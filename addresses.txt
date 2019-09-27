@@ -1,0 +1,36 @@
+RamAddr  type   description
+80270AE8 code   reads global volume (from R4 + 0x5D4)
+80270AF0 code   reads SFX volume (from R3 + 0x5D4)
+80270AFC code   [41820034] - NOP here prevents any new sound effects from playing.
+
+802AF8A4 code   reads 803a32ac (enable disguise) from s16 R3+4
+
+803398B0 ?      controller inputs
+
+803428F8 float  Y velocity
+
+803A32C8 u16    set to 0101 to become Fox
+	as Krystal it's 0001 so maybe only first byte matters
+803A33AB u16    staff upgrades
+803A32A8 u8     current health (in 1/4 of a heart)
+803A32A9 u8     max health
+803A32B0 u8     money or something
+803A32AC u8     set to 1 to enable Sharpclaw Disguise
+	using it as Krystal turns you back into Fox but keeps her voice
+803A336A u8     something to do with camera - set above 7F to pan somewhere else
+803A32C4 char[?]    save file name
+803A32D0 ?      some item unlocks
+
+803BD180 object read by 80270AF0 (with offset 0x5D4 => 803BD754, music volume)
+803BD1B0 object read by 80270AF0 (with offset 0x5D4 => 803BD784, SFX volume)
+803BD210 object read by 80270AE8 (with offset 0x5D4 => 803BD7E4, wind volume)
+803BD360 object read by 80270AE8 (with offset 0x5D4 => 803BD934, global volume)
+803BD754 float  music volume
+803BD758 float  mirror of music volume, does nothing?
+803BD784 float  sfx volume (includes voices)
+803BD7E4 float  rain/storm sound volume (partial - wind?)
+803BD934 float  global volume
+
+803E6500 float  many floats, unknown purpose.
+
+814DAEB0 ?      "\x12Krystal" - looks like a copy of MODELS.bin?

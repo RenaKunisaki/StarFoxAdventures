@@ -1,0 +1,131 @@
+hex
+01 starry background, green stuff in corner
+02 nothing
+05 changes the lighting
+10 nothing if loaded from title menu
+	but pressing Start loads C6 which is the pause menu
+	this is the actual "in-game" mode
+34 title screen menu
+35 save file select
+36 Enter Name (for new file)
+	this will actually overwrite your save file
+37 options menu, audio menu, language menu
+39 blank, but pressing A loads file 10 which is a map select
+	you can select a map and immediately die
+
+loading game:
+1e8
+259
+79
+c8
+12b
+e9
+42
+143
+1e9
+1f6
+1e9 several times
+1ea
+1f6
+1ab
+1ec
+20
+c6 several times
+1f5
+e5 or e2 I missed it
+5a
+e5
+4c
+and then we have the opening cutscene.
+
+80339d40 "This is not the Memory Card with which you began the game"
+this seems to be the currently displayed text
+80e50bd2 is the actual message and others
+or 8052ff9a, it moves around
+nothing ever reads these though (lol memory breakpoints don't work)
+
+8026140C __CARDVerify
+inserting a blr (4E800020) here bypasses this check
+code: 0426140C 4E800020
+BUT using this when starting up the game results in it erasing the file.
+
+MAPINFO.bin is a list of map names and offsets of something. each entry is 0x20 bytes:
+0x1C bytes name (null terminated)
+0x01 bytes map type
+0x03 bytes ???
+
+Maps:
+ 0 0x00	animtest
+ 1 0x01	animtest_01
+ 2 0x02	animtest_02
+ 3 0x03	arwing
+ 4 0x04	dragrock
+ 5 0x05	animtest_05
+ 6 0x06	dfptop
+ 7 0x07	volcano
+ 8 0x08	animtest_08
+ 9 0x09	mazecave
+10 0x0a	dragrockbot
+11 0x0b	dfalls
+12 0x0c	swaphol
+13 0x0d	shipbattle
+14 0x0e	nwastes
+15 0x0f	warlock
+16 0x10	shop
+17 0x11	animtest_11
+18 0x12	crfort
+19 0x13	swapholbot
+20 0x14	wallcity
+21 0x15	lightfoot
+22 0x16	cloudtreasure
+23 0x17	animtest_17
+24 0x18	clouddungeon
+25 0x19	mmpass
+26 0x1a	darkicemines
+27 0x1b	animtest_1B
+28 0x1c	desert
+29 0x1d	animtest_1D
+30 0x1e	icemountain
+31 0x1f	animtest_1F
+32 0x20	animtest_20
+33 0x21	animtest_21
+34 0x22	darkicemines2
+35 0x23	bossgaldon
+36 0x24	animtest_24
+37 0x25	insidegal
+38 0x26	magiccave
+39 0x27	dfshrine
+40 0x28	mmshrine
+41 0x29	ecshrine
+42 0x2a	gpshrine
+43 0x2b	dbshrine
+44 0x2c	nwshrine
+45 0x2d	worldmap
+46 0x2e	animtest_2E
+47 0x2f	capeclaw
+48 0x30	dbay
+49 0x31	animtest_31
+50 0x32	cloudrace
+51 0x33	bossdrakor
+52 0x34	animtest_34
+53 0x35	bosstrex
+54 0x36	linkb
+55 0x37	cloudjoin
+56 0x38	arwingtoplanet
+57 0x39	arwingdarkice
+58 0x3a	arwingcloud
+59 0x3b	arwingcity
+60 0x3c	arwingdragon
+61 0x3d	gamefront
+62 0x3e	linklevel
+63 0x3f	greatfox
+64 0x40	linka
+65 0x41	linkc
+66 0x42	linkd
+67 0x43	linke
+68 0x44	linkf
+69 0x45	linkg
+70 0x46	linkh
+71 0x47	linkj
+72 0x48	linki
+-1 0xffff	none
