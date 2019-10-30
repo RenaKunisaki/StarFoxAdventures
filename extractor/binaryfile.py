@@ -1,16 +1,17 @@
 import struct
 
 class BinaryFile:
-    def __init__(self, path, byteOrder='>'):
+    def __init__(self, path, byteOrder='>', offset=0):
         self.path = path
         self.file = open(path, 'rb')
         self.byteOrder = byteOrder
+        self.offset = offset
         self.file.seek(0, 2)
-        self.size = self.file.tell()
-        self.file.seek(0)
+        self.size = self.file.tell() - offset
+        self.file.seek(offset)
 
     def seek(self, offset, origin=0):
-        self.file.seek(offset, origin)
+        self.file.seek(offset+self.offset, origin)
 
     def _readFmt(self, fmt, length, offset=None):
         if offset is not None: self.seek(offset)
