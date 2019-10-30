@@ -5,6 +5,7 @@
 *.gci
 *.img
 *.dol
+*.lock*
 __pycache__
 **/build/*
 **/bin/*

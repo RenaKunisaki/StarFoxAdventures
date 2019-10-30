@@ -54,6 +54,60 @@ MAPINFO.bin is a list of map names and offsets of something. each entry is 0x20 
 0x01 bytes map type
 0x03 bytes ???
 
+040559C8 60000000 - enable LOAD PASS/FAIL messages for every object
+043A31D4 FFFFFFFF - enable all "cheats" (music test, sepia, dino language, show credits)
+0407EEF4 60000000 - bypass save file checksum
+
+on title screen:
+cardCb_8025de84  - just wakes up a thread
+cardFn_802608b0  - returns pointer to the game code and title
+cardReadFn_80263948
+    cardReadFn_80263800
+gameText 0x497 = "The Star Fox Adventures saved game on the Memory Card in Slot A is corrupt.  You must delete it before you can save."
+0x4C7 = "This is not the same Memory Card on which you created your initial save game."
+
+sound IDs:
+0x72 rain?
+0x286 camera turn behind player
+0x2CB Krystal grab ledge
+0x2D0 Krystal fall scream
+0x398 Krystal climb up
+0x3CD Krystal roll 2
+0x3CE Krystal roll 1
+
+MODELS.tab is just a list of model offsets, but the highest 4 bits are some flags.
+I think they say which file to get the model from.
+10000000 10000140 1001A5E0 1001A7C0
+
+MODELS.bin contains FACEFEED structures which are:
+0x00: 0xFACEFEED
+0x04: decompressed size
+0x08: offset to ZLB data: (this * 4) + 0x28 + start of structure
+    usually 0xC (points to ZLB *data*, not header)
+0x0C: compressed length - 0x10
+0x10:
+0x14:
+0x18: relates to MODELIND - maybe submodels?
+0x1C: maybe # animations?
+0x20: copied to ModelData field 0x84
+0x24: ZLB archive
+no idea the purpose of repeating this information when the ZLB header already has it...
+
+they can also be this structure for non-compressed models:
+0x00: 0xE0E0E0E0
+0x04: size
+0x08: data offset: (this * 4) + 0x18
+so I guess the purpose is that the size/offset are here for both compressed and uncompressed models.
+
+MODELIND.bin seems to be a lookup table translating model IDs to different IDs.
+it loads 8 bytes at a time but it looks like only 2 bytes per model; it might be that loading the file has a minimum data size of 8.
+
+some map coords:
+gamefront       -18870.4    9.75    28360.4
+hollow          -5552.31    -780.94 -3281.25
+shipbattle      -18878.5    13      28456.2
+krazoapalace    12366.6     211.06  85.8501
+
 Maps:
  0 0x00	animtest
  1 0x01	animtest_01

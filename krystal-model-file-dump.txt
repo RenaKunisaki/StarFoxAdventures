@@ -1,0 +1,189 @@
+krystalModelFile @ 0x80f69920
+u8        1h                      loaded                            XREF[2]:     809f5400(*), 816ae88e(*)
+??        00h                     field_0x1
+ModelDat  UseLocalModAnimTab      flags
+ModelId   Krystal                 modelId       ;set on load
+??        00h                     field_0x6
+??        00h                     field_0x7
+ddw       0h                      field_0x8
+u32       21DE0h                  fileSize      ;size of this file
+??        00h                     field_0x10
+??        00h                     field_0x11
+??        00h                     field_0x12
+??        00h                     field_0x13
+??        00h                     field_0x14
+??        00h                     field_0x15
+??        00h                     field_0x16
+??        00h                     field_0x17
+u32       0h                      field_0x18
+u32       0h                      extraAmapSize
+addr *    krystalTextureIds       textures      ;-> texture IDs tha
+ModelDat  5                       flags_0x24
+db        0h                      field_0x25    ;relates to lighting
+??        00h                     field_0x26
+??        00h                     field_0x27
+vec3s *   krystalVtxs             vtxs
+vec3s *   krystalNormals          normals
+u16 *     00000000                colors        ;presumably 16bpp
+vec2s *   krystalTexCoords        texCoords
+Material *krystalMaterials        materials
+Bone *    krystalBones            bones
+Quaterni  krystalBoneQuats        boneQuats
+u32[3]                            field_0x44
+  FFC00000h,    FFC00000h,    FFC00000h
+u32       0h                      field_0x50
+ModelVtx  krystalVtxGroups        vtxGroups
+HitboxSt  krystalHitBoxes         hitboxes
+??        00h                     field_0x5c
+??        00h                     field_0x5d
+??        00h                     field_0x5e
+??        00h                     field_0x5f
+??        00h                     field_0x60
+??        00h                     field_0x61
+??        00h                     field_0x62
+??        00h                     field_0x63
+addr      00000000                pAltIndBuf
+addr      00000000                pAnimBuf
+short *   krystalAnimTbl_80f8b700 pModelIndBuf  ;0 in file; -> anim
+ushort[8]                         animIdxs
+   0h,    FDh,   112h,   197h
+ 218h,   29Bh,     0h,     0h
+ changing these causes crazy animations such as crouching, kneeling, and spinning in midair instead of walking
+u32       21998h                  amapTabEntry
+ushort    21F0h                   field_0x84
+??        00h                     field_0x86
+??        00h                     field_0x87
+astruct_54                        field_0x88
+    ??        00h                     field_0x0
+    ??        00h                     field_0x1
+    ushort    0h                      nVtxs
+    ??        00h                     field_0x4
+    ??        00h                     field_0x5
+    ??        00h                     field_0x6
+    ??        00h                     field_0x7
+    ??        00h                     field_0x8
+    ??        00h                     field_0x9
+    ??        00h                     field_0xa
+    ??        00h                     field_0xb
+    int       0h                      vtxOffs_0xc
+??        00h                     field_0x98
+??        00h                     field_0x99
+??        00h                     field_0x9a
+??        00h                     field_0x9b
+??        00h                     field_0x9c
+??        00h                     field_0x9d
+??        00h                     field_0x9e
+??        00h                     field_0x9f
+??        00h                     field_0xa0
+??        00h                     field_0xa1
+??        00h                     field_0xa2
+??        00h                     field_0xa3
+addr      00000000                field_0xa4    ;related to animBuf
+addr      00000000                field_0xa8
+??        00h                     field_0xac
+??        00h                     field_0xad
+dw        0h                      field_0xae
+??        00h                     field_0xb0
+??        00h                     field_0xb1
+??        00h                     field_0xb2
+??        00h                     field_0xb3
+??        00h                     field_0xb4
+??        00h                     field_0xb5
+??        00h                     field_0xb6
+??        00h                     field_0xb7
+??        00h                     field_0xb8
+??        00h                     field_0xb9
+??        00h                     field_0xba
+??        00h                     field_0xbb
+??        00h                     field_0xbc
+??        00h                     field_0xbd
+??        00h                     field_0xbe
+??        00h                     field_0xbf
+??        00h                     field_0xc0
+??        00h                     field_0xc1
+??        00h                     field_0xc2
+??        00h                     field_0xc3
+??        00h                     field_0xc4
+??        00h                     field_0xc5
+??        00h                     field_0xc6
+??        00h                     field_0xc7
+addr      00000000                altNormals    ;-> sth 0x4 bytes;
+addr      00000000                field_0xcc
+DisplayL  krystalDisplayList      dlists
+db *      krystalRenderInstrs     renderInstrs  ;bit-packed instruc
+ushort    168h                    nRenderInstrs ;# bytes
+??        00h                     field_0xda
+??        00h                     field_0xdb
+short * * PTR_ARRAY_80f69a1c      ptrs_0xdc     ;relates to animati
+short     24h                     field_0xe0    ;related to lightin
+short     404h                    flagsE2       ;related to texture
+short     8A9h                    nVtxs
+dw        925h                    nNormals
+short     0000h                   nColors       ;guessed
+short     0640h                   nTexCoords
+short     359h                    nAnimations
+??        00h                     field_0xee
+??        00h                     field_0xef
+??        00h                     field_0xf0
+??        00h                     field_0xf1
+u8        6h                      nTextures
+u8        24h                     nBones        ;# mtxs at Model->m
+u8        3Bh                     nMtxs         ;added to field nBo
+u8        1Fh                     nDlists
+u8        1Fh                     field_0xf6
+u8        14h                     nHitBoxes
+u8        6h                      nMaterials    ;#items at field_0x
+u8        2Fh                     nPtrsDC       ;related to fuzz?
+u8        1h                      field_0xfa    ;num texmtxs?
+u8        0h                      field_0xfb
+
+-------------------------------------------------------------------------
+
+Repeated without unknown zeros:
+u8        1h                      loaded                            XREF[2]:     809f5400(*), 816ae88e(*)
+ModelDat  UseLocalModAnimTab      flags
+ModelId   Krystal                 modelId       ;set on load
+u32       21DE0h                  fileSize      ;size of this file
+u32       0h                      extraAmapSize
+addr *    krystalTextureIds       textures      ;-> texture IDs tha
+ModelDat  5                       flags_0x24
+vec3s *   krystalVtxs             vtxs
+vec3s *   krystalNormals          normals
+u16 *     00000000                colors        ;presumably 16bpp
+vec2s *   krystalTexCoords        texCoords
+Material *krystalMaterials        materials
+Bone *    krystalBones            bones
+Quaterni  krystalBoneQuats        boneQuats
+u32[3]                            field_0x44
+  FFC00000h,    FFC00000h,    FFC00000h
+ModelVtx  krystalVtxGroups        vtxGroups
+HitboxSt  krystalHitBoxes         hitboxes
+addr      00000000                pAltIndBuf
+addr      00000000                pAnimBuf
+short *   krystalAnimTbl_80f8b700 pModelIndBuf  ;0 in file; -> anim
+ushort[8]                         animIdxs
+   0h,    FDh,   112h,   197h
+ 218h,   29Bh,     0h,     0h
+u32       21998h                  amapTabEntry
+ushort    21F0h                   field_0x84
+addr      00000000                altNormals    ;-> sth 0x4 bytes;
+DisplayL  krystalDisplayList      dlists
+db *      krystalRenderInstrs     renderInstrs  ;bit-packed instruc
+ushort    168h                    nRenderInstrs ;# bytes
+short * * PTR_ARRAY_80f69a1c      ptrs_0xdc     ;relates to animati
+short     24h                     field_0xe0    ;related to lightin
+short     404h                    flagsE2       ;related to texture
+short     8A9h                    nVtxs
+dw        925h                    nNormals
+short     0640h                   nTexCoords
+short     359h                    nAnimations
+u8        6h                      nTextures
+u8        24h                     nBones        ;# mtxs at Model->m
+u8        3Bh                     nMtxs         ;added to field nBo
+u8        1Fh                     nDlists
+u8        1Fh                     field_0xf6
+u8        14h                     nHitBoxes
+u8        6h                      nMaterials    ;#items at field_0x
+u8        2Fh                     nPtrsDC       ;related to fuzz?
+u8        1h                      field_0xfa    ;num texmtxs?
+u8        0h                      field_0xfb

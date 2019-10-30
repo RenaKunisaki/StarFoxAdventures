@@ -6,6 +6,7 @@ All work here is being done on USA v1.0. `GSAE01.map` is automatically exported 
 ## Eventual goals
 
 * Play as Krystal throughout the game
+    * Reimplement two-character mechanic
 * Rip sound effects, textures, models
 * Replace models?
 * Find any interesting hidden goodies
