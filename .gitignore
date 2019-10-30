@@ -4,6 +4,7 @@
 *.bin
 *.gci
 *.img
+*.dol
 __pycache__
 **/build/*
 **/bin/*
