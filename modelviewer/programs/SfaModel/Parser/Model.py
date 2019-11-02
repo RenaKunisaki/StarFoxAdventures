@@ -100,8 +100,8 @@ class Model:
         offs = self.header.texCoords + self.offset
         self.texCoords = Vec2s.readFromFile(self.file, offs, self.header.nTexCoords)
         for vtx in self.texCoords:
-            vtx.x /= 256.0
-            vtx.y /= 256.0
+            vtx.x /= 1024.0
+            vtx.y /= 1024.0
 
     def _readMaterials(self):
         log.debug("nMaterials=%d from 0x%X", self.header.nMaterials,

@@ -27,6 +27,9 @@ class SfaModelViewer(SfaProgram, EventHandler):
     def __init__(self, ctx):
         super().__init__(ctx)
 
+        # temporary until real texture support
+        self.texture = self.ctx.Texture("./texture.png")
+
         # setup shaders and subprograms
         self.fragShader     = FragmentShader(self.ctx)
         self.boneRenderer   = BoneRenderer(self)
@@ -46,10 +49,12 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self._mouseButtons = {}
         self._mouseOrigin  = [0, 0]
         self._translate    = [15, -15, -50]
-        self._rotate       = [0, 0, 0]
+        self._rotate       = [0, 180, 0] # for some reason the models face backward
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
-        self.curList       = 0
+        self.curList       = -1 # all
+        self.minPoly       = -1 # all
+        self.maxPoly       = 9999
         self.curMaterial   = None
         self.mtxLut        = {}
 
@@ -167,6 +172,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
                 attrs['COL1'] = 1
 
             parser.setVtxFmt(6, **attrs) # XXX always 6?
+            parser.setMaterial(self.curMaterial)
             dlist = parser.parse()
             log.debug("Dlist %d has %d polys", idx, len(parser.polys))
             #self._dlistCache[idx] = dlist
@@ -245,18 +251,19 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #self.ctx.glDepthRange(1,0)
 
         self._setMtxs()
+        self.texture.bind()
         #for rnd in self.dlistRenderers: rnd.run()
         if self.curList == -1:
             log.dprint("All Dlists")
             for lst in self.dlistRenderers:
-                lst.run()
+                lst.run(minPoly=self.minPoly, maxPoly=self.maxPoly)
         elif self.curList >= 0 and self.curList < len(self.dlistRenderers):
             log.dprint("Dlist %d", self.curList)
-            self.dlistRenderers[self.curList].run()
+            self.dlistRenderers[self.curList].run(minPoly=self.minPoly, maxPoly=self.maxPoly)
         else:
             log.dprint("Dlist %d not found", self.curList)
-        self.boneRenderer.run()
-        self.boxRenderer.run()
+        #self.boneRenderer.run()
+        #self.boxRenderer.run()
 
         self.frame += 1
 

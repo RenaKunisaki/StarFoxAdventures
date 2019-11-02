@@ -39,13 +39,13 @@ class VertexArray:
         return self._Binding(self)
 
 
-    def render(self, mode, count=None, first=0):
+    def render(self, mode, count=None, offset=0):
         """Render vertex array.
 
         mode: Type of primitives; eg GL_POINTS, GL_LINES...
         count: Number of indices to render.
-        first: First index to render.
+        offset: First index offset to render.
         """
         self.bind()
         # XXX count=None should mean all... but how do we know how many?
-        self.ctx.glDrawArrays(mode, first, count)
+        self.ctx.glDrawArrays(mode, offset, count)

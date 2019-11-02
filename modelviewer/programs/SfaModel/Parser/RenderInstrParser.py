@@ -59,15 +59,18 @@ class RenderInstrParser:
     def op_selectTexture(self): # opcode 1: select texture and material
         idx = self.getBits(6) # idx of both texture and material
         ok  = (idx < self.model.header.nTextures)
-        #log.debug("Select tex/mtrl %d (%s)", idx, "OK" if ok else "ERR")
+        log.debug("%04X Select tex/mtrl %d (%s)", self._bitOffs-6,
+            idx, "OK" if ok else "ERR")
         self.curMaterial = idx
         self.result.append(('TEX', idx))
 
 
     def op_callDlist(self): # opcode 2: call display list
-        idx = self.getBits(8)
-        ok  = (idx < self.model.header.nDlists)
-        log.debug("Call dlist %d (%s)", idx, "OK" if ok else "ERR")
+        offs = self._bitOffs
+        idx  = self.getBits(8)
+        ok   = (idx < self.model.header.nDlists)
+        log.debug("%04X Call dlist %d (%s)", offs, idx,
+            "OK" if ok else "ERR")
         self.result.append(('CALL', idx))
 
 

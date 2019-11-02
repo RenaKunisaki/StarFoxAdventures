@@ -102,6 +102,7 @@ class DlistParser:
         self.model.file.seek(self.list.offset)
         self.bytes = self.model.file.read(self.list.size)
         self._offset = 0
+        self.material = None
         self.polys   = []
         self._cpRegs = {
             0x30: 0x3C03C780, # MATIDX_REG_A
@@ -233,6 +234,11 @@ class DlistParser:
             self._cpRegs[reg + vat] = curVal
 
 
+    def setMaterial(self, mat):
+        """Set the material to use."""
+        self.material = mat
+
+
     def parse(self):
         #print(gl.Util.Data.dumpHex(self.bytes))
         try:
@@ -269,7 +275,7 @@ class DlistParser:
                 else:
                     log.warning("DlistParser: unknown opcode 0x%02X at 0x%04X", opcode, self._offset - 1)
                     return self
-            log.debug("Parsed OK")
+            log.debug("Parsed OK, end=0x%04X", self._offset)
         except IndexError:
             log.exception("Failed parsing dlist %d at 0x%04X",
                 self.listIdx, self._offset)
@@ -305,8 +311,10 @@ class DlistParser:
         try: name = self.drawModes[mode]
         except IndexError: name = 'unk%02X' % mode
 
-        #log.debug("%04X Draw(#%3d: %d %s, VAT %d): %s", self._offset - 3,
-        #    len(self.polys), count, name, vat, self.describeVat(vat))
+        if self.listIdx in range(25, 29):
+            log.debug("%04X %2d Draw(#%3d: %d %s, VAT %d): %s",
+                self._offset - 3, self.listIdx,
+                len(self.polys), count, name, vat, self.describeVat(vat))
 
         for i in range(count):
             vtx = self.nextVertex(vat)
@@ -315,12 +323,18 @@ class DlistParser:
 
         #log.debug(" -> P %s", list(map(lambda v: v['POS'], vtxs)))
         #log.debug(" -> M %s", list(map(lambda v: v['PNMTXIDX'], vtxs)))
+        #if (self.listIdx == 25 and
+        #((len(self.polys) >=  42 and len(self.polys) <  52) or
+        #( len(self.polys) >= 163 and len(self.polys) < 164))):
+        #    vtxs = []
         self.polys.append({
             'vat':  vat,
             'mode': mode,
             'vtxs': vtxs,
             'list': self.listIdx,
             'offs': offs,
+            'idx':  len(self.polys),
+            'material': self.material,
         })
 
 

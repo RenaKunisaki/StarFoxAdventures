@@ -44,6 +44,8 @@ class Struct:
             res  = []
             offs = 0
             for i in range(count):
-                res.append(cls(data[offs:]))
+                obj = cls(data[offs:])
+                setattr(obj, '_idx', i)
+                res.append(obj)
                 offs += cls._size
             return res

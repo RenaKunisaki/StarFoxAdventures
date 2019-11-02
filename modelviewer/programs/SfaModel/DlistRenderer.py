@@ -19,7 +19,7 @@ class DlistShader(SfaProgram):
 class DlistRenderer(gl.Pipeline):
     """Subprogram for rendering display lists."""
     MAX_VTXS = 16384
-    vtxBufferFmt = "3f" # (x,y,z)
+    vtxBufferFmt = "5f" # (x,y,z,s,t)
     colorBufferFmt = "4f" # (r,g,b,a)
 
     def __init__(self, parent, dlist, mtxLut):
@@ -37,9 +37,14 @@ class DlistRenderer(gl.Pipeline):
         self._colorSize = struct.calcsize(self.colorBufferFmt)
         self.bufVtxs   = self.ctx.Buffer(self._vtxSize * self.MAX_VTXS, True)
         self.bufColors = self.ctx.Buffer(self._colorSize * self.MAX_VTXS, True)
-        self._nVtxs = 0
+        self._nVtxs   = 0
         self._prevPos = None
+        self._polyIdx = []
         self.setList(dlist)
+        self.programs['fragment_shader'].setUniforms(
+            enableTexture = True,
+            #minAlpha      =  0.5,
+        )
 
 
     def setList(self, dlist):
@@ -65,9 +70,22 @@ class DlistRenderer(gl.Pipeline):
         v   = int((listIdx / cnt) * 128) + 127
         return ((v >> 6) / 4, ((v >> 3) & 7) / 8, (v & 7) / 8, 0.9)
 
+    def _matToColor(self, material):
+        return (1, 1, 1, 1)
+        if material is None: idx = 0
+        else: idx = material._idx #idx = material.textureId[1]
+        if idx < 0: idx = 255
+        # reverse bits
+        idx = int('{:08b}'.format(idx)[::-1], 2) | 0x80
+        #cnt = self.parent.model.header.nMaterials
+        #v   = int((idx / cnt) * 128) + 127
+        v = idx
+        return ((v >> 6) / 4, ((v >> 3) & 7) / 8, (v & 7) / 8, 0.9)
+
 
     def _addQuads(self, poly):
         for i in range(0, len(poly['vtxs']), 4):
+            self._polyIdx.append(poly['idx'])
             v0, v1, v2, v3 = poly['vtxs'][i:i+4]
             p0 = self._resolveVtxPos(v0)
             p1 = self._resolveVtxPos(v1)
@@ -82,14 +100,16 @@ class DlistRenderer(gl.Pipeline):
             self._addVtx(p3, (1, 1, 0, 1))
 
     def _addTris(self, poly):
-        c0 = self._listToColor(poly['list'])
+        c0 = self._matToColor(poly['material'])
         for i in range(0, len(poly['vtxs']), 3):
+            self._polyIdx.append(poly['idx'])
             v0, v1, v2 = poly['vtxs'][i:i+3]
             self._addTri(v0, v1, v2, c0, c0, c0)
 
     def _addTriStrips(self, poly):
-        c0 = self._listToColor(poly['list'])
+        c0 = self._matToColor(poly['material'])
         for i in range(2, len(poly['vtxs'])):
+            self._polyIdx.append(poly['idx'])
             v0, v1, v2 = poly['vtxs'][i-2: i+1]
             # for even idxs, swap v0 and v1 so the triangle
             # faces the right way and doesn't get culled.
@@ -100,30 +120,34 @@ class DlistRenderer(gl.Pipeline):
                 self._addTri(v0, v1, v2, c0, c0, c0)
 
     def _addTriFans(self, poly):
-        c0 = self._listToColor(poly['list'])
+        c0 = self._matToColor(poly['material'])
         v0, v1 = poly['vtxs'][0:2]
         for i in range(2, len(poly['vtxs'])):
+            self._polyIdx.append(poly['idx'])
             v2 = poly['vtxs'][i]
             self._addTri(v0, v1, v2, c0, c0, c0)
             v1 = v2
 
     def _addLines(self, poly):
-        c0 = self._listToColor(poly['list'])
+        c0 = self._matToColor(poly['material'])
         for i in range(0, len(poly['vtxs']), 2):
+            self._polyIdx.append(poly['idx'])
             v0, v1 = poly['vtxs'][i:i+2]
             self._addTri(v0, v1, v1, c0, c0, c0)
 
     def _addLineStrips(self, poly):
-        c0 = self._listToColor(poly['list'])
+        c0 = self._matToColor(poly['material'])
         v0 = poly['vtxs'][0]
         for i in range(1, len(poly['vtxs'])):
+            self._polyIdx.append(poly['idx'])
             v1 = poly['vtxs'][i]
             self._addTri(v0, v1, v1, c0, c0, c0)
             v0 = v1
 
     def _addPoints(self, poly):
-        c0 = self._listToColor(poly['list'])
+        c0 = self._matToColor(poly['material'])
         for i in range(0, len(poly['vtxs'])):
+            self._polyIdx.append(poly['idx'])
             v0 = poly['vtxs'][i]
             self._addTri(v0, v0, v0, c0, c0, c0)
 
@@ -147,10 +171,13 @@ class DlistRenderer(gl.Pipeline):
         p0 = self._resolveVtxPos(v0)
         p1 = self._resolveVtxPos(v1)
         p2 = self._resolveVtxPos(v2)
+        t0 = self._resolveTexCoord(v0)
+        t1 = self._resolveTexCoord(v1)
+        t2 = self._resolveTexCoord(v2)
 
-        self._addVtx(p0, c0)
-        self._addVtx(p1, c1)
-        self._addVtx(p2, c2)
+        self._addVtx(p0, c0, t0)
+        self._addVtx(p1, c1, t1)
+        self._addVtx(p2, c2, t2)
 
 
     def _resolveVtxPos(self, vtx):
@@ -187,7 +214,24 @@ class DlistRenderer(gl.Pipeline):
         return (x, y, z)
 
 
-    def _addVtx(self, pos, color):
+    def _resolveTexCoord(self, vtx):
+        tc = vtx['TEX0']
+        # if this is indexed, get the actual value
+        if type(tc) is tuple:
+            isIdx, tc = tc
+            if isIdx:
+                try:
+                    tc = self._dlist.model.texCoords[tc]
+                except IndexError:
+                    log.error("TexCoord %d in list %d out of range %d",
+                        tc, self._dlist.listIdx, len(self._dlist.model.texCoords))
+                    return (0,0)
+            else:
+                raise NotImplementedError("Not implemented direct TEX0")
+        return (tc.x, tc.y)
+
+
+    def _addVtx(self, pos, color, texCoord=None):
         x, y, z = pos
         if self._prevPos is not None:
             if (x == self._prevPos[0]
@@ -196,10 +240,13 @@ class DlistRenderer(gl.Pipeline):
                 x, y, z = x+0.05, y+0.05, z+0.05 # actually draw
         self._prevPos = (x, y, z)
 
+        s, t = 0, 0
+        if texCoord is not None: s, t = texCoord
+
         # XXX handle indexed texcoords, etc
         r, g, b, a = color
 
-        vtxData = struct.pack(self.vtxBufferFmt, x, y, z)
+        vtxData = struct.pack(self.vtxBufferFmt, x, y, z, s, t)
         colData = struct.pack(self.colorBufferFmt, r, g, b, a)
         vtxOffs = self._nVtxs * self._vtxSize
         colOffs = self._nVtxs * self._colorSize
@@ -208,15 +255,37 @@ class DlistRenderer(gl.Pipeline):
         self._nVtxs += 1
 
 
-    def run(self):
+    def run(self, minPoly=0, maxPoly=999999):
         #self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
         #self.ctx.glDepthFunc(self.ctx.GL_LESS)
         #self.ctx.glEnable(self.ctx.GL_BLEND)
         #self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
         #    self.ctx.GL_ONE_MINUS_SRC_ALPHA)
+        maxP = min(maxPoly, self._polyIdx[-1])
+        minP = min(minPoly, maxP)
+
+        vStart, vEnd = 0, 99999999
+        for i, v in enumerate(self._polyIdx):
+            if v < minP: vStart += 1
+            if v > maxP:
+                vEnd = i
+                break
+        #vStart -= 1?
+        vEnd = min(vEnd, self._nVtxs)
+        log.dprint("Polys %4d - %4d: %4d / %4d", minP, maxP,
+            maxP - minP, self._polyIdx[-1])
+        log.dprint("Tris %5d - %4d: %4d / %4d", vStart, vEnd,
+            vEnd - vStart, self._nVtxs)
+        if vEnd <= vStart: return
+
+        # nVtxs = # triangles since we use GL_TRIANGLES here,
+        # so the division by 3 is done automatically
         with self:
             self._bindBuffers()
-            self.shader.vao.render(self.ctx.GL_TRIANGLES, count=self._nVtxs)
+            if minPoly < 0: self.shader.vao.render(self.ctx.GL_TRIANGLES,
+                count=self._nVtxs)
+            else: self.shader.vao.render(self.ctx.GL_TRIANGLES,
+                count=(vEnd-vStart)*3, offset=vStart*3)
 
 
     def setMtxs(self, projection, modelView):
@@ -228,8 +297,14 @@ class DlistRenderer(gl.Pipeline):
             # in vec3 vert
             shader.attribs['vert'].bindBuffer(
                 self.bufVtxs, self.ctx.GL_FLOAT, 3,
-                stride=3 * gl.Util.SIZEOF_FLOAT,
+                stride=5 * gl.Util.SIZEOF_FLOAT,
                 offset=0 * gl.Util.SIZEOF_FLOAT)
+
+            # in vec2 texCoord
+            shader.attribs['texCoord'].bindBuffer(
+                self.bufVtxs, self.ctx.GL_FLOAT, 2,
+                stride=5 * gl.Util.SIZEOF_FLOAT,
+                offset=3 * gl.Util.SIZEOF_FLOAT)
 
             # in vec4 vtxColor
             shader.attribs['vtxColor'].bindBuffer(

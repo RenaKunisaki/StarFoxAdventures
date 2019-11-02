@@ -5,9 +5,11 @@
 
 layout(triangles) in;
 layout(triangle_strip, max_vertices=256) out;
+uniform sampler2D texture;
 
 in VertexAttrib {
     vec3 vtx;
+    vec2 texCoord;
     vec4 color;
 } vertex[];
 
@@ -37,9 +39,10 @@ void drawOutline(vec3 a, vec3 b, vec3 c) {
 }
 
 void main() {
+    ivec2 texSize  = textureSize(texture, 0);
     for(int i = 0; i < gl_in.length(); i += 3) { //for each primitive
         for(int j=0; j<3; j++) {
-            drawVtx(vertex[i+j].vtx, vertex[i+j].color);
+            drawVtx(vertex[i+j].vtx, vertex[i+j].color, vertex[i+j].texCoord);
         }
         EndPrimitive();
         drawOutline(vertex[i].vtx, vertex[i+1].vtx, vertex[i+2].vtx);
