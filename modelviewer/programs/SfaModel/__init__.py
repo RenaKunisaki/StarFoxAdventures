@@ -34,18 +34,11 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.fragShader     = FragmentShader(self.ctx)
         self.boneRenderer   = BoneRenderer(self)
         self.boxRenderer    = BoxRenderer(self)
-        self.dlistRenderers = []
+        self.dlistRenderer  = DlistRenderer(self)
 
         # used during model loading
-        self._dlistCache    = {}
-        self._vtxFmt = {
-            'pos': 0,
-            'nrm': 0,
-            'col': 0,
-            'tex': 0,
-        }
-
-        self.frame = 0
+        self._vtxFmt       = {'pos':0, 'nrm':0, 'col':0, 'tex':0}
+        self.frame         = 0
         self._mouseButtons = {}
         self._mouseOrigin  = [0, 0]
         self._translate    = [15, -15, -50]
@@ -57,6 +50,8 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.maxPoly       = 9999
         self.curMaterial   = None
         self.mtxLut        = {}
+
+        self.dlistRenderer.setLut('matrix', self.mtxLut)
 
         # enable our local logger to print on the screen
         # by using log.dprint()
@@ -74,6 +69,8 @@ class SfaModelViewer(SfaProgram, EventHandler):
         # read the model
         with open(path, 'rb') as file:
             self.model = Model(file)
+            self.dlistRenderer.setLut('vtx', self.model.vtxs)
+            self.dlistRenderer.setLut('texCoord', self.model.texCoords)
             self._doRenderInstrs()
 
         # draw each vertex as a point
@@ -146,38 +143,35 @@ class SfaModelViewer(SfaProgram, EventHandler):
 
 
     def _callDlist(self, idx):
-        if idx not in self._dlistCache:
-            parser = DlistParser(self.model, idx)
+        parser = DlistParser(self.model, idx)
 
-            attrs = {
-                # XXX col and tex apply to all enabled attrs
-                'POS':  self._vtxFmt['pos'],
-                'NRM':  self._vtxFmt['nrm'],
-                'COL0': self._vtxFmt['col'],
-                #'COL1' : self._vtxFmt['col'],
-                'TEX0': self._vtxFmt['tex'],
-            }
+        attrs = {
+            # XXX col and tex apply to all enabled attrs
+            'POS':  self._vtxFmt['pos'],
+            'NRM':  self._vtxFmt['nrm'],
+            'COL0': self._vtxFmt['col'],
+            #'COL1' : self._vtxFmt['col'],
+            'TEX0': self._vtxFmt['tex'],
+        }
 
-            if self.curMaterial:
-                log.debug("Material Texture ID is %d, %d", *self.curMaterial.textureId)
-            else:
-                log.debug("No material")
-            if self.curMaterial and self.curMaterial.textureId[0] >= 0:
-                attrs['TEX1'] = self._vtxFmt['tex']
+        if self.curMaterial:
+            log.debug("Material Texture ID is %d, %d", *self.curMaterial.textureId)
+        else:
+            log.debug("No material")
+        if self.curMaterial and self.curMaterial.textureId[0] >= 0:
+            attrs['TEX1'] = self._vtxFmt['tex']
 
-            if idx == 24: # HACK
-                attrs['PNMTXIDX'] = 1
-                attrs['T0MIDX'] = 1
-                attrs['COL0'] = 1
-                attrs['COL1'] = 1
+        if idx == 24: # HACK
+            attrs['PNMTXIDX'] = 1
+            attrs['T0MIDX'] = 1
+            attrs['COL0'] = 1
+            attrs['COL1'] = 1
 
-            parser.setVtxFmt(6, **attrs) # XXX always 6?
-            parser.setMaterial(self.curMaterial)
-            dlist = parser.parse()
-            log.debug("Dlist %d has %d polys", idx, len(parser.polys))
-            #self._dlistCache[idx] = dlist
-            #log.debug("Call dlist %3d with mtxs %s", idx, self.mtxLut)
-            self.dlistRenderers.append(DlistRenderer(self, dlist, self.mtxLut))
+        parser.setVtxFmt(6, **attrs) # XXX always 6?
+        parser.setMaterial(self.curMaterial)
+        dlist = parser.parse()
+        log.debug("Dlist %d has %d polys", idx, len(parser.polys))
+        self.dlistRenderer.addList(dlist)
 
 
     def _makeAxes(self, vtxData, vtxColors):
@@ -252,18 +246,9 @@ class SfaModelViewer(SfaProgram, EventHandler):
 
         self._setMtxs()
         self.texture.bind()
-        #for rnd in self.dlistRenderers: rnd.run()
-        if self.curList == -1:
-            log.dprint("All Dlists")
-            for lst in self.dlistRenderers:
-                lst.run(minPoly=self.minPoly, maxPoly=self.maxPoly)
-        elif self.curList >= 0 and self.curList < len(self.dlistRenderers):
-            log.dprint("Dlist %d", self.curList)
-            self.dlistRenderers[self.curList].run(minPoly=self.minPoly, maxPoly=self.maxPoly)
-        else:
-            log.dprint("Dlist %d not found", self.curList)
-        #self.boneRenderer.run()
-        #self.boxRenderer.run()
+        self.dlistRenderer.run()
+        self.boneRenderer.run()
+        self.boxRenderer.run()
 
         self.frame += 1
 
@@ -308,5 +293,4 @@ class SfaModelViewer(SfaProgram, EventHandler):
 
         self.boneRenderer.setMtxs(mp, mv)
         self.boxRenderer .setMtxs(mp, mv)
-        for rnd in self.dlistRenderers:
-            rnd.setMtxs(mp, mv)
+        self.dlistRenderer.setMtxs(mp, mv)

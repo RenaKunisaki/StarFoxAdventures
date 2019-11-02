@@ -58,7 +58,7 @@ class EventHandler:
         elif key == 'w': self.minPoly += 1
         elif key == 'e': self.maxPoly -= 1
         elif key == 'r': self.maxPoly += 1
-        if self.curList < -1: self.curList = len(self.dlistRenderers)-1
-        if self.curList >= len(self.dlistRenderers): self.curList=-1
-        if self.maxPoly > self.dlistRenderers[self.curList]._polyIdx[-1]:
-            self.maxPoly = self.dlistRenderers[self.curList]._polyIdx[-1]
+        #if self.curList < -1: self.curList = len(self.dlistRenderers)-1
+        #if self.curList >= len(self.dlistRenderers): self.curList=-1
+        #if self.maxPoly > self.dlistRenderers[self.curList]._polyIdx[-1]:
+        #    self.maxPoly = self.dlistRenderers[self.curList]._polyIdx[-1]

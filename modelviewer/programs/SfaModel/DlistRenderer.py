@@ -18,19 +18,28 @@ class DlistShader(SfaProgram):
 
 class DlistRenderer(gl.Pipeline):
     """Subprogram for rendering display lists."""
-    MAX_VTXS = 16384
+    MAX_VTXS = 65536
     vtxBufferFmt = "5f" # (x,y,z,s,t)
     colorBufferFmt = "4f" # (r,g,b,a)
 
-    def __init__(self, parent, dlist, mtxLut):
+    def __init__(self, parent):
         self.parent = parent
         self.shader = DlistShader(self.parent.ctx)
-        self.mtxLut = mtxLut
+        self.lists  = []
+        self.luts   = {
+            'vtx':      [],
+            'texCoord': [],
+            'matrix':   [],
+        }
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
             geometry_shader = self.shader,
             fragment_shader = parent.fragShader,
+        )
+        self.programs['fragment_shader'].setUniforms(
+            enableTexture = True,
+            #minAlpha      =  0.5,
         )
 
         self._vtxSize   = struct.calcsize(self.vtxBufferFmt)
@@ -40,17 +49,11 @@ class DlistRenderer(gl.Pipeline):
         self._nVtxs   = 0
         self._prevPos = None
         self._polyIdx = []
-        self.setList(dlist)
-        self.programs['fragment_shader'].setUniforms(
-            enableTexture = True,
-            #minAlpha      =  0.5,
-        )
 
 
-    def setList(self, dlist):
-        """Set the display list to render."""
-        self._dlist = dlist
-        self._nVtxs = 0
+    def addList(self, dlist):
+        """Add a display list to render."""
+        self.lists.append(dlist)
         for i, poly in enumerate(dlist.polys):
             mode = poly['mode']
             if   mode == 0 or mode == 1: self._addQuads(poly)
@@ -60,7 +63,11 @@ class DlistRenderer(gl.Pipeline):
             elif mode == 5: self._addLines(poly)
             elif mode == 6: self._addLineStrips(poly)
             else: self._addPoints(poly)
-        log.debug("List %d generated %d vtxs", self._dlist.listIdx, self._nVtxs)
+        log.debug("List %d generated %d vtxs", dlist.listIdx, self._nVtxs)
+
+
+    def setLut(self, name, lut):
+        self.luts[name] = lut
 
 
     def _listToColor(self, listIdx):
@@ -181,6 +188,8 @@ class DlistRenderer(gl.Pipeline):
 
 
     def _resolveVtxPos(self, vtx):
+        lutMtx = self.luts['matrix']
+        lutPos = self.luts['vtx']
         pos = vtx['POS']
         # if this is indexed, get the actual value
         if type(pos) is tuple:
@@ -192,10 +201,10 @@ class DlistRenderer(gl.Pipeline):
                     # self.vtxs there
                     # but we already read the vtxs as vec3s which is
                     # 6 bytes so we don't need to do that here
-                    pos = self._dlist.model.vtxs[pos]
+                    pos = lutPos[pos]
                 except IndexError:
-                    log.error("Vtx %d in list %d out of range %d",
-                        pos, self._dlist.listIdx, len(self._dlist.model.vtxs))
+                    log.error("Vtx %d out of range %d",
+                        pos, len(lutPos))
                     return (0,0,0)
             else:
                 raise NotImplementedError("Not implemented direct POS")
@@ -205,8 +214,8 @@ class DlistRenderer(gl.Pipeline):
         mIdx = vtx.get('PNMTXIDX', None)
         if type(mIdx) is tuple: mIdx = mIdx[1] # always indexed
         if mIdx is not None: mIdx //= 3 # offset -> idx
-        if mIdx in self.mtxLut:
-            tx, ty, tz = self.mtxLut[mIdx]
+        if mIdx in lutMtx:
+            tx, ty, tz = lutMtx[mIdx]
             x, y, z = x+tx, y+ty, z+tz
         else:
             log.warning("Mtx idx not valid: %s", mIdx)
@@ -216,15 +225,16 @@ class DlistRenderer(gl.Pipeline):
 
     def _resolveTexCoord(self, vtx):
         tc = vtx['TEX0']
+        lutTex = self.luts['texCoord']
         # if this is indexed, get the actual value
         if type(tc) is tuple:
             isIdx, tc = tc
             if isIdx:
                 try:
-                    tc = self._dlist.model.texCoords[tc]
+                    tc = lutTex[tc]
                 except IndexError:
-                    log.error("TexCoord %d in list %d out of range %d",
-                        tc, self._dlist.listIdx, len(self._dlist.model.texCoords))
+                    log.error("TexCoord %d out of range %d",
+                        tc, len(lutTex))
                     return (0,0)
             else:
                 raise NotImplementedError("Not implemented direct TEX0")
@@ -261,31 +271,32 @@ class DlistRenderer(gl.Pipeline):
         #self.ctx.glEnable(self.ctx.GL_BLEND)
         #self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
         #    self.ctx.GL_ONE_MINUS_SRC_ALPHA)
-        maxP = min(maxPoly, self._polyIdx[-1])
-        minP = min(minPoly, maxP)
+        #maxP = min(maxPoly, self._polyIdx[-1])
+        #minP = min(minPoly, maxP)
 
-        vStart, vEnd = 0, 99999999
-        for i, v in enumerate(self._polyIdx):
-            if v < minP: vStart += 1
-            if v > maxP:
-                vEnd = i
-                break
-        #vStart -= 1?
-        vEnd = min(vEnd, self._nVtxs)
-        log.dprint("Polys %4d - %4d: %4d / %4d", minP, maxP,
-            maxP - minP, self._polyIdx[-1])
-        log.dprint("Tris %5d - %4d: %4d / %4d", vStart, vEnd,
-            vEnd - vStart, self._nVtxs)
-        if vEnd <= vStart: return
+        #vStart, vEnd = 0, 99999999
+        #for i, v in enumerate(self._polyIdx):
+        #    if v < minP: vStart += 1
+        #    if v > maxP:
+        #        vEnd = i
+        #        break
+        ##vStart -= 1?
+        #vEnd = min(vEnd, self._nVtxs)
+        #log.dprint("Polys %4d - %4d: %4d / %4d", minP, maxP,
+        #    maxP - minP, self._polyIdx[-1])
+        #log.dprint("Tris %5d - %4d: %4d / %4d", vStart, vEnd,
+        #    vEnd - vStart, self._nVtxs)
+        #if vEnd <= vStart: return
 
         # nVtxs = # triangles since we use GL_TRIANGLES here,
         # so the division by 3 is done automatically
         with self:
             self._bindBuffers()
-            if minPoly < 0: self.shader.vao.render(self.ctx.GL_TRIANGLES,
+            #if minPoly < 0:
+            self.shader.vao.render(self.ctx.GL_TRIANGLES,
                 count=self._nVtxs)
-            else: self.shader.vao.render(self.ctx.GL_TRIANGLES,
-                count=(vEnd-vStart)*3, offset=vStart*3)
+            #else: self.shader.vao.render(self.ctx.GL_TRIANGLES,
+            #    count=(vEnd-vStart)*3, offset=vStart*3)
 
 
     def setMtxs(self, projection, modelView):
