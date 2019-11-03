@@ -22,6 +22,8 @@ class DlistRenderParams:
         self.dlist   = dlist
         self.vtxOffs = 0 # offset into vtx buffer
         self.nVtxs   = 0
+        self.enableOutline = True
+        self.enableFill    = True
 
 
 class DlistRenderer(gl.Pipeline):
@@ -31,10 +33,11 @@ class DlistRenderer(gl.Pipeline):
     colorBufferFmt = "4f" # (r,g,b,a)
 
     def __init__(self, parent):
-        self.parent = parent
-        self.shader = DlistShader(self.parent.ctx)
-        self.lists  = []
-        self.model  = None
+        self.parent   = parent
+        self.shader   = DlistShader(self.parent.ctx)
+        self.lists    = []
+        self.textures = {}
+        self.model    = None
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
@@ -55,6 +58,41 @@ class DlistRenderer(gl.Pipeline):
         self._polyIdx = []
 
 
+    def run(self):
+        #self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
+        #self.ctx.glDepthFunc(self.ctx.GL_LESS)
+        #self.ctx.glEnable(self.ctx.GL_BLEND)
+        #self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
+        #    self.ctx.GL_ONE_MINUS_SRC_ALPHA)
+
+        # nVtxs = # triangles since we use GL_TRIANGLES here,
+        # so the division by 3 is done automatically
+        with self:
+            gShader = self.programs['geometry_shader']
+            log.dprint("\nDL# F L 1stVtx LastVx")
+            for iList, dlist in enumerate(self.lists):
+                log.dprint("%3d %s %s %6d %6d", iList,
+                    'F' if dlist.enableFill else '-',
+                    'L' if dlist.enableOutline else '-',
+                    dlist.vtxOffs, dlist.nVtxs+dlist.vtxOffs)
+                gShader.setUniforms(
+                    enableFill    = dlist.enableFill,
+                    enableOutline = dlist.enableOutline,
+                    #minAlpha      =  0.5,
+                )
+                self.textures['test'].bind() # XXX
+                self._bindBuffers()
+                self.shader.vao.render(self.ctx.GL_TRIANGLES,
+                    count=dlist.nVtxs, offset=dlist.vtxOffs)
+
+
+    def setMtxs(self, projection, modelView):
+        self.shader.setMtxs(projection, modelView)
+
+    def setTexture(self, name, tex):
+        self.textures[name] = tex
+
+
     def addList(self, dlist):
         """Add a display list to render."""
         param = DlistRenderParams(dlist)
@@ -71,12 +109,17 @@ class DlistRenderer(gl.Pipeline):
             else: self._addPoints(poly)
         param.nVtxs = self._nVtxs - param.vtxOffs
 
-        log.debug("List %d generated %d vtxs", dlist.listIdx, self._nVtxs)
+        log.debug("List %d generated %d vtxs", dlist.listIdx, param.nVtxs)
 
 
     def setModel(self, model):
         # only for debug
         self.model = model
+
+
+    def getRenderParam(self, idx):
+        """Get DlistRenderParams for list idx."""
+        return self.lists[idx]
 
 
     def _listToColor(self, listIdx):
@@ -205,44 +248,6 @@ class DlistRenderer(gl.Pipeline):
         self.bufVtxs  .write(vtxData, vtxOffs)
         self.bufColors.write(colData, colOffs)
         self._nVtxs += 1
-
-
-    def run(self, minPoly=0, maxPoly=999999):
-        #self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
-        #self.ctx.glDepthFunc(self.ctx.GL_LESS)
-        #self.ctx.glEnable(self.ctx.GL_BLEND)
-        #self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
-        #    self.ctx.GL_ONE_MINUS_SRC_ALPHA)
-        #maxP = min(maxPoly, self._polyIdx[-1])
-        #minP = min(minPoly, maxP)
-
-        #vStart, vEnd = 0, 99999999
-        #for i, v in enumerate(self._polyIdx):
-        #    if v < minP: vStart += 1
-        #    if v > maxP:
-        #        vEnd = i
-        #        break
-        ##vStart -= 1?
-        #vEnd = min(vEnd, self._nVtxs)
-        #log.dprint("Polys %4d - %4d: %4d / %4d", minP, maxP,
-        #    maxP - minP, self._polyIdx[-1])
-        #log.dprint("Tris %5d - %4d: %4d / %4d", vStart, vEnd,
-        #    vEnd - vStart, self._nVtxs)
-        #if vEnd <= vStart: return
-
-        # nVtxs = # triangles since we use GL_TRIANGLES here,
-        # so the division by 3 is done automatically
-        with self:
-            self._bindBuffers()
-            #if minPoly < 0:
-            self.shader.vao.render(self.ctx.GL_TRIANGLES,
-                count=self._nVtxs)
-            #else: self.shader.vao.render(self.ctx.GL_TRIANGLES,
-            #    count=(vEnd-vStart)*3, offset=vStart*3)
-
-
-    def setMtxs(self, projection, modelView):
-        self.shader.setMtxs(projection, modelView)
 
 
     def _bindBuffers(self):

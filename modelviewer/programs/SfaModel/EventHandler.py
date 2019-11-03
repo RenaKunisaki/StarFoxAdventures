@@ -46,19 +46,21 @@ class EventHandler:
         if key == 'space': # reset
             self._translate = self._initT.copy()
             self._rotate    = self._initR.copy()
-        # up/down: move forward/backward
-        elif key == 'Up':    self._translate[2] += 10.0
-        elif key == 'Down':  self._translate[2] -= 10.0
-        # left/right: rotate Z
-        elif key == 'Left':  self._rotate[2] -= 10
-        elif key == 'Right': self._rotate[2] += 10
-        elif key == 'a': self.curList -= 1
-        elif key == 's': self.curList += 1
-        elif key == 'q': self.minPoly -= 1
-        elif key == 'w': self.minPoly += 1
-        elif key == 'e': self.maxPoly -= 1
-        elif key == 'r': self.maxPoly += 1
-        #if self.curList < -1: self.curList = len(self.dlistRenderers)-1
-        #if self.curList >= len(self.dlistRenderers): self.curList=-1
-        #if self.maxPoly > self.dlistRenderers[self.curList]._polyIdx[-1]:
-        #    self.maxPoly = self.dlistRenderers[self.curList]._polyIdx[-1]
+
+        # w/s: move forward/backward
+        elif key == 'w': self._translate[2] += 10.0
+        elif key == 's': self._translate[2] -= 10.0
+        # a/d: rotate Z
+        elif key == 'a': self._rotate[2] -= 10
+        elif key == 'd': self._rotate[2] += 10
+
+        elif key == 'Up':    self.cursor[0] -= 1
+        elif key == 'Down':  self.cursor[0] += 1
+        elif key == 'Left':  self.cursor[1] -= 1
+        elif key == 'Right': self.cursor[1] += 1
+        elif key == 'Return': self._doCursorEnter()
+
+        if self.cursor[0] <  0: self.cursor[0] = len(self.dlists) - 1
+        if self.cursor[0] >= len(self.dlists): self.cursor[0] = 0
+        if self.cursor[1] <  0: self.cursor[1] = len(self.cursorCols)
+        if self.cursor[1] >= len(self.cursorCols): self.cursor[1] = 0

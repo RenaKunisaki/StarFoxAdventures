@@ -27,14 +27,15 @@ class SfaModelViewer(SfaProgram, EventHandler):
     def __init__(self, ctx):
         super().__init__(ctx)
 
-        # temporary until real texture support
-        self.texture = self.ctx.Texture("./texture.png")
-
         # setup shaders and subprograms
         self.fragShader     = FragmentShader(self.ctx)
         self.boneRenderer   = BoneRenderer(self)
         self.boxRenderer    = BoxRenderer(self)
         self.dlistRenderer  = DlistRenderer(self)
+
+        # temporary until real texture support
+        tex = self.ctx.Texture("./texture.png")
+        self.dlistRenderer.setTexture('test', tex)
 
         # set up UI
         self.frame         = 0
@@ -44,9 +45,9 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self._rotate       = [0, 180, 0] # for some reason the models face backward
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
-        self.curList       = -1 # all
-        self.minPoly       = -1 # all
-        self.maxPoly       = 9999
+        self.dlists        = []
+        self.cursor        = [0, 0]
+        self.cursorCols    = (3, 5, 8, 15)
 
         # enable our local logger to print on the screen
         # by using log.dprint()
@@ -67,6 +68,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
             self.model = loader.loadFromFile(file)
             self.dlistRenderer.setModel(self.model)
             for dlist in loader.dlists:
+                self.dlists.append(dlist)
                 self.dlistRenderer.addList(dlist)
 
         # draw each vertex as a point
@@ -169,6 +171,15 @@ class SfaModelViewer(SfaProgram, EventHandler):
         ))
 
 
+    def _doCursorEnter(self):
+        """Called when pressing Enter."""
+        row, col = self.cursor
+        dlist = self.dlists[row]
+        param = self.dlistRenderer.getRenderParam(row)
+        if   col == 0: param.enableFill = not param.enableFill
+        elif col == 1: param.enableOutline = not param.enableOutline
+
+
     def run(self):
         """Render the scene."""
         #self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
@@ -177,10 +188,13 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #self.ctx.glDepthRange(1,0)
 
         self._setMtxs()
-        self.texture.bind()
         self.dlistRenderer.run()
         self.boneRenderer.run()
         self.boxRenderer.run()
+
+        log.dprint("\x1B[%d;%dH>",
+            (self.cursor[0]+4)*8,
+            self.cursorCols[self.cursor[1]]*8)
 
         self.frame += 1
 
