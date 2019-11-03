@@ -51,8 +51,6 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.curMaterial   = None
         self.mtxLut        = {}
 
-        self.dlistRenderer.setLut('matrix', self.mtxLut)
-
         # enable our local logger to print on the screen
         # by using log.dprint()
         log.setLevel('DPRINT')
@@ -69,8 +67,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         # read the model
         with open(path, 'rb') as file:
             self.model = Model(file)
-            self.dlistRenderer.setLut('vtx', self.model.vtxs)
-            self.dlistRenderer.setLut('texCoord', self.model.texCoords)
+            self.dlistRenderer.setModel(self.model)
             self._doRenderInstrs()
 
         # draw each vertex as a point
@@ -169,6 +166,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
 
         parser.setVtxFmt(6, **attrs) # XXX always 6?
         parser.setMaterial(self.curMaterial)
+        parser.setMtxLut(self.mtxLut)
         dlist = parser.parse()
         log.debug("Dlist %d has %d polys", idx, len(parser.polys))
         self.dlistRenderer.addList(dlist)

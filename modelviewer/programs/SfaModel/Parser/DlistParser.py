@@ -100,11 +100,12 @@ class DlistParser:
         log.debug("Parsing dlist %d (0x%X) size %d (0x%X) offs=0x%X", idx,
             idx, self.list.size, self.list.size, self.list.offset)
         self.model.file.seek(self.list.offset)
-        self.bytes = self.model.file.read(self.list.size)
-        self._offset = 0
+        self.bytes    = self.model.file.read(self.list.size)
+        self._offset  = 0
         self.material = None
-        self.polys   = []
-        self._cpRegs = {
+        self.mtxLut   = {}
+        self.polys    = []
+        self._cpRegs  = {
             0x30: 0x3C03C780, # MATIDX_REG_A
             0x50: 0x00001F03, # VCD_LO[0]
             0x51: 0x00001F03, # VCD_LO[1] XXX probably wrong
@@ -174,12 +175,50 @@ class DlistParser:
         return struct.unpack_from('>I', self.bytes[self._offset - 4:])[0]
 
     def nextVtxField(self, fmt):
-        if fmt == 0: return None
-        if fmt == 1: return (False, self.nextByte()) # XXX verify
-        if fmt == 2: return (True,  self.nextByte()) # is index
-        if fmt == 3: return (True,  self.nextU16())
+        if fmt == 0: return False, None
+        if fmt == 1: return False, self.nextByte() # XXX verify
+        if fmt == 2: return True,  self.nextByte() # is index
+        if fmt == 3: return True,  self.nextU16()
+
+    def _resolveIndex(self, name, idx):
+        """Given attribute name and index, return the referenced value."""
+        if   name == 'POS': return self.model.vtxs[idx]
+        elif name == 'NRM': return self.model.normals[idx]
+        elif name.startswith('TEX'): return self.model.texCoords[idx]
+        elif name.endswith('IDX'): return self.mtxLut[idx//3]
+        else:
+            raise NotImplementedError("Not implemented indexed %s" % name)
+
+    def _convertVtx(self, vtx):
+        """Apply matrix transforms and convert from
+        Vec[23][fs] to tuple for each attribute.
+        """
+        #log.debug("Vtx: %s", vtx)
+        # convert types and apply mtxs
+        p, n = vtx['POS'], vtx['NRM']
+        px, py, pz = p.x, p.y, p.z
+        nx, ny, nz = n.x, n.y, n.z
+        if vtx['PNMTXIDX'] is not None:
+            # we only store the translation vector, not whole mtx
+            tx, ty, tz = vtx['PNMTXIDX']
+            px, py, pz = px+tx, py+ty, pz+tz
+            nx, ny, nz = nx+tx, ny+ty, nz+tz
+        vtx['POS'] = (px, py, pz)
+        vtx['NRM'] = (nx, ny, nz)
+
+        for i in range(8):
+            p = vtx['TEX%d' % i]
+            if p is not None:
+                x, y = p.x, p.y
+                # XXX
+                #if vtx['T%dMIDX' % i] is not None:
+                #    tx, ty = self.mtxLut[vtx['T%dMIDX' % i]]
+                #    x, y = x+tx, y+ty
+                vtx['TEX%d' % i] = (x, y)
+        return vtx
 
     def nextVertex(self, vat):
+        """Read vertex data from current offset."""
         fmtLo = self._cpRegs[vat + 0x50]
         fmtHi = self._cpRegs[vat + 0x60]
         start = self._offset
@@ -188,17 +227,25 @@ class DlistParser:
             reg, idx, size = self.vatFields[name]
             fmt = self._cpRegs[reg + vat]
             mask = (1 << size) - 1
-            try: val = self.nextVtxField((fmt >> idx) & mask)
+            
+            try: isIdx, val = self.nextVtxField((fmt >> idx) & mask)
             except (IndexError, struct.error):
                 log.exception("Index out of range for vtx field %s at 0x%X fmt %d vat %d (len=0x%X)",
                     name, start, (fmt >> idx) & mask, vat,
                     len(self.bytes))
                 raise
+
+            if (isIdx or name == 'PNMTXIDX') and (val is not None):
+                try:
+                    val = self._resolveIndex(name, val)
+                except KeyError:
+                    log.warning("Vtx in list %d attr %s idx is invalid (%s / %s)",
+                        self.listIdx, name, val,
+                        ', '.join(map(str, self.mtxLut.keys())))
             vtx[name] = val
 
         #log.debug("VAT %d fmt %X, %X => %d bytes", vat, fmtLo, fmtHi, self._offset - start)
-
-        return vtx
+        return self._convertVtx(vtx)
 
 
     def describeVat(self, vat): # for debug
@@ -239,6 +286,11 @@ class DlistParser:
         self.material = mat
 
 
+    def setMtxLut(self, lut):
+        """Set the matrix lookup table to use."""
+        self.mtxLut = lut
+
+
     def parse(self):
         #print(gl.Util.Data.dumpHex(self.bytes))
         try:
@@ -273,7 +325,7 @@ class DlistParser:
                 elif opcode == 0x61: self.op_loadBpReg()
                 elif opcode >= 0x80 and opcode < 0xC0: self.op_draw(opcode)
                 else:
-                    log.warning("DlistParser: unknown opcode 0x%02X at 0x%04X", opcode, self._offset - 1)
+                    log.error("DlistParser: unknown opcode 0x%02X at 0x%04X", opcode, self._offset - 1)
                     return self
             log.debug("Parsed OK, end=0x%04X", self._offset)
         except IndexError:
@@ -339,6 +391,7 @@ class DlistParser:
 
 
     def _printVtx(self, i, vtx, vat, offs):
+        # XXX this won't work anymore...
         p = vtx['POS']
         m = vtx['PNMTXIDX']
         t = vtx['TEX0']

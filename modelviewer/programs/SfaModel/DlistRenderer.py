@@ -16,6 +16,14 @@ class DlistShader(SfaProgram):
     geometry_shader = (shaders, 'dlist.geom')
 
 
+class DlistRenderParams:
+    """Params used by DlistRenderer to track each list."""
+    def __init__(self, dlist):
+        self.dlist   = dlist
+        self.vtxOffs = 0 # offset into vtx buffer
+        self.nVtxs   = 0
+
+
 class DlistRenderer(gl.Pipeline):
     """Subprogram for rendering display lists."""
     MAX_VTXS = 65536
@@ -26,11 +34,7 @@ class DlistRenderer(gl.Pipeline):
         self.parent = parent
         self.shader = DlistShader(self.parent.ctx)
         self.lists  = []
-        self.luts   = {
-            'vtx':      [],
-            'texCoord': [],
-            'matrix':   [],
-        }
+        self.model  = None
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
@@ -53,7 +57,9 @@ class DlistRenderer(gl.Pipeline):
 
     def addList(self, dlist):
         """Add a display list to render."""
-        self.lists.append(dlist)
+        param = DlistRenderParams(dlist)
+        param.vtxOffs = self._nVtxs
+        self.lists.append(param)
         for i, poly in enumerate(dlist.polys):
             mode = poly['mode']
             if   mode == 0 or mode == 1: self._addQuads(poly)
@@ -63,11 +69,14 @@ class DlistRenderer(gl.Pipeline):
             elif mode == 5: self._addLines(poly)
             elif mode == 6: self._addLineStrips(poly)
             else: self._addPoints(poly)
+        param.nVtxs = self._nVtxs - param.vtxOffs
+
         log.debug("List %d generated %d vtxs", dlist.listIdx, self._nVtxs)
 
 
-    def setLut(self, name, lut):
-        self.luts[name] = lut
+    def setModel(self, model):
+        # only for debug
+        self.model = model
 
 
     def _listToColor(self, listIdx):
@@ -91,20 +100,12 @@ class DlistRenderer(gl.Pipeline):
 
 
     def _addQuads(self, poly):
+        c0 = self._matToColor(poly['material'])
         for i in range(0, len(poly['vtxs']), 4):
             self._polyIdx.append(poly['idx'])
-            v0, v1, v2, v3 = poly['vtxs'][i:i+4]
-            p0 = self._resolveVtxPos(v0)
-            p1 = self._resolveVtxPos(v1)
-            p2 = self._resolveVtxPos(v2)
-            p3 = self._resolveVtxPos(v3)
             # triangulate
-            self._addVtx(p0, (1, 0, 0, 1))
-            self._addVtx(p1, (0, 1, 0, 1))
-            self._addVtx(p2, (0, 0, 1, 1))
-            self._addVtx(p1, (0, 1, 0, 1))
-            self._addVtx(p2, (0, 0, 1, 1))
-            self._addVtx(p3, (1, 1, 0, 1))
+            self._addTri(v0, v1, v2, c0, c0, c0)
+            self._addTri(v1, v2, v3, c0, c0, c0)
 
     def _addTris(self, poly):
         c0 = self._matToColor(poly['material'])
@@ -175,70 +176,12 @@ class DlistRenderer(gl.Pipeline):
             v2['T7MIDX'][1]/24,
             0.8)
 
-        p0 = self._resolveVtxPos(v0)
-        p1 = self._resolveVtxPos(v1)
-        p2 = self._resolveVtxPos(v2)
-        t0 = self._resolveTexCoord(v0)
-        t1 = self._resolveTexCoord(v1)
-        t2 = self._resolveTexCoord(v2)
+        p0, p1, p2 = v0['POS'],  v1['POS'],  v2['POS']
+        t0, t1, t2 = v0['TEX0'], v1['TEX0'], v2['TEX0']
 
         self._addVtx(p0, c0, t0)
         self._addVtx(p1, c1, t1)
         self._addVtx(p2, c2, t2)
-
-
-    def _resolveVtxPos(self, vtx):
-        lutMtx = self.luts['matrix']
-        lutPos = self.luts['vtx']
-        pos = vtx['POS']
-        # if this is indexed, get the actual value
-        if type(pos) is tuple:
-            isIdx, pos = pos
-            if isIdx:
-                try:
-                    # pos is a vtx idx, technically should multiply
-                    # by the array stride (6) and read bytes from
-                    # self.vtxs there
-                    # but we already read the vtxs as vec3s which is
-                    # 6 bytes so we don't need to do that here
-                    pos = lutPos[pos]
-                except IndexError:
-                    log.error("Vtx %d out of range %d",
-                        pos, len(lutPos))
-                    return (0,0,0)
-            else:
-                raise NotImplementedError("Not implemented direct POS")
-        x, y, z = pos.x, pos.y, pos.z
-
-        # apply the matrix
-        mIdx = vtx.get('PNMTXIDX', None)
-        if type(mIdx) is tuple: mIdx = mIdx[1] # always indexed
-        if mIdx is not None: mIdx //= 3 # offset -> idx
-        if mIdx in lutMtx:
-            tx, ty, tz = lutMtx[mIdx]
-            x, y, z = x+tx, y+ty, z+tz
-        else:
-            log.warning("Mtx idx not valid: %s", mIdx)
-
-        return (x, y, z)
-
-
-    def _resolveTexCoord(self, vtx):
-        tc = vtx['TEX0']
-        lutTex = self.luts['texCoord']
-        # if this is indexed, get the actual value
-        if type(tc) is tuple:
-            isIdx, tc = tc
-            if isIdx:
-                try:
-                    tc = lutTex[tc]
-                except IndexError:
-                    log.error("TexCoord %d out of range %d",
-                        tc, len(lutTex))
-                    return (0,0)
-            else:
-                raise NotImplementedError("Not implemented direct TEX0")
-        return (tc.x, tc.y)
 
 
     def _addVtx(self, pos, color, texCoord=None):
@@ -253,7 +196,6 @@ class DlistRenderer(gl.Pipeline):
         s, t = 0, 0
         if texCoord is not None: s, t = texCoord
 
-        # XXX handle indexed texcoords, etc
         r, g, b, a = color
 
         vtxData = struct.pack(self.vtxBufferFmt, x, y, z, s, t)
