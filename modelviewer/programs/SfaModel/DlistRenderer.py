@@ -69,12 +69,12 @@ class DlistRenderer(gl.Pipeline):
         # so the division by 3 is done automatically
         with self:
             gShader = self.programs['geometry_shader']
-            log.dprint("\nDL# F L 1stVtx LastVx")
+            #log.dprint("\nDL# F L 1stVtx LastVx")
             for iList, dlist in enumerate(self.lists):
-                log.dprint("%3d %s %s %6d %6d", iList,
-                    'F' if dlist.enableFill else '-',
-                    'L' if dlist.enableOutline else '-',
-                    dlist.vtxOffs, dlist.nVtxs+dlist.vtxOffs)
+                #log.dprint("%3d %s %s %6d %6d", iList,
+                #    'F' if dlist.enableFill else '-',
+                #    'L' if dlist.enableOutline else '-',
+                #    dlist.vtxOffs, dlist.nVtxs+dlist.vtxOffs)
                 gShader.setUniforms(
                     enableFill    = dlist.enableFill,
                     enableOutline = dlist.enableOutline,

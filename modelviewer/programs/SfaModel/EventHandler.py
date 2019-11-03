@@ -42,25 +42,24 @@ class EventHandler:
 
     def on_key_press(self, event):
         key = Gdk.keyval_name(event.keyval)
+
         #print(key)
-        if key == 'space': # reset
+        if   key == 'Up':        self.menu.moveCursor(-1)
+        elif key == 'Down':      self.menu.moveCursor( 1)
+        elif key == 'Page_Up':   self.menu.changePage(-1)
+        elif key == 'Page_Down': self.menu.changePage( 1)
+        elif key == 'Return':    self.menu.activate()
+
+        elif key == 'space': # reset
             self._translate = self._initT.copy()
             self._rotate    = self._initR.copy()
 
         # w/s: move forward/backward
         elif key == 'w': self._translate[2] += 10.0
         elif key == 's': self._translate[2] -= 10.0
-        # a/d: rotate Z
-        elif key == 'a': self._rotate[2] -= 10
-        elif key == 'd': self._rotate[2] += 10
-
-        elif key == 'Up':    self.cursor[0] -= 1
-        elif key == 'Down':  self.cursor[0] += 1
-        elif key == 'Left':  self.cursor[1] -= 1
-        elif key == 'Right': self.cursor[1] += 1
-        elif key == 'Return': self._doCursorEnter()
-
-        if self.cursor[0] <  0: self.cursor[0] = len(self.dlists) - 1
-        if self.cursor[0] >= len(self.dlists): self.cursor[0] = 0
-        if self.cursor[1] <  0: self.cursor[1] = len(self.cursorCols)
-        if self.cursor[1] >= len(self.cursorCols): self.cursor[1] = 0
+        # a/d: move left/right
+        elif key == 'a': self._translate[0] += 10.0
+        elif key == 'd': self._translate[0] -= 10.0
+        # q/e: rotate Z
+        elif key == 'q': self._rotate[2] -= 10
+        elif key == 'e': self._rotate[2] += 10

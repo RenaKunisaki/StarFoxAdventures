@@ -12,6 +12,7 @@ from .Parser.DlistParser import DlistParser
 from .BoneRenderer import BoneRenderer
 from .BoxRenderer import BoxRenderer
 from .DlistRenderer import DlistRenderer
+from .Menu import Menu
 
 
 class FragmentShader(SfaProgram):
@@ -46,8 +47,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
         self.dlists        = []
-        self.cursor        = [0, 0]
-        self.cursorCols    = (3, 5, 8, 15)
+        self.menu          = Menu(self)
 
         # enable our local logger to print on the screen
         # by using log.dprint()
@@ -67,9 +67,11 @@ class SfaModelViewer(SfaProgram, EventHandler):
             loader = ModelLoader()
             self.model = loader.loadFromFile(file)
             self.dlistRenderer.setModel(self.model)
-            for dlist in loader.dlists:
+            self.menu.pages['dlists'].items = ["All Lists"]
+            for i, dlist in enumerate(loader.dlists):
                 self.dlists.append(dlist)
                 self.dlistRenderer.addList(dlist)
+                self.menu.pages['dlists'].items.append("%3d" % i)
 
         # draw each vertex as a point
         #d=0.04
@@ -171,15 +173,6 @@ class SfaModelViewer(SfaProgram, EventHandler):
         ))
 
 
-    def _doCursorEnter(self):
-        """Called when pressing Enter."""
-        row, col = self.cursor
-        dlist = self.dlists[row]
-        param = self.dlistRenderer.getRenderParam(row)
-        if   col == 0: param.enableFill = not param.enableFill
-        elif col == 1: param.enableOutline = not param.enableOutline
-
-
     def run(self):
         """Render the scene."""
         #self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
@@ -188,13 +181,15 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #self.ctx.glDepthRange(1,0)
 
         self._setMtxs()
+        self.menu.render()
         self.dlistRenderer.run()
         self.boneRenderer.run()
         self.boxRenderer.run()
 
-        log.dprint("\x1B[%d;%dH>",
-            (self.cursor[0]+4)*8,
-            self.cursorCols[self.cursor[1]]*8)
+        selList = self.menu.pages['dlists'].cursorPos - 1
+        if selList >= 0:
+            dlist = self.dlists[selList]
+            log.dprint("\nDlist %d: %d polys", selList, len(dlist.polys))
 
         self.frame += 1
 

@@ -23,29 +23,29 @@ class DebugText(gl.Program):
     DEBUG_LEVELV_NUM = 9 # logger debug level
     MAX_CHARS = 4096 # buffer size
     CHAR_FMT  = 'iii' # x, y, chr
-    scale     = 1.5
+    scale     = 1.75
     gridSize  = (16, 6) # characters in font
     charSize  = (8, 8) # XXX derive from texture
     chrDataSize = struct.calcsize(CHAR_FMT)
     bufSize   = MAX_CHARS * chrDataSize
     palette   = ( # ANSI colors
         # r    g    b
-        (0.00, 0.00, 0.00), # black
-        (0.67, 0.00, 0.00), # red
-        (0.00, 0.67, 0.00), # green
-        (0.67, 0.33, 0.00), # brown/yellow
-        (0.00, 0.00, 0.67), # blue
-        (0.67, 0.00, 0.67), # magenta
-        (0.00, 0.67, 0.67), # cyan
-        (0.67, 0.67, 0.67), # gray
-        (0.33, 0.33, 0.33), # dark gray
-        (1.00, 0.33, 0.33), # red
-        (0.33, 1.00, 0.33), # green
-        (1.00, 1.00, 0.33), # yellow
-        (0.33, 0.33, 1.00), # blue
-        (1.00, 0.33, 1.00), # magenta
-        (0.33, 1.00, 1.00), # cyan
-        (1.00, 1.00, 1.00), # white
+        (0.00, 0.00, 0.00), #  0: black
+        (0.67, 0.00, 0.00), #  1: red
+        (0.00, 0.67, 0.00), #  2: green
+        (0.67, 0.33, 0.00), #  3: brown/yellow
+        (0.00, 0.00, 0.67), #  4: blue
+        (0.67, 0.00, 0.67), #  5: magenta
+        (0.00, 0.67, 0.67), #  6: cyan
+        (0.67, 0.67, 0.67), #  7: gray
+        (0.33, 0.33, 0.33), #  8: dark gray
+        (1.00, 0.33, 0.33), #  9: red
+        (0.33, 1.00, 0.33), # 10: green
+        (1.00, 1.00, 0.33), # 11: yellow
+        (0.33, 0.33, 1.00), # 12: blue
+        (1.00, 0.33, 1.00), # 13: magenta
+        (0.33, 1.00, 1.00), # 14: cyan
+        (1.00, 1.00, 1.00), # 15: white
     )
 
     def __init__(self, ctx):
@@ -257,7 +257,7 @@ class DebugText(gl.Program):
                 i += 1
                 if arg == 2: # 2;r;g;b
                     r, g, b = args[i : i+3]
-                    self.color = (r/255, g/255, b/255)
+                    self.color = (r/255.0, g/255.0, b/255.0)
                     i += 3
                 elif arg == 5: # 5;idx
                     idx = args[i]
