@@ -106,11 +106,11 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #self.ctx.glDepthRange(1,0)
 
         self._setMtxs()
-        self.menu.render()
         self.dlistRenderer.run()
         self.boneRenderer.run()
         self.boxRenderer.run()
         self.textureRenderer.run()
+        self.menu.render()
 
         self.frame += 1
 

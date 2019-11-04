@@ -58,4 +58,5 @@ class DlistMenu(Menu):
 
 
     def _onChange(self):
-        pass
+        param = self.parent.dlistRenderer.getRenderParam(self.dlist.listIdx)
+        param.polyIdx = self.cursorPos - 1

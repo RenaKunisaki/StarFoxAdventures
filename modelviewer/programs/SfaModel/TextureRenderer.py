@@ -73,10 +73,6 @@ class TextureRenderer(gl.Pipeline):
 
     def run(self):
         self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
-        #self.ctx.glDepthFunc(self.ctx.GL_LESS)
-        #self.ctx.glEnable(self.ctx.GL_BLEND)
-        #self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
-        #    self.ctx.GL_ONE_MINUS_SRC_ALPHA)
 
         # nVtxs = # triangles since we use GL_TRIANGLES here,
         # so the division by 3 is done automatically

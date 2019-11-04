@@ -96,9 +96,9 @@ class Program:
 
     def setUniforms(self, **values):
         """Set the values of multiple uniform variables."""
-        self.bind()
-        for name, val in values.items():
-            self.uniforms[name].value = val
+        with self:
+            for name, val in values.items():
+                self.uniforms[name].value = val
 
 
     def _loadShaders(self, **files):
