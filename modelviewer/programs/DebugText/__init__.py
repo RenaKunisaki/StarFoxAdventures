@@ -146,7 +146,7 @@ class DebugText(gl.Program):
             text = text[1:]
             if c == '\n':
                 self.cursor[0] = 0
-                self.cursor[1] += self.charSize[1]
+                self.cursor[1] += self.charSize[1] + 1
             elif c == '\r':
                 self.cursor[0] = 0
             elif c == '\t':

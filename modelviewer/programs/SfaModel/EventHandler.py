@@ -49,9 +49,7 @@ class EventHandler:
         elif key == 'Page_Up':   self.menu.moveCursor(-10)
         elif key == 'Page_Down': self.menu.moveCursor( 10)
         elif key == 'Return':    self.menu.activate()
-        elif key == 'BackSpace':
-            if len(self._menuStack) > 0:
-                self.menu = self._menuStack.pop()
+        elif key == 'BackSpace': self.exitMenu()
 
         elif key == 'space': # reset
             self._translate = self._initT.copy()

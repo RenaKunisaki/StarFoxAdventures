@@ -97,6 +97,7 @@ class DlistParser:
         self.model   = model
         self.listIdx = idx
         self.list    = self.model.dlistPtrs[idx]
+        self.offset  = self.list.offset
         log.debug("Parsing dlist %d (0x%X) size %d (0x%X) offs=0x%X", idx,
             idx, self.list.size, self.list.size, self.list.offset)
         self.model.file.seek(self.list.offset)
@@ -222,12 +223,12 @@ class DlistParser:
         fmtLo = self._cpRegs[vat + 0x50]
         fmtHi = self._cpRegs[vat + 0x60]
         start = self._offset
-        vtx = {}
+        vtx = {'offs':start}
         for name in self.vatFieldOrder:
             reg, idx, size = self.vatFields[name]
             fmt = self._cpRegs[reg + vat]
             mask = (1 << size) - 1
-            
+
             try: isIdx, val = self.nextVtxField((fmt >> idx) & mask)
             except (IndexError, struct.error):
                 log.exception("Index out of range for vtx field %s at 0x%X fmt %d vat %d (len=0x%X)",
@@ -236,6 +237,7 @@ class DlistParser:
                 raise
 
             if (isIdx or name == 'PNMTXIDX') and (val is not None):
+                vtx[name+'_idx'] = val
                 try:
                     val = self._resolveIndex(name, val)
                 except KeyError:

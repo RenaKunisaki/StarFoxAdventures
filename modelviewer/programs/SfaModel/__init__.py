@@ -86,6 +86,15 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #self._renderHitboxes()
 
 
+    def enterMenu(self, menu):
+        self._menuStack.append(self.menu)
+        self.menu = menu
+
+    def exitMenu(self):
+        if len(self._menuStack) > 0:
+            self.menu = self._menuStack.pop()
+
+
     def run(self):
         """Render the scene."""
         #self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)

@@ -4,6 +4,7 @@ class Menu:
     """Base class for UI menus."""
     title = ""
     items = []
+    itemsPerPage = 40
 
 
     def __init__(self, parent):
@@ -28,5 +29,10 @@ class Menu:
 
     def render(self):
         log.dprint("\n  [%s]", self.title)
-        for i, item in enumerate(self.items):
+        start = max(0, self.cursorPos - (self.itemsPerPage // 2))
+        if len(self.items) <= self.itemsPerPage: start = 0
+
+        for i in range(start, start+self.itemsPerPage):
+            if i >= len(self.items): break
+            item = self.items[i]
             log.dprint("%s%s", '>' if i == self.cursorPos else ' ', item)
