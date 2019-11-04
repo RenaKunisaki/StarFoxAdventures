@@ -41,6 +41,7 @@ class DlistRenderer(gl.Pipeline):
         self.lists    = []
         self.textures = {}
         self.model    = None
+        self.useFaceCulling = True
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
@@ -63,10 +64,16 @@ class DlistRenderer(gl.Pipeline):
 
     def run(self):
         self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
+        if self.useFaceCulling: self.ctx.glEnable(self.ctx.GL_CULL_FACE)
+        else: self.ctx.glDisable(self.ctx.GL_CULL_FACE)
+        #self.ctx.glEnable(self.ctx.GL_CULL_FACE)
         #self.ctx.glDepthFunc(self.ctx.GL_LESS)
         #self.ctx.glEnable(self.ctx.GL_BLEND)
         #self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
         #    self.ctx.GL_ONE_MINUS_SRC_ALPHA)
+
+        log.dprint("Face Culling: %s",
+            "On" if self.useFaceCulling else "Off")
 
         # nVtxs = # triangles since we use GL_TRIANGLES here,
         # so the division by 3 is done automatically
@@ -166,7 +173,9 @@ class DlistRenderer(gl.Pipeline):
         c0 = self._matToColor(poly['material'])
         for i in range(0, len(poly['vtxs']), 3):
             v0, v1, v2 = poly['vtxs'][i:i+3]
-            self._addTri(v0, v1, v2, c0, c0, c0)
+            # this appears to be the correct order, else the faces
+            # are incorrectly culled.
+            self._addTri(v2, v1, v0, c0, c0, c0)
         self._nPolys += 1
 
     def _addTriStrips(self, poly):

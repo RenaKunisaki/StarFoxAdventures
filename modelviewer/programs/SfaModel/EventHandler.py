@@ -55,12 +55,18 @@ class EventHandler:
             self._translate = self._initT.copy()
             self._rotate    = self._initR.copy()
 
+        elif key == '1':
+            self.dlistRenderer.useFaceCulling = not self.dlistRenderer.useFaceCulling
+
         # w/s: move forward/backward
         elif key == 'w': self._translate[2] += 10.0
         elif key == 's': self._translate[2] -= 10.0
         # a/d: move left/right
         elif key == 'a': self._translate[0] += 10.0
         elif key == 'd': self._translate[0] -= 10.0
+        # q/e: move up/down
+        elif key == 'q': self._translate[1] += 10.0
+        elif key == 'e': self._translate[1] -= 10.0
         # q/e: rotate Z
-        elif key == 'q': self._rotate[2] -= 10
-        elif key == 'e': self._rotate[2] += 10
+        #elif key == 'q': self._rotate[2] -= 10
+        #elif key == 'e': self._rotate[2] += 10
