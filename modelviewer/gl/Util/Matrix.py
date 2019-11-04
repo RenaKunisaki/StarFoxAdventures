@@ -127,6 +127,14 @@ def translate(x, y, z):
         [x, y, z, 1],
     ], dtype=np.float)
 
+def scale(x=1, y=1, z=1):
+    return np.array([
+        [x, 0, 0, 0],
+        [0, y, 0, 0],
+        [0, 0, z, 0],
+        [0, 0, 0, 1],
+    ], dtype=np.float)
+
 
 def rotate(rx, ry, rz):
     # I don't think this works

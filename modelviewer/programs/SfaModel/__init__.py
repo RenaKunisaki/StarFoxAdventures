@@ -12,6 +12,7 @@ from .Parser.DlistParser import DlistParser
 from .BoneRenderer import BoneRenderer
 from .BoxRenderer import BoxRenderer
 from .DlistRenderer import DlistRenderer
+from .TextureRenderer import TextureRenderer
 from .Menu import Menu, MainMenu
 
 
@@ -29,14 +30,16 @@ class SfaModelViewer(SfaProgram, EventHandler):
         super().__init__(ctx)
 
         # setup shaders and subprograms
-        self.fragShader     = FragmentShader(self.ctx)
-        self.boneRenderer   = BoneRenderer(self)
-        self.boxRenderer    = BoxRenderer(self)
-        self.dlistRenderer  = DlistRenderer(self)
+        self.fragShader      = FragmentShader(self.ctx)
+        self.boneRenderer    = BoneRenderer(self)
+        self.boxRenderer     = BoxRenderer(self)
+        self.dlistRenderer   = DlistRenderer(self)
+        self.textureRenderer = TextureRenderer(self)
 
         # temporary until real texture support
         tex = self.ctx.Texture("./texture.png")
         self.dlistRenderer.setTexture('test', tex)
+        self.textureRenderer.setTexture(tex)
 
         # set up UI
         self.frame         = 0
@@ -107,6 +110,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.dlistRenderer.run()
         self.boneRenderer.run()
         self.boxRenderer.run()
+        self.textureRenderer.run()
 
         self.frame += 1
 
@@ -149,6 +153,10 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #    log.dprint("%2d %+7.2f %+7.2f %+7.2f | %+7.2f %+7.2f %+7.2f",
         #        i, head[0], head[1], head[2], tail[0], tail[1], tail[2])
 
-        self.boneRenderer.setMtxs(mp, mv)
-        self.boxRenderer .setMtxs(mp, mv)
-        self.dlistRenderer.setMtxs(mp, mv)
+        self.boneRenderer   .setMtxs(mp, mv)
+        self.boxRenderer    .setMtxs(mp, mv)
+        self.dlistRenderer  .setMtxs(mp, mv)
+        self.textureRenderer.setMtxs(
+            gl.Util.Matrix.scale(2/width, 2/height) @
+            gl.Util.Matrix.translate(-0.9, -0.9, 0),
+            mv)

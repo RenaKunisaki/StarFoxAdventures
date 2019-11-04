@@ -41,7 +41,7 @@ void drawOutline(vec3 a, vec3 b, vec3 c) {
 }
 
 void main() {
-    ivec2 texSize  = textureSize(texture, 0);
+    //ivec2 texSize  = textureSize(texture, 0);
     for(int i = 0; i < gl_in.length(); i += 3) { //for each primitive
         if(enableFill) {
             for(int j=0; j<3; j++) {

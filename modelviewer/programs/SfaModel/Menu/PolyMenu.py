@@ -40,14 +40,31 @@ class PolyMenu(Menu):
     def render(self):
         super().render()
 
-        selVts = self.cursorPos
-        #poly = self.dlist.polys[selPoly]
-        #log.dprint("\x1B[16,400HPoly %d: %s, %d vtxs", selPoly,
-        #    self.drawModes[poly['mode']],
-        #    len(poly['vtxs']))
-        #for i, vtx in enumerate(poly['vtxs']):
-        #    log.dprint("%d", i)
+        maxIdx = len(self.poly['vtxs']) - 4
+        idx = max(0, min(self.cursorPos-1, maxIdx))
+        vtxs = self.poly['vtxs'][idx: idx+3]
+
+        log.dprint("\x1B[330,330H  S    T    X    Y    Z ")
+        for i, v in enumerate(vtxs):
+            log.dprint("\x1B[%d,330H%04X %04X %04X %04X %04X",
+                330 + ((i+1)*12),
+                int(v['TEX0'][0] * 1024) & 0xFFFF,
+                int(v['TEX0'][1] * 1024) & 0xFFFF,
+                int(v['POS'] [0] *  256) & 0xFFFF,
+                int(v['POS'] [1] *  256) & 0xFFFF,
+                int(v['POS'] [2] *  256) & 0xFFFF,
+            )
 
 
     def _onChange(self):
-        pass
+        renderer = self.parent.textureRenderer
+        renderer.reset()
+        maxIdx = len(self.poly['vtxs']) - 4
+        idx = max(0, min(self.cursorPos-1, maxIdx))
+        vtxs = self.poly['vtxs'][idx: idx+3]
+        renderer.addTri(
+            vtxs[0]['TEX0'],
+            vtxs[1]['TEX0'],
+            vtxs[2]['TEX0'],
+            (1, 1, 1, 0.5),
+        )
