@@ -112,6 +112,14 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.textureRenderer.run()
         self.menu.render()
 
+        lines = (
+            "[1] Face Culling: %s" % ("On" if self.dlistRenderer.useFaceCulling else "Off"),
+            "[2] Bone X-ray: %s" % (
+                "Off" if self.boneRenderer.useDepthTest else "On"),
+        )
+        for i, line in enumerate(lines):
+            log.dprint("\x1B[%d,200H%s", (i*11)+5, line)
+
         self.frame += 1
 
 
@@ -133,7 +141,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #    width/height)
         log.dprint("r=%d, %d, %d",
             self._rotate[0], self._rotate[1], self._rotate[2])
-        log.dprint("t=%f, %f, %f",
+        log.dprint("t=%+2.1f, %+2.1f, %+2.1f",
             self._translate[0], self._translate[1], self._translate[2])
         #log.dprint("B=%s", self._mouseButtons)
         #log.dprint("\nPROJ\n" +

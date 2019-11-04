@@ -35,6 +35,7 @@ class BoneRenderer(gl.Pipeline):
         self._colorSize = struct.calcsize(self.colorBufferFmt)
         self.bufVtxs   = self.ctx.Buffer(self._vtxSize * self.MAX_BONES, True)
         self.bufColors = self.ctx.Buffer(self._colorSize * self.MAX_BONES, True)
+        self.useDepthTest = True
 
 
     def setModel(self, model):
@@ -57,6 +58,10 @@ class BoneRenderer(gl.Pipeline):
 
 
     def run(self):
+        if self.useDepthTest: self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
+        else: self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
+        self.ctx.glDisable(self.ctx.GL_CULL_FACE)
+        self.ctx.glLineWidth(2)
         with self:
             self._bindBuffers()
             self.shader.vao.render(self.ctx.GL_POINTS, count=self._nBones)

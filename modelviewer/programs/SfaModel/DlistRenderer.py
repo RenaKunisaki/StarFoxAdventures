@@ -72,9 +72,6 @@ class DlistRenderer(gl.Pipeline):
         #self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
         #    self.ctx.GL_ONE_MINUS_SRC_ALPHA)
 
-        log.dprint("Face Culling: %s",
-            "On" if self.useFaceCulling else "Off")
-
         # nVtxs = # triangles since we use GL_TRIANGLES here,
         # so the division by 3 is done automatically
         with self:
