@@ -44,11 +44,14 @@ class EventHandler:
         key = Gdk.keyval_name(event.keyval)
 
         #print(key)
-        if   key == 'Up':        self.menu.moveCursor(-1)
-        elif key == 'Down':      self.menu.moveCursor( 1)
-        elif key == 'Page_Up':   self.menu.changePage(-1)
-        elif key == 'Page_Down': self.menu.changePage( 1)
+        if   key == 'Up':        self.menu.moveCursor( -1)
+        elif key == 'Down':      self.menu.moveCursor(  1)
+        elif key == 'Page_Up':   self.menu.moveCursor(-10)
+        elif key == 'Page_Down': self.menu.moveCursor( 10)
         elif key == 'Return':    self.menu.activate()
+        elif key == 'BackSpace':
+            if len(self._menuStack) > 0:
+                self.menu = self._menuStack.pop()
 
         elif key == 'space': # reset
             self._translate = self._initT.copy()

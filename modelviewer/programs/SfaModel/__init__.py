@@ -12,7 +12,7 @@ from .Parser.DlistParser import DlistParser
 from .BoneRenderer import BoneRenderer
 from .BoxRenderer import BoxRenderer
 from .DlistRenderer import DlistRenderer
-from .Menu import Menu
+from .Menu import Menu, MainMenu
 
 
 class FragmentShader(SfaProgram):
@@ -47,7 +47,8 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
         self.dlists        = []
-        self.menu          = Menu(self)
+        self.menu          = MainMenu(self)
+        self._menuStack    = []
 
         # enable our local logger to print on the screen
         # by using log.dprint()
@@ -67,11 +68,10 @@ class SfaModelViewer(SfaProgram, EventHandler):
             loader = ModelLoader()
             self.model = loader.loadFromFile(file)
             self.dlistRenderer.setModel(self.model)
-            self.menu.pages['dlists'].items = ["All Lists"]
             for i, dlist in enumerate(loader.dlists):
                 self.dlists.append(dlist)
                 self.dlistRenderer.addList(dlist)
-                self.menu.pages['dlists'].items.append("%3d" % i)
+            self.menu.refresh()
 
         # draw each vertex as a point
         #d=0.04
@@ -98,11 +98,6 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.dlistRenderer.run()
         self.boneRenderer.run()
         self.boxRenderer.run()
-
-        selList = self.menu.pages['dlists'].cursorPos - 1
-        if selList >= 0:
-            dlist = self.dlists[selList]
-            log.dprint("\nDlist %d: %d polys", selList, len(dlist.polys))
 
         self.frame += 1
 
