@@ -35,4 +35,5 @@ class Menu:
         for i in range(start, start+self.itemsPerPage):
             if i >= len(self.items): break
             item = self.items[i]
-            log.dprint("%s%s", '>' if i == self.cursorPos else ' ', item)
+            log.dprint("%s%s\x1B[0m",
+                '\x1B[38;5;13m>' if i == self.cursorPos else ' ', item)

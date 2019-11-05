@@ -105,6 +105,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #self.ctx.glDepthMask(self.ctx.GL_TRUE)
         #self.ctx.glDepthRange(1,0)
 
+        log.dprint("Frame %d", self.frame)
         self._setMtxs()
         self.dlistRenderer.run()
         self.boneRenderer.run()
@@ -165,6 +166,6 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.boxRenderer    .setMtxs(mp, mv)
         self.dlistRenderer  .setMtxs(mp, mv)
         self.textureRenderer.setMtxs(
-            gl.Util.Matrix.scale(2/width, 2/height) @
+            gl.Util.Matrix.scale(3/width, 3/height) @
             gl.Util.Matrix.translate(-0.9, -0.9, 0),
             mv)

@@ -44,10 +44,10 @@ class PolyMenu(Menu):
         idx = max(0, min(self.cursorPos-1, maxIdx))
         vtxs = self.poly['vtxs'][idx: idx+3]
 
-        log.dprint("\x1B[330,330H  S    T    X    Y    Z ")
+        log.dprint("\x1B[450,500H  S    T    X    Y    Z ")
         for i, v in enumerate(vtxs):
-            log.dprint("\x1B[%d,330H%04X %04X %04X %04X %04X",
-                330 + ((i+1)*12),
+            log.dprint("\x1B[%d,500H%04X %04X %04X %04X %04X",
+                450 + ((i+1)*12),
                 int(v['TEX0'][0] * 1024) & 0xFFFF,
                 int(v['TEX0'][1] * 1024) & 0xFFFF,
                 int(v['POS'] [0] *  256) & 0xFFFF,
@@ -60,11 +60,19 @@ class PolyMenu(Menu):
         renderer = self.parent.textureRenderer
         renderer.reset()
         maxIdx = len(self.poly['vtxs']) - 4
-        idx = max(0, min(self.cursorPos-1, maxIdx))
+        idx  = max(0, min(self.cursorPos-1, maxIdx))
         vtxs = self.poly['vtxs'][idx: idx+3]
-        renderer.addTri(
-            vtxs[0]['TEX0'],
-            vtxs[1]['TEX0'],
-            vtxs[2]['TEX0'],
-            (1, 1, 1, 0.5),
+
+        vtx = self.poly['vtxs'][max(0, self.cursorPos-1)]
+        x, y = vtx['TEX0']
+        dx, dy = 0.001, 0.002
+        xa, xb, xc, xd = (0, y-dy), (1, y-dy), (1, y+dy), (0, y+dy)
+        ya, yb, yc, yd = (x-dx, 0), (x-dx, 1), (x+dx, 1), (x+dx, 0)
+
+        renderer.addTri(xa, xb, xc, (1, 0, 0, 0.5))
+        renderer.addTri(xb, xc, xd, (1, 0, 0, 0.5))
+        renderer.addTri(ya, yb, yc, (0, 1, 0, 0.5))
+        renderer.addTri(yb, yc, yd, (0, 1, 0, 0.5))
+        renderer.addTri(vtxs[0]['TEX0'], vtxs[1]['TEX0'], vtxs[2]['TEX0'],
+            (1, 1, 1, 1),
         )

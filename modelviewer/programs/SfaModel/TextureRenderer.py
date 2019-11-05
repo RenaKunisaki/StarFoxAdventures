@@ -27,6 +27,7 @@ class TextureRenderer(gl.Pipeline):
         self.parent   = parent
         self.shader   = TextureShader(self.parent.ctx)
         self.texture  = None
+        self._frame   = 0
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
@@ -78,6 +79,11 @@ class TextureRenderer(gl.Pipeline):
         self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
             self.ctx.GL_ONE_MINUS_SRC_ALPHA)
 
+        c = (math.sin(self._frame * 4) * 0.5) + 1
+        self.programs['fragment_shader'].setUniforms(
+            modColor = (1, 1, 1, c),
+        )
+
         # nVtxs = # triangles since we use GL_TRIANGLES here,
         # so the division by 3 is done automatically
         with self:
@@ -85,6 +91,7 @@ class TextureRenderer(gl.Pipeline):
             self._bindBuffers()
             self.shader.vao.render(self.ctx.GL_TRIANGLES,
                 count=self._nVtxs)
+        self._frame += 1
 
 
     def setMtxs(self, projection, modelView):
