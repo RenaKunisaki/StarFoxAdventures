@@ -365,7 +365,7 @@ class DlistParser:
         try: name = self.drawModes[mode]
         except IndexError: name = 'unk%02X' % mode
 
-        if self.listIdx in range(25, 29):
+        if self.listIdx in range(12, 13):
             log.debug("%04X %2d Draw(#%3d: %d %s, VAT %d): %s",
                 self._offset - 3, self.listIdx,
                 len(self.polys), count, name, vat, self.describeVat(vat))

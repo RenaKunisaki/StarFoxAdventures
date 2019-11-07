@@ -57,7 +57,8 @@ class SfaModelViewer(SfaProgram, EventHandler):
         # by using log.dprint()
         log.setLevel('DPRINT')
 
-        self.loadModel('../dump/krystal.bin')
+        #self.loadModel('../dump/krystal.bin')
+        self.loadModel(sys.argv[1])
 
 
     def _getShaderCodeFromFile(self, path):
