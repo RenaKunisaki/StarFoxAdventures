@@ -27,8 +27,9 @@ class Zlb:
 
     def compress(self):
         rawData = self.file.readBytes()
-        data = zlib.compress(rawData, level=9)
+        comp = zlib.compressobj(level=9,wbits=13)
+        data = comp.compress(rawData) + comp.flush()
         return (
-            b'ZLB\0\0\0\0\x01' +
+            b'ZLB\0' + b'\0\0\0\x01' + # magic, version
             struct.pack('>II', len(rawData), len(data)) +
             data)
