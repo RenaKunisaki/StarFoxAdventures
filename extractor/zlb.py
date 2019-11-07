@@ -1,9 +1,10 @@
 import zlib
+import struct
 from binaryfile import BinaryFile
 
 # XXX version can be "DIR\0"
 
-class ZlbDecoder:
+class Zlb:
     def __init__(self, file:BinaryFile):
         self.file = file
 
@@ -23,3 +24,11 @@ class ZlbDecoder:
         result = zlib.decompress(compData)
         assert len(result) == decLen
         return result
+
+    def compress(self):
+        rawData = self.file.readBytes()
+        data = zlib.compress(rawData, level=9)
+        return (
+            b'ZLB\0\0\0\0\x01' +
+            struct.pack('>II', len(rawData), len(data)) +
+            data)

@@ -3,7 +3,7 @@ import sys
 import inspect
 from binaryfile import BinaryFile
 from tabfile import TabFile
-from zlb import ZlbDecoder
+from zlb import Zlb
 
 def printf(fmt, *args):
     print(fmt % args, end='')
@@ -25,12 +25,20 @@ class App:
             printf("%s: %s\n", name, method.__doc__)
 
 
+    def compress(self, inPath, outPath, inOffset=0):
+        """Compress a ZLB file."""
+        if type(inOffset) is str: inOffset = int(inOffset, 0)
+        file = BinaryFile(inPath, offset=inOffset)
+        with open(outPath, 'wb') as outFile:
+            outFile.write(Zlb(file).compress())
+
+
     def decompress(self, inPath, outPath, inOffset=0):
         """Decompress a ZLB file."""
         if type(inOffset) is str: inOffset = int(inOffset, 0)
         file = BinaryFile(inPath, offset=inOffset)
         with open(outPath, 'wb') as outFile:
-            outFile.write(ZlbDecoder(file).decompress())
+            outFile.write(Zlb(file).decompress())
 
 
     def listTable(self, inPath):
@@ -58,7 +66,7 @@ class App:
                     entry['flags'],
                     "compressed" if compressed else "raw")
                 file.seek(offset)
-                if compressed: data = ZlbDecoder(file).decompress()
+                if compressed: data = Zlb(file).decompress()
                 else:
                     # we don't know the actual size, just guess...
                     try: sz = entries[i+1]['offset'] - offset

@@ -66,6 +66,6 @@ class BinaryFile:
             r.append(chr(b))
         return ''.join(r)
 
-    def readBytes(self, count, offset=None):
+    def readBytes(self, count=None, offset=None):
         if offset is not None: self.seek(offset)
         return self.file.read(count)
