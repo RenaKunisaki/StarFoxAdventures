@@ -1,11 +1,11 @@
 .text
 .include "common.s"
 
-
-# Patch MODELS.bin loading
+# Patch MODELS.bin loading; inject Krystal model into it
 GECKO_BEGIN_PATCH 0x800453D4 # lis r4, 0x7d7d
 # just before a call to allocTagged; r3 = size
 # r5 is free
+b start
 
 .set KRYSTAL_MODEL_OFFSET,0x901C0
 .set KRYSTAL_MODEL_SIZE,0x12B40
@@ -16,11 +16,10 @@ GECKO_BEGIN_PATCH 0x800453D4 # lis r4, 0x7d7d
 .set SP_ORIG_SIZE,0x18 # original buffer size (offset to copy to)
 .set SP_FILE_BUFFER,0x1C # file buffer temp
 
-b start
 filePath:
     .string "warlock/MODELS.bin"
 
-.align 4
+.byte 0 # align without excess padding
 start:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)
