@@ -1,41 +1,35 @@
 .text
 .include "common.s"
 
-# Patch TEX0.bin loading; inject Krystal textures into it
-GECKO_BEGIN_PATCH 0x80045CC0 # lis r4, 0x7d7d
+# Patch TEX1.bin loading; inject Krystal textures into it
+GECKO_BEGIN_PATCH 0x80046158 # lis r4, 0x7d7d
 # just before a call to allocTagged; r3 = size
 # r5 is free
 # yes, this is nearly the same as patch 1
 b start
 
-.set NUM_TEXTURES,4
-.set TEXTURE_OFFSETS_SIZE,(NUM_TEXTURES+1)*4
-# +2 bytes for the end marker and 2 for the lhzu padding
-.set TOTAL_EXTRA_SIZE,0x540 # how much to add to the buffer
+.set TOTAL_EXTRA_SIZE,0x19a00 # how much to add to the buffer
+#.set TEXTURE_OFFSETS_SIZE,7*4 # size of textureOffsets
+.set SOURCE_OFFSET,0x13D720   # where to copy from
 
 # stack offsets
 .set STACK_SIZE,0x40 # how much to reserve
 .set SP_BUFFER,0x10 # allocated buffer
-.set SP_DATA_SIZE,0x14 # TOTAL_EXTRA_SIZE
+.set SP_EXTRA_SIZE,0x14 # TOTAL_EXTRA_SIZE
 .set SP_ORIG_SIZE,0x18 # original buffer size (offset to copy to)
 .set SP_FILE_BUFFER,0x1C # file buffer temp
 .set SP_DEST_BUFFER,0x20 # destination in allocated buffer
 .set SP_TEXOFFSETS,0x24 # ptr to textureOffsets
+.set SP_SRC_OFFSET,0x28 # SOURCE_OFFSET
 
-textureOffsets: # offset >> 4, data size, for textures 0xD4-D9
-    # we don't need the actual IDs here though
-    # we'll round sizes up to next 16; the exta data won't matter
-    # but they do need to be aligned.
-    .short 0x2ED2, 0x00E0 # 0x009F + 0x40 rounded up
-    .short 0x2F8A, 0x00D0 # 0x00AB + 0x24
-    .short 0x2FF2, 0x0090 # 0x006B + 0x24
-    .short 0x3040, 0x0300 # 0x02BC + 0x40
-    .short 0
+srcOffset:
+    # keep this here, we can retrieve it easily
+    .int SOURCE_OFFSET
 
 filePath:
-    .string "warlock/TEX0.bin"
+    .string "warlock/TEX1.bin"
 
-.byte 0 # align without excess padding
+.byte 0, 0, 0 # align without excess padding
 start:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)
@@ -45,16 +39,18 @@ start:
 
     # call allocTagged ourselves; allocate the requested size
     # plus the size of the model data
-    li      r5, TOTAL_EXTRA_SIZE
-    stw     r5, SP_DATA_SIZE(r1)
+    lis     r5, TOTAL_EXTRA_SIZE@h
+    ori     r5, r5, TOTAL_EXTRA_SIZE@l
+    stw     r5, SP_EXTRA_SIZE(r1)
     add     r3, r3, r5 # add space for the new data
-    li      r5, 0
-    lis     r4, 0x7d7d
-    ori     r4, r4, 0x7d7d
+    li      r5, 0 # name
+    lis     r4, 0x7d7d # the alloc tag, which the game was about
+    ori     r4, r4, 0x7d7d # to set up before we hooked it
     CALL    allocTagged
     # now r3 = buffer
     stw     r3, SP_BUFFER(r1)
-    addi    r3, r3, TOTAL_EXTRA_SIZE
+    lwz     r5, SP_ORIG_SIZE(r1)
+    add     r3, r3, r5
     stw     r3, SP_DEST_BUFFER(r1)
 
     # get table address in r3
@@ -63,10 +59,13 @@ start:
     .getpc:
         mflr r3
         #mtlr r7 # restore LR
-        # subtract 2 so we can use lhzu
-        addi r3, r3, ((textureOffsets - .getpc)-2)@l
+        # subtract 4 so we can use lwzu
+        addi r3, r3, (srcOffset - .getpc)@l
     stw     r3, SP_TEXOFFSETS(r1)
-    addi    r3, r3, TEXTURE_OFFSETS_SIZE
+    #addi    r3, r3, TEXTURE_OFFSETS_SIZE - 4
+    lwzu    r4, 0(r3) # I guess this doesn't work today
+    stw     r4, SP_SRC_OFFSET(r1)
+    addi    r3, r3, 4
 
     # load "warlock/TEX0.bin"
     li      r4, 0 # we don't need size
@@ -74,26 +73,12 @@ start:
     # now r3 = data
     stw     r3, SP_FILE_BUFFER(r1)
 
-    # copy the texture data we want.
-    .next:
-        # get texture ID
-        lwz     r6, SP_TEXOFFSETS(r1)
-        lhzu    r4, 2(r6) # r4 = offset >> 4
-        cmpwi   r4, 0
-        beq     end
-
-        slwi    r4, r4, 4 # r4 = offset
-        lhzu    r5, 2(r6) # r5 = length
-        stw     r6, SP_TEXOFFSETS(r1) # store new offset ptr
-
-        lwz     r3, SP_FILE_BUFFER(r1)
-        add     r4, r4, r3 # r4 = src
-        lwz     r3, SP_DEST_BUFFER(r1)
-        add     r6, r3, r5 # r6 is ignored by memcpy
-        stw     r6, SP_DEST_BUFFER(r1) # update ptr
-
-        CALL    memcpy
-        b       .next
+    # copy the texture data
+    lwz     r4, SP_SRC_OFFSET(r1)
+    add     r4, r4, r3 # r4 = src
+    lwz     r3, SP_DEST_BUFFER(r1) # r3 = dest
+    lwz     r5, SP_EXTRA_SIZE(r1) # r5 = length
+    CALL    memcpy
 
 end:
     # free the file buffer
@@ -106,9 +91,6 @@ end:
     # we can't use a branch here because we don't know our location,
     # and `ba` isn't usable on GCN at all (unless someone mapped RAM
     # at 0)
-    lis     r4, 0x8004
-    ori     r4, r4, 0x5CD0
-    mtlr    r4
-    blr
+    JUMP    0x80046168, r4
 
 GECKO_END_PATCH
