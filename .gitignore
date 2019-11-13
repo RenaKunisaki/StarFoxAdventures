@@ -10,6 +10,8 @@ __pycache__
 **/build/*
 **/bin/*
 **/old/*
+**/dump/*
+**/discroot/*
 
 # from https://github.com/github/gitignore
 # Object files
