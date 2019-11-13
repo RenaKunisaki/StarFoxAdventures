@@ -84,6 +84,7 @@ MODELS.bin contains FACEFEED structures which are:
 0x04: decompressed size
 0x08: offset to ZLB data: (this * 4) + 0x28 + start of structure
     usually 0xC (points to ZLB *data*, not header)
+    this is wrong...
 0x0C: compressed length - 0x10
 0x10:
 0x14:

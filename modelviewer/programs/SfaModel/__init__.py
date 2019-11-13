@@ -2,6 +2,8 @@ import logging; log = logging.getLogger(__name__)
 import struct
 import math
 import sys
+import os
+import os.path
 import gl
 import numpy as np
 from . import shaders
@@ -58,7 +60,11 @@ class SfaModelViewer(SfaProgram, EventHandler):
         log.setLevel('DPRINT')
 
         #self.loadModel('../dump/krystal.bin')
-        self.loadModel(sys.argv[1])
+        #self.loadModel(sys.argv[1])
+        if len(sys.argv) > 1:
+            path = sys.argv[1]
+            if os.path.isdir(path): self.loadDir(path, int(sys.argv[2]))
+            else: self.loadModel(path)
 
 
     def _getShaderCodeFromFile(self, path):
@@ -66,9 +72,31 @@ class SfaModelViewer(SfaProgram, EventHandler):
         except FileNotFoundError: return resources.read_text(Common, path)
 
 
-    def loadModel(self, path):
+    def loadDir(self, path, modelIdx=0):
+        modelsTab = {}
+        with open(path+'/MODELS.tab', 'rb') as file:
+            idx = 0
+            while True:
+                d = file.read(4)
+                if len(d) < 4: break
+                s = struct.unpack('>I', d)[0] # grumble
+                modelsTab[idx] = {
+                    'flags':  s >> 24,
+                    'offset': s & 0xFFFFFF,
+                }
+                idx += 1
+
+        if modelIdx not in modelsTab:
+            raise ValueError("Model %d not found in path %s" % (
+                modelIdx, path))
+        self.loadModel(path+'/MODELS.bin', modelsTab[modelIdx]['offset'])
+
+
+
+    def loadModel(self, path, offset=0):
         # read the model
         with open(path, 'rb') as file:
+            file.seek(offset)
             loader = ModelLoader()
             self.model = loader.loadFromFile(file)
             self.dlistRenderer.setModel(self.model)

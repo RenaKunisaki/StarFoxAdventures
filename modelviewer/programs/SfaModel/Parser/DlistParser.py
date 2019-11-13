@@ -192,7 +192,7 @@ class DlistParser:
 
     def _convertVtx(self, vtx):
         """Apply matrix transforms and convert from
-        Vec[23][fs] to tuple for each attribute.
+        Vec[2,3][f,s] to tuple for each attribute.
         """
         #log.debug("Vtx: %s", vtx)
         # convert types and apply mtxs

@@ -4,6 +4,8 @@ import math
 import sys
 import gl
 import numpy as np
+import zlib
+import tempfile
 from . import Model
 from .DlistParser import DlistParser
 
@@ -20,9 +22,87 @@ class ModelLoader:
 
 
     def loadFromFile(self, file):
-        self.model = Model(file)
+        curOffs = file.tell()
+        header  = struct.unpack('>I', file.read(4))[0] # grumble
+        if header == 0xFACEFEED:
+            self._loadFaceFeed(file)
+
+        elif header == 0x5A4C4200: # "ZLB\0"
+            self._loadZlb(file)
+
+        elif header == 0xE0E0E0E0: # uncompressed
+            # following is size, data offset
+            # but unsure how to interpret offset
+            raise NotImplementedError("Not implemented 0xE0E0E0E0 header")
+
+        else: # uncompressed?
+            file.seek(curOffs) # go back
+            self.model = Model(file)
+
         self._doRenderInstrs()
         return self.model
+
+
+    def _loadFaceFeed(self, file):
+        """Decompress model with FACEFEED header.
+        Expects `file` to be seeked to just past the 0xFACEFEED word.
+        """
+        offs        = file.tell()
+        header      = struct.unpack('>8I', file.read(8*4))
+        decLen      = header[0]
+        zlbDataOffs = header[1]
+        compLen     = header[2] # minus 0x10
+        # other fields unknown
+        log.debug("FACEFEED header: %s", header)
+
+        # XXX the game doesn't actually do these checks.
+        # it's entirely possible for there to not be a ZLB header here.
+        h2 = struct.unpack('>3sb3I', file.read(4*4))
+        log.debug("ZLB header: %s", h2)
+        assert h2[0] == b'ZLB' and h2[1] == 0, \
+            "Corrupt ZLB header following FACEFEED"
+        assert h2[2] == 1, "Unsupported ZLB version"
+        assert h2[3] == decLen, "ZLB/FACEFEED headers disagree on decLen"
+        #assert h2[4] == compLen+0x10, \
+        #    "ZLB/FACEFEED headers disagree on compLen"
+
+        log.debug("ZLB data at 0x%X (0x%X; now 0x%X)",
+            zlbDataOffs + offs, zlbDataOffs, offs)
+        #file.seek(zlbDataOffs + offs) # no idea
+        self._decompress(file, decLen, compLen + 0x10)
+
+
+    def _loadZlb(self, file):
+        """Decompress model with ZLB header.
+        Expects `file` to be seeked to just past the "ZLB\0" word.
+        """
+        header  = struct.unpack('>3I', file.read(3*4))
+        version = header[0]
+        decLen  = header[1]
+        compLen = header[2]
+        if version == 0x44495200: # "DIR\0"
+            # is this ever used in the game?
+            raise NotImplementedError("ZLB DIR not supported")
+        elif version != 1:
+            raise NotImplementedError("Unsupported ZLB version %d" % version)
+
+        self._decompress(file, decLen, compLen)
+
+
+    def _decompress(self, file, decLen, compLen):
+        """Decompress ZLB data from file, with given decompressed length
+        and compressed length.
+        """
+        log.debug("Decompress from offset 0x%X, dec=0x%X comp=0x%X",
+            file.tell(), decLen, compLen)
+        compData = file.read(compLen)
+        assert len(compData) == compLen, "Compressed file is truncated"
+        result   = zlib.decompress(compData)
+        assert len(result) == decLen, "Decompression failed"
+        tmp = tempfile.TemporaryFile()
+        tmp.write(result)
+        tmp.seek(0)
+        self.model = Model(tmp)
 
 
     def _doRenderInstrs(self):
@@ -50,7 +130,10 @@ class ModelLoader:
                 mtxs = instr[1]
                 for i, mtx in enumerate(mtxs):
                     n = tbl[i]
-                    self.mtxLut[n] = self.model.xlates[mtx]
+                    try:
+                        self.mtxLut[n] = self.model.xlates[mtx]
+                    except IndexError:
+                        raise RuntimeError("Model parsing failed: reference to uninitialized matrix %d" % mtx)
 
             else:
                 log.error("BUG: RenderInstrParser generated unknown opcode %s", op)

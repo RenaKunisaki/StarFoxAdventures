@@ -126,6 +126,21 @@ class DlistRenderer(gl.Pipeline):
 
         log.debug("List %d generated %d vtxs, %d polys",
             dlist.listIdx, param.nVtxs, param.nPolys)
+        #self._dumpDlist(dlist)
+
+
+    def _dumpDlist(self, dlist):
+        with open('vtxs.dat', 'at') as file:
+            for i, poly in enumerate(dlist.polys):
+                for j, vtx in enumerate(poly['vtxs']):
+                    file.write("%d;%d;%d;%d;%d;%f;%f;%f;%d;%f;%f\n" % (i, j,
+                        poly['material']._idx,
+                        poly['mode'],
+                        vtx['POS_idx'],
+                        vtx['POS'][0], vtx['POS'][1], vtx['POS'][2],
+                        vtx['TEX0_idx'],
+                        vtx['TEX0'][0], vtx['TEX0'][1],
+                    ))
 
 
     def setModel(self, model):

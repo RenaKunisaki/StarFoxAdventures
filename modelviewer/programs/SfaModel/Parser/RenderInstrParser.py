@@ -75,8 +75,13 @@ class RenderInstrParser:
 
 
     def op_setVtxFmt(self): # opcode 3: set vtx format
-        mat = self.model.materials[self.curMaterial]
-        if (mat.flags_40 & 2) != 0:
+        if self.curMaterial is None:
+            flags = 0
+        else:
+            mat = self.model.materials[self.curMaterial]
+            flags = mat.flags_40
+            
+        if (flags & 2) != 0:
             fmt = self.getBits(4)
             posSize = 2 if (fmt & 1) == 0 else 3 # VAT format (2=8bit 3=16bit)
             nrmSize = 2 if (fmt & 2) == 0 else 3
