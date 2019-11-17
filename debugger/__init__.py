@@ -73,6 +73,19 @@ class App:
         self.game.showObject(addr)
         self.client.conn.send(b"\xAA")
 
+    def listObjModels(self, addr):
+        """Display list of object's models."""
+        self._checkConnected()
+        addr = int(addr, 16)
+        self.game.listObjModels(addr)
+        self.client.conn.send(b"\xAA")
+
+    def listFiles(self):
+        """Display the RAM address of each loaded file."""
+        self._checkConnected()
+        self.game.listFiles()
+        self.client.conn.send(b"\xAA")
+
     def showHeap(self):
         """Display the heap map."""
         self._checkConnected()

@@ -49,6 +49,15 @@ class Client:
         """Read from memory."""
         raise NotImplementedError
 
+    def readStr(self, address):
+        """Read null-terminated string from memory."""
+        result = []
+        while True:
+            b = self.read(address, 'b')
+            if b == 0: break
+            result.append(chr(b))
+        return ''.join(result)
+
     def pause(self):
         """Pause the game."""
         raise NotImplementedError
