@@ -9,8 +9,8 @@ RamAddr  type   description
 
 803428F8 float  Y velocity
 
-803A32C8 u16    set to 0101 to become Fox
-	as Krystal it's 0001 so maybe only first byte matters
+803A32C8 u8     player ID (0=Krystal 1=Fox)
+    this is not the model ID
 803A33AB u16    staff upgrades
 803A32A8 u8     current health (in 1/4 of a heart)
 803A32A9 u8     max health
