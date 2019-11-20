@@ -136,14 +136,15 @@ class Game:
             model.printSelf()
 
     def showHeap(self):
-        printf("\x1B[1m#│Size    │Avail   │Used    │Data    │DataSize\x1B[0m\n")
+        printf("\x1B[1m#│Data    │Size    │Used    │Free    │Slots   │UsedSlot│FreeSlot\x1B[0m\n")
         heaps = []
         for i in range(5):
-            hs = HeapStruct(self.client, 0x8034069C + (i*HeapStruct.SIZE))
+            hs = HeapStruct(self.client, 0x803406A0 + (i*HeapStruct.SIZE))
             heaps.append(hs)
-            printf("\x1B[48;5;%dm%d│%08X│%08X│%08X│%08X│%08X\x1B[0m\n",
+            printf("\x1B[48;5;%dm%d│%08X│%08X│%08X│%08X│%08X│%08X│%08X\x1B[0m\n",
                 ROW_COLOR[i&1], i,
-                hs.size, hs.avail, hs.used, hs.data, hs.dataSize)
+                hs.data, hs.size, hs.usedSize, hs.size-hs.usedSize,
+                hs.avail, hs.used, hs.avail-hs.used)
 
         for i, heap in enumerate(heaps):
             if heap.data != 0:
@@ -152,13 +153,26 @@ class Game:
                 for j in range(heap.used):
                     entry = HeapEntry(self.client, heap.data + (j * HeapEntry.SIZE))
                     printf("\x1B[48;5;%dm%4d│%08X│%08X│%04X│%04X│%04X%04X│%08X│%08X│%08X %s\x1B[0m\n",
-                    ROW_COLOR[i&1], j,
+                    ROW_COLOR[j&1], j,
                     entry.loc, entry.size, entry.unk08, entry.idx,
                     entry.stack[0], entry.stack[1], entry.unk14, entry.unk18,
                     entry.tag, HeapEntry._tags.get(entry.tag, "<unknown>"))
 
             else:
                 printf("\x1B[1mHeap %d: \x1B[0mnull\n", i)
+
+    def heapStats(self):
+        printf("\x1B[1m#│Data    │Size    │Used    │Free    │Slots   │UsedSlot│FreeSlot\x1B[0m\n")
+        heaps = []
+        for i in range(5):
+            hs = HeapStruct(self.client, 0x803406A0 + (i*HeapStruct.SIZE))
+            heaps.append(hs)
+        for i, hs in enumerate(heaps):
+            printf("\x1B[48;5;%dm%d│%08X│%08X│%08X│%08X│%08X│%08X│%08X\x1B[0m\n",
+                ROW_COLOR[i&1], i,
+                hs.data, hs.size, hs.usedSize, hs.size-hs.usedSize,
+                hs.avail, hs.used, hs.avail-hs.used)
+
 
     def listFiles(self):
         printf("\x1B[1mID│FileName        │RamAddr\x1B[0m\n")

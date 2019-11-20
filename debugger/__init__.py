@@ -92,6 +92,27 @@ class App:
         self.game.showHeap()
         self.client.conn.send(b"\xAA")
 
+    def heapStats(self):
+        """Display basic heap info."""
+        self._checkConnected()
+        self.game.heapStats()
+        self.client.conn.send(b"\xAA")
+
+    def watchHeap(self):
+        """Display heap stats in real time."""
+        self._checkConnected()
+        print("\x1B[2J\x1B[H", end='') # clear; cursor to 1,1
+        try:
+            while True:
+                print("\x1B[H", end='') # cursor to 1,1
+                self.game.heapStats()
+                print("\x1B[7H", end='') # cursor to 1,7, so that
+                    # stopping it doesn't erase the info
+                self.client.conn.send(b"\xAA") # ACK; BB=retry, CC=cancel
+                time.sleep(0.05)
+        except KeyboardInterrupt:
+            self.client.conn.send(b"\xAA")
+
     def pause(self):
         """Freeze the game."""
         self._checkConnected()

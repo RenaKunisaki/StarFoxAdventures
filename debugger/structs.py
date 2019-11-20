@@ -112,11 +112,11 @@ class GameObject(Struct):
 class HeapStruct(Struct):
     SIZE = 0x14
     _fields = {
-        "size":     ('>I', 0x00),
-        "avail":    ('>I', 0x04),
-        "used":     ('>I', 0x08),
-        "data":     ('>I', 0x0C),
-        "dataSize": ('>I', 0x10),
+        "avail":    ('>I', 0x00),
+        "used":     ('>I', 0x04),
+        "data":     ('>I', 0x08),
+        "size":     ('>I', 0x0C),
+        "usedSize": ('>I', 0x10),
     }
 
 class HeapEntry(Struct):
