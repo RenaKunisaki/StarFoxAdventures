@@ -133,7 +133,8 @@ class ModelLoader:
                     try:
                         self.mtxLut[n] = self.model.xlates[mtx]
                     except IndexError:
-                        raise RuntimeError("Model parsing failed: reference to uninitialized matrix %d" % mtx)
+                        log.error("Model parsing error: reference to uninitialized matrix %d", mtx)
+                        self.mtxLut[n] = (0, 0, 0)
 
             else:
                 log.error("BUG: RenderInstrParser generated unknown opcode %s", op)

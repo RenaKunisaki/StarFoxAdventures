@@ -244,6 +244,7 @@ class DlistParser:
                     log.warning("Vtx in list %d attr %s idx is invalid (%s / %s)",
                         self.listIdx, name, val,
                         ', '.join(map(str, self.mtxLut.keys())))
+                    val = self._resolveIndex(name, 0)
             vtx[name] = val
 
         #log.debug("VAT %d fmt %X, %X => %d bytes", vat, fmtLo, fmtHi, self._offset - start)
