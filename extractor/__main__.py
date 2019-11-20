@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import inspect
+import struct
 from binaryfile import BinaryFile
 from tabfile import TabFile
 from zlb import Zlb
@@ -80,6 +81,24 @@ class App:
                 else:
                     printf("empty\n")
                 dumped[offset] = True
+
+
+    def listAnimations(self, discRoot, modelId):
+        """List the animation IDs used by given model."""
+        modelId = int(modelId, 0)
+        modAnimTab = BinaryFile(discRoot+'/MODANIM.TAB')
+        modAnimOffs = modAnimTab.readu16(modelId << 1)
+        nextOffs = modAnimTab.readu16((modelId+1) << 1)
+        nAnims = (nextOffs - modAnimOffs) >> 1
+        modAnimBin = BinaryFile(discRoot+'/MODANIM.BIN')
+        animIds = modAnimBin.readBytes(nAnims*2, modAnimOffs)
+        animIds = struct.unpack('>%dh' % nAnims, animIds)
+        printf("%4d animations; MODANIM.BIN 0x%06X - 0x%06X, min 0x%04X max 0x%04X\n",
+            nAnims, modAnimOffs, modAnimOffs+(nAnims*2),
+            max(0, min(animIds)), max(animIds))
+        for i in range(0, nAnims, 8):
+            printf('%04X: %s\n', i,
+            ' '.join(map(lambda v: '%04X' % (v&0xFFFF), animIds[i:i+8])))
 
 
 
