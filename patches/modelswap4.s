@@ -19,7 +19,7 @@ textureData:
     .int 0x8409EB90 - BASE_OFFSET
     .int 0x810A1940 - BASE_OFFSET
     .int 0x810AA910 - BASE_OFFSET
-    .int 0x01000000 - 0x000f82a0 # to make 0x01000000
+    .int 0x01000000
     .int 0x810AB270 - BASE_OFFSET
     .int 0x810AB600 - BASE_OFFSET
     .int 0x810AB740 - BASE_OFFSET
@@ -27,7 +27,7 @@ textureData:
 # using .align generates unnecessary extra padding.
 #.byte 0, 0
 start:
-    # r3 = address of TEX0.tab
+    # r3 = address of TEX1.tab
     lis     r3, TEX1_TAB@h
     ori     r3, r3, TEX1_TAB@l
     lwz     r3, 0(r3)
@@ -49,8 +49,13 @@ start:
     li      r9, BASE_ID
     .next:
         lwzu    r6, 4(r5)  # r6 = offset
+        srwi    r7, r6, 24
+        cmpwi   r7, 1
+        beq     .noAdd
+
         add     r6, r6, r4 # plus the offset we wrote it at
 
+        .noAdd:
         slwi    r7, r9, 2  # ID -> offset
         stwx    r6, r3, r7 # store it
         addi    r9, r9, 1
