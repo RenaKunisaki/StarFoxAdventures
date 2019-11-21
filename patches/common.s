@@ -8,12 +8,14 @@
 .set r30,30; .set r31,31; .set f0,0; .set f2,2; .set f3,3
 
 # SFA functions
+.set __restore_gpr,0x802860f4
+.set __save_gpr,0x802860a8
 .set allocTagged,0x80023cc8 #void* (uint size,AllocTag tag,char *name)
 .set free,0x800233e8
 .set loadFileByPath,0x80015ab4 #void* (char *path,uint *outSize)
     # Returns pointer to allocated buffer of contents.
     # outSize: if not NULL, receives file size.
-.set memcpy,0x80003494
+.set memcpy,0x80003494 # clobbers: r0, r6
 .set memset,0x800033D8 # clobbers: r0, r6, r7
 .set modelLoad,0x80029570 # ModelFileHeader* (
     # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
@@ -43,4 +45,12 @@
     ori  r0,r0,\addr@l
     mtlr r0
     blrl  # branch link to the address in the link register
+.endm
+
+# jump to absolute address, clobber specified register
+.macro JUMP addr, reg
+    lis  \reg, \addr@h
+    ori  \reg, \reg, \addr@l
+    mtlr \reg
+    blr
 .endm
