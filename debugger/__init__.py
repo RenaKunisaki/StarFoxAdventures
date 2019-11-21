@@ -175,6 +175,14 @@ class App:
         except KeyboardInterrupt:
             self.client.conn.send(b"\xAA")
 
+    def call(self, addr, *args):
+        """Call a function in the game."""
+        self._checkConnected()
+        addr = int(addr, 16)
+        argV = []
+        for arg in args: argV.append(int(arg, 16))
+        self.client.callFunc(addr, *argV)
+
 
 def main(*args):
     app = App()
@@ -194,6 +202,8 @@ def main(*args):
 
         sig   = inspect.signature(func)
         nArg  = len(sig.parameters)
+        vArg  = any(map(lambda a: a.kind == inspect._VAR_POSITIONAL, sig.parameters.values()))
+        if vArg: nArg = len(args) - 1
         fArgs = args[1:nArg+1]
         args  = args[nArg+1:]
 

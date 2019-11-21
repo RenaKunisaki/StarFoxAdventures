@@ -162,15 +162,16 @@ class Game:
                 printf("\x1B[1mHeap %d: \x1B[0mnull\n", i)
 
     def heapStats(self):
-        printf("\x1B[1m#│Data    │Size    │Used    │Free    │Slots   │UsedSlot│FreeSlot│FreeB│FreeS\x1B[0m\n")
+        printf("\x1B[1m#│Data    │Size    │End     │Used    │Free    │Slots   │UsedSlot│FreeSlot│FreeB│FreeS\x1B[0m\n")
         heaps = []
         for i in range(5):
             hs = HeapStruct(self.client, 0x803406A0 + (i*HeapStruct.SIZE))
             heaps.append(hs)
         for i, hs in enumerate(heaps):
-            printf("\x1B[48;5;%dm%d│%08X│%08X│%08X│%08X│%08X│%08X│%08X│%4d%%│%4d%%\x1B[0m\n",
+            printf("\x1B[48;5;%dm%d│%08X│%08X│%08X│%08X│%08X│%08X│%08X│%08X│%4d%%│%4d%%\x1B[0m\n",
                 ROW_COLOR[i&1], i,
-                hs.data, hs.size, hs.usedSize, hs.size-hs.usedSize,
+                hs.data, hs.size, hs.data + hs.size,
+                hs.usedSize, hs.size-hs.usedSize,
                 hs.avail, hs.used, hs.avail-hs.used,
                 (1-(hs.usedSize/hs.size))*100 if hs.size != 0 else 0,
                 (1-(hs.used/hs.avail))*100 if hs.avail != 0 else 0)

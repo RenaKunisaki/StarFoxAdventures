@@ -76,45 +76,53 @@ frozen:
         beq	finish			# r3 returns 1 or 0, one for byte received ok
 
 checkcommand:
+    bl   .getpc
+    .getpc:
+        mflr r15
+        #mtlr r7 # restore LR
+    addi r16, r15, (cmdAddrs - .getpc)-4
+    addi r17, r15, (cmdIds - .getpc)-1
 
-	cmpwi	   r29, 0x04		# checks lf 8/1/32 bits write command
-	bge	   _nextcommand
-        cmpwi      r29, 0x01
-	blt	   finish
-        b          writedword		#write value to address
-_nextcommand:
-        beq        readmem
-        cmpwi        r29, 0x06
-        beq        freezegame
-        cmpwi        r29, 0x07
-        beq        unfreezegame
-        cmpwi        r29, 0x08
-        beq        resumegame
-        cmpwi        r29, 0x09
-        beq        breakpoints #ibp
-        cmpwi        r29, 0x10
-        beq        breakpoints #dbp
-        cmpwi        r29, 0x2F
-        beq        upbpdata
-        cmpwi        r29, 0x30
-        beq        getbpdata
-        cmpwi        r29, 0x38
-        beq       cancelbreakpoints
-        cmpwi        r29, 0x40
-        beq        sendcheats
-        cmpwi        r29, 0x41
-        beq        uploadcode
-	cmpwi	     r29, 0x44
-	beq	   breakpoints #step
-        cmpwi        r29, 0x50
-        beq        pausestatus
-        cmpwi        r29, 0x60
-        beq        executecodes
-        cmpwi        r29, 0x89
-        beq        breakpoints #aligned dbp
-	cmpwi        r29, 0x99
-	beq	   versionnumber
-        b          finish
+    .nextCmd:
+        addi    r16, r16, 4
+        lbzu    r15, 1(r17)
+        cmpwi   r15, 0
+        beq     finish
+        cmp     0, 0, r15, r29
+        bne     .nextCmd
+        lwz     r15, 0(r16)
+        mtlr    r15
+        blr
+
+cmdAddrs:
+    .int writedword, writedword, writedword
+    .int readmem
+    .int freezegame, unfreezegame, resumegame
+    .int breakpoints, breakpoints
+    .int upbpdata, getbpdata, cancelbreakpoints
+    .int sendcheats, uploadcode
+    .int breakpoints, pausestatus, executecodes
+    .int breakpoints
+    .int versionnumber
+    # my new commands start here
+    .int callfunc
+
+cmdIds:
+    .byte 0x01, 0x02, 0x03 # write byte, word, dword
+    .byte 0x04 # readmem
+    .byte 0x06, 0x07, 0x08 # freezegame, unfreezegame, resumegame
+    .byte 0x09, 0x10 # breakpoints: instr, data
+    .byte 0x2F, 0x30, 0x38 # upbpdata, getbpdata, cancelbreakpoints
+    .byte 0x40, 0x41 # sendcheats, uploadcode
+    .byte 0x44, 0x50, 0x60 # step, pausestatus, executecodes
+    .byte 0x89 # aligned dbp
+    .byte 0x99 # versionnumber
+    # my new commands start here
+    .byte 0xA0 # callfunc
+    .byte 0
+    .align 4
+
+
 
 #***************************************************************************
 #                        subroutine: getpausestatus:
@@ -515,7 +523,7 @@ finishupload:
 
 #***************************************************************************
 #                        subroutine: exireceivebyte:
-#         Return 1(r3) lf byte receive, 0(r3) lf no byte
+#         Return 1(r3) if byte receive, 0(r3) if no byte
 #         Command byte is stored at 0x800027ff
 #***************************************************************************
 
@@ -704,7 +712,40 @@ cancelbreakpoints:
 versionnumber:
 	li	r3, 0x42		#0x80 = Wii, 0x81 = NGC, 0x42 = NGC but faster
 	bl	exisendbyte
-	#b	finish
+	b	finish
+
+
+
+#***************************************************************************
+#                subroutine: call function
+#                Call a subroutine in the game code.
+#***************************************************************************
+callfunc:
+    #bl	    exicheckreceive
+    bl	    exireceivebyte
+    slwi    r3, r29, 2 # num args -> num bytes
+    ori	    r12, r31, argbuffer@l	# buffer
+    bl	    exireceivebuffer
+
+    #li      r16, argbuffer@l - 4
+    ori     r16, r31, argbuffer@l - 4
+    lwzu    r15, 4(r16)
+    lwzu    r3,  4(r16)
+    lwzu    r4,  4(r16)
+    lwzu    r5,  4(r16)
+    lwzu    r6,  4(r16)
+    lwzu    r7,  4(r16)
+    lwzu    r8,  4(r16)
+    lwzu    r9,  4(r16)
+    lwzu    r10, 4(r16)
+    lwzu    r11, 4(r16)
+    lwzu    r12, 4(r16)
+    mflr    r14
+    mtlr    r15
+    blrl
+    mtlr    r14
+
+    # b finish
 
 #***************************************************************************
 #                Finish
@@ -1734,6 +1775,8 @@ bpbuffer:
 .long 0		#data address to bp on
 .long 0		#alignement check
 .long 0		#counter for alignement
+argbuffer:
+.space 11*4
 
 regbuffer:
 .space 72*4

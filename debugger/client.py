@@ -70,6 +70,10 @@ class Client:
         """Advance one frame while paused."""
         raise NotImplementedError
 
+    def callFunc(self, addr, *args):
+        """Call a function in the game."""
+        raise NotImplementedError
+
 
 class FileClient(Client):
     """Uses static memory dump."""
@@ -182,3 +186,9 @@ class GeckoClient(Client):
     def frameAdvance(self):
         """Advance one frame while paused."""
         self.conn.send(b"\x08")
+
+    def callFunc(self, addr, *args):
+        """Call a function in the game."""
+        data = struct.pack('>BBI', 0xA0, len(args)+1, addr)
+        for arg in args: data += struct.pack('>I', arg)
+        self.conn.send(data)

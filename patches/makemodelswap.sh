@@ -16,3 +16,5 @@ echo "82200000 803428f8" >> modelswap.gecko
 echo "86000000 000000ac" >> modelswap.gecko
 echo "86410000 00010000" >> modelswap.gecko
 echo "e2000000 80000000" >> modelswap.gecko
+# increase size of heap 3
+echo "00024077 00000048" >> modelswap.gecko
