@@ -17,7 +17,7 @@ lwz     r3, 0(r3)
 # get the ptr to model data, stored by previous code.
 lis     r4, 0x8180
 lwz     r4, -4(r4)
-lis     r5, 0x8000
+lis     r5, 0xA000
 or      r4, r4, r5 # set compressed flag
 stw     r4, (KRYSTAL_MODEL_ID * 4)(r3)
 

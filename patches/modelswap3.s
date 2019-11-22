@@ -71,6 +71,11 @@ start:
     CALL    loadFileByPath
     # now r3 = data
     stw     r3, SP_FILE_BUFFER(r1)
+    cmpwi   r3, 0
+    bne     .ok
+    CALL    0x80249000 # a random OSPanic() we can recognize
+
+.ok:
 
     # copy the texture data
     lwz     r4, SP_SRC_OFFSET(r1)

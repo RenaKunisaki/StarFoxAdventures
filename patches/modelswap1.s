@@ -39,7 +39,11 @@ start:
     CALL    allocTagged
     # now r3 = buffer
     stw     r3, SP_BUFFER(r1)
+    cmpwi   r3, 0
+    bne     .ok
+    CALL    0x80248fd0 # a random OSPanic() we can recognize
 
+.ok:
     # get file path address in r3
     #mflr r7
     bl   .getpc

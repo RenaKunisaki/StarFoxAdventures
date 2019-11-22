@@ -8,11 +8,14 @@ GECKO_BEGIN_PATCH 0x800463DC # lwz r3, -0x6554(r13)
 # nearly identical to patch 2
 b start
 
-.set TEX1_TAB,0x8035f46c
+.set TEX1_TAB,0x8035f518
 .set NUM_TEXTURES,7
 .set BASE_OFFSET,0x9EB90 # 0x13D720 >> 1 - offset we copy from in TEX1.bin
 .set BASE_ID,0x724 # first ID to patch in table
 .set LAST_ID,BASE_ID+NUM_TEXTURES
+
+offsets:
+    .int TEX1_TAB
 
 textureData:
     # copied from TEX1.tab and offset by the first entry.
@@ -27,11 +30,6 @@ textureData:
 # using .align generates unnecessary extra padding.
 #.byte 0, 0
 start:
-    # r3 = address of TEX1.tab
-    lis     r3, TEX1_TAB@h
-    ori     r3, r3, TEX1_TAB@l
-    lwz     r3, 0(r3)
-
     # get the texture offset, stored by previous code.
     lis     r4, 0x8180
     lwz     r4, -8(r4)
@@ -44,8 +42,9 @@ start:
         mflr r5
         mtlr r7 # restore LR
         # subtract 4 so we can use lwzu
-        addi r5, r5, ((textureData - .getpc)-4)@l
-
+        addi r5, r5, ((offsets - .getpc)-4)@l
+    lwzu    r3,  4(r5) # r3  = TEX1.tab
+    lwz     r3,  0(r3)
     li      r9, BASE_ID
     .next:
         lwzu    r6, 4(r5)  # r6 = offset
@@ -56,9 +55,9 @@ start:
         add     r6, r6, r4 # plus the offset we wrote it at
 
         .noAdd:
-        slwi    r7, r9, 2  # ID -> offset
-        stwx    r6, r3, r7 # store it
-        addi    r9, r9, 1
+        slwi    r7, r9,  2  # ID -> offset
+        stwx    r6, r3,  r7 # store it
+        addi    r9, r9,  1
 
         cmpwi   r9, LAST_ID
         bne     .next
