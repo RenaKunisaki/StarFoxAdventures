@@ -8,14 +8,15 @@ GECKO_BEGIN_PATCH 0x800463DC # lwz r3, -0x6554(r13)
 # nearly identical to patch 2
 b start
 
-.set TEX1_TAB,0x8035f518
+.set MAP_TEX1_TAB,0x8035f518
+.set GLOBAL_TEX1_TAB,0x8035f46c
 .set NUM_TEXTURES,7
 .set BASE_OFFSET,0x9EB90 # 0x13D720 >> 1 - offset we copy from in TEX1.bin
 .set BASE_ID,0x724 # first ID to patch in table
 .set LAST_ID,BASE_ID+NUM_TEXTURES
 
 offsets:
-    .int TEX1_TAB
+    .int MAP_TEX1_TAB, GLOBAL_TEX1_TAB
 
 textureData:
     # copied from TEX1.tab and offset by the first entry.
@@ -43,8 +44,14 @@ start:
         mtlr r7 # restore LR
         # subtract 4 so we can use lwzu
         addi r5, r5, ((offsets - .getpc)-4)@l
-    lwzu    r3,  4(r5) # r3  = TEX1.tab
+    lwzu    r3,  4(r5) # r3  = map TEX1.tab
+    lwzu    r9,  4(r5) # r9  = global TEX1.tab
     lwz     r3,  0(r3)
+    cmpwi   r3,  0     # map table not loaded?
+    bne     .ok
+    lwz     r3,  0(r9) # get the global one
+
+    .ok:
     li      r9, BASE_ID
     .next:
         lwzu    r6, 4(r5)  # r6 = offset
