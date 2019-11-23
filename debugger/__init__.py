@@ -183,6 +183,34 @@ class App:
         for arg in args: argV.append(int(arg, 16))
         self.client.callFunc(addr, *argV)
 
+    def watchGame(self):
+        """Display general game state info."""
+        self._checkConnected()
+        try:
+            while True:
+                time.sleep(0.1)
+                print("\x1B[H", end='') # cursor to 1,1
+
+                nObj, pObj = self.client.read(0x803dcb84, '>II')
+                map = self.game.getCurMap()
+                printf("Map: %04X \x1B[48;5;19m%-28s\x1B[0m Type %02X unk %02X %04X Objs: %4d @%08X  \r\n",
+                    map['id'], map['name'], map['type'],
+                    map['field_1d'], map['field_1e'],
+                    nObj, pObj)
+
+                pPlayer = self.client.read(0x803428f8, '>I')
+                x, y, z = self.client.read(pPlayer+0x0C, '>3f')
+                animId  = self.client.read(pPlayer+0xA0, '>H')
+                printf("Coords: %+8.2f %+8.2f %+8.2f  Anim: %04X   \r\n", x, y, z, animId)
+
+                curHP, maxHP = self.client.read(0x803A32A8, '>BB')
+                printf("HP: %1.2f / %1.2f  \r\n", curHP/4, maxHP/4)
+
+                self.game.heapStats()
+
+        except KeyboardInterrupt:
+            self.client.conn.send(b"\xAA")
+
 
 def main(*args):
     app = App()

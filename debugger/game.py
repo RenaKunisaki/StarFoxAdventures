@@ -183,3 +183,19 @@ class Game:
             filePtr = self.client.read(0x8035f3e8 + (i*4), ">I")
             printf("\x1B[48;5;%dm%02X│%-16s│%08X\x1B[0m\n", ROW_COLOR[i&1],
                 i, fileNames[i], filePtr)
+
+
+    def getCurMap(self):
+        name, typ, field_1d, field_1e = self.client.read(0x816a8ba0, ">28s2bh")
+        id = self.client.read(0x8035f592, ">h")
+        try: name = name.decode('shift-jis')
+        except UnicodeDecodeError: name = '???'
+        lol = name.find('\0')
+        if lol >= 0: name = name[0:lol]
+        return {
+            'name': name,
+            'id':   id,
+            'type': typ,
+            'field_1d': field_1d,
+            'field_1e': field_1e,
+        }
