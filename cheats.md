@@ -95,7 +95,7 @@ e2000001 80008000
 86000000 01000000
 86300000 fbffffff
 84200000 803dea9c
-e2000000 00000000
+e2000001 00000000
 (this might be bugged; it seems to prevent other codes from working?)
 
 ### D-Down to Switch Character
