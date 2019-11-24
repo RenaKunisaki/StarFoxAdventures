@@ -11,7 +11,6 @@ RamAddr  type   description
 
 803A32C8 u8     player ID (0=Krystal 1=Fox)
     this is not the model ID
-803A33AB u16    staff upgrades
 803A32A8 u8     current health (in 1/4 of a heart)
 803A32A9 u8     max health
 803A32B0 u8     money or something
@@ -20,6 +19,7 @@ RamAddr  type   description
 803A336A u8     something to do with camera - set above 7F to pan somewhere else
 803A32C4 char[?]    save file name
 803A32D0 ?      some item unlocks
+803A33AB u16    staff upgrades
 
 803BD180 object read by 80270AF0 (with offset 0x5D4 => 803BD754, music volume)
 803BD1B0 object read by 80270AF0 (with offset 0x5D4 => 803BD784, SFX volume)
