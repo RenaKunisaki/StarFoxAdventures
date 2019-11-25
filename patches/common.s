@@ -20,9 +20,14 @@
 .set modelLoad,0x80029570 # ModelFileHeader* (
     # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
     # if modelNum is negative, don't use MODELIND.bin
+.set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
 .set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
     # returns with r5 = out + rawLen
+
+# SFA globals
+.set fileBuffers,0x8035f3e8 # void*[fileIdx]
+.set pPlayer,0x803428f8
 
 .macro GECKO_BEGIN_PATCH addr
     # Generate an "Insert ASM" Gecko code line.
