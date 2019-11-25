@@ -6,13 +6,11 @@
 
 # patch into gameText_run
 GECKO_BEGIN_PATCH 0x80019c48 # lis r3, 0x8034
-# free: r0, r3, r26, r27, r28, r31
 
 .set HUD_TEXT_PTR,0x8033afbc
 
 # get HUD texts
-lis     r3, 0x8034
-lwz     r3, -(0x10000 - 0xafbc)(r3)
+LOADW   r3, HUD_TEXT_PTR
 cmpwi   r3, 0
 beq     end
 
@@ -20,11 +18,13 @@ lwz     r3, 8(r3)
 cmpwi   r3, 0
 beq     end
 
-lwz     r3, (4 * 79)(r3) # to "Scanning for Information"
+lis     r4, mapInfo@h
+ori     r4, r4, mapInfo@l
+stw     r4, (80 * 4)(r3) # change "Information" to map name
+lwz     r3, (79 * 4)(r3) # addr of "Scanning for"
 
 # get player
-lis     r12, 0x8034
-lwz     r12, 0x28f8(r12)
+LOADW   r12, pPlayer
 cmpwi   r12, 0
 beq     end
 lhz     r5,  0xA0(r12)

@@ -27,6 +27,7 @@
 
 # SFA globals
 .set fileBuffers,0x8035f3e8 # void*[fileIdx]
+.set mapInfo,0x816a8ba0 # char[28] name
 .set pPlayer,0x803428f8
 
 .macro GECKO_BEGIN_PATCH addr
@@ -58,4 +59,9 @@
     ori  \reg, \reg, \addr@l
     mtlr \reg
     blr
+.endm
+
+.macro LOADW reg, addr
+    lis \reg, (\addr >> 16) + ((\addr & 0x8000) >> 15)
+    lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)
 .endm
