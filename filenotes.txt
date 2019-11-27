@@ -109,6 +109,13 @@ hollow          -5552.31    -780.94 -3281.25
 shipbattle      -18878.5    13      28456.2
 krazoapalace    12366.6     211.06  85.8501
 
+WARPTAB.BIN is 16 bytes per entry:
+    vec3f coords
+    short mapFlagIdx, rotX;
+many entries are all zeros
+there are 0x80 entries
+8035f458 is ptr to WARPTAB.BIN in memory
+
 Maps:
  0 0x00	animtest
  1 0x01	animtest_01

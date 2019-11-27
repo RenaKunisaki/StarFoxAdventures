@@ -118,6 +118,12 @@ e2000001 80008000
 043a31d4 ffffffff
 ```
 
+### Press Z for Level Select
+```
+04119d90 60000000
+```
+This shortens the normal button code to enable the level select feature. Just press Z before selecting Play Game on the title screen.
+
 ### D-Up to Change Game Speed
 ```
 283398d2 00000008
