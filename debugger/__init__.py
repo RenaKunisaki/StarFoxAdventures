@@ -183,6 +183,15 @@ class App:
         for arg in args: argV.append(int(arg, 16))
         self.client.callFunc(addr, *argV)
 
+    def warp(self, mapId, charId):
+        """Warp to specified map ID, optionally switching character."""
+        self._checkConnected()
+        mapId = int(mapId, 16)
+        if charId == '-': charId = None
+        else: charId = int(charId)
+        self.game.warpToMap(mapId, charId)
+
+
     def watchGame(self):
         """Display general game state info."""
         self._checkConnected()
@@ -200,11 +209,15 @@ class App:
 
                 pPlayer = self.client.read(0x803428f8, '>I')
                 x, y, z = self.client.read(pPlayer+0x0C, '>3f')
+                mapX, mapZ, cellX, cellZ = \
+                    self.client.read(0x803dcdc8, '>4i')
                 animId  = self.client.read(pPlayer+0xA0, '>H')
-                printf("Coords: %+8.2f %+8.2f %+8.2f  Anim: %04X   \r\n", x, y, z, animId)
+                printf("Coords: %+8.2f %+8.2f %+8.2f  Cell %4d %4d @ %4d %4d \r\n",
+                    x, y, z, cellX, cellZ, mapX, mapZ)
 
                 curHP, maxHP = self.client.read(0x803A32A8, '>BB')
-                printf("HP: %1.2f / %1.2f  \r\n", curHP/4, maxHP/4)
+                printf("HP: %1.2f / %1.2f  Anim: %04X  \r\n",
+                    curHP/4, maxHP/4, animId)
 
                 self.game.heapStats()
 

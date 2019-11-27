@@ -199,3 +199,9 @@ class Game:
             'field_1d': field_1d,
             'field_1e': field_1e,
         }
+
+    def warpToMap(self, mapId, charId=None):
+        if charId is not None:
+            self.client.write(0x803a32c8, struct.pack('b', charId))
+        # XXX what is second param?
+        self.client.callFunc(0x800552e8, mapId, 0)
