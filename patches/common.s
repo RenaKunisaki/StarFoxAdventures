@@ -7,6 +7,19 @@
 .set r25,25; .set r26,26; .set r27,27; .set r28,28; .set r29,29
 .set r30,30; .set r31,31; .set f0,0; .set f2,2; .set f3,3
 
+.set PAD_BUTTON_LEFT, 0x0001
+.set PAD_BUTTON_RIGHT,0x0002
+.set PAD_BUTTON_DOWN, 0x0004
+.set PAD_BUTTON_UP,   0x0008
+.set PAD_BUTTON_Z,    0x0010
+.set PAD_BUTTON_R,    0x0020
+.set PAD_BUTTON_L,    0x0040
+.set PAD_BUTTON_A,    0x0100
+.set PAD_BUTTON_B,    0x0200
+.set PAD_BUTTON_X,    0x0400
+.set PAD_BUTTON_Y,    0x0800
+.set PAD_BUTTON_MENU, 0x1000 # Start
+
 # SFA functions
 .set __restore_gpr,0x802860f4
 .set __save_gpr,0x802860a8
@@ -26,23 +39,13 @@
 .set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
     # returns with r5 = out + rawLen
 
+
 # SFA globals
 .set fileBuffers,0x8035f3e8 # void*[fileIdx]
 .set mapInfo,0x816a8ba0 # char[28] name
+.set buttonsJustPressed,0x803398d0
 .set pPlayer,0x803428f8
-
-.macro GECKO_BEGIN_PATCH addr
-    # Generate an "Insert ASM" Gecko code line.
-    # Your code should follow this.
-    #.int 0x42000000, 0x80000000 # set base address
-    .int 0xC2000000 | (\addr & 0xFFFFFF), ((_end - _start)+7) / 8
-    _start:
-.endm
-
-.macro GECKO_END_PATCH
-    .int 0 # Gecko code must end with this
-    _end:
-.endm
+.set playerId,0x803a32c8 # 0=Krystal, 1=Fox
 
 # we can't use `bl` instruction because it's relative and we don't
 # know where our code will end up. so we use this instead.
@@ -71,3 +74,10 @@
     lis \reg, (\addr >> 16) + ((\addr & 0x8000) >> 15)
     lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)
 .endm
+
+.macro LOAD reg, val
+    lis \reg, \val@h
+    ori \reg, \reg, \val@l
+.endm
+
+.include "gecko.s"

@@ -25,6 +25,6 @@ li      r4, 0x70
     bne     .next
 
 end:
-    li r0, 0 # replaced
+    li      r0, 0 # replaced
 
 GECKO_END_PATCH
