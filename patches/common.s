@@ -11,6 +11,7 @@
 .set __restore_gpr,0x802860f4
 .set __save_gpr,0x802860a8
 .set allocTagged,0x80023cc8 #void* (uint size,AllocTag tag,char *name)
+.set DVDReadAsyncPrio,0x80248eac
 .set free,0x800233e8
 .set loadFileByPath,0x80015ab4 #void* (char *path,uint *outSize)
     # Returns pointer to allocated buffer of contents.
@@ -61,6 +62,11 @@
     blr
 .endm
 
+# expands to:
+# lis reg, X
+# lwz reg, Y(reg)
+# where X and Y are the upper and lower halves of addr,
+# adjusted as necessary when Y >= 0x8000.
 .macro LOADW reg, addr
     lis \reg, (\addr >> 16) + ((\addr & 0x8000) >> 15)
     lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)

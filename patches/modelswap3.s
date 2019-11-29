@@ -38,14 +38,12 @@ start:
 
     # call allocTagged ourselves; allocate the requested size
     # plus the size of the model data
-    lis     r5, TOTAL_EXTRA_SIZE@h
-    ori     r5, r5, TOTAL_EXTRA_SIZE@l
+    LOAD    r5, TOTAL_EXTRA_SIZE
     stw     r5, SP_EXTRA_SIZE(r1)
     add     r3, r3, r5 # add space for the new data
     li      r5, 0 # name
-    lis     r4, 0x7d7d # the alloc tag, which the game was about
-    ori     r4, r4, 0x7d7d # to set up before we hooked it
-    CALL    allocTagged
+    LOAD    r4, 0x7d7d7d7d # the alloc tag, which the game was about
+    CALL    allocTagged # to set up before we hooked it
     # now r3 = buffer
     stw     r3, SP_BUFFER(r1)
     lwz     r5, SP_ORIG_SIZE(r1)

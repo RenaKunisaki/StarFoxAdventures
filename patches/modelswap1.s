@@ -29,13 +29,11 @@ start:
 
     # call allocTagged ourselves; allocate the requested size
     # plus the size of the model data
-    lis     r5, KRYSTAL_MODEL_SIZE@h
-    ori     r5, r5, KRYSTAL_MODEL_SIZE@l
+    LOAD    r5, KRYSTAL_MODEL_SIZE
     stw     r5, SP_MODEL_SIZE(r1)
     add     r3, r3, r5 # add space for the model
     li      r5, 0
-    lis     r4, 0x7d7d
-    ori     r4, r4, 0x7d7d
+    LOAD    r4, 0x7d7d7d7d # alloc tag
     CALL    allocTagged
     # now r3 = buffer
     stw     r3, SP_BUFFER(r1)
@@ -58,8 +56,7 @@ start:
     stw     r3, SP_FILE_BUFFER(r1)
 
     # copy from there into buffer
-    lis     r0, KRYSTAL_MODEL_OFFSET@h
-    ori     r0, r0, KRYSTAL_MODEL_OFFSET@l
+    LOAD    r0, KRYSTAL_MODEL_OFFSET
     add     r4, r3, r0     # r4 = src
     lwz     r3, SP_BUFFER(r1)     # r3 = buffer
     lwz     r5, SP_MODEL_SIZE(r1) # r5 = size
@@ -79,9 +76,6 @@ end:
     # we can't use a branch here because we don't know our location,
     # and `ba` isn't usable on GCN at all (unless someone mapped RAM
     # at 0)
-    lis     r4, 0x8004
-    ori     r4, r4, 0x53E4
-    mtlr    r4
-    blr
+    JUMP    0x800453E4, r4
 
 GECKO_END_PATCH
