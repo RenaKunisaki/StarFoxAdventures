@@ -15,12 +15,13 @@ lwz     r0, 0x6C(r7)  # Fox anim ptr
 stw     r0, 0x6C(r6)  # store to Krystal
 
 # copy Fox's animIdxs to Krystal so the animations will play correctly
+# as well as field 0x80 which is right after
 li      r4, 0x70
 .next:
     lwzx    r0,r4,r7 # get Fox animIdxs
     stwx    r0,r4,r6 # store to Krystal
     addi    r4,r4,4
-    cmpwi   r4,0x80
+    cmpwi   r4,0x84
     bne     .next
 
 end:
