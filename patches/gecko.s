@@ -1,16 +1,16 @@
 # macros for assembling Gecko codes in binary form.
 
-.macro GECKO_BEGIN_PATCH addr
+.macro GECKO_BEGIN_PATCH addr, name=patch
     # Generate an "Insert ASM" Gecko code line.
     # Your code should follow this.
     #.int 0x42000000, 0x80000000 # set base address
-    .int 0xC2000000 | ((\addr) & 0xFFFFFF), ((_patch_end - _patch_start)+7) / 8
-    _patch_start:
+    .int 0xC2000000 | ((\addr) & 0xFFFFFF), ((_patch_end_\name - _patch_start_\name)+7) / 8
+    _patch_start_\name:
 .endm
 
-.macro GECKO_END_PATCH
+.macro GECKO_END_PATCH name=patch
     .int 0 # Gecko code must end with this
-    _patch_end:
+    _patch_end_\name:
 .endm
 
 # write val to addr+(ba or po, depending on use_po), count times

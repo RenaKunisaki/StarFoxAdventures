@@ -2,7 +2,7 @@
 .include "common.s"
 
 # Patch TEX1.tab loading; set Krystal texture offsets we loaded in patch 3
-GECKO_BEGIN_PATCH 0x800463DC # lwz r3, -0x6554(r13)
+GECKO_BEGIN_PATCH 0x800463DC, tex1_1 # lwz r3, -0x6554(r13)
 # just before a call to stackPush
 # r3, r4 are free
 # nearly identical to patch 2
@@ -30,7 +30,7 @@ textureData:
 
 # using .align generates unnecessary extra padding.
 #.byte 0, 0
-start:
+do_patch:
     # get the texture offset, stored by previous code.
     lis     r4, 0x8180
     lwz     r4, -8(r4)
@@ -68,7 +68,25 @@ start:
 
         cmpwi   r9, LAST_ID
         bne     .next
+    blr
 
-lwz     r3, -0x6554(r13) # replaced
+start:
+    mflr    r10
+    bl      do_patch
+    mtlr    r10
+    lwz     r3, -0x6554(r13) # replaced
 
-GECKO_END_PATCH
+# bin2gecko adds the necessary padding but that doesn't work
+# if there's multiple patches.
+nop # so we need this here.
+GECKO_END_PATCH tex1_1
+
+# seconary patch for other texture load function,
+# used when leaving orbit.
+GECKO_BEGIN_PATCH 0x80042888, tex1_2 # blr
+b do_patch
+GECKO_END_PATCH tex1_2
+
+GECKO_BEGIN_PATCH 0x800427bc, tex1_3 # blr
+b do_patch
+GECKO_END_PATCH tex1_3
