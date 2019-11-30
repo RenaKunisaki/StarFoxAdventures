@@ -67,6 +67,17 @@
     .int (\addr)
 .endm
 
+# if(po >= (lo << 16) && po < (hi << 16))
+.macro GECKO_CHECK_PO lo=0x8000, hi=0x8180, endif=0
+    .int 0xDE000000 | (\endif)
+    .int ((\lo) << 16) | (\hi)
+.endm
+
+.macro GECKO_CHECK_BA lo=0x8000, hi=0x8180, endif=0
+    .int 0xCE000000 | (\endif)
+    .int ((\lo) << 16) | (\hi)
+.endm
+
 # 4PTYZ00N XXXXXXXX
 # P: what to set: 0=ba, 8=po
 # T: 0=set 1=add
@@ -141,6 +152,17 @@
         .int 0x44000000 | ((\use_po)<<28) | ((\use_ba)<<16)
     .endif
     .int (\val)
+.endm
+
+# set po to address of next line plus offset (int16)
+.macro GECKO_GET_NEXT_PO offset=0
+    .int 0x4E000000 | (\offset)
+    .int 0x00000000
+.endm
+
+.macro GECKO_GET_NEXT_BA offset=0
+    .int 0x46000000 | (\offset)
+    .int 0x00000000
 .endm
 
 # 4P0YZ00N XXXXXXXX
@@ -226,3 +248,28 @@
 # 86T1 : [grN] = ([grN] ?  XXXXXXXX)
 # 86T2 :  grN  = ( grN  ? [XXXXXXXX])
 # 86T3 : [grN] = ([grN] ? [XXXXXXXX])
+
+.macro GECKO_STORE_GR r, addr, size, count=1, use_po=0, use_ba=0
+    .int 0x84000000 | (((\count)-1)<<4) | (\r) | ((\size)<<20) | ((\use_ba)<<16) | ((\use_po)<<28)
+    .int (\addr)
+.endm
+
+.macro GECKO_STORE_GR_8 r, addr, count=1, use_po=0, use_ba=0
+    GECKO_STORE_GR (\r), (\addr), 0, (\count), (\use_po), (\use_ba)
+.endm
+
+.macro GECKO_STORE_GR_16 r, addr, count=1, use_po=0, use_ba=0
+    GECKO_STORE_GR (\r), (\addr), 1, (\count), (\use_po), (\use_ba)
+.endm
+
+.macro GECKO_STORE_GR_32 r, addr, count=1, use_po=0, use_ba=0
+    GECKO_STORE_GR (\r), (\addr), 2, (\count), (\use_po), (\use_ba)
+.endm
+
+# 84T0YYYN XXXXXXXX : Starting Address is XXXXXXXX
+# 84T1YYYN XXXXXXXX : Starting Address is XXXXXXXX+ba
+# 94T1YYYN XXXXXXXX : Starting Address is XXXXXXXX+po
+# T = 0 : byte
+# T = 1 : halfword
+# T = 2 : word-
+# Write grN's T to YYY+1 consecutive T-sized addresses.

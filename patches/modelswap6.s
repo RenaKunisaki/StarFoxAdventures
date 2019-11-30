@@ -21,16 +21,23 @@ GECKO_WRITE32 0x8025c34c, 0x60000000 # fix crash on pause (not necessary?)
 
 # D-Down to switch character
 GECKO_IFEQ_16 buttonsJustPressed+2, PAD_BUTTON_DOWN # D-Down pressed?
-    GECKO_LOAD_PO pPlayer # po = Player
+    GECKO_SET_GR 0, 0x817ffff4
+    GECKO_GR_OP  0, GECKO_OP_XOR, 1, 1 # *gr0 ^= 1
+    # that toggles the parameter above.
+GECKO_ENDIF 1, 0x8000 # end if, set ba=0x80000000
+
+GECKO_LOAD_PO pPlayer # po = Player
+GECKO_CHECK_PO # is valid?
     GECKO_IFEQ_16 0x44, 1, , , 1 # Player->objId == 1?
         # the Fox model on the title screen is actually assigned as
         # the Player object, but it's not the same object type; if we
         # change its model ID, the game will crash.
         # since we need D-pad Down to enter cheats, this won't do.
-        GECKO_SET_GR 0, 0xAC, 1, 1 # gr0 = &Player->curModel
-        GECKO_GR_OP 0, GECKO_OP_XOR, 0x00010000, 1 # *gr0 ^= 0x10000
+        GECKO_LOAD_GR_8 1, 0x817ffff7 # get gr1
+        GECKO_STORE_GR_8 1, 0xAD, 1, 1, 1 # *(po+0xAD) = gr1
+
         # also change the voice flag (which also changes backpack)
-        GECKO_LOAD_GR_32 0, 0xB8, 1, 1 # r0 = Player->animState
-        GECKO_GR_OP 0, GECKO_OP_ADD, 0x818 # gr0 += 0x818
-        GECKO_GR_OP 0, GECKO_OP_XOR, 0x00000001, 1 # *gr0 ^= 1
+        # get Player->animState
+        GECKO_LOAD_PO 0xB8, 0, -1, 1, 1 # po = *(po+0xB8)
+        GECKO_STORE_GR_8 1, 0x81B, 1, 1, 1 # *po = gr1
 GECKO_ENDIF 2, 0x8000 # end if x2, set ba=0x80000000
