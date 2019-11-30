@@ -1,6 +1,4 @@
-# Supplementary debugging patch. Not needed for model swap itself.
-# Displays the player animation ID in place of "Scanning for information"
-# in the PDA.
+# Change PDA "Scanning for information" message to map name and coords.
 .text
 .include "common.s"
 
@@ -27,17 +25,11 @@ lwz     r3, (79 * 4)(r3) # addr of "Scanning for"
 LOADW   r12, pPlayer
 cmpwi   r12, 0
 beq     end
-lhz     r5,  0xA0(r12) # get anim ID
 
-LOAD    r4, 0x8030e79f # set r4 to a random "%x"
-
-# or show coords instead (but ugly)
-# in fact this is too long and overwrites other strings, whoops
-#LOAD     r4, 0x8031D621 # "%f %f %f"
-#lfs      f1, 0x0C(r12)
-#lfs      f2, 0x10(r12)
-#lfs      f3, 0x14(r12)
-#creqv    4*cr1+eq,4*cr1+eq,4*cr1+eq
+LOAD    r4, 0x8032CC05 # "%04x%04x"
+lis     r5, 0x803e
+lhz     r6, (0x10000 - 0xcdcc)(r5) # cell Z
+lhz     r5, (0x10000 - 0xcdc8)(r5) # cell X
 CALL    sprintf
 
 end:
