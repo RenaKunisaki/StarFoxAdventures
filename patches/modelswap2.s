@@ -18,8 +18,8 @@ bne     end # nope, don't touch it.
 lis     r4, 0x8180
 lwz     r4, -4(r4)
 
-lis     r5, 0x9000 # set flags: compressed, use local MODELS.BIN
-or      r6, r4, r5 # since that's the one we append our data into
+lis     r5, 0xB000 # set flags: compressed, use either MODELS.BIN
+or      r6, r4, r5
 
 LOADW   r3, MODELS_TAB # get the address of MODELS.TAB in memory
 lwz     r4, (KRYSTAL_MODEL_ID * 4)(r3) # r4 = offset for Krystal model
