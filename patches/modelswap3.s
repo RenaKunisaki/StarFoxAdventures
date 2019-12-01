@@ -9,7 +9,7 @@ GECKO_BEGIN_PATCH 0x80046158 # lis r4, 0x7d7d
 b start
 
 .set TOTAL_EXTRA_SIZE,0x19a00 # how much to add to the buffer
-.set SOURCE_OFFSET,0x13D720   # where to copy from
+.set SOURCE_OFFSET,0x046860   # where to copy from
 
 # stack offsets
 .set STACK_SIZE,0x40 # how much to reserve
@@ -26,9 +26,9 @@ srcOffset:
     .int SOURCE_OFFSET
 
 filePath:
-    .string "warlock/TEX1.bin"
+    .string "animtest/TEX1.bin"
 
-.byte 0, 0, 0 # align without excess padding
+.byte 0, 0 # align without excess padding
 start:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)

@@ -7,7 +7,8 @@ GECKO_BEGIN_PATCH 0x800453D4 # lis r4, 0x7d7d
 # r5 is free
 b start
 
-.set KRYSTAL_MODEL_OFFSET,0x901C0
+#.set KRYSTAL_MODEL_OFFSET,0x901C0 # for warlock
+.set KRYSTAL_MODEL_OFFSET,0x33720 # for animtest
 .set KRYSTAL_MODEL_SIZE,0x12B40
 # stack offsets
 .set STACK_SIZE,0x40 # how much to reserve
@@ -17,9 +18,9 @@ b start
 .set SP_FILE_BUFFER,0x1C # file buffer temp
 
 filePath:
-    .string "warlock/MODELS.bin"
+    .string "animtest/MODELS.bin"
 
-.byte 0 # align without excess padding
+#.byte 0 # align without excess padding
 start:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)

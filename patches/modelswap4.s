@@ -11,7 +11,7 @@ b start
 .set MAP_TEX1_TAB,0x8035f518
 .set GLOBAL_TEX1_TAB,0x8035f46c
 .set NUM_TEXTURES,7
-.set BASE_OFFSET,0x9EB90 # 0x13D720 >> 1 - offset we copy from in TEX1.bin
+.set BASE_OFFSET,0x023430 # first entry
 .set BASE_ID,0x724 # first ID to patch in table
 .set LAST_ID,BASE_ID+NUM_TEXTURES
 
@@ -20,13 +20,13 @@ offsets:
 
 textureData:
     # copied from TEX1.tab and offset by the first entry.
-    .int 0x8409EB90 - BASE_OFFSET
-    .int 0x810A1940 - BASE_OFFSET
-    .int 0x810AA910 - BASE_OFFSET
+    .int 0x84023430 - BASE_OFFSET
+    .int 0x810261E0 - BASE_OFFSET
+    .int 0x8102F1B0 - BASE_OFFSET
     .int 0x01000000
-    .int 0x810AB270 - BASE_OFFSET
-    .int 0x810AB600 - BASE_OFFSET
-    .int 0x810AB740 - BASE_OFFSET
+    .int 0x8102FB10 - BASE_OFFSET
+    .int 0x8102FEA0 - BASE_OFFSET
+    .int 0x8102FFE0 - BASE_OFFSET
 
 # using .align generates unnecessary extra padding.
 #.byte 0, 0
