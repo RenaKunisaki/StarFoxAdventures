@@ -197,7 +197,7 @@ class App:
         self._checkConnected()
         try:
             while True:
-                time.sleep(0.1)
+                time.sleep(1.0 / 60.0)
                 print("\x1B[H", end='') # cursor to 1,1
 
                 nObj, pObj = self.client.read(0x803dcb84, '>II')
@@ -215,11 +215,13 @@ class App:
                 printf("Coords: %+8.2f %+8.2f %+8.2f  Cell %4d %4d @ %4d %4d \r\n",
                     x, y, z, cellX, cellZ, mapX, mapZ)
 
+                # XXX this is only for Krystal
                 curHP, maxHP = self.client.read(0x803A32A8, '>BB')
                 printf("HP: %1.2f / %1.2f  Anim: %04X  \r\n",
                     curHP/4, maxHP/4, animId)
 
                 self.game.heapStats()
+                self.client.conn.send(b"\xAA")
 
         except KeyboardInterrupt:
             self.client.conn.send(b"\xAA")
