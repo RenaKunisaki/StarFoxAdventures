@@ -55,6 +55,8 @@ start:
     CALL    loadFileByPath
     # now r3 = data
     stw     r3, SP_FILE_BUFFER(r1)
+    cmpwi   r3, 0
+    beq     end # out of memory
 
     # copy from there into buffer
     LOAD    r0, KRYSTAL_MODEL_OFFSET

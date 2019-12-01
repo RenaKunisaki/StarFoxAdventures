@@ -45,6 +45,8 @@ start:
     LOAD    r4, 0x7d7d7d7d # the alloc tag, which the game was about
     CALL    allocTagged # to set up before we hooked it
     # now r3 = buffer
+    cmpwi   r3, 0
+    beq     abort # alloc failure
     stw     r3, SP_BUFFER(r1)
     lwz     r5, SP_ORIG_SIZE(r1)
     add     r3, r3, r5
@@ -70,8 +72,8 @@ start:
     # now r3 = data
     stw     r3, SP_FILE_BUFFER(r1)
     cmpwi   r3, 0
-    bne     .ok
-    CALL    0x80249000 # a random OSPanic() we can recognize
+    beq     abort
+    #CALL    0x80249000 # a random OSPanic() we can recognize
 
 .ok:
 
@@ -87,6 +89,8 @@ end:
     lwz     r3, SP_FILE_BUFFER(r1)
     CALL    free
     lwz     r3, SP_BUFFER(r1)  # return buffer
+
+abort:
     addi    r1, r1, STACK_SIZE # restore stack ptr
 
     # jump back into the game code, just past the allocTagged call.
