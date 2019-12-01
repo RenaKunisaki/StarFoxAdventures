@@ -38,8 +38,9 @@ start:
     # now r3 = buffer
     stw     r3, SP_BUFFER(r1)
     cmpwi   r3, 0
-    bne     .ok
-    CALL    0x80248fd0 # a random OSPanic() we can recognize
+    #bne     .ok
+    beq     end # alloc fail is OK
+    #CALL    0x80248fd0 # a random OSPanic() we can recognize
 
 .ok:
     # get file path address in r3
