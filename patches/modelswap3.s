@@ -87,7 +87,7 @@ start:
 end:
     # free the file buffer
     lwz     r3, SP_FILE_BUFFER(r1)
-    CALL    free
+    CALL    mm_free
     lwz     r3, SP_BUFFER(r1)  # return buffer
 
 abort:

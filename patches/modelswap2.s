@@ -18,7 +18,7 @@ bne     end # nope, don't touch it.
 lis     r4, 0x8180
 lwz     r4, -4(r4)
 
-lis     r5, 0xB000 # set flags: compressed, use either MODELS.BIN
+lis     r5, 0x8000 # set flags: compressed, use either MODELS.BIN
 or      r6, r4, r5
 
 LOADW   r3, MODELS_TAB # get the address of MODELS.TAB in memory
