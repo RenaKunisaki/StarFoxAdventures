@@ -25,6 +25,8 @@ lis     r5, 0x9000 # set flags: compressed, use main map MODELS.bin
 or      r6, r4, r5
 
 LOADW   r3, MODELS_TAB # get the address of main map's MODELS.TAB in memory
+cmpwi   r3, 0
+beq     end # not loaded yet...
 lwz     r4, (KRYSTAL_MODEL_ID * 4)(r3) # r4 = offset for Krystal model
 rlwinm. r5, r4, 4, 0xF # r5 = (r4 >> 28) & 0xF (the flag bits)
 cmpwi   r5, 0 # already loaded?
