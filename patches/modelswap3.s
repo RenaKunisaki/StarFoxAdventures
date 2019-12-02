@@ -5,6 +5,7 @@
 GECKO_BEGIN_PATCH 0x80046158 # lis r4, 0x7d7d
 # just before a call to allocTagged; r3 = size
 # r5 is free
+# r23 = which file is being loaded: 0x20 (main map) or 0x4B (submap)
 # yes, this is nearly the same as patch 1
 b start
 
@@ -20,6 +21,7 @@ b start
 .set SP_DEST_BUFFER,0x20 # destination in allocated buffer
 .set SP_TEXOFFSETS,0x24 # ptr to textureOffsets (not used atm)
 .set SP_SRC_OFFSET,0x28 # SOURCE_OFFSET
+.set SP_ALLOC_TAG,0x2C
 
 srcOffset:
     # keep this here, we can retrieve it easily
@@ -30,6 +32,8 @@ filePath:
 
 .byte 0, 0 # align without excess padding
 start:
+    cmpwi   r23, 0x20 # only patch the main map
+    bne     skip
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)
     # store the offset, we'll need it later.
@@ -42,11 +46,23 @@ start:
     stw     r5, SP_EXTRA_SIZE(r1)
     add     r3, r3, r5 # add space for the new data
     li      r5, 0 # name
-    LOAD    r4, 0x7d7d7d7d # the alloc tag, which the game was about
-    CALL    allocTagged # to set up before we hooked it
+    LOAD    r4, 0x7d7d7d7d # the alloc tag
+    stw     r4, SP_ALLOC_TAG(r1)
+    CALL    allocTagged
     # now r3 = buffer
     cmpwi   r3, 0
-    beq     abort # alloc failure
+    bne     .alloc_ok
+
+    # alloc failed
+    lis     r4, 0x8180
+    stw     r3, -8(r4) # zero the pointer
+    lwz     r3, SP_ORIG_SIZE(r1) # try again with original size
+    lwz     r4, SP_ALLOC_TAG(r1)
+    li      r5, 0 # name
+    CALL    allocTagged
+    b       abort # return the original result
+
+.alloc_ok:
     stw     r3, SP_BUFFER(r1)
     lwz     r5, SP_ORIG_SIZE(r1)
     add     r3, r3, r5
@@ -75,7 +91,7 @@ start:
     beq     abort
     #CALL    0x80249000 # a random OSPanic() we can recognize
 
-.ok:
+#.ok:
 
     # copy the texture data
     lwz     r4, SP_SRC_OFFSET(r1)
@@ -99,4 +115,5 @@ abort:
     # at 0)
     JUMP    0x80046168, r4
 
+skip:
 GECKO_END_PATCH

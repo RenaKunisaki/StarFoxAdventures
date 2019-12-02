@@ -17,17 +17,20 @@ bne     end # nope, don't touch it.
 # get the ptr to model data, stored by previous code.
 lis     r4, 0x8180
 lwz     r4, -4(r4)
+cmpwi   r4, 0
+beq     end # we didn't load the model
+# better to let it be a cube than to crash the game
 
-lis     r5, 0x8000 # set flags: compressed, use either MODELS.BIN
+lis     r5, 0x9000 # set flags: compressed, use main map MODELS.bin
 or      r6, r4, r5
 
-LOADW   r3, MODELS_TAB # get the address of MODELS.TAB in memory
+LOADW   r3, MODELS_TAB # get the address of main map's MODELS.TAB in memory
 lwz     r4, (KRYSTAL_MODEL_ID * 4)(r3) # r4 = offset for Krystal model
 rlwinm. r5, r4, 4, 0xF # r5 = (r4 >> 28) & 0xF (the flag bits)
 cmpwi   r5, 0 # already loaded?
 bne     end # then don't change it.
 
-# store it into local MODELS.TAB
+# store it into map's MODELS.TAB
 stw     r6, (KRYSTAL_MODEL_ID * 4)(r3)
 stw     r6, 0x18(r1) # return this offset to the caller
 
