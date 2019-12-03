@@ -32,8 +32,17 @@ filePath:
 
 .byte 0, 0 # align without excess padding
 start:
-    cmpwi   r23, 0x20 # only patch the main map
-    bne     skip
+#    cmpwi   r27, 0
+#    bne     .noswap
+#    cmpwi   r23, 0x4B
+#    beq     .doit
+#    b       skip
+
+#.noswap:
+#    cmpwi   r23, 0x20 # only patch the main map
+#    bne     skip
+
+.doit:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)
     # store the offset, we'll need it later.

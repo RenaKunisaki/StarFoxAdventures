@@ -5,6 +5,7 @@
 GECKO_BEGIN_PATCH 0x800453D4 # lis r4, 0x7d7d
 # just before a call to allocTagged; r3 = size
 # r23 = which file is being loaded: 0x2B (main map) or 0x46 (submap)
+# r27 = whether we're swapping slots
 # r5 is free
 b start
 
@@ -24,8 +25,6 @@ filePath:
 
 #.byte 0 # align without excess padding
 start:
-    cmpwi   r23, 0x2B # only patch the main map
-    bne     skip
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)
     # store the offset, we'll need it later.
@@ -97,7 +96,5 @@ abort:
     # and `ba` isn't usable on GCN at all (unless someone mapped RAM
     # at 0)
     JUMP    0x800453E4, r4
-
-skip:
 
 GECKO_END_PATCH

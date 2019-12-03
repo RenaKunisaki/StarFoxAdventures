@@ -38,6 +38,7 @@
     # outSize: if not NULL, receives file size.
 .set memcpy,0x80003494 # clobbers: r0, r6
 .set memset,0x800033D8 # clobbers: r0, r6, r7
+.set mm_free,0x80023800 # wrapper for free()
 .set modelLoad,0x80029570 # ModelFileHeader* (
     # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
     # if modelNum is negative, don't use MODELIND.bin
@@ -80,6 +81,14 @@
 .macro LOADW reg, addr
     lis \reg, (\addr >> 16) + ((\addr & 0x8000) >> 15)
     lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)
+.endm
+
+.macro LOADWH reg, addr
+    lis \reg, (\addr >> 16) + ((\addr & 0x8000) >> 15)
+.endm
+
+.macro LOADWL reg, addr, base=\reg
+    lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\base)
 .endm
 
 .macro LOAD reg, val
