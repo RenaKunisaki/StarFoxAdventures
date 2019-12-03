@@ -3,95 +3,263 @@ from util import printf
 from structs import ObjectFileStruct, GameObject, HeapStruct, HeapEntry, ModelFileHeader, Model
 
 ROW_COLOR = (19, 17)
-fileNames = (
-    "AUDIO.tab",
-    "AUDIO.bin",
-    "SFX.tab",
-    "SFX.bin",
-    "AMBIENT.tab",
-    "AMBIENT.bin",
-    "MUSIC.tab",
-    "MUSIC.bin",
-    "MPEG.tab",
-    "MPEG.bin",
-    "MUSICACT.bin",
-    "CAMACTIO.bin",
-    "LACTIONS.bin",
-    "ANIMCURV.bin",
-    "ANIMCURV.tab",
-    "OBJSEQ2C.tab",
-    "FONTS.bin",
-    "CACHEFON.bin",
-    "CACHEFON.bin_12",
-    "GAMETEXT.bin",
-    "GAMETEXT.tab",
-    "globalma.bin",
-    "TABLES.bin",
-    "TABLES.tab",
-    "SCREENS.bin",
-    "SCREENS.tab",
-    "VOXMAP.tab",
-    "VOXMAP.bin",
-    "WARPTAB.bin",
-    "MAPS.bin",
-    "MAPS.tab",
-    "MAPINFO.bin",
-    "TEX1.bin",
-    "TEX1.tab",
-    "TEXTABLE.bin",
-    "TEX0.bin",
-    "TEX0.tab",
-    "BLOCKS.bin",
-    "BLOCKS.tab",
-    "TRKBLK.tab",
-    "HITS.bin",
-    "HITS.tab",
-    "MODELS.tab",
-    "MODELS.bin",
-    "MODELIND.bin",
-    "MODANIM.TAB",
-    "MODANIM.BIN",
-    "ANIM.TAB",
-    "ANIM.BIN",
-    "AMAP.TAB",
-    "AMAP.BIN",
-    "BITTABLE.bin",
-    "WEAPONDA.bin",
-    "VOXOBJ.tab",
-    "VOXOBJ.bin",
-    "MODLINES.bin",
-    "MODLINES.tab",
-    "SAVEGAME.bin",
-    "SAVEGAME.tab",
-    "OBJSEQ.bin",
-    "OBJSEQ.tab",
-    "OBJECTS.tab",
-    "OBJECTS.bin",
-    "OBJINDEX.bin",
-    "OBJEVENT.bin",
-    "OBJHITS.bin",
-    "DLLS.bin",
-    "DLLS.tab",
-    "DLLSIMPO.bin",
-    "MODELS.tab_45",
-    "MODELS.bin_46",
-    "BLOCKS.bin_47",
-    "BLOCKS.tab_48",
-    "ANIM.TAB_49",
-    "ANIM.BIN_4A",
-    "TEX1.bin_4B",
-    "TEX1.tab_4C",
-    "TEX0.bin_4D",
-    "TEX0.tab_4E",
-    "TEXPRE.bin",
-    "TEXPRE.tab",
-    "PREANIM.bin",
-    "PREANIM.tab",
-    "VOXMAP.tab_53",
-    "VOXMAP.bin_54",
-    "ANIMCURV.bin_55",
-    "ANIMCURV.tab_56",
-    "ENVFXACT.bin",
+fileTable = {
+    'AMAP': {
+        'bin': (0x32, ),
+        'tab': (0x31, ),
+    },
+    'AMBIENT': {
+        'bin': (0x05, ),
+        'tab': (0x04, ),
+    },
+    'ANIM': {
+        'bin': (0x30, 0x4A),
+        'tab': (0x2F, 0x49),
+    },
+    'ANIMCURV': {
+        'bin': (0x0D, 0x55),
+        'tab': (0x0E, 0x56),
+    },
+    'AUDIO': {
+        'bin': (0x01, ),
+        'tab': (0x00, ),
+    },
+    'BITTABLE': {
+        'bin': (0x33, ),
+        'tab': None,
+    },
+    'BLOCKS': {
+        'bin': (0x25, 0x47),
+        'tab': (0x26, 0x48),
+    },
+    'CACHEFON': {
+        'bin': (0x11, 0x12),
+        'tab': None,
+    },
+    'CAMACTIO': {
+        'bin': (0x0B, ),
+        'tab': None,
+    },
+    'DLLS': {
+        'bin': (0x42, ),
+        'tab': (0x43, ),
+    },
+    'DLLSIMPO': {
+        'bin': (0x44, ),
+        'tab': None,
+    },
+    'ENVFXACT': {
+        'bin': (0x57, ),
+        'tab': None,
+    },
+    'FONTS': {
+        'bin': (0x10, ),
+        'tab': None,
+    },
+    'GAMETEXT': {
+        'bin': (0x13, ),
+        'tab': (0x14, ),
+    },
+    'globalma': {
+        'bin': (0x15, ),
+        'tab': None,
+    },
+    'HITS': {
+        'bin': (0x28, ),
+        'tab': (0x29, ),
+    },
+    'LACTIONS': {
+        'bin': (0x0C, ),
+        'tab': None,
+    },
+    'MAPINFO': {
+        'bin': (0x1F, ),
+        'tab': None,
+    },
+    'MAPS': {
+        'bin': (0x1D, ),
+        'tab': (0x1E, ),
+    },
+    'MODELIND': {
+        'bin': (0x2C, ),
+        'tab': None,
+    },
+    'MODELS': {
+        'bin': (0x2B, 0x46),
+        'tab': (0x2A, 0x45),
+    },
+    'MODLINES': {
+        'bin': (0x37, ),
+        'tab': (0x38, ),
+    },
+    'MPEG': {
+        'bin': (0x09, ),
+        'tab': (0x08, ),
+    },
+    'MUSIC': {
+        'bin': (0x07, ),
+        'tab': (0x06, ),
+    },
+    'MUSICACT': {
+        'bin': (0x0A, ),
+        'tab': None,
+    },
+    'OBJECTS': {
+        'bin': (0x3E, ),
+        'tab': (0x3D, ),
+    },
+    'OBJEVENT': {
+        'bin': (0x40, ),
+        'tab': None,
+    },
+    'OBJHITS': {
+        'bin': (0x41, ),
+        'tab': None,
+    },
+    'OBJINDEX': {
+        'bin': (0x3F, ),
+        'tab': None,
+    },
+    'OBJSEQ': {
+        'bin': (0x3B, ),
+        'tab': (0x3C, ),
+    },
+    'OBJSEQ2C': {
+        'bin': None,
+        'tab': (0x0F, ),
+    },
+    'PREANIM': {
+        'bin': (0x51, ),
+        'tab': (0x52, ),
+    },
+    'SAVEGAME': {
+        'bin': (0x39, ),
+        'tab': (0x3A, ),
+    },
+    'SCREENS': {
+        'bin': (0x18, ),
+        'tab': (0x19, ),
+    },
+    'SFX': {
+        'bin': (0x03, ),
+        'tab': (0x02, ),
+    },
+    'TABLES': {
+        'bin': (0x16, ),
+        'tab': (0x17, ),
+    },
+    'TEX0': {
+        'bin': (0x23, 0x4D),
+        'tab': (0x24, 0x4E),
+    },
+    'TEX1': {
+        'bin': (0x20, 0x4B),
+        'tab': (0x21, 0x4C),
+    },
+    'TEXPRE': {
+        'bin': (0x4F, ),
+        'tab': (0x50, ),
+    },
+    'TEXTABLE': {
+        'bin': (0x22, ),
+        'tab': None,
+    },
+    'TRKBLK': {
+        'bin': None,
+        'tab': (0x27, ),
+    },
+    'VOXMAP': {
+        'bin': (0x1B, 0x54),
+        'tab': (0x1A, 0x53),
+    },
+    'VOXOBJ': {
+        'bin': (0x36, ),
+        'tab': (0x35, ),
+    },
+    'WARPTAB': {
+        'bin': (0x1C, ),
+        'tab': None,
+    },
+    'WEAPONDA': {
+        'bin': (0x34, ),
+        'tab': None,
+    },
+}
+
+mapNames = (
+    "animtest",
+    "animtest_01",
+    "animtest_02",
+    "arwing",
+    "dragrock",
+    "animtest_05",
+    "dfptop",
+    "volcano",
+    "animtest_08",
+    "mazecave",
+    "dragrockbot",
+    "dfalls",
+    "swaphol",
+    "shipbattle",
+    "nwastes",
+    "warlock",
+    "shop",
+    "animtest_11",
+    "crfort",
+    "swapholbot",
+    "wallcity",
+    "lightfoot",
+    "cloudtreasure",
+    "animtest_17",
+    "clouddungeon",
+    "mmpass",
+    "darkicemines",
+    "animtest_1B",
+    "desert",
+    "animtest_1D",
+    "icemountain",
+    "animtest_1F",
+    "animtest_20",
+    "animtest_21",
+    "darkicemines2",
+    "bossgaldon",
+    "animtest_24",
+    "insidegal",
+    "magiccave",
+    "dfshrine",
+    "mmshrine",
+    "ecshrine",
+    "gpshrine",
+    "dbshrine",
+    "nwshrine",
+    "worldmap",
+    "animtest_2E",
+    "capeclaw",
+    "dbay",
+    "animtest_31",
+    "cloudrace",
+    "bossdrakor",
+    "animtest_34",
+    "bosstrex",
+    "linkb",
+    "cloudjoin",
+    "arwingtoplanet",
+    "arwingdarkice",
+    "arwingcloud",
+    "arwingcity",
+    "arwingdragon",
+    "gamefront",
+    "linklevel",
+    "greatfox",
+    "linka",
+    "linkc",
+    "linkd",
+    "linke",
+    "linkf",
+    "linkg",
+    "linkh",
+    "linkj",
+    "linki",
 )
 
 class Game:
@@ -178,11 +346,52 @@ class Game:
 
 
     def listFiles(self):
-        printf("\x1B[1mID│FileName        │RamAddr\x1B[0m\n")
-        for i in range(0x58):
-            filePtr = self.client.read(0x8035f3e8 + (i*4), ">I")
-            printf("\x1B[48;5;%dm%02X│%-16s│%08X\x1B[0m\n", ROW_COLOR[i&1],
-                i, fileNames[i], filePtr)
+        filePtrs  = self.client.read(0x8035f3e8, '>88I')
+        fileSizes = self.client.read(0x8035f0a8, '>88I')
+        mapIds    = self.client.read(0x8035f548, '>88H')
+
+        printf("\x1B[1m        " +
+            "║Slot 1 .bin                        "+
+            "║Slot 1 .tab                        "+
+            "║Slot 2 .bin                        "+
+            "║Slot 2 .tab\nFileName" +
+            "║ RamAddr│FileSize│ Map             "+
+            "║ RamAddr│FileSize│ Map             "+
+            "║ RamAddr│FileSize│ Map             "+
+            "║ RamAddr│FileSize│ Map\x1B[0m\n")
+
+        rowIdx = 0
+        for name, file in fileTable.items():
+            bin, tab = file['bin'], file['tab']
+            if bin is None: bin = ()
+            if tab is None: tab = ()
+            printf("\x1B[48;5;%dm%-8s║", ROW_COLOR[rowIdx&1], name)
+            for i in range(2):
+                binIdx = bin[i] if i < len(bin) else None
+                tabIdx = tab[i] if i < len(tab) else None
+
+                if binIdx is not None:
+                    mapId = mapIds[binIdx]
+                    mapName = mapNames[mapId] if mapId < len(mapNames) else "-"
+                    printf("\x1B[38;5;%dm%8X│%8X│%04X %-12s\x1B[38;5;7m║",
+                        8 if filePtrs[binIdx] == 0 else 7,
+                        filePtrs[binIdx], fileSizes[binIdx],
+                         mapId, mapName)
+                else:
+                    printf("--------│--------│---- ------------║")
+
+                if tabIdx is not None:
+                    mapId = mapIds[tabIdx]
+                    mapName = mapNames[mapId] if mapId < len(mapNames) else "-"
+                    printf("\x1B[38;5;%dm%8X│%8X│%04X %-12s\x1B[38;5;7m║",
+                        8 if filePtrs[tabIdx] == 0 else 7,
+                        filePtrs[tabIdx], fileSizes[tabIdx],
+                        mapId, mapName)
+                else:
+                    printf("--------│--------│---- ------------║")
+
+            printf("\x1B[0m\n")
+            rowIdx += 1
 
 
     def getCurMap(self):

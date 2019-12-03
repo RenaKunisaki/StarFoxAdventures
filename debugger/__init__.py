@@ -197,7 +197,8 @@ class App:
         self._checkConnected()
         try:
             while True:
-                time.sleep(1.0 / 60.0)
+                #time.sleep(1.0 / 60.0)
+                time.sleep(0.1)
                 print("\x1B[H", end='') # cursor to 1,1
 
                 nObj, pObj = self.client.read(0x803dcb84, '>II')
