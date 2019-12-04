@@ -1,3 +1,6 @@
+# Note
+Most AR codes beginning with 00, 02, or 04 will also work as Gecko codes and vice-versa.
+
 # AR codes
 ## From random sites
 
@@ -123,6 +126,40 @@ e2000001 80008000
 04119d90 60000000
 ```
 This shortens the normal button code to enable the level select feature. Just press Z before selecting Play Game on the title screen.
+
+### No Save Confirmation
+```
+0412a97c 4bfbdd55
+```
+Selecting "Save" from the pause menu will save the game without asking if you're sure.
+
+### Save Confirmation is Yes by Default
+```
+0012a983 00000000
+```
+When choosing Save, the cursor will be at Yes when the confirmation appears.
+
+### Disable Pause Menu Voices
+```
+0412a904 60000000
+0412a8c4 60000000
+0412a95c 60000000
+0412ba94 60000000
+0412b8dc 60000000
+0412b88c 60000000
+0412b8b4 60000000
+0412bd78 60000000
+```
+
+other places that call streamPlay from pause menu:
+```
+8012baa8
+8012bad4
+8012bb3c
+8012bc54
+8012bd50
+8012bdcc
+```
 
 ### D-Up to Change Game Speed
 ```
