@@ -1,0 +1,2 @@
+- the map `dbay` has `animtest` as its parent
+- the lighting debug object loads sometimes in DarkIce Mines. still doesn't appear to function.
