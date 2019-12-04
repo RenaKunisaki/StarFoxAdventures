@@ -62,6 +62,7 @@ Most AR codes beginning with 00, 02, or 04 will also work as Gecko codes and vic
 ```
 00014E73 00000004
 ```
+(this lets the game read controllers 2-4. the only known use is that pressing A/B on controller 3 triggers some debug messages.)
 
 ### Enable Debug Text
 ```
