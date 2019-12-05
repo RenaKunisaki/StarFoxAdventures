@@ -27,8 +27,7 @@ This program extracts resources from the game files. It's very much a work in pr
 ### Modelviewer
 This program attempts to render model data extracted from the game files. It's still very limited:
 - Doesn't extract the model itself (use the Extractor program for that)
-- Loads a model from a fixed path (`../dump/krystal.bin`)
-- Doesn't support textures (polygons are coloured according to which display list produced them)
+- Doesn't decode textures (loads them from a PNG file)
 - Doesn't support animations
 - Does display the model's geometry and skeleton
 - Navigate by dragging the mouse buttons, arrow keys, A, and S
