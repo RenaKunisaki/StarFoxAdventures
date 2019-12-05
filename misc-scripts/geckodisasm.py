@@ -31,7 +31,7 @@ def nextLine():
 
 
 def disasmType0(codeType:int, code):
-    addr     = (bytes2word(code) & 0x01FFFFFF) + 0x80000000
+    addr     = (bytes2word(code) & 0x01FFFFFF)
     val      = bytes2word(code[4:])
     count    = ((code[4] << 16) | code[5]) + 1
     subType  = (code[0] & 0x07) >> 1
@@ -82,7 +82,7 @@ def disasmType0(codeType:int, code):
 
 def disasmType2(codeType:int, code):
     global curIfCount
-    addr     = (bytes2word(code) & 0x01FFFFFF) + 0x80000000
+    addr     = (bytes2word(code) & 0x01FFFFFF)
     isEndif  = (addr & 1) != 0
     poFlag   = code[0] & 0x10
     val      = bytes2word(code[4:])
@@ -208,7 +208,7 @@ def disasmTypeA(codeType:int, code):
     subType = (code[0] & 0x07) >> 1
     poFlag  = code[0] & 0x10
 
-    addr      = (bytes2word(code) & 0x01FFFFFC) + 0x80000000
+    addr      = (bytes2word(code) & 0x01FFFFFC)
     isEndif   = (code[3] & 1) != 0
     isCounter = (codeType & 0x08) != 0
     poFlag    = code[0] & 0x10
@@ -240,7 +240,7 @@ def disasmTypeA(codeType:int, code):
 def disasmTypeC(codeType:int, code):
     global curIfCount
     subType = (code[0] & 0x07) >> 1
-    addr    = (bytes2word(code) & 0x01FFFFFC) + 0x80000000
+    addr    = (bytes2word(code) & 0x01FFFFFC)
     val     = bytes2word(code[4:])
     poFlag  = code[0] & 0x10
     P       = 'ba' if poFlag == 0 else 'po'
@@ -285,7 +285,7 @@ def disasmTypeE(codeType:int, code):
             printf("End")
             curIfCount = 0
         else:
-            curIfCount -= code[3] # XXX -1? does this count as an If?
+            curIfCount -= code[3] - 1 # XXX does this count as an If?
             printf("EndIf(x%d)", code[3])
             if code[1] & 0x10:
                 printf("; Else")
@@ -301,7 +301,7 @@ def disasmTypeE(codeType:int, code):
         curIfCount = 0
 
     elif codeType == 0xF2 or codeType == 0xF4:
-        addr    = (bytes2word(code) & 0x01FFFFFC) + 0x80000000
+        addr    = (bytes2word(code) & 0x01FFFFFC)
         poFlag  = code[0] & 0x04
         P       = 'ba' if poFlag == 0 else 'po'
         count  = code[4]
@@ -368,6 +368,7 @@ else:
 for line in inFile:
     lines.append(line)
 
+printf("start ba=0x80000000 po=0x80000000\n")
 while len(lines) > 0:
     disasm(nextLine())
 
