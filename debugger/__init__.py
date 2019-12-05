@@ -2,6 +2,7 @@
 import re
 import sys
 import time
+import struct
 import inspect
 from util import printf, hexdump
 from client import GeckoClient, FileClient, TcpConnection
@@ -215,11 +216,22 @@ class App:
                 animId  = self.client.read(pPlayer+0xA0, '>H')
                 printf("Coords: %+8.2f %+8.2f %+8.2f  Cell %4d %4d @ %4d %4d \r\n",
                     x, y, z, cellX, cellZ, mapX, mapZ)
+                #animId
 
-                # XXX this is only for Krystal
-                curHP, maxHP = self.client.read(0x803A32A8, '>BB')
-                printf("HP: %1.2f / %1.2f  Anim: %04X  \r\n",
-                    curHP/4, maxHP/4, animId)
+                playerState = self.client.read(0x803A32A8, 24)
+                playerNames = ('K', 'F')
+                for i in range(2):
+                    curHP, maxHP, unk2, unk3, curMP, maxMP, money, \
+                    curLives, maxLives, unkB = struct.unpack_from(
+                        '>bbbbhhbbbb', playerState, i*12)
+                    printf("%s  HP:\x1B[48;5;19m%5.2f/%5.2f\x1B[0m   "+
+                        "MP:\x1B[48;5;19m%3d/%3d\x1B[0m   "+
+                        "$\x1B[48;5;19m%3d\x1B[0m   "+
+                        "B:\x1B[48;5;19m%3d/%3d\x1B[0m   "+
+                        "unk=%d, %d, %d   \r\n",
+                        playerNames[i],
+                        curHP/4, maxHP/4, curMP, maxMP, money,
+                        curLives, maxLives, unk2, unk3, unkB)
 
                 self.game.heapStats()
                 self.client.conn.send(b"\xAA")
