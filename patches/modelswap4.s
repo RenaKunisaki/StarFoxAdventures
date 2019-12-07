@@ -69,7 +69,7 @@ do_patch:
         # offset to that entry.
         srwi    r7, r6, 24
         cmpwi   r7, 1
-        beq     .noAdd
+        beq     .skip2
             add     r6, r6, r4 # plus the offset we wrote it at
 
         .noAdd:

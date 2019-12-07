@@ -19,6 +19,19 @@ GECKO_WRITE32 0x80295be0, 0x38600001 # let Krystal use map, comm, etc
 # above patch seems to cause crashing on pause, so:
 GECKO_WRITE32 0x8025c34c, 0x60000000 # fix crash on pause (not necessary?)
 
+# force TEX1.bin to be reloaded on map transitions, even if the
+# destination map is already loaded.
+# This works around a crash that can happen with some warps,
+# where the opposite slot has our textures in it and gets unloaded
+# by such a warp. Usually no problem because the warp would then
+# load another map and our textures would get added, but in this
+# case that doesn't happen; this patch ensures it does.
+GECKO_WRITE32 0x80046038, 0x42800008
+GECKO_WRITE32 0x80046058, 0x42800008
+# and the same for MODELS.bin
+GECKO_WRITE32 0x800452b8, 0x42800008
+GECKO_WRITE32 0x800452d8, 0x42800008
+
 # D-Down to switch character
 GECKO_IFEQ_16 buttonsJustPressed+2, PAD_BUTTON_DOWN # D-Down pressed?
     GECKO_SET_GR 0, 0x817ffff4
