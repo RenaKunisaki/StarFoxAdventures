@@ -107,6 +107,7 @@ de000000 80008180
 e2000001 80008000
 ```
 (this might be for a different version; it's meant to work instantly)
+(or, it might be an AR code instead)
 
 ### staff
 ```
