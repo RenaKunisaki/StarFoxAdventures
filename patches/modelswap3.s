@@ -46,8 +46,8 @@ start:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)
     # store the offset, we'll need it later.
-    lis     r4, 0x8180
-    stw     r3, -8(r4)
+    #lis     r4, 0x8180
+    #stw     r3, -8(r4)
 
     # call allocTagged ourselves; allocate the requested size
     # plus the size of the model data
@@ -63,8 +63,8 @@ start:
     bne     .alloc_ok
 
     # alloc failed
-    lis     r4, 0x8180
-    stw     r3, -8(r4) # zero the pointer
+    #lis     r4, 0x8180
+    #stw     r3, -8(r4) # zero the pointer
     lwz     r3, SP_ORIG_SIZE(r1) # try again with original size
     lwz     r4, SP_ALLOC_TAG(r1)
     li      r5, 0 # name

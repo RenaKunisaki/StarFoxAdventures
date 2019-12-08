@@ -4,55 +4,69 @@
 # patch mergeTableFiles() case MODELS.tab
 # insert the offset we loaded Krystal at into the table
 GECKO_BEGIN_PATCH 0x80043d78 # li r9, 0x0800
+b start
 
-.set MODELS_TAB_MAIN,0x8035f490
-.set MODELS_TAB_SUB,0x8035f4fc
+.set P_MODELS_TAB1,dataFileBuffers + (MODELS_TAB  * 4)
+.set P_MODELS_TAB2,dataFileBuffers + (MODELS_TAB2 * 4)
+.set P_MODELS_BIN1,dataFileBuffers + (MODELS_BIN  * 4)
+.set P_MODELS_BIN2,dataFileBuffers + (MODELS_BIN2 * 4)
 .set KRYSTAL_MODEL_ID,0x4E8
+
 .set STACK_SIZE,0x100 # how much to reserve
+.set SP_LR_SAVE,0x104 # this is what the game does
+.set SP_GPR_SAVE,0x10
+
+do_patch:
+    # r3 = models.bin file ID * 4
+    # r4 = models.tab file ID * 4
+    lwzx    r9,  r3, r11 # r9 = &MODELS.bin
+    cmpwi   r9,  0
+    beq     .end # not loaded, skip
+
+    # get the size of this file
+    lwzx    r5, r3, r12 # r5 = size
+    # that's the size of the original file, before we appended
+    # our model data, so we don't need to adjust it.
+    add     r7, r5, r9 # r7 = the actual address
+    lwz     r7, 0(r7)
+    cmp     0, 0, r7, r10 # is there a model here?
+    # we don't need to check for other valid headers because we're
+    # only checking for a specific model
+    bne     .end
+
+    # OK, r5 is valid.
+    lis     r9, 0x8000 # flags: compressed
+    or      r5, r5, r9
+    lwzx    r9, r4, r11 # r9 = MODELS.tab
+    cmpwi   r9, 0
+    beq     .end # table not loaded!? idk why this happens.
+    stw     r5, (KRYSTAL_MODEL_ID*4)(r9) # store the offset
+
+    .end:
+        blr
 
 start:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
-    stmw    r3, 0x10(r1)
+    stmw    r3, SP_GPR_SAVE(r1)
+    mflr    r3
+    stw     r3, SP_LR_SAVE(r1)
 
-    # get the ptr to model data, stored by previous code.
-    lis     r4, 0x8180
-    lwz     r4, -4(r4)
-    cmpwi   r4, 0
-    beq     end # we didn't load the model
-    # better to let it be a cube than to crash the game
+    LOAD    r12, dataFileSize
+    addi    r11, r12, dataFileBuffers - dataFileSize
+    LOAD    r10, 0xFACEFEED
 
-    lis     r5, 0x8000 # set flags: compressed, use main map MODELS.bin
-    or      r6, r4, r5
+    li      r3, MODELS_BIN*4
+    li      r4, MODELS_TAB*4
+    bl      do_patch
 
-    # get main MODELS.TAB
-    LOADWH  r7, MODELS_TAB_MAIN
-    LOADWL  r3, MODELS_TAB_MAIN, r7
-    cmpwi   r3, 0
-    beq     .next
+    li      r3, MODELS_BIN2*4
+    li      r4, MODELS_TAB2*4
+    bl      do_patch
 
-.doit:
-    lwz     r4, (KRYSTAL_MODEL_ID * 4)(r3) # r4 = offset for Krystal model
-    rlwinm. r5, r4, 4, 0xF # r5 = (r4 >> 28) & 0xF (the flag bits)
-    cmpwi   r5, 0 # already loaded?
-    bne     .next # then don't change it.
-
-    # store it into map's MODELS.TAB
-    stw     r6, (KRYSTAL_MODEL_ID * 4)(r3)
-
-# try other slot
-.next:
-    LOADWL  r3, MODELS_TAB_SUB, r7
-    cmpwi   r3, 0
-    beq     end
-
-    lwz     r4, (KRYSTAL_MODEL_ID * 4)(r3) # r4 = offset for Krystal model
-    rlwinm. r5, r4, 4, 0xF # r5 = (r4 >> 28) & 0xF (the flag bits)
-    cmpwi   r5, 0 # already loaded?
-    bne     end # don't change it
-    stw     r6, (KRYSTAL_MODEL_ID * 4)(r3)
-
-end:
-    lmw     r3, 0x10(r1)
+    # restore registers
+    lwz     r3, SP_LR_SAVE(r1)
+    mtlr    r3
+    lmw     r3, SP_GPR_SAVE(r1)
     addi    r1, r1, STACK_SIZE # restore stack ptr
     li      r9, 0x0800 # replaced
 
