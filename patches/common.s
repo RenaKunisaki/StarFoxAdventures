@@ -27,34 +27,6 @@
 .set PAD_BUTTON_Y,    0x0800
 .set PAD_BUTTON_MENU, 0x1000 # Start
 
-# SFA functions
-.set __restore_gpr,0x802860f4
-.set __save_gpr,0x802860a8
-.set allocTagged,0x80023cc8 #void* (uint size,AllocTag tag,char *name)
-.set DVDReadAsyncPrio,0x80248eac
-.set free,0x800233e8
-.set loadFileByPath,0x80015ab4 #void* (char *path,uint *outSize)
-    # Returns pointer to allocated buffer of contents.
-    # outSize: if not NULL, receives file size.
-.set memcpy,0x80003494 # clobbers: r0, r6
-.set memset,0x800033D8 # clobbers: r0, r6, r7
-.set mm_free,0x80023800 # wrapper for free()
-.set modelLoad,0x80029570 # ModelFileHeader* (
-    # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
-    # if modelNum is negative, don't use MODELIND.bin
-.set sprintf,0x8028f688
-.set storeRegs26,0x802860D8
-.set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
-    # returns with r5 = out + rawLen
-
-
-# SFA globals
-.set fileBuffers,0x8035f3e8 # void*[fileIdx]
-.set mapInfo,0x816a8ba0 # char[28] name
-.set buttonsJustPressed,0x803398d0
-.set pPlayer,0x803428f8
-.set playerId,0x803a32c8 # 0=Krystal, 1=Fox
-
 # we can't use `bl` instruction because it's relative and we don't
 # know where our code will end up. so we use this instead.
 # this clobbers lr and r0
@@ -75,12 +47,12 @@
 
 # expands to:
 # lis reg, X
-# lwz reg, Y(reg)
+# lwz dest, Y(reg)
 # where X and Y are the upper and lower halves of addr,
 # adjusted as necessary when Y >= 0x8000.
-.macro LOADW reg, addr
+.macro LOADW reg, addr, dest=\reg
     lis \reg, (\addr >> 16) + ((\addr & 0x8000) >> 15)
-    lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)
+    lwz \dest, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)
 .endm
 
 .macro LOADWH reg, addr
@@ -96,4 +68,5 @@
     ori \reg, \reg, \val@l
 .endm
 
+.include "sfa.s"
 .include "gecko.s"
