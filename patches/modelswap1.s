@@ -27,9 +27,6 @@ filePath:
 start:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)
-    # store the offset, we'll need it later.
-    #lis     r4, 0x8180
-    #stw     r3, -4(r4) # hopefully this is safe...
 
     # call allocTagged ourselves; allocate the requested size
     # plus the size of the model data
@@ -47,8 +44,6 @@ start:
 
     # alloc failed...
     #CALL    0x80248fd0 # a random OSPanic() we can recognize
-    #lis     r4, 0x8180
-    #stw     r3, -4(r4) # zero the pointer
     lwz     r3, SP_ORIG_SIZE(r1) # try again with orig size
     lwz     r4, SP_ALLOC_TAG(r1)
     li      r5, 0 # name
@@ -64,7 +59,8 @@ start:
         mflr r3
         #mtlr r7 # restore LR
         addi r3, r3, (filePath - .getpc)@l
-    # load "warlock/MODELS.bin"
+
+    # load "animtest/MODELS.bin"
     li      r4, 0 # we don't need size
     CALL    loadFileByPath
     # now r3 = data

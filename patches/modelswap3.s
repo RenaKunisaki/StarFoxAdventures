@@ -32,22 +32,8 @@ filePath:
 
 .byte 0, 0 # align without excess padding
 start:
-#    cmpwi   r27, 0
-#    bne     .noswap
-#    cmpwi   r23, 0x4B
-#    beq     .doit
-#    b       skip
-
-#.noswap:
-#    cmpwi   r23, 0x20 # only patch the main map
-#    bne     skip
-
-.doit:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1)
-    # store the offset, we'll need it later.
-    #lis     r4, 0x8180
-    #stw     r3, -8(r4)
 
     # call allocTagged ourselves; allocate the requested size
     # plus the size of the model data
@@ -63,8 +49,6 @@ start:
     bne     .alloc_ok
 
     # alloc failed
-    #lis     r4, 0x8180
-    #stw     r3, -8(r4) # zero the pointer
     lwz     r3, SP_ORIG_SIZE(r1) # try again with original size
     lwz     r4, SP_ALLOC_TAG(r1)
     li      r5, 0 # name
@@ -83,11 +67,11 @@ start:
     .getpc:
         mflr r3
         #mtlr r7 # restore LR
-        # subtract 4 so we can use lwzu
         addi r3, r3, (srcOffset - .getpc)@l
-    #stw     r3, SP_TEXOFFSETS(r1)
-    #addi    r3, r3, TEXTURE_OFFSETS_SIZE - 4
-    lwzu    r4, 0(r3) # I guess this doesn't work today
+    # unfortunately we can't use lwzu here because we'd
+    # still have to add 4 to r3 to point it to the file path,
+    # which would defeat the point.
+    lwz     r4, 0(r3)
     stw     r4, SP_SRC_OFFSET(r1)
     addi    r3, r3, 4
 
@@ -99,8 +83,6 @@ start:
     cmpwi   r3, 0
     beq     abort
     #CALL    0x80249000 # a random OSPanic() we can recognize
-
-#.ok:
 
     # copy the texture data
     lwz     r4, SP_SRC_OFFSET(r1)
