@@ -216,7 +216,13 @@ class App:
                 animId  = self.client.read(pPlayer+0xA0, '>H')
                 printf("Coords: %+8.2f %+8.2f %+8.2f  Cell %4d %4d @ %4d %4d \r\n",
                     x, y, z, cellX, cellZ, mapX, mapZ)
-                #animId
+
+                playTime = self.client.read(0x803a32a8 + 0x560, '>f') # frames
+                printf("Anim %04X PlayTime %02d:%02d:%02d\n",
+                    animId,
+                    playTime // 216000,
+                    (playTime // 3660) % 60,
+                    (playTime // 60) % 60)
 
                 playerState = self.client.read(0x803A32A8, 24)
                 playerNames = ('K', 'F')
