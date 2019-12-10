@@ -15,6 +15,7 @@
     # if modelNum is negative, don't use MODELIND.bin
 .set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
+.set strlen,0x802918a4
 .set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
     # returns with r5 = out + rawLen
 

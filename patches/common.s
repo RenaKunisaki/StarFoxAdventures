@@ -50,22 +50,30 @@
 # lwz dest, Y(reg)
 # where X and Y are the upper and lower halves of addr,
 # adjusted as necessary when Y >= 0x8000.
-.macro LOADW reg, addr, dest=\reg
+.macro LOADW reg, addr
     lis \reg, (\addr >> 16) + ((\addr & 0x8000) >> 15)
-    lwz \dest, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)
+    lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)
 .endm
 
 .macro LOADWH reg, addr
     lis \reg, (\addr >> 16) + ((\addr & 0x8000) >> 15)
 .endm
 
-.macro LOADWL reg, addr, base=\reg
+.macro LOADWL reg, addr
+    lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\reg)
+.endm
+
+.macro LOADWL2 reg, addr, base
     lwz \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\base)
 .endm
 
 .macro LOAD reg, val
     lis \reg, \val@h
     ori \reg, \reg, \val@l
+.endm
+
+.macro STOREW reg, addr, base
+    stw \reg, -(((\addr & 0x8000) << 1) - (\addr & 0xFFFF))(\base)
 .endm
 
 .include "sfa.s"

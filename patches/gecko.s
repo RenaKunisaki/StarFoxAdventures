@@ -273,3 +273,9 @@
 # T = 1 : halfword
 # T = 2 : word-
 # Write grN's T to YYY+1 consecutive T-sized addresses.
+
+# Writes, at ______+ba, a "b YYYYYYYY" instruction.
+.macro GECKO_CREATE_BRANCH addr, dest, use_po=0
+    .int 0xC6000000 | ((\addr) & 0x01FFFFFF) | ((\use_po) << 28)
+    .int \dest
+.endm

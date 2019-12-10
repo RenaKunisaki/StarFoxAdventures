@@ -196,3 +196,38 @@ e2000001 80000000
 e2000001 80000000
 ```
 (swaps the model pointers. may be broken)
+
+### Debug Print on-screen
+```
+c6148b78 80137948
+c62510cc 80137948
+c6246e04 80137948
+c628f7dc 80137948
+c213798c 0000000d
+91410024 7d6802a6
+91610068 3c60803e
+8063bc14 80810008
+80a1000c 80c10010
+80e10014 81010018
+8121001c 81410020
+81610024 3c008028
+6000f688 7c0803a6
+4e800021 3c80803e
+80a4bc14 7ca51a14
+38a50001 90a4bc14
+80a10068 7ca803a6
+60000000 00000000
+```
+(re-enables a debug message display function. not compatible with other Debug Print code above)
+
+#### Include Tricky debug print
+```
+c6148bc8 80137948
+```
+(use with above code. displays a lot of text.)
+
+#### Include all OSReport messages
+```
+c607d6dc 80137948
+```
+(many of these aren't intended to show on screen so may be hard to read)
