@@ -23,6 +23,8 @@
 # SFA globals
 .set dataFileSize,0x8035f0a8 # int32[fileIdx]
 .set dataFileBuffers,0x8035f3e8 # void*[fileIdx]
+.set debugLogBuffer,0x803aa018
+.set debugLogEnd,0x803dbc14 # end of debugLogBuffer
 .set loadedFileMapIds,0x8035f548 # int16[fileIdx]
 .set mapInfo,0x816a8ba0 # char[28] name
 .set buttonsJustPressed,0x803398d0
