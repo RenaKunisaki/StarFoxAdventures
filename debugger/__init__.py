@@ -192,6 +192,19 @@ class App:
         else: charId = int(charId)
         self.game.warpToMap(mapId, charId)
 
+    def getDebugLog(self):
+        """Display debug log messages from the game."""
+        print(self.game.getDebugLog())
+
+    def watchDebugLog(self):
+        """Monitor debug log messages from the game."""
+        try:
+            while True:
+                time.sleep(1.0 / 60.0)
+                print("\x1B[2J\x1B[H" + self.game.getDebugLog())
+        except KeyboardInterrupt:
+            self.client.conn.send(b"\xAA")
+
 
     def watchGame(self):
         """Display general game state info."""
@@ -200,31 +213,35 @@ class App:
             while True:
                 #time.sleep(1.0 / 60.0)
                 time.sleep(0.1)
-                print("\x1B[H", end='') # cursor to 1,1
 
+                # do all reads at once
+                #texts = self.client.read(0x803a3800, '>5b')
                 nObj, pObj = self.client.read(0x803dcb84, '>II')
                 map = self.game.getCurMap()
-                printf("Map: %04X \x1B[48;5;19m%-28s\x1B[0m Type %02X unk %02X %04X Objs: %4d @%08X  \r\n",
-                    map['id'], map['name'], map['type'],
-                    map['field_1d'], map['field_1e'],
-                    nObj, pObj)
-
                 pPlayer = self.client.read(0x803428f8, '>I')
                 x, y, z = self.client.read(pPlayer+0x0C, '>3f')
                 mapX, mapZ, cellX, cellZ = \
                     self.client.read(0x803dcdc8, '>4i')
                 animId  = self.client.read(pPlayer+0xA0, '>H')
+                playTime = self.client.read(0x803a32a8 + 0x560, '>f') # frames
+                playerState = self.client.read(0x803A32A8, 24)
+
+
+                printf("\x1B[H"+ # cursor to 1,1
+                    "Map: %04X \x1B[48;5;19m%-28s\x1B[0m Type %02X unk %02X %04X Objs: %4d @%08X  \r\n",
+                    map['id'], map['name'], map['type'],
+                    map['field_1d'], map['field_1e'],
+                    nObj, pObj)
+
                 printf("Coords: %+8.2f %+8.2f %+8.2f  Cell %4d %4d @ %4d %4d \r\n",
                     x, y, z, cellX, cellZ, mapX, mapZ)
 
-                playTime = self.client.read(0x803a32a8 + 0x560, '>f') # frames
                 printf("Anim %04X PlayTime %02d:%02d:%02d\n",
                     animId,
                     playTime // 216000,
                     (playTime // 3660) % 60,
                     (playTime // 60) % 60)
 
-                playerState = self.client.read(0x803A32A8, 24)
                 playerNames = ('K', 'F')
                 for i in range(2):
                     curHP, maxHP, unk2, unk3, curMP, maxMP, money, \

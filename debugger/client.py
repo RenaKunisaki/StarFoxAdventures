@@ -136,7 +136,7 @@ class GeckoClient(Client):
         while len(r) < size:
             d = self.conn.recv(size-len(r))
             r += d
-            #self.conn.send(b"\xAA") # ACK; BB=retry, CC=cancel
+        self.conn.send(b"\xAA") # ACK; BB=retry, CC=cancel
         return r
 
     def write(self, address, data:bytes):

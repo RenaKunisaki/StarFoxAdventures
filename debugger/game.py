@@ -414,3 +414,38 @@ class Game:
             self.client.write(0x803a32c8, struct.pack('b', charId))
         # XXX what is second param?
         self.client.callFunc(0x800552e8, mapId, 0)
+
+
+    def getDebugLog(self):
+        bufEnd = self.client.read(0x803dbc14, '>I')
+        size   = bufEnd - 0x803aa018
+        if size <= 0: return ''
+        data   = self.client.read(0x803aa018, size)
+
+        # parse control codes
+        res = []
+        i = 0
+        while i < len(data):
+            b = data[i]
+            i += 1
+            if b == 0x81: # set color
+                r, g, b, a = data[i:i+4]
+                i += 4
+                res.append("\x1B[38;2;%d;%d;%dm" % (r, g, b))
+            elif b == 0x82: # set position
+                y, x = struct.unpack_from('>hh', data, i)
+                i += 4
+                res.append("\x1B[%d;%dH" % (y, x))
+            elif b == 0x83 or b == 0x84:
+                res.append("<UNK %02X>" % b)
+            elif b == 0x85: # set BG color?
+                r, g, b, a = data[i:i+4]
+                i += 4
+                res.append("\x1B[48;2;%d;%d;%dm" % (r, g, b))
+            elif b == 0x86 or b == 0x87:
+                x, y = data[i:i+2]
+                i += 2
+                res.append("<UNK %02X %02X%02X>" % (b, x, y))
+            else:
+                res.append(chr(b))
+        return ''.join(res)
