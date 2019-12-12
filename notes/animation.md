@@ -364,6 +364,7 @@ climbing is animations (alternating):
 0x6E, 0xBE (down cliff)
 0x2D, 0x2E (up ladder)
 0x38, 0x39 (down ladder)
+tied up 0348 0337 0351 others?
 
 
 field_0xDC points to pointers to short[]

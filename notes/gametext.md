@@ -48,3 +48,23 @@ FrontEnd contains the credits, some unused cheats (Xmas Mode), "Play full game",
 AnimTest contains only the generic menu texts from every map
 Boot contains only disc read error messages and "Loading..."
 Sequences contains a ton of files... maybe only one text each
+
+escape sequences in debug text:
+0x81: set color; followed by u8 r, g, b, a
+0x82: set position; followed by u16 y, u16 x
+0x83: ??? clears the flag set by 0x84?
+0x84: ??? sets a flag
+0x85: set some (bg?) color; followed by u8 r, g, b, a
+0x86: ??? followed by 2 bytes
+0x87: ??? followed by 2 bytes
+I don't see anywhere these are used except color.
+
+escape sequences in gametext (maybe only after 0xEFA3):
+0xB4: set style? followed by 2 bytes
+0xB7: switch font texture? used to display icons. followed by 2 bytes.
+    2: buttons
+    4: default
+    5: faces?
+
+these would be UTF-8 for characters 0xF8F4 and 0xF8F7 which are in the Private Use area
+but this isn't strictly UTF-8 as the bytes following can be zero, or bytes that don't form a valid UTF-8 sequence
