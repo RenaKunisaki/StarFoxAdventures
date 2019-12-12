@@ -43,14 +43,25 @@ with open(sys.argv[1], 'rb') as file:
     offsets = []
     for i in range(numStrs):
         offsets.append(struct.unpack('>I', file.read(4))[0]) # grumble
+    p = file.tell()
+    file.seek(0, 2)
+    offsets.append(file.tell())
+    file.seek(p)
 
     strs = []
     base = file.tell()
     for i in range(numStrs):
-        file.seek(base + offsets[i])
+        offs = base + offsets[i]
+        offsEnd = base + offsets[i+1]
+        file.seek(offs)
         s = []
-        while True:
-            b = file.read(1)[0]
+        while file.tell() < offsEnd-1:
+            b = file.read(1)
+            if len(b) == 0: break
+            b = b[0]
+            #if b == 0xEE:
+            #    c = file.read(4)
+            #    b = '<EE %02X%02X%02X%02X>' % (c[0], c[1], c[2], c[3])
             if b == 0xEF: # control code
                 c = file.read(1)[0]
                 if c == 0xA3:
@@ -70,7 +81,7 @@ with open(sys.argv[1], 'rb') as file:
                         c = file.read(2)
                         b = '<UNK %02X%02X>' % (c[0], c[1])
                 else: b = '\\xEF\\x%02X' % c
-            elif b == 0: break
+            #elif b == 0: break
 
             if type(b) is not str:
                 if b > 127 or b < 32: b = "\\x%02X" % b
