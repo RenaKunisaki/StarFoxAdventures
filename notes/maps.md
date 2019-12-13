@@ -25,3 +25,66 @@ when we head to Ice Mountain, 0x2B is icemountain/MODELS.bin and 0x46 is empty.
 magiccave is also considered part of swaphol
 
 but sometimes it switches which is which
+
+all map directories on disc:
+Dir Name      |Description
+--------------|-----------
+animtest      |unused? the game reads its files at various points
+arwing        |
+arwingcity    |
+arwingcloud   |
+arwingdarkice |
+arwingdragon  |
+arwingtoplanet|flying to Dino Planet
+bossdrakor    |
+bossgaldon    |
+bosstrex      |
+capeclaw      |
+clouddungeon  |CloudRunner dungeon
+cloudrace     |
+cloudtreasure |
+crfort        |CloudRunner fortress
+darkicemines  |
+darkicemines2 |
+dbay          |
+dbshrine      |
+desert        |
+dfalls        |
+dfptop        |
+dfshrine      |
+dragrock      |
+dragrockbot   |
+ecshrine      |
+frontend      |unused?
+gamefront     |title screen
+gpshrine      |
+greatfox      |probably first scene where Fox receives mission
+icemountain   |
+insidegal     |
+lightfoot     |
+linka         |
+linkb         |
+linkc         |
+linkd         |
+linke         |
+linkf         |
+linkg         |
+linkh         |
+linki         |
+linkj         |
+linklevel     |
+magiccave     |caves where staff upgrades are found
+mazecave      |
+mmpass        |Moon Mountain Pass
+mmshrine      |
+nwastes       |SnowHorn Wastes
+nwshrine      |
+shipbattle    |Scene where Krystal shoots down the ship (start of game)
+shop          |ThornTail store
+swapcircle    |
+swaphol       |ThornTail Hollow
+swapholbot    |ThornTail Hollow lower area (caves with white mushrooms)
+volcano       |
+wallcity      |
+warlock       |Krazoa Palace
+worldmap      |world map where you choose where to fly the Arwing to

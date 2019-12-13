@@ -29,3 +29,5 @@
     map ID is 5 "ZNot Used - Krazoa Palace"
     Coords: +13440.99  +973.00 +30397.73  Cell   14   40 @ 8960 25600
     Anim 035A
+
+neither ID or Def is the index in OBJECTS.bin
