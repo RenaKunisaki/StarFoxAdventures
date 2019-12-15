@@ -14,7 +14,7 @@
 000B|TrickyExcla|0004|"!" over Tricky's head
 000C|TrickyQuest|0005|"?" over Tricky's head
 000D|TrickyFood |0006|mushroom over Tricky's head
-000E|sword      |0467|
+000E|sword      |0467|crashes :(
 000F|staff      |007E|
 0010|fox_shield |0084|
 0011|BackPack   |0087|
@@ -171,7 +171,7 @@
 00A8|CFGCpillbre|0351|
 00A9|CFGCsmallbl|0352|
 00AA|SkyDome    |0450|
-00AB|CFLevelCont|0467|
+00AB|CFLevelCont|0467|sets music
 00AC|CFCloudCalP|0324|
 00AD|CFAnimCloud|0324|
 00AE|CFCloudCall|0324|
@@ -477,14 +477,14 @@
 01DA|LINKSnowGra|04E3|
 01DB|LINKJseqobj|0466|
 01DC|VFP_Platfor|0200|
-01DD|LINKB_levco|0467|
+01DD|LINKB_levco|0467|falling snow
 01DE|LINKB_seqob|0466|
 01DF|linkB_Stone|04E5|
 01E0|LINKC_seqob|0466|
 01E1|LinkF_liftg|04D8|
 01E2|LinkF_cog  |04D9|
 01E3|CCTestInfot|0010|
-01E4|CClevcontro|0467|
+01E4|CClevcontro|0467|changes sky
 01E5|CC_HighTop |0094|
 01E6|CCeyeVines |00D9|
 01E7|CCwaterShut|01EB|
@@ -585,7 +585,7 @@
 0246|Animpeppy  |01C1|
 0247|GF_PepperHe|01C9|GF = GameFront (title screen)
 0248|GF_planet  |01C5|
-0249|GF_LevelCon|01C2|
+0249|GF_LevelCon|01C2|slow fade in, starry sky
 024A|GF_sequence|0466|
 024B|Animrob    |01C3|
 024C|AnimPilotse|01D6|
@@ -655,16 +655,16 @@
 028C|NW_InfoText|0010|
 028D|NW_InfoText|0010|
 028E|WaterFlowWe|0101|
-028F|SH_YellowWh|00F1|
+028F|SH_YellowWh|00F1|SH = swaphol (ThornTail Hollow)
 0290|SH_BlueWhit|00F2|
-0291|SH_InfoPoin|0010|
+0291|SH_InfoPoin|0010|sign "this way to cape claw" (invisible)
 0292|SH_RedYello|00F3|
 0293|SH_BlueFlow|00F4|
-0294|SH_MagicCav|00F0|
+0294|SH_MagicCav|00F0|large round door
 0295|SH_QueensDo|00EF|
-0296|SH_Portcull|00E0|
+0296|SH_Portcull|00E0|rusty iron gate
 0297|SH_FernTree|00EE|
-0298|SH_AnimMap |00ED|
+0298|SH_AnimMap |00ED|map from shop (disappears after 1 frame)
 0299|SH_FireWeed|00EC|
 029A|SH_BombWall|00E1|
 029B|SH_BombWall|00E2|
@@ -680,7 +680,7 @@
 02A5|SH_newseqob|0466|
 02A6|SH_BottomSe|0466|
 02A7|SH_krystalH|00F5|
-02A8|SH_LevelCon|0466|
+02A8|SH_LevelCon|0466|displays "ThornTail Hollow" on screen
 02A9|SH_staff   |007E|
 02AA|SH_staffHaz|004D|
 02AB|SH_tricky  |0467|
@@ -691,14 +691,14 @@
 02B0|SH_whitemus|00D7|
 02B1|SH_killermu|00D5|
 02B2|SH_whitemus|00D7|
-02B3|SH_swaplift|00DB|
+02B3|SH_swaplift|00DB|warpstone platform; stand on and press A to warp to him
 02B4|SH_swapston|00DC|warpstone
 02B5|SH_Pressure|0240|
 02B6|SH_boulder |00FF|
 02B7|SH_AnimBoul|00FF|
 02B8|AnimSwapGif|0444|
 02B9|SHAnimBaby |0100|
-02BA|SHCloudBaby|0100|
+02BA|SHCloudBaby|0100|a CloudRunner, the PDA even recognizes it
 02BB|KP_sequence|0466|
 02BC|KP_red_orb |045F|
 02BD|KP_red_gree|026D|
@@ -712,7 +712,7 @@
 02C5|KP_console_|0279|
 02C6|KP_console_|027B|
 02C7|KP_console_|027A|
-02C8|KP_textbloc|027C|
+02C8|KP_textbloc|027C|spams console: "<textblock.c Init>No Longer supported"
 02C9|KP_textbloc|027D|
 02CA|KP_textbloc|027E|
 02CB|KP_textbloc|027F|
@@ -786,8 +786,8 @@
 030F|CNTstopwatc|0468|
 0310|CNThitObjec|0468|
 0311|CNTColideOb|0468|
-0312|CameraColli|0468|
-0313|VFP_InfoTex|0010|
+0312|CameraColli|0468|invisible solid object
+0313|VFP_InfoTex|0010|sign
 0314|VFP_Warding|0213|
 0315|VFP_newball|01F2|
 0316|VFP_liftgra|0212|
@@ -829,12 +829,12 @@
 033A|VFP_Door2B |01F6|
 033B|VFP_statueb|01F9|
 033C|VFP_MiniFir|01FB|
-033D|VFP_LevelCo|0467|
+033D|VFP_LevelCo|0467|changes music, applies heat effect
 033E|VFP_ObjCrea|0469|
 033F|VFP_locksym|029B|
 0340|VFP_Bobbing|01EF|
 0341|VFP_Bobbing|01F0|
-0342|LINKA_levco|045F|
+0342|LINKA_levco|045F|spawns an object and puts you in an endless animation loop with weird music
 0343|OFPclawOnly|0214|
 0344|DFP_PowerSl|0000|
 0345|DFP_Lightni|0000|
@@ -881,10 +881,10 @@
 036E|DFP_DoorSwi|0220|
 036F|DFPSpDA    |023B|
 0370|DFPSpDB    |023C|
-0371|DFP_Textblo|0232|
+0371|DFP_Textblo|0232|"no longer supported"
 0372|DFP_RoundDo|0215|
 0373|DFP_SmallTu|022F|
-0374|DFP_LevelCo|0467|
+0374|DFP_LevelCo|0467|sets music
 0375|DFP_ObjCrea|045F|
 0376|WM_dummyfox|0001|warlock? (Krazoa Palace)
 0377|WM_MediumSc|00DD|
@@ -956,15 +956,15 @@
 03B9|WM_WallTorc|024B|
 03BA|WM_Worm    |046A|
 03BB|WM_Wallpowe|045F|
-03BC|WM_LevelCon|0467|
-03BD|SPitembeam |043E|
+03BC|WM_LevelCon|0467|sets music/rain SFX, gives everything green tint
+03BD|SPitembeam |043E|SP=shop
 03BE|SPDrape    |0438|
 03BF|SPScarab   |02B1|
 03C0|SPSeqObj   |0466|
 03C1|SPDoor     |0437|
 03C2|SPShop     |0467|
 03C3|SPShopKeepe|0436|
-03C4|SPFruitSmal|02BB|
+03C4|SPFruitSmal|02BB|spawning shop items outside the shop gives "pick up" but you can't. inside, you can buy them
 03C5|SPEggSmall |02B9|
 03C6|SPFruitLarg|043F|
 03C7|SPEggLarge |0440|
@@ -974,7 +974,7 @@
 03CB|SPBlueArtef|0443|
 03CC|SPBlueMushr|00D6|
 03CD|SPSwapGift |0444|
-03CE|SPPda      |0445|
+03CE|SPPda      |0445|DumbleDang Pod
 03CF|SPBinocular|0446|
 03D0|SPFireFly  |02EF|
 03D1|SPFuelCell |00F6|
@@ -1000,7 +1000,7 @@
 03E5|FEseqobject|0466|
 03E6|Rarelogo   |02D3|
 03E7|N64logo    |02D1|
-03E8|FrontFox   |01D1|title screen Fox
+03E8|FrontFox   |01D1|title screen Fox - steals camera focus
 03E9|FrontPeppy |01D2|
 03EA|FrontSlippy|01D3|
 03EB|FrontRob   |01D4|
@@ -1057,7 +1057,7 @@
 041E|DBSH_Shrine|0294|
 041F|DBSH_Symbol|02AB|
 0420|NWSH_Seqobj|0466|
-0421|NWSH_levcon|0467|
+0421|NWSH_levcon|0467|purple haze, chanting
 0422|Animscaless|007D|
 0423|DBprotectZo|0471|
 0424|DBHoleContr|0471|
@@ -1156,8 +1156,8 @@
 0481|DR_EarthCal|039E|
 0482|DR_CloudCal|03A0|
 0483|DieSeqObjec|0466|
-0484|DieDuster  |02C6|
-0485|DieFox     |0001|Fox death animation
+0484|DieDuster  |02C6|everything else goes black, game crashes
+0485|DieFox     |0001|Fox death animation - you can still walk around
 0486|DieKrystal |04E8|Krystal death animation
 0487|AnimFox    |0001|
 0488|AnimFoxLink|0001|
@@ -1169,7 +1169,7 @@
 048E|Fall_Ladder|02BC|
 048F|sfxPlayer  |046A|
 0490|InvisibleHi|031B|
-0491|curve      |0465|
+0491|curve      |0465|debug object?
 0492|checkpoint4|0458|
 0493|setuppoint |02D9|
 0494|EndObject  |02D9|
@@ -1180,8 +1180,8 @@
 0499|PortalDoorA|0364|
 049A|FireFlyLant|037F|
 049B|LanternFire|02EF|
-049C|MagicCaveTo|04CF|
-049D|MagicCaveBo|0466|
+049C|MagicCaveTo|04CF|staff glows when nearby
+049D|MagicCaveBo|0466|dark effect; press A to do an animation and crash
 049E|MCProjDoor |04D0|
 049F|MCUpgrade  |0466|
 04A0|MCUpgradeMa|0466|
@@ -1196,25 +1196,25 @@
 04A9|WC_LandingP|0466|
 04AA|SH_NT_Landi|0466|
 04AB|Arwingsteps|04C3|
-04AC|Landed_Arwi|0480|Arwing on ground
-04AD|Landed_Arwi|0480|
+04AC|Landed_Arwi|0480|Arwing on ground; can use it
+04AD|Landed_Arwi|0480|can't be used
 04AE|texscroll  |046B|
 04AF|texscroll2 |046B|
 04B0|LFXEmitter |0479|
-04B1|Transporter|045F|
+04B1|Transporter|045F|warp pad (won't let you warp)
 04B2|WarpPoint  |02D1|
 04B3|RestartPoin|046C|
 04B4|CFDungeonBl|02D7|
 04B5|InvHit     |046A|
 04B6|iceblast   |046C|
-04B7|flameblast |046C|
+04B7|flameblast |046C|makes Tricky spew fire
 04B8|WaveAnimato|046D|
 04B9|TexFrameAni|046D|
 04BA|AlphaAnimat|046E|
 04BB|GroundAnima|0471|
 04BC|HitAnimator|0478|
 04BD|VisAnimator|046F|
-04BE|WallAnimato|0471|
+04BE|WallAnimato|0471|makes Tricky think there's something near
 04BF|XYZAnimator|0471|
 04C0|ExplodeAnim|0471|
 04C1|PadlockKey |02D4|
@@ -1240,18 +1240,18 @@
 04D5|Area       |0477|
 04D6|DigHole    |0471|
 04D7|DigTunnel  |045F|
-04D8|GroundQuake|046A|
-04D9|SidekickBal|00B5|
-04DA|SidekickBal|00B5|
+04D8|GroundQuake|046A|a blue cube with FX written on it
+04D9|SidekickBal|00B5|Tricky's ball. you automatically pick it up. when thrown it flies off VERY fast and Tricky won't follow it.
+04DA|SidekickBal|00B5|Tricky's ball, instantly despawns
 04DB|LockIcon   |0451|
-04DC|coldWaterCo|0467|
+04DC|coldWaterCo|0467|makes nearby water cold (you take damage being in it)
 04DD|animbubble |02FA|
-04DE|Duster     |02C6|Bafomdad (1up)
+04DE|Duster     |02C6|Bafomdad (1up); flies away to random spots
 04DF|BlueMushroo|00D6|
 04E0|BlueMushroo|00D6|
-04E1|EnergyEgg  |02B9|health pickup
+04E1|EnergyEgg  |02B9|health pickup; frequently disappears, can't be collected
 04E2|EnergyEggAn|02B9|
-04E3|Apple      |02BB|
+04E3|Apple      |02BB|small health pickup
 04E4|MoonSeedCol|0161|
 04E5|AppleAnim  |02BB|
 04E6|AppleOnTree|02BA|
@@ -1261,7 +1261,7 @@
 04EA|MagicDustMi|02C5|
 04EB|MagicDustLa|02C5|
 04EC|MagicDustLa|02C5|
-04ED|MagicDustHu|02C5|
+04ED|MagicDustHu|02C5|magic energy pickup
 04EE|MagicDustHu|02C5|
 04EF|GreenScarab|02B0|
 04F0|RedScarab  |02B0|
@@ -1272,34 +1272,34 @@
 04F5|GoldScarabA|02B0|
 04F6|FireFly    |02EF|
 04F7|SmallBasket|02AC|
-04F8|LargeBasket|02AD|
+04F8|LargeBasket|02AD|empty
 04F9|LargeCrate |02B2|
 04FA|LargeCrateL|02B3|
 04FB|ReinforcedC|02B4|
 04FC|TreasureChe|02B7|
-04FD|MapTreasure|02B7|
+04FD|MapTreasure|02B7|"TREASURE CHEST"
 04FE|MagicPlant |02C3|plant that drops magic pickups
 04FF|StayPoint  |0467|
-0500|ProjectileS|02C8|
+0500|ProjectileS|02C8|switch activated by fireball
 0501|GunPowderBa|016A|
 0502|MetalBarrel|033E|
-0503|BarrelGener|033C|
+0503|BarrelGener|033C|doesn't actually generate barrels
 0504|BarrelPad  |033D|
 0505|MetalPushBl|02B5|
 0506|SpiritDoorL|033F|
 0507|SpiritDoorS|0340|
 0508|BurnableVin|00D9|
 0509|BombPlant  |00D8|
-050A|BombPlantSp|0447|
-050B|BombPlantSp|0447|
+050A|BombPlantSp|0447|bomb spore, collectible
+050B|BombPlantSp|0447|bomb spore, despawns
 050C|BombPlantin|045F|
-050D|HoloPoint  |0341|
+050D|HoloPoint  |0341|crashes Dolphin
 050E|MSBush     |0165|
 050F|MSVine     |0167|
 0510|MSSeqObject|0466|
 0511|animMoonSee|0161|
 0512|MSPlantingS|0161|
-0513|InfoPoint  |02C1|
+0513|InfoPoint  |02C1|press A to temporarily hide the HUD
 0514|GroundQuake|0131|
 0515|fuelCell   |00F6|
 0516|ReStartMark|00F7|
@@ -1361,11 +1361,11 @@
 054E|ARWWalledCi|019B|
 054F|ARWDinoPlan|0198|
 0550|ARWAnimBomb|048A|
-0551|LGTPointLig|047C|
-0552|LGTDirectio|047E|debug light?
+0551|LGTPointLig|047C|illuminates area
+0552|LGTDirectio|047E|debug light? doesn't seem to be visible
 0553|LGTProjecte|0467|
 0554|LGTControlL|0467|
-0555|SKYScapeDef|04AB|
+0555|SKYScapeDef|04AB|clouds
 0556|SKYScapeSto|04AC|
 0557|SKYScapeSto|04AD|
 0558|SKYScapeSpa|01BA|
@@ -1446,7 +1446,7 @@
 05A3|HangingLigh|014C|
 05A4|PoleLight  |014E|
 05A5|PoleFlame  |014D|
-05A6|LightSource|045F|
+05A6|LightSource|045F|burning sound effect?
 05A7|FXEmit     |0000|
 05A8|AreaFXEmit |0000|
 05A9|WaterFallSp|0000|
@@ -1459,13 +1459,13 @@
 05B0|StaffBoulde|008B|
 05B1|StaffLeverO|008C|
 05B2|StaffLeverT|008D|
-05B3|CommandMenu|04BC|
+05B3|CommandMenu|04BC|the C stick menu from the HUD
 05B4|CommandMenu|04BF|
 05B5|CommandMenu|04C0|
 05B6|CommandMenu|04C1|
 05B7|FrontEndLog|04C4|
 05B8|Blue_bean  |02BB|
-05B9|EnergyGem1 |046A|
+05B9|EnergyGem1 |046A|another FX cube
 05BA|beanAnim   |02BB|
 05BB|DFropenode |0000|
 05BC|DFsequences|0466|
@@ -1474,6 +1474,6 @@
 05BF|WM_PureMagi|02EB|
 05C0|DFSH_Door3S|0290|
 05C1|DFSH_Door4S|0291|
-05C2|Footstep   |0002|
+05C2|Footstep   |0002|a light yellow cylinder
 05C3|WarpCigar  |04E6|
 05C4|WarpGasCyli|04E7|
