@@ -102,3 +102,92 @@ unk1E          = 0x43
 flags          = 0x10
 
 randVals 0x0261 = "Stay!"
+
+
+the SfxBinEntry structure is something like:
+SoundId id; //the actual sound effect ID
+u8  baseVolume;
+u8  volumeRand; //volume = rand(baseVolume - volumeRand, baseVolume + volumeRand)
+u8  baseVol2;
+u8  vol2Rand;
+u16 unk06;
+u16 range;       //how far from source object to silence
+u16 randVals[6]; //actual sound to play (not same as SoundId)
+u8  randTbl[6];  //chance to pick each sound
+u16 randMax;     //sum of randTbl
+u8  unk1E; //iiii a??b
+	//iiii: index into sfxTable_803db248
+	//a, b: unknown
+u8 numIdxs : 4; //number of items in randVals/randTbl
+u8 prevIdx : 4; //previously played idx
+
+to play a sound:
+look up the entry with the desired ID
+if entry->numIdxs == 0, don't play
+
+if the ID is 0xAB:
+	//no idea what this is, just some kind of whoosh or creak.
+	//it alternates between two different sounds every time it's played.
+	
+	entry->prevIdx ^= 1
+	idx = entry->prevIdx
+else:
+	n = rand(1, entry->randMax)
+	idx = the index of value n in entry->randVals
+		//eg if randVals = [10, 20, 30] and n = 22,
+		//then idx = 2, since randVals[2] >= n
+
+	//avoid playing the same sound twice in a row.
+	//if we chose the same one as last time, use the next one.
+	if entry->prevIdx == idx:
+		idx += 1
+		if idx > entry->numIdxs: idx = 0
+
+entry->prevIdx = idx
+outId = entry->randVals[idx]
+if outId is 0, don't play
+
+compute the volume:
+	if entry->volumeRand == 0:
+		outVolume = entry->baseVolume
+	else: outVolume = rand(
+		entry->baseVolume - entry->volumeRand,
+		entry->baseVolume + entry->volumeRand)
+
+	//same calculation here, but result is cast to float.
+	maxOfs2 = entry->vol2Rand
+	if entry->vol2Rand == 0:
+		outVol2 = (float)entry->baseVol2
+	else: outVol2 = rand(
+		entry->baseVol2 - entry->vol2Rand,
+		entry->baseVol2 + entry->vol2Rand)
+	
+outField6  = (float)unk06
+outRange   = (float)range
+outTable1E = sfxTable_803db248[unk1E >> 4]
+out1ELow   = unk1E & 1
+out1EHigh  = (unk1E >> 3) & 1
+
+u8 sfxTable_803db248[8] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0};
+
+8000bb18 void audioPlaySound(ObjInstance *sourceObj, SoundId soundId);
+8000c400 SfxBinEntry * audioGetSfxBinEntry(uint soundId);
+	//given a sound ID, look up its entry from SFX.BIN
+802751b8 SoundEffect * audioGetSoundEffectById(SoundId2 id);
+	//SoundId2 -> SoundEffect*
+
+struct SoundEffect {
+	u16 id;
+	u16 unk02;
+	u8  unk04;
+	u8  unk05;
+	u8  unk06;
+	u8  unk07;
+	u32 offset; //u8 idx, u24 offset
+	u16 rate;
+	u16 pitch;
+	int length;
+	u32 repeatStart;
+	u32 repeatEnd;
+	u32 variation;
+}
