@@ -15,9 +15,8 @@
     - TM &  2002 NINTENDO  GAME BY RARE [unused]
 
 - warping to map 0x5D gives us AnimTest which is an empty void where Krystal does an animation and then the map reloads
-    after reloading a few times it crashes
-    the objects are:
-    objPtr = 816B22A0 nObjs = 7
+    - after reloading a few times it crashes
+    - the objects are: objPtr = 816B22A0 nObjs = 7
 
 Obj|Address |Name       |ID  |Def |ModelPtr|XPos     |YPos     |ZPos     |Ch
 ---|--------|-----------|----|----|--------|---------|---------|---------|--
