@@ -45,30 +45,35 @@ Hugo Peters discovered this AR/Gecko code for the kiosk demo to make invisible d
 Gilgamesh ported it to other versions:
 
 US version 1.00
+
     0402D820 5480003C
     0402D824 901E0044
     0402D828 60000000
     0402D82C 60000000
 
 US version 1.01
+
     0402D918 5480003C
     0402D91C 901E0044
     0402D920 60000000
     0402D924 60000000
 
 Japan version 1.00
+
     0402D840 5480003C
     0402D844 901E0044
     0402D848 60000000
     0402D84C 60000000
 
 Japan version 1.01
+
     0402D918 5480003C
     0402D91C 901E0044
     0402D920 60000000
     0402D924 60000000
 
 Europe versions 1.00 & 1.01
+
     0402D9B4 5480003C
     0402D9B8 901E0044
     0402D9BC 60000000
