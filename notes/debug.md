@@ -1,4 +1,4 @@
-patches to enable some print functions:
+patches to enable some print functions: (v1.00)
 80148B78 4BF34B64
 802510CC 4BE2C610
 80148BC8 4BF34B14

@@ -3,6 +3,8 @@ Reverse engineering notes for SFA
 
 All work here is being done on USA v1.0. `GSAE01.map` is automatically exported from Ghidra and contains symbols found by Dolphin as well as by me.
 
+*NOTE:* some findings were incorrectly listed as being for v1.01, when they were actually for v1.0. These should have all been corrected now.
+
 ## Eventual goals
 
 * Play as Krystal throughout the game

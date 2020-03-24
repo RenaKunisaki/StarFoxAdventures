@@ -1,5 +1,6 @@
 # Note
 Most AR codes beginning with 00, 02, or 04 will also work as Gecko codes and vice-versa.
+Codes are for v1.00 unless otherwise noted.
 
 # AR codes
 ## From random sites
@@ -24,7 +25,7 @@ Most AR codes beginning with 00, 02, or 04 will also work as Gecko codes and vic
 04041738 60000000
 04041744 60000000
 ```
-(this code is for V1.1; it makes the fur effect always active. probably lags on real hardware)
+(this code is for V1.01; it makes the fur effect always active. probably lags on real hardware)
 
 ### Player Wags Tail
 ```
@@ -183,6 +184,7 @@ e2000002 00000000
 e2000001 80000000
 ```
 (if Krystal isn't loaded, a cube appears instead)
+(these codes are obsolete; refer to https://github.com/RenaKunisaki/StarFoxAdventures/blob/master/patches/modelswap.gecko for the full mod.)
 
 ### D-Down to Switch Model
 ```

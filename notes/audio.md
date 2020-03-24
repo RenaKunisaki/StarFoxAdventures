@@ -128,7 +128,7 @@ if entry->numIdxs == 0, don't play
 if the ID is 0xAB:
 	//no idea what this is, just some kind of whoosh or creak.
 	//it alternates between two different sounds every time it's played.
-	
+
 	entry->prevIdx ^= 1
 	idx = entry->prevIdx
 else:
@@ -161,7 +161,7 @@ compute the volume:
 	else: outVol2 = rand(
 		entry->baseVol2 - entry->vol2Rand,
 		entry->baseVol2 + entry->vol2Rand)
-	
+
 outField6  = (float)unk06
 outRange   = (float)range
 outTable1E = sfxTable_803db248[unk1E >> 4]
@@ -183,7 +183,7 @@ struct SoundEffect {
 	u8  unk05;
 	u8  unk06;
 	u8  unk07;
-	u32 offset; //u8 idx, u24 offset
+	u32 offset; //u8 idx, u24 offset - not sure
 	u16 rate;
 	u16 pitch;
 	int length;
@@ -191,3 +191,129 @@ struct SoundEffect {
 	u32 repeatEnd;
 	u32 variation;
 }
+
+files under /audio:
+midi.wad
+starfox.h.bak - old list of SFX IDs (don't match final)
+starfoxm.poo, starfoxs.poo - pool file
+starfoxm.pro, starfoxs.pro - project file
+starfoxm.sam, starfoxs.sam - sample file (the actual audio data)
+starfoxm.sdi, starfoxs.sdi - sample directory
+m=music, s=sfx?
+https://github.com/axiodl/amuse is able to parse the audio data
+of course, it does not build, and has some utterly insane dependencies (why the shit does an audio decoder want a 3D graphics library!?)
+
+.proj: project structure, what belongs to which group
+.pool: all data except samples
+.sdir: locations of samples needed by groups
+.samp: sample data
+
+/audio/data:
+EmptyN .bin 256K where N is 0..7
+Music  .bin   2.5K
+Sfx    .bin  38K
+Streams.bin  20K
+
+SoundMacro:
+0x0 	4 	Chunk Size (note: includes the size value itself)
+0x4 	2 	SoundMacro ObjectID
+0x6 	2 	Padding
+commands... 8 bytes each
+
+Table:
+0x0 	4 	Chunk Size
+0x4 	2 	Table ObjectID
+0x6 	2 	Padding
+
+Keymap:
+0x0 	4 	Chunk Size; (usually 0x1032)
+0x4 	2 	Keymap ObjectID
+0x6 	2 	Padding
+
+Keymap Entry:
+0x0 	2 	ObjectID
+0x2 	1 	Transpose
+0x3 	1 	Pan
+0x4 	1 	Priority Offset
+0x8 	Padded to 8 bytes
+
+Layer:
+0x0 	4 	Chunk Size
+0x4 	2 	Layer ObjectID
+0x6 	2 	Padding
+Chunk Size 	Layer data
+
+Layer Data:
+0x0 	2 	ObjectID
+0x2 	1 	Key Lo
+0x3 	1 	Key Hi
+0x4 	1 	Transpose
+0x5 	1 	Volume
+0x6 	1 	Priority Offset
+0x7 	1 	Surround Pan; (0: extreme forward, 64: center, 127: extreme rearward)
+0x8 	1 	Pan; (0: extreme left, 64: center, 127: extreme right)
+0xC 	Padded to 12 bytes
+
+Project:
+0x0 	4 	Group end offset (points to next group in project)
+0x2 	2 	Group ID
+0x4 	2 	Group Type; 0 for SongGroup (for use with CSNG), 1 for SFXGroup.
+0x8 	4 	SoundMacro ID table offset
+0xC 	4 	Sample ID table offset
+0x10 	4 	Tables table offset
+0x14 	4 	Keymaps table offset
+0x18 	4 	Layers table offset
+0x1C 	4 	Normal page table (SongGroup) / SFX table offset (SFXGroup)
+0x20 	4 	Drum page table offset (SongGroup)
+0x24 	4 	MIDI Setup table offset (SongGroup)
+0x20 	End of group header
+
+Normal/Drum Page Entry:
+0x0 	2 	ObjectID
+0x2 	1 	Priority; voices are limited, so priority is used to play more important sounds over others
+0x3 	1 	Max number of voices
+0x4 	1 	GM Program Number
+0x5 	1 	Padding
+
+SFX Entry:
+0x0 	2 	DefineID; referenced by game code
+0x2 	2 	ObjectID
+0x4 	1 	Priority; voices are limited, so priority is used to play more important sounds over others
+0x5 	1 	Max number of voices
+0x6 	1 	Definite Velocity; volume (usually 7F)
+0x7 	1 	Panning
+0x8 	1 	Definite Key; The default pitch - usually 0x3C (MIDI C4)
+0x9 	1 	Padding
+
+MIDI Setup Entry:
+0x0 	1 	Program Number
+0x1 	1 	Volume
+0x2 	1 	Panning
+0x3 	1 	Reverb
+0x4 	1 	Chorus
+
+SampleDir Table A:
+0x0 	2 	Sound ID
+0x2 	2 	Padding; always 0
+0x4 	4 	Sound start offset, relative to the start of the ADPCM chunk
+0x8 	4 	Unknown
+0xC 	1 	Base Note; Corresponds to the MIDI note played in the sample, at the native sample-rate (which MusyX obtains from the INST chunk of .aiff files or SMPL chunk of .wav files, along with looping info). To play at a specified pitch in cents, set the playback sample rate using this formula: sampleRate * 2((pitch - baseNote * 100) / 1200.0)
+0xD 	1 	Padding; always 0
+0xE 	2 	Sample rate
+0x10 	1 	Audio format
+    DSP-ADPCM
+    DSP-ADPCM (Drum Sample)
+    PCM
+    N64-VADPCM (Legacy Format)
+0x11 	3 	Number of samples
+0x14 	4 	Loop start sample
+0x18 	4 	Loop length, in samples. To get the loop end sample, add this to the start sample and subtract 1.
+0x1C 	4 	Table B entry offset, relative to the start of the sound metadata chunk
+
+Table B:
+0x0 	2 	Unknown; always 8
+0x2 	1 	Initial predictor/scale (matches first frame header)
+0x3 	1 	Loop predictor/scale (matches loop start frame header)
+0x4 	2 	Loop context sample history 2
+0x6 	2 	Loop context sample history 1
+0x8 	2 × 16 	Decode coefficients

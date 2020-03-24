@@ -1,0 +1,28 @@
+@8002d918
+
+original:
+  4B FF 63 B1  bl       allocTagged
+  7C 7F 1B 78  or       r31,r3,r3
+  38 81 00 AC  addi     r4,r1,offset DAT_803f8310+4
+  38 A0 01 0C  li       r5,0x10c
+    totalSize = objGetTotalDataSize(&objTmp,objFile,object,modelFlags);
+    objBuffer = allocTagged(totalSize + baseSize,OBJECTS,NULL);
+    memcpy(objBuffer,&objTmp,0x10c);
+    memset_(objBuffer + 1,0,(totalSize + baseSize) - 0x10c);
+    *&objBuffer->models = objBuffer + 1;
+    objBuffer->file->flags = objBuffer->file->flags | DidLoadModels;
+
+patched:
+  54 80 00 3c  rlwinm  r0, r4, 0, 0, 30
+  90 1e 00 44  stw     r0, 0x44(r30)
+  60 00 00 00  nop
+  60 00 00 00  nop
+    totalSize = objGetTotalDataSize(&objTmp,objFile,object,modelFlags);
+    objFile->flags = 0xe;
+    memcpy(totalSize + baseSize,&DAT_0000000e,0);
+    memset_(&object->field_0x10c,0,(totalSize + baseSize) - 0x10c);
+    object->pData = &object->field_0x10c;
+    *(object->name + 0x44) = *(object->name + 0x44) | 0x800000;
+
+  8002d950 60 00 00 0E  ori      r0,r0,0xe
+0402d848 4280004C
