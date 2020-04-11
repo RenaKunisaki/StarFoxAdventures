@@ -4,186 +4,51 @@ from structs import ObjectFileStruct, GameObject, HeapStruct, HeapEntry, ModelFi
 
 ROW_COLOR = (19, 17)
 fileTable = {
-    'AMAP': {
-        'bin': (0x32, ),
-        'tab': (0x31, ),
-    },
-    'AMBIENT': {
-        'bin': (0x05, ),
-        'tab': (0x04, ),
-    },
-    'ANIM': {
-        'bin': (0x30, 0x4A),
-        'tab': (0x2F, 0x49),
-    },
-    'ANIMCURV': {
-        'bin': (0x0D, 0x55),
-        'tab': (0x0E, 0x56),
-    },
-    'AUDIO': {
-        'bin': (0x01, ),
-        'tab': (0x00, ),
-    },
-    'BITTABLE': {
-        'bin': (0x33, ),
-        'tab': None,
-    },
-    'BLOCKS': {
-        'bin': (0x25, 0x47),
-        'tab': (0x26, 0x48),
-    },
-    'CACHEFON': {
-        'bin': (0x11, 0x12),
-        'tab': None,
-    },
-    'CAMACTIO': {
-        'bin': (0x0B, ),
-        'tab': None,
-    },
-    'DLLS': {
-        'bin': (0x42, ),
-        'tab': (0x43, ),
-    },
-    'DLLSIMPO': {
-        'bin': (0x44, ),
-        'tab': None,
-    },
-    'ENVFXACT': {
-        'bin': (0x57, ),
-        'tab': None,
-    },
-    'FONTS': {
-        'bin': (0x10, ),
-        'tab': None,
-    },
-    'GAMETEXT': {
-        'bin': (0x13, ),
-        'tab': (0x14, ),
-    },
-    'globalma': {
-        'bin': (0x15, ),
-        'tab': None,
-    },
-    'HITS': {
-        'bin': (0x28, ),
-        'tab': (0x29, ),
-    },
-    'LACTIONS': {
-        'bin': (0x0C, ),
-        'tab': None,
-    },
-    'MAPINFO': {
-        'bin': (0x1F, ),
-        'tab': None,
-    },
-    'MAPS': {
-        'bin': (0x1D, ),
-        'tab': (0x1E, ),
-    },
-    'MODELIND': {
-        'bin': (0x2C, ),
-        'tab': None,
-    },
-    'MODELS': {
-        'bin': (0x2B, 0x46),
-        'tab': (0x2A, 0x45),
-    },
-    'MODLINES': {
-        'bin': (0x37, ),
-        'tab': (0x38, ),
-    },
-    'MPEG': {
-        'bin': (0x09, ),
-        'tab': (0x08, ),
-    },
-    'MUSIC': {
-        'bin': (0x07, ),
-        'tab': (0x06, ),
-    },
-    'MUSICACT': {
-        'bin': (0x0A, ),
-        'tab': None,
-    },
-    'OBJECTS': {
-        'bin': (0x3E, ),
-        'tab': (0x3D, ),
-    },
-    'OBJEVENT': {
-        'bin': (0x40, ),
-        'tab': None,
-    },
-    'OBJHITS': {
-        'bin': (0x41, ),
-        'tab': None,
-    },
-    'OBJINDEX': {
-        'bin': (0x3F, ),
-        'tab': None,
-    },
-    'OBJSEQ': {
-        'bin': (0x3B, ),
-        'tab': (0x3C, ),
-    },
-    'OBJSEQ2C': {
-        'bin': None,
-        'tab': (0x0F, ),
-    },
-    'PREANIM': {
-        'bin': (0x51, ),
-        'tab': (0x52, ),
-    },
-    'SAVEGAME': {
-        'bin': (0x39, ),
-        'tab': (0x3A, ),
-    },
-    'SCREENS': {
-        'bin': (0x18, ),
-        'tab': (0x19, ),
-    },
-    'SFX': {
-        'bin': (0x03, ),
-        'tab': (0x02, ),
-    },
-    'TABLES': {
-        'bin': (0x16, ),
-        'tab': (0x17, ),
-    },
-    'TEX0': {
-        'bin': (0x23, 0x4D),
-        'tab': (0x24, 0x4E),
-    },
-    'TEX1': {
-        'bin': (0x20, 0x4B),
-        'tab': (0x21, 0x4C),
-    },
-    'TEXPRE': {
-        'bin': (0x4F, ),
-        'tab': (0x50, ),
-    },
-    'TEXTABLE': {
-        'bin': (0x22, ),
-        'tab': None,
-    },
-    'TRKBLK': {
-        'bin': None,
-        'tab': (0x27, ),
-    },
-    'VOXMAP': {
-        'bin': (0x1B, 0x54),
-        'tab': (0x1A, 0x53),
-    },
-    'VOXOBJ': {
-        'bin': (0x36, ),
-        'tab': (0x35, ),
-    },
-    'WARPTAB': {
-        'bin': (0x1C, ),
-        'tab': None,
-    },
-    'WEAPONDA': {
-        'bin': (0x34, ),
-        'tab': None,
-    },
+    'AMAP':     { 'bin': (0x32,     ), 'tab': (0x31,     ) },
+    'AMBIENT':  { 'bin': (0x05,     ), 'tab': (0x04,     ) },
+    'ANIM':     { 'bin': (0x30, 0x4A), 'tab': (0x2F, 0x49) },
+    'ANIMCURV': { 'bin': (0x0D, 0x55), 'tab': (0x0E, 0x56) },
+    'AUDIO':    { 'bin': (0x01,     ), 'tab': (0x00,     ) },
+    'BITTABLE': { 'bin': (0x33,     ), 'tab': None         },
+    'BLOCKS':   { 'bin': (0x25, 0x47), 'tab': (0x26, 0x48) },
+    'CACHEFON': { 'bin': (0x11, 0x12), 'tab': None         },
+    'CAMACTIO': { 'bin': (0x0B,     ), 'tab': None         },
+    'DLLS':     { 'bin': (0x42,     ), 'tab': (0x43,     ) },
+    'DLLSIMPO': { 'bin': (0x44,     ), 'tab': None         },
+    'ENVFXACT': { 'bin': (0x57,     ), 'tab': None         },
+    'FONTS':    { 'bin': (0x10,     ), 'tab': None         },
+    'GAMETEXT': { 'bin': (0x13,     ), 'tab': (0x14,     ) },
+    'globalma': { 'bin': (0x15,     ), 'tab': None         },
+    'HITS':     { 'bin': (0x28,     ), 'tab': (0x29,     ) },
+    'LACTIONS': { 'bin': (0x0C,     ), 'tab': None         },
+    'MAPINFO':  { 'bin': (0x1F,     ), 'tab': None         },
+    'MAPS':     { 'bin': (0x1D,     ), 'tab': (0x1E,     ) },
+    'MODELIND': { 'bin': (0x2C,     ), 'tab': None         },
+    'MODELS':   { 'bin': (0x2B, 0x46), 'tab': (0x2A, 0x45) },
+    'MODLINES': { 'bin': (0x37,     ), 'tab': (0x38,     ) },
+    'MPEG':     { 'bin': (0x09,     ), 'tab': (0x08,     ) },
+    'MUSIC':    { 'bin': (0x07,     ), 'tab': (0x06,     ) },
+    'MUSICACT': { 'bin': (0x0A,     ), 'tab': None         },
+    'OBJECTS':  { 'bin': (0x3E,     ), 'tab': (0x3D,     ) },
+    'OBJEVENT': { 'bin': (0x40,     ), 'tab': None         },
+    'OBJHITS':  { 'bin': (0x41,     ), 'tab': None         },
+    'OBJINDEX': { 'bin': (0x3F,     ), 'tab': None         },
+    'OBJSEQ':   { 'bin': (0x3B,     ), 'tab': (0x3C,     ) },
+    'OBJSEQ2C': { 'bin': None,         'tab': (0x0F,     ) },
+    'PREANIM':  { 'bin': (0x51,     ), 'tab': (0x52,     ) },
+    'SAVEGAME': { 'bin': (0x39,     ), 'tab': (0x3A,     ) },
+    'SCREENS':  { 'bin': (0x18,     ), 'tab': (0x19,     ) },
+    'SFX':      { 'bin': (0x03,     ), 'tab': (0x02,     ) },
+    'TABLES':   { 'bin': (0x16,     ), 'tab': (0x17,     ) },
+    'TEX0':     { 'bin': (0x23, 0x4D), 'tab': (0x24, 0x4E) },
+    'TEX1':     { 'bin': (0x20, 0x4B), 'tab': (0x21, 0x4C) },
+    'TEXPRE':   { 'bin': (0x4F,     ), 'tab': (0x50,     ) },
+    'TEXTABLE': { 'bin': (0x22,     ), 'tab': None         },
+    'TRKBLK':   { 'bin': None,         'tab': (0x27,     ) },
+    'VOXMAP':   { 'bin': (0x1B, 0x54), 'tab': (0x1A, 0x53) },
+    'VOXOBJ':   { 'bin': (0x36,     ), 'tab': (0x35,     ) },
+    'WARPTAB':  { 'bin': (0x1C,     ), 'tab': None         },
+    'WEAPONDA': { 'bin': (0x34,     ), 'tab': None         },
 }
 
 mapNames = (
@@ -281,7 +146,7 @@ class Game:
             print("objPtr is NULL")
             return
         printf("objPtr = %08X nObjs = %d\n", ptr, cnt)
-        printf("\x1B[1mObj│Address │Name       │ID  │Def │ModelPtr│XPos     │YPos     │ZPos     │Ch\x1B[0m\n")
+        printf("\x1B[1mObj│Address │Name       │ID  │Def │ModelPtr│XPos     │YPos     │ZPos     │Ch│Seq\x1B[0m\n")
         for i in range(cnt):
             pObj = self.client.read(ptr + (i*4), ">I")
             if pObj == 0:
@@ -289,11 +154,11 @@ class Game:
                 break
 
             obj = GameObject(self.client, pObj)
-            printf("\x1B[48;5;%dm%3d│%08X│%-11s│%04X│%04X│%08X│%+9.2f│%+9.2f│%+9.2f│%2d\x1B[0m\n",
+            printf("\x1B[48;5;%dm%3d│%08X│%-11s│%04X│%04X│%08X│%+9.2f│%+9.2f│%+9.2f│%2d│%08X %d\x1B[0m\n",
                 ROW_COLOR[i&1],
                 i, pObj, obj.name,
                 obj.objId, obj.defNo, obj.models, obj.pos[0], obj.pos[1], obj.pos[2],
-                obj.nChildren)
+                obj.nChildren, obj.seq, obj.curSeq)
 
     def listObjModels(self, addr):
         obj = self.readObject(addr)
