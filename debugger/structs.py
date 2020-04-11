@@ -81,6 +81,7 @@ class GameObject(Struct):
         'curModel': (">B",  0xAD),
         'slot':     (">B",  0xAE),
         'flagsAF':  (">3B", 0xAF),
+        'curSeq':   (">h",  0xB4),
         'parent':   (">I",  0xC4),
         'pC8':      (">I",  0xC8),
         'pCC':      (">I",  0xCC),

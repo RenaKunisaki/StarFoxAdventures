@@ -176,6 +176,25 @@ class App:
         except KeyboardInterrupt:
             self.client.conn.send(b"\xAA")
 
+    def watchFloats(self, addr, length):
+        """Read floating-point values from RAM until stopped."""
+        self._checkConnected()
+        addr   = int(addr,   16)
+        length = int(length, 16)
+        try:
+            while True:
+                data = self.client.read(addr, length)
+                print("\x1B[2J\x1B[H", end='') # clear; cursor to 1,1
+                for i in range(0, len(data), 4):
+                    f = struct.unpack('>f', data[i:i+4])[0] # grumble
+                    printf("%+7.2f ", f)
+                    if i & 0xF == 0xC: printf("\n")
+                self.client.conn.send(b"\xAA") # ACK; BB=retry, CC=cancel
+                printf("\n")
+                time.sleep(0.01)
+        except KeyboardInterrupt:
+            self.client.conn.send(b"\xAA")
+
     def call(self, addr, *args):
         """Call a function in the game."""
         self._checkConnected()
@@ -204,6 +223,16 @@ class App:
                 print("\x1B[2J\x1B[H" + self.game.getDebugLog())
         except KeyboardInterrupt:
             self.client.conn.send(b"\xAA")
+
+    def getGameBit(self, bit):
+        res = self.game.getGameBit(int(bit, 16))
+        print(res)
+
+    def setGameBit(self, bit, val):
+        self.game.setGameBit(int(bit, 16), int(val, 16))
+
+    def dumpGameBits(self):
+        self.game.dumpGameBits()
 
 
     def watchGame(self):

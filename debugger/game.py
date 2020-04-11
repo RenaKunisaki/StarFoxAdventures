@@ -131,6 +131,7 @@ class Game:
     """Connection to SFA."""
     def __init__(self, client):
         self.client = client
+        self._bitTable = None
 
     def showObject(self, addr):
         obj = GameObject(self.client, addr)
@@ -314,3 +315,124 @@ class Game:
             else:
                 res.append(chr(b))
         return ''.join(res)
+
+    def _readBitTable(self):
+        if self._bitTable is None:
+            # read BITTABLE.BIN from memory
+            ptr = self.client.read(0x8035f3e8 + (0x33 * 4), '>I')
+            data = self.client.read(ptr, '>7840I')
+            self._bitTable = []
+            for val in data:
+                self._bitTable.append({
+                    'offset':   val >> 16, # bit offset into table
+                    'tblIdx':  (val >> 14) & 3, # which table
+                    'unk13':   (val >> 13) & 1, # unk03 is valid
+                    'nBits':  ((val >>  8) & 0x1F)+1,
+                    'unk03':    val        & 0xFF, # a task text index?
+                })
+
+    def _calcGameBitAddr(self, bit):
+        self._readBitTable()
+
+        # get the address of the table
+        entry = self._bitTable[bit]
+        tblIdx = entry['tblIdx']
+        if tblIdx == 0: pTable = 0x803a4198 # temp bits
+        else:
+            pSaveGame = self.client.read(0x803dcae0, '>I')
+            if pSaveGame == 0:
+                return entry, None
+            #printf("saveGame = 0x%08X\n", pSaveGame)
+            offsets = (0x564, 0x24, 0x5D8)
+            pTable = pSaveGame + offsets[tblIdx-1]
+
+        addr = pTable #+ (entry['offset'] >> 3)
+        #printf("Tbl #%d @0x%08X bit #0x%04X -> byte 0x%02X bit %d: 0x%08X, unk 0x%02X %d\n",
+        #    tblIdx, pTable, entry['offset'], entry['offset'] >> 3,
+        #    entry['offset'] & 7, addr,
+        #    entry['unk03'], entry['unused'])
+
+        return entry, addr
+
+    def getGameBit(self, bit):
+        entry, addr = self._calcGameBitAddr(bit)
+        if addr is None: return "<no save game loaded>"
+        nBits    = entry['nBits']
+        firstBit = entry['offset']
+        lastBit  = firstBit + nBits
+        val      = 0
+        idx      = 0
+        for i in range(firstBit, lastBit):
+            byte = self.client.read(addr + (i >> 3), 'B')
+            if byte & (1 << (i & 7)): val |= 1 << idx
+            idx += 1
+        #printf("bits %d - %d val 0x%X\n", firstBit, lastBit, val)
+        return val
+
+    def setGameBit(self, bit, val):
+        entry, addr = self._calcGameBitAddr(bit)
+        if addr is None:
+            printf("Can't set bit 0x%X, no save game loaded\n", bit)
+            return
+
+        nBits    = entry['nBits']
+        firstBit = entry['offset']
+        lastBit  = firstBit + nBits
+        idx      = 0
+
+        maxVal = (1 << nBits) - 1
+        if val < 0: val += maxVal
+        if val < 0 or val > maxVal:
+            printf("Value out of range (0 to %d, got %d)\n", maxVal, val)
+            return
+
+        for i in range(firstBit, lastBit):
+            byte = self.client.read(addr + (i >> 3), 'B')
+            oldB = byte
+            mask = (1 << (i & 7))
+            b    = val & (1 << idx)
+            if b: byte |= mask
+            else: byte &= ~mask
+            #printf("write 0x%02X -> 0x%02X at 0x%08X, idx %d val %d\n",
+            #    oldB, byte, addr + (i >> 3), idx, 1 if b else 0)
+            self.client.write(addr + (i >> 3), bytes([byte]))
+            idx += 1
+            if idx == 8: idx = 0
+
+    def dumpGameBits(self):
+        self._readBitTable()
+        pSaveGame = self.client.read(0x803dcae0, '>I')
+        tables = (
+            0x803a4198, # temp bits
+            pSaveGame+0x564, pSaveGame+0x24, pSaveGame+0x5D8,
+        )
+        sizes = (0x80, 0x74, 0x144, 0xAC)
+
+        tableData = []
+        for i, addr in enumerate(tables):
+            if addr >= 0x80000000:
+                tableData.append(self.client.read(addr, sizes[i]))
+            else:
+                tableData.append(b'\0' * sizes[i])
+
+        printf("\x1B[1mBit#│T│Unk │MaxValue  │Value\x1B[0m\n")
+        for iBit in range(0x1000):
+            entry = self._bitTable[iBit]
+            tblIdx = entry['tblIdx']
+            tData  = tableData[tblIdx]
+
+            nBits    = entry['nBits']
+            firstBit = entry['offset']
+            lastBit  = firstBit + nBits
+            maxVal   = (1 << nBits) - 1
+            val      = 0
+            idx      = 0
+            for i in range(firstBit, lastBit):
+                n = i >> 3
+                b = tData[n] if n < len(tData) else 0
+                if b & (1 << (i & 7)): val |= 1 << idx
+                idx += 1
+            printf("\x1B[48;5;%dm%04X│%d│%02X %d│%10d│%s\x1B[0m\n",
+                ROW_COLOR[iBit & 1], iBit, tblIdx,
+                entry['unk03'], entry['unk13'],
+                maxVal, val)
