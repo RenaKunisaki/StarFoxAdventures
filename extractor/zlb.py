@@ -16,8 +16,9 @@ class Zlb:
         decLen  = self.file.readu32()
         compLen = self.file.readu32()
         print("ZLB version", version, "decLen", decLen, "compLen", compLen)
-        if decLen < compLen:
-            raise RuntimeError("ZLB: Output size < compressed size")
+        # this can happen when a very small file is compressed
+        #if decLen < compLen:
+        #    raise RuntimeError("ZLB: Output size < compressed size")
 
         #result = bytearray(decLen)
         compData = self.file.readBytes(compLen)

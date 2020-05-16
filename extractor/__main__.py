@@ -101,6 +101,64 @@ class App:
             ' '.join(map(lambda v: '%04X' % (v&0xFFFF), animIds[i:i+8])))
 
 
+    def readRomList(self, path, discRoot):
+        """Read romlist.zlb file."""
+        file = BinaryFile(path, offset=0)
+        data = Zlb(file).decompress()
+
+        # read OBJINDEX.bin
+        objIndex = []
+        with open(discRoot+'/OBJINDEX.bin', 'rb') as objIdxFile:
+            entries = objIdxFile.read()
+            for i in range(0, len(entries), 2):
+                it = struct.unpack_from('>H', entries, i)[0] # grumble
+                objIndex.append(it)
+
+        # read OBJECTS.tab
+        objsTab = []
+        with open(discRoot+'/OBJECTS.tab', 'rb') as objTabFile:
+            entries = objTabFile.read()
+            for i in range(0, len(entries), 4):
+                it = struct.unpack_from('>I', entries, i)[0] # grumble
+                objsTab.append(it)
+
+        # read OBJECTS.bin to get names
+        objNames = []
+        with open(discRoot+'/OBJECTS.bin', 'rb') as objBinFile:
+            for offs in objsTab:
+                objBinFile.seek(offs + 0x91)
+                name = objBinFile.read(11).decode('utf-8').replace('\0', '')
+                objNames.append(name)
+
+
+        offs = 0
+        idx  = 0
+        printf("Idx  Offs Type ID   ObjName     Sz 03 04 05 06 07      X        Y        Z   14\n")
+        while offs < len(data):
+            entry = struct.unpack_from('>hBBBBBBfffI', data, offs)
+            length = entry[1]
+            typ = entry[0]
+            if typ >= 0:
+                if typ < len(objIndex): realTyp = objIndex[typ]
+                else: realTyp = "????"
+            else: realTyp = -typ
+            if type(realTyp) != str:
+                try: name = objNames[realTyp]
+                except: name = "?"
+                realTyp = '%04X' % realTyp
+            else: name = "?"
+
+            # idx offs typ realTyp name sz 03 ID 05 06 07 X Y Z 14
+            printf("%04X %04X %04X %s %-11s %02X %02X %02X %02X %02X %02X %+8.2f %+8.2f %+8.2f %08X ",
+                idx, offs, typ, realTyp, name, *(entry[1:]))
+            for i in range(0x18, length*4, 4):
+                printf("%02X%02X%02X%02X ", *data[offs+i: offs+i+4])
+            printf("\n")
+
+            if length == 0: break
+            offs += length * 4
+            idx  += 1
+
 
 
 def main(*args):
