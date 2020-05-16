@@ -68,3 +68,4 @@ escape sequences in gametext (maybe only after 0xEFA3):
 
 these would be UTF-8 for characters 0xF8F4 and 0xF8F7 which are in the Private Use area
 but this isn't strictly UTF-8 as the bytes following can be zero, or bytes that don't form a valid UTF-8 sequence
+is this valid Shift-JIS?
