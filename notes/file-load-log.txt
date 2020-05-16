@@ -1,0 +1,301 @@
+file load log from boot (with Krystal mod)
++ OSReport
+
+       2 kB audio/data/Music.bin
+      38 kB audio/data/Sfx.bin
+      19 kB audio/data/Streams.bin
+      61 kB audio/starfoxm.poo
+       6 kB audio/starfoxm.pro
+      42 kB audio/starfoxm.sdi
+   5,328 kB audio/starfoxm.sam
+
+---------------- Nintendo logo ------------------------
+
+      68 kB audio/starfoxs.poo
+      23 kB audio/starfoxs.pro
+      63 kB audio/starfoxs.sdi
+   9,926 kB audio/starfoxs.sam
+   1,273 kB audio/midi.wad
+       0 kB hightop.romlist.zlb
+       3 kB linkc.romlist.zlb
+       3 kB linkj.romlist.zlb
+       0 kB galleonship.romlist.zlb
+       0 kB cfgalleon.romlist.zlb
+       0 kB cfgangplank.romlist.zlb
+       0 kB nwtreebridge.romlist.zlb
+       0 kB cfdungeonblock.romlist.zlb
+       0 kB cloudrunnermap.romlist.zlb
+       0 kB ccbridge.romlist.zlb
+       0 kB cfcolumn.romlist.zlb
+       0 kB nwboulder.romlist.zlb
+       0 kB cfprisondoor.romlist.zlb
+       0 kB cfprisoncage.romlist.zlb
+       0 kB nwtreebridge2.romlist.zlb
+       0 kB dim2iceblock1.romlist.zlb
+       0 kB dimpushblock.romlist.zlb
+       0 kB dim2iceblock2.romlist.zlb
+       0 kB dimhornplinth.romlist.zlb
+       0 kB nwshcolpush.romlist.zlb
+       0 kB dim2lift.romlist.zlb
+       0 kB dim2icefloe.romlist.zlb
+       0 kB dim2icefloe1.romlist.zlb
+       0 kB dim2icefloe2.romlist.zlb
+       0 kB cfliftplat.romlist.zlb
+       0 kB imspacecraft.romlist.zlb
+       0 kB dimbossgut.romlist.zlb
+       0 kB wmcolrise.romlist.zlb
+       0 kB vfpslide1.romlist.zlb
+       0 kB vfpslide2.romlist.zlb
+       0 kB drpushcart.romlist.zlb
+       0 kB drliftplat.romlist.zlb
+       0 kB dim2stonepillar.romlist.zlb
+       0 kB bossdrakorflatr.romlist.zlb
+       0 kB wcbouncycrate.romlist.zlb
+       0 kB wcpushblock.romlist.zlb
+       0 kB wctemplelift.romlist.zlb
+       0 kB KamColumn.romlist.zlb
+       0 kB dbstepstone.romlist.zlb
+       0 kB vfppushblock.romlist.zlb
+       2 kB CAMACTIO.bin
+      40 kB LACTIONS.bin
+       2 kB OBJSEQ2C.tab
+      22 kB FONTS.bin
+      69 kB GAMETEXT.bin
+      20 kB GAMETEXT.tab
+       0 kB globalma.bin
+       0 kB TABLES.bin
+       0 kB TABLES.tab
+       0 kB SCREENS.tab
+       2 kB WARPTAB.bin
+     111 kB MAPS.bin
+       3 kB MAPS.tab
+       3 kB MAPINFO.bin
+       6 kB TEXTABLE.bin
+       0 kB TRKBLK.tab
+     392 kB HITS.bin
+       6 kB HITS.tab
+       3 kB MODELIND.bin
+       2 kB MODANIM.TAB
+      11 kB MODANIM.BIN
+       5 kB AMAP.TAB
+     206 kB AMAP.BIN
+      15 kB BITTABLE.bin
+      51 kB WEAPONDA.bin
+       0 kB VOXOBJ.tab
+       7 kB MODLINES.bin
+       0 kB MODLINES.tab
+       6 kB SAVEGAME.bin
+       0 kB SAVEGAME.tab
+      28 kB OBJSEQ.bin
+       2 kB OBJSEQ.tab
+       5 kB OBJECTS.tab
+     301 kB OBJECTS.bin
+       4 kB OBJINDEX.bin
+       9 kB OBJEVENT.bin
+      27 kB OBJHITS.bin
+     482 kB TEXPRE.bin
+       0 kB TEXPRE.tab
+     946 kB PREANIM.BIN
+      10 kB PREANIM.TAB
+      98 kB ENVFXACT.bin
+     205 kB animtest/TEX0.bin
+       3 kB animtest/TEX0.tab
+      32 kB gametext/Link/English.bin
+     222 kB gametext/FrontEnd/English.bin
+     513 kB animtest/TEX1.bin
+     826 kB gamefront/TEX1.bin
+       9 kB gamefront/TEX1.tab
+     324 kB gamefront/TEX0.bin
+       3 kB gamefront/TEX0.tab
+     798 kB gamefront/ANIM.BIN
+      10 kB gamefront/ANIM.TAB
+     322 kB animtest/MODELS.bin
+     499 kB gamefront/MODELS.bin
+       5 kB gamefront/MODELS.tab
+       1 kB gamefront.romlist.zlb
+       6 kB gamefront/mod62.tab
+      61 kB gamefront/mod62.zlb.bin
+       6 kB gamefront/VOXMAP.tab
+      25 kB warlock/VOXMAP.bin
+      25 kB gamefront/ANIMCURV.tab
+      30 kB gamefront/ANIMCURV.bin
+> SKYSun
+> SKYMoon
+> CommandMenu
+> CommandMenu
+> CommandMenu
+> CommandMenu
+> CommandMenu
+> CommandMenu
+> communicato
+> WORLDcomm
+> commCube
+> commCubeFro
+> commQuitObj
+> commMemoryC
+> projball
+> LockIcon
+> finished init
+
+  48,931 kB starfox.thp
+> WarpPoint
+> DepthOfFiel
+> FrontPilots
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> CmbSrc
+> GF_JukeBox
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> LGTPointLig
+> FrontPilots
+> FrontPilots
+> FrontFox
+> FrontSlippy
+> FrontPeppy
+> FrontRob
+> LGTPointLig
+> FrontPilots
+> FrontPlanet
+> TailLightSo
+> TailLightSo
+> TailLightSo
+> TailLightSo
+> texscroll2
+> DustMoteSou
+> DustMoteSou
+> DustMoteSou
+> GF_DoorLeft
+> GF_DoorLeft
+> CmbSrc
+> CmbSrc
+> FrontSeq
+> Override
+> GF_DoorRigh
+> Override
+> GF_DoorRigh
+> SKYScapeSpa
+
+----------------------- Title Screen ------------------------------
+
+     513 kB animtest/TEX1.bin
+   2,157 kB lightfoot/TEX1.bin
+       9 kB lightfoot/TEX1.tab
+     307 kB lightfoot/TEX0.bin
+       3 kB lightfoot/TEX0.tab
+   1,386 kB lightfoot/ANIM.BIN
+      10 kB lightfoot/ANIM.TAB
+     322 kB animtest/MODELS.bin
+     665 kB lightfoot/MODELS.bin
+       5 kB lightfoot/MODELS.tab
+      21 kB swapcircle.romlist.zlb
+       2 kB lightfoot/mod22.tab
+     488 kB lightfoot/mod22.zlb.bin
+       6 kB lightfoot/VOXMAP.tab
+      25 kB warlock/VOXMAP.bin
+      25 kB lightfoot/ANIMCURV.tab
+     122 kB lightfoot/ANIMCURV.bin
+> mmUniqueIdent
+> SC_levelcon
+> SC_mounddoo
+> sideload
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> sideload
+> DepthOfFiel
+> PoleLight
+> PoleLight
+> BullRushClu
+> BoulderOne
+> StaffBoulde
+> LongGrassCl
+> LongGrassCl
+> BullRushClu
+> StaffBoostP
+> StaffBoostP
+> TrigPln
+> BoulderOne
+> LongGrassCl
+> HangingLigh
+> HangingLigh
+> HangingLigh
+> HangingLigh
+> HangingLigh
+> HangingLigh
+> HangingLigh
+> HangingLigh
+> TrigPln
+> TrigPln
+> fuelCell
+> fuelCell
+> CAMERAseqob
+> siderepel
+> siderepel
+> siderepel
+> siderepel
+> CCriverflow
+> CCriverflow
+> CCriverflow
+> CCriverflow
+> CCriverflow
+> siderepel
+> siderepel
+> Whirlpool
+> SC_stepping
+> SC_stepping
+> SC_stepping
+> Whirlpool
+> Whirlpool
+> Whirlpool
+> Whirlpool
+> SC_blTarget
+> SmallBasket
+> LOADING CHARACTER     maptype 0  playerno 1
+> Sabre
+> SKYScapeDef
+> Override
+> Override
+> Override
+> Override
+> Tricky
+> staff
+> BackPack
+> fox_shield
+> CommandMenu
+> CommandMenu
+
+     106 kB gametext/LightFoot/English.bin
+> SC_sequence
+> SC_totempuz
+> SC_totempuz
+> SC_totempuz
+> ModelsWithT
+
+-------------------- Save file loaded -----------------------------
