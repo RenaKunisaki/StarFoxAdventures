@@ -31,6 +31,25 @@
 .set pPlayer,0x803428f8
 .set playerId,0x803a32c8 # 0=Krystal, 1=Fox
 
+.set distortionFilterVector, 0x803821c8 #vec3f
+.set viewportAspect,         0x803db268 #float
+.set motionBlurIntensity,    0x803db62c #float, 32=high, 256=unnoticeable
+.set colorFilterColor,       0x803db630 #color
+.set fovY,                   0x803dc8a4 #float
+.set bEnableBlurFilter,      0x803dcdf4 #bool  blur filter
+.set bBlurFilterUseArea,     0x803dcdf5 #bool  constrain effect by blurFilterArea
+.set bEnableDistortionFilter,0x803dcdf6 #bool  distortion filter
+.set bEnableMotionBlur,      0x803dcdf7 #bool  motion blur
+.set bEnableMonochromeFilter,0x803dcdf8 #bool  monochrome
+.set bEnableSpiritVision,    0x803dcdf9 #bool  spirit vision filter
+.set bEnableViewFinderHud,   0x803dcdfa #bool  viewfinder
+.set bBiggerBlurFilter,      0x803dcdfb #bool  bigger blur filter
+.set bEnableColorFilter,     0x803dce3b #bool  actually int
+.set distortionFilterAngle1, 0x803dce3c #float distortion filter angle
+.set distortionFilterColor,  0x803dce40 #color distortion filter color
+.set distortionFilterAngle2, 0x803dce44 #float distortion filter angle 2
+.set blurFilterArea,         0x803dce48 #vec3f blur filter area
+.set physicsTimeScale,       0x803dea9c #float, default 60.0
 
 # SFA file IDs
 .set AUDIO_TAB,0x00
