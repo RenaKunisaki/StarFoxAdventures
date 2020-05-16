@@ -22,9 +22,12 @@ class App:
             and not func.startswith('_')
         ]
         for name, method in sorted(methods, key = lambda it: it[0]):
-            doc = method.__doc__.strip()
-            doc = re.sub(r'\n\n+\s*', '\n  ', doc)
-            printf("%s: %s\n", name, doc)
+            if method.__doc__ is None:
+                printf("%s: (no documentation)\n", name)
+            else:
+                doc = method.__doc__.strip()
+                doc = re.sub(r'\n\n+\s*', '\n  ', doc)
+                printf("%s: %s\n", name, doc)
 
     def connect(self, where):
         """Connect to Gecko server.

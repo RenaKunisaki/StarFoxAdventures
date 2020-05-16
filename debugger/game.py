@@ -262,6 +262,9 @@ class Game:
 
     def getCurMap(self):
         name, typ, field_1d, field_1e = self.client.read(0x816a8ba0, ">28s2bh")
+        # note this is directory ID
+        # there may not be an address for actual map ID
+        # but we could translate it
         id = self.client.read(0x8035f592, ">h")
         try: name = name.decode('shift-jis')
         except UnicodeDecodeError: name = '???'
@@ -415,8 +418,8 @@ class Game:
             else:
                 tableData.append(b'\0' * sizes[i])
 
-        printf("\x1B[1mBit#│T│Unk │MaxValue  │Value\x1B[0m\n")
-        for iBit in range(0x1000):
+        printf("\x1B[1mBit#│T│Unk │MaxValue  │Value     │MaxHex  │ValHex\x1B[0m\n")
+        for iBit in range(0xF58):
             entry = self._bitTable[iBit]
             tblIdx = entry['tblIdx']
             tData  = tableData[tblIdx]
@@ -432,7 +435,9 @@ class Game:
                 b = tData[n] if n < len(tData) else 0
                 if b & (1 << (i & 7)): val |= 1 << idx
                 idx += 1
-            printf("\x1B[48;5;%dm%04X│%d│%02X %d│%10d│%s\x1B[0m\n",
+            printf("\x1B[48;5;%dm%04X│%d│%02X %d│%10d│%-10d│%08X|%08X\x1B[0m\n",
                 ROW_COLOR[iBit & 1], iBit, tblIdx,
                 entry['unk03'], entry['unk13'],
-                maxVal, val)
+                maxVal, val, maxVal, val)
+            #printf("%04X|%d|%02X|%d|%08X|\n",
+            #    iBit, tblIdx, entry['unk03'], entry['unk13'], maxVal)
