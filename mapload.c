@@ -1,4 +1,4 @@
-//decompiled by Ghidra and tited up.
+//decompiled by Ghidra and tidied up.
 
     // DISPLAY WARNING: Type casts are NOT being printed
 
