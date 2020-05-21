@@ -152,6 +152,7 @@ class ModelStruct(Struct):
     _size   = 0xFC
     _order  = '>'
     _fields = {
+        # 0x00: ref count, set on load
         'flags':         ('H', 0x02),
         #'modelId':       ('H', 0x04), # set on load
         'fileSize':      ('I', 0x0C),
@@ -176,9 +177,11 @@ class ModelStruct(Struct):
         'pModelIndBuf':  ('I', 0x6C), # -> array of u16 anim IDs - null in file, loaded from MODANIM.TAB
         'animIdxs':      ('8h',0x70), # related to animation - FFxx disables walk anim - 0x0, 0xFD, 0x112, 0x197, 0x218, 0x29B, 0x0, 0x0
         'amapTabEntry':  ('I', 0x80),
-        'unk84':         ('I', 0x84),
-        #'offs88':        ('I', 0x88), # astruct_54 (not a ptr)
-        'unkA4':         ('I', 0xA4), # related to movement/mtxs/texmtxs
+        'posFineSkinningConfig': ('I', 0x84),
+        'posFineSkinningPieces': ('I', 0xA4), # ObjInstance*
+            # field_88.nVtxs = how many
+        'posFineSkinningWeights': ('I', 0xA8),
+        'nrmFineSkinningWeights': ('I', 0xAC),
         'dlists':        ('I', 0xD0), # -> DisplayListPtr
         'renderInstrs':  ('I', 0xD4), # -> bit-packed instruction code
         'nRenderInstrs': ('H', 0xD8), # num bytes
@@ -187,7 +190,7 @@ class ModelStruct(Struct):
         'flagsE2':       ('H', 0xE2), # related to textures; # texcoords?
         'nVtxs':         ('H', 0xE4),
         'nNormals':      ('H', 0xE6),
-        'nColors':       ('H', 0xE8), # guessed
+        'nColors':       ('H', 0xE8),
         'nTexCoords':    ('H', 0xEA),
         'nAnimations':   ('H', 0xEC),
         'nTextures':     ('B', 0xF2),
