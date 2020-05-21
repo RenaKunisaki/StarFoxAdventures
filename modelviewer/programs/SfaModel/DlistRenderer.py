@@ -134,7 +134,7 @@ class DlistRenderer(gl.Pipeline):
             for i, poly in enumerate(dlist.polys):
                 for j, vtx in enumerate(poly['vtxs']):
                     file.write("%d;%d;%d;%d;%d;%f;%f;%f;%d;%f;%f\n" % (i, j,
-                        poly['material']._idx,
+                        poly['shader']._idx,
                         poly['mode'],
                         vtx['POS_idx'],
                         vtx['POS'][0], vtx['POS'][1], vtx['POS'][2],
@@ -160,21 +160,21 @@ class DlistRenderer(gl.Pipeline):
         v   = int((listIdx / cnt) * 128) + 127
         return ((v >> 6) / 4, ((v >> 3) & 7) / 8, (v & 7) / 8, 0.9)
 
-    def _matToColor(self, material):
+    def _shaderToColor(self, shader):
         return (1, 1, 1, 1)
-        if material is None: idx = 0
-        else: idx = material._idx #idx = material.textureId[1]
+        if shader is None: idx = 0
+        else: idx = shader._idx #idx = shader.textureId[1]
         if idx < 0: idx = 255
         # reverse bits
         idx = int('{:08b}'.format(idx)[::-1], 2) | 0x80
-        #cnt = self.parent.model.header.nMaterials
+        #cnt = self.parent.model.header.nShaders
         #v   = int((idx / cnt) * 128) + 127
         v = idx
         return ((v >> 6) / 4, ((v >> 3) & 7) / 8, (v & 7) / 8, 0.9)
 
 
     def _addQuads(self, poly):
-        c0 = self._matToColor(poly['material'])
+        c0 = self._shaderToColor(poly['shader'])
         for i in range(0, len(poly['vtxs']), 4):
             # triangulate
             self._addTri(v0, v1, v2, c0, c0, c0)
@@ -182,7 +182,7 @@ class DlistRenderer(gl.Pipeline):
         self._nPolys += 1
 
     def _addTris(self, poly):
-        c0 = self._matToColor(poly['material'])
+        c0 = self._shaderToColor(poly['shader'])
         for i in range(0, len(poly['vtxs']), 3):
             v0, v1, v2 = poly['vtxs'][i:i+3]
             # this appears to be the correct order, else the faces
@@ -191,7 +191,7 @@ class DlistRenderer(gl.Pipeline):
         self._nPolys += 1
 
     def _addTriStrips(self, poly):
-        c0 = self._matToColor(poly['material'])
+        c0 = self._shaderToColor(poly['shader'])
         for i in range(2, len(poly['vtxs'])):
             v0, v1, v2 = poly['vtxs'][i-2: i+1]
             # for even idxs, swap v0 and v1 so the triangle
@@ -204,7 +204,7 @@ class DlistRenderer(gl.Pipeline):
         self._nPolys += 1
 
     def _addTriFans(self, poly):
-        c0 = self._matToColor(poly['material'])
+        c0 = self._shaderToColor(poly['shader'])
         v0, v1 = poly['vtxs'][0:2]
         for i in range(2, len(poly['vtxs'])):
             v2 = poly['vtxs'][i]
@@ -213,14 +213,14 @@ class DlistRenderer(gl.Pipeline):
         self._nPolys += 1
 
     def _addLines(self, poly):
-        c0 = self._matToColor(poly['material'])
+        c0 = self._shaderToColor(poly['shader'])
         for i in range(0, len(poly['vtxs']), 2):
             v0, v1 = poly['vtxs'][i:i+2]
             self._addTri(v0, v1, v1, c0, c0, c0)
         self._nPolys += 1
 
     def _addLineStrips(self, poly):
-        c0 = self._matToColor(poly['material'])
+        c0 = self._shaderToColor(poly['shader'])
         v0 = poly['vtxs'][0]
         for i in range(1, len(poly['vtxs'])):
             v1 = poly['vtxs'][i]
@@ -229,7 +229,7 @@ class DlistRenderer(gl.Pipeline):
         self._nPolys += 1
 
     def _addPoints(self, poly):
-        c0 = self._matToColor(poly['material'])
+        c0 = self._shaderToColor(poly['shader'])
         for i in range(0, len(poly['vtxs'])):
             v0 = poly['vtxs'][i]
             self._addTri(v0, v0, v0, c0, c0, c0)

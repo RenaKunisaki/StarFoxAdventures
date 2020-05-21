@@ -110,10 +110,12 @@ class DisplayListPtr(Struct):
     _fields = {
         'offset': ('I', 0x00),
         'size':   ('H', 0x04),
+        # 'specialBitAddr': ???
+        # bounding box in here somewhere?
         'unk':    ('22B', 0x06),
     }
 
-class MaterialColor(Struct):
+class ShaderColor(Struct):
     _size   = 8
     _order  = '>'
     _fields = {
@@ -121,14 +123,14 @@ class MaterialColor(Struct):
         'color':  ('3B', 0x04), # not plain RGB
     }
 
-class Material(Struct):
+class Shader(Struct):
     _size   = 0x44
     _order  = '>'
     _fields = {
-        'color0':    (MaterialColor, 0x00),
-        'color1':    (MaterialColor, 0x08),
-        'color2':    (MaterialColor, 0x10),
-        'color3':    (MaterialColor, 0x18),
+        'color0':    (ShaderColor, 0x00),
+        'color1':    (ShaderColor, 0x08),
+        'color2':    (ShaderColor, 0x10),
+        'color3':    (ShaderColor, 0x18),
         'alpha':     ('B',  0x22),
         'unk24':     ('4I', 0x24),
         'textureId': ('2i', 0x34),
@@ -162,7 +164,7 @@ class ModelStruct(Struct):
         'normals':       ('I', 0x2C), # -> vec3s
         'colors':        ('I', 0x30), # -> ??? (how many?)
         'texCoords':     ('I', 0x34), # -> vec2s
-        'materials':     ('I', 0x38), # -> Material
+        'shaders':       ('I', 0x38), # -> Shader
         'bones':         ('I', 0x3C), # -> Bone
         'boneQuats':     ('I', 0x40), # -> Quaternion
         'unk44':         ('3I',0x44), # 0xFFC00000 x3; never read
@@ -194,7 +196,7 @@ class ModelStruct(Struct):
         'nDlists':       ('B', 0xF5),
         'unkF6':         ('B', 0xF6),
         'nHitBoxes':     ('B', 0xF7),
-        'nMaterials':    ('B', 0xF8),
+        'nShaders':      ('B', 0xF8),
         'nPtrsDC':       ('B', 0xF9), # #ptrs at field DC
         'nTexMtxs':      ('B', 0xFA),
         'unkFB':         ('B', 0xFB),

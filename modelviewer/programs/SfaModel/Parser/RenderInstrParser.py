@@ -10,7 +10,7 @@ class RenderInstrParser:
         self.model.file.seek(self.model.header.renderInstrs)
         # read 3 extra bytes since we always fetch 3 at a time.
         self.bytes = self.model.file.read(self.model.header.nRenderInstrs+3)
-        self.curMaterial = None
+        self.curShader = None
 
 
     def getU24(self):
@@ -56,12 +56,12 @@ class RenderInstrParser:
         return self.result
 
 
-    def op_selectTexture(self): # opcode 1: select texture and material
-        idx = self.getBits(6) # idx of both texture and material
+    def op_selectTexture(self): # opcode 1: select texture and shader
+        idx = self.getBits(6) # idx of both texture and shader
         ok  = (idx < self.model.header.nTextures)
-        log.debug("%04X Select tex/mtrl %d (%s)", self._bitOffs-6,
+        log.debug("%04X Select tex/shader %d (%s)", self._bitOffs-6,
             idx, "OK" if ok else "ERR")
-        self.curMaterial = idx
+        self.curShader = idx
         self.result.append(('TEX', idx))
 
 
@@ -75,12 +75,12 @@ class RenderInstrParser:
 
 
     def op_setVtxFmt(self): # opcode 3: set vtx format
-        if self.curMaterial is None:
+        if self.curShader is None:
             flags = 0
         else:
-            mat = self.model.materials[self.curMaterial]
+            mat = self.model.shaders[self.curShader]
             flags = mat.flags_40
-            
+
         if (flags & 2) != 0:
             fmt = self.getBits(4)
             posSize = 2 if (fmt & 1) == 0 else 3 # VAT format (2=8bit 3=16bit)

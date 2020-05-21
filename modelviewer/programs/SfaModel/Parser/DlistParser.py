@@ -103,7 +103,7 @@ class DlistParser:
         self.model.file.seek(self.list.offset)
         self.bytes    = self.model.file.read(self.list.size)
         self._offset  = 0
-        self.material = None
+        self.shader   = None
         self.mtxLut   = {}
         self.polys    = []
         self._cpRegs  = {
@@ -284,9 +284,9 @@ class DlistParser:
             self._cpRegs[reg + vat] = curVal
 
 
-    def setMaterial(self, mat):
-        """Set the material to use."""
-        self.material = mat
+    def setShader(self, shader):
+        """Set the shader to use."""
+        self.shader = shader
 
 
     def setMtxLut(self, lut):
@@ -389,7 +389,7 @@ class DlistParser:
             'list': self.listIdx,
             'offs': offs,
             'idx':  len(self.polys),
-            'material': self.material,
+            'shader': self.shader,
         })
 
 

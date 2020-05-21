@@ -9,7 +9,7 @@ from .PolyMenu import PolyMenu
 #    'list': self.listIdx,
 #    'offs': offs,
 #    'idx':  len(self.polys),
-#    'material': self.material,
+#    'shader': self.shader,
 #})
 
 class DlistMenu(Menu):
@@ -26,12 +26,12 @@ class DlistMenu(Menu):
 
 
     def refresh(self):
-        self.items = ["Poly Offset DrawMode  Vtxs Mat VAT"]
+        self.items = ["Poly Offset DrawMode  Vtxs Shd VAT"]
         for i, poly in enumerate(self.dlist.polys):
             self.items.append("%4d %06X %-9s %4d %3d %d" % (i,
                 poly['offs'], self.drawModes[poly['mode']],
                 len(poly['vtxs']),
-                poly['material']._idx, poly['vat']))
+                poly['shader']._idx, poly['vat']))
         self.cursorPos = 0
 
 

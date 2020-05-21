@@ -1,6 +1,6 @@
 import logging; log = logging.getLogger(__name__)
 import struct
-from .structs import Bone, DisplayListPtr, Material, HitboxStruct, ModelStruct, ModelVtxGroup, Mtx43, Mtx44, Quaternion, Vec2s, Vec3f, Vec3s
+from .structs import Bone, DisplayListPtr, Shader, HitboxStruct, ModelStruct, ModelVtxGroup, Mtx43, Mtx44, Quaternion, Vec2s, Vec3f, Vec3s
 from .DlistParser import DlistParser
 from .RenderInstrParser import RenderInstrParser
 #from gl.Util import Matrix
@@ -28,7 +28,7 @@ class Model:
         self._readTexCoords()
         self._readHitBoxes()
         self._readTextures()
-        self._readMaterials()
+        self._readShaders()
         self._readRenderInstrs()
         self._readDlistPtrs()
 
@@ -103,11 +103,11 @@ class Model:
             vtx.x /= 1024.0
             vtx.y /= 1024.0
 
-    def _readMaterials(self):
-        log.debug("nMaterials=%d from 0x%X", self.header.nMaterials,
-            self.header.materials)
-        offs = self.header.materials + self.offset
-        self.materials = Material.readFromFile(self.file, offs, self.header.nMaterials)
+    def _readShaders(self):
+        log.debug("nShaders=%d from 0x%X", self.header.nShaders,
+            self.header.shaders)
+        offs = self.header.shaders + self.offset
+        self.shaders = Shader.readFromFile(self.file, offs, self.header.nShaders)
 
     def _readHitBoxes(self):
         log.debug("nHitBoxes=%d from 0x%X", self.header.nHitBoxes,

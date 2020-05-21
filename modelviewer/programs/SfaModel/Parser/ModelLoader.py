@@ -16,7 +16,7 @@ class ModelLoader:
     def __init__(self):
         self.model       = None
         self._vtxFmt     = {'pos':0, 'nrm':0, 'col':0, 'tex':0}
-        self.curMaterial = None
+        self.curShader   = None
         self.mtxLut      = {}
         self.dlists      = []
 
@@ -110,8 +110,8 @@ class ModelLoader:
         for instr in self.model.renderInstrs:
             op = instr[0]
             if op == 'TEX':
-                log.debug("Set material %d", instr[1])
-                self.curMaterial = self.model.materials[instr[1]]
+                log.debug("Set shader %d", instr[1])
+                self.curShader = self.model.shaders[instr[1]]
 
             elif op == 'CALL':
                 self._callDlist(instr[1])
@@ -153,11 +153,11 @@ class ModelLoader:
             'TEX0': self._vtxFmt['tex'],
         }
 
-        if self.curMaterial:
-            log.debug("Material Texture ID is %d, %d", *self.curMaterial.textureId)
+        if self.curShader:
+            log.debug("Shader Texture ID is %d, %d", *self.curShader.textureId)
         else:
-            log.debug("No material")
-        if self.curMaterial and self.curMaterial.textureId[0] >= 0:
+            log.debug("No shader")
+        if self.curShader and self.curShader.textureId[0] >= 0:
             attrs['TEX1'] = self._vtxFmt['tex']
 
         if idx == 24: # HACK
@@ -167,7 +167,7 @@ class ModelLoader:
             attrs['COL1'] = 1
 
         parser.setVtxFmt(6, **attrs) # XXX always 6?
-        parser.setMaterial(self.curMaterial)
+        parser.setShader(self.curShader)
         parser.setMtxLut(self.mtxLut)
         dlist = parser.parse()
         log.debug("Dlist %d has %d polys", idx, len(parser.polys))
