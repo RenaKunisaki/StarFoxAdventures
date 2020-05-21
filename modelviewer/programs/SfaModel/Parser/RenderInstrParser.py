@@ -1,5 +1,7 @@
 import logging; log = logging.getLogger(__name__)
 
+vtxFmts = ('none', 'direct', '8bit', '16bit')
+
 class RenderInstrParser:
     """Parse bit-packed render instructions specific to SFA models."""
 
@@ -37,8 +39,8 @@ class RenderInstrParser:
             op = self.getBits(4)
             if op not in opCount: opCount[op] = 0
             opCount[op] += 1
-            #log.debug("Bit %04X (byte %04X) op %X",
-            #    (self._bitOffs-4), (self._bitOffs-4) >> 3, op)
+            log.debug("Bit %04X (byte %04X) op %X",
+                (self._bitOffs-4), (self._bitOffs-4) >> 3, op)
             if   op == 1: self.op_selectTexture()
             elif op == 2: self.op_callDlist()
             elif op == 3: self.op_setVtxFmt()
@@ -93,8 +95,8 @@ class RenderInstrParser:
             nrmSize = 2 if (fmt & 2) == 0 else 3
             colSize = 0
             texSize = 2 if (fmt & 4) == 0 else 3 # for all 8 texture slots
-        log.debug("VtxFmt: pos=%d nrm=%d col=%d tex=%d", posSize,
-            nrmSize, colSize, texSize)
+        log.debug("VtxFmt: pos=%s nrm=%s col=%s tex=%s",
+            vtxFmts[posSize], vtxFmts[nrmSize], vtxFmts[colSize], vtxFmts[texSize])
         self.result.append(('VFMT', posSize, nrmSize, colSize, texSize))
 
 
@@ -102,11 +104,14 @@ class RenderInstrParser:
         # it looks like opcode 0 would be the same as this but isn't used
         nMtxs = self.getBits(4)
         # here the game asserts that nMtxs < 20, but this is impossible...
-        #log.debug("Init %d mtxs (bit %d)", nMtxs, self._bitOffs)
+        log.debug("Init %d mtxs (bit %d)", nMtxs, self._bitOffs)
         mtxs = []
+        nMtx = self.model.header.nVtxGroups + self.model.header.nBones
         for i in range(nMtxs):
             idx = self.getBits(8)
-            ok  = idx < self.model.header.nVtxGroups + self.model.header.nBones
+            ok  = idx <= nMtx
+            if not ok:
+                log.warning("Init mtx %d but max is %d", idx, nMtx)
             #log.debug("  Init mtx %d (%s)", idx, "OK" if ok else "ERR")
             mtxs.append(idx)
         self.result.append(('MTX', mtxs))

@@ -260,7 +260,7 @@ class DlistParser:
         for name in self.vatFieldOrder:
             reg, idx, nbits = self.vatFields[name]
             mask = (1 << nbits) - 1
-            fmt = (self._cpRegs[reg + vat] >> idx) & mask
+            fmt  = (self._cpRegs[reg + vat] >> idx) & mask
             if fmt != 0: res.append('%s=%s' % (name, fmtNames[fmt]))
             size += fmtSizes[fmt]
 
@@ -282,6 +282,7 @@ class DlistParser:
             set  = val & mask
             curVal = (curVal & ~(mask << idx)) | (set << idx)
             self._cpRegs[reg + vat] = curVal
+            #log.debug("setVtxFmt: %s = %d => %X", name, val, set)
 
 
     def setShader(self, shader):
@@ -366,10 +367,10 @@ class DlistParser:
         try: name = self.drawModes[mode]
         except IndexError: name = 'unk%02X' % mode
 
-        if self.listIdx in range(12, 13):
-            log.debug("%04X %2d Draw(#%3d: %d %s, VAT %d): %s",
-                self._offset - 3, self.listIdx,
-                len(self.polys), count, name, vat, self.describeVat(vat))
+        #if self.listIdx in range(12, 13):
+        #log.debug("%04X %2d Draw(#%3d: %d %s, VAT %d): %s",
+        #    self._offset - 3, self.listIdx,
+        #    len(self.polys), count, name, vat, self.describeVat(vat))
 
         for i in range(count):
             vtx = self.nextVertex(vat)

@@ -19,6 +19,7 @@ class Model:
 
         for name, field in ModelStruct._fields.items():
             val = getattr(self.header, name)
+            name = name.ljust(20)
             if type(val) is int: print(name, val, hex(val))
             else: print(name, val)
         self._readBones()

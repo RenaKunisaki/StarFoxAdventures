@@ -104,6 +104,10 @@ class ModelLoader:
         tmp.seek(0)
         self.model = Model(tmp)
 
+        # debug
+        with open('decodedmodel.bin', 'wb') as out:
+            out.write(result)
+
 
     def _doRenderInstrs(self):
         """Follow previously parsed render instructions for loaded model."""
@@ -151,6 +155,10 @@ class ModelLoader:
             'COL0': self._vtxFmt['col'],
             #'COL1' : self._vtxFmt['col'],
             'TEX0': self._vtxFmt['tex'],
+            # XXX is this correct?
+            'PNMTXIDX': self._vtxFmt['pos'],
+            'T0MIDX': self._vtxFmt['tex'],
+            'T7MIDX': self._vtxFmt['tex'],
         }
 
         if self.curShader:
@@ -160,7 +168,7 @@ class ModelLoader:
         if self.curShader and self.curShader.textureId[0] >= 0:
             attrs['TEX1'] = self._vtxFmt['tex']
 
-        if idx == 24: # HACK
+        if idx == 24: # HACK - Krystal eyes
             attrs['PNMTXIDX'] = 1
             attrs['T0MIDX'] = 1
             attrs['COL0'] = 1
@@ -169,6 +177,7 @@ class ModelLoader:
         parser.setVtxFmt(6, **attrs) # XXX always 6?
         parser.setShader(self.curShader)
         parser.setMtxLut(self.mtxLut)
+        log.debug("Parse dlist %d with attrs: %r", idx, attrs)
         dlist = parser.parse()
         log.debug("Dlist %d has %d polys", idx, len(parser.polys))
         self.dlists.append(dlist)
