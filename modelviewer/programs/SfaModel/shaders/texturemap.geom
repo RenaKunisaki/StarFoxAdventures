@@ -7,6 +7,13 @@ layout(triangle_strip, max_vertices=4) out;
 uniform sampler2D texture;
 
 //inputs from vertex shader
+in gl_PerVertex {
+    //not used but must exist
+    vec4 gl_Position;
+    float gl_PointSize;
+    float gl_ClipDistance[];
+} gl_in[];
+
 in VertexAttrib {
     vec3 texCoord; //x, y, useTexture
     vec4 color;
@@ -16,6 +23,13 @@ uniform mat4 matProjection; //projection matrix
 
 out vec4 fragColor;
 out vec3 fragTexCoord; //x, y, useTexture
+
+out gl_PerVertex {
+    //not used but must exist
+    vec4 gl_Position;
+    float gl_PointSize;
+    float gl_ClipDistance[];
+};
 
 
 void drawVtx(vec2 pos, vec4 color, vec3 texCoord) {

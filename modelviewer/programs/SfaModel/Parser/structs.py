@@ -204,3 +204,36 @@ class ModelStruct(Struct):
         'nTexMtxs':      ('B', 0xFA),
         'unkFB':         ('B', 0xFB),
     }
+
+class MapBlockStruct(Struct):
+    _size   = 0xB0 # XXX verify
+    _order  = '>'
+    _fields = {
+        'unused00':      ('I',   0x00), # ignored in file
+        'flags_4':       ('H',   0x04),
+        'fileSize':      ('I',   0x08),
+        'unknown':       ('64B', 0x0C),
+        'unk4C':         ('I',   0x4C), # relates to hit detection
+        'unk50':         ('I',   0x50), # relates to hit detection
+        'textures':      ('I',   0x54), # -> texture IDs
+        'vtxs':          ('I',   0x58),
+        'colors':        ('I',   0x5C),
+        'texcoords':     ('I',   0x60),
+        'shaders':       ('I',   0x64),
+        'dlists':        ('I',   0x68),
+        'hits':          ('I',   0x70),
+        'renderInstrs':  ('3I',  0x78),
+        'nRenderInstrs': ('3H',  0x84), # num bytes
+        'nVtxs':         ('H',   0x90),
+        'unk92':         ('H',   0x92),
+        'nColors':       ('H',   0x94),
+        'nTexCoords':    ('H',   0x96),
+        'unk98':         ('2H',  0x98),
+        'nHits':         ('H' ,  0x9C),
+        'unk9E':         ('H' ,  0x9E),
+        'nTextures':     ('B',   0xA0),
+        'nDlists':       ('B',   0xA1),
+        'nShaders':      ('B',   0xA2),
+        'unkA3':         ('B',   0xA3),
+        'name':          ('11s', 0xA4), # length guessed
+    }

@@ -108,7 +108,7 @@ class Program:
         """
         for name, path in files.items():
             shd = self._compileShader(name, path)
-            log.debug("Bind shader %d to program %d", shd, self.id)
+            log.debug("Bind shader %d to program %d: %s => %s", shd, self.id, name, path)
             self.ctx.glAttachShader(self.id, shd)
 
 
