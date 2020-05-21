@@ -139,7 +139,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.dlistRenderer.run()
         self.boneRenderer.run()
         self.boxRenderer.run()
-        self.textureRenderer.run()
+        #self.textureRenderer.run()
         self.menu.render()
 
         lines = (

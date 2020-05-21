@@ -63,6 +63,7 @@ class DlistRenderer(gl.Pipeline):
 
 
     def run(self):
+        if self.model is None: return
         self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
         if self.useFaceCulling: self.ctx.glEnable(self.ctx.GL_CULL_FACE)
         else: self.ctx.glDisable(self.ctx.GL_CULL_FACE)

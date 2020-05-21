@@ -73,6 +73,7 @@ class TextureRenderer(gl.Pipeline):
 
 
     def run(self):
+        if self.texture is None: return
         self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
         self.ctx.glDisable(self.ctx.GL_CULL_FACE)
         self.ctx.glEnable(self.ctx.GL_BLEND)

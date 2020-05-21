@@ -24,6 +24,7 @@ class BoneRenderer(gl.Pipeline):
     def __init__(self, parent):
         self.parent = parent
         self.shader = BoneShader(self.parent.ctx)
+        self.model  = None
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
@@ -58,6 +59,7 @@ class BoneRenderer(gl.Pipeline):
 
 
     def run(self):
+        if self.model is None: return
         if self.useDepthTest: self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
         else: self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
         self.ctx.glDisable(self.ctx.GL_CULL_FACE)
