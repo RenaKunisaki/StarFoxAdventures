@@ -26,7 +26,6 @@
 .set debugLogBuffer,0x803aa018
 .set debugLogEnd,0x803dbc14 # end of debugLogBuffer
 .set loadedFileMapIds,0x8035f548 # int16[fileIdx]
-.set mapInfo,0x816a8ba0 # char[28] name
 .set buttonsJustPressed,0x803398d0
 .set pPlayer,0x803428f8
 .set playerId,0x803a32c8 # 0=Krystal, 1=Fox
@@ -49,6 +48,7 @@
 .set distortionFilterColor,  0x803dce40 #color distortion filter color
 .set distortionFilterAngle2, 0x803dce44 #float distortion filter angle 2
 .set blurFilterArea,         0x803dce48 #vec3f blur filter area
+.set pCurMapInfo,            0x803dce78 #MapInfoEntry*
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
 
 # SFA file IDs

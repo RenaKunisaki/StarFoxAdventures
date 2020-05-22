@@ -16,8 +16,7 @@ lwz     r3, 8(r3)
 cmpwi   r3, 0
 beq     end
 
-lis     r4, mapInfo@h
-ori     r4, r4, mapInfo@l
+LOADW   r4, pCurMapInfo
 stw     r4, (80 * 4)(r3) # change "Information" to map name
 lwz     r3, (79 * 4)(r3) # addr of "Scanning for"
 
