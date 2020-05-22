@@ -279,12 +279,7 @@ class Game:
         ptr = self.client.read(0x803dce78, '>I')
         if ptr == 0: return None
         name, typ, field_1d, field_1e = self.client.read(ptr, ">28s2bh")
-        # note this is directory ID
-        # there may not be an address for actual map ID
-        # but we could translate it
-        # 803db620 seems to be most recently loaded map ID,
-        # which is not necessarily the one we're on right now
-        id = self.client.read(0x8035f592, ">h")
+        id = self.client.read(0x803dcec8, ">i")
         try: name = name.decode('shift-jis')
         except UnicodeDecodeError: name = '???'
         lol = name.find('\0')
