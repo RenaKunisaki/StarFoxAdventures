@@ -276,7 +276,9 @@ class Game:
 
 
     def getCurMap(self):
-        name, typ, field_1d, field_1e = self.client.read(0x816a8ba0, ">28s2bh")
+        ptr = self.client.read(0x803dce78, '>I')
+        if ptr == 0: return None
+        name, typ, field_1d, field_1e = self.client.read(ptr, ">28s2bh")
         # note this is directory ID
         # there may not be an address for actual map ID
         # but we could translate it
