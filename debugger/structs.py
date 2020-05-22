@@ -152,6 +152,21 @@ class HeapEntry(Struct):
         0xFFFFFFFF: "Savegame",
     }
 
+class DisplayListPtr(Struct):
+    SIZE    = 0x1C
+    _fields = {
+        'offset':  ('>I',  0x00),
+        'size':    ('>H',  0x04),
+        'bbox':    ('>6h', 0x06),
+        # 'specialBitAddr': ???
+        'unk12':   ('>B', 0x12),
+        'shaderId':('>B', 0x13), # maybe u16
+        'unk14':   ('>H', 0x14), # related to shader
+        'unk16':   ('>H', 0x16),
+        'unk18':   ('>I', 0x18), # always 07 00 00 00?
+    }
+
+
 
 class ModelFileHeader(Struct):
     SIZE = 0xFC
@@ -289,9 +304,10 @@ class Model(Struct):
         printf("    nAnimations=%4d nTextures=%3d nBones=%3d nVtxGroups=%3d\n",
             self.header.nAnimations, self.header.nTextures,
             self.header.nBones, self.header.nVtxGroups)
-        printf("    nDlists=%3d nHitBoxes=%3d nMaterials=%3d\n",
-            self.header.nDlists, self.header.nHitBoxes,
-            self.header.nMaterials)
+        printf("    dlists: %3d @ 0x%08X\n",
+            self.header.nDlists, self.header.pDlists)
+        printf("    nHitBoxes=%3d nMaterials=%3d\n",
+            self.header.nHitBoxes, self.header.nMaterials)
         printf("    nUnkDC=%3d nTexMtxs=%3d\n",
             self.header.nUnkDC, self.header.nTexMtxs)
         printf("    Unk: 01=%02X 06=%04X 08=%08X 10=%08X %08X\n",

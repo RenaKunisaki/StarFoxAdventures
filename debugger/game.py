@@ -1,6 +1,6 @@
 import struct
 from util import printf
-from structs import ObjectFileStruct, GameObject, HeapStruct, HeapEntry, ModelFileHeader, Model
+from structs import ObjectFileStruct, GameObject, HeapStruct, HeapEntry, ModelFileHeader, Model, DisplayListPtr
 
 ROW_COLOR = (19, 17)
 fileTable = {
@@ -168,6 +168,21 @@ class Game:
             model = Model(self.client, pModels[i])
             printf("\nModel %d @ 0x%08X:\n", i, pModels[i])
             model.printSelf()
+            self.listModelDlists(pModels[i])
+
+    def listModelDlists(self, addr):
+        model = Model(self.client, addr)
+        printf("\x1B[1m#  │ListAddr│Size│Bbox 1              │Bbox 2              │12│Sd│  14│  16│      18\x1B[0m\n")
+        for i in range(model.header.nDlists):
+            dlist = DisplayListPtr(self.client,
+                model.header.pDlists + (i * 0x1C))
+            printf("\x1B[48;5;%dm%3d│%08X│%04X│%+6d %+6d %+6d│%+6d %+6d %+6d│%02X│%02X│%04X│%04X│%08X\x1B[0m\n",
+                ROW_COLOR[i&1], i,
+                dlist.offset, dlist.size,
+                dlist.bbox[0], dlist.bbox[1], dlist.bbox[2],
+                dlist.bbox[3], dlist.bbox[4], dlist.bbox[5],
+                dlist.unk12, dlist.shaderId,
+                dlist.unk14, dlist.unk16, dlist.unk18)
 
     def showHeap(self):
         printf("\x1B[1m#│Data    │Size    │Used    │Free    │Slots   │UsedSlot│FreeSlot\x1B[0m\n")
@@ -265,6 +280,8 @@ class Game:
         # note this is directory ID
         # there may not be an address for actual map ID
         # but we could translate it
+        # 803db620 seems to be most recently loaded map ID,
+        # which is not necessarily the one we're on right now
         id = self.client.read(0x8035f592, ">h")
         try: name = name.decode('shift-jis')
         except UnicodeDecodeError: name = '???'

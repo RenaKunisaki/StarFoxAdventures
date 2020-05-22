@@ -77,11 +77,11 @@ class App:
         self.game.showObject(addr)
         self.client.conn.send(b"\xAA")
 
-    def listObjModels(self, addr):
+    def listObjModels(self, objAddr):
         """Display list of object's models."""
         self._checkConnected()
-        addr = int(addr, 16)
-        self.game.listObjModels(addr)
+        objAddr = int(objAddr, 16)
+        self.game.listObjModels(objAddr)
         self.client.conn.send(b"\xAA")
 
     def listFiles(self):
