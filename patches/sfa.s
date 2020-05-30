@@ -2,17 +2,22 @@
 .set __restore_gpr,0x802860f4
 .set __save_gpr,0x802860a8
 .set allocTagged,0x80023cc8 #void* (uint size,AllocTag tag,char *name)
+.set ClearArena,0x80240400
+.set debugPrintf,0x801378a8
 .set DVDReadAsyncPrio,0x80248eac
 .set free,0x800233e8
 .set loadFileByPath,0x80015ab4 #void* (char *path,uint *outSize)
     # Returns pointer to allocated buffer of contents.
     # outSize: if not NULL, receives file size.
+.set logSetColor,0x80137520 # r, g, b, a
 .set memcpy,0x80003494 # clobbers: r0, r6
 .set memset,0x800033D8 # clobbers: r0, r6, r7
 .set mm_free,0x80023800 # wrapper for free()
 .set modelLoad,0x80029570 # ModelFileHeader* (
     # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
     # if modelNum is negative, don't use MODELIND.bin
+.set OSReport,0x8007d6dc
+.set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
 .set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
@@ -35,6 +40,7 @@
 .set motionBlurIntensity,    0x803db62c #float, 32=high, 256=unnoticeable
 .set colorFilterColor,       0x803db630 #color
 .set fovY,                   0x803dc8a4 #float
+.set mapCoords,              0x803dcdc8 #int mapX, mapZ, cellX, cellZ
 .set bEnableBlurFilter,      0x803dcdf4 #bool  blur filter
 .set bBlurFilterUseArea,     0x803dcdf5 #bool  constrain effect by blurFilterArea
 .set bEnableDistortionFilter,0x803dcdf6 #bool  distortion filter
@@ -49,6 +55,7 @@
 .set distortionFilterAngle2, 0x803dce44 #float distortion filter angle 2
 .set blurFilterArea,         0x803dce48 #vec3f blur filter area
 .set pCurMapInfo,            0x803dce78 #MapInfoEntry*
+.set curMapId,               0x803dcec8 #int
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
 
 # SFA file IDs
