@@ -25,7 +25,7 @@ LOADW   r12, pPlayer
 cmpwi   r12, 0
 beq     end
 
-LOAD    r4, 0x8032CC05 # "%04x%04x"
+LOAD    r4, 0x8032CC05 # "%%04x%04x"
 lis     r5, 0x803e
 lhz     r6, -(0x10000 - 0xcdce)(r5) # cell Z
 lhz     r5, -(0x10000 - 0xcdca)(r5) # cell X

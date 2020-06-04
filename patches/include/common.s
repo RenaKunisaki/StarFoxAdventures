@@ -33,16 +33,19 @@
 .macro CALL addr
     lis  r0,\addr@h
     ori  r0,r0,\addr@l
-    mtlr r0
-    blrl  # branch link to the address in the link register
+    #mtlr r0
+    #blrl  # branch link to the address in the link register
+    mtspr CTR, r0
+    bctrl
 .endm
-
 # jump to absolute address, clobber specified register
 .macro JUMP addr, reg
     lis  \reg, \addr@h
     ori  \reg, \reg, \addr@l
-    mtlr \reg
-    blr
+    #mtlr \reg
+    #blr
+    mtspr CTR, \reg
+    bctr
 .endm
 
 # expands to:
@@ -55,6 +58,16 @@
     lwz \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\reg)
 .endm
 
+.macro LOADH reg, addr
+    lis \reg, ((\addr) >> 16) + (((\addr) & 0x8000) >> 15)
+    lhz \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\reg)
+.endm
+
+.macro LOADB reg, addr
+    lis \reg, ((\addr) >> 16) + (((\addr) & 0x8000) >> 15)
+    lbz \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\reg)
+.endm
+
 .macro LOADWH reg, addr
     lis \reg, ((\addr) >> 16) + (((\addr) & 0x8000) >> 15)
 .endm
@@ -65,6 +78,10 @@
 
 .macro LOADWL2 reg, addr, base
     lwz \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
+.endm
+
+.macro LOADHL2 reg, addr, base
+    lhz \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
 .endm
 
 .macro LOADBL2 reg, addr, base
@@ -88,12 +105,68 @@
     stw \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
 .endm
 
+.macro STOREH reg, addr, base
+    sth \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
+.endm
+
 .macro STOREB reg, addr, base
     stb \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
 .endm
 
 .macro STOREF reg, addr, base
     stfs \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
+.endm
+
+# macros for patch files
+.set PATCH_KEEP_AFTER_RUN,0x00000000 # don't automatically free patch
+.set PATCH_FREE_AFTER_RUN,0x00000001 # free this patch after running it
+
+.macro PATCH_BL addr, dest
+    # insert `bl dest` at `addr`
+    .int ((\addr) & 0x1FFFFFF) | 0xC6000000
+    .int ((\dest) - patchList) | 1 # low bit set = bl
+.endm
+
+.macro PATCH_B addr, dest
+    # insert `b dest` at `addr`
+    .int ((\addr) & 0x1FFFFFF) | 0xC6000000
+    .int ((\dest) - patchList) | 0 # low bit clear = b
+.endm
+
+.macro PATCH_BYTE addr, val
+    # write byte `val` to `addr`
+    .int ((\addr) & 0x01FFFFFF) | 0x00000000
+    .int (\val)
+.endm
+
+.macro PATCH_BYTES addr, count, val
+    # write byte `val` to `addr`...`addr+count` inclusive.
+    .int ((\addr) & 0x01FFFFFF) | 0x00000000
+    .int (\val) | ((\count) << 16)
+.endm
+
+.macro PATCH_HWORD addr, val
+    # write hword `val` to `addr`
+    .int ((\addr) & 0x01FFFFFF) | 0x02000000
+    .int (\val)
+.endm
+
+.macro PATCH_HWORDS addr, count, val
+    # write hword `val` to `addr`...`addr+(count*2)` inclusive.
+    .int ((\addr) & 0x01FFFFFF) | 0x02000000
+    .int (\val) | ((\count) << 16)
+.endm
+
+# there is no PATCH_WORDS because where would the count go?
+.macro PATCH_WORD addr, val
+    # write word `val` to `addr`
+    .int ((\addr) & 0x01FFFFFF) | 0x04000000
+    .int (\val)
+.endm
+
+.macro PATCH_END flags
+    # insert end-of-patch-list marker and flags
+    .int 0, flags
 .endm
 
 .include "sfa.s"
