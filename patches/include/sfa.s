@@ -8,6 +8,8 @@
 .set debugPrintf,0x801378a8
 .set DVDReadAsyncPrio,0x80248eac
 .set free,0x800233e8
+.set gameTextSetColor,0x80019908 # u8 r, g, b, a
+.set gameTextShowStr,0x80015dc8 # char*, int box, int x, int y
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
 .set getButtonsJustPressed,0x80014e70 # u16 (int controller)
 .set iCacheFlush,0x80241ae0 #(dest, size) -> dest
@@ -15,6 +17,7 @@
     # Returns pointer to allocated buffer of contents.
     # outSize: if not NULL, receives file size.
 .set logSetColor,0x80137520 # r, g, b, a
+.set mainGetBit,0x8001ffb4
 .set memcpy,0x80003494 # clobbers: r0, r6
 .set memset,0x800033D8 # clobbers: r0, r6, r7
 .set mm_free,0x80023800 # wrapper for free()
@@ -57,8 +60,10 @@
 .set fovY,                   0x803dc8a4 #float
 .set loadedFileMapIds,       0x8035f548 # int16[fileIdx]
 .set mapCoords,              0x803dcdc8 #int mapX, mapZ, cellX, cellZ
+.set minimapMode,            0x803dd944 # u8 0=map 1=compass 2=info
 .set motionBlurIntensity,    0x803db62c #float, 32=high, 256=unnoticeable
 .set pCurMapInfo,            0x803dce78 #MapInfoEntry*
+.set pdaOn,                  0x803dbbb0 # bool
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
 .set playerId,               0x803a32c8 # 0=Krystal, 1=Fox
 .set playerLocked,           0x803dca3c # bool

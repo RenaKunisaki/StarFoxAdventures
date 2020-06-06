@@ -53,7 +53,6 @@ entry: # called as soon as our patch is loaded.
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
 
-
 mainLoop: # called by our hook, from the patch list.
     stwu  r1, -STACK_SIZE(r1) # get some stack space
     mflr  r3
@@ -164,6 +163,13 @@ mainLoop: # called by our hook, from the patch list.
     # magic required to make floats print correctly
     # no idea what this does
     creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
+    CALL debugPrintf
+
+    # display input
+    LOADWH  r6, controllerStates
+    LOADBL2 r4, controllerStates+2, r6 # x
+    LOADBL2 r5, controllerStates+3, r6 # y
+    addi r3, r14, (.fmt_input - .getpc)@l
     CALL debugPrintf
 
     # do free movement (XXX move to another file)
@@ -300,5 +306,7 @@ mainLoop: # called by our hook, from the patch list.
 .fmt_playerState:
     .string "\nS \x84%02X\x83 A \x84%04X %f %f\x83\n"
     #.string "S \x84%02X\x83 A \x84%04X\x83\n"
+.fmt_input:
+    .string "%X %X\n"
 bootMsg:
     .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
