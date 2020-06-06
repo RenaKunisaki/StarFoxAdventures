@@ -189,7 +189,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpw   r3, r4
     bne    .noCloseSound
     li     r3, 0
-    li     r4, 0x03E5
+    li     r4, 0x03E6
     CALL   audioPlaySound
 .noCloseSound:
     lfs    f1, (menuAnimTimer - mainLoop)(r14)
@@ -398,15 +398,38 @@ adjItem_PDAHUD:
     blr
 
 
+# unfortunately this isn't safe.
+# playing invalid sounds can crash the game.
+drawItem_sound:
+    # r3 = strBuf
+    addi r4, r14, (s_sound - mainLoop)
+    lhz  r5, (soundTestId - mainLoop)(r14)
+    mflr r28
+    CALL sprintf
+    mtlr r28
+    mr   r3, r18 # return strbuf
+    blr
+
+adjItem_sound:
+    # r3 = amount to adjust by
+    lhz  r4, (soundTestId - mainLoop)(r14)
+    add  r4, r4, r3
+    sth  r4, (soundTestId - mainLoop)(r14)
+    li   r3, 0
+    CALL audioPlaySound
+    blr
+
 
 itemDrawFuncs:
     .int drawItem_player - mainLoop
     .int drawItem_PDAHUD - mainLoop
+    #.int drawItem_sound  - mainLoop
     .int 0
 
 itemAdjustFuncs:
     .int adjItem_player - mainLoop
     .int adjItem_PDAHUD - mainLoop
+    #.int adjItem_sound  - mainLoop
 
 # more items to add:
 # - FOV (will require overriding some code when not default)
@@ -444,6 +467,7 @@ menuVisible:   .byte 0
 menuSelItem:   .byte 0
 menuSelColor:  .byte 0
 menuJustMoved: .byte 0
+soundTestId:   .short 0
 
 # string pool
 title:     .string "PDA Menu"
@@ -456,6 +480,7 @@ s_PDAHUD:  .string "PDA HUD: %s"
 s_map:     .string "Map"
 s_compass: .string "Fuel Cell Compass"
 s_info:    .string "Information"
+s_sound:   .string "Sound Test: %04X"
 
 strBuf: # buffer to print strings into
     .rept 64
