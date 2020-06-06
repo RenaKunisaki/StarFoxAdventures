@@ -7,6 +7,7 @@
 #   switching. Also, there's now a sound effect.
 # - Reduce load time and RAM usage by loading the assets from dedicated
 #   files instead of animtest, and by removing a lot of repeated code.
+# - Remove hardcoded file sizes.
 # TODO:
 # - Patch animations instead of using Fox's.
 .text
@@ -70,6 +71,11 @@ entry: # called when patch is loaded
 modelsBinPatch:
     # replacing a call to allocTagged.
     # r3=size, r4=tag, r5=name (null)
+    # This is allocating the buffer to read MODELS.BIN into.
+    # We'll extend that buffer, and append the Krystal model to it,
+    # ensuring that it's available in every map.
+    # Later, we'll patch MODELS.TAB to reference it.
+
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1) # original file size
     stw     r4,  SP_ALLOC_TAG(r1) # original alloc tag
@@ -134,13 +140,13 @@ freeFileAndReturnBuffer:
     lwz     r3, SP_FILE_BUFFER(r1)
     cmpwi   r3, 0
     beq     returnBuffer
-    CALL    mm_free
+    CALL    mm_free # free our loaded file, if any
 
 returnBuffer:
-    lwz     r3, SP_BUFFER(r1)  # return buffer
-
-abort:
-    lwz     r6,  SP_LR_SAVE(r1)
+    # we hooked a call to allocTagged, so we need to return
+    # the address of the buffer we just allocated.
+    lwz     r3, SP_BUFFER(r1)
+    lwz     r6, SP_LR_SAVE(r1)
     mtlr    r6
     addi    r1, r1, STACK_SIZE # restore stack ptr
     blr
@@ -151,6 +157,10 @@ abort:
 tex1BinPatch:
     # replacing a call to allocTagged.
     # r3=size, r4=tag, r5=name (null)
+    # This is pretty much identical to the MODELS.BIN patch.
+    # We append Krystal's textures to the end of TEX1.BIN in memory
+    # just like we did for the model.
+
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stw     r3,  SP_ORIG_SIZE(r1) # original file size
     stw     r4,  SP_ALLOC_TAG(r1) # original alloc tag
@@ -182,6 +192,7 @@ modelsTab_doPatch:
     lwzx    r5, r3, r12 # r5 = size
     # that's the size of the original file, before we appended
     # our model data, so we don't need to adjust it.
+    # the original file's size equals the offset of the appended data.
     add     r7, r5, r9 # r7 = the actual address
     lwz     r7, 0(r7)
     cmp     0, 0, r7, r10 # is there a model here?
@@ -190,8 +201,7 @@ modelsTab_doPatch:
     bne     .modelsTab_doPatch_end
 
     # OK, r5 is valid.
-    lis     r9, 0x8000 # flags: compressed
-    or      r5, r5, r9
+    oris    r5, r5, 0x8000 # flags: compressed
     lwzx    r9, r4, r11 # r9 = MODELS.tab
     cmpwi   r9, 0
     beq     .modelsTab_doPatch_end # table not loaded!? idk why this happens.
@@ -202,7 +212,8 @@ modelsTab_doPatch:
 
 modelsTabPatch:
     # patch mergeTableFiles() case MODELS.tab
-    # insert the offset we loaded Krystal at into the table
+    # insert the offset we loaded Krystal at into the table,
+    # so that the game will actually use the model.
     # patch at 0x80043d7c, "b 0x80043df4" -> "b modelsTabPatch"
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stmw    r3, SP_GPR_SAVE(r1)
@@ -292,8 +303,9 @@ tex1_doPatch:
 
 tex1TabPatch:
     # patch mergeTableFiles() case TEX1.tab
-    # insert the offset we loaded Krystal at into the table
-    # nearly identical to modelsTabPatch
+    # insert the offset we loaded Krystal at into the table,
+    # so that the game will actually use the textures.
+    # nearly identical to modelsTabPatch.
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stmw    r3, SP_GPR_SAVE(r1)
     mflr    r3
