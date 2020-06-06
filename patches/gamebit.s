@@ -5,6 +5,7 @@
 
 # define patches
 patchList:
+    PATCH_ID "GameBit" # must be 7 chars
     # void mainSetBits(GameBit bit,uint val)
     # 8002010c 48 0C 86 A5  bl isSaveGameLoading
     PATCH_BL 0x8002010C, main
@@ -17,9 +18,6 @@ constants:
 entry: # called as soon as our patch is loaded.
     blr # nothing to do here
 
-# helpful identifying string. not actually neded.
-.string "GameBits"
-.align 4
 
 main:
     stwu r1, -STACK_SIZE(r1) # get some stack space

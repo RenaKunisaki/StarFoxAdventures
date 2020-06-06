@@ -6,6 +6,7 @@
 
 # define patches
 patchList:
+    PATCH_ID   "Pause  " # must be 7 chars
     PATCH_WORD 0x8012A97C, 0x4BFBDD55 # disable save confirmation
     # disable some voices
     PATCH_WORD 0x8012A904, 0x60000000
@@ -20,10 +21,6 @@ patchList:
 
 entry: # called as soon as our patch is loaded.
     blr # nothing to do here
-
-# helpful identifying string. not actually neded.
-.string "Pause"
-.align 4
 
 # eventually we should put a menu in that pops up with some key combo,
 # or replaces the pause menu or even has its own icon (could use Krystal talking head model)

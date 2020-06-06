@@ -24,12 +24,19 @@
 #
 # C0000000 aaaaaaaa: call `aaaaaaaa` from the game main loop.
 # This should be an address relative to the start of the patch file.
+# (in Gecko this calls code immediately following, but that's of
+# little use here.)
 #
 # C6aaaaaa tttttttt: insert branch to `tttttttt` at `80aaaaaa`.
 # C7aaaaaa tttttttt: insert branch to `tttttttt` at `81aaaaaa`.
 # Works like Gecko, but if the lowest bit of `tttttttt` is set, it will
 # insert a `blr` instead of a `b`. The target is relative to the beginning
 # of the patch file.
+#
+# FExxxxxx xxxxxxxx: does nothing. Useful to insert the patch's name
+# at the beginning of the file for quick identification, so long as
+# it's padded to exactly 7 characters.
+#
 # 00000000 xxxxxxxx: End patch list.
 #  xxxxxxxx: flags:
 #  00000001: free this patch after executing it.
@@ -55,6 +62,7 @@ constants:
     .set OP_WRITE32,0x04
     .set OP_MAIN_LOOP,0xC0
     .set OP_BRANCH,0xC6
+    .set OP_NOP,0xFE
 
     .set STACK_SIZE,0x40 # how much to reserve
     .set SP_LR_SAVE,0x10
@@ -132,10 +140,13 @@ start:
     beq     .makeBl
     cmpwi   r5, OP_MAIN_LOOP
     beq     .addMainLoopHook
+    cmpwi   r5, OP_NOP
+    beq     .nextListItem
 
     # unsupported command...
     #b       .nextListItem
     tw       2, r0, r0 # trap if r0 == r0 (ie always)
+    # XXX that doesn't actually do anything...
 
 .write8: # r4 = address; r3 -> patch list entry
     lhz     r9, 4(r3) # get count

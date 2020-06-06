@@ -46,6 +46,7 @@ constants:
 
 # define patches
 patchList:
+    PATCH_ID        "Krystal" # must be 7 chars
     PATCH_BL        0x800453E0, modelsBinPatch
     PATCH_B         0x80043D7C, modelsTabPatch
     PATCH_BL        0x80046164, tex1BinPatch
@@ -63,12 +64,6 @@ patchList:
 
 entry: # called when patch is loaded
     blr # nothing to do
-
-
-# helpful identifying string. not actually neded.
-.string "Krystal"
-.align 4
-
 
 ########################## MODELS.BIN PATCH ##############################
 

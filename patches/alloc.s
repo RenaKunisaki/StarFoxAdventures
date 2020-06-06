@@ -5,7 +5,8 @@
 
 # define patches
 patchList:
-    PATCH_B 0x80023D00, main
+    PATCH_ID  "alloc  " # must be 7 chars
+    PATCH_B   0x80023D00, main
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -17,10 +18,6 @@ constants:
 
 entry: # called as soon as our patch is loaded.
     blr # nothing to do here
-
-# helpful identifying string. not actually neded.
-.string "Alloc"
-.align 4
 
 main:
     # patch into allocTagged

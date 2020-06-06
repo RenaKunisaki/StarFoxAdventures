@@ -6,6 +6,7 @@
 
 # define patches
 patchList:
+    PATCH_ID        "DbgText" # must be 7 chars
     PATCH_MAIN_LOOP mainLoop
     # patch debug print to move to the very edge of the screen.
     PATCH_HWORD 0x8013761A, 0
@@ -51,10 +52,6 @@ entry: # called as soon as our patch is loaded.
     mtlr r3 # restore LR
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
-
-# helpful identifying string. not actually neded.
-.string "DebugPrint"
-.align 4
 
 
 mainLoop: # called by our hook, from the patch list.

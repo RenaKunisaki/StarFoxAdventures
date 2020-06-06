@@ -13,6 +13,7 @@
 
 # define patches
 patchList:
+    PATCH_ID "Climb  " # must be 7 chars
     # 802a06b4 7C 77 1B 78  or       r23,r3,r3
     # r3: ObjInstance* (probably player)
     # r4: PlayerAnimState*
@@ -37,10 +38,6 @@ constants:
 entry: # called as soon as our patch is loaded.
     # nothing to do
     blr
-
-# helpful identifying string. not actually neded.
-.string "Climb"
-.align 4
 
 
 main: # called by our hook, from the patch list.

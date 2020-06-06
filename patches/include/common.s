@@ -121,6 +121,13 @@
 .set PATCH_KEEP_AFTER_RUN,0x00000000 # don't automatically free patch
 .set PATCH_FREE_AFTER_RUN,0x00000001 # free this patch after running it
 
+.macro PATCH_ID name
+    # insert patch ID/name into patch list.
+    # name must be exactly 7 characters.
+    .byte 0xFE
+    .ascii "\name" # we have to use quotes even when name is already quoted...
+.endm
+
 .macro PATCH_BL addr, dest
     # insert `bl dest` at `addr`
     .int ((\addr) & 0x1FFFFFF) | 0xC6000000
