@@ -24,6 +24,8 @@
 #
 # C0000000 aaaaaaaa: call `aaaaaaaa` from the game main loop.
 # This should be an address relative to the start of the patch file.
+# The code is called with r3 = its own address, to help with writing
+# position-independent code.
 # (in Gecko this calls code immediately following, but that's of
 # little use here.)
 #
@@ -36,6 +38,8 @@
 # FExxxxxx xxxxxxxx: does nothing. Useful to insert the patch's name
 # at the beginning of the file for quick identification, so long as
 # it's padded to exactly 7 characters.
+# This type is unused in Gecko. It's not 0xFF because the lowest bit
+# isn't part of the type.
 #
 # 00000000 xxxxxxxx: End patch list.
 #  xxxxxxxx: flags:
