@@ -6,9 +6,7 @@
 
 # define patches
 patchList:
-    # we'll replace a bl to a do-nothing function
-    # with a bl to our new code.
-    PATCH_BL 0x80020D4C, mainLoop
+    PATCH_MAIN_LOOP mainLoop
     # patch debug print to move to the very edge of the screen.
     PATCH_HWORD 0x8013761A, 0
     PATCH_HWORD 0x8013762E, 0
@@ -304,5 +302,6 @@ mainLoop: # called by our hook, from the patch list.
     .string "M \x84%d %d %d %d\x83 "
 .fmt_playerState:
     .string "\nS \x84%02X\x83 A \x84%04X %f %f\x83\n"
+    #.string "S \x84%02X\x83 A \x84%04X\x83\n"
 bootMsg:
     .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"

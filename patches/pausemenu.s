@@ -24,3 +24,8 @@ entry: # called as soon as our patch is loaded.
 # helpful identifying string. not actually neded.
 .string "Pause"
 .align 4
+
+# eventually we should put a menu in that pops up with some key combo,
+# or replaces the pause menu or even has its own icon (could use Krystal talking head model)
+# and has options like toggle debug print, set FOV, game speed,
+# cheats, etc.

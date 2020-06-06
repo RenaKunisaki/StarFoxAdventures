@@ -133,6 +133,12 @@
     .int ((\dest) - patchList) | 0 # low bit clear = b
 .endm
 
+.macro PATCH_MAIN_LOOP dest
+    # call `dest` from game main loop.
+    .int 0xC0000000
+    .int ((\dest) - patchList)
+.endm
+
 .macro PATCH_BYTE addr, val
     # write byte `val` to `addr`
     .int ((\addr) & 0x01FFFFFF) | 0x00000000

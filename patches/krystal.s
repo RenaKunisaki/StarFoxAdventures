@@ -46,15 +46,15 @@ constants:
 
 # define patches
 patchList:
-    PATCH_BL   0x800453E0, modelsBinPatch
-    PATCH_B    0x80043D7C, modelsTabPatch
-    PATCH_BL   0x80046164, tex1BinPatch
-    PATCH_B    0x80043DB8, tex1TabPatch
-    PATCH_B    0x802B6F28, loadSaveGamePatch
-    PATCH_BL   0x80020C60, mainLoopPatch
-    PATCH_WORD 0x802B08D8, 0x38000001 # let Krystal use staff
-    PATCH_WORD 0x80295BE0, 0x38600001 # let Krystal use map, comm, etc
-    PATCH_WORD 0x8005F5E0, 0x60000000 # HACK: fix a crash caused by
+    PATCH_BL        0x800453E0, modelsBinPatch
+    PATCH_B         0x80043D7C, modelsTabPatch
+    PATCH_BL        0x80046164, tex1BinPatch
+    PATCH_B         0x80043DB8, tex1TabPatch
+    PATCH_B         0x802B6F28, loadSaveGamePatch
+    PATCH_MAIN_LOOP mainLoopPatch
+    PATCH_WORD      0x802B08D8, 0x38000001 # let Krystal use staff
+    PATCH_WORD      0x80295BE0, 0x38600001 # let Krystal use map, PDA, etc
+    PATCH_WORD      0x8005F5E0, 0x60000000 # HACK: fix a crash caused by
         # the previous patch, where some fog parameter is being
         # set incorrectly leading to an endless loop on pause screen.
         # XXX figure out what's causing that and fix it correctly.
@@ -368,13 +368,13 @@ loadSaveGamePatch:
 ###################### MAIN LOOP PATCH ##########################
 
 mainLoopPatch:
-    # replace a bl to a do-nothing function at 80020C60
-    mflr  r14
-    bl   .mainLoopPatch_getpc
-    .mainLoopPatch_getpc:
-        mflr r10
-
-    lbz   r15, (curCharacter - .mainLoopPatch_getpc)(r10)
+    # r3 = address of mainLoopPatch
+    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stmw    r3, SP_GPR_SAVE(r1)
+    mflr    r15
+    stw     r15, SP_LR_SAVE(r1)
+    mr      r10, r3
+    lbz     r15, (curCharacter - mainLoopPatch)(r10)
 
     # check buttons
     LOADWH  r9, controllerStates
@@ -387,7 +387,7 @@ mainLoopPatch:
 
     # swap character
     xori  r15, r15, 1
-    stb   r15, (curCharacter - .mainLoopPatch_getpc)(r10)
+    stb   r15, (curCharacter - mainLoopPatch)(r10)
 
     # do sharpclaw disguise animation (XXX where is that function?)
     #LOADW r3, pPlayer
@@ -424,7 +424,10 @@ mainLoopPatch:
     stb   r15, 0x081B(r4) # voice and backpack
 
 .mainLoopPatch_end:
-    mtlr  r14
+    lwz     r3, SP_LR_SAVE(r1)
+    mtlr    r3
+    lmw     r3, SP_GPR_SAVE(r1)
+    addi    r1, r1, STACK_SIZE # restore stack ptr
     blr
 
 #################### STRINGS AND CONSTANT POOLS ###################
@@ -435,27 +438,26 @@ tex1Tab_offsets: # for quick access
 
 tex1Tab_data:
     # copied from TEX1.tab and offset by the first entry.
-    .int 0x84023430 - TEX1_BASE_OFFSET # eye texture
-    .int 0x810261E0 - TEX1_BASE_OFFSET # fur texture
-    .int 0x8102F1B0 - TEX1_BASE_OFFSET # ? maybe hair sides?
-    .int 0x01000000
-    .int 0x8102FB10 - TEX1_BASE_OFFSET # another eye texture?
-    .int 0x8102FEA0 - TEX1_BASE_OFFSET # hair front
-    .int 0x8102FFE0 - TEX1_BASE_OFFSET # hair back
+    #.int 0x84023430 - TEX1_BASE_OFFSET # eye texture
+    #.int 0x810261E0 - TEX1_BASE_OFFSET # fur texture
+    #.int 0x8102F1B0 - TEX1_BASE_OFFSET # ? maybe hair sides?
+    #.int 0x01000000
+    #.int 0x8102FB10 - TEX1_BASE_OFFSET # another eye texture?
+    #.int 0x8102FEA0 - TEX1_BASE_OFFSET # hair front
+    #.int 0x8102FFE0 - TEX1_BASE_OFFSET # hair back
 
     # for alt
-    #.int  0x84000000
-    #.int  0x81002DB0
-    #.int  0x81012308
-    #.int  0x01000000
-    #.int  0x81012C68
-    #.int  0x81012FF8
-    #.int  0x81013138
+    .int  0x84000000
+    .int  0x81002DB0
+    .int  0x81012308
+    .int  0x01000000
+    .int  0x81012C68
+    .int  0x81012FF8
+    .int  0x81013138
 
 # let's make the paths short to shave a few more bytes
 # off the patch size, since RAM is tight.
 modelPath:
-    #.string "animtest/MODELS.bin"
     .string "patches/km"
 
 texturePath:
