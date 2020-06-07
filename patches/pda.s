@@ -84,6 +84,17 @@ mainLoop: # called from main loop. r3 = mainLoop
     li     r4, 0
     icbi   r4, r5 # flush instruction cache
 
+    # 8013266A = 01B8, -> 01D8 to move map down
+    # to move left, all following must be changed:
+    # 8013267A = 0032 (the box)
+    # 801326A6 = 0032 (the box clip)
+    # 80132A92, 80132A96 (some texture shit)
+    # 803e2210 (float) the clip offset
+    # 80132A94 could just be changed to "add r5, r28, r3" unless a branch points directly at it
+    # this also doesn't affect the D-pad icon and arrows.
+    # also with huge map, it shudders sometimes, trying to shrink
+    # back to normal size.
+
     lbz   r4, (menuVisible - mainLoop)(r14)
     cmpwi r4, 0
     beq   .closeAnim
@@ -478,12 +489,12 @@ adjItem_debugText: # r3 = amount to adjust by
 ####################################################################
 
 drawItem_bigMap: # r3 = strBuf
-    addi  r4, r14, (s_BigMap - mainLoop)
-    addi  r5, r14, (s_off - mainLoop)
+    addi  r4, r14, (s_MapSize - mainLoop)
+    addi  r5, r14, (s_Normal - mainLoop)
     lhz   r6, (minimapSizeOverride - mainLoop)(r14)
     cmpwi r6, 0
     beq   .drawBigMap_off
-    addi  r5, r14, (s_on - mainLoop)
+    addi  r5, r14, (s_Huge - mainLoop)
 
 .drawBigMap_off:
     blr
@@ -712,7 +723,9 @@ s_info:      .string "Information"
 s_DebugText: .string "Debug Text: %s"
 s_FOV:       .string "FOV: %d"
 s_gameSpeed: .string "Game Speed: %d%%"
-s_BigMap:    .string "Huge Map: %s"
+s_MapSize:   .string "Map Size: %s"
+s_Normal:    .string "Normal"
+s_Huge:      .string "Huge"
 s_MapAlpha:  .string "Map Opacity: %d"
 s_volMusic:  .string "Music Volume: %d%%"
 s_volSFX:    .string "SFX Volume: %d%%"
