@@ -1,5 +1,6 @@
 # PDA patch:
-# replaces the "PDA On/Off" item with a menu.
+# Replaces the "PDA On/Off" item with a menu with lots of handy features.
+# TODO: change the "PDA On/Off" text.
 .text
 .include "common.s"
 
@@ -11,6 +12,7 @@ patchList:
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
+    .set CUR_CHAR_ADDR,0x817FFFFF # for character swap
     .set MENU_WIDTH,400
     .set MENU_HEIGHT,200
     .set MENU_XPOS,320-(MENU_WIDTH/2)
@@ -47,6 +49,7 @@ itemHook: # called when the PDA is being toggled on/off by player.
 
     JUMP 0x80133A94, r0 # skip the actual on/off code
 
+####################################################################
 
 mainLoop: # called from main loop. r3 = mainLoop
     stwu  r1, -STACK_SIZE(r1) # get some stack space
@@ -54,6 +57,23 @@ mainLoop: # called from main loop. r3 = mainLoop
     stw   r5, SP_LR_SAVE(r1)
     stmw  r3, SP_GPR_SAVE(r1)
     mr    r14, r3
+
+    # do minimap size override
+    LOADWH r5, minimapWidth
+    li     r4, 100 # default height
+    lhz    r6, (minimapSizeOverride - mainLoop)(r14)
+    cmpwi  r6, 0
+    beq    .noMapOverride
+    mr     r4, r6
+    STOREW r4, minimapWidth, r5
+
+.noMapOverride:
+    STOREW r4, minimapHeight, r5
+    LOAD   r5, 0x801324CA # some instructions to patch for height
+    sth    r4, 0(r5)
+    sth    r4, 8(r5)
+    li     r4, 0
+    icbi   r4, r5 # flush instruction cache
 
     lbz   r4, (menuVisible - mainLoop)(r14)
     cmpwi r4, 0
@@ -169,8 +189,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi  r16, r16, LINE_HEIGHT
     CALL  gameTextShowStr
     b     .nextItem
-    # 81682b64
-    # 802c7593
 
 
 .end:
@@ -211,7 +229,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     stb    r3, (menuVisible - mainLoop)(r14)
     LOADWH r5, playerLocked
     STOREB r3, playerLocked, r5 # unpause game
-    li     r4, 0x03E6
+    li     r4, 0x03F2
     CALL   audioPlaySound
     b      .end
 
@@ -329,21 +347,31 @@ doAnimation:
     sth    r6, 0x0E(r19) # set box Y pos
     blr
 
+####################################################################
 
-drawItem_player:
-    # r3 = strBuf
-    # XXX how to get the variable?
-    addi r4, r14, (s_Player - mainLoop)
-    addi r5, r14, (s_Krystal - mainLoop)
+drawItem_player: # r3 = strBuf
+    addi    r4, r14, (s_Player - mainLoop)
+    addi    r5, r14, (s_Krystal - mainLoop)
+    LOADWH  r6, CUR_CHAR_ADDR
+    LOADBL2 r6, CUR_CHAR_ADDR, r6
+    cmpwi   r6, 0
+    beq     .drawPlayer_krystal
+    addi    r5, r14, (s_Fox - mainLoop)
+.drawPlayer_krystal:
     mflr r28
     CALL sprintf
     mtlr r28
     mr   r3, r18 # return strbuf
     blr
 
-adjItem_player:
-    # r3 = amount to adjust by
+adjItem_player: # r3 = amount to adjust by
+    LOADWH  r5, CUR_CHAR_ADDR
+    LOADBL2 r6, CUR_CHAR_ADDR, r5
+    xori    r6, r6, 1
+    STOREB  r6, CUR_CHAR_ADDR, r5
     blr
+
+####################################################################
 
 drawItem_PDAHUD:
     addi    r4, r14, (s_PDAHUD - mainLoop)
@@ -397,48 +425,187 @@ adjItem_PDAHUD:
     STOREB  r6, pdaOn, r7
     blr
 
+####################################################################
 
 # unfortunately this isn't safe.
 # playing invalid sounds can crash the game.
-drawItem_sound:
-    # r3 = strBuf
-    addi r4, r14, (s_sound - mainLoop)
-    lhz  r5, (soundTestId - mainLoop)(r14)
+#drawItem_sound:
+#    # r3 = strBuf
+#    addi r4, r14, (s_sound - mainLoop)
+#    lhz  r5, (soundTestId - mainLoop)(r14)
+#    mflr r28
+#    CALL sprintf
+#    mtlr r28
+#    mr   r3, r18 # return strbuf
+#    blr
+#
+#adjItem_sound:
+#    # r3 = amount to adjust by
+#    lhz  r4, (soundTestId - mainLoop)(r14)
+#    add  r4, r4, r3
+#    sth  r4, (soundTestId - mainLoop)(r14)
+#    li   r3, 0
+#    CALL audioPlaySound
+#    blr
+
+####################################################################
+
+drawItem_debugText: # r3 = strBuf
+    addi  r4, r14, (s_DebugText - mainLoop)
+    addi  r5, r14, (s_off - mainLoop)
+    LOADB r6, enableDebugText
+    cmpwi r6, 0
+    beq   .drawDebugText_off
+    addi  r5, r14, (s_on - mainLoop)
+
+.drawDebugText_off:
     mflr r28
     CALL sprintf
     mtlr r28
     mr   r3, r18 # return strbuf
     blr
 
-adjItem_sound:
-    # r3 = amount to adjust by
-    lhz  r4, (soundTestId - mainLoop)(r14)
-    add  r4, r4, r3
-    sth  r4, (soundTestId - mainLoop)(r14)
-    li   r3, 0
-    CALL audioPlaySound
+adjItem_debugText: # r3 = amount to adjust by
+    LOADWH  r3, enableDebugText
+    LOADBL2 r4, enableDebugText, r3
+    xori    r4, r4, 1
+    STOREB  r4, enableDebugText, r3
     blr
 
+####################################################################
+
+drawItem_bigMap: # r3 = strBuf
+    addi  r4, r14, (s_BigMap - mainLoop)
+    addi  r5, r14, (s_off - mainLoop)
+    lhz   r6, (minimapSizeOverride - mainLoop)(r14)
+    cmpwi r6, 0
+    beq   .drawBigMap_off
+    addi  r5, r14, (s_on - mainLoop)
+
+.drawBigMap_off:
+    mflr r28
+    CALL sprintf
+    mtlr r28
+    mr   r3, r18 # return strbuf
+    blr
+
+adjItem_bigMap: # r3 = amount to adjust by
+    lhz     r3, (minimapSizeOverride - mainLoop)(r14)
+    xori    r3, r3, 0x100
+    sth     r3, (minimapSizeOverride - mainLoop)(r14)
+    blr
+
+####################################################################
+
+drawItem_FOV: # r3 = strBuf
+    addi    r4, r14, (s_FOV - mainLoop)
+    LOADWH  r5, fovY
+    LOADFL2 f1, fovY, r5
+    fctiwz  f1, f1
+    stfd    f1, SP_FLOAT_TMP(r1)
+    lwz     r5, (SP_FLOAT_TMP+4)(r1)
+
+    mflr r28
+    CALL sprintf
+    mtlr r28
+    mr   r3, r18 # return strbuf
+    blr
+
+adjItem_FOV: # r3 = amount to adjust by
+    LOADWH  r5, fovY
+    LOADFL2 f1, fovY, r5 # f1 = FOV
+    lfs     f2, (five - mainLoop)(r14) # f2 = 5
+    fmr     f3, f2 # f3 = 5
+    lfs     f4, (fovMax - mainLoop)(r14) # f4 = 360
+    cmpwi   r3, 0
+    bge     .noNeg
+    fneg    f2, f2
+.noNeg:
+    fadds   f1, f1, f2 # f2 = -5
+    fcmpo   0, f1, f3 # f1 < 5?
+    bge     .fov_moreThan5
+    fmr     f1, f4 # f1 = 360
+.fov_moreThan5:
+    fcmpo   0, f1, f4 # f1 > 360?
+    blt     .fov_lessThan360
+    fmr     f1, f3 # f1 = 5
+.fov_lessThan360:
+    STOREF  f1, fovY, r5
+    LOAD    r3, 0x8000FC4C # patch address
+    lis     r4, 0x6000
+    lfs     f4, (sixty - mainLoop)(r14) # f4 = 60
+    fcmpo   0, f1, f4 # f1 == 60?
+    bne     .fov_doPatch
+    # if FOV is 60, undo the patch to override it.
+    lwz     r4, (fovOpDefault - mainLoop)(r14)
+.fov_doPatch:
+    stw     r4, 0(r3)
+    li      r4, 0
+    icbi    r4, r3 # flush instruction cache
+    blr
+
+####################################################################
+
+drawItem_gameSpeed: # r3 = strBuf
+    addi    r4, r14, (s_gameSpeed - mainLoop)
+    LOADWH  r5, physicsTimeScale
+    LOADFL2 f1, physicsTimeScale, r5 # f1 = speed
+    lfs     f4, (gameSpeedDiv - mainLoop)(r14) # f4 = 60/100
+    fdivs   f1, f1, f4 # f1 = speed%
+    fctiw   f1, f1
+    stfd    f1, SP_FLOAT_TMP(r1)
+    lwz     r5, (SP_FLOAT_TMP+4)(r1)
+    mflr    r28
+    CALL    sprintf
+    mtlr    r28
+    mr      r3, r18 # return strbuf
+    blr
+
+adjItem_gameSpeed: # r3 = amount to adjust by
+    LOADWH  r5, physicsTimeScale
+    LOADFL2 f1, physicsTimeScale, r5 # f1 = physicsTimeScale
+    lfs     f2, (gameSpeedMin - mainLoop)(r14) # f2 = 15
+    fmr     f3, f2 # f3 = 15
+    lfs     f4, (gameSpeedMax - mainLoop)(r14) # f4 = 240
+    cmpwi   r3, 0
+    bge     .noNegSpeed
+    fneg    f2, f2
+.noNegSpeed:
+    fadds   f1, f1, f2 # f2 = -15
+    fcmpo   0, f1, f3 # f1 < 15?
+    bge     .gameSpeed_moreThanMin
+    fmr     f1, f4 # f1 = 240
+.gameSpeed_moreThanMin:
+    fcmpo   0, f1, f4 # f1 > 240?
+    blt     .gameSpeed_lessThanMax
+    fmr     f1, f3 # f1 = 15
+.gameSpeed_lessThanMax:
+    STOREF  f1, physicsTimeScale, r5
+    blr
+
+####################################################################
 
 itemDrawFuncs:
-    .int drawItem_player - mainLoop
-    .int drawItem_PDAHUD - mainLoop
-    #.int drawItem_sound  - mainLoop
+    .int drawItem_player    - mainLoop
+    .int drawItem_PDAHUD    - mainLoop
+    .int drawItem_bigMap    - mainLoop
+    #.int drawItem_sound     - mainLoop
+    .int drawItem_FOV       - mainLoop
+    .int drawItem_gameSpeed - mainLoop
+    .int drawItem_debugText - mainLoop
     .int 0
 
 itemAdjustFuncs:
-    .int adjItem_player - mainLoop
-    .int adjItem_PDAHUD - mainLoop
-    #.int adjItem_sound  - mainLoop
+    .int adjItem_player    - mainLoop
+    .int adjItem_PDAHUD    - mainLoop
+    .int adjItem_bigMap    - mainLoop
+    #.int adjItem_sound     - mainLoop
+    .int adjItem_FOV       - mainLoop
+    .int adjItem_gameSpeed - mainLoop
+    .int adjItem_debugText - mainLoop
 
-# more items to add:
-# - FOV (will require overriding some code when not default)
-# - sound volumes
-# - debug print
-# - time scale
-
-# address of GameTextBox we use
-boxAddr: .int 0x802c7588
+boxAddr: .int 0x802c7588 # address of GameTextBox we use
+fovOpDefault: .int 0xD02D96C4 # opcode to undo FOV patch
 
 # menu animation
 menuAnimTimer: .float 0
@@ -447,10 +614,16 @@ menuAnimSpeed: .float 0.125 # 1 / 8
 #menuAnimSpeed: .float 0.0166666667 # 1 / 60
 
 # float constants
-zero:          .float 0
-one:           .float 1
-two:           .float 2
+zero:          .float   0
+one:           .float   1
+two:           .float   2
+five:          .float   5
+sixty:         .float  60
 twoFiveFive:   .float 255
+fovMax:        .float 175 # the most the game will do
+gameSpeedMin:  .float  15 # 1/4 * 60; also the amount to adjust by
+gameSpeedMax:  .float 240 # 4 * 60
+gameSpeedDiv:  .float 0.6 # 60 / 100, to convert to percent
 floatMagic:    .int 0x43300000,0x80000000
 # lol of course we can't do this.
 #f_menuWidth:   .float MENU_WIDTH
@@ -463,24 +636,31 @@ f_centerX:     .float 320
 f_centerY:     .float 240
 
 # menu state
+minimapSizeOverride: .short 0
 menuVisible:   .byte 0
 menuSelItem:   .byte 0
 menuSelColor:  .byte 0
 menuJustMoved: .byte 0
-soundTestId:   .short 0
+#soundTestId:   .short 0
 
 # string pool
-title:     .string "PDA Menu"
-s_on:      .string "On"
-s_off:     .string "Off"
-s_Player:  .string "Player: %s"
-s_Fox:     .string "Fox"
-s_Krystal: .string "Krystal"
-s_PDAHUD:  .string "PDA HUD: %s"
-s_map:     .string "Map"
-s_compass: .string "Fuel Cell Compass"
-s_info:    .string "Information"
-s_sound:   .string "Sound Test: %04X"
+title:       .string "PDA Menu"
+s_on:        .string "On"
+s_off:       .string "Off"
+s_Player:    .string "Player: %s"
+s_Fox:       .string "Fox"
+s_Krystal:   .string "Krystal"
+s_PDAHUD:    .string "PDA HUD: %s"
+s_map:       .string "Map"
+s_compass:   .string "Fuel Cell Compass"
+s_info:      .string "Information"
+#s_sound:     .string "Sound Test: %04X"
+s_DebugText: .string "Debug Text: %s"
+s_FOV:       .string "FOV: %d"
+s_gameSpeed: .string "Game Speed: %d%%"
+s_BigMap:    .string "Huge Map: %s"
+
+# maybe eventually can add volume controls
 
 strBuf: # buffer to print strings into
     .rept 64

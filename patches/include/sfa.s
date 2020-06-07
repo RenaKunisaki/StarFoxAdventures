@@ -49,24 +49,27 @@
 .set colorFilterColor,       0x803db630 #color
 .set controllerStates,       0x803398f0 #u16 buttons, s8 x, s8 y, s8 cx, s8 cy, s8 L, s8 R
 .set curMapId,               0x803dcec8 #int
-.set dataFileBuffers,        0x8035f3e8 # void*[fileIdx]
-.set dataFileSize,           0x8035f0a8 # int32[fileIdx]
+.set dataFileBuffers,        0x8035f3e8 #void*[fileIdx]
+.set dataFileSize,           0x8035f0a8 #int32[fileIdx]
 .set debugLogBuffer,         0x803aa018
-.set debugLogEnd,            0x803dbc14 # end of debugLogBuffer
+.set debugLogEnd,            0x803dbc14 #end of debugLogBuffer
 .set distortionFilterAngle1, 0x803dce3c #float distortion filter angle
 .set distortionFilterAngle2, 0x803dce44 #float distortion filter angle 2
 .set distortionFilterColor,  0x803dce40 #color distortion filter color
 .set distortionFilterVector, 0x803821c8 #vec3f
+.set enableDebugText,        0x803dda28 #bool
 .set fovY,                   0x803dc8a4 #float
-.set loadedFileMapIds,       0x8035f548 # int16[fileIdx]
+.set loadedFileMapIds,       0x8035f548 #int16[fileIdx]
 .set mapCoords,              0x803dcdc8 #int mapX, mapZ, cellX, cellZ
-.set minimapMode,            0x803dd944 # u8 0=map 1=compass 2=info
+.set minimapHeight,          0x803dbbc4 #int
+.set minimapMode,            0x803dd944 #u8 0=map 1=compass 2=info
+.set minimapWidth,           0x803dbbc0 #int
 .set motionBlurIntensity,    0x803db62c #float, 32=high, 256=unnoticeable
 .set pCurMapInfo,            0x803dce78 #MapInfoEntry*
-.set pdaOn,                  0x803dbbb0 # bool
+.set pdaOn,                  0x803dbbb0 #bool
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
-.set playerId,               0x803a32c8 # 0=Krystal, 1=Fox
-.set playerLocked,           0x803dca3c # bool
+.set playerId,               0x803a32c8 #0=Krystal, 1=Fox
+.set playerLocked,           0x803dca3c #bool
 .set pPlayer,                0x803428f8
 .set viewportAspect,         0x803db268 #float
 

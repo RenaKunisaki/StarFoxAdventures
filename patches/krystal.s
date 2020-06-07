@@ -2,9 +2,7 @@
 # Implemented as a patch file instead of a Gecko code.
 # Improvements:
 # - The SharpClaw Disguise now functions properly.
-# - Switching character now requires holding L and pressing D-pad Down,
-#   instead of just D-pad Down. So you can zoom the map out without
-#   switching. Also, there's now a sound effect.
+# - Switch character using the fancy new PDA menu.
 # - Reduce load time and RAM usage by loading the assets from dedicated
 #   files instead of animtest, and by removing a lot of repeated code.
 # - Remove hardcoded file sizes.
@@ -14,9 +12,9 @@
 .include "common.s"
 
 constants:
-    # controls
-    .set CHAR_SWAP_BUTTONS_PRESS,PAD_BUTTON_DOWN # must press this...
-    .set CHAR_SWAP_BUTTONS_HOLD,PAD_BUTTON_L # while holding these.
+    # make this "global" at a fixed address so that the
+    # PDA Menu patch knows where to find it.
+    .set CUR_CHAR_ADDR,0x817FFFFF # store current character
 
     # model data
     .set KRYSTAL_MODEL_ID,0x4E8
@@ -381,32 +379,9 @@ mainLoopPatch:
     mflr    r15
     stw     r15, SP_LR_SAVE(r1)
     mr      r10, r3
-    lbz     r15, (curCharacter - mainLoopPatch)(r10)
+    LOADWH  r16, CUR_CHAR_ADDR
+    LOADBL2 r15, CUR_CHAR_ADDR, r16
 
-    # check buttons
-    LOADWH  r9, controllerStates
-    LOADWL2 r7, buttonsJustPressed, r9 # buttons pressed
-    LOADHL2 r8, controllerStates,   r9 # buttons held
-    andi.   r3, r8, CHAR_SWAP_BUTTONS_HOLD
-    beq     .mainLoopPatch_noCharSwap
-    andi.   r3, r7, CHAR_SWAP_BUTTONS_PRESS
-    beq     .mainLoopPatch_noCharSwap
-
-    # swap character
-    xori  r15, r15, 1
-    stb   r15, (curCharacter - mainLoopPatch)(r10)
-
-    # do sharpclaw disguise animation (XXX where is that function?)
-    #LOADW r3, pPlayer
-    #li    r4, 9
-    #CALL 0x800395d8
-
-    # play sound effect
-    li    r3, 0
-    li    r4, 0x402
-    CALL  audioPlaySound
-
-.mainLoopPatch_noCharSwap:
     LOADW r3, pPlayer
     cmpwi r3, 0
     beq   .mainLoopPatch_end
@@ -425,7 +400,7 @@ mainLoopPatch:
     cmpwi r4, 2
     beq   .mainLoopPatch_end
 
-    # swap character
+    # set correct model for selected character.
     stb   r15, 0xAD(r3) # model index
     lwz   r4,  0xB8(r3)
     stb   r15, 0x081B(r4) # voice and backpack
@@ -474,6 +449,3 @@ texturePath:
 #    .string "Load model to offs %08X sz %08X"
 #msg_loadModelFailed:
 #    .string "Load model FAIL"
-
-curCharacter:
-    .byte 0 # keeps track of whether to apply swap.
