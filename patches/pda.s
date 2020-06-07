@@ -66,12 +66,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     STOREH r4, minimapAlpha, r5
 
 .noAlphaOverride:
-    li     r4, 100 # default height
-    lhz    r6, (minimapSizeOverride - mainLoop)(r14)
-    cmpwi  r6, 0
-    beq    .noMapOverride
-    mr     r4, r6
-    STOREW r4, minimapWidth, r5
+    li      r4, 100 # default height
+    LOADBL2 r6, minimapMode, r5
+    cmpwi   r6, 0 # map mode?
+    bne     .noMapOverride # don't change size
+    lhz     r6, (minimapSizeOverride - mainLoop)(r14)
+    cmpwi   r6, 0
+    beq     .noMapOverride
+    mr      r4, r6
+    STOREW  r4, minimapWidth, r5
 
 .noMapOverride:
     STOREW r4, minimapHeight, r5
@@ -88,7 +91,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     # ------ menu is visible ------
     # pause game
     LOADWH r5, playerLocked
-    STOREB r4, playerLocked, r5
+    STOREB r4, playerLocked, r5 # stops all objects
     STOREB r4, pauseDisabled, r5 # inhibit pause menu
     li     r4, 1
     STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
