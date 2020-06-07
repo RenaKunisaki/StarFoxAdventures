@@ -13,7 +13,7 @@ patchList:
 
 constants:
     .set CUR_CHAR_ADDR,0x817FFFFF # for character swap
-    .set MENU_WIDTH,400
+    .set MENU_WIDTH,300
     .set MENU_HEIGHT,200
     .set MENU_XPOS,320-(MENU_WIDTH/2)
     .set MENU_YPOS,240-(MENU_HEIGHT/2)
@@ -101,7 +101,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     extsb   r6, r6 # sign extend (PPC Y U NO LBA OPCODE!?)
     extsb   r7, r7
     or      r8, r6, r7 # either
-    andi.   r8, r8, 0xF0 # deadzone
+    andi.   r8, r8, 0xF8 # deadzone
 
     lbz     r5, (menuJustMoved - mainLoop)(r14)
     cmpwi   r5, 0
@@ -113,13 +113,13 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 
 .checkMove: # Check if joystick moved.
-    cmpwi   r7, 0x18
+    cmpwi   r7, 0x10
     bgt     .up
-    cmpwi   r7, -0x18
+    cmpwi   r7, -0x10
     blt     .down
-    cmpwi   r6, 0x18
+    cmpwi   r6, 0x10
     bgt     .right
-    cmpwi   r6, -0x18
+    cmpwi   r6, -0x10
     blt     .left
 
 .resetJustMoved:
@@ -191,6 +191,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     li    r4, 0x93 # box type
     #li    r5, MENU_XPOS + 8 # X pos
     lhz   r5, 0x0C(r19) # X pos
+    addi  r5, r5, 10
     mr    r6, r16 # Y pos
     addi  r16, r16, LINE_HEIGHT
     CALL  gameTextShowStr
@@ -361,9 +362,9 @@ drawItem_player: # r3 = strBuf
     LOADWH  r6, CUR_CHAR_ADDR
     LOADBL2 r6, CUR_CHAR_ADDR, r6
     cmpwi   r6, 0
-    beq     .drawPlayer_krystal
+    beq     drawStrItem
     addi    r5, r14, (s_Fox - mainLoop)
-.drawPlayer_krystal:
+drawStrItem:
     mflr r28
     CALL sprintf
     mtlr r28
@@ -396,11 +397,7 @@ drawItem_PDAHUD:
     addi    r6, r6, .pdaModeStrs - mainLoop # r6 = addr of str offs
     lhzx    r6, r6, r14 # r6 = str offs from mainLoop
     add     r5, r6, r14 # r5 = str
-    mflr    r28
-    CALL    sprintf
-    mtlr    r28
-    mr      r3, r18 # return strbuf
-    blr
+    b       drawStrItem # reuse code
 
 .pdaModeStrs:
     .short s_map     - mainLoop
@@ -439,11 +436,7 @@ adjItem_PDAHUD:
 #    # r3 = strBuf
 #    addi r4, r14, (s_sound - mainLoop)
 #    lhz  r5, (soundTestId - mainLoop)(r14)
-#    mflr r28
-#    CALL sprintf
-#    mtlr r28
-#    mr   r3, r18 # return strbuf
-#    blr
+#    b       drawStrItem # reuse code
 #
 #adjItem_sound:
 #    # r3 = amount to adjust by
@@ -465,11 +458,7 @@ drawItem_debugText: # r3 = strBuf
     addi  r5, r14, (s_on - mainLoop)
 
 .drawDebugText_off:
-    mflr r28
-    CALL sprintf
-    mtlr r28
-    mr   r3, r18 # return strbuf
-    blr
+    b       drawStrItem # reuse code
 
 adjItem_debugText: # r3 = amount to adjust by
     LOADWH  r3, enableDebugText
@@ -489,11 +478,7 @@ drawItem_bigMap: # r3 = strBuf
     addi  r5, r14, (s_on - mainLoop)
 
 .drawBigMap_off:
-    mflr r28
-    CALL sprintf
-    mtlr r28
-    mr   r3, r18 # return strbuf
-    blr
+    b       drawStrItem # reuse code
 
 adjItem_bigMap: # r3 = amount to adjust by
     lhz     r3, (minimapSizeOverride - mainLoop)(r14)
@@ -506,11 +491,7 @@ adjItem_bigMap: # r3 = amount to adjust by
 drawItem_mapAlpha: # r3 = strBuf
     addi r4, r14, (s_MapAlpha - mainLoop)
     lbz  r5, (minimapAlphaOverride - mainLoop)(r14)
-    mflr r28
-    CALL sprintf
-    mtlr r28
-    mr   r3, r18 # return strbuf
-    blr
+    b       drawStrItem # reuse code
 
 adjItem_mapAlpha: # r3 = amount to adjust by
     mulli   r3, r3, 16
@@ -530,51 +511,37 @@ adjItem_mapAlpha: # r3 = amount to adjust by
 ####################################################################
 
 drawItem_FOV: # r3 = strBuf
-    addi    r4, r14, (s_FOV - mainLoop)
+    mr      r7, r3
     LOADWH  r5, fovY
     LOADFL2 f1, fovY, r5
     fctiwz  f1, f1
     stfd    f1, SP_FLOAT_TMP(r1)
     lwz     r5, (SP_FLOAT_TMP+4)(r1)
 
-    mflr r28
-    CALL sprintf
-    mtlr r28
-    mr   r3, r18 # return strbuf
-    blr
-
-adjItem_FOV: # r3 = amount to adjust by
-    LOADWH  r5, fovY
-    LOADFL2 f1, fovY, r5 # f1 = FOV
-    lfs     f2, (five - mainLoop)(r14) # f2 = 5
-    fmr     f3, f2 # f3 = 5
-    lfs     f4, (fovMax - mainLoop)(r14) # f4 = 360
-    cmpwi   r3, 0
-    bge     .noNeg
-    fneg    f2, f2
-.noNeg:
-    fadds   f1, f1, f2 # f2 = -5
-    fcmpo   0, f1, f3 # f1 < 5?
-    bge     .fov_moreThan5
-    fmr     f1, f4 # f1 = 360
-.fov_moreThan5:
-    fcmpo   0, f1, f4 # f1 > 360?
-    blt     .fov_lessThan360
-    fmr     f1, f3 # f1 = 5
-.fov_lessThan360:
-    STOREF  f1, fovY, r5
+    # if FOV is 60 (default), undo the override patch.
+    # otherwise, apply it.
+    # doing this here instead of on adjust to simplify
+    # the code a bit.
     LOAD    r3, 0x8000FC4C # patch address
-    lis     r4, 0x6000
-    lfs     f4, (sixty - mainLoop)(r14) # f4 = 60
-    fcmpo   0, f1, f4 # f1 == 60?
+    lis     r4, 0x6000 # NOP
+    cmpwi   r5, 60
     bne     .fov_doPatch
-    # if FOV is 60, undo the patch to override it.
     lwz     r4, (fovOpDefault - mainLoop)(r14)
 .fov_doPatch:
     stw     r4, 0(r3)
     li      r4, 0
     icbi    r4, r3 # flush instruction cache
-    blr
+
+    mr      r3, r7
+    addi    r4, r14, (s_FOV - mainLoop)
+    b       drawStrItem # reuse code
+
+adjItem_FOV: # r3 = amount to adjust by
+    LOAD    r5, fovY
+    lfs     f2, (five   - mainLoop)(r14) # f2 = step
+    lfs     f3, (five   - mainLoop)(r14) # f3 = min
+    lfs     f4, (fovMax - mainLoop)(r14) # f4 = max
+    b       adjItem_float
 
 ####################################################################
 
@@ -587,33 +554,71 @@ drawItem_gameSpeed: # r3 = strBuf
     fctiw   f1, f1
     stfd    f1, SP_FLOAT_TMP(r1)
     lwz     r5, (SP_FLOAT_TMP+4)(r1)
-    mflr    r28
-    CALL    sprintf
-    mtlr    r28
-    mr      r3, r18 # return strbuf
-    blr
+    b       drawStrItem # reuse code
 
 adjItem_gameSpeed: # r3 = amount to adjust by
-    LOADWH  r5, physicsTimeScale
-    LOADFL2 f1, physicsTimeScale, r5 # f1 = physicsTimeScale
+    LOAD    r5, physicsTimeScale
     lfs     f2, (gameSpeedMin - mainLoop)(r14) # f2 = 15
     fmr     f3, f2 # f3 = 15
     lfs     f4, (gameSpeedMax - mainLoop)(r14) # f4 = 240
+
+adjItem_float: # r3=adj, r5=&val, f2=adjStep, f3=min, f4=max
+    lfs     f1, 0(r5) # f1 = val
     cmpwi   r3, 0
-    bge     .noNegSpeed
+    bge     .noNegFloat
     fneg    f2, f2
-.noNegSpeed:
-    fadds   f1, f1, f2 # f2 = -15
-    fcmpo   0, f1, f3 # f1 < 15?
-    bge     .gameSpeed_moreThanMin
-    fmr     f1, f4 # f1 = 240
-.gameSpeed_moreThanMin:
-    fcmpo   0, f1, f4 # f1 > 240?
-    blt     .gameSpeed_lessThanMax
-    fmr     f1, f3 # f1 = 15
-.gameSpeed_lessThanMax:
-    STOREF  f1, physicsTimeScale, r5
+.noNegFloat:
+    fadds   f1, f1, f2 # f2 = -adjStep
+    fcmpo   0, f1, f3 # f1 < min?
+    bge     .float_moreThanMin
+    # XXX wraparound doesn't work nicely due to rounding error.
+    # sometims you'll jump from 10% to 200% instead of to 0%.
+    #fmr     f1, f4 # f1 = max
+    fmr     f1, f3 # f1 = min
+.float_moreThanMin:
+    fcmpo   0, f1, f4 # f1 > max?
+    ble     .float_lessThanMax
+    #fmr     f1, f3 # f1 = min
+    fmr     f1, f4 # f1 = max
+.float_lessThanMax:
+    stfs    f1, 0(r5)
     blr
+
+####################################################################
+
+drawItem_volMusic: # r3 = strBuf
+    addi    r4, r14, (s_volMusic - mainLoop)
+    LOADWH  r5, volumeMusic
+    LOADFL2 f1, volumeMusic, r5 # f1 = volume
+drawItem_volume:
+    lfs     f4, (oneHundred - mainLoop)(r14) # f4 = 100
+    fmuls   f1, f1, f4 # f1 = vol%
+    fctiw   f1, f1
+    stfd    f1, SP_FLOAT_TMP(r1)
+    lwz     r5, (SP_FLOAT_TMP+4)(r1)
+    b       drawStrItem # reuse code
+
+adjItem_volMusic: # r3 = amount to adjust by
+    LOAD    r5, volumeMusic
+
+adjItem_volume:
+    lfs     f2, (volAdjStep - mainLoop)(r14) # f2 = 0.1
+    lfs     f3, (zero - mainLoop)(r14) # f3 = 0
+    lfs     f4, (two - mainLoop)(r14) # f4 = 2
+    b       adjItem_float
+
+####################################################################
+
+drawItem_volSFX: # r3 = strBuf
+    addi    r4, r14, (s_volSFX - mainLoop)
+    LOADWH  r5, volumeSFX
+    LOADFL2 f1, volumeSFX, r5 # f1 = volume
+    b       drawItem_volume
+
+adjItem_volSFX: # r3 = amount to adjust by
+    LOAD    r5, volumeSFX
+    b       adjItem_volume
+
 
 ####################################################################
 
@@ -624,6 +629,8 @@ itemDrawFuncs:
     .int drawItem_mapAlpha  - mainLoop
     #.int drawItem_sound     - mainLoop
     .int drawItem_FOV       - mainLoop
+    .int drawItem_volMusic  - mainLoop
+    .int drawItem_volSFX    - mainLoop
     .int drawItem_gameSpeed - mainLoop
     .int drawItem_debugText - mainLoop
     .int 0
@@ -635,6 +642,8 @@ itemAdjustFuncs:
     .int adjItem_mapAlpha  - mainLoop
     #.int adjItem_sound     - mainLoop
     .int adjItem_FOV       - mainLoop
+    .int adjItem_volMusic  - mainLoop
+    .int adjItem_volSFX    - mainLoop
     .int adjItem_gameSpeed - mainLoop
     .int adjItem_debugText - mainLoop
 
@@ -653,18 +662,20 @@ one:           .float   1
 two:           .float   2
 five:          .float   5
 sixty:         .float  60
+oneHundred:    .float 100
 twoFiveFive:   .float 255
 fovMax:        .float 175 # the most the game will do
 gameSpeedMin:  .float  15 # 1/4 * 60; also the amount to adjust by
 gameSpeedMax:  .float 240 # 4 * 60
 gameSpeedDiv:  .float 0.6 # 60 / 100, to convert to percent
+volAdjStep:    .float 0.1
 floatMagic:    .int 0x43300000,0x80000000
 # lol of course we can't do this.
 #f_menuWidth:   .float MENU_WIDTH
 #f_menuHeight:  .float MENU_HEIGHT
 #f_menuXPos:    .float MENU_XPOS
 #f_menuYPos:    .float MENU_YPOS
-f_menuWidth:   .float 400
+f_menuWidth:   .float 300
 f_menuHeight:  .float 200
 f_centerX:     .float 320
 f_centerY:     .float 240
@@ -695,6 +706,9 @@ s_FOV:       .string "FOV: %d"
 s_gameSpeed: .string "Game Speed: %d%%"
 s_BigMap:    .string "Huge Map: %s"
 s_MapAlpha:  .string "Map Opacity: %d"
+s_volMusic:  .string "Music Volume: %d%%"
+s_volSFX:    .string "SFX Volume: %d%%"
+s_volCS:     .string "CutScene Volume: %d%%"
 
 # maybe eventually can add volume controls,
 # option to move HUD to extreme edges of screen

@@ -73,6 +73,9 @@
 .set playerLocked,           0x803dca3c #bool
 .set pPlayer,                0x803428f8
 .set viewportAspect,         0x803db268 #float
+.set volumeCutScenes,        0x803db253 #s8
+.set volumeMusic,            0x803bd754 #float
+.set volumeSFX,              0x803bd784 #float
 
 # SFA file IDs
 .set AUDIO_TAB,0x00
