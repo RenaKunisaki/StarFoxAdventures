@@ -89,6 +89,9 @@ mainLoop: # called from main loop. r3 = mainLoop
     # pause game
     LOADWH r5, playerLocked
     STOREB r4, playerLocked, r5
+    STOREB r4, pauseDisabled, r5 # inhibit pause menu
+    li     r4, 1
+    STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
 
     # check input
     LOADWH  r5, controllerStates
@@ -240,6 +243,8 @@ mainLoop: # called from main loop. r3 = mainLoop
     stb    r3, (menuVisible - mainLoop)(r14)
     LOADWH r5, playerLocked
     STOREB r3, playerLocked, r5 # unpause game
+    LOADWH r5, pauseDisabled
+    STOREB r3, pauseDisabled, r5 # allow pause menu
     li     r4, 0x03F2
     CALL   audioPlaySound
     b      .end

@@ -3,6 +3,7 @@
 .set __save_gpr,0x802860a8
 .set allocTagged,0x80023cc8 #void* (uint size,AllocTag tag,char *name)
 .set audioPlaySound,0x8000bb18 #(ObjInstance *sourceObj,SoundId soundid)
+.set buttonDisable,0x80014b3c #int pad, u32 buttons
 .set ClearArena,0x80240400
 .set dCacheFlush,0x80241a50 #(dest, size) -> dest
 .set debugPrintf,0x801378a8
@@ -46,6 +47,8 @@
 .set bEnableViewFinderHud,   0x803dcdfa #bool  viewfinder
 .set blurFilterArea,         0x803dce48 #vec3f blur filter area
 .set buttonsJustPressed,     0x803398e0 #u32
+.set cMenuOpen,              0x803dd795 #bool
+.set cMenuState,             0x803dd7d4 #u8
 .set colorFilterColor,       0x803db630 #color
 .set controllerStates,       0x803398f0 #u16 buttons, s8 x, s8 y, s8 cx, s8 cy, s8 L, s8 R
 .set curMapId,               0x803dcec8 #int
@@ -66,12 +69,15 @@
 .set minimapMode,            0x803dd944 #u8 0=map 1=compass 2=info
 .set minimapWidth,           0x803dbbc0 #int
 .set motionBlurIntensity,    0x803db62c #float, 32=high, 256=unnoticeable
+.set pauseDisabled,          0x803dd789 #bool
 .set pCurMapInfo,            0x803dce78 #MapInfoEntry*
 .set pdaOn,                  0x803dbbb0 #bool
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox
 .set playerLocked,           0x803dca3c #bool
 .set pPlayer,                0x803428f8
+.set shouldCloseCMenu,       0x803dd7b4 #bool
+.set shouldOpenCMenu,        0x803dd7d5 #u8
 .set viewportAspect,         0x803db268 #float
 .set volumeCutScenes,        0x803db253 #s8
 .set volumeMusic,            0x803bd754 #float
