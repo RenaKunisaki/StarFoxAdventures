@@ -187,7 +187,11 @@ mainLoop: # called from main loop. r3 = mainLoop
     mtspr CTR, r3
     mr    r3, r18
     bctrl
-    #mr    r3, r18 # strBuf
+    # the item draw function should return r4=string,
+    # and any additional sprintf args.
+    mr    r3, r18 # strBuf
+    CALL sprintf
+    mr    r3, r18 # strBuf
     li    r4, 0x93 # box type
     #li    r5, MENU_XPOS + 8 # X pos
     lhz   r5, 0x0C(r19) # X pos
@@ -362,13 +366,9 @@ drawItem_player: # r3 = strBuf
     LOADWH  r6, CUR_CHAR_ADDR
     LOADBL2 r6, CUR_CHAR_ADDR, r6
     cmpwi   r6, 0
-    beq     drawStrItem
+    beq     .drawPlayer_krystal
     addi    r5, r14, (s_Fox - mainLoop)
-drawStrItem:
-    mflr r28
-    CALL sprintf
-    mtlr r28
-    mr   r3, r18 # return strbuf
+.drawPlayer_krystal:
     blr
 
 adjItem_player: # r3 = amount to adjust by
@@ -397,7 +397,7 @@ drawItem_PDAHUD:
     addi    r6, r6, .pdaModeStrs - mainLoop # r6 = addr of str offs
     lhzx    r6, r6, r14 # r6 = str offs from mainLoop
     add     r5, r6, r14 # r5 = str
-    b       drawStrItem # reuse code
+    blr
 
 .pdaModeStrs:
     .short s_map     - mainLoop
@@ -436,7 +436,7 @@ adjItem_PDAHUD:
 #    # r3 = strBuf
 #    addi r4, r14, (s_sound - mainLoop)
 #    lhz  r5, (soundTestId - mainLoop)(r14)
-#    b       drawStrItem # reuse code
+#    blr
 #
 #adjItem_sound:
 #    # r3 = amount to adjust by
@@ -458,7 +458,7 @@ drawItem_debugText: # r3 = strBuf
     addi  r5, r14, (s_on - mainLoop)
 
 .drawDebugText_off:
-    b       drawStrItem # reuse code
+    blr
 
 adjItem_debugText: # r3 = amount to adjust by
     LOADWH  r3, enableDebugText
@@ -478,7 +478,7 @@ drawItem_bigMap: # r3 = strBuf
     addi  r5, r14, (s_on - mainLoop)
 
 .drawBigMap_off:
-    b       drawStrItem # reuse code
+    blr
 
 adjItem_bigMap: # r3 = amount to adjust by
     lhz     r3, (minimapSizeOverride - mainLoop)(r14)
@@ -491,7 +491,7 @@ adjItem_bigMap: # r3 = amount to adjust by
 drawItem_mapAlpha: # r3 = strBuf
     addi r4, r14, (s_MapAlpha - mainLoop)
     lbz  r5, (minimapAlphaOverride - mainLoop)(r14)
-    b       drawStrItem # reuse code
+    blr
 
 adjItem_mapAlpha: # r3 = amount to adjust by
     mulli   r3, r3, 16
@@ -534,7 +534,7 @@ drawItem_FOV: # r3 = strBuf
 
     mr      r3, r7
     addi    r4, r14, (s_FOV - mainLoop)
-    b       drawStrItem # reuse code
+    blr
 
 adjItem_FOV: # r3 = amount to adjust by
     LOAD    r5, fovY
@@ -554,7 +554,7 @@ drawItem_gameSpeed: # r3 = strBuf
     fctiw   f1, f1
     stfd    f1, SP_FLOAT_TMP(r1)
     lwz     r5, (SP_FLOAT_TMP+4)(r1)
-    b       drawStrItem # reuse code
+    blr
 
 adjItem_gameSpeed: # r3 = amount to adjust by
     LOAD    r5, physicsTimeScale
@@ -596,7 +596,7 @@ drawItem_volume:
     fctiw   f1, f1
     stfd    f1, SP_FLOAT_TMP(r1)
     lwz     r5, (SP_FLOAT_TMP+4)(r1)
-    b       drawStrItem # reuse code
+    blr
 
 adjItem_volMusic: # r3 = amount to adjust by
     LOAD    r5, volumeMusic
@@ -709,9 +709,6 @@ s_MapAlpha:  .string "Map Opacity: %d"
 s_volMusic:  .string "Music Volume: %d%%"
 s_volSFX:    .string "SFX Volume: %d%%"
 s_volCS:     .string "CutScene Volume: %d%%"
-
-# maybe eventually can add volume controls,
-# option to move HUD to extreme edges of screen
 
 strBuf: # buffer to print strings into
     .rept 64
