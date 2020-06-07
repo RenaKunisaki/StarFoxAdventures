@@ -61,6 +61,7 @@
 .set fovY,                   0x803dc8a4 #float
 .set loadedFileMapIds,       0x8035f548 #int16[fileIdx]
 .set mapCoords,              0x803dcdc8 #int mapX, mapZ, cellX, cellZ
+.set minimapAlpha,           0x803dd930 #u16 x2
 .set minimapHeight,          0x803dbbc4 #int
 .set minimapMode,            0x803dd944 #u8 0=map 1=compass 2=info
 .set minimapWidth,           0x803dbbc0 #int

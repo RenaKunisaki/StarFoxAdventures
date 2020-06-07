@@ -58,8 +58,14 @@ mainLoop: # called from main loop. r3 = mainLoop
     stmw  r3, SP_GPR_SAVE(r1)
     mr    r14, r3
 
-    # do minimap size override
+    # do minimap size/opacity override
     LOADWH r5, minimapWidth
+    lbz    r4, (minimapAlphaOverride - mainLoop)(r14)
+    cmpwi  r4, 0xFF
+    beq    .noAlphaOverride
+    STOREH r4, minimapAlpha, r5
+
+.noAlphaOverride:
     li     r4, 100 # default height
     lhz    r6, (minimapSizeOverride - mainLoop)(r14)
     cmpwi  r6, 0
@@ -497,6 +503,32 @@ adjItem_bigMap: # r3 = amount to adjust by
 
 ####################################################################
 
+drawItem_mapAlpha: # r3 = strBuf
+    addi r4, r14, (s_MapAlpha - mainLoop)
+    lbz  r5, (minimapAlphaOverride - mainLoop)(r14)
+    mflr r28
+    CALL sprintf
+    mtlr r28
+    mr   r3, r18 # return strbuf
+    blr
+
+adjItem_mapAlpha: # r3 = amount to adjust by
+    mulli   r3, r3, 16
+    lbz     r4, (minimapAlphaOverride - mainLoop)(r14)
+    add     r4, r4, r3
+    cmpwi   r4, 255
+    ble     .adjMapAlpha_notMax
+    li      r4, 255
+.adjMapAlpha_notMax:
+    cmpwi   r4, 0
+    bge     .adjMapAlpha_notMin
+    li      r4, 0
+.adjMapAlpha_notMin:
+    stb     r4, (minimapAlphaOverride - mainLoop)(r14)
+    blr
+
+####################################################################
+
 drawItem_FOV: # r3 = strBuf
     addi    r4, r14, (s_FOV - mainLoop)
     LOADWH  r5, fovY
@@ -589,6 +621,7 @@ itemDrawFuncs:
     .int drawItem_player    - mainLoop
     .int drawItem_PDAHUD    - mainLoop
     .int drawItem_bigMap    - mainLoop
+    .int drawItem_mapAlpha  - mainLoop
     #.int drawItem_sound     - mainLoop
     .int drawItem_FOV       - mainLoop
     .int drawItem_gameSpeed - mainLoop
@@ -599,6 +632,7 @@ itemAdjustFuncs:
     .int adjItem_player    - mainLoop
     .int adjItem_PDAHUD    - mainLoop
     .int adjItem_bigMap    - mainLoop
+    .int adjItem_mapAlpha  - mainLoop
     #.int adjItem_sound     - mainLoop
     .int adjItem_FOV       - mainLoop
     .int adjItem_gameSpeed - mainLoop
@@ -636,7 +670,8 @@ f_centerX:     .float 320
 f_centerY:     .float 240
 
 # menu state
-minimapSizeOverride: .short 0
+minimapSizeOverride:  .short 0
+minimapAlphaOverride: .byte 255
 menuVisible:   .byte 0
 menuSelItem:   .byte 0
 menuSelColor:  .byte 0
@@ -659,8 +694,10 @@ s_DebugText: .string "Debug Text: %s"
 s_FOV:       .string "FOV: %d"
 s_gameSpeed: .string "Game Speed: %d%%"
 s_BigMap:    .string "Huge Map: %s"
+s_MapAlpha:  .string "Map Opacity: %d"
 
-# maybe eventually can add volume controls
+# maybe eventually can add volume controls,
+# option to move HUD to extreme edges of screen
 
 strBuf: # buffer to print strings into
     .rept 64
