@@ -2,9 +2,10 @@ drawItem_mapAlpha:
     addi  r4, r14, (s_MapAlpha - mainLoop)
     lbz   r5, (minimapAlphaOverride - mainLoop)(r14)
     # convert to percent
-    mulli r5, r5, 10000
+    mulli r5, r5, 1000
     li    r6, 25500 # PPC Y U NO DIVLI?
     divw  r5, r5, r6
+    mulli r5, r5, 10 # quick hack to hide rounding error.
     blr
 
 adjItem_mapAlpha: # r3 = amount to adjust by
