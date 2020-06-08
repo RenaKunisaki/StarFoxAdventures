@@ -1,10 +1,14 @@
 drawItem_mapAlpha:
-    addi r4, r14, (s_MapAlpha - mainLoop)
-    lbz  r5, (minimapAlphaOverride - mainLoop)(r14)
+    addi  r4, r14, (s_MapAlpha - mainLoop)
+    lbz   r5, (minimapAlphaOverride - mainLoop)(r14)
+    # convert to percent
+    mulli r5, r5, 10000
+    li    r6, 25500 # PPC Y U NO DIVLI?
+    divw  r5, r5, r6
     blr
 
 adjItem_mapAlpha: # r3 = amount to adjust by
-    mulli   r3, r3, 16
+    mulli   r3, r3, 25
     lbz     r4, (minimapAlphaOverride - mainLoop)(r14)
     add     r4, r4, r3
     cmpwi   r4, 255
