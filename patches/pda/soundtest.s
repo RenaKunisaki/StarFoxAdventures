@@ -1,5 +1,4 @@
 drawItem_sound:
-    # r3 = strBuf
     addi r4, r14, (s_sound - mainLoop)
     lhz  r5, (soundTestId - mainLoop)(r14)
     blr

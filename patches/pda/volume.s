@@ -1,4 +1,4 @@
-drawItem_volMusic: # r3 = strBuf
+drawItem_volMusic:
     addi    r4, r14, (s_volMusic - mainLoop)
     LOADWH  r5, volumeMusic
     LOADFL2 f1, volumeMusic, r5 # f1 = volume
@@ -21,7 +21,7 @@ adjItem_volume:
 
 ####################################################################
 
-drawItem_volSFX: # r3 = strBuf
+drawItem_volSFX:
     addi    r4, r14, (s_volSFX - mainLoop)
     LOADWH  r5, volumeSFX
     LOADFL2 f1, volumeSFX, r5 # f1 = volume

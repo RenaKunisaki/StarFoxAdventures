@@ -1,4 +1,4 @@
-drawItem_FOV: # r3 = strBuf
+drawItem_FOV:
     mr      r7, r3
     LOADWH  r5, fovY
     LOADFL2 f1, fovY, r5

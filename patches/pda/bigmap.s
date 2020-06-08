@@ -1,4 +1,4 @@
-drawItem_bigMap: # r3 = strBuf
+drawItem_bigMap:
     addi  r4, r14, (s_MapSize - mainLoop)
     addi  r5, r14, (s_Normal - mainLoop)
     lhz   r6, (minimapSizeOverride - mainLoop)(r14)

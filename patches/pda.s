@@ -18,10 +18,11 @@ constants:
     .set MENU_XPOS,320-(MENU_WIDTH/2)
     .set MENU_YPOS,240-(MENU_HEIGHT/2)
     .set LINE_HEIGHT,18
-    .set STACK_SIZE,0x100 # how much to reserve
-    .set SP_LR_SAVE,0x104 # this is what the game does
-    .set SP_FLOAT_TMP,0x20 # temporary storage for float conversion (8 bytes)
-    .set SP_GPR_SAVE,0x28
+    .set STACK_SIZE,0x180 # how much to reserve
+    .set SP_LR_SAVE,0x184 # this is what the game does
+    .set SP_STR_BUF,0x20 # temporary string buffer
+    .set SP_FLOAT_TMP,0xA0 # temporary storage for float conversion (8 bytes)
+    .set SP_GPR_SAVE,0xA8
 
 entry: # called as soon as our patch is loaded.
     # nothing to do

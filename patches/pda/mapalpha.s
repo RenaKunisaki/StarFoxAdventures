@@ -1,4 +1,4 @@
-drawItem_mapAlpha: # r3 = strBuf
+drawItem_mapAlpha:
     addi r4, r14, (s_MapAlpha - mainLoop)
     lbz  r5, (minimapAlphaOverride - mainLoop)(r14)
     blr

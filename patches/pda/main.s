@@ -78,7 +78,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     lhz   r16, 0x0E(r19)
     addi  r16, r16, LINE_HEIGHT # Y offset
     lbz   r17, (menuSelItem - mainLoop)(r14)
-    addi  r18, r14, strBuf - mainLoop
+    addi  r18, r1, SP_STR_BUF
 
 .nextItem:
     li    r3, 255
@@ -106,9 +106,9 @@ mainLoop: # called from main loop. r3 = mainLoop
     bctrl
     # the item draw function should return r4=string,
     # and any additional sprintf args.
-    mr    r3, r18 # strBuf
+    #addi  r3, r1, SP_STR_BUF
     CALL sprintf
-    mr    r3, r18 # strBuf
+    addi  r3, r1, SP_STR_BUF
     li    r4, 0x93 # box type
     #li    r5, MENU_XPOS + 8 # X pos
     lhz   r5, 0x0C(r19) # X pos

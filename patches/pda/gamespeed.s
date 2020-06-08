@@ -1,4 +1,4 @@
-drawItem_gameSpeed: # r3 = strBuf
+drawItem_gameSpeed:
     addi    r4, r14, (s_gameSpeed - mainLoop)
     LOADWH  r5, physicsTimeScale
     LOADFL2 f1, physicsTimeScale, r5 # f1 = speed

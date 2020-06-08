@@ -1,4 +1,4 @@
-drawItem_player: # r3 = strBuf
+drawItem_player:
     addi    r4, r14, (s_Player - mainLoop)
     addi    r5, r14, (s_Krystal - mainLoop)
     LOADWH  r6, CUR_CHAR_ADDR

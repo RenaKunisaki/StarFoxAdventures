@@ -1,4 +1,4 @@
-drawItem_debugText: # r3 = strBuf
+drawItem_debugText:
     addi  r4, r14, (s_DebugText - mainLoop)
     addi  r5, r14, (s_off - mainLoop)
     LOADB r6, enableDebugText

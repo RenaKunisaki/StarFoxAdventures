@@ -78,8 +78,3 @@ s_MapAlpha:  .string "Map Opacity: %d"
 s_volMusic:  .string "Music Volume: %d%%"
 s_volSFX:    .string "SFX Volume: %d%%"
 s_volCS:     .string "CutScene Volume: %d%%"
-
-strBuf: # buffer to print strings into
-    .rept 64
-    .byte 0
-    .endr
