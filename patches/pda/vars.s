@@ -15,13 +15,6 @@
 # This points to the box in question.
 boxAddr: .int 0x802c7588
 
-fovOpDefault: .int 0xD02D96C4 # opcode to undo FOV patch
-
-# menu animation
-menuAnimTimer: .float 0
-menuAnimSpeed: .float 0.125 # 1 / 8
-#menuAnimSpeed: .float 0.066666667 # 1 / 15
-#menuAnimSpeed: .float 0.0166666667 # 1 / 60
 
 # float constants
 zero:          .float   0

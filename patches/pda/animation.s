@@ -79,3 +79,9 @@ doCloseAnimation:
 .closeAnimContinue:
     li     r3, 1 # menu isn't fully closed, so draw it.
     b      .animContinue
+
+
+menuAnimTimer: .float 0
+menuAnimSpeed: .float 0.125 # 1 / 8
+#menuAnimSpeed: .float 0.066666667 # 1 / 15
+#menuAnimSpeed: .float 0.0166666667 # 1 / 60

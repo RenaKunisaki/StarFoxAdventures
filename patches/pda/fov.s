@@ -30,3 +30,5 @@ adjItem_FOV: # r3 = amount to adjust by
     lfs     f3, (five   - mainLoop)(r14) # f3 = min
     lfs     f4, (fovMax - mainLoop)(r14) # f4 = max
     b       adjItem_float
+
+fovOpDefault: .int 0xD02D96C4 # opcode to undo FOV patch
