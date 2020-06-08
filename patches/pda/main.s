@@ -14,7 +14,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     bne   .menuMain
     beql  doCloseAnimation # if menu not "visible", do close anim.
     cmpwi r3, 0
-    beq   .mainEnd # if close anim finished, don't draw anything.
+    beq   .menuNotOpen # if close anim finished, don't draw anything.
     b     .drawMain
 
 .menuMain:
@@ -117,6 +117,19 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL  gameTextShowStr
     b     .nextItem
 
+
+.menuNotOpen:
+    # allow L+Z+B to open menu as well.
+    LOADWH  r5, controllerStates
+    LOADWL2 r6, buttonsJustPressed, r5
+    LOADHL2 r7, controllerStates, r5 # buttons held
+    andi.   r7, r7, PAD_BUTTON_L | PAD_BUTTON_Z
+    cmpwi   r7, PAD_BUTTON_L | PAD_BUTTON_Z
+    bne     .mainEnd
+    cmpwi   r6, PAD_BUTTON_B
+    bne     .mainEnd
+    li      r4, 1
+    stb     r4, (menuVisible - mainLoop)(r14)
 
 .mainEnd:
     lwz  r5, SP_LR_SAVE(r1)
