@@ -30,3 +30,33 @@ drawItem_volSFX:
 adjItem_volSFX: # r3 = amount to adjust by
     LOAD    r5, volumeSFX
     b       adjItem_volume
+
+####################################################################
+
+drawItem_volCutScene:
+    # this one is inexplicably not a float.
+    # it ranges from 0 to 127.
+    # XXX does going beyond 127 actually do something?
+    addi    r4, r14, (s_volCS - mainLoop)
+    LOADB   r5, volumeCutScenes
+    mulli   r5, r5, 1000
+    li      r6, 12700 # PPC Y U NO DIVLI?
+    divw    r5, r5, r6
+    mulli   r5, r5, 10 # quick hack to hide rounding error.
+    blr
+
+adjItem_volCutScene: # r3 = amount to adjust by
+    mulli   r3, r3, 13
+    LOADWH  r5, volumeCutScenes
+    LOADBL2 r4, volumeCutScenes, r5
+    add     r4, r4, r3
+    cmpwi   r4, 255
+    ble     .adjVolCs_notMax
+    li      r4, 255
+.adjVolCs_notMax:
+    cmpwi   r4, 0
+    bge     .adjVolCs_notMin
+    li      r4, 0
+.adjVolCs_notMin:
+    STOREB  r4, volumeCutScenes, r5
+    blr
