@@ -106,7 +106,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     bctrl
     # the item draw function should return r4=string,
     # and any additional sprintf args.
-    #addi  r3, r1, SP_STR_BUF
     CALL sprintf
     addi  r3, r1, SP_STR_BUF
     li    r4, 0x93 # box type

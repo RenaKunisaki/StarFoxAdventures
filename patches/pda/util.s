@@ -11,6 +11,8 @@ adjItem_float: # r3=adj, r5=&val, f2=adjStep, f3=min, f4=max
     bge     .float_moreThanMin
     # XXX wraparound doesn't work nicely due to rounding error.
     # sometims you'll jump from 10% to 200% instead of to 0%.
+    # (fun fact: Super Smash Bros Melee's debug menus have this
+    # exact same bug.)
     #fmr     f1, f4 # f1 = max
     fmr     f1, f3 # f1 = min
 .float_moreThanMin:

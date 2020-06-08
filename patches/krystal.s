@@ -10,12 +10,9 @@
 # - Patch animations instead of using Fox's.
 .text
 .include "common.s"
+.include "globals.s"
 
 constants:
-    # make this "global" at a fixed address so that the
-    # PDA Menu patch knows where to find it.
-    .set CUR_CHAR_ADDR,0x817FFFFF # store current character
-
     # model data
     .set KRYSTAL_MODEL_ID,0x4E8
 
