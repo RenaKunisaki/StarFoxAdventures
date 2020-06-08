@@ -5,47 +5,19 @@ mainLoop: # called from main loop. r3 = mainLoop
     stmw  r3, SP_GPR_SAVE(r1)
     mr    r14, r3
 
-    # do minimap size/opacity override
-    LOADWH r5, minimapWidth
-    lbz    r4, (minimapAlphaOverride - mainLoop)(r14)
-    cmpwi  r4, 0xFF
-    beq    .noAlphaOverride
-    STOREH r4, minimapAlpha, r5
+    # do HUD overrides, even if menu isn't open.
+    bl    doHudOverrides
 
-.noAlphaOverride:
-    li      r4, 100 # default height
-    LOADBL2 r6, minimapMode, r5
-    cmpwi   r6, 0 # map mode?
-    bne     .noMapOverride # don't change size
-    lhz     r6, (minimapSizeOverride - mainLoop)(r14)
-    cmpwi   r6, 0
-    beq     .noMapOverride
-    mr      r4, r6
-    STOREW  r4, minimapWidth, r5
-
-.noMapOverride:
-    STOREW r4, minimapHeight, r5
-    LOAD   r5, 0x801324CA # some instructions to patch for height
-    sth    r4, 0(r5)
-    sth    r4, 8(r5)
-    li     r4, 0
-    icbi   r4, r5 # flush instruction cache
-
-    # 8013266A = 01B8, -> 01D8 to move map down
-    # to move left, all following must be changed:
-    # 8013267A = 0032 (the box)
-    # 801326A6 = 0032 (the box clip)
-    # 80132A92, 80132A96 (some texture shit)
-    # 803e2210 (float) the clip offset
-    # 80132A94 could just be changed to "add r5, r28, r3" unless a branch points directly at it
-    # this also doesn't affect the D-pad icon and arrows.
-    # also with huge map, it shudders sometimes, trying to shrink
-    # back to normal size.
-
+    # check if menu is closed or closing.
     lbz   r4, (menuVisible - mainLoop)(r14)
     cmpwi r4, 0
-    beq   .closeAnim
+    bne   .menuMain
+    beql  doCloseAnimation # if menu not "visible", do close anim.
+    cmpwi r3, 0
+    beq   .mainEnd # if close anim finished, don't draw anything.
+    b     .drawMain
 
+.menuMain:
     # ------ menu is visible ------
     # pause game
     LOADWH r5, playerLocked
@@ -90,26 +62,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     stb     r7, (menuJustMoved - mainLoop)(r14)
 
 .draw: # do animation and setup box
-    lwz    r3, (menuAnimTimer - mainLoop)(r14)
-    cmpwi  r3, 0
-    bne    .noOpenSound
-    li     r4, 0x03E5
-    CALL   audioPlaySound
-
-.noOpenSound:
-    # do animation.
-    lfs    f1, (menuAnimTimer - mainLoop)(r14)
-    lfs    f2, (menuAnimSpeed - mainLoop)(r14)
-    fadds  f1, f1, f2
-    lfs    f3, (one - mainLoop)(r14)
-    fcmpo  0, f1, f3
-    blt    .animContinue
-    fmr    f1, f3 # clamp anim timer to 1
-
-.animContinue:
-    lwz    r19, (boxAddr - mainLoop)(r14)
-    stfs   f1,  (menuAnimTimer - mainLoop)(r14) # f1 = timer
-    bl     doAnimation
+    bl     doOpenAnimation
 
 .drawMain:
     # draw box and title
@@ -146,7 +99,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     subi  r17, r17, 1
     lwzu  r3, 4(r15)
     cmpwi r3, 0
-    beq   .end
+    beq   .mainEnd
     add   r3, r3, r14
     mtspr CTR, r3
     mr    r3, r18
@@ -166,38 +119,13 @@ mainLoop: # called from main loop. r3 = mainLoop
     b     .nextItem
 
 
-.end:
+.mainEnd:
     lwz  r5, SP_LR_SAVE(r1)
     mtlr r5 # restore LR
     lmw  r3, SP_GPR_SAVE(r1)
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
 
-.closeAnim: # do close animation
-    lwz    r3, (menuAnimTimer - mainLoop)(r14)
-    cmpwi  r3, 0
-    beq    .end # menu fully closed.
-
-    lis    r4, 0x3F80 # 1.0 = 3F800000
-    cmpw   r3, r4
-    bne    .noCloseSound
-    li     r3, 0
-    li     r4, 0x03E6
-    CALL   audioPlaySound
-.noCloseSound:
-    lfs    f1, (menuAnimTimer - mainLoop)(r14)
-    lfs    f2, (menuAnimSpeed - mainLoop)(r14)
-    fsubs  f1, f1, f2
-    lfs    f3, (zero - mainLoop)(r14)
-    fcmpo  0, f1, f3
-    bgt    .closeAnimContinue
-    fmr    f1, f3 # clamp anim timer to 0
-
-.closeAnimContinue:
-    lwz    r19, (boxAddr - mainLoop)(r14)
-    stfs   f1,  (menuAnimTimer - mainLoop)(r14) # f1 = timer
-    bl     doAnimation
-    b      .drawMain
 
 .close: # close the menu
     li     r3, 0
@@ -208,7 +136,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     STOREB r3, pauseDisabled, r5 # allow pause menu
     li     r4, 0x03F2
     CALL   audioPlaySound
-    b      .end
+    b      .mainEnd
 
 .finishClose: # called once anim timer reaches 0
     # restore textbox config
@@ -221,7 +149,8 @@ mainLoop: # called from main loop. r3 = mainLoop
     sth    r4, 0x0C(r19) # X
     li     r4, 0x0032
     sth    r4, 0x0E(r19) # Y
-    b      .end
+    b      .mainEnd
+
 
 .up: # up pressed
     lbz   r17, (menuSelItem - mainLoop)(r14)
@@ -282,44 +211,3 @@ mainLoop: # called from main loop. r3 = mainLoop
     stb   r17, (menuJustMoved - mainLoop)(r14)
     li    r4, 0xF3
     b     .doSound
-
-
-doAnimation:
-    # expects r19 = boxAddr, f1 = menuAnimTimer
-    lfs    f2,  (f_menuWidth   - mainLoop)(r14) # f2 = width
-    lfs    f3,  (f_menuHeight  - mainLoop)(r14) # f3 = height
-    lfs    f4,  (f_centerX     - mainLoop)(r14) # f4 = X
-    lfs    f5,  (f_centerY     - mainLoop)(r14) # f5 = Y
-    lfs    f9,  (two           - mainLoop)(r14) # r9 = 2
-    lfs    f8,  (twoFiveFive   - mainLoop)(r14) # r8 = 255
-    fmuls  f8, f8, f1 # f8 = scaled alpha
-    fctiwz f0, f8
-    stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r20, (SP_FLOAT_TMP+4)(r1)
-
-    fmuls  f2, f2, f1 # f2 = scaled width
-    fctiwz f0, f2
-    stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r6, (SP_FLOAT_TMP+4)(r1)
-    sth    r6, 0x00(r19) # set box width
-
-    fdivs  f2, f2, f9 # f2 /= 2
-    fsubs  f6, f4, f2 # f6 = scaled X pos
-    fctiwz f0, f6
-    stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r6, (SP_FLOAT_TMP+4)(r1)
-    sth    r6, 0x0C(r19) # set box X pos
-
-    fmuls  f3, f3, f1 # f3 = scaled height
-    fctiwz f0, f3
-    stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r6, (SP_FLOAT_TMP+4)(r1)
-    sth    r6, 0x02(r19) # set box height
-
-    fdivs  f3, f3, f9 # f2 /= 2
-    fsubs  f6, f5, f3 # f6 = scaled Y pos
-    fctiwz f0, f6
-    stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r6, (SP_FLOAT_TMP+4)(r1)
-    sth    r6, 0x0E(r19) # set box Y pos
-    blr

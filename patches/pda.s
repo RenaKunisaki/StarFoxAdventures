@@ -55,6 +55,8 @@ itemHook: # called when the PDA is being toggled on/off by player.
 # not affect the actual order displayed; for that, change the
 # function pointers below.
 .include "pda/main.s"
+.include "pda/hud.s"
+.include "pda/animation.s"
 .include "pda/player.s"
 .include "pda/pdahud.s"
 # unfortunately this isn't safe.
