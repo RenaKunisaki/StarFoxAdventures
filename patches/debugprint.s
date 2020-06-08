@@ -3,6 +3,7 @@
 # 2) moves debug print to very edges of screen
 .text
 .include "common.s"
+.include "globals.s"
 
 # define patches
 patchList:
@@ -60,6 +61,14 @@ mainLoop: # called by our hook, from the patch list.
     stw   r14, SP_R14_SAVE(r1)
     stw   r15, SP_R15_SAVE(r1)
     stw   r16, SP_R16_SAVE(r1)
+
+    # the patch that restores debug print functions also overrides
+    # this variable, so manually check it before doing things.
+    # XXX that patch should be integrated into this one instead
+    # of being a separate Gecko code.
+    LOADB r4, enableDebugText
+    cmpwi r4, 0
+    beq   .end
 
     bl .getpc
     .getpc:
@@ -278,6 +287,7 @@ mainLoop: # called by our hook, from the patch list.
 
 
 .noPlayer:
+.end:
     lwz  r14, SP_R14_SAVE(r1)
     lwz  r15, SP_R15_SAVE(r1)
     lwz  r16, SP_R16_SAVE(r1)
