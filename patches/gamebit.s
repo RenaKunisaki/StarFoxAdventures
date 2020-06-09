@@ -39,6 +39,8 @@ main:
         mflr r14
 
     # check ignore list
+    cmpwi r3, 0
+    blt   .end
     addi  r9, r14, (.ignoreList - .getpc)@l
 .nextIgnore:
     lhzu  r8, 2(r9)
@@ -74,7 +76,7 @@ main:
 
 .ignoreList: # these change pretty much every frame
     .short 0x7511 # dummy entry
-    .short 0x0960, 0x0961, 0x0964, 0x0965, 0x0969, 0x096B, 0x0986
+    #.short 0x0960, 0x0961, 0x0964, 0x0965, 0x0969, 0x096B, 0x0986
     #.short 0x0A7F, 0x0A8B
     #.short 0x0EB5
     #.short 0x0F10, 0x0F46
