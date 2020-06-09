@@ -96,10 +96,15 @@ mainLoop: # called from main loop. r3 = mainLoop
 
     # convert stick position to floats
     # adapted from http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/PPCNumerics/PPCNumerics-157.html
-    lfd   f9, (.floatMagic - mainLoop)(r14) # load constant into f9
-    lfs   f8, (.freeMoveScale - mainLoop)(r14)
-    lis   r6, 0x4330
-    stw   r6, SP_FLOAT_TMP(r1) # store exponent part for integer
+    lfd     f9, (.floatMagic - mainLoop)(r14) # load constant into f9
+    lfs     f8, (.freeMoveScale - mainLoop)(r14)
+    LOADHL2 r6, controllerStates, r9 # buttons
+    andi.   r6, r6, PAD_BUTTON_B
+    beq     .notBheld
+    lfs     f8, (.freeMoveScale2 - mainLoop)(r14)
+.notBheld:
+    lis     r6, 0x4330
+    stw     r6, SP_FLOAT_TMP(r1) # store exponent part for integer
 
     # convert stick X to move X
     xoris r3, r3, 0x8000         # invert sign of integer
@@ -213,5 +218,6 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 .floatMagic:     .int 0x43300000,0x80000000
 .freeMoveScale:  .float 0.07
+.freeMoveScale2: .float 0.35 # when B held
 .freeMoveCoords: .int 0, 0, 0
 .prevEnable:     .byte 0
