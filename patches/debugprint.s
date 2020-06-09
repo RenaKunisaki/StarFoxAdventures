@@ -69,7 +69,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     # of being a separate Gecko code.
     LOADB r4, enableDebugText
     cmpwi r4, 0
-    #beq   .end
+    beq   .end
 
     # display heap stats: free bytes, free blocks
     LOAD  r16, 0x803406A0 # heap 0
