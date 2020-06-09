@@ -313,7 +313,7 @@ mainLoopHooks:
     .string "hello, cruel world"
 
 .s_run:
-    .string "run patch %d @%08X"
+    .string "run patch %d @ %08X"
 
 .s_free:
     .string "free patch %d"
