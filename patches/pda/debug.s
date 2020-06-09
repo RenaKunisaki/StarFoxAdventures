@@ -16,6 +16,36 @@ adjItem_debugText: # r3 = amount to adjust by
     STOREB  r4, enableDebugText, r3
     blr
 
+#######################################################################
+
+drawItem_trickyDebug:
+    addi  r4, r14, (s_TrickyDebug - mainLoop)
+    addi  r5, r14, (s_off - mainLoop)
+    LOADB r6, 0x80148bc8
+    cmpwi r6, 0x4B
+    bne   .drawDebugText_off
+    addi  r5, r14, (s_on - mainLoop)
+
+.drawTrickyDebug_off:
+    blr
+
+adjItem_trickyDebug: # r3 = amount to adjust by
+    LOAD    r3, 0x80148bc8
+    lwz     r4, 0(r3)
+    lwz     r5, (.trickyDebugXor - mainLoop)(r14)
+    xor     r4, r4, r5
+    stw     r4, 0(r3)
+    li      r4, 0
+    icbi    r4, r3 # flush instruction cache
+    blr
+
+# original value is 0x9421FF90: stwu r1, -0x70(r1)
+# patched  value is 0x4BFEED80: b 0x80137948
+# this value is original XOR patched. by XORing the value
+# with this constant, we toggle between the two.
+.trickyDebugXor: .int 0xdfdf1210
+
+#######################################################################
 
 drawItem_freeMove:
     addi  r4, r14, (s_FreeMove - mainLoop)
