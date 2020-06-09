@@ -18,6 +18,7 @@ constants:
     .set MENU_XPOS,320-(MENU_WIDTH/2)
     .set MENU_YPOS,240-(MENU_HEIGHT/2)
     .set LINE_HEIGHT,18
+    .set MOVE_DELAY,15 # wait this many frames between autorepeat
     .set STACK_SIZE,0x180 # how much to reserve
     .set SP_LR_SAVE,0x184 # this is what the game does
     .set SP_STR_BUF,0x20 # temporary string buffer

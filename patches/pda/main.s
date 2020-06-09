@@ -42,10 +42,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     lbz     r5, (menuJustMoved - mainLoop)(r14)
     cmpwi   r5, 0
     beq     .checkMove
+
     # we already moved. don't move again until joystick is reset.
-    cmpwi   r8, 0
-    bne     .draw
-    b       .resetJustMoved # r7 must be 0
+    subi    r5, r5, 1 # decrement counter
+    cmpwi   r8, 0 # is stick reset?
+    bne     .noMoveReset
+    li      r5, 0 # reset counter
+.noMoveReset:
+    stb     r5, (menuJustMoved - mainLoop)(r14)
+    b       .draw
 
 
 .checkMove: # Check if joystick moved.
@@ -57,9 +62,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     bgt     .right
     cmpwi   r6, -0x10
     blt     .left
-
-.resetJustMoved:
-    stb     r7, (menuJustMoved - mainLoop)(r14)
 
 .draw: # do animation and setup box
     bl     doOpenAnimation
@@ -182,7 +184,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 .storeSel:
     stb   r17, (menuSelItem - mainLoop)(r14)
-    li    r17, 1
+    li    r17, MOVE_DELAY
     stb   r17, (menuJustMoved - mainLoop)(r14)
     li    r4, 0xF3
 
@@ -219,7 +221,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     add   r4, r4, r14
     mtspr CTR, r4
     bctrl
-    li    r17, 1
+    li    r17, MOVE_DELAY
     stb   r17, (menuJustMoved - mainLoop)(r14)
     li    r4, 0xF3
     b     .doSound

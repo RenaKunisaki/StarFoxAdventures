@@ -46,7 +46,7 @@ minimapAlphaOverride: .byte 255
 menuVisible:   .byte 0
 menuSelItem:   .byte 0
 menuSelColor:  .byte 0
-menuJustMoved: .byte 0
+menuJustMoved: .byte 0 # frame counter
 #soundTestId:   .short 0
 
 # string pool
