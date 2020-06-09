@@ -20,7 +20,7 @@ patchList:
     PATCH_BL 0x802A06B4, main
     # increase climb speeds
     PATCH_HWORD 0x803E8000, 0x3D4B # wall climbing (up and down)
-    PATCH_HWORD 0x803E7F84, 0x3CC4 # ladder climbing (up)
+    PATCH_HWORD 0x803E7F84, 0x3D04 # ladder climbing (up)
     PATCH_HWORD 0x802A26A6, 0x1A84 # ladder climbing (down)
         # last one is changing the down speed to use the same variable
         # as the up speed, because normally it uses a variable that's
@@ -51,11 +51,6 @@ main: # called by our hook, from the patch list.
     LOADWH r6, aButtonIcon
     STOREH r5, aButtonIcon, r6
 
-    # prevent immediately regrabbing the wall
-    lbz    r5, 0x03F0(r4)
-    ori    r5, r5, 0x20
-    stb    r5, 0x03F0(r4)
-
     # check button
     LOADWH  r9, controllerStates
     LOADWL2 r7, buttonsJustPressed, r9 # buttons pressed
@@ -64,6 +59,17 @@ main: # called by our hook, from the patch list.
 
     li     r5, 1 # idle
     sth    r5, 0x0274(r4) # set player state
+
+    # prevent immediately regrabbing the wall.
+    # this flag actually means we're in the water, so this can cause
+    # occasionally switching into a swimming animation.
+    # more importantly, it causes a glitch in areas where we're
+    # climbing above flowing water - the current will actually push
+    # us while we climb, even through walls.
+    # hopefully only applying it while we drop will prevent that.
+    lbz    r5, 0x03F0(r4)
+    ori    r5, r5, 0x20
+    stb    r5, 0x03F0(r4)
 
 .noDrop:
     lwz  r5, SP_LR_SAVE(r1)
