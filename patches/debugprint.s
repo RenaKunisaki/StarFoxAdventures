@@ -21,11 +21,11 @@ patchList:
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
-    .set STACK_SIZE,0x30 # how much to reserve
-    .set SP_LR_SAVE,0x10
-    .set SP_R14_SAVE,0x14
-    .set SP_R15_SAVE,0x18
-    .set SP_R16_SAVE,0x1C
+    .set STACK_SIZE,  0x30 # how much to reserve
+    .set SP_LR_SAVE,  0x10
+    .set SP_R14_SAVE, 0x14
+    .set SP_R15_SAVE, 0x18
+    .set SP_R16_SAVE, 0x1C
     .set SP_FLOAT_TMP,0x20 # temporary storage for float conversion (8 byt
 
 entry: # called as soon as our patch is loaded.
@@ -54,13 +54,14 @@ entry: # called as soon as our patch is loaded.
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
 
-mainLoop: # called by our hook, from the patch list.
+mainLoop: # called from main loop. r3 = mainLoop
     stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r3
-    stw   r3,  SP_LR_SAVE(r1)
+    mflr  r4
+    stw   r4,  SP_LR_SAVE(r1)
     stw   r14, SP_R14_SAVE(r1)
     stw   r15, SP_R15_SAVE(r1)
     stw   r16, SP_R16_SAVE(r1)
+    mr    r14, r3
 
     # the patch that restores debug print functions also overrides
     # this variable, so manually check it before doing things.
@@ -70,15 +71,11 @@ mainLoop: # called by our hook, from the patch list.
     cmpwi r4, 0
     beq   .end
 
-    bl .getpc
-    .getpc:
-        mflr r14
-
     # display heap stats: free bytes, free blocks
     LOAD  r16, 0x803406A0 # heap 0
     li    r15, 0 # idx
 .nextHeap:
-    addi  r3, r14, (.fmt_heap - .getpc)@l
+    addi  r3, r14, (.fmt_heap - mainLoop)@l
     #mr    r4, r15 # heap num
 
     lwz   r4, 0x0C(r16) # total bytes
@@ -121,7 +118,7 @@ mainLoop: # called by our hook, from the patch list.
     #addi  r17, r3, 0x91 # get name
 #.noObject:
 
-    addi r3, r14, (.fmt_playerCoords - .getpc)@l
+    addi r3, r14, (.fmt_playerCoords - mainLoop)@l
 
     # display player coords
     # debugPrintf doesn't support eg '%+7.2f' so we'll just convert
@@ -151,7 +148,7 @@ mainLoop: # called by our hook, from the patch list.
     CALL debugPrintf
 
     # display map cell
-    addi r3, r14, (.fmt_mapCoords - .getpc)@l
+    addi r3, r14, (.fmt_mapCoords - mainLoop)@l
     LOADWH  r9, mapCoords
     LOADWL2 r4, mapCoords,    r9
     LOADWL2 r5, mapCoords+ 4, r9
@@ -162,7 +159,7 @@ mainLoop: # called by our hook, from the patch list.
     CALL debugPrintf
 
     # display player state
-    addi r3, r14, (.fmt_playerState - .getpc)@l
+    addi r3, r14, (.fmt_playerState - mainLoop)@l
     lwz  r4, 0x00B8(r16) # get animState
     lfs  f1, 0x0098(r16) # get anim timer
     lfs  f2, 0x0814(r4)  # get anim val
@@ -184,17 +181,10 @@ mainLoop: # called by our hook, from the patch list.
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
 
-.floatMagic:
-    .int 0x43300000,0x80000000
-
-.fmt_heap:
-    .string "\x84%3d %3d\x83, "
-.fmt_playerCoords:
-    .string "\nP \x84%08X %d %d %d\x83 "
-.fmt_mapCoords:
-    .string "M \x84%d %d %d %d\x83 "
-.fmt_playerState:
-    .string "\nS \x84%02X\x83 A \x84%04X %f %f\x83\n"
+.floatMagic: .int 0x43300000,0x80000000
+.fmt_heap: .string "\x84%3d %3d\x83, "
+.fmt_playerCoords: .string "\nP \x84%08X %d %d %d\x83 "
+.fmt_mapCoords: .string "M \x84%d %d %d %d\x83 "
+.fmt_playerState: .string "\nS \x84%02X\x83 A \x84%04X %f %f\x83\n"
     #.string "S \x84%02X\x83 A \x84%04X\x83\n"
-bootMsg:
-    .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
+bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
