@@ -95,6 +95,12 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpwi r15, 4
     bne   .nextHeap
 
+    # display game state info
+    addi  r3, r14, .fmt_gameState - mainLoop
+    LOADW r4, 0x803dcb84 # numObjects
+    LOADW r5, 0x803dcde8 # game state flags
+    CALL  debugPrintf
+
     # get player object
     LOADW r16, pPlayer
     cmpwi r16, 0
@@ -160,13 +166,12 @@ mainLoop: # called from main loop. r3 = mainLoop
 
     # display player state
     addi r3, r14, (.fmt_playerState - mainLoop)@l
-    lwz  r4, 0x00B8(r16) # get animState
+    lwz  r9, 0x00B8(r16) # get animState
     lfs  f1, 0x0098(r16) # get anim timer
-    #lfs  f2, 0x0814(r4)  # get anim val
-    LOADWH r5, fovY
-    LOADFL2 f2, fovY, r5
-    lhz  r4, 0x0274(r4)  # get state ID
-    lhz  r5, 0x00A0(r16) # get anim ID
+    #lfs  f2, 0x0814(r9)  # get anim val
+    lhz  r4, 0x0274(r9)  # get state ID
+    lwz  r5, 0x03F0(r9)  # get flags
+    lhz  r6, 0x00A0(r16) # get anim ID
     # magic required to make floats print correctly
     # no idea what this does
     creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
@@ -184,9 +189,10 @@ mainLoop: # called from main loop. r3 = mainLoop
     blr
 
 .floatMagic: .int 0x43300000,0x80000000
-.fmt_heap: .string "\x84%3d %3d\x83, "
-.fmt_playerCoords: .string "\nP \x84%08X %d %d %d\x83 "
+.fmt_heap: .string "\x84%3d%3d\x83, "
+.fmt_gameState: .string "%d obj; G %08X\n"
+.fmt_playerCoords: .string "P \x84%08X %d %d %d\x83 "
 .fmt_mapCoords: .string "M \x84%d %d %d %d\x83 "
-.fmt_playerState: .string "\nS \x84%02X\x83 A \x84%04X %f %f\x83\n"
+.fmt_playerState: .string "\nS \x84%02X %08X\x83 A \x84%04X %f\x83\n"
     #.string "S \x84%02X\x83 A \x84%04X\x83\n"
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
