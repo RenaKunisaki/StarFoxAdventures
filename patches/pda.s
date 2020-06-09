@@ -3,6 +3,7 @@
 # TODO: change the "PDA On/Off" text.
 .text
 .include "common.s"
+.include "globals.s"
 
 # define patches
 patchList:
@@ -12,9 +13,8 @@ patchList:
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
-    .set CUR_CHAR_ADDR,0x817FFFFF # for character swap
     .set MENU_WIDTH,300
-    .set MENU_HEIGHT,200
+    .set MENU_HEIGHT,220
     .set MENU_XPOS,320-(MENU_WIDTH/2)
     .set MENU_YPOS,240-(MENU_HEIGHT/2)
     .set LINE_HEIGHT,18
@@ -44,7 +44,7 @@ entry: # called as soon as our patch is loaded.
 # unfortunately this isn't safe.
 # playing invalid sounds can crash the game.
 #.include "pda/soundtest.s"
-.include "pda/debugtext.s"
+.include "pda/debug.s"
 .include "pda/bigmap.s"
 .include "pda/mapalpha.s"
 .include "pda/fov.s"

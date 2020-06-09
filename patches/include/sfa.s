@@ -2,6 +2,7 @@
 .set __restore_gpr,0x802860f4
 .set __save_gpr,0x802860a8
 .set allocTagged,0x80023cc8 #void* (uint size,AllocTag tag,char *name)
+.set angleToVec2,0x80292f14 #void (int angle, float *outX, float *outY)
 .set audioPlaySound,0x8000bb18 #(ObjInstance *sourceObj,SoundId soundid)
 .set buttonDisable,0x80014b3c #int pad, u32 buttons
 .set ClearArena,0x80240400
@@ -25,6 +26,7 @@
 .set modelLoad,0x80029570 # ModelFileHeader* (
     # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
     # if modelNum is negative, don't use MODELIND.bin
+.set multVectorByObjMtx,0x8000e0a0 #f1:x f2:y f3:z r3:*outX r4:*outY r5:*outZ r6:obj
 .set OSReport,0x8007d6dc
 .set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
 .set sprintf,0x8028f688

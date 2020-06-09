@@ -17,6 +17,7 @@ itemDrawFuncs:
     .int drawItem_volCutScene - mainLoop
     .int drawItem_gameSpeed   - mainLoop
     .int drawItem_debugText   - mainLoop
+    .int drawItem_freeMove    - mainLoop
     # this table must end with a null entry to mark the end of the menu.
     # other tables don't need a null entry.
     .int 0
@@ -33,3 +34,4 @@ itemAdjustFuncs:
     .int adjItem_volCutScene - mainLoop
     .int adjItem_gameSpeed   - mainLoop
     .int adjItem_debugText   - mainLoop
+    .int adjItem_freeMove    - mainLoop

@@ -36,7 +36,7 @@ floatMagic:    .int 0x43300000,0x80000000
 #f_menuXPos:    .float MENU_XPOS
 #f_menuYPos:    .float MENU_YPOS
 f_menuWidth:   .float 300
-f_menuHeight:  .float 200
+f_menuHeight:  .float 220
 f_centerX:     .float 320
 f_centerY:     .float 240
 
@@ -62,6 +62,7 @@ s_compass:   .string "Fuel Cell Compass"
 s_info:      .string "Information"
 #s_sound:     .string "Sound Test: %04X"
 s_DebugText: .string "Debug Text: %s"
+s_FreeMove:  .string "Free Move: %s"
 s_FOV:       .string "FOV: %d"
 s_gameSpeed: .string "Game Speed: %d%%"
 s_MapSize:   .string "Map Size: %s"
