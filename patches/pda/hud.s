@@ -2,40 +2,87 @@
 
 doHudOverrides:
     # do minimap size/opacity override
-    LOADWH r5, minimapWidth
+    LOADWH  r9, minimapWidth
+    LOADBL2 r6, minimapMode, r9
+    cmpwi   r6, 0 # map mode?
+    bne     .noMapOverride # don't change alpha, use default size
+
     lbz    r4, (minimapAlphaOverride - mainLoop)(r14)
     cmpwi  r4, 0xFF
-    beq    .noAlphaOverride
-    STOREH r4, minimapAlpha, r5
+    beq    .noMapAlphaOverride
+    STOREH r4, minimapAlpha, r9
 
-.noAlphaOverride:
-    li      r4, 100 # default height
-    LOADBL2 r6, minimapMode, r5
-    cmpwi   r6, 0 # map mode?
-    bne     .noMapOverride # don't change size
+.noMapAlphaOverride:
     lhz     r6, (minimapSizeOverride - mainLoop)(r14)
-    cmpwi   r6, 0
+    cmpwi   r6, 0 # override enabled?
     beq     .noMapOverride
-    mr      r4, r6
-    STOREW  r4, minimapWidth, r5
+
+    # override position.
+    li      r4, 0x0002 # X pos
+    li      r5, 0x01D8 # Y pos
+    lis     r7, 0x4000 # X pos float
+    #       r6, r9 are already set
+    b       .setMapDimensions
 
 .noMapOverride:
-    STOREW r4, minimapHeight, r5
-    LOAD   r5, 0x801324CA # some instructions to patch for height
-    sth    r4, 0(r5)
-    sth    r4, 8(r5)
-    li     r4, 0
-    icbi   r4, r5 # flush instruction cache
+    # use default position/size.
+    li      r4, 0x0032 # X pos
+    li      r5, 0x01B8 # Y pos
+    li      r6, 0x0078 # width and height
+    lis     r7, 0x4248 # X pos float
+    #       r9 is already set
+    b       .setDimensionsNoSize # let it resize itself.
 
+
+.setMapDimensions:
+    # r4 = X position
+    # r5 = Y position
+    # r6 = width and height
+    # r7 = Y position as float
+    # r9 = high half of &minimapWidth
+
+    # override size
+    STOREW  r6, minimapWidth,  r9
+    STOREW  r6, minimapHeight, r9
+
+.setDimensionsNoSize:
+    li      r8, 0
+    lis     r9, 0x8013
+
+    # additional width override to prevent shuddering.
+    # must be done even for normal size to undo the patch
+    # for larger size.
+    addi    r3, r9, 0x25FA
+    sth     r6, 0(r3)
+    icbi    r8, r3 # flush instruction cache
+
+    # some instructions to patch for height
+    addi    r3, r9, 0x24CA
+    sth     r6, 0(r3)
+    sth     r6, 8(r3)
+    icbi    r8, r3 # flush instruction cache
+
+    # override Y position.
+    ori     r3, r9, 0x266A
+    sth     r5, 0(r3)
+    icbi    r8, r3 # flush instruction cache
+
+    # override X position.
+    ori     r3, r9, 0x267A
+    sth     r4, 0(r3) # the box
+    icbi    r8, r3 # flush instruction cache
+
+    ori     r3, r9, 0x26A6
+    sth     r4, 0(r3) # the box clip
+    icbi    r8, r3 # flush instruction cache
+
+    ori     r3, r9, 0x2A92
+    sth     r4, 0(r3) # texture related
+    sth     r4, 4(r3) # texture related
+    icbi    r8, r3 # flush instruction cache
+
+    lis     r5, 0x803E
+    stw     r7, 0x2210(r5) # the clip offset (float)
+
+.end:
     blr
-
-    # 8013266A = 01B8, -> 01D8 to move map down
-    # to move left, all following must be changed:
-    # 8013267A = 0032 (the box)
-    # 801326A6 = 0032 (the box clip)
-    # 80132A92, 80132A96 (some texture shit)
-    # 803e2210 (float) the clip offset
-    # 80132A94 could just be changed to "add r5, r28, r3" unless a branch points directly at it
-    # this also doesn't affect the D-pad icon and arrows.
-    # also with huge map, it shudders sometimes, trying to shrink
-    # back to normal size.
