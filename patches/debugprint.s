@@ -69,7 +69,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     # of being a separate Gecko code.
     LOADB r4, enableDebugText
     cmpwi r4, 0
-    beq   .end
+    #beq   .end
 
     # display heap stats: free bytes, free blocks
     LOAD  r16, 0x803406A0 # heap 0
@@ -162,7 +162,9 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi r3, r14, (.fmt_playerState - mainLoop)@l
     lwz  r4, 0x00B8(r16) # get animState
     lfs  f1, 0x0098(r16) # get anim timer
-    lfs  f2, 0x0814(r4)  # get anim val
+    #lfs  f2, 0x0814(r4)  # get anim val
+    LOADWH r5, fovY
+    LOADFL2 f2, fovY, r5
     lhz  r4, 0x0274(r4)  # get state ID
     lhz  r5, 0x00A0(r16) # get anim ID
     # magic required to make floats print correctly
