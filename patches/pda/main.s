@@ -243,6 +243,9 @@ menuHandleInput:
     stb   r17, (menuPage - mainLoop)(r14)
     li    r17, MOVE_DELAY
     stb   r17, (menuJustMoved - mainLoop)(r14)
+    # reset cursor to first item
+    li    r17, 0
+    stb   r17, (menuSelItem - mainLoop)(r14)
     li    r4,  0xFC
     b     .doSound
 
@@ -284,7 +287,6 @@ menuHandleInput:
     addi  r17, r17, 1
     slwi  r16, r17, 2 # times 4
     addi  r16, r16, 4 # skip title
-    # XXX this still allows us to select one item past the end. why?
     lwzx  r3,  r21, r16
     cmpwi r3,  0
     bne   .storeSel
