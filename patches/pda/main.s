@@ -208,12 +208,12 @@ menuHandleInput:
     cmpwi   r6, -0x10
     blt     .left
     cmpwi   r8, 0x10
-    bgt     .prevPage
+    bgt     .nextPage
     cmpwi   r8, -0x10
     bge     menuEndSub # no input
 
-    # next page
-    addi  r17, r17, 1
+    # prev page
+    addi  r17, r17, -1
 
 
 .checkPage:
@@ -249,8 +249,8 @@ menuHandleInput:
     li    r4,  0xFC
     b     .doSound
 
-.prevPage:
-    subi  r17, r17, 1
+.nextPage:
+    addi  r17, r17, 1
     b     .checkPage
 
 

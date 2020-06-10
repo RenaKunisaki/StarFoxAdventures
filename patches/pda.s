@@ -13,7 +13,7 @@ patchList:
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
-    .set MENU_WIDTH,300
+    .set MENU_WIDTH,320
     .set MENU_HEIGHT,220
     .set MENU_XPOS,320-(MENU_WIDTH/2)
     .set MENU_YPOS,240-(MENU_HEIGHT/2)

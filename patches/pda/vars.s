@@ -35,7 +35,7 @@ floatMagic:    .int 0x43300000,0x80000000
 #f_menuHeight:  .float MENU_HEIGHT
 #f_menuXPos:    .float MENU_XPOS
 #f_menuYPos:    .float MENU_YPOS
-f_menuWidth:   .float 300
+f_menuWidth:   .float 320
 f_menuHeight:  .float 220
 f_centerX:     .float 320
 f_centerY:     .float 240
@@ -80,12 +80,15 @@ s_volSFX:     .string "SFX Volume: %d%%"
 s_volCS:      .string "CutScene Volume: %d%%"
 
 # page 2
-title_page2:  .string "Debug"
+title_page2:  .string "Audio"
+
+# page 3
+title_page3:  .string "Debug"
 s_DebugText:  .string "Debug Text: %s"
 s_TrickyDebug:.string "Tricky Debug Text: %s"
 s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
-s_sound:      .string "Sound Test: %04X"
+s_sound:      .string "Sound Test: %04X" # these don't have names.
 s_music:      .string "Music Test: %02X %s"
 s_stream:     .string "Stream Test: %04X %s"
 

@@ -90,8 +90,7 @@ adjItem_streamTest:
     mulli r7, r3, 0x16
     add   r6, r6, r7
     lhz   r3, 0(r6) # get ID
-    #li    r4, 0 # callback
-    LOAD  r4, 0x8000d138
+    LOAD  r4, 0x8000d138 # callback the game uses
     CALL  0x8000d200 # play stream
     mtlr  r20
     li    r9, 0 # no sound effect
