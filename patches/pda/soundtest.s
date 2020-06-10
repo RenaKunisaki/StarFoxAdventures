@@ -22,7 +22,7 @@ adjItem_sound:
 
 drawItem_music:
     addi  r4, r14, (s_music - mainLoop)
-    lhz   r5, (musicTestId - mainLoop)(r14)
+    lbz   r5, (musicTestId - mainLoop)(r14)
     LOAD  r6, 0x802c5700 # get song entry
     slwi  r7, r5, 4 # r7 = r5 * 16
     add   r6, r6, r7
@@ -32,7 +32,7 @@ drawItem_music:
 adjItem_music:
     # r3 = amount to adjust by (0 = A button)
     # r9 = sound effect to play after calling this
-    lhz   r4, (musicTestId - mainLoop)(r14)
+    lbz   r4, (musicTestId - mainLoop)(r14)
     add   r4, r4, r3
     cmpwi r4, 0
     bge   r4, .musicNotMax
@@ -42,12 +42,56 @@ adjItem_music:
     blt   .musicNotMin
     li    r4, 0
 .musicNotMin:
-    sth   r4, (musicTestId - mainLoop)(r14)
+    stb   r4, (musicTestId - mainLoop)(r14)
     cmpwi r3, 0
     bnelr
     mflr  r20
-    lhz   r3, (musicTestId - mainLoop)(r14)
+    lbz   r3, (musicTestId - mainLoop)(r14)
     CALL  0x8000a2e4 # music test function
+    mtlr  r20
+    li    r9, 0 # no sound effect
+    blr
+
+######################################################################
+
+drawItem_streamTest:
+    addi  r4, r14, (s_stream - mainLoop)
+    lhz   r5, (streamTestId - mainLoop)(r14)
+    LOADW r6, 0x803dc850 # STREAMS.bin
+    mulli r7, r5, 0x16
+    add   r6, r6, r7
+    addi  r6, r6, 6 # to name
+    blr
+
+adjItem_streamTest:
+    # r3 = amount to adjust by (0 = A button)
+    # r9 = sound effect to play after calling this
+    lhz   r4, (streamTestId - mainLoop)(r14)
+    add   r4, r4, r3
+    cmpwi r4, 0
+    bge   r4, .streamNotMax
+    li    r4, 904
+.streamNotMax:
+    cmpwi r4, 905
+    blt   .streamNotMin
+    li    r4, 0
+.streamNotMin:
+    sth   r4, (streamTestId - mainLoop)(r14)
+    cmpwi r3, 0
+    bnelr
+
+    mflr  r20
+    #CALL  0x8000d594 # reset stream
+    CALL  0x8000d01c # stop stream
+
+    lhz   r3, (streamTestId - mainLoop)(r14)
+    LOADW r6, 0x803dc850 # STREAMS.bin
+    mulli r7, r3, 0x16
+    add   r6, r6, r7
+    lhz   r3, 0(r6) # get ID
+    #li    r4, 0 # callback
+    LOAD  r4, 0x8000d138
+    CALL  0x8000d200 # play stream
     mtlr  r20
     li    r9, 0 # no sound effect
     blr

@@ -57,6 +57,7 @@ itemDrawFuncs_page2:
     .int drawItem_reloadMap   - mainLoop
     .int drawItem_sound       - mainLoop
     .int drawItem_music       - mainLoop
+    .int drawItem_streamTest  - mainLoop
     .int 0
 
 itemAdjustFuncs_page2:
@@ -66,3 +67,4 @@ itemAdjustFuncs_page2:
     .int adjItem_reloadMap   - mainLoop
     .int adjItem_sound       - mainLoop
     .int adjItem_music       - mainLoop
+    .int adjItem_streamTest  - mainLoop

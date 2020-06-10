@@ -48,8 +48,9 @@ menuSelItem:   .byte 0
 menuSelColor:  .byte 0
 menuJustMoved: .byte 0 # frame counter
 menuPage:      .byte 0
+musicTestId:   .byte 0
+streamTestId:  .short 0
 soundTestId:   .short 0
-musicTestId:   .short 0
 
 # string pool
 # general
@@ -86,6 +87,7 @@ s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
 s_sound:      .string "Sound Test: %04X"
 s_music:      .string "Music Test: %04X %s"
+s_stream:     .string "Stream Test: %04X %s"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add
