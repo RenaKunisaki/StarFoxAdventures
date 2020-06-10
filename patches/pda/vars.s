@@ -75,12 +75,15 @@ s_Fox:        .string "Fox"
 s_Krystal:    .string "Krystal"
 s_FOV:        .string "FOV: %d"
 s_gameSpeed:  .string "Game Speed: %d%%"
-s_volMusic:   .string "Music Volume: %d%%"
-s_volSFX:     .string "SFX Volume: %d%%"
-s_volCS:      .string "CutScene Volume: %d%%"
 
 # page 2
 title_page2:  .string "Audio"
+s_volMusic:   .string "Music Volume: %d%%"
+s_volSFX:     .string "SFX Volume: %d%%"
+s_volCS:      .string "CutScene Volume: %d%%"
+s_sound:      .string "Sound Test: %04X" # SFX don't have names.
+s_music:      .string "Music Test: %02X %s"
+s_stream:     .string "Stream Test: %04X %s"
 
 # page 3
 title_page3:  .string "Debug"
@@ -88,9 +91,6 @@ s_DebugText:  .string "Debug Text: %s"
 s_TrickyDebug:.string "Tricky Debug Text: %s"
 s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
-s_sound:      .string "Sound Test: %04X" # these don't have names.
-s_music:      .string "Music Test: %02X %s"
-s_stream:     .string "Stream Test: %04X %s"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add
@@ -105,7 +105,6 @@ s_stream:     .string "Stream Test: %04X %s"
 # - Arbitrary warp (set coords/layer manually)
 # - Browse loaded object list, loaded file list, heap
 #   - change camera focus? turns out that's pretty easy.
-# - Music/SFX/stream test if we can make them not crash
 # - Browse GameText, textures, models, animations?
 # - fun stuff
 #   - bullet time (reduce game speed during combat)

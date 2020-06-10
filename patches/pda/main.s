@@ -158,6 +158,12 @@ menuHandleInput:
     STOREB r4, pauseDisabled, r5 # inhibit pause menu
     #li     r4, 1
     STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
+    # inhibit game timer
+    LOAD   r5, 0x800140BC # gameTimerRun
+    LOAD   r4, 0x4E800020 # blr
+    stw    r4, 0(r5)
+    li     r4, 0
+    icbi   r4, r5 # flush instruction cache
 
     # get the controller state
     # r6 = stick X, r7 = stick Y
@@ -327,5 +333,13 @@ menuHandleInput:
     STOREB r3, playerLocked, r5 # unpause game
     LOADWH r5, pauseDisabled
     STOREB r3, pauseDisabled, r5 # allow pause menu
+
+    # restore game timer
+    LOAD   r5, 0x800140BC # gameTimerRun
+    LOAD   r4, 0x9421FFC0 # original opcode
+    stw    r4, 0(r5)
+    li     r4, 0
+    icbi   r4, r5 # flush instruction cache
+
     li     r4, 0x03F2
     b      .doSound
