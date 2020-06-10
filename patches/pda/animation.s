@@ -40,7 +40,7 @@ doAnimation:
 
 
 doOpenAnimation:
-    mflr   r21
+    mflr   r23
     lwz    r3, (menuAnimTimer - mainLoop)(r14)
     cmpwi  r3, 0
     bne    .noOpenSound
@@ -59,12 +59,12 @@ doOpenAnimation:
 .animContinue:
     lwz    r19, (boxAddr - mainLoop)(r14)
     stfs   f1,  (menuAnimTimer - mainLoop)(r14) # f1 = timer
-    mtlr   r21
+    mtlr   r23
     b      doAnimation
 
 
 doCloseAnimation:
-    mflr   r21
+    mflr   r23
     lwz    r3, (menuAnimTimer - mainLoop)(r14)
     cmpwi  r3, 0
     beqlr  # menu is fully closed.
@@ -76,6 +76,17 @@ doCloseAnimation:
     fcmpo  0, f1, f3
     bgt    .closeAnimContinue
     fmr    f1, f3 # clamp anim timer to 0
+
+    # restore textbox config
+    lwz    r19, (boxAddr - mainLoop)(r14)
+    li     r4, 0x0186
+    sth    r4, 0x00(r19) # width
+    li     r4, 0x00C8
+    sth    r4, 0x02(r19) # height
+    li     r4, 0x0028
+    sth    r4, 0x0C(r19) # X
+    li     r4, 0x0032
+    sth    r4, 0x0E(r19) # Y
 .closeAnimContinue:
     li     r3, 1 # menu isn't fully closed, so draw it.
     b      .animContinue

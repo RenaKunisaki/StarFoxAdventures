@@ -47,29 +47,39 @@ menuVisible:   .byte 0
 menuSelItem:   .byte 0
 menuSelColor:  .byte 0
 menuJustMoved: .byte 0 # frame counter
+menuPage:      .byte 0
 #soundTestId:   .short 0
 
 # string pool
-title:        .string "PDA Menu"
+# general
 s_on:         .string "On"
 s_off:        .string "Off"
-s_Player:     .string "Player: %s"
-s_Fox:        .string "Fox"
-s_Krystal:    .string "Krystal"
+
+# page 0
+title_page0:  .string "PDA Menu"
 s_PDAHUD:     .string "PDA HUD: %s"
 s_map:        .string "Map"
 s_compass:    .string "Fuel Cell Compass"
 s_info:       .string "Information"
-#s_sound:      .string "Sound Test: %04X"
-s_DebugText:  .string "Debug Text: %s"
-s_TrickyDebug:.string "Tricky Debug: %s"
-s_FreeMove:   .string "Free Move: %s"
-s_FOV:        .string "FOV: %d"
-s_gameSpeed:  .string "Game Speed: %d%%"
 s_MapSize:    .string "Map Size: %s"
 s_Normal:     .string "Normal"
 s_Huge:       .string "Huge"
 s_MapAlpha:   .string "Map Opacity: %d%%"
+
+# page 1
+title_page1:  .string "Game Settings"
+s_Player:     .string "Player: %s"
+s_Fox:        .string "Fox"
+s_Krystal:    .string "Krystal"
+s_FOV:        .string "FOV: %d"
+s_gameSpeed:  .string "Game Speed: %d%%"
 s_volMusic:   .string "Music Volume: %d%%"
 s_volSFX:     .string "SFX Volume: %d%%"
 s_volCS:      .string "CutScene Volume: %d%%"
+#s_sound:      .string "Sound Test: %04X"
+
+# page 2
+title_page2:  .string "Debug"
+s_DebugText:  .string "Debug Text: %s"
+s_TrickyDebug:.string "Tricky Debug Text: %s"
+s_FreeMove:   .string "Free Move: %s"
