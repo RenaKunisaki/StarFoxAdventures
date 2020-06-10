@@ -91,7 +91,7 @@ menuDraw:
     # setup box
     lwz    r19, (boxAddr - mainLoop)(r14)
     lhz    r16, 0x0E(r19) # box Y pos
-    addi   r16, r16, LINE_HEIGHT # text Y offset
+    addi   r16, r16, LINE_HEIGHT + 8 # text Y offset
     lbz    r17, (menuSelItem - mainLoop)(r14)
     addi   r18, r1, SP_STR_BUF
 
