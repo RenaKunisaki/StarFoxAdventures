@@ -193,6 +193,8 @@ menuHandleInput:
 .notJustMoved: # we didn't move recently
     andi.   r3, r9, PAD_BUTTON_B
     bne     .close # B pressed -> close menu
+    andi.   r3, r9, PAD_BUTTON_A
+    bne     .select # A pressed -> select item
 
     lbz   r17, (menuPage - mainLoop)(r14)
 
@@ -310,6 +312,10 @@ menuHandleInput:
     stb   r17, (menuJustMoved - mainLoop)(r14)
     li    r4, 0xF3
     b     .doSound
+
+.select: # A was pressed
+    li     r3, 0
+    b      .doAdjust
 
 .close: # close the menu
     li     r3, 0
