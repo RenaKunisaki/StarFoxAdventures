@@ -83,3 +83,27 @@ title_page2:  .string "Debug"
 s_DebugText:  .string "Debug Text: %s"
 s_TrickyDebug:.string "Tricky Debug Text: %s"
 s_FreeMove:   .string "Free Move: %s"
+s_ReloadMap:  .string "Reload Map"
+
+# 803dca3e bool shouldResetNextFrame
+# not sure where to put this, and would want to add
+# some kind of confirmation to it.
+# plus it probably has soft reset hotkey already...
+# it does, X+B+Start
+# but maybe can do reset to title screen or reload save
+
+# other things to add:
+# - GameBit menu
+# - WARPTAB menu
+# - Arbitrary warp (set coords/layer manually)
+# - Browse loaded object list, loaded file list, heap
+#   - change camera focus? turns out that's pretty easy.
+# - Music/SFX/stream test if we can make them not crash
+# - Browse GameText, textures, models, animations?
+# - fun stuff
+#   - bullet time (reduce game speed during combat)
+#   - dynamic FOV (increase with player velocity)
+#     - increase game speed with player velocity?
+#     - or decrease so it's like you go the same speed but
+#       the rest of the world slows down
+#   - color filters

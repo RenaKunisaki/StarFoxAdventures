@@ -56,9 +56,11 @@ itemDrawFuncs_page2:
     .int drawItem_debugText   - mainLoop
     .int drawItem_trickyDebug - mainLoop
     .int drawItem_freeMove    - mainLoop
+    .int drawItem_reloadMap   - mainLoop
     .int 0
 
 itemAdjustFuncs_page2:
     .int adjItem_debugText   - mainLoop
     .int adjItem_trickyDebug - mainLoop
     .int adjItem_freeMove    - mainLoop
+    .int adjItem_reloadMap   - mainLoop

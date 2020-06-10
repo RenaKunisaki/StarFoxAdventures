@@ -64,3 +64,14 @@ adjItem_freeMove: # r3 = amount to adjust by
     xori    r4, r4, 1
     STOREB  r4, ENABLE_FREE_MOVE, r3
     blr
+
+#######################################################################
+
+drawItem_reloadMap:
+    addi  r4, r14, (s_ReloadMap - mainLoop)
+    blr
+
+adjItem_reloadMap: # r3 = amount to adjust by (0=A button)
+    cmpwi   r3, 0
+    bnelr
+    JUMP    0x80020748, r3 # mapReload
