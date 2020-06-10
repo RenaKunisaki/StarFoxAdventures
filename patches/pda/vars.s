@@ -49,6 +49,7 @@ menuSelColor:  .byte 0
 menuJustMoved: .byte 0 # frame counter
 menuPage:      .byte 0
 soundTestId:   .short 0
+musicTestId:   .short 0
 
 # string pool
 # general
@@ -84,6 +85,7 @@ s_TrickyDebug:.string "Tricky Debug Text: %s"
 s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
 s_sound:      .string "Sound Test: %04X"
+s_music:      .string "Music Test: %04X %s"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add

@@ -56,6 +56,7 @@ itemDrawFuncs_page2:
     .int drawItem_freeMove    - mainLoop
     .int drawItem_reloadMap   - mainLoop
     .int drawItem_sound       - mainLoop
+    .int drawItem_music       - mainLoop
     .int 0
 
 itemAdjustFuncs_page2:
@@ -64,3 +65,4 @@ itemAdjustFuncs_page2:
     .int adjItem_freeMove    - mainLoop
     .int adjItem_reloadMap   - mainLoop
     .int adjItem_sound       - mainLoop
+    .int adjItem_music       - mainLoop
