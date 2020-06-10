@@ -38,7 +38,6 @@ itemDrawFuncs_page1:
     .int drawItem_volMusic    - mainLoop
     .int drawItem_volSFX      - mainLoop
     .int drawItem_volCutScene - mainLoop
-    #.int drawItem_sound       - mainLoop
     .int 0
 
 itemAdjustFuncs_page1:
@@ -48,7 +47,6 @@ itemAdjustFuncs_page1:
     .int adjItem_volMusic     - mainLoop
     .int adjItem_volSFX       - mainLoop
     .int adjItem_volCutScene  - mainLoop
-    #.int adjItem_sound       - mainLoop
 
 
 itemDrawFuncs_page2:
@@ -57,6 +55,7 @@ itemDrawFuncs_page2:
     .int drawItem_trickyDebug - mainLoop
     .int drawItem_freeMove    - mainLoop
     .int drawItem_reloadMap   - mainLoop
+    .int drawItem_sound       - mainLoop
     .int 0
 
 itemAdjustFuncs_page2:
@@ -64,3 +63,4 @@ itemAdjustFuncs_page2:
     .int adjItem_trickyDebug - mainLoop
     .int adjItem_freeMove    - mainLoop
     .int adjItem_reloadMap   - mainLoop
+    .int adjItem_sound       - mainLoop

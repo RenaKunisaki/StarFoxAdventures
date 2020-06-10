@@ -48,7 +48,7 @@ menuSelItem:   .byte 0
 menuSelColor:  .byte 0
 menuJustMoved: .byte 0 # frame counter
 menuPage:      .byte 0
-#soundTestId:   .short 0
+soundTestId:   .short 0
 
 # string pool
 # general
@@ -76,7 +76,6 @@ s_gameSpeed:  .string "Game Speed: %d%%"
 s_volMusic:   .string "Music Volume: %d%%"
 s_volSFX:     .string "SFX Volume: %d%%"
 s_volCS:      .string "CutScene Volume: %d%%"
-#s_sound:      .string "Sound Test: %04X"
 
 # page 2
 title_page2:  .string "Debug"
@@ -84,6 +83,7 @@ s_DebugText:  .string "Debug Text: %s"
 s_TrickyDebug:.string "Tricky Debug Text: %s"
 s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
+s_sound:      .string "Sound Test: %04X"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add
@@ -107,3 +107,6 @@ s_ReloadMap:  .string "Reload Map"
 #     - or decrease so it's like you go the same speed but
 #       the rest of the world slows down
 #   - color filters
+#
+# how would we do things like object list though? we'd need a different
+# menu system for that.

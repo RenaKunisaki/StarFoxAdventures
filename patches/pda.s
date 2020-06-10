@@ -42,9 +42,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/animation.s"
 .include "pda/player.s"
 .include "pda/pdahud.s"
-# unfortunately this isn't safe.
-# playing invalid sounds can crash the game.
-#.include "pda/soundtest.s"
+.include "pda/soundtest.s"
 .include "pda/debug.s"
 .include "pda/bigmap.s"
 .include "pda/mapalpha.s"

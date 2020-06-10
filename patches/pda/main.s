@@ -304,15 +304,16 @@ menuHandleInput:
     lbz   r17, (menuSelItem - mainLoop)(r14)
     #add   r15, r14, r22 # get adjust func
     slwi  r16, r17, 2 # times 4
-    lwzx  r4,  r22, r16
-    cmpwi r4,  0
-    beq   .draw # no adjust func
-    add   r4, r4, r14
-    mtspr CTR, r4
+    lwzx  r8,  r22, r16
+    cmpwi r8,  0
+    beq   menuEndSub # no adjust func
+    add   r8, r8, r14
+    mtspr CTR, r8
+    li    r9, 0xF3 # sound effect ID
     bctrl # call it
     li    r17, MOVE_DELAY
     stb   r17, (menuJustMoved - mainLoop)(r14)
-    li    r4, 0xF3
+    mr    r4, r9
     b     .doSound
 
 .select: # A was pressed
