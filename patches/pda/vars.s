@@ -86,7 +86,7 @@ s_TrickyDebug:.string "Tricky Debug Text: %s"
 s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
 s_sound:      .string "Sound Test: %04X"
-s_music:      .string "Music Test: %04X %s"
+s_music:      .string "Music Test: %02X %s"
 s_stream:     .string "Stream Test: %04X %s"
 
 # 803dca3e bool shouldResetNextFrame

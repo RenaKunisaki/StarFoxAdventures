@@ -6,7 +6,7 @@ drawItem_sound:
 adjItem_sound:
     # r3 = amount to adjust by (0 = A button)
     # r9 = sound effect to play after calling this
-    lhz   r4, (soundTestId - mainLoop)(r14)
+    lha   r4, (soundTestId - mainLoop)(r14)
     add   r4, r4, r3
     sth   r4, (soundTestId - mainLoop)(r14)
     cmpwi r3, 0
@@ -33,9 +33,10 @@ adjItem_music:
     # r3 = amount to adjust by (0 = A button)
     # r9 = sound effect to play after calling this
     lbz   r4, (musicTestId - mainLoop)(r14)
+    #extsb r4, r4
     add   r4, r4, r3
     cmpwi r4, 0
-    bge   r4, .musicNotMax
+    bge   .musicNotMax
     li    r4, 0x58
 .musicNotMax:
     cmpwi r4, 0x59
@@ -66,13 +67,13 @@ drawItem_streamTest:
 adjItem_streamTest:
     # r3 = amount to adjust by (0 = A button)
     # r9 = sound effect to play after calling this
-    lhz   r4, (streamTestId - mainLoop)(r14)
+    lha   r4, (streamTestId - mainLoop)(r14)
     add   r4, r4, r3
     cmpwi r4, 0
-    bge   r4, .streamNotMax
-    li    r4, 904
+    bge   .streamNotMax
+    li    r4, 0x33D
 .streamNotMax:
-    cmpwi r4, 905
+    cmpwi r4, 0x33E
     blt   .streamNotMin
     li    r4, 0
 .streamNotMin:
