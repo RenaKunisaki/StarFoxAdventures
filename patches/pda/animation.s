@@ -14,28 +14,26 @@ doAnimation:
     fmuls  f2, f2, f1 # f2 = scaled width
     fctiwz f0, f2
     stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r3, (SP_FLOAT_TMP+4)(r1) # box width
+    lwz    r5, (SP_FLOAT_TMP+4)(r1) # box width
 
     fdivs  f2, f2, f9 # f2 /= 2
     fsubs  f6, f4, f2 # f6 = scaled X pos
     fctiwz f0, f6
     stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r5, (SP_FLOAT_TMP+4)(r1) # box X pos
+    lwz    r3, (SP_FLOAT_TMP+4)(r1) # box X pos
 
     fmuls  f3, f3, f1 # f3 = scaled height
     fctiwz f0, f3
     stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r4, (SP_FLOAT_TMP+4)(r1) # box height
+    lwz    r6, (SP_FLOAT_TMP+4)(r1) # box height
 
     fdivs  f3, f3, f9 # f2 /= 2
     fsubs  f6, f5, f3 # f6 = scaled Y pos
     fctiwz f0, f6
     stfd   f0, SP_FLOAT_TMP(r1)
-    lwz    r6, (SP_FLOAT_TMP+4)(r1) # box Y pos
+    lwz    r4, (SP_FLOAT_TMP+4)(r1) # box Y pos
 
-    lwz    r7, (menuAnimTimer - mainLoop)(r14) # scale
-    li     r8, 7 # texture
-    b      mainMenuSetupBox
+    b      menuDrawBox
 
 
 doOpenAnimation:
@@ -75,18 +73,7 @@ doCloseAnimation:
     fcmpo  0, f1, f3
     bgt    .closeAnimContinue
     fmr    f1, f3 # clamp anim timer to 0
-
-    # restore textbox config
-    # XXX we need to restore both boxes...
-    li     r3, 0x0186 # width
-    li     r4, 0x00C8 # height
-    li     r5, 0x0028 # X
-    li     r6, 0x0032 # Y
-    lis    r7, 0x3F80 # scale
-    li     r8, 5 # texture
-    mflr   r20
-    bl     mainMenuSetupBox
-    mtlr   r20
+    
 .closeAnimContinue:
     li     r3, 1 # menu isn't fully closed, so draw it.
     b      .animContinue

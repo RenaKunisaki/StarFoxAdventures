@@ -36,20 +36,15 @@ objMenu_List: # draw list of objects.
     lwz     r22, 0xA4(r21)
 
 .objMenu_List_noCamera: # draw the list
-
-    # set up the box
-    # there must be some "draw box" and "draw string" functions
-    # we can just call directly instead of this hijacking
-    # a textbox nonsense.
-    # also, hide the HUD when we're in the object list, as it
+    # XXX hide the HUD when we're in the object list, as it
     # likes to render overtop of our menu.
-    li      r3, 600 # width
-    li      r4, 420 # height
-    li      r5, 10  # X
-    li      r6, 40  # Y
-    lis     r7, 0x3F80 # scale
-    li      r8, 7 # texture
-    bl      mainMenuSetupBox
+
+    # draw the box
+    li      r3, 10  # X
+    li      r4, 40  # Y
+    li      r5, 600 # width
+    li      r6, 420 # height
+    bl      menuDrawBox
 
     # first item (selected) in blue
     li      r3, 0
@@ -88,7 +83,7 @@ objMenu_List: # draw list of objects.
     CALL    sprintf
 
     addi    r3,  r1, SP_STR_BUF
-    li      r4,  0x0C # box type
+    li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  10  # X pos
     li      r6,  390 # Y pos
     CALL    gameTextShowStr
@@ -130,7 +125,7 @@ objMenu_List: # draw list of objects.
     addi    r3,  r1, SP_STR_BUF
     li      r4,  0
     stb     r4,  25(r3) # strncpy doesn't do this if src is long
-    li      r4,  0x93 # box type
+    li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  10  # X pos
     mr      r6,  r20 # Y pos
     CALL    gameTextShowStr

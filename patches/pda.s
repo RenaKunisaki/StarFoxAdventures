@@ -19,6 +19,7 @@ constants:
     .set MENU_YPOS,240-(MENU_HEIGHT/2)
     .set LINE_HEIGHT,18
     .set MOVE_DELAY,10 # wait this many frames between autorepeat
+    .set MENU_TEXTBOX_ID,0x93 # same one the game uses for HUD
     .set STACK_SIZE,0x180 # how much to reserve
     .set SP_LR_SAVE,0x184 # this is what the game does
     .set SP_STR_BUF,0x20 # temporary string buffer
@@ -39,6 +40,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/main.s"
 
 .include "pda/hud.s"
+.include "pda/drawbox.s"
 .include "pda/animation.s"
 .include "pda/player.s"
 .include "pda/pdahud.s"

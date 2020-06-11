@@ -47,7 +47,6 @@ menuPtrs: # menu main function pointers
     .int runMenu    - mainLoop
     .int objectMenu - mainLoop
 
-
 returnToMainMenu:
     # called from other menus
     li   r3, 0
@@ -55,20 +54,6 @@ returnToMainMenu:
     li   r3, MOVE_DELAY
     stb  r3, (menuJustMoved - mainLoop)(r14)
     blr
-
-
-mainMenuSetupBox:
-    # set up the textbox
-    # r3 = width, r4 = height, r5 = X, r6 = Y, r7 = scale, r8 = texture
-    lwz    r19, (boxAddr - mainLoop)(r14)
-    sth    r3,  0x00(r19) # set box width
-    sth    r4,  0x02(r19) # set box height
-    sth    r5,  0x0C(r19) # set box X pos
-    sth    r6,  0x0E(r19) # set box Y pos
-    stw    r7,  0x04(r19) # set box scale
-    stb    r8,  0x0B(r19) # set box texture ID
-    blr
-
 
 runMenu:
     # subroutine: runs the menu logic.
@@ -109,7 +94,6 @@ runMenu:
     bl     menuDraw
     b      menuEndSub
 
-
 menuDraw:
     # subroutine: draws the menu.
     # expects r14 = mainLoop, r21 = draw funcs, r22 = adjust funcs
@@ -121,15 +105,14 @@ menuDraw:
     # draw title
     lwz    r3, 0(r21) # get title string
     add    r3, r3, r14
-    li     r4, 0xC # box type
-    li     r5, 0 # X pos
-    li     r6, 0 # Y pos
+    li     r4, 0 # box type: (center, y+???) with no background
+    #lhz    r5, (menuBoxX - mainLoop)(r14) # X pos
+    lhz    r6, (menuBoxY - mainLoop)(r14) # Y pos
+    subi   r6, r6, 30 # offset to actually fit the box
     CALL   gameTextShowStr
 
-    # setup box
-    #bl     mainMenuSetupBox
-    lwz    r19, (boxAddr - mainLoop)(r14)
-    lhz    r16, 0x0E(r19) # box Y pos
+    # setup text
+    lhz    r16, (menuBoxY - mainLoop)(r14)
     addi   r16, r16, LINE_HEIGHT + 8 # text Y offset
     lbz    r17, (menuSelItem - mainLoop)(r14)
     addi   r18, r1, SP_STR_BUF
@@ -173,8 +156,8 @@ menuDraw:
     CALL   sprintf
     lwz    r19, (boxAddr - mainLoop)(r14)
     addi   r3,  r1, SP_STR_BUF
-    li     r4,  0x93 # box type
-    lhz    r5,  0x0C(r19) # X pos
+    li     r4,  MENU_TEXTBOX_ID # box type
+    lhz    r5,  (menuBoxX - mainLoop)(r14) # X pos
     addi   r5,  r5, 10
     mr     r6,  r16 # Y pos
     addi   r16, r16, LINE_HEIGHT

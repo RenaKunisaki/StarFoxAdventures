@@ -10,12 +10,6 @@
 # because it makes it easier to see when a constant is duplicated
 # and just reuse it for both labels.
 
-# Since the GameText engine doesn't really allow for arbitrary box
-# styles/positions, we steal one of the boxes for our menu.
-# This points to the box in question.
-boxAddr: .int 0x802c7588
-
-
 # float constants
 zero:          .float   0
 one:           .float   1

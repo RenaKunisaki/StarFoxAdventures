@@ -1,5 +1,19 @@
 # some generic code used by multiple submodules.
 
+intToFloat: # convert r3 from int to float.
+    # stores result in f1.
+    # clobbers f9, r0, r3, SP_FLOAT_TMP
+    lfd     f9, (floatMagic - mainLoop)(r14) # load constant into f9
+    lis     r0, 0x4330
+    stw     r0, SP_FLOAT_TMP(r1) # store exponent part for integer
+
+    xoris r3, r3, 0x8000         # invert sign of integer
+    stw   r3, SP_FLOAT_TMP+4(r1) # store fraction part for integer
+    lfd   f1, SP_FLOAT_TMP(r1)   # load integer in double format into f1
+    fsub  f1, f1, f9             # f1 contains converted integer
+    frsp  f1, f1                 # double to single
+    blr
+
 adjItem_float: # r3=adj, r5=&val, f2=adjStep, f3=min, f4=max
     lfs     f1, 0(r5) # f1 = val
     cmpwi   r3, 0
