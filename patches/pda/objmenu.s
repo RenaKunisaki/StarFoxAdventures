@@ -1,3 +1,8 @@
+.set OBJ_MENU_XPOS,20
+.set OBJ_MENU_YPOS,20
+.set OBJ_MENU_WIDTH,600
+.set OBJ_MENU_HEIGHT,400
+
 objectMenu:
     # subroutine: runs the objects menu.
     # expects r14 = mainLoop.
@@ -5,6 +10,10 @@ objectMenu:
     mflr  r0
     stw   r0, SP_LR_SAVE(r1)
     stmw  r13, SP_GPR_SAVE(r1)
+
+    li     r3, 1
+    LOADWH r4, hudHidden
+    STOREB r3, hudHidden, r4
 
     lbz   r3, (objMenuState - mainLoop)(r14)
     slwi  r3, r3, 2
@@ -40,10 +49,10 @@ objMenu_List: # draw list of objects.
     # likes to render overtop of our menu.
 
     # draw the box
-    li      r3, 10  # X
-    li      r4, 40  # Y
-    li      r5, 600 # width
-    li      r6, 420 # height
+    li      r3, OBJ_MENU_XPOS   # X
+    li      r4, OBJ_MENU_YPOS   # Y
+    li      r5, OBJ_MENU_WIDTH  # width
+    li      r6, OBJ_MENU_HEIGHT # height
     bl      menuDrawBox
 
     # first item (selected) in blue
@@ -84,11 +93,11 @@ objMenu_List: # draw list of objects.
 
     addi    r3,  r1, SP_STR_BUF
     li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  10  # X pos
-    li      r6,  390 # Y pos
+    li      r5,  OBJ_MENU_XPOS # X pos
+    li      r6,  OBJ_MENU_YPOS + OBJ_MENU_HEIGHT + 16 # Y pos
     CALL    gameTextShowStr
 
-    li      r20, 40 # string Y pos
+    li      r20, OBJ_MENU_YPOS # string Y pos
 
 .objMenu_List_nextObj:
     slwi    r4,  r17, 2
@@ -141,7 +150,7 @@ objMenu_List: # draw list of objects.
     cmpw    r17, r16 # obj = numLoadedObjs?
     bge     menuEndSub
     addi    r20, r20, LINE_HEIGHT
-    cmpwi   r20, 420
+    cmpwi   r20, OBJ_MENU_YPOS + OBJ_MENU_HEIGHT
     blt     .objMenu_List_nextObj
 
     b       menuEndSub

@@ -35,6 +35,8 @@ f_centerX:     .float 320
 f_centerY:     .float 240
 
 # menu state
+streamTestId:  .short 0
+soundTestId:   .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
 menuVisible:   .byte 0
@@ -44,8 +46,7 @@ menuJustMoved: .byte 0 # frame counter
 menuPage:      .byte 0
 whichMenu:     .byte 0
 musicTestId:   .byte 0
-streamTestId:  .short 0
-soundTestId:   .short 0
+menuWasHudHidden: .byte 0
 
 # string pool
 # general

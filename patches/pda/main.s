@@ -33,12 +33,18 @@ checkMenuOpenKey:
     cmpwi   r7, PAD_BUTTON_L | PAD_BUTTON_Z
     bne     menuEndSub
     cmpwi   r6, PAD_BUTTON_B
-    bne     menuEndSub
+    #bne     menuEndSub
+    beql    mainMenuOpen
+    b       menuEndSub
+
+mainMenuOpen:
     li      r4, 1
     stb     r4, (menuVisible - mainLoop)(r14)
     li      r4, 0
     stb     r4, (whichMenu - mainLoop)(r14)
-    b       menuEndSub
+    LOADB   r4, hudHidden
+    stb     r4, (menuWasHudHidden - mainLoop)(r14)
+    blr
 
 menuPtrs: # menu main function pointers
     # whichMenu should always be 0 if the menu is closed or
@@ -393,6 +399,11 @@ menuHandleInput:
     stw    r4, 0(r5)
     li     r4, 0
     icbi   r4, r5 # flush instruction cache
+
+    # restore HUD
+    lbz     r4, (menuWasHudHidden - mainLoop)(r14)
+    LOADWH  r3, hudHidden
+    STOREB  r4, hudHidden, r3
 
     li     r4, 0x03F2
     b      .doSound
