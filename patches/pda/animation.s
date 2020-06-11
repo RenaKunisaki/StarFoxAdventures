@@ -41,8 +41,16 @@ doOpenAnimation:
     lwz    r3, (menuAnimTimer - mainLoop)(r14)
     cmpwi  r3, 0
     bne    .noOpenSound
+
+    # this is the first frame, so play the sound effect
+    # and initialize the state.
     li     r4, 0x03E5
     CALL   audioPlaySound
+    li     r4, 0
+    stb    r4, (whichMenu - mainLoop)(r14)
+    LOADB  r4, hudHidden
+    stb    r4, (menuWasHudHidden - mainLoop)(r14)
+
 
 .noOpenSound:
     # do animation.
@@ -73,7 +81,7 @@ doCloseAnimation:
     fcmpo  0, f1, f3
     bgt    .closeAnimContinue
     fmr    f1, f3 # clamp anim timer to 0
-    
+
 .closeAnimContinue:
     li     r3, 1 # menu isn't fully closed, so draw it.
     b      .animContinue
