@@ -48,6 +48,7 @@ menuSelItem:   .byte 0
 menuSelColor:  .byte 0
 menuJustMoved: .byte 0 # frame counter
 menuPage:      .byte 0
+whichMenu:     .byte 0
 musicTestId:   .byte 0
 streamTestId:  .short 0
 soundTestId:   .short 0
@@ -91,6 +92,11 @@ s_DebugText:  .string "Debug Text: %s"
 s_TrickyDebug:.string "Tricky Debug Text: %s"
 s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
+s_Objects:    .string "Objects"
+
+# Objects menu
+fmt_objListEntry: .string "%04X %08X "
+fmt_objListCoords: .string "%08X  %d, %d, %d"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add

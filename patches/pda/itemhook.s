@@ -11,6 +11,8 @@ itemHook: # called when the PDA is being toggled on/off by player.
 
     li   r3, 1
     stb  r3, (menuVisible - .itemHook_getpc)(r29)
+    li   r3, 0
+    stb  r3, (whichMenu - .itemHook_getpc)(r29)
 
     lwz  r5, SP_LR_SAVE(r1)
     mtlr r5 # restore LR

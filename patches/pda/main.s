@@ -2,18 +2,25 @@ mainLoop: # called from main loop. r3 = mainLoop
     stwu  r1, -STACK_SIZE(r1) # get some stack space
     mflr  r5
     stw   r5, SP_LR_SAVE(r1)
-    stmw  r3, SP_GPR_SAVE(r1)
+    stmw  r13, SP_GPR_SAVE(r1)
     mr    r14, r3
 
     # do HUD overrides, even if menu isn't open.
     bl    doHudOverrides
-    bl    runMenu
+
+    lbz   r4, (whichMenu - mainLoop)(r14)
+    slwi  r4, r4, 2
+    addi  r5, r14, menuPtrs - mainLoop
+    lwzx  r5, r4, r5
+    add   r5, r5, r14
+    mtspr CTR, r5
+    bctrl
 
 menuEndSub:
     # common end code for menu subroutines.
-    lwz  r5, SP_LR_SAVE(r1)
-    mtlr r5 # restore LR
-    lmw  r3, SP_GPR_SAVE(r1)
+    lwz  r0, SP_LR_SAVE(r1)
+    mtlr r0 # restore LR
+    lmw  r13, SP_GPR_SAVE(r1)
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
 
@@ -29,7 +36,39 @@ checkMenuOpenKey:
     bne     menuEndSub
     li      r4, 1
     stb     r4, (menuVisible - mainLoop)(r14)
+    li      r4, 0
+    stb     r4, (whichMenu - mainLoop)(r14)
     b       menuEndSub
+
+menuPtrs: # menu main function pointers
+    # whichMenu should always be 0 if the menu is closed or
+    # doing the close animation, so we don't need to check
+    # if the menu is open in the others.
+    .int runMenu    - mainLoop
+    .int objectMenu - mainLoop
+
+
+returnToMainMenu:
+    # called from other menus
+    li   r3, 0
+    stb  r3, (whichMenu - mainLoop)(r14)
+    li   r3, MOVE_DELAY
+    stb  r3, (menuJustMoved - mainLoop)(r14)
+    blr
+
+
+mainMenuSetupBox:
+    # set up the textbox
+    # r3 = width, r4 = height, r5 = X, r6 = Y, r7 = scale, r8 = texture
+    lwz    r19, (boxAddr - mainLoop)(r14)
+    sth    r3,  0x00(r19) # set box width
+    sth    r4,  0x02(r19) # set box height
+    sth    r5,  0x0C(r19) # set box X pos
+    sth    r6,  0x0E(r19) # set box Y pos
+    stw    r7,  0x04(r19) # set box scale
+    stb    r8,  0x0B(r19) # set box texture ID
+    blr
+
 
 runMenu:
     # subroutine: runs the menu logic.
@@ -37,7 +76,7 @@ runMenu:
     stwu  r1, -STACK_SIZE(r1) # get some stack space
     mflr  r5
     stw   r5, SP_LR_SAVE(r1)
-    stmw  r3, SP_GPR_SAVE(r1)
+    stmw  r13, SP_GPR_SAVE(r1)
 
     # get current page, and get pointers to the
     # draw function tables and adjust function tables.
@@ -66,10 +105,9 @@ runMenu:
 .menuIsOpen:
     bl     doOpenAnimation
     bl     menuHandleInput
-
 .menuClosing:
-    bl menuDraw
-    b  menuEndSub
+    bl     menuDraw
+    b      menuEndSub
 
 
 menuDraw:
@@ -78,7 +116,7 @@ menuDraw:
     stwu   r1, -STACK_SIZE(r1) # get some stack space
     mflr   r5
     stw    r5, SP_LR_SAVE(r1)
-    stmw   r3, SP_GPR_SAVE(r1)
+    stmw   r13, SP_GPR_SAVE(r1)
 
     # draw title
     lwz    r3, 0(r21) # get title string
@@ -89,6 +127,7 @@ menuDraw:
     CALL   gameTextShowStr
 
     # setup box
+    #bl     mainMenuSetupBox
     lwz    r19, (boxAddr - mainLoop)(r14)
     lhz    r16, 0x0E(r19) # box Y pos
     addi   r16, r16, LINE_HEIGHT + 8 # text Y offset
@@ -143,38 +182,23 @@ menuDraw:
     b      .nextItem
 
 
-menuHandleInput:
-    # subroutine: runs the menu logic.
-    # expects r14 = mainLoop, r21 = draw funcs, r22 = adjust funcs
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r5
-    stw   r5, SP_LR_SAVE(r1)
-    stmw  r3, SP_GPR_SAVE(r1)
-
-    # pause game
-    li     r4, 1
-    LOADWH r5, playerLocked
-    STOREB r4, playerLocked, r5 # stops all objects
-    STOREB r4, pauseDisabled, r5 # inhibit pause menu
-    #li     r4, 1
-    STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
-    # inhibit game timer
-    LOAD   r5, 0x800140BC # gameTimerRun
-    LOAD   r4, 0x4E800020 # blr
-    stw    r4, 0(r5)
-    li     r4, 0
-    icbi   r4, r5 # flush instruction cache
+menuGetInput:
+    # subroutine: checks input.
+    # expects r14 = mainLoop
+    # returns r3=buttons, r4=stick X, r5=stick Y,
+    # r6=CX, r7=CY, r8=L, r9=R
+    # returns all inputs zero if menuJustMoved timer not zero.
 
     # get the controller state
     # r6 = stick X, r7 = stick Y
-    LOADWH  r5, controllerStates
-    LOADBL2 r6, controllerStates+2, r5 # stick x
-    LOADBL2 r7, controllerStates+3, r5 # stick y
-    LOADBL2 r8, controllerStates+4, r5 # CX
-    LOADWL2 r9, buttonsJustPressed, r5
-    extsb   r6, r6 # sign extend (PPC Y U NO LBA OPCODE!?)
-    extsb   r7, r7
-    extsb   r8, r8
+    LOADWH  r10, controllerStates
+    LOADBL2 r6,  controllerStates+2, r10 # stick x
+    LOADBL2 r7,  controllerStates+3, r10 # stick y
+    LOADBL2 r8,  controllerStates+4, r10 # CX
+    LOADWL2 r9,  buttonsJustPressed, r10
+    extsb   r6,  r6 # sign extend (PPC Y U NO LBA OPCODE!?)
+    extsb   r7,  r7
+    extsb   r8,  r8
 
     # have we just moved?
     lbz     r5, (menuJustMoved - mainLoop)(r14)
@@ -193,29 +217,74 @@ menuHandleInput:
 .stickNotNeutral: # set the move timer.
     subi    r5, r5, 1
     stb     r5, (menuJustMoved - mainLoop)(r14)
-    b menuEndSub # don't move this frame.
 
+    # don't move this frame.
+    li      r3, 0
+    li      r4, 0
+    li      r5, 0
+    li      r6, 0
+    li      r7, 0
+    li      r8, 0
+    li      r9, 0
+    blr
 
 .notJustMoved: # we didn't move recently
-    andi.   r3, r9, PAD_BUTTON_B
+    mr      r3, r9 # buttons
+    mr      r4, r6 # stick X
+    mr      r5, r7 # stick Y
+    mr      r6, r8 # CX
+    LOADBL2 r7, controllerStates+5, r10 # CY
+    extsb   r7, r7
+    LOADBL2 r8, controllerStates+6, r10 # L
+    LOADBL2 r9, controllerStates+7, r10 # R
+    blr
+
+
+menuHandleInput:
+    # subroutine: runs the menu logic.
+    # expects r14 = mainLoop, r21 = draw funcs, r22 = adjust funcs
+    stwu  r1, -STACK_SIZE(r1) # get some stack space
+    mflr  r5
+    stw   r5, SP_LR_SAVE(r1)
+    stmw  r13, SP_GPR_SAVE(r1)
+
+    # pause game
+    li     r4, 1
+    LOADWH r5, playerLocked
+    STOREB r4, playerLocked, r5 # stops all objects
+    STOREB r4, pauseDisabled, r5 # inhibit pause menu
+    #li     r4, 1
+    STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
+    # inhibit game timer
+    LOAD   r5, 0x800140BC # gameTimerRun
+    LOAD   r4, 0x4E800020 # blr
+    stw    r4, 0(r5)
+    li     r4, 0
+    icbi   r4, r5 # flush instruction cache
+
+    bl     menuGetInput
+    # r3=buttons, r4=stick X, r5=stick Y,
+    # r6=CX, r7=CY, r8=L, r9=R
+
+    andi.   r10, r3, PAD_BUTTON_B
     bne     .close # B pressed -> close menu
-    andi.   r3, r9, PAD_BUTTON_A
+    andi.   r10, r3, PAD_BUTTON_A
     bne     .select # A pressed -> select item
 
     lbz   r17, (menuPage - mainLoop)(r14)
 
     # check analog stick
-    cmpwi   r7, 0x10
+    cmpwi   r5, 0x10
     bgt     .up
-    cmpwi   r7, -0x10
+    cmpwi   r5, -0x10
     blt     .down
-    cmpwi   r6, 0x10
+    cmpwi   r4, 0x10
     bgt     .right
-    cmpwi   r6, -0x10
+    cmpwi   r4, -0x10
     blt     .left
-    cmpwi   r8, 0x10
+    cmpwi   r6, 0x10
     bgt     .nextPage
-    cmpwi   r8, -0x10
+    cmpwi   r6, -0x10
     bge     menuEndSub # no input
 
     # prev page
@@ -329,6 +398,7 @@ menuHandleInput:
 .close: # close the menu
     li     r3, 0
     stb    r3, (menuVisible - mainLoop)(r14)
+    stb    r3, (whichMenu - mainLoop)(r14)
     LOADWH r5, playerLocked
     STOREB r3, playerLocked, r5 # unpause game
     LOADWH r5, pauseDisabled

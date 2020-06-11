@@ -71,6 +71,7 @@ itemDrawFuncs_page3: # Debug
     .int drawItem_trickyDebug - mainLoop
     .int drawItem_freeMove    - mainLoop
     .int drawItem_reloadMap   - mainLoop
+    .int drawItem_objects     - mainLoop
     .int 0
 
 itemAdjustFuncs_page3:
@@ -78,3 +79,4 @@ itemAdjustFuncs_page3:
     .int adjItem_trickyDebug - mainLoop
     .int adjItem_freeMove    - mainLoop
     .int adjItem_reloadMap   - mainLoop
+    .int adjItem_objects     - mainLoop

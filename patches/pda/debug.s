@@ -75,3 +75,16 @@ adjItem_reloadMap: # r3 = amount to adjust by (0=A button)
     cmpwi   r3, 0
     bnelr
     JUMP    0x80020748, r3 # mapReload
+
+#######################################################################
+
+drawItem_objects:
+    addi  r4, r14, (s_Objects - mainLoop)
+    blr
+
+adjItem_objects: # r3 = amount to adjust by (0=A button)
+    cmpwi   r3, 0
+    bnelr
+    li      r3, 1
+    stb     r3, (whichMenu - mainLoop)(r14)
+    blr
