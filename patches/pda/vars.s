@@ -47,6 +47,7 @@ menuPage:      .byte 0
 whichMenu:     .byte 0
 musicTestId:   .byte 0
 menuWasHudHidden: .byte 0
+menuWasPdaOn:  .byte 0 # for hiding map in objects list
 
 # string pool
 # general

@@ -14,6 +14,9 @@ objectMenu:
     li     r3, 1
     LOADWH r4, hudHidden
     STOREB r3, hudHidden, r4
+    li     r3, 0
+    LOADWH r4, pdaOn
+    STOREB r3, pdaOn, r4
 
     lbz   r3, (objMenuState - mainLoop)(r14)
     slwi  r3, r3, 2

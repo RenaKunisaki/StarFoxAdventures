@@ -44,4 +44,5 @@ adjItem_PDAHUD:
 
 .setPDA:
     STOREB  r6, pdaOn, r7
+    stb     r6, (menuWasPdaOn - mainLoop)(r14) # don't reset
     blr

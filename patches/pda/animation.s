@@ -44,12 +44,15 @@ doOpenAnimation:
 
     # this is the first frame, so play the sound effect
     # and initialize the state.
-    li     r4, 0x03E5
-    CALL   audioPlaySound
-    li     r4, 0
-    stb    r4, (whichMenu - mainLoop)(r14)
-    LOADB  r4, hudHidden
-    stb    r4, (menuWasHudHidden - mainLoop)(r14)
+    li      r4, 0x03E5
+    CALL    audioPlaySound
+    li      r4, 0
+    stb     r4, (whichMenu - mainLoop)(r14)
+    LOADB   r4, hudHidden
+    stb     r4, (menuWasHudHidden - mainLoop)(r14)
+    LOADWH  r4, pdaOn
+    LOADBL2 r4, pdaOn, r4
+    stb     r4, (menuWasPdaOn - mainLoop)(r14)
 
 
 .noOpenSound:
