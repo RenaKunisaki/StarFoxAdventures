@@ -2,18 +2,18 @@
 .text
 .include "common.s"
 
-# temporary patch to undo previous patch
-#GECKO_WRITE32 0x80137948, 0x9421FF90
+# redirect some stubbed print functions to OSReport
+# (OSReport is itself a stub, but Dolphin hooks it)
+GECKO_CREATE_BRANCH 0x80148B78, 0x8007D6DC # trickyReportError
+GECKO_CREATE_BRANCH 0x802510cc, 0x8007D6DC # dspDebugPrint
+GECKO_CREATE_BRANCH 0x80246e04, 0x8007D6DC # _osDebugPrint
 
-# patch some other debug print functions to use this one
-GECKO_CREATE_BRANCH 0x80148B78, 0x80137948
-GECKO_CREATE_BRANCH 0x802510cc, 0x80137948
-GECKO_CREATE_BRANCH 0x80246e04, 0x80137948
-GECKO_CREATE_BRANCH 0x801378a8, 0x80137948
-GECKO_CREATE_BRANCH 0x80148bc8, 0x80137948 # Tricky
-GECKO_CREATE_BRANCH 0x8007d6dc, 0x80137948 # OSReport
+# patch some other debug print functions to use this logPrintf
+GECKO_CREATE_BRANCH 0x801378a8, 0x80137948 # debugPrintf
+#GECKO_CREATE_BRANCH 0x80148bc8, 0x80137948 # trickyDebugPrint
+#GECKO_CREATE_BRANCH 0x8007d6dc, 0x80137948 # OSReport
 
-GECKO_BEGIN_PATCH 0x8013798c # stw r10,0x24(r1)
+GECKO_BEGIN_PATCH 0x8013798c # stw r10,0x24(r1) - logPrintf
 
 stw     r10,0x24(r1) # replaced
 mflr    r11
