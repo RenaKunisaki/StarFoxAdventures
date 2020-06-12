@@ -1,7 +1,11 @@
-.set OBJ_MENU_XPOS,20
-.set OBJ_MENU_YPOS,20
-.set OBJ_MENU_WIDTH,600
-.set OBJ_MENU_HEIGHT,400
+.set OBJ_MENU_XPOS,   10
+.set OBJ_MENU_YPOS,   20
+.set OBJ_MENU_WIDTH, 300
+.set OBJ_MENU_HEIGHT,448
+.set OBJ_INFO_XPOS,OBJ_MENU_XPOS+OBJ_MENU_WIDTH+8
+.set OBJ_INFO_YPOS,   20
+.set OBJ_INFO_WIDTH, 300
+.set OBJ_INFO_HEIGHT,448
 
 objectMenu:
     # subroutine: runs the objects menu.
@@ -48,22 +52,19 @@ objMenu_List: # draw list of objects.
     lwz     r22, 0xA4(r21)
 
 .objMenu_List_noCamera: # draw the list
-    # XXX hide the HUD when we're in the object list, as it
-    # likes to render overtop of our menu.
-
-    # draw the box
+    # draw the boxes
     li      r3, OBJ_MENU_XPOS   # X
     li      r4, OBJ_MENU_YPOS   # Y
     li      r5, OBJ_MENU_WIDTH  # width
     li      r6, OBJ_MENU_HEIGHT # height
+    li      r20, 255 # opacity
     bl      menuDrawBox
 
-    # first item (selected) in blue
-    li      r3, 0
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    li      r3, OBJ_INFO_XPOS   # X
+    li      r4, OBJ_INFO_YPOS   # Y
+    li      r5, OBJ_INFO_WIDTH  # width
+    li      r6, OBJ_INFO_HEIGHT # height
+    bl      menuDrawBox
 
     # get the object ptrs
     lhz     r17, (objMenuIdx - mainLoop)(r14)
@@ -72,35 +73,17 @@ objMenu_List: # draw list of objects.
     LOADWL2 r15, loadedObjects, r15
     slwi    r4,  r17, 2
     lwzx    r18, r4, r15   # r18 = ObjInstance*
+    mr      r3, r18
+    bl      objMenu_drawCurObject
 
-    # draw the coords
-    lfs     f1, 0x0C(r18)
-    fctiwz  f2,f1
-    stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r6,SP_FLOAT_TMP+4(r1)
+    # first item (selected) in blue
+    li      r3, 0
+    li      r4, 255
+    li      r5, 255
+    li      r6, 255
+    CALL    gameTextSetColor
 
-    lfs     f1, 0x10(r18)
-    fctiwz  f2,f1
-    stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r7,SP_FLOAT_TMP+4(r1)
-
-    lfs     f1, 0x14(r18)
-    fctiwz  f2,f1
-    stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r8,SP_FLOAT_TMP+4(r1)
-
-    mr      r5, r18 # address
-    addi    r4, r14, fmt_objListCoords - mainLoop
-    addi    r3,  r1, SP_STR_BUF
-    CALL    sprintf
-
-    addi    r3,  r1, SP_STR_BUF
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  OBJ_MENU_XPOS # X pos
-    li      r6,  OBJ_MENU_YPOS + OBJ_MENU_HEIGHT + 16 # Y pos
-    CALL    gameTextShowStr
-
-    li      r20, OBJ_MENU_YPOS # string Y pos
+    li      r20, OBJ_MENU_YPOS + 8 # string Y pos
 
 .objMenu_List_nextObj:
     slwi    r4,  r17, 2
@@ -138,7 +121,7 @@ objMenu_List: # draw list of objects.
     li      r4,  0
     stb     r4,  25(r3) # strncpy doesn't do this if src is long
     li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  10  # X pos
+    li      r5,  OBJ_MENU_XPOS + 8  # X pos
     mr      r6,  r20 # Y pos
     CALL    gameTextShowStr
 
@@ -153,7 +136,7 @@ objMenu_List: # draw list of objects.
     cmpw    r17, r16 # obj = numLoadedObjs?
     bge     menuEndSub
     addi    r20, r20, LINE_HEIGHT
-    cmpwi   r20, OBJ_MENU_YPOS + OBJ_MENU_HEIGHT
+    cmpwi   r20, OBJ_MENU_YPOS + OBJ_MENU_HEIGHT - LINE_HEIGHT
     blt     .objMenu_List_nextObj
 
     b       menuEndSub
@@ -180,6 +163,8 @@ objMenu_List_doInput: # return r3 = 0 to close, 1 to keep open
     bne     .objMenu_close
     andi.   r10, r3, PAD_BUTTON_Z
     bne     .objMenu_focus
+    andi.   r10, r3, PAD_BUTTON_X
+    bne     .objMenu_delete
 
     # check analog stick
     cmpwi   r5, 0x10
@@ -242,6 +227,139 @@ objMenu_List_doInput: # return r3 = 0 to close, 1 to keep open
     li      r3, 0
     li      r4, 0xFD # "can't use that item"
     CALL    audioPlaySound
+    b       menuEndSub
+
+.objMenu_delete: # delete the selected object
+    mr      r3, r18
+    CALL    objFree
+    li      r3,  MOVE_DELAY
+    stb     r3,  (menuJustMoved - mainLoop)(r14)
+    b       menuEndSub
+
+
+objMenu_drawCurObject:
+    stwu  r1, -STACK_SIZE(r1) # get some stack space
+    mflr  r0
+    stw   r0, SP_LR_SAVE(r1)
+    stmw  r13, SP_GPR_SAVE(r1)
+
+    mr      r18, r3
+    li      r3, 255
+    li      r4, 255
+    li      r5, 255
+    li      r6, 255
+    CALL    gameTextSetColor
+
+    # line 1: address, coords
+    lfs     f1, 0x0C(r18)
+    fctiwz  f2,f1
+    stfd    f2,SP_FLOAT_TMP(r1)
+    lwz     r6,SP_FLOAT_TMP+4(r1)
+
+    lfs     f1, 0x10(r18)
+    fctiwz  f2,f1
+    stfd    f2,SP_FLOAT_TMP(r1)
+    lwz     r7,SP_FLOAT_TMP+4(r1)
+
+    lfs     f1, 0x14(r18)
+    fctiwz  f2,f1
+    stfd    f2,SP_FLOAT_TMP(r1)
+    lwz     r8,SP_FLOAT_TMP+4(r1)
+
+    mr      r5, r18 # address
+    addi    r4, r14, fmt_objListCoords - mainLoop
+    addi    r3,  r1, SP_STR_BUF
+    CALL    sprintf
+
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + 8 # Y pos
+    CALL    gameTextShowStr
+
+    # line 2: flags
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4, r14, fmt_objListFlags - mainLoop
+    lhz     r5, 0x06(r18) # flags
+    lbz     r6, 0xAF(r18) # flags
+    lbz     r7, 0xB0(r18) # flags
+    CALL    sprintf
+
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + LINE_HEIGHT + 8 # Y pos
+    CALL    gameTextShowStr
+
+    # line 3: slot, map
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4, r14, fmt_objListMap - mainLoop
+    lbz     r5, 0xAE(r18) # slot
+    lbz     r6, 0x34(r18) # map
+    lbz     r7, 0xAC(r18) # map 2
+    CALL    sprintf
+
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*2) + 8 # Y pos
+    CALL    gameTextShowStr
+
+    # line 4: seq
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4, r14, fmt_objListSeq - mainLoop
+    lwz     r5, 0x4C(r18) # seq
+    lhz     r6, 0xB4(r18) # curSeq
+    CALL    sprintf
+
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*3) + 8 # Y pos
+    CALL    gameTextShowStr
+
+    # line 5: event
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4, r14, fmt_objListEvent - mainLoop
+    lwz     r5, 0x60(r18) # event
+    CALL    sprintf
+
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*4) + 8 # Y pos
+    CALL    gameTextShowStr
+
+    # line 6: models
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4, r14, fmt_objListModel - mainLoop
+    lwz     r5, 0x7C(r18) # models
+    lbz     r6, 0xAD(r18) # curModel
+    slwi    r7, r6, 4
+    lwzx    r7, r5, r7 # get model
+    cmpwi   r7, 0
+    beq     .objMenu_drawCurObject_noModel
+    lwz     r7, 0(r7) # get ModelFileHeader
+    cmpwi   r7, 0
+    beq     .objMenu_drawCurObject_noModel
+    lhz     r7, 4(r7) # get model ID
+
+.objMenu_drawCurObject_noModel:
+    CALL    sprintf
+
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*5) + 8 # Y pos
+    CALL    gameTextShowStr
+
+    # instructions
+    addi    r3,  r14, fmt_objListInstrs - mainLoop
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - LINE_HEIGHT # Y pos
+    CALL    gameTextShowStr
+
     b       menuEndSub
 
 

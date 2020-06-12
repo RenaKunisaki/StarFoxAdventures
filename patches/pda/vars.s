@@ -91,8 +91,15 @@ s_ReloadMap:  .string "Reload Map"
 s_Objects:    .string "Objects"
 
 # Objects menu
-fmt_objListEntry: .string "%04X %08X "
+fmt_objListEntry:  .string "%04X %08X "
+# right pane
 fmt_objListCoords: .string "%08X  %d, %d, %d"
+fmt_objListFlags:  .string "FLAG %04X %02X %02X"
+fmt_objListMap:    .string "SLOT %02X MAP %02X %02X"
+fmt_objListSeq:    .string "SEQ %08X %04X"
+fmt_objListEvent:  .string "EVENT %08X"
+fmt_objListModel:  .string "MODEL %08X(%d) %04X"
+fmt_objListInstrs: .string "Z:Focus X:Delete"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add
@@ -105,8 +112,7 @@ fmt_objListCoords: .string "%08X  %d, %d, %d"
 # - GameBit menu
 # - WARPTAB menu
 # - Arbitrary warp (set coords/layer manually)
-# - Browse loaded object list, loaded file list, heap
-#   - change camera focus? turns out that's pretty easy.
+# - Browse loaded file list, heap
 # - Browse GameText, textures, models, animations?
 # - fun stuff
 #   - bullet time (reduce game speed during combat)
@@ -115,6 +121,3 @@ fmt_objListCoords: .string "%08X  %d, %d, %d"
 #     - or decrease so it's like you go the same speed but
 #       the rest of the world slows down
 #   - color filters
-#
-# how would we do things like object list though? we'd need a different
-# menu system for that.
