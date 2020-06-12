@@ -1,6 +1,8 @@
 # debugprint patch:
 # 1) patches into main loop to display some info on screen
 # 2) moves debug print to very edges of screen
+# 3) draws bars in bottom left corner: render time, physics time,
+#    heap usage
 .text
 .include "common.s"
 .include "globals.s"
@@ -71,25 +73,74 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpwi r4, 0
     beq   .end
 
+    # don't make debug text flash with HUD text
+    li      r3, 255
+    li      r4, 255
+    li      r5, 255
+    li      r6, 255
+    CALL    gameTextSetColor
+
+    LOAD  r18, 0x803a89b0 # HUD textures
+
+    # draw full bar at reduced opacity to show range
+    lfs     f1, (.cpuBarX - mainLoop)(r14)
+    lfs     f2, (.cpuBarY - mainLoop)(r14)
+    li      r6, 200    # width
+    li      r3, 13     # texture
+    li      r4, 0x7F   # opacity
+    li      r7, 30     # height
+    bl      .drawBarWithOpacityAndHeight
+
+    # display CPU usage
+    LOADWH  r4, msecsThisFrame
+    LOADFL2 f1, msecsThisFrame, r4
+    lfs     f2, (.timeDeltaScale - mainLoop)(r14)
+    fmuls   f2, f2, f1
+    fctiwz  f2, f2
+    stfd    f2, SP_FLOAT_TMP(r1)
+    lwz     r6, SP_FLOAT_TMP+4(r1) # width
+    lfs     f1, (.cpuBarX - mainLoop)(r14) # X
+    lfs     f2, (.cpuBarY - mainLoop)(r14) # Y
+    li      r3, 13     # texture
+    bl      .drawBar
+
+    # display time delta
+    LOADWH  r4, timeDelta
+    LOADFL2 f1, timeDelta, r4
+    lfs     f2, (.timeDeltaScale - mainLoop)(r14)
+    fmuls   f2, f2, f1
+    fctiwz  f2, f2
+    stfd    f2, SP_FLOAT_TMP(r1)
+    lwz     r6, SP_FLOAT_TMP+4(r1) # width
+    lfs     f1, (.cpuBarX - mainLoop)(r14) # X
+    lfs     f2, (.timeBarY - mainLoop)(r14) # Y
+    li      r3, 13     # texture
+    bl      .drawBar
+
     # display heap stats: free bytes, free blocks
     LOAD  r16, 0x803406A0 # heap 0
     li    r15, 0 # idx
+    lfs   f31, (.heapBarY - mainLoop)(r14)
+    lfs   f30, (.heapBarHeight - mainLoop)(r14)
 .nextHeap:
-    addi  r3, r14, (.fmt_heap - mainLoop)@l
-    #mr    r4, r15 # heap num
-
     lwz   r4, 0x0C(r16) # total bytes
-    lwz   r5, 0x00(r16) # total blocks
+    #lwz   r5, 0x00(r16) # total blocks
     lwz   r6, 0x10(r16) # used bytes
     #sub   r4, r4, r6    # free bytes
-    mulli r6, r6, 100
-    divwu r4, r6, r4 # used bytes percent
-    lwz   r6, 0x04(r16) # used blocks
-    #sub   r5, r5, r6    # free blocks
-    mulli r6, r6, 100
-    divwu r5, r6, r5 # used blocks percent
+    mulli r6, r6, 200
+    divwu r6, r6, r4 # used bytes percent * 2
+    #lwz   r6, 0x04(r16) # used blocks
+    ##sub   r5, r5, r6    # free blocks
+    #mulli r6, r6, 100
+    #divwu r5, r6, r5 # used blocks percent
 
-    CALL debugPrintf
+    lfs     f1, (.cpuBarX - mainLoop)(r14) # X
+    fmr     f2, f31 # Y
+    fadds   f31, f31, f30
+    li      r3, 13     # texture
+    bl      .drawBar
+    # XXX blocks?
+
     addi  r16, r16, 0x14 # heap entry size
     addi  r15, r15, 1
     cmpwi r15, 4
@@ -100,6 +151,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADW r4, 0x803dcb84 # numObjects
     LOADW r5, 0x803dcde8 # game state flags
     CALL  debugPrintf
+
 
     # get player object
     LOADW r16, pPlayer
@@ -188,11 +240,31 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
 
+.drawBar:
+    li      r4, 0xFF    # opacity
+    li      r7, 5       # height
+.drawBarWithOpacityAndHeight:
+    slwi    r3, r3, 2   # texture ID * 4
+    lwzx    r3, r3, r18 # Texture*
+    li      r5, 0x0100  # scale
+    li      r8, 0       # flags
+    mflr    r29
+    CALL    0x8007681c  # draw scaled texture
+    mtlr    r29
+    blr
+
+#.timeDeltaScale: .float 6.25 # 100 / 16
+.timeDeltaScale: .float 12.5 # 200 / 16
+#.timeDeltaScale: .float 18.75 # 300 / 16
+.cpuBarX:        .float 1
+.cpuBarY:        .float 460
+.timeBarY:       .float 463
+.heapBarY:       .float 466
+.heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
-.fmt_heap: .string "\x84%3d%3d\x83, "
-.fmt_gameState: .string "%d obj; G %08X\n"
-.fmt_playerCoords: .string "P \x84%08X %d %d %d\x83 "
-.fmt_mapCoords: .string "M \x84%d %d %d %d\x83 "
-.fmt_playerState: .string "\nS \x84%02X %08X\x83 A \x84%04X %f\x83\n"
+.fmt_gameState: .string "\x84%3d\x83 obj  G:\x84%08X\x83  "
+.fmt_playerCoords: .string "P:\x84%08X %d %d %d\x83  "
+.fmt_mapCoords: .string "M:\x84%d %d %d %d\x83 "
+.fmt_playerState: .string "\nS:\x84%02X %08X\x83 A:\x84%04X %f\x83\n"
     #.string "S \x84%02X\x83 A \x84%04X\x83\n"
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
