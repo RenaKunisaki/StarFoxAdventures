@@ -10,13 +10,27 @@
 patchList:
     PATCH_ID        "DbgText" # must be 7 chars
     PATCH_MAIN_LOOP mainLoop
+
+    # restore some stubbed print functions (redirect to OSReport)
+    PATCH_WORD 0x80148B78, 0x4BF34B64 # trickyReportError
+    PATCH_WORD 0x802510CC, 0x4BE2C610 # dspDebugPrint
+    PATCH_WORD 0x80246E04, 0x4BE368D8 # _osDebugPrint
+
+    # restore debugPrintf
+    PATCH_WORD 0x801378A8, 0x480000A0 # debugPrintf
+    PATCH_B 0x8013798C, hook_logPrintf
+
     # patch debug print to move to the very edge of the screen.
     PATCH_HWORD 0x8013761A, 0
     PATCH_HWORD 0x8013762E, 0
     PATCH_HWORD 0x8013764A, 0
     PATCH_HWORD 0x8013765E, 0
+
     # make fixed width more reasonable
+    # we can even do 5 here, but then the letter B gets cut off
+    # and looks like 8.
     PATCH_BYTE  0x80137317, 6
+
     # enable debug functions on controller 3
     PATCH_BYTE 0x80014E73, 0x00000004
     PATCH_END PATCH_KEEP_AFTER_RUN
@@ -31,8 +45,10 @@ constants:
 
 entry: # called as soon as our patch is loaded.
     stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r3
-    stw   r3,  SP_LR_SAVE(r1)
+    mflr  r4
+    stw   r4,  SP_LR_SAVE(r1)
+    stw   r14, SP_R14_SAVE(r1)
+    mr    r14, r3
 
     # print some info about boot environment.
     lis    r3,  0x8000
@@ -44,16 +60,41 @@ entry: # called as soon as our patch is loaded.
     lwz    r9,  0x30(r3) # arena lo
     lwz    r10, 0x34(r3) # arena hi
 
-    bl .entry_getpc
-    .entry_getpc:
-        mflr r3
-    addi r3, r3, (bootMsg - .entry_getpc)@l
+    addi r3, r14, (bootMsg - patchList)@l
     CALL OSReport
 
+    lwz  r14, SP_R14_SAVE(r1)
     lwz  r3,  SP_LR_SAVE(r1)
     mtlr r3 # restore LR
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
+
+
+hook_logPrintf: # hooked beginning of logPrintf
+    stw     r10, 0x24(r1) # replaced
+    mflr    r11
+    stw     r11, 0x68(r1) # stash lr too
+    LOADW   r3,  debugLogEnd # prepare params for sprintf
+    lwz     r4,  0x08(r1) # must shift all params up one register
+    lwz     r5,  0x0C(r1)
+    lwz     r6,  0x10(r1)
+    lwz     r7,  0x14(r1)
+    lwz     r8,  0x18(r1)
+    lwz     r9,  0x1C(r1)
+    lwz     r10, 0x20(r1)
+    lwz     r11, 0x24(r1)
+    CALL    sprintf # returns # characters written excluding null
+
+    # update pLogEnd
+    LOADWH  r4, debugLogEnd
+    LOADWL2 r5, debugLogEnd, r4
+    add     r5, r5, r3
+    addi    r5, r5, 1 # or else it deadlocks displaying
+    STOREW  r5, debugLogEnd, r4
+    lwz     r5, 0x68(r1)
+    mtlr    r5
+    JUMP    0x80137990, r0
+
 
 mainLoop: # called from main loop. r3 = mainLoop
     stwu  r1, -STACK_SIZE(r1) # get some stack space
@@ -65,9 +106,8 @@ mainLoop: # called from main loop. r3 = mainLoop
     mr    r14, r3
 
     # the patch that restores debug print functions also overrides
-    # this variable, so manually check it before doing things.
-    # XXX that patch should be integrated into this one instead
-    # of being a separate Gecko code.
+    # this variable, and won't affect our bar drawing,
+    # so manually check it before doing things.
     LOADB r4, enableDebugText
     cmpwi r4, 0
     beq   .end
