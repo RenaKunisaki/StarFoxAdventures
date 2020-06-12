@@ -1,9 +1,10 @@
-#!/bin/sh
+#!/bin/bash
 # make and install all patches
 # you will probably want to change the destination
 # and maybe the order
 TARGET=~/projects/sfa/files
 
+set -e
 ./makedolpatch.sh debugbin && mv -f debugbin.bin $TARGET/debug.bin
 ./makedolpatch.sh debugprint && mv -f debugprint.bin $TARGET/patches/0000
 ./makedolpatch.sh krystal && mv -f krystal.bin $TARGET/patches/0001
