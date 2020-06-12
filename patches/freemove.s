@@ -40,10 +40,13 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpwi r4, 0
     beq   .off
 
-    # get player object
-    LOADW r16, pPlayer
-    cmpwi r16, 0
-    beq   .end # no player object
+    # get object of camera focus.
+    LOADW   r21, pCamera
+    cmpwi   r21, 0
+    beq     .end # no camera
+    lwz     r16, 0xA4(r21)
+    cmpwi   r16, 0
+    beq     .end # no focus object
 
     # was it just turned on?
     lbz   r5, (.prevEnable - mainLoop)(r14)
