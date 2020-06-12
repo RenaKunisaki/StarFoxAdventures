@@ -15,12 +15,7 @@ objectMenu:
     stw   r0, SP_LR_SAVE(r1)
     stmw  r13, SP_GPR_SAVE(r1)
 
-    li     r3, 1
-    LOADWH r4, hudHidden
-    STOREB r3, hudHidden, r4
-    li     r3, 0
-    LOADWH r4, pdaOn
-    STOREB r3, pdaOn, r4
+    bl    menuHideHud
 
     lbz   r3, (objMenuState - mainLoop)(r14)
     slwi  r3, r3, 2
@@ -142,7 +137,7 @@ objMenu_List: # draw list of objects.
     b       menuEndSub
 
 
-objMenu_List_doInput: # return r3 = 0 to close, 1 to keep open
+objMenu_List_doInput:
     stwu  r1, -STACK_SIZE(r1) # get some stack space
     mflr  r0
     stw   r0, SP_LR_SAVE(r1)

@@ -85,6 +85,19 @@ drawItem_objects:
 adjItem_objects: # r3 = amount to adjust by (0=A button)
     cmpwi   r3, 0
     bnelr
-    li      r3, 1
+    li      r3, MENU_ID_OBJLIST
+    stb     r3, (whichMenu - mainLoop)(r14)
+    blr
+
+#######################################################################
+
+drawItem_gameBits:
+    addi  r4, r14, (s_GameBits - mainLoop)
+    blr
+
+adjItem_gameBits: # r3 = amount to adjust by (0=A button)
+    cmpwi   r3, 0
+    bnelr
+    li      r3, MENU_ID_GAMEBIT
     stb     r3, (whichMenu - mainLoop)(r14)
     blr

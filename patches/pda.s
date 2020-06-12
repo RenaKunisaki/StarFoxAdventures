@@ -20,6 +20,11 @@ constants:
     .set LINE_HEIGHT,18
     .set MOVE_DELAY,10 # wait this many frames between autorepeat
     .set MENU_TEXTBOX_ID,0x93 # same one the game uses for HUD
+
+    .set MENU_ID_MAIN,0 # constants for whichMenu
+    .set MENU_ID_OBJLIST,1
+    .set MENU_ID_GAMEBIT,2
+
     .set STACK_SIZE,0x180 # how much to reserve
     .set SP_LR_SAVE,0x184 # this is what the game does
     .set SP_STR_BUF,0x20 # temporary string buffer
@@ -54,6 +59,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/util.s"
 .include "pda/items.s"
 .include "pda/objmenu.s"
+.include "pda/gamebitmenu.s"
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"

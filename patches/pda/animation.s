@@ -46,7 +46,7 @@ doOpenAnimation:
     # and initialize the state.
     li      r4, 0x03E5
     CALL    audioPlaySound
-    li      r4, 0
+    li      r4, MENU_ID_MAIN
     stb     r4, (whichMenu - mainLoop)(r14)
     LOADB   r4, hudHidden
     stb     r4, (menuWasHudHidden - mainLoop)(r14)

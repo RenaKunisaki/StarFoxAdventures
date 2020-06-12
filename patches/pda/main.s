@@ -42,12 +42,13 @@ menuPtrs: # menu main function pointers
     # whichMenu should always be 0 if the menu is closed or
     # doing the close animation, so we don't need to check
     # if the menu is open in the others.
-    .int runMenu    - mainLoop
-    .int objectMenu - mainLoop
+    .int runMenu     - mainLoop
+    .int objectMenu  - mainLoop
+    .int gamebitMenu - mainLoop
 
 returnToMainMenu:
     # called from other menus
-    li   r3, 0
+    li   r3, MENU_ID_MAIN
     stb  r3, (whichMenu - mainLoop)(r14)
     li   r3, MOVE_DELAY
     stb  r3, (menuJustMoved - mainLoop)(r14)
@@ -396,6 +397,9 @@ menuHandleInput:
     lbz     r4, (menuWasHudHidden - mainLoop)(r14)
     LOADWH  r3, hudHidden
     STOREB  r4, hudHidden, r3
+    lbz     r4, (menuWasPdaOn - mainLoop)(r14)
+    LOADWH  r3, pdaOn
+    STOREB  r4, pdaOn, r3
 
     li     r4, 0x03F2
     b      .doSound

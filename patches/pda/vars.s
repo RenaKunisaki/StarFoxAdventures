@@ -35,6 +35,7 @@ f_centerX:     .float 320
 f_centerY:     .float 240
 
 # menu state
+bitMenuIdx:    .short 0
 streamTestId:  .short 0
 soundTestId:   .short 0
 minimapSizeOverride:  .short 0
@@ -44,7 +45,7 @@ menuSelItem:   .byte 0
 menuSelColor:  .byte 0
 menuJustMoved: .byte 0 # frame counter
 menuPage:      .byte 0
-whichMenu:     .byte 0
+whichMenu:     .byte MENU_ID_MAIN
 musicTestId:   .byte 0
 menuWasHudHidden: .byte 0
 menuWasPdaOn:  .byte 0 # for hiding map in objects list
@@ -89,6 +90,7 @@ s_TrickyDebug:.string "Tricky Debug Text: %s"
 s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
 s_Objects:    .string "Objects"
+s_GameBits:   .string "GameBits"
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "
@@ -100,6 +102,10 @@ fmt_objListSeq:    .string "SEQ %08X %04X"
 fmt_objListEvent:  .string "EVENT %08X"
 fmt_objListModel:  .string "MODEL %08X(%d) %04X"
 fmt_objListInstrs: .string "Z:Focus X:Delete"
+
+# GameBits
+fmt_bitListHeader: .string "BIdx    T Offs   Sz Unk: Val"
+fmt_bitListEntry:  .string "%04X %X %04X %02X %03X: %X"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add
@@ -114,6 +120,7 @@ fmt_objListInstrs: .string "Z:Focus X:Delete"
 # - Arbitrary warp (set coords/layer manually)
 # - Browse loaded file list, heap
 # - Browse GameText, textures, models, animations?
+# - Memory editor
 # - fun stuff
 #   - bullet time (reduce game speed during combat)
 #   - dynamic FOV (increase with player velocity)

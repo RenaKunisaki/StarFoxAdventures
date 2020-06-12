@@ -37,3 +37,13 @@ adjItem_float: # r3=adj, r5=&val, f2=adjStep, f3=min, f4=max
 .float_lessThanMax:
     stfs    f1, 0(r5)
     blr
+
+
+menuHideHud:
+    li     r3, 1
+    LOADWH r4, hudHidden
+    STOREB r3, hudHidden, r4
+    li     r3, 0
+    LOADWH r4, pdaOn
+    STOREB r3, pdaOn, r4
+    blr
