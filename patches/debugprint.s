@@ -1,8 +1,7 @@
 # debugprint patch:
 # 1) patches into main loop to display some info on screen
 # 2) moves debug print to very edges of screen
-# 3) draws bars in bottom left corner: render time, physics time,
-#    heap usage
+# 3) draws bars in bottom left corner showing CPU time and memory usage
 .text
 .include "common.s"
 .include "globals.s"
@@ -86,12 +85,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     lfs     f1, (.cpuBarX - mainLoop)(r14)
     lfs     f2, (.cpuBarY - mainLoop)(r14)
     li      r6, 200    # width
-    li      r3, 13     # texture
+    li      r3, 11     # texture (box left side, but we flip it)
     li      r4, 0x7F   # opacity
     li      r7, 30     # height
     bl      .drawBarWithOpacityAndHeight
 
     # display CPU usage
+    # XXX this isn't a very good indicator. it's frame time, which is
+    # always going to be at least 16.7ms because it includes idle time.
+    # is there a proper CPU usage variable anywhere?
     LOADWH  r4, msecsThisFrame
     LOADFL2 f1, msecsThisFrame, r4
     lfs     f2, (.timeDeltaScale - mainLoop)(r14)
@@ -101,19 +103,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     lwz     r6, SP_FLOAT_TMP+4(r1) # width
     lfs     f1, (.cpuBarX - mainLoop)(r14) # X
     lfs     f2, (.cpuBarY - mainLoop)(r14) # Y
-    li      r3, 13     # texture
-    bl      .drawBar
-
-    # display time delta
-    LOADWH  r4, timeDelta
-    LOADFL2 f1, timeDelta, r4
-    lfs     f2, (.timeDeltaScale - mainLoop)(r14)
-    fmuls   f2, f2, f1
-    fctiwz  f2, f2
-    stfd    f2, SP_FLOAT_TMP(r1)
-    lwz     r6, SP_FLOAT_TMP+4(r1) # width
-    lfs     f1, (.cpuBarX - mainLoop)(r14) # X
-    lfs     f2, (.timeBarY - mainLoop)(r14) # Y
     li      r3, 13     # texture
     bl      .drawBar
 
@@ -247,18 +236,17 @@ mainLoop: # called from main loop. r3 = mainLoop
     slwi    r3, r3, 2   # texture ID * 4
     lwzx    r3, r3, r18 # Texture*
     li      r5, 0x0100  # scale
-    li      r8, 0       # flags
+    li      r8, 1       # flags: H flip (so border is at right)
     mflr    r29
     CALL    0x8007681c  # draw scaled texture
     mtlr    r29
     blr
 
 #.timeDeltaScale: .float 6.25 # 100 / 16
-.timeDeltaScale: .float 12.5 # 200 / 16
+.timeDeltaScale: .float 12.0 # 200 / 16.666666...
 #.timeDeltaScale: .float 18.75 # 300 / 16
 .cpuBarX:        .float 1
-.cpuBarY:        .float 460
-.timeBarY:       .float 463
+.cpuBarY:        .float 463
 .heapBarY:       .float 466
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000

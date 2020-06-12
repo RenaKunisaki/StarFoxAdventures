@@ -10,6 +10,8 @@
 .set debugPrintf,0x801378a8
 .set DVDReadAsyncPrio,0x80248eac
 .set free,0x800233e8
+.set gameBitDecrement,0x8001fee8 #bitIdx
+.set gameBitIncrement,0x8001ff3c #bitIdx
 .set gameTextSetColor,0x80019908 # u8 r, g, b, a
 .set gameTextShowStr,0x80015dc8 # char*, int box, int x, int y
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
@@ -27,11 +29,13 @@
     # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
     # if modelNum is negative, don't use MODELIND.bin
 .set multVectorByObjMtx,0x8000e0a0 #f1:x f2:y f3:z r3:*outX r4:*outY r5:*outZ r6:obj
+.set objFree,0x8002cbc4 #ObjInstance*
 .set OSReport,0x8007d6dc
 .set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
 .set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
+.set strncpy,0x802917a8
 .set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
     # returns with r5 = out + rawLen
 
@@ -64,14 +68,20 @@
 .set distortionFilterVector, 0x803821c8 #vec3f
 .set enableDebugText,        0x803dda28 #bool
 .set fovY,                   0x803dc8a4 #float
+.set hudHidden,              0x803dca3a #bool
 .set loadedFileMapIds,       0x8035f548 #int16[fileIdx]
+.set loadedObjects,          0x803dcb88 #ObjInstance*
 .set mapCoords,              0x803dcdc8 #int mapX, mapZ, cellX, cellZ
 .set minimapAlpha,           0x803dd930 #u16 x2
 .set minimapHeight,          0x803dbbc4 #int
 .set minimapMode,            0x803dd944 #u8 0=map 1=compass 2=info
 .set minimapWidth,           0x803dbbc0 #int
 .set motionBlurIntensity,    0x803db62c #float, 32=high, 256=unnoticeable
+.set msecsThisFrame,         0x803dccc0 #float
+.set numLoadedObjs,          0x803dcb84 #int
+.set oneOverTimeDelta,       0x803db418 #float
 .set pauseDisabled,          0x803dd789 #bool
+.set pCamera,                0x803dd524 #Camera*
 .set pCurMapInfo,            0x803dce78 #MapInfoEntry*
 .set pdaOn,                  0x803dbbb0 #bool
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
@@ -80,6 +90,7 @@
 .set pPlayer,                0x803428f8
 .set shouldCloseCMenu,       0x803dd7b4 #bool
 .set shouldOpenCMenu,        0x803dd7d5 #u8
+.set timeDelta,              0x803db414 #float
 .set viewportAspect,         0x803db268 #float
 .set volumeCutScenes,        0x803db253 #s8
 .set volumeMusic,            0x803bd754 #float
