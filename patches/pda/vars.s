@@ -47,6 +47,7 @@ menuJustMoved: .byte 0 # frame counter
 menuPage:      .byte 0
 whichMenu:     .byte MENU_ID_MAIN
 musicTestId:   .byte 0
+warpMenuIdx:   .byte 0
 menuWasHudHidden: .byte 0
 menuWasPdaOn:  .byte 0 # for hiding map in objects list
 
@@ -91,6 +92,7 @@ s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
 s_Objects:    .string "Objects"
 s_GameBits:   .string "GameBits"
+s_Warp:       .string "Warp"
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "
@@ -101,11 +103,18 @@ fmt_objListMap:    .string "SLOT %02X MAP %02X %02X"
 fmt_objListSeq:    .string "SEQ %08X %04X"
 fmt_objListEvent:  .string "EVENT %08X"
 fmt_objListModel:  .string "MODEL %08X(%d) %04X"
+fmt_objListState:  .string "STATE %08X"
 fmt_objListInstrs: .string "Z:Focus X:Delete"
 
 # GameBits
 fmt_bitListHeader: .string "BIdx    T Offs   Sz Unk: Val"
 fmt_bitListEntry:  .string "%04X %X %04X %02X %03X: %X"
+
+# Warps
+fmt_warpListEntry:  .string "%02X %02X %s"
+fmt_warpListCoords: .string "%f %f %f %d %02X"
+fmt_warpListNoMap:  .string "-"
+fmt_warpListInstrs: .string "A:Warp Z:Jump"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add
@@ -115,12 +124,13 @@ fmt_bitListEntry:  .string "%04X %X %04X %02X %03X: %X"
 # but maybe can do reset to title screen or reload save
 
 # other things to add:
-# - GameBit menu
 # - WARPTAB menu
 # - Arbitrary warp (set coords/layer manually)
+#   - Map grid view?
 # - Browse loaded file list, heap
 # - Browse GameText, textures, models, animations?
 # - Memory editor
+# - Spawn objects if we can figure out how
 # - fun stuff
 #   - bullet time (reduce game speed during combat)
 #   - dynamic FOV (increase with player velocity)

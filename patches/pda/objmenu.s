@@ -211,18 +211,22 @@ objMenu_List_doInput:
     LOADW   r21, pCamera
     li      r22, 0
     cmpwi   r21, 0
-    beq     .objMenu_focus_noCamera
+    #beq     .objMenu_focus_noCamera
+    beq     menuEndSub
     stw     r18, 0xA4(r21)
     # since time is stopped we must manually update
     # the camera position.
     CALL    0x801030c0
     b       menuEndSub
+    # XXX why does focusing the camera on some objects crash the game?
+    # even if we don't update the camera position, it's still trying
+    # to read something from the target object.
 
-.objMenu_focus_noCamera:
-    li      r3, 0
-    li      r4, 0xFD # "can't use that item"
-    CALL    audioPlaySound
-    b       menuEndSub
+#.objMenu_focus_noCamera:
+#    li      r3, 0
+#    li      r4, 0xFD # "can't use that item"
+#    CALL    audioPlaySound
+#    b       menuEndSub
 
 .objMenu_delete: # delete the selected object
     mr      r3, r18
@@ -265,7 +269,6 @@ objMenu_drawCurObject:
     addi    r4, r14, fmt_objListCoords - mainLoop
     addi    r3,  r1, SP_STR_BUF
     CALL    sprintf
-
     addi    r3,  r1, SP_STR_BUF
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
@@ -279,7 +282,6 @@ objMenu_drawCurObject:
     lbz     r6, 0xAF(r18) # flags
     lbz     r7, 0xB0(r18) # flags
     CALL    sprintf
-
     addi    r3,  r1, SP_STR_BUF
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
@@ -293,7 +295,6 @@ objMenu_drawCurObject:
     lbz     r6, 0x34(r18) # map
     lbz     r7, 0xAC(r18) # map 2
     CALL    sprintf
-
     addi    r3,  r1, SP_STR_BUF
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
@@ -306,7 +307,6 @@ objMenu_drawCurObject:
     lwz     r5, 0x4C(r18) # seq
     lhz     r6, 0xB4(r18) # curSeq
     CALL    sprintf
-
     addi    r3,  r1, SP_STR_BUF
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
@@ -318,7 +318,6 @@ objMenu_drawCurObject:
     addi    r4, r14, fmt_objListEvent - mainLoop
     lwz     r5, 0x60(r18) # event
     CALL    sprintf
-
     addi    r3,  r1, SP_STR_BUF
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
@@ -346,6 +345,17 @@ objMenu_drawCurObject:
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
     li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*5) + 8 # Y pos
+    CALL    gameTextShowStr
+
+    # line 7: state
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4, r14, fmt_objListState - mainLoop
+    lwz     r5, 0xB8(r18) # state
+    CALL    sprintf
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*6) + 8 # Y pos
     CALL    gameTextShowStr
 
     # instructions

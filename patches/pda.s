@@ -24,6 +24,7 @@ constants:
     .set MENU_ID_MAIN,0 # constants for whichMenu
     .set MENU_ID_OBJLIST,1
     .set MENU_ID_GAMEBIT,2
+    .set MENU_ID_WARP,3
 
     .set STACK_SIZE,0x180 # how much to reserve
     .set SP_LR_SAVE,0x184 # this is what the game does
@@ -60,6 +61,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/items.s"
 .include "pda/objmenu.s"
 .include "pda/gamebitmenu.s"
+.include "pda/warpmenu.s"
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"

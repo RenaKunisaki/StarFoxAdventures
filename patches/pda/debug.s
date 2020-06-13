@@ -101,3 +101,16 @@ adjItem_gameBits: # r3 = amount to adjust by (0=A button)
     li      r3, MENU_ID_GAMEBIT
     stb     r3, (whichMenu - mainLoop)(r14)
     blr
+
+#######################################################################
+
+drawItem_warp:
+    addi  r4, r14, (s_Warp - mainLoop)
+    blr
+
+adjItem_warp: # r3 = amount to adjust by (0=A button)
+    cmpwi   r3, 0
+    bnelr
+    li      r3, MENU_ID_WARP
+    stb     r3, (whichMenu - mainLoop)(r14)
+    blr

@@ -45,6 +45,7 @@ menuPtrs: # menu main function pointers
     .int runMenu     - mainLoop
     .int objectMenu  - mainLoop
     .int gamebitMenu - mainLoop
+    .int warpMenu    - mainLoop
 
 returnToMainMenu:
     # called from other menus
