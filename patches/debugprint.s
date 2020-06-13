@@ -290,8 +290,8 @@ mainLoop: # called from main loop. r3 = mainLoop
 .heapBarY:       .float 466
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
-.fmt_gameState: .string "\x84%3d\x83 obj  G:\x84%08X\x83  "
-.fmt_playerCoords: .string "P:\x84%08X %d %d %d\x83  "
+.fmt_gameState: .string "\x84%3d\x83 obj G:\x84%08X\x83 "
+.fmt_playerCoords: .string "P:\x84%08X %d %d %d\x83 "
 .fmt_mapCoords: .string "M:\x84%d %d %d %d\x83 "
 .fmt_playerState: .string "\nS:\x84%02X %08X\x83 A:\x84%04X %f\x83\n"
     #.string "S \x84%02X\x83 A \x84%04X\x83\n"
