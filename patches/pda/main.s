@@ -46,10 +46,13 @@ menuPtrs: # menu main function pointers
     .int objectMenu  - mainLoop
     .int gamebitMenu - mainLoop
     .int warpMenu    - mainLoop
+    .int heapList    - mainLoop
+    .int heapMenu    - mainLoop
 
 returnToMainMenu:
     # called from other menus
     li   r3, MENU_ID_MAIN
+returnToMenu: # r3 = which
     stb  r3, (whichMenu - mainLoop)(r14)
     li   r3, MOVE_DELAY
     stb  r3, (menuJustMoved - mainLoop)(r14)

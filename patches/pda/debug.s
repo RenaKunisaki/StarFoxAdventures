@@ -83,10 +83,11 @@ drawItem_objects:
     blr
 
 adjItem_objects: # r3 = amount to adjust by (0=A button)
+    li      r4, MENU_ID_OBJLIST
+.debug_setMenu:
     cmpwi   r3, 0
     bnelr
-    li      r3, MENU_ID_OBJLIST
-    stb     r3, (whichMenu - mainLoop)(r14)
+    stb     r4, (whichMenu - mainLoop)(r14)
     blr
 
 #######################################################################
@@ -96,11 +97,8 @@ drawItem_gameBits:
     blr
 
 adjItem_gameBits: # r3 = amount to adjust by (0=A button)
-    cmpwi   r3, 0
-    bnelr
-    li      r3, MENU_ID_GAMEBIT
-    stb     r3, (whichMenu - mainLoop)(r14)
-    blr
+    li      r4, MENU_ID_GAMEBIT
+    b       .debug_setMenu
 
 #######################################################################
 
@@ -109,8 +107,15 @@ drawItem_warp:
     blr
 
 adjItem_warp: # r3 = amount to adjust by (0=A button)
-    cmpwi   r3, 0
-    bnelr
-    li      r3, MENU_ID_WARP
-    stb     r3, (whichMenu - mainLoop)(r14)
+    li      r4, MENU_ID_WARP
+    b       .debug_setMenu
+
+#######################################################################
+
+drawItem_heap:
+    addi  r4, r14, (s_Heap - mainLoop)
     blr
+
+adjItem_heap: # r3 = amount to adjust by (0=A button)
+    li      r4, MENU_ID_HEAP_LIST
+    b       .debug_setMenu

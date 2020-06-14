@@ -207,6 +207,7 @@ warpMenu_doInput:
     b       .warpMenu_close
 
 .warpMenu_doJump:
+    # this doesn't really work
     lbz     r17, (warpMenuIdx - mainLoop)(r14)
     slwi    r9,  r17, 4
     add     r9,  r9, r15 # r4 = warp entry*
@@ -217,7 +218,7 @@ warpMenu_doInput:
     stfs    f1,  0x0C(r16)
     stfs    f2,  0x10(r16)
     stfs    f3,  0x14(r16)
-    CALL    0x80020748 # mapReload
+    #CALL    0x80020748 # mapReload
     b       .warpMenu_close
 
 .warpMenu_mapCellScale: .float 640.0
