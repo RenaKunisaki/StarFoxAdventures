@@ -325,17 +325,28 @@ objMenu_drawCurObject:
     CALL    gameTextShowStr
 
     # line 6: models
+    li      r7, 0
+    lis     r8, 0x81FF
+    lis     r9, 0x8000
     addi    r3,  r1, SP_STR_BUF
     addi    r4, r14, fmt_objListModel - mainLoop
     lwz     r5, 0x7C(r18) # models
     lbz     r6, 0xAD(r18) # curModel
+    cmpwi   r6, 0xFF
+    beq     .objMenu_drawCurObject_noModel
     slwi    r7, r6, 4
     lwzx    r7, r5, r7 # get model
-    cmpwi   r7, 0
-    beq     .objMenu_drawCurObject_noModel
+
+    cmpw    r7, r8 # sanity check pointer
+    bgt     .objMenu_drawCurObject_noModel
+    cmpw    r7, r9
+    blt     .objMenu_drawCurObject_noModel
     lwz     r7, 0(r7) # get ModelFileHeader
-    cmpwi   r7, 0
-    beq     .objMenu_drawCurObject_noModel
+    
+    cmpw    r7, r8 # sanity check pointer
+    bgt     .objMenu_drawCurObject_noModel
+    cmpw    r7, r9
+    blt     .objMenu_drawCurObject_noModel
     lhz     r7, 4(r7) # get model ID
 
 .objMenu_drawCurObject_noModel:
