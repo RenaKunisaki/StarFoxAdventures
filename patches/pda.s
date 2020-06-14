@@ -30,7 +30,9 @@ constants:
 
     .set STACK_SIZE,0x180 # how much to reserve
     .set SP_LR_SAVE,0x184 # this is what the game does
-    .set SP_STR_BUF,0x20 # temporary string buffer
+    .set SP_ARG9, 0x08 # for eg sprintf
+    .set SP_ARG10,0x0C
+    .set SP_STR_BUF,0x40 # temporary string buffer
     .set SP_FLOAT_TMP,0xA0 # temporary storage for float conversion (8 bytes)
     .set SP_GPR_SAVE,0xA8
 

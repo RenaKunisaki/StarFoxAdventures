@@ -22,6 +22,7 @@
     # outSize: if not NULL, receives file size.
 .set logSetColor,0x80137520 # r, g, b, a
 .set mainGetBit,0x8001ffb4
+.set mapCoordsToId,0x80059ac0 #int (int x, int z, int layer)
 .set memcpy,0x80003494 # clobbers: r0, r6
 .set memset,0x800033D8 # clobbers: r0, r6, r7
 .set mm_free,0x80023800 # wrapper for free()
@@ -36,6 +37,7 @@
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
 .set strncpy,0x802917a8
+.set warpToMap,0x800552e8 # warpIdx, bool swapCharacter
 .set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
     # returns with r5 = out + rawLen
 
@@ -68,10 +70,12 @@
 .set distortionFilterVector, 0x803821c8 #vec3f
 .set enableDebugText,        0x803dda28 #bool
 .set fovY,                   0x803dc8a4 #float
+.set heaps,                  0x80340698 #Heap[4]
 .set hudHidden,              0x803dca3a #bool
 .set loadedFileMapIds,       0x8035f548 #int16[fileIdx]
 .set loadedObjects,          0x803dcb88 #ObjInstance*
 .set mapCoords,              0x803dcdc8 #int mapX, mapZ, cellX, cellZ
+.set mapNames,               0x802cb940 #char*
 .set minimapAlpha,           0x803dd930 #u16 x2
 .set minimapHeight,          0x803dbbc4 #int
 .set minimapMode,            0x803dd944 #u8 0=map 1=compass 2=info
@@ -95,6 +99,11 @@
 .set volumeCutScenes,        0x803db253 #s8
 .set volumeMusic,            0x803bd754 #float
 .set volumeSFX,              0x803bd784 #float
+
+# misc constants
+.set NUM_HEAPS,4
+.set SCREEN_HEIGHT,480
+.set SCREEN_WIDTH,640
 
 # SFA file IDs
 .set AUDIO_TAB,0x00

@@ -1,7 +1,7 @@
-.set HEAP_LIST_XPOS,   70
-.set HEAP_LIST_YPOS,   70
-.set HEAP_LIST_WIDTH, 500
-.set HEAP_LIST_HEIGHT,300
+.set HEAP_LIST_XPOS,    0
+.set HEAP_LIST_YPOS,  120
+.set HEAP_LIST_WIDTH, 635
+.set HEAP_LIST_HEIGHT,100
 
 heapList:
     # subroutine: runs the Heap List menu.
@@ -17,7 +17,7 @@ heapList:
     b      menuEndSub
 
 
-heapList_Main: # draw list of bits.
+heapList_Main: # draw list of heaps.
     stwu  r1, -STACK_SIZE(r1) # get some stack space
     mflr  r0
     stw   r0, SP_LR_SAVE(r1)
@@ -75,6 +75,10 @@ heapList_Main: # draw list of bits.
     lwz     r8,  0x04(r18) # used bytes
     lwz     r9,  0x0C(r18) # used blocks
     lwz     r10, 0x10(r18) # data
+    stw     r10, SP_ARG10(r1)
+    sub     r10, r7, r9 # free blocks
+    stw     r10, SP_ARG9(r1)
+    sub     r10, r6, r8 # free bytes
     CALL    sprintf
 
     addi    r3,  r1, SP_STR_BUF
