@@ -107,7 +107,7 @@ fmt_objListSeq:    .string "SEQ %08X %04X"
 fmt_objListEvent:  .string "EVENT %08X"
 fmt_objListModel:  .string "MODEL %08X(%d) %04X"
 fmt_objListState:  .string "STATE %08X"
-fmt_objListInstrs: .string "Z:Focus X:Delete"
+fmt_objListInstrs: .string "Z:Focus X:Delete Start:GoTo"
 
 # GameBits
 fmt_bitListHeader: .string "BIdx    T Offs   Sz Unk: Val"
@@ -122,7 +122,7 @@ fmt_warpListInstrs: .string "A:Warp Z:Jump"
 # Heap
 fmt_heapListHeader: .string "N Bytes        Blocks  UsedBytes  UBlk  FreeBytes    FBlk Data"
 fmt_heapListEntry:  .string "%d %08X %04X %08X %04X %08X %04X %08X"
-fmt_heapMenuHeader: .string "Num   Tag               Data          Size"
+fmt_heapMenuHeader: .string "Num   Tag                 Data                  Size"
 #fmt_heapMenuEntry:  .string "%04X %08X %08X %08X"
 fmt_04X: .string "%04X"
 fmt_08X: .string "%08X"

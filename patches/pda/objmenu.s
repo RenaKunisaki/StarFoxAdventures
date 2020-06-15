@@ -17,6 +17,11 @@ objectMenu:
 
     bl    menuHideHud
 
+    # inhibit C menu
+    li     r4, 1
+    LOADWH r5, shouldCloseCMenu
+    STOREB r4, shouldCloseCMenu, r5
+
     lbz   r3, (objMenuState - mainLoop)(r14)
     slwi  r3, r3, 2
     addi  r4, r14, objMenu_Funcs - mainLoop
@@ -151,6 +156,8 @@ objMenu_List_doInput:
     bne     .objMenu_focus
     andi.   r10, r3, PAD_BUTTON_X
     bne     .objMenu_delete
+    andi.   r10, r3, PAD_BUTTON_MENU
+    bne     .objMenu_goto
 
     # check analog stick
     cmpwi   r5, 0x10
@@ -200,18 +207,20 @@ objMenu_List_doInput:
 .objMenu_focus: # set the camera focus to the selected object
     # get the camera in r21
     LOADW   r21, pCamera
-    li      r22, 0
+    #li      r22, 0
     cmpwi   r21, 0
     #beq     .objMenu_focus_noCamera
-    beq     menuEndSub
+    beq     .objMenu_end
     stw     r18, 0xA4(r21)
     # since time is stopped we must manually update
     # the camera position.
     CALL    0x801030c0
-    b       menuEndSub
+    b       .objMenu_end
     # XXX why does focusing the camera on some objects crash the game?
     # even if we don't update the camera position, it's still trying
     # to read something from the target object.
+    # maybe the camera goes out of bounds or into another map and
+    # the player object gets unloaded?
 
 #.objMenu_focus_noCamera:
 #    li      r3, 0
@@ -222,9 +231,25 @@ objMenu_List_doInput:
 .objMenu_delete: # delete the selected object
     mr      r3, r18
     CALL    objFree
+.objMenu_end:
     li      r3,  MOVE_DELAY
     stb     r3,  (menuJustMoved - mainLoop)(r14)
     b       menuEndSub
+
+.objMenu_goto: # move player to the selected object
+    LOADW   r21, pPlayer
+    cmpwi   r21, 0
+    beq     .objMenu_end
+    lwz     r3,  0x0C(r18)
+    stw     r3,  0x0C(r21)
+    stw     r3,  0x18(r21) # try to override hit detection...
+    lwz     r3,  0x10(r18)
+    stw     r3,  0x10(r21)
+    stw     r3,  0x1C(r21)
+    lwz     r3,  0x14(r18)
+    stw     r3,  0x14(r21)
+    stw     r3,  0x20(r21)
+    b       .objMenu_end
 
 
 objMenu_drawCurObject:
