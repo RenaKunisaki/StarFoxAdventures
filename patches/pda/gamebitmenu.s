@@ -133,23 +133,23 @@ gamebitMenu_doInput:
     blt     .gameBitMenu_dec
 
     # check L/R - extra fast scroll
-    cmpwi   r8, 0x10
+    cmpwi   r8, 0x04
     bgt     .gameBitMenu_prevPage
-    cmpwi   r9, 0x10
+    cmpwi   r9, 0x04
     bgt     .gameBitMenu_nextPage
 
     b       menuEndSub
 
 .gameBitMenu_up: # up pressed
     subi    r17, r17, 1
+.gameBitMenu_up2:
     cmpwi   r17, 0
     bge     .gameBitMenu_storeIdx
-    addi    r17, r17, MAX_GAMEBIT - 2
-    # by adding -2 there and then falling into the Down
-    # code, which adds 1, we avoid a branch.
+    addi    r17, r17, MAX_GAMEBIT - 1
 
 .gameBitMenu_down: # down pressed
     addi    r17, r17, 1
+.gameBitMenu_down2:
     cmpwi   r17, MAX_GAMEBIT
     blt     .gameBitMenu_storeIdx
     li      r17, 0
@@ -184,14 +184,14 @@ gamebitMenu_doInput:
     b       menuEndSub
 
 .gameBitMenu_prevPage:
-    addi    r17, r17, -0x10
-.gameBitMenu_setPage:
-    sth     r17, (bitMenuIdx - mainLoop)(r14)
-    b       menuEndSub
+    srwi.   r8, r8, 1
+    sub     r17, r17, r8
+    b       .gameBitMenu_up2
 
 .gameBitMenu_nextPage:
-    addi    r17, r17, 0x10
-    b       .gameBitMenu_setPage
+    srwi.   r9, r9, 1
+    add     r17, r17, r9
+    b       .gameBitMenu_down2
 
 .gameBitMenu_close:
     bl      returnToMainMenu

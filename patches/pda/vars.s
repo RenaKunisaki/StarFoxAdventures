@@ -107,7 +107,7 @@ fmt_objListSeq:    .string "SEQ %08X %04X"
 fmt_objListEvent:  .string "EVENT %08X"
 fmt_objListModel:  .string "MODEL %08X(%d) %04X"
 fmt_objListState:  .string "STATE %08X"
-fmt_objListInstrs: .string "Z:Focus X:Delete Start:GoTo"
+fmt_objListInstrs: .string "Z:Focus X:Delete Y:GoTo S:Player"
 
 # GameBits
 fmt_bitListHeader: .string "BIdx    T Offs   Sz Unk: Val"

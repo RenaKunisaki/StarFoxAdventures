@@ -149,9 +149,9 @@ heapMenu_doInput:
     blt     .heapMenu_down
 
     # check L/R - extra fast scroll
-    cmpwi   r8, 0x10
+    cmpwi   r8, 0x04
     bgt     .heapMenu_prevPage
-    cmpwi   r9, 0x10
+    cmpwi   r9, 0x04
     bgt     .heapMenu_nextPage
 
     b       menuEndSub
@@ -181,11 +181,13 @@ heapMenu_doInput:
     b       menuEndSub
 
 .heapMenu_prevPage:
-    addi    r17, r17, -0x10
+    srwi.   r8, r8, 1
+    sub     r17, r17, r8
     b       .heapMenu_up2
 
 .heapMenu_nextPage:
-    addi    r17, r17, 0x10
+    srwi.   r9, r9, 1
+    add     r17, r17, r9
     b       .heapMenu_down2
 
 .heapMenu_close:

@@ -156,8 +156,10 @@ objMenu_List_doInput:
     bne     .objMenu_focus
     andi.   r10, r3, PAD_BUTTON_X
     bne     .objMenu_delete
-    andi.   r10, r3, PAD_BUTTON_MENU
+    andi.   r10, r3, PAD_BUTTON_Y
     bne     .objMenu_goto
+    andi.   r10, r3, PAD_BUTTON_MENU
+    bne     .objMenu_toPlayer
 
     # check analog stick
     cmpwi   r5, 0x10
@@ -249,6 +251,26 @@ objMenu_List_doInput:
     lwz     r3,  0x14(r18)
     stw     r3,  0x14(r21)
     stw     r3,  0x20(r21)
+    b       .objMenu_end
+
+.objMenu_toPlayer: # move cursor to Player object
+    LOADW   r21, pPlayer
+    LOADWH  r15, loadedObjects
+    LOADWL2 r16, numLoadedObjs, r15
+    LOADWL2 r15, loadedObjects, r15
+.objMenu_toPlayer_next:
+    subi    r16, r16, 1
+    slwi    r4,  r16, 2
+    lwzx    r3,  r15, r4
+    cmpw    r3,  r21
+    beq     .objMenu_toPlayer_found
+
+    cmpwi   r16, 0
+    bne     .objMenu_toPlayer_next
+    b       .objMenu_end
+
+.objMenu_toPlayer_found:
+    sth     r16, (objMenuIdx - mainLoop)(r14)
     b       .objMenu_end
 
 
