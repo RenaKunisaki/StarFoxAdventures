@@ -40,6 +40,11 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpwi r4, 0
     beq   .off
 
+    # inhibit C menu
+    li     r4, 1
+    LOADWH r5, shouldCloseCMenu
+    STOREB r4, shouldCloseCMenu, r5
+
     # get object of camera focus.
     LOADW   r21, pCamera
     cmpwi   r21, 0
@@ -174,6 +179,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 
     # use C stick to rotate
     # the animState rotation overrides the object rotation
+    # but we update both, for non-player objects
     lwz     r4, 0xB8(r16) # animState
     LOADBL2 r3, controllerStates+4, r9 # CX
     extsb   r3, r3
@@ -181,6 +187,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     lha     r5, 0x0478(r4)
     add     r5, r5, r3
     sth     r5, 0x0478(r4)
+    sth     r5, 0x0000(r16)
     LOADBL2 r3, controllerStates+5, r9 # CY
     extsb   r3, r3
     mulli   r3, r3, -8
@@ -199,6 +206,24 @@ mainLoop: # called from main loop. r3 = mainLoop
     ori   r5, r5, 0x8000 # disable update
     sth   r5, 0xB0(r16)
 
+    # force player state even if target object isn't player,
+    # so that the player isn't running around while we're
+    # moving some other object.
+    LOADW   r3,  pPlayer
+    cmpwi   r3,  0
+    beq     .end # no player
+    lwz     r4, 0xB8(r3) # animState
+    li      r5, 1
+    sth     r5, 0x0274(r4)
+    #li      r5, 0
+    #stw     r5, 0x98(r3) # clear animTimer
+    #stw     r5, 0x9C(r3) # clear anim something
+    #sth     r5, 0xA0(r3) # clear animID
+    lhz     r5, 0xB0(r3)
+    ori     r5, r5, 0x8000 # disable update
+    sth     r5, 0xB0(r3)
+
+
 .end:
     lwz  r3,  SP_LR_SAVE(r1)
     mtlr r3 # restore LR
@@ -213,6 +238,14 @@ mainLoop: # called from main loop. r3 = mainLoop
     lhz   r5, 0xB0(r16)
     andi. r5, r5, 0x7FFF # enable update
     sth   r5, 0xB0(r16)
+
+    # enable update of Player (in case not focused object)
+    LOADW   r3,  pPlayer
+    cmpwi   r3,  0
+    beq     .notJustTurnedOff # no player
+    lhz     r5, 0xB0(r3)
+    andi.   r5, r5, 0x7FFF # enable update
+    sth     r5, 0xB0(r3)
 
 .notJustTurnedOff:
     li    r3, 0
