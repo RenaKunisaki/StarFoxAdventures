@@ -33,19 +33,16 @@ heapMenu_Main: # draw list of entries.
     stmw    r13, SP_GPR_SAVE(r1)
 
     # draw the box
-    li      r3, HEAP_MENU_XPOS   # X
-    li      r4, HEAP_MENU_YPOS   # Y
-    li      r5, HEAP_MENU_WIDTH  # width
-    li      r6, HEAP_MENU_HEIGHT # height
+    li      r3,  HEAP_MENU_XPOS   # X
+    li      r4,  HEAP_MENU_YPOS   # Y
+    li      r5,  HEAP_MENU_WIDTH  # width
+    li      r6,  HEAP_MENU_HEIGHT # height
     li      r20, 255 # opacity
     bl      menuDrawBox
 
     # first item (selected) in blue
-    li      r3, 0
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0x00FFFFFF
+    bl      menuSetTextColor
 
     # draw the header
     addi    r3,  r14, fmt_heapMenuHeader - mainLoop
@@ -64,27 +61,53 @@ heapMenu_Main: # draw list of entries.
     cmpwi   r7,  0
     beq     menuEndSub
 
-    # make line
+    # draw first column: index
     addi    r3,  r1, SP_STR_BUF
-    addi    r4,  r14, fmt_heapMenuEntry - mainLoop
+    addi    r4,  r14, fmt_04X - mainLoop
     mr      r5,  r17 # idx
-    lwz     r6,  0x10(r18) # tag
-    lwz     r8,  0x04(r18) # size
     CALL    sprintf
-
     addi    r3,  r1, SP_STR_BUF
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  HEAP_MENU_XPOS + 8  # X pos
     mr      r6,  r20 # Y pos
     CALL    gameTextShowStr
 
-    li      r3, 255
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    # draw second column: tag
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4,  r14, fmt_08X - mainLoop
+    lwz     r5,  0x10(r18) # tag
+    CALL    sprintf
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  HEAP_MENU_XPOS + 8 + 60  # X pos
+    mr      r6,  r20 # Y pos
+    CALL    gameTextShowStr
+
+    # draw third column: data
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4,  r14, fmt_08X - mainLoop
+    lwz     r5,  0(r18) # data
+    CALL    sprintf
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  HEAP_MENU_XPOS + 8 + 185  # X pos
+    mr      r6,  r20 # Y pos
+    CALL    gameTextShowStr
+
+    # draw fourth column: size
+    addi    r3,  r1, SP_STR_BUF
+    addi    r4,  r14, fmt_08X - mainLoop
+    lwz     r5,  0x04(r18) # size
+    CALL    sprintf
+    addi    r3,  r1, SP_STR_BUF
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  HEAP_MENU_XPOS + 8 + 310  # X pos
+    mr      r6,  r20 # Y pos
+    CALL    gameTextShowStr
 
     # next line
+    LOAD    r3, 0xFFFFFFFF
+    bl      menuSetTextColor
     addi    r17, r17, 1
     cmpw    r17, r21
     bge     menuEndSub

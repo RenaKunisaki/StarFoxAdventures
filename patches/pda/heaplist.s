@@ -34,11 +34,8 @@ heapList_Main: # draw list of heaps.
     li      r20, 255 # opacity
     bl      menuDrawBox
 
-    li      r3, 255
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0xFFFFFFFF
+    bl      menuSetTextColor
 
     # draw the header
     addi    r3,  r14, fmt_heapListHeader - mainLoop
@@ -147,4 +144,4 @@ heapList_doInput:
     li      r3, 0
     sth     r3, (heapMenuIdx - mainLoop)(r14)
     li      r3, MENU_ID_HEAP
-    stb     r3, (whichMenu - mainLoop)(r14)
+    b       returnToMenu

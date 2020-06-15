@@ -38,11 +38,8 @@ warpMenu_Main: # draw list of warps.
     bl      menuDrawBox
 
     # first item (selected) in blue
-    li      r3, 0
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0x00FFFFFF
+    bl      menuSetTextColor
 
     lbz     r17, (warpMenuIdx - mainLoop)(r14)
     li      r20, WARP_MENU_YPOS + 8 # string Y pos
@@ -89,11 +86,8 @@ warpMenu_Main: # draw list of warps.
     mr      r6,  r20 # Y pos
     CALL    gameTextShowStr
 
-    li      r3, 255
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0xFFFFFFFF
+    bl      menuSetTextColor
 
     # next line
     addi    r17, r17, 1
@@ -105,11 +99,8 @@ warpMenu_Main: # draw list of warps.
 
 .warpMenu_drawSelected:
     # draw selected item
-    li      r3, 255
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    #LOAD    r3, 0xFFFFFFFF
+    #bl      menuSetTextColor
 
     lbz     r17, (warpMenuIdx - mainLoop)(r14)
     slwi    r9,  r17, 4

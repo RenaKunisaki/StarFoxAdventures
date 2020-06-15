@@ -123,7 +123,9 @@ fmt_warpListInstrs: .string "A:Warp Z:Jump"
 fmt_heapListHeader: .string "N Bytes        Blocks  UsedBytes  UBlk  FreeBytes    FBlk Data"
 fmt_heapListEntry:  .string "%d %08X %04X %08X %04X %08X %04X %08X"
 fmt_heapMenuHeader: .string "Num   Tag               Data          Size"
-fmt_heapMenuEntry:  .string "%04X %08X %08X %08X"
+#fmt_heapMenuEntry:  .string "%04X %08X %08X %08X"
+fmt_04X: .string "%04X"
+fmt_08X: .string "%08X"
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add

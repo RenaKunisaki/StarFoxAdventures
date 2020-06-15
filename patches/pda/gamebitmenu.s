@@ -38,11 +38,8 @@ gamebitMenu_Main: # draw list of bits.
     bl      menuDrawBox
 
     # first item (selected) in blue
-    li      r3, 0
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0x00FFFFFF
+    bl      menuSetTextColor
 
     # draw the header
     addi    r3,  r14, fmt_bitListHeader - mainLoop
@@ -83,11 +80,8 @@ gamebitMenu_Main: # draw list of bits.
     mr      r6,  r20 # Y pos
     CALL    gameTextShowStr
 
-    li      r3, 255
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0xFFFFFFFF
+    bl      menuSetTextColor
 
     # next line
     addi    r17, r17, 1

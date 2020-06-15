@@ -47,3 +47,12 @@ menuHideHud:
     LOADWH r4, pdaOn
     STOREB r3, pdaOn, r4
     blr
+
+
+menuSetTextColor: # r3 = RRGGBBAA
+    rlwinm  r4, r3, 16, 0xFF # G
+    rlwinm  r5, r3, 24, 0xFF # B
+    rlwinm  r6, r3,  0, 0xFF # A
+    rlwinm  r3, r3,  8, 0xFF # R
+    JUMP    gameTextSetColor, r0
+#8168395c

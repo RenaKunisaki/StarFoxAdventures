@@ -72,11 +72,8 @@ objMenu_List: # draw list of objects.
     bl      objMenu_drawCurObject
 
     # first item (selected) in blue
-    li      r3, 0
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0x00FFFFFF
+    bl      menuSetTextColor
 
     li      r20, OBJ_MENU_YPOS + 8 # string Y pos
 
@@ -90,11 +87,8 @@ objMenu_List: # draw list of objects.
     cmpw    r18, r22 # is this the focused object?
     bne     .objMenu_List_notFocused
 
-    li      r3, 255
-    li      r4, 0
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0xFF00FFFF
+    bl      menuSetTextColor
 
 .objMenu_List_notFocused:
     # make line
@@ -120,11 +114,8 @@ objMenu_List: # draw list of objects.
     mr      r6,  r20 # Y pos
     CALL    gameTextShowStr
 
-    li      r3, 255
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0xFFFFFFFF
+    bl      menuSetTextColor
 
     # next line
     addi    r17, r17, 1
@@ -243,11 +234,8 @@ objMenu_drawCurObject:
     stmw  r13, SP_GPR_SAVE(r1)
 
     mr      r18, r3
-    li      r3, 255
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
-    CALL    gameTextSetColor
+    LOAD    r3, 0xFFFFFFFF
+    bl      menuSetTextColor
 
     # line 1: address, coords
     lfs     f1, 0x0C(r18)
@@ -342,7 +330,7 @@ objMenu_drawCurObject:
     cmpw    r7, r9
     blt     .objMenu_drawCurObject_noModel
     lwz     r7, 0(r7) # get ModelFileHeader
-    
+
     cmpw    r7, r8 # sanity check pointer
     bgt     .objMenu_drawCurObject_noModel
     cmpw    r7, r9
