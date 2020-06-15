@@ -155,13 +155,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     lwz   r4, 0x0C(r16) # total bytes
     #lwz   r5, 0x00(r16) # total blocks
     lwz   r6, 0x10(r16) # used bytes
-    #sub   r4, r4, r6    # free bytes
-    mulli r6, r6, 200
-    divwu r6, r6, r4 # used bytes percent * 2
+    sub   r4, r4, r6    # free bytes
+    #mulli r6, r6, 200
+    #divwu r6, r6, r4 # used bytes percent * 2
     #lwz   r6, 0x04(r16) # used blocks
     ##sub   r5, r5, r6    # free blocks
     #mulli r6, r6, 100
     #divwu r5, r6, r5 # used blocks percent
+
+    srwi    r6, r4, 14 # free 16KByte blocks
 
     lfs     f1, (.cpuBarX - mainLoop)(r14) # X
     fmr     f2, f31 # Y
