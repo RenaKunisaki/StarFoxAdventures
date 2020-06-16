@@ -12,11 +12,14 @@
 .set free,0x800233e8
 .set gameBitDecrement,0x8001fee8 #bitIdx
 .set gameBitIncrement,0x8001ff3c #bitIdx
+.set gameTextGet,0x80019570 # gametextStruct (GameTextId32)
 .set gameTextSetColor,0x80019908 # u8 r, g, b, a
 .set gameTextShowStr,0x80015dc8 # char*, int box, int x, int y
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
 .set getButtonsJustPressed,0x80014e70 # u16 (int controller)
 .set iCacheFlush,0x80241ae0 #(dest, size) -> dest
+.set isCheatActive,0x800e7e94
+.set isCheatUnlocked,0x800e7efc
 .set loadFileByPath,0x80015ab4 #void* (char *path,uint *outSize)
     # Returns pointer to allocated buffer of contents.
     # outSize: if not NULL, receives file size.
@@ -104,6 +107,10 @@
 .set NUM_HEAPS,4
 .set SCREEN_HEIGHT,480
 .set SCREEN_WIDTH,640
+.set CHEAT_SHOW_CREDITS,0
+.set CHEAT_SEPIA_MODE,1
+.set CHEAT_MUSIC_TEST,2
+.set CHEAT_DINO_LANGUAGE,3
 
 # SFA file IDs
 .set AUDIO_TAB,0x00

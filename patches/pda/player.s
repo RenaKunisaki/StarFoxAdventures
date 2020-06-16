@@ -3,6 +3,7 @@ drawItem_player:
     addi    r5, r14, (s_Krystal - mainLoop)
     LOADWH  r6, CUR_CHAR_ADDR
     LOADBL2 r6, CUR_CHAR_ADDR, r6
+    andi.   r6, r6, 0x7F
     cmpwi   r6, 0
     beq     .drawPlayer_krystal
     addi    r5, r14, (s_Fox - mainLoop)
