@@ -16,6 +16,9 @@ mainLoop: # called from main loop. r3 = mainLoop
     STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
 
 .mainLoop_menuNotOpen:
+    # we still run the menu routine, so it can do the close
+    # animation. we must be on the main menu for the open
+    # flag to be cleared, so don't worry about the other menus.
     lbz   r4, (whichMenu - mainLoop)(r14)
     slwi  r4, r4, 2
     addi  r5, r14, menuPtrs - mainLoop
@@ -47,9 +50,6 @@ checkMenuOpenKey:
     b       menuEndSub
 
 menuPtrs: # menu main function pointers
-    # whichMenu should always be 0 if the menu is closed or
-    # doing the close animation, so we don't need to check
-    # if the menu is open in the others.
     .int runMenu     - mainLoop
     .int objectMenu  - mainLoop
     .int gamebitMenu - mainLoop
@@ -183,6 +183,22 @@ menuGetInput:
     # r6=CX, r7=CY, r8=L, r9=R
     # returns all inputs zero if menuJustMoved timer not zero.
 
+    # are we doing open animation?
+    lwz     r5, (menuAnimTimer - mainLoop)(r14)
+    lis     r6, 0x3F80 # 1.0
+    cmpw    r5, r6
+    beq     .notOpening
+
+    # ignore the inputs for a while.
+.ignore:
+    li      r5, 31
+    b       .stickNotNeutral
+
+.notOpening:
+    LOADHA r4, curGameText
+    cmpwi  r4, 0
+    bge    .ignore
+
     # get the controller state
     # r6 = stick X, r7 = stick Y
     LOADWH  r10, controllerStates
@@ -266,22 +282,36 @@ menuHandleInput:
     lbz   r17, (menuPage - mainLoop)(r14)
 
     # check analog stick
-    cmpwi   r5, 0x10
+    cmpwi   r5, 0x10 # stick up
     bgt     .up
-    cmpwi   r5, -0x10
+    cmpwi   r5, -0x10 # stick down
     blt     .down
-    cmpwi   r4, 0x10
+    cmpwi   r4, 0x10 # stick right
     bgt     .right
-    cmpwi   r4, -0x10
+    cmpwi   r4, -0x10 # stick left
     blt     .left
-    cmpwi   r6, 0x10
+    cmpwi   r6, 0x10 # C right
     bgt     .nextPage
-    cmpwi   r6, -0x10
-    bge     menuEndSub # no input
+    cmpwi   r6, -0x10 # C left
+    blt     .prevPage
+    cmpwi   r8, 0x04 # L
+    bge     .leftFast
+    cmpwi   r9, 0x04 # R
+    blt     menuEndSub # no input
 
-    # prev page
+    # right fast
+    #li    r3, 16
+    srwi   r3, r9, 2
+    b     .doAdjustNoDelay
+
+.leftFast:
+    #li    r3, -16
+    srwi   r3, r8, 2
+    neg    r3, r3
+    b     .doAdjustNoDelay
+
+.prevPage:
     addi  r17, r17, -1
-
 
 .checkPage:
     slwi  r3, r17, 3 # r3 = r17 * 8
@@ -367,7 +397,10 @@ menuHandleInput:
 .right: # Right was pressed
     li    r3, 1
 
-.doAdjust: # 81682ce0
+.doAdjust:
+    li    r17, MOVE_DELAY
+    stb   r17, (menuJustMoved - mainLoop)(r14)
+.doAdjustNoDelay:
     lbz   r17, (menuSelItem - mainLoop)(r14)
     #add   r15, r14, r22 # get adjust func
     slwi  r16, r17, 2 # times 4
@@ -378,8 +411,6 @@ menuHandleInput:
     mtspr CTR, r8
     li    r9, 0xF3 # sound effect ID
     bctrl # call it
-    li    r17, MOVE_DELAY
-    stb   r17, (menuJustMoved - mainLoop)(r14)
     mr    r4, r9
     b     .doSound
 

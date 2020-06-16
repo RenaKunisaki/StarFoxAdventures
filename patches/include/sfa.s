@@ -62,6 +62,7 @@
 .set cMenuState,             0x803dd7d4 #u8
 .set colorFilterColor,       0x803db630 #color
 .set controllerStates,       0x803398f0 #u16 buttons, s8 x, s8 y, s8 cx, s8 cy, s8 L, s8 R
+.set curGameText,            0x803dba70 #s16
 .set curMapId,               0x803dcec8 #int
 .set dataFileBuffers,        0x8035f3e8 #void*[fileIdx]
 .set dataFileSize,           0x8035f0a8 #int32[fileIdx]

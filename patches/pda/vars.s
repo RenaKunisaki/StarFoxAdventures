@@ -39,6 +39,7 @@ heapMenuIdx:   .short 0
 bitMenuIdx:    .short 0
 streamTestId:  .short 0
 soundTestId:   .short 0
+textTestId:    .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
 menuVisible:   .byte 0
@@ -96,6 +97,7 @@ s_Warp:       .string "Warp"
 s_Objects:    .string "Objects"
 s_GameBits:   .string "GameBits"
 s_Heap:       .string "Heap"
+s_TextTest:   .string "Show Text: %04X"
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "
@@ -138,8 +140,7 @@ fmt_08X: .string "%08X"
 # - Arbitrary warp (set coords/layer manually)
 #   - edit the WARPTAB enties in memory?
 #   - Map grid view?
-# - Browse loaded file list?
-# - Browse GameText, textures, models, animations?
+# - Browse loaded file list, textures, models, animations?
 # - Memory editor
 # - Spawn objects if we can figure out how
 # - fun stuff
