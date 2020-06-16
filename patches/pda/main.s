@@ -8,6 +8,14 @@ mainLoop: # called from main loop. r3 = mainLoop
     # do HUD overrides, even if menu isn't open.
     bl    doHudOverrides
 
+    # check if the menu is open.
+    lbz    r4, (menuVisible - mainLoop)(r14)
+    cmpwi  r4, 0
+    beq    .mainLoop_menuNotOpen
+    #li     r4, 1
+    STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
+
+.mainLoop_menuNotOpen:
     lbz   r4, (whichMenu - mainLoop)(r14)
     slwi  r4, r4, 2
     addi  r5, r14, menuPtrs - mainLoop
@@ -239,8 +247,6 @@ menuHandleInput:
     LOADWH r5, playerLocked
     STOREB r4, playerLocked, r5 # stops all objects
     STOREB r4, pauseDisabled, r5 # inhibit pause menu
-    #li     r4, 1
-    STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
     # inhibit game timer
     LOAD   r5, 0x800140BC # gameTimerRun
     LOAD   r4, 0x4E800020 # blr

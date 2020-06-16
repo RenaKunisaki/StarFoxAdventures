@@ -13,11 +13,6 @@ heapMenu:
 
     bl    menuHideHud
 
-    # inhibit C menu
-    li     r4, 1
-    LOADWH r5, shouldCloseCMenu
-    STOREB r4, shouldCloseCMenu, r5
-
     # get the heap table
     LOAD   r15, heaps
     lbz    r3,  (whichHeap - mainLoop)(r14)

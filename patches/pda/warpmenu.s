@@ -12,11 +12,6 @@ warpMenu:
     stw   r0, SP_LR_SAVE(r1)
     stmw  r13, SP_GPR_SAVE(r1)
 
-    # inhibit C menu
-    li     r4, 1
-    LOADWH r5, shouldCloseCMenu
-    STOREB r4, shouldCloseCMenu, r5
-
     #bl    menuHideHud
     bl     warpMenu_doInput
     bl     warpMenu_Main

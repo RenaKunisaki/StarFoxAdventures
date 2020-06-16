@@ -17,11 +17,6 @@ objectMenu:
 
     bl    menuHideHud
 
-    # inhibit C menu
-    li     r4, 1
-    LOADWH r5, shouldCloseCMenu
-    STOREB r4, shouldCloseCMenu, r5
-
     lbz   r3, (objMenuState - mainLoop)(r14)
     slwi  r3, r3, 2
     addi  r4, r14, objMenu_Funcs - mainLoop
