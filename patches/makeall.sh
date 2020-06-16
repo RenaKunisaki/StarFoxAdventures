@@ -15,6 +15,7 @@ set -e
 #./makedolpatch.sh alloc && mv -f alloc.bin $TARGET/patches/0006
 #./makedolpatch.sh gamebit && mv -f gamebit.bin $TARGET/patches/0006
 ./makedolpatch.sh hitboxdebug && mv -f hitboxdebug.bin $TARGET/patches/0006
+./makedolpatch.sh dll && mv -f dll.bin $TARGET/patches/0007
 
 # extract Krystal model and texture to own files
 dd if=$TARGET/animtest/MODELS.bin of=$TARGET/patches/km1 bs=1 skip=210720 count=76608
