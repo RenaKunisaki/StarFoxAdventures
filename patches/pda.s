@@ -50,6 +50,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/main.s"
 
 .include "pda/hud.s"
+.include "pda/hudelems.s"
 .include "pda/drawbox.s"
 .include "pda/animation.s"
 .include "pda/player.s"

@@ -42,6 +42,7 @@ soundTestId:   .short 0
 textTestId:    .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
+hudFullScreen: .byte 1
 menuVisible:   .byte 0
 menuSelItem:   .byte 0
 menuSelColor:  .byte 0
