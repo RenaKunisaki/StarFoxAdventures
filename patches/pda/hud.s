@@ -33,10 +33,31 @@ doHudOverrides:
 
 .noMapAlphaOverride:
     lhz     r6, (minimapSizeOverride - mainLoop)(r14)
+    LOADW   r8, 0x803dd93c # map texture
+    cmpwi   r8, 0
+    bne     .haveMap
+
+    # hide "no map data" message.
+    # this "overrides the override" so to speak.
+    # it will shrink the map down to nothing, regardless
+    # of whether the map size is set to Normal or Huge.
+    # when we do have a map, it'll spring back up again.
+    LOADWL2 r6, minimapWidth, r9
+    cmpwi   r6, 2
+    blt     .end
+
+    # every frame the game will try to increase the map size
+    # by 1, so the shrinkage is actually one unit less than
+    # what we do here.
+    subi    r6, r6, 5
+    b       .doMapSizeOverride
+
+.haveMap: # we do have a map to show.
     cmpwi   r6, 0 # override enabled?
     beq     .noMapOverride
 
     # override position.
+.doMapPosOverride:
     li      r4, 0x0002 # X pos
     li      r5, 0x01D8 # Y pos
     lis     r7, 0x4000 # X pos float
@@ -45,9 +66,10 @@ doHudOverrides:
 
 .noMapOverride:
     # use default position/size.
+    li      r6, 0x0078 # width and height
+.doMapSizeOverride:
     li      r4, 0x0032 # X pos
     li      r5, 0x01B8 # Y pos
-    li      r6, 0x0078 # width and height
     lis     r7, 0x4248 # X pos float
     #       r9 is already set
     b       .setDimensionsNoSize # let it resize itself.
@@ -105,6 +127,7 @@ doHudOverrides:
 
 .end:
     blr
+
 
 # HUD elements:
 # - Health bar:

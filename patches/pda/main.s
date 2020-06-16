@@ -192,7 +192,7 @@ menuGetInput:
     # ignore the inputs for a while.
 .ignore:
     li      r5, 31
-    b       .stickNotNeutral
+    b       .notNeutral
 
 .notOpening:
     LOADHA r4, curGameText
@@ -219,12 +219,19 @@ menuGetInput:
     or      r3, r6, r7 # either axis
     or      r3, r3, r8 # also C stick
     andi.   r3, r3, 0xF8 # deadzone
-    bne     .stickNotNeutral
+    bne     .notNeutral
+
+    # and the L/R buttons?
+    LOADBL2 r8, controllerStates+6, r10 # L
+    LOADBL2 r9, controllerStates+7, r10 # R
+    or      r3, r8, r9
+    andi.   r3, r3, 0xFC # deadzone
+    bne     .notNeutral
 
     # stick is neutral, so reset the move timer.
     li      r5, 1
 
-.stickNotNeutral: # set the move timer.
+.notNeutral: # set the move timer.
     subi    r5, r5, 1
     stb     r5, (menuJustMoved - mainLoop)(r14)
 
