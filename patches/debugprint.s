@@ -183,7 +183,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADW r5, 0x803dcde8 # game state flags
     CALL  debugPrintf
 
-
     # get player object
     LOADW r16, pPlayer
     cmpwi r16, 0
@@ -262,6 +261,15 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 
 .noPlayer:
+    # display GameText info
+    LOADHA r4, 0x803dba70 # curGameText
+    cmpwi  r4, 0
+    blt    .noText
+    LOADW  r5, 0x803a9440
+    addi   r3, r14, .fmt_textState - mainLoop
+    CALL   debugPrintf
+
+.noText:
 .end:
     lwz  r14, SP_R14_SAVE(r1)
     lwz  r15, SP_R15_SAVE(r1)
@@ -297,4 +305,5 @@ mainLoop: # called from main loop. r3 = mainLoop
 .fmt_mapCoords: .string "M:\x84%d %d %d %d\x83 "
 .fmt_playerState: .string "\nS:\x84%02X %08X\x83 A:\x84%04X %f\x83\n"
     #.string "S \x84%02X\x83 A \x84%04X\x83\n"
+.fmt_textState: .string "TEXT %04X %08X\n"
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"

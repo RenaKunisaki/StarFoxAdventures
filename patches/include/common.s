@@ -63,6 +63,11 @@
     lhz \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\reg)
 .endm
 
+.macro LOADHA reg, addr
+    lis \reg, ((\addr) >> 16) + (((\addr) & 0x8000) >> 15)
+    lha \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\reg)
+.endm
+
 .macro LOADB reg, addr
     lis \reg, ((\addr) >> 16) + (((\addr) & 0x8000) >> 15)
     lbz \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\reg)
