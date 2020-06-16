@@ -19,4 +19,4 @@ set -e
 # extract Krystal model and texture to own files
 dd if=$TARGET/animtest/MODELS.bin of=$TARGET/patches/km1 bs=1 skip=210720 count=76608
 dd if=$TARGET/animtest/TEX1.bin of=$TARGET/patches/kt1 bs=1 skip=288864 count=104960
-cp km2 kt2 $TARGET/patches/
+cp krystal/km2 krystal/kt2 $TARGET/patches/
