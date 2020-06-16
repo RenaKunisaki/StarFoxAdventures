@@ -168,10 +168,17 @@ objMenu_List_doInput:
     cmpwi   r7, -0x10
     blt     .objMenu_List_down
 
+    # check L/R - jump by page
+    cmpwi   r8, 0x04
+    bgt     .objMenu_List_prevPage
+    cmpwi   r9, 0x04
+    bgt     .objMenu_List_nextPage
+
     b       menuEndSub
 
 .objMenu_List_up: # up pressed
     subi    r17, r17, 1
+.objMenu_List_up2:
     cmpwi   r17, 0
     bge     .objMenu_List_storeIdx
     addi    r17, r16, -2
@@ -180,6 +187,7 @@ objMenu_List_doInput:
 
 .objMenu_List_down: # down pressed
     addi    r17, r17, 1
+.objMenu_List_down2:
     cmpw    r17, r16
     blt     .objMenu_List_storeIdx
     li      r17, 0
@@ -194,6 +202,14 @@ objMenu_List_doInput:
     li      r3,  3
     stb     r3,  (menuJustMoved - mainLoop)(r14)
     b       menuEndSub
+
+.objMenu_List_prevPage:
+    subi    r17, r17, 0x40
+    b       .objMenu_List_up2
+
+.objMenu_List_nextPage:
+    addi    r17, r17, 0x40
+    b       .objMenu_List_down2
 
 .objMenu_close:
     li      r3, 0

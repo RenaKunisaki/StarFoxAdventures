@@ -127,7 +127,7 @@ gamebitMenu_doInput:
     cmpwi   r6, -0x10
     blt     .gameBitMenu_dec
 
-    # check L/R - extra fast scroll
+    # check L/R - jump by page
     cmpwi   r8, 0x04
     bgt     .gameBitMenu_prevPage
     cmpwi   r9, 0x04
@@ -179,13 +179,11 @@ gamebitMenu_doInput:
     b       menuEndSub
 
 .gameBitMenu_prevPage:
-    srwi.   r8, r8, 1
-    sub     r17, r17, r8
+    subi    r17, r17, 0x100
     b       .gameBitMenu_up2
 
 .gameBitMenu_nextPage:
-    srwi.   r9, r9, 1
-    add     r17, r17, r9
+    addi    r17, r17, 0x100
     b       .gameBitMenu_down2
 
 .gameBitMenu_close:

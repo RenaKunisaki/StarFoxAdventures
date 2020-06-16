@@ -162,10 +162,17 @@ warpMenu_doInput:
     cmpwi   r7, -0x10
     blt     .warpMenu_down
 
+    # check L/R - jump by page
+    cmpwi   r8, 0x04
+    bgt     .warpMenu_prevPage
+    cmpwi   r9, 0x04
+    bgt     .warpMenu_nextPage
+
     b       menuEndSub
 
 .warpMenu_up: # up pressed
     subi    r17, r17, 1
+.warpMenu_up2:
     cmpwi   r17, 0
     bge     .warpMenu_storeIdx
     addi    r17, r17, MAX_WARP - 2
@@ -174,6 +181,7 @@ warpMenu_doInput:
 
 .warpMenu_down: # down pressed
     addi    r17, r17, 1
+.warpMenu_down2:
     cmpwi   r17, MAX_WARP
     blt     .warpMenu_storeIdx
     li      r17, 0
@@ -186,6 +194,14 @@ warpMenu_doInput:
     li      r3,  MOVE_DELAY
     stb     r3,  (menuJustMoved - mainLoop)(r14)
     b       menuEndSub
+
+.warpMenu_prevPage:
+    subi    r17, r17, 0x10
+    b       .warpMenu_up2
+
+.warpMenu_nextPage:
+    addi    r17, r17, 0x10
+    b       .warpMenu_down2
 
 .warpMenu_close:
     bl      returnToMainMenu
