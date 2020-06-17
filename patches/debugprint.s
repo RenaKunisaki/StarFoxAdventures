@@ -113,6 +113,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     beq   .end
 
     # don't make debug text flash with HUD text
+    # XXX why doesn't this work?
     li      r3, 255
     li      r4, 255
     li      r5, 255
@@ -177,12 +178,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpwi r15, 4
     bne   .nextHeap
 
-    # display game state info
-    addi  r3, r14, .fmt_gameState - mainLoop
-    LOADW r4, 0x803dcb84 # numObjects
-    LOADW r5, 0x803dcde8 # game state flags
-    CALL  debugPrintf
-
     # get player object
     LOADW r16, pPlayer
     cmpwi r16, 0
@@ -205,8 +200,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     #lwz   r3, 0x50(r3) # get file ptr
     #addi  r17, r3, 0x91 # get name
 #.noObject:
-
-    addi r3, r14, (.fmt_playerCoords - mainLoop)@l
 
     # display player coords
     # debugPrintf doesn't support eg '%+7.2f' so we'll just convert
@@ -232,16 +225,17 @@ mainLoop: # called from main loop. r3 = mainLoop
     ## no idea what this does
     #creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
 
-    mr   r4, r16 # player*
+    addi r3, r14, (.fmt_playerCoords - mainLoop)@l
+    mr   r7, r16 # player*
     CALL debugPrintf
 
     # display map cell
     addi r3, r14, (.fmt_mapCoords - mainLoop)@l
     LOADWH  r9, mapCoords
-    LOADWL2 r4, mapCoords,    r9
-    LOADWL2 r5, mapCoords+ 4, r9
-    LOADWL2 r6, mapCoords+ 8, r9
-    LOADWL2 r7, mapCoords+12, r9
+    #LOADWL2 r4, mapCoords,    r9
+    #LOADWL2 r5, mapCoords+ 4, r9
+    LOADWL2 r4, mapCoords+ 8, r9
+    LOADWL2 r5, mapCoords+12, r9
     #ori     r8, r10, 0 # r9 = nearest object
     #ori     r9, r17, 0 # r10 = name
     CALL debugPrintf
@@ -251,7 +245,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     lwz  r9, 0x00B8(r16) # get animState
     lfs  f1, 0x0098(r16) # get anim timer
     #lfs  f2, 0x0814(r9)  # get anim val
-    lhz  r4, 0x0274(r9)  # get state ID
+    lbz  r4, 0x0275(r9)  # get state ID
     lwz  r5, 0x03F0(r9)  # get flags
     lhz  r6, 0x00A0(r16) # get anim ID
     # magic required to make floats print correctly
@@ -261,11 +255,47 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 
 .noPlayer:
+    # get camera object
+    LOADW r16, pCamera
+    cmpwi r16, 0
+    beq   .noCamera
+
+    # display camera coords
+    lfs    f1, 0x0C(r16)
+    fctiwz f2,f1
+    stfd   f2,SP_FLOAT_TMP(r1)
+    lwz    r4,SP_FLOAT_TMP+4(r1)
+
+    lfs    f1, 0x10(r16)
+    fctiwz f2,f1
+    stfd   f2,SP_FLOAT_TMP(r1)
+    lwz    r5,SP_FLOAT_TMP+4(r1)
+
+    lfs    f1, 0x14(r16)
+    fctiwz f2,f1
+    stfd   f2,SP_FLOAT_TMP(r1)
+    lwz    r6,SP_FLOAT_TMP+4(r1)
+
+    #lfs   f2, 0x10(r16)
+    #lfs   f3, 0x14(r16)
+    ## magic required to make floats print correctly
+    ## no idea what this does
+    #creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
+
+    addi r3, r14, (.fmt_cameraCoords - mainLoop)@l
+    CALL debugPrintf
+
+    # display game state info
+    addi  r3, r14, .fmt_gameState - mainLoop
+    LOADW r4, 0x803dcb84 # numObjects
+    LOADW r5, 0x803dcde8 # game state flags
+    CALL  debugPrintf
+
     # display GameText info
-    LOADHA r4, 0x803dba70 # curGameText
+    LOADHA r4, curGameText
     cmpwi  r4, 0
     blt    .noText
-    LOADW  r5, 0x803a9440
+    LOADW  r5, 0x803a9444 # cur phrase
     addi   r3, r14, .fmt_textState - mainLoop
     CALL   debugPrintf
 
@@ -300,10 +330,10 @@ mainLoop: # called from main loop. r3 = mainLoop
 .heapBarY:       .float 466
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
-.fmt_gameState: .string "\x84%3d\x83 obj G:\x84%08X\x83 "
-.fmt_playerCoords: .string "P:\x84%08X %d %d %d\x83 "
-.fmt_mapCoords: .string "M:\x84%d %d %d %d\x83 "
-.fmt_playerState: .string "\nS:\x84%02X %08X\x83 A:\x84%04X %f\x83\n"
-    #.string "S \x84%02X\x83 A \x84%04X\x83\n"
-.fmt_textState: .string "TEXT %04X %08X\n"
+.fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
+.fmt_mapCoords:    .string "M:\x84%3d %3d\x83 "
+.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X %f\x83"
+.fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
+.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83\n"
+.fmt_textState:    .string "TEXT %04X %08X\n"
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
