@@ -149,6 +149,10 @@ hudElementOverrides_values_on:
     #   - Scarabs:
     #       X: 803a92f8 (float, varies)
     #       A: 803a92c4 (float, varies)
+    # I don't know where those X positions came from but they're wrong.
+    # the counters start at X=591 and this increases by 40 for each
+    # counter drawn.
+    # we would need to override that logic.
 
 # HUD elements:
 # - Health bar:

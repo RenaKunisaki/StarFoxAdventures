@@ -12,8 +12,11 @@ mainLoop: # called from main loop. r3 = mainLoop
     lbz    r4, (menuVisible - mainLoop)(r14)
     cmpwi  r4, 0
     beq    .mainLoop_menuNotOpen
+
+    # inhibt C menu
+    LOADWH r5, shouldCloseCMenu
     #li     r4, 1
-    STOREB r4, shouldCloseCMenu, r5 # inhibt C menu
+    STOREB r4, shouldCloseCMenu, r5
 
 .mainLoop_menuNotOpen:
     # we still run the menu routine, so it can do the close
