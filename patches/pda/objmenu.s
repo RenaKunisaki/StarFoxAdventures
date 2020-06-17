@@ -222,24 +222,21 @@ objMenu_List_doInput:
     LOADW   r21, pCamera
     #li      r22, 0
     cmpwi   r21, 0
-    #beq     .objMenu_focus_noCamera
-    beq     .objMenu_end
+    beq     .objMenu_focus_cantuse
+    lwz     r3, 0xB8(r18)
+    cmpwi   r3, 0 # has an AnimState*?
+    beq     .objMenu_focus_cantuse
     stw     r18, 0xA4(r21)
     # since time is stopped we must manually update
     # the camera position.
     CALL    0x801030c0
     b       .objMenu_end
-    # XXX why does focusing the camera on some objects crash the game?
-    # even if we don't update the camera position, it's still trying
-    # to read something from the target object.
-    # maybe the camera goes out of bounds or into another map and
-    # the player object gets unloaded?
 
-#.objMenu_focus_noCamera:
-#    li      r3, 0
-#    li      r4, 0xFD # "can't use that item"
-#    CALL    audioPlaySound
-#    b       menuEndSub
+.objMenu_focus_cantuse:
+    li      r3, 0
+    li      r4, 0xFD # "can't use that item"
+    CALL    audioPlaySound
+    b       menuEndSub
 
 .objMenu_delete: # delete the selected object
     mr      r3, r18
