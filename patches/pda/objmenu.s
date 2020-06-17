@@ -226,6 +226,8 @@ objMenu_List_doInput:
     lwz     r3, 0xB8(r18)
     cmpwi   r3, 0 # has an AnimState*?
     beq     .objMenu_focus_cantuse
+    # focusing the camera on an object with NULL AnimState*
+    # will crash the game, so don't do that.
     stw     r18, 0xA4(r21)
     # since time is stopped we must manually update
     # the camera position.
