@@ -91,6 +91,7 @@
 .set pauseDisabled,          0x803dd789 #bool
 .set pCamera,                0x803dd524 #Camera*
 .set pCurMapInfo,            0x803dce78 #MapInfoEntry*
+.set pCurSaveGame,           0x803dd498 #SaveGame*
 .set pdaOn,                  0x803dbbb0 #bool
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox

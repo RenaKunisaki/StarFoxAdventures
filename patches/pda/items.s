@@ -74,6 +74,7 @@ itemDrawFuncs_page3: # Debug
     .int drawItem_warp        - mainLoop
     .int drawItem_objects     - mainLoop
     .int drawItem_gameBits    - mainLoop
+    .int drawItem_saveGame    - mainLoop
     .int drawItem_heap        - mainLoop
     .int drawItem_textTest    - mainLoop
     .int 0
@@ -86,5 +87,6 @@ itemAdjustFuncs_page3:
     .int adjItem_warp        - mainLoop
     .int adjItem_objects     - mainLoop
     .int adjItem_gameBits    - mainLoop
+    .int adjItem_saveGame    - mainLoop
     .int adjItem_heap        - mainLoop
     .int adjItem_textTest    - mainLoop

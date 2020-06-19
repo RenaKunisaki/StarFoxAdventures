@@ -1,3 +1,6 @@
+menuDrawBoxOpaque:
+    li r20, 0xFF
+
 menuDrawBox:
     # subroutine: draws a box.
     # expects r14 = mainLoop.

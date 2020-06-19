@@ -55,4 +55,17 @@ menuSetTextColor: # r3 = RRGGBBAA
     rlwinm  r6, r3,  0, 0xFF # A
     rlwinm  r3, r3,  8, 0xFF # R
     JUMP    gameTextSetColor, r0
-#8168395c
+
+
+menuPrintf: # r19:X, r20:Y, r4:fmt, r5...:args
+    mflr    r31
+    addi    r3,  r1, SP_STR_BUF
+    CALL    sprintf
+    addi    r3,  r1, SP_STR_BUF
+    mtlr    r31
+menuDrawStr2:
+    mr      r5,  r19 # X pos
+    mr      r6,  r20 # Y pos
+menuDrawStr: # r3:str, r5:X, r6:Y
+    li      r4,  MENU_TEXTBOX_ID # box type
+    JUMP    gameTextShowStr, r0

@@ -21,12 +21,13 @@ constants:
     .set MOVE_DELAY,10 # wait this many frames between autorepeat
     .set MENU_TEXTBOX_ID,0x93 # same one the game uses for HUD
 
-    .set MENU_ID_MAIN,0 # constants for whichMenu
-    .set MENU_ID_OBJLIST,1
-    .set MENU_ID_GAMEBIT,2
-    .set MENU_ID_WARP,3
+    .set MENU_ID_MAIN,     0 # constants for whichMenu
+    .set MENU_ID_OBJLIST,  1
+    .set MENU_ID_GAMEBIT,  2
+    .set MENU_ID_WARP,     3
     .set MENU_ID_HEAP_LIST,4
-    .set MENU_ID_HEAP,5
+    .set MENU_ID_HEAP,     5
+    .set MENU_ID_SAVEGAME, 6
 
     .set STACK_SIZE,0x180 # how much to reserve
     .set SP_LR_SAVE,0x184 # this is what the game does
@@ -69,6 +70,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/warpmenu.s"
 .include "pda/heaplist.s"
 .include "pda/heapmenu.s"
+.include "pda/savegamemenu.s"
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"

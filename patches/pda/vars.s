@@ -33,6 +33,7 @@ f_menuWidth:   .float 320
 f_menuHeight:  .float 220
 f_centerX:     .float 320
 f_centerY:     .float 240
+f_mapCellScale: .float 640.0
 
 # menu state
 heapMenuIdx:   .short 0
@@ -51,14 +52,17 @@ menuPage:      .byte 0
 whichMenu:     .byte MENU_ID_MAIN
 musicTestId:   .byte 0
 warpMenuIdx:   .byte 0
+saveMenuIdx:   .byte 0
 whichHeap:     .byte 0
 menuWasHudHidden: .byte 0
 menuWasPdaOn:  .byte 0 # for hiding map in objects list
 
 # string pool
 # general
-s_on:         .string "On"
-s_off:        .string "Off"
+s_on:            .string "On"
+s_off:           .string "Off"
+fmt_04X:         .string "%04X"
+fmt_08X:         .string "%08X"
 
 # page 0
 title_page0:  .string "PDA Menu"
@@ -97,6 +101,7 @@ s_ReloadMap:  .string "Reload Map"
 s_Warp:       .string "Warp"
 s_Objects:    .string "Objects"
 s_GameBits:   .string "GameBits"
+s_SaveGame:   .string "SaveGame Data"
 s_Heap:       .string "Heap"
 s_TextTest:   .string "Show Text: %04X"
 
@@ -127,8 +132,23 @@ fmt_heapListHeader: .string "N Bytes        Blocks  UsedBytes  UBlk  FreeBytes  
 fmt_heapListEntry:  .string "%d %08X %04X %08X %04X %08X %04X %08X"
 fmt_heapMenuHeader: .string "Num   Tag                 Data                  Size"
 #fmt_heapMenuEntry:  .string "%04X %08X %08X %08X"
-fmt_04X: .string "%04X"
-fmt_08X: .string "%08X"
+
+# SaveGame
+s_savegameEmpty:        .string "NO DATA"
+s_savegameCurChr:       .string "Chr: %s; SaveName: %s"
+s_savegameItem_Game:    .string "Game State"
+s_savegameItem_Krystal: .string "Krystal State"
+s_savegameItem_Fox:     .string "Fox State"
+s_savegameHPMP:         .string "HP %02d/%02d  MP %02d/%02d"
+s_savegameLivesMoney:   .string "1up %d/%d  Money: %d"
+s_savegameUnkFlags:     #.string "Unk: %02X %02X %02X"
+s_savegameUnkChrState:  .string "Unk %02X %02X %02X"
+s_savegameCoordX:       .string "X %f"
+s_savegameCoordY:       .string "Y %f"
+s_savegameCoordZ:       .string "Z %f"
+s_savegameLayer:        .string "Rot %d Grid %d unk %04X"
+s_savegameMap:          .string "Map: %s"
+
 
 # 803dca3e bool shouldResetNextFrame
 # not sure where to put this, and would want to add

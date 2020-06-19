@@ -53,12 +53,13 @@ checkMenuOpenKey:
     b       menuEndSub
 
 menuPtrs: # menu main function pointers
-    .int runMenu     - mainLoop
-    .int objectMenu  - mainLoop
-    .int gamebitMenu - mainLoop
-    .int warpMenu    - mainLoop
-    .int heapList    - mainLoop
-    .int heapMenu    - mainLoop
+    .int runMenu      - mainLoop
+    .int objectMenu   - mainLoop
+    .int gamebitMenu  - mainLoop
+    .int warpMenu     - mainLoop
+    .int heapList     - mainLoop
+    .int heapMenu     - mainLoop
+    .int savegameMenu - mainLoop
 
 returnToMainMenu:
     # called from other menus

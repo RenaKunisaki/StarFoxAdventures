@@ -43,7 +43,7 @@ warpMenu_Main: # draw list of warps.
 
     lbz     r17, (warpMenuIdx - mainLoop)(r14)
     li      r20, WARP_MENU_YPOS + 8 # string Y pos
-    lfs     f30, (.warpMenu_mapCellScale - mainLoop)(r14)
+    lfs     f30, (f_mapCellScale - mainLoop)(r14)
 
 .warpMenu_nextWarp:
     slwi    r9,  r17, 4
@@ -227,5 +227,3 @@ warpMenu_doInput:
     stfs    f3,  0x14(r16)
     #CALL    0x80020748 # mapReload
     b       .warpMenu_close
-
-.warpMenu_mapCellScale: .float 640.0

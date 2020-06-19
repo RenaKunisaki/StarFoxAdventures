@@ -102,6 +102,16 @@ adjItem_gameBits: # r3 = amount to adjust by (0=A button)
 
 #######################################################################
 
+drawItem_saveGame:
+    addi  r4, r14, (s_SaveGame - mainLoop)
+    blr
+
+adjItem_saveGame: # r3 = amount to adjust by (0=A button)
+    li      r4, MENU_ID_SAVEGAME
+    b       .debug_setMenu
+
+#######################################################################
+
 drawItem_warp:
     addi  r4, r14, (s_Warp - mainLoop)
     blr
