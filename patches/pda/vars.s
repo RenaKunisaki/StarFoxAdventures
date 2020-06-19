@@ -11,18 +11,21 @@
 # and just reuse it for both labels.
 
 # float constants
-zero:          .float   0
-one:           .float   1
-two:           .float   2
-five:          .float   5
-sixty:         .float  60
-oneHundred:    .float 100
-twoFiveFive:   .float 255
-fovMax:        .float 175 # the most the game will do
-gameSpeedMin:  .float  15 # 1/4 * 60; also the amount to adjust by
-gameSpeedMax:  .float 240 # 4 * 60
-gameSpeedDiv:  .float 0.6 # 60 / 100, to convert to percent
-volAdjStep:    .float 0.1
+f_m60:         .float  -60
+zero:          .float    0
+one:           .float    1
+two:           .float    2
+five:          .float    5
+f_24:          .float   24
+sixty:         .float   60
+oneHundred:    .float  100
+twoFiveFive:   .float  255
+f_3600:        .float 3600
+fovMax:        .float  175 # the most the game will do
+gameSpeedMin:  .float   15 # 1/4 * 60; also the amount to adjust by
+gameSpeedMax:  .float  240 # 4 * 60
+gameSpeedDiv:  .float  0.6 # 60 / 100, to convert to percent
+volAdjStep:    .float  0.1
 floatMagic:    .int 0x43300000,0x80000000
 # lol of course we can't do this.
 #f_menuWidth:   .float MENU_WIDTH
@@ -43,19 +46,20 @@ soundTestId:   .short 0
 textTestId:    .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
-hudFullScreen: .byte 1
-menuVisible:   .byte 0
-menuSelItem:   .byte 0
-menuSelColor:  .byte 0
-menuJustMoved: .byte 0 # frame counter
-menuPage:      .byte 0
-whichMenu:     .byte MENU_ID_MAIN
-musicTestId:   .byte 0
-warpMenuIdx:   .byte 0
-saveMenuIdx:   .byte 0
-whichHeap:     .byte 0
+hudFullScreen:    .byte 1
+menuVisible:      .byte 0
+menuSelItem:      .byte 0
+menuSelColor:     .byte 0
+menuJustMoved:    .byte 0 # frame counter
+menuPage:         .byte 0
+whichMenu:        .byte MENU_ID_MAIN
+musicTestId:      .byte 0
+warpMenuIdx:      .byte 0
+saveMenuIdx:      .byte 0
+saveMenuObjIdx:   .byte 0
+whichHeap:        .byte 0
 menuWasHudHidden: .byte 0
-menuWasPdaOn:  .byte 0 # for hiding map in objects list
+menuWasPdaOn:     .byte 0 # for hiding map in objects list
 
 # string pool
 # general
@@ -136,9 +140,11 @@ fmt_heapMenuHeader: .string "Num   Tag                 Data                  Siz
 # SaveGame
 s_savegameEmpty:        .string "NO DATA"
 s_savegameCurChr:       .string "Chr: %s; SaveName: %s"
+s_savegamePlayTime:     .string "%dd %02dh %02dm %02ds %02df"
 s_savegameItem_Game:    .string "Game State"
 s_savegameItem_Krystal: .string "Krystal State"
 s_savegameItem_Fox:     .string "Fox State"
+s_savegameItem_Objs:    .string "Saved Objects"
 s_savegameHPMP:         .string "HP %02d/%02d  MP %02d/%02d"
 s_savegameLivesMoney:   .string "1up %d/%d  Money: %d"
 s_savegameUnkFlags:     #.string "Unk: %02X %02X %02X"
@@ -148,6 +154,7 @@ s_savegameCoordY:       .string "Y %f"
 s_savegameCoordZ:       .string "Z %f"
 s_savegameLayer:        .string "Rot %d Grid %d unk %04X"
 s_savegameMap:          .string "Map: %s"
+s_savegameSavedObj:     .string "%08X %d %d %d"
 
 
 # 803dca3e bool shouldResetNextFrame

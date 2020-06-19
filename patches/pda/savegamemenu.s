@@ -6,7 +6,8 @@
 .set SAVEGAME_INFO_YPOS,   40
 .set SAVEGAME_INFO_WIDTH, 310
 .set SAVEGAME_INFO_HEIGHT,400
-.set SAVEGAME_MENU_NOPTS,   3
+.set MAX_SAVED_OBJECTS,    63
+.set SAVEGAME_MENU_NOPTS,   4
 
 savegameMenu:
     # subroutine: runs the SaveGame menu.
@@ -25,12 +26,14 @@ savegameMenu_itemStrs:
     .int s_savegameItem_Game    - mainLoop
     .int s_savegameItem_Krystal - mainLoop
     .int s_savegameItem_Fox     - mainLoop
+    .int s_savegameItem_Objs    - mainLoop
     .int 0
 
 savegameMenu_itemFuncs:
     .int savegameMenu_drawGameState    - mainLoop
     .int savegameMenu_drawKrystalState - mainLoop
     .int savegameMenu_drawFoxState     - mainLoop
+    .int savegameMenu_drawSavedObjs    - mainLoop
 
 savegameMenu_Main: # draw savegame info
     stwu    r1, -STACK_SIZE(r1) # get some stack space
@@ -115,6 +118,12 @@ savegameMenu_doInput:
     andi.   r10, r3, PAD_BUTTON_B
     bne     .savegameMenu_close
 
+    # check C stick
+    cmpwi   r7, -0x10
+    blt     .savegameMenu_objListDown
+    cmpwi   r7, 0x10
+    bgt     .savegameMenu_objListUp
+
     # check analog stick
     cmpwi   r5, -0x10
     blt     .savegameMenu_down
@@ -138,6 +147,7 @@ savegameMenu_doInput:
 .savegameMenu_storeIdx:
     stb     r17, (saveMenuIdx - mainLoop)(r14)
     li      r3,  MOVE_DELAY
+.savegameMenu_storeIdx2:
     stb     r3,  (menuJustMoved - mainLoop)(r14)
     b       menuEndSub
 
@@ -151,6 +161,27 @@ savegameMenu_doInput:
     li      r6,  SAVEGAME_MENU_YPOS + 8 # Y pos
     bl      menuDrawStr
     b       menuEndSub
+
+.savegameMenu_objListDown:
+    lbz     r3, (saveMenuObjIdx - mainLoop)(r14)
+    addi    r3, r3, 1
+    cmpwi   r3, MAX_SAVED_OBJECTS
+    blt     .savegameMenu_objListStore
+    li      r3, 0
+.savegameMenu_objListStore:
+    stb     r3, (saveMenuObjIdx - mainLoop)(r14)
+    li      r3, 3
+    b       .savegameMenu_storeIdx2
+
+.savegameMenu_objListUp:
+    lbz     r3, (saveMenuObjIdx - mainLoop)(r14)
+    cmpwi   r3, 0
+    beq     .savegameMenu_objListTop
+    subi    r3, r3, 1
+    b       .savegameMenu_objListStore
+.savegameMenu_objListTop:
+    li      r3, MAX_SAVED_OBJECTS - 1
+    b       .savegameMenu_objListStore
 
 
 savegameMenu_drawGameState:
@@ -282,3 +313,45 @@ savegameMenu_drawCharState:
     bl      menuPrintf
 
     b       menuEndSub
+
+
+savegameMenu_drawSavedObjs:
+    li      r19, SAVEGAME_INFO_XPOS + 8 # X pos
+    li      r20, SAVEGAME_INFO_YPOS + 8 # string Y pos
+    addi    r21, r15, 0x0168
+    lbz     r3,  (saveMenuObjIdx - mainLoop)(r14)
+    mr      r22, r3
+    slwi    r3,  r3, 4
+    add     r21, r21, r3
+
+.savegameMenu_drawNextObj:
+    lwz     r5,  0x00(r21) # ID
+    #cmpwi   r5,  0
+    #beq     menuEndSub
+
+    lfs     f1,  0x04(r21) # X
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r6,  SP_FLOAT_TMP+4(r1)
+
+    lfs     f1,  0x08(r21) # Y
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r7,  SP_FLOAT_TMP+4(r1)
+
+    lfs     f1,  0x0C(r21) # Z
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r8,  SP_FLOAT_TMP+4(r1)
+
+    addi    r4,  r14, s_savegameSavedObj - mainLoop
+    bl      menuPrintf
+    cmpwi   r20, SAVEGAME_INFO_YPOS + SAVEGAME_INFO_HEIGHT - LINE_HEIGHT
+    bge     menuEndSub
+
+    addi    r20, r20, LINE_HEIGHT
+    addi    r21, r21, 0x10
+    addi    r22, r22, 1
+    cmpwi   r22, MAX_SAVED_OBJECTS
+    bge     menuEndSub
+    b       .savegameMenu_drawNextObj
