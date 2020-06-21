@@ -136,30 +136,43 @@ class GCISO(ISO):
         # create target dirs
         os.makedirs(os.path.join(path,'sys'), exist_ok=True)
         os.makedirs(os.path.join(path,'files'), exist_ok=True)
-        for file in filter(lambda f: f.isDir, self.files):
+
+        # extract system files
+        print("Extract boot.bin...")
+        self.bootBin.writeToFile(os.path.join(path,'sys','boot.bin'))
+        print("Extract bi2.bin...")
+        self.bi2bin .writeToFile(os.path.join(path,'sys','bi2.bin'))
+        print("Extract fst.bin...")
+        self.fstbin .writeToFile(os.path.join(path,'sys','fst.bin'))
+        print("Extract apploader.img...")
+        self.appldr .writeToFile(os.path.join(path,'sys','apploader.img'))
+        print("Extract main.dol...")
+        self.mainDol.writeToFile(os.path.join(path,'sys','main.dol'))
+
+        # extract directories
+        dirs = list(filter(lambda f: f.isDir, self.files))
+        for i, file in enumerate(dirs):
             name = file.path
             if name.startswith('/'): name = '.'+name
             target = os.path.join(path, 'files', name)
-            #print("mkdir", target)
+            print("\r\x1B[KExtract dir  %5d/%5d: %s" % (
+                i+1, len(dirs), target), end='', flush=True)
             os.makedirs(target, exist_ok=True)
-
-        # extract system files
-        self.bootBin.writeToFile(os.path.join(path,'sys','boot.bin'))
-        self.bi2bin .writeToFile(os.path.join(path,'sys','bi2.bin'))
-        self.fstbin .writeToFile(os.path.join(path,'sys','fst.bin'))
-        self.appldr .writeToFile(os.path.join(path,'sys','apploader.img'))
-        self.mainDol.writeToFile(os.path.join(path,'sys','main.dol'))
+        print('')
 
         # extract files
-        for file in filter(lambda f: not f.isDir, self.files):
+        files = list(filter(lambda f: not f.isDir, self.files))
+        for i, file in enumerate(files):
             if '..' in file.path:
                 raise NameError("Invalid file path: %s" % str(file.path))
             name = file.path
             if name.startswith('/'): name = '.'+name
             target = os.path.join(path, 'files', name)
-            #print("extract", target)
+            print("\r\x1B[KExtract file %5d/%5d: %s" % (
+                i+1, len(files), target), end='', flush=True)
             out = BinaryFile(target, 'wb')
             file.writeToFile(out)
+        print('')
 
 
     def writeToFile(self, file:(str,BinaryFile), chunkSize:int=4096):

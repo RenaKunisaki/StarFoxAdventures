@@ -44,7 +44,7 @@ class AppTest:
 
         # extract ISO to temp dir and verify contents
         # against known-good extracted directory.
-        print("extract to temp dir", self.tempDir)
+        #print("extract to temp dir", self.tempDir)
         print("Extracting...")
         self.iso.extract(self.tempDir)
         self._verifyExtractedFiles()
@@ -69,7 +69,7 @@ class AppTest:
         print("Reading rebuilt ISO...")
         self.iso = GCISO().readFile(testIsoPath)
 
-        print("extract to temp dir", self.tempDir)
+        #print("extract to temp dir", self.tempDir)
         print("Extracting rebuilt ISO...")
         self.iso.extract(self.tempDir)
         self._verifyExtractedFiles()
