@@ -34,7 +34,7 @@ class App:
 
         The files are not modified during the test.
         """
-        AppTest().run(isoPath, filesPath)
+        AppTest().runAllTests(isoPath, filesPath)
 
 
     def readIso(self, path:str):

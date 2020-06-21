@@ -15,8 +15,16 @@ class AppTest:
         self.tempDir   = None
         self.iso       = None
 
-    def run(self, isoPath:str, filesPath:str):
-        """Perform self test.
+
+    def runAllTests(self, isoPath:str, filesPath:str):
+        """Run all tests."""
+        self.testExtractAndRebuild(isoPath, filesPath)
+
+
+    def testExtractAndRebuild(self, isoPath:str, filesPath:str):
+        """Test that we can:
+        1) extract an ISO correctly
+        2) build an ISO correctly from extracted files
 
         isoPath: path to a GameCube ISO.
         filesPath: path to directory containing files extracted
@@ -29,10 +37,10 @@ class AppTest:
 
         print("Self test: reading ISO...")
         self.iso = GCISO().readFile(isoPath)
-        self.tempDirObj = tempfile.TemporaryDirectory()
-        self.tempDir = self.tempDirObj.name
+        tempDirObj   = tempfile.TemporaryDirectory()
+        self.tempDir = tempDirObj.name
         #self.tempDir = './test'
-        self.iso.bootBin.dump()
+        #self.iso.bootBin.dump()
 
         # extract ISO to temp dir and verify contents
         # against known-good extracted directory.
@@ -45,7 +53,8 @@ class AppTest:
         fst = self.iso.fstbin
 
         # rebuild a new ISO from the extracted files
-        testIsoPath = '/home/rena/projects/sfa/test.iso'
+        #testIsoPath = '/home/rena/projects/sfa/test.iso'
+        testIsoPath = os.path.join(self.tempDir, 'test.iso')
         print("Rebuilding...")
         self.iso = GCISO()
         #self.iso.readDir(self.tempDir)
@@ -54,8 +63,8 @@ class AppTest:
 
         # extract the rebuilt ISO and verify again
         # to ensure it was rebuilt correctly.
-        self.tempDirObj = tempfile.TemporaryDirectory()
-        self.tempDir = self.tempDirObj.name
+        tempDirObj2  = tempfile.TemporaryDirectory()
+        self.tempDir = tempDirObj2.name
 
         print("Reading rebuilt ISO...")
         self.iso = GCISO().readFile(testIsoPath)
