@@ -32,18 +32,46 @@ class AppTest:
         self.tempDirObj = tempfile.TemporaryDirectory()
         self.tempDir = self.tempDirObj.name
         #self.tempDir = './test'
+        self.iso.bootBin.dump()
 
-        #print("extract to temp dir", self.tempDir)
+        # extract ISO to temp dir and verify contents
+        # against known-good extracted directory.
+        print("extract to temp dir", self.tempDir)
         print("Extracting...")
         self.iso.extract(self.tempDir)
         self._verifyExtractedFiles()
         self._verifyNoExtraFiles()
         self._verifySystemFiles()
+        fst = self.iso.fstbin
+
+        # rebuild a new ISO from the extracted files
+        testIsoPath = '/home/rena/projects/sfa/test.iso'
+        print("Rebuilding...")
+        self.iso = GCISO()
+        #self.iso.readDir(self.tempDir)
+        self.iso.addFilesFromFst(fst, self.tempDir)
+        self.iso.writeToFile(testIsoPath)
+
+        # extract the rebuilt ISO and verify again
+        # to ensure it was rebuilt correctly.
+        self.tempDirObj = tempfile.TemporaryDirectory()
+        self.tempDir = self.tempDirObj.name
+
+        print("Reading rebuilt ISO...")
+        self.iso = GCISO().readFile(testIsoPath)
+
+        print("extract to temp dir", self.tempDir)
+        print("Extracting rebuilt ISO...")
+        self.iso.extract(self.tempDir)
+        self._verifyExtractedFiles()
+        self._verifyNoExtraFiles()
+        self._verifySystemFiles()
+
         print("Test completed")
 
 
     def _verifyExtractedFiles(self):
-        print("Verify extracted files...")
+        print("Verify extracted files... ", end='', flush=True)
         for file in self.iso.files:
             target = os.path.join(self.tempDir, 'files', '.'+file.path)
             if file.isDir:
@@ -55,7 +83,7 @@ class AppTest:
 
                 # verify data
                 self._verifyExtractedFileData(file)
-        print("Verify extracted files: OK")
+        print("OK")
 
 
     def _verifyExtractedFileData(self, file):
@@ -79,11 +107,11 @@ class AppTest:
             newData  = newFile .read(4096)
             if len(origData) < len(newData):
                 raise RuntimeError("File extracted incorrectly: %s (extra data at 0x%X)" % (
-                    origPath, offs + len(origData)
+                    newPath, offs + len(origData)
                 ))
             elif len(origData) > len(newData):
                 raise RuntimeError("File extracted incorrectly: %s (truncated at 0x%X)" % (
-                    origPath, offs + len(newData)
+                    newPath, offs + len(newData)
                 ))
             if len(origData) == 0: break
             if origData != newData:
@@ -93,16 +121,16 @@ class AppTest:
                         dOffs = i
                         break
                 raise RuntimeError("File extracted incorrectly: %s (at 0x%X: 0x%02X should be 0x%02X)" % (
-                    origPath,
+                    newPath,
                     offs + dOffs, newData[dOffs], origData[dOffs]
                 ))
             offs += len(origData)
 
 
     def _verifyNoExtraFiles(self):
-        print("Verify no extra files...")
+        print("Verify no extra files... ", end='', flush=True)
         self._verifyNoExtraFilesInDir('/')
-        print("Verify no extra files: OK")
+        print("OK")
 
 
     def _verifyNoExtraFilesInDir(self, path, _depth=0):
@@ -123,9 +151,11 @@ class AppTest:
 
 
     def _verifySystemFiles(self):
-        print("Verify system files...")
-        files = ('apploader.img', 'bi2.bin', 'boot.bin', 'fst.bin', 'main.dol')
+        print("Verify system files... ", end='', flush=True)
+        # skip fst.bin because the files can be in a different order.
+        files = ('apploader.img', 'bi2.bin', 'boot.bin', 'main.dol')
         for name in files:
             origPath = os.path.join(self.filesPath, 'sys', name)
             newPath  = os.path.join(self.tempDir, 'sys', name)
             self._verifyFileData(origPath, newPath)
+        print("OK")

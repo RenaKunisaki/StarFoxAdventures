@@ -34,7 +34,7 @@ class Appldr(IsoFile):
 
     def dump(self):
         """Dump to console."""
-        print("apploader.img:")
+        print("apploader.img @ 0x%08X:" % self.offset)
         print(" Build Date:           \"%s\"" % self.buildDate)
         print(" Entry Point:          0x%08X" % self.entryPoint)
         print(" Appldr Size:          0x%08X" % self.size)

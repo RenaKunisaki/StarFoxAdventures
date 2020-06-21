@@ -49,7 +49,7 @@ class DOL(IsoFile):
 
     def dump(self):
         """Dump to console."""
-        print(self.path)
+        print("%s @ 0x%08X:" % (self.path, self.offset))
         print("  Section | Offset | MemAddr  | Size")
         for i, sec in enumerate(self.textSections):
             print("  text%-2d  | %06X | %08X | %06X" % (i,

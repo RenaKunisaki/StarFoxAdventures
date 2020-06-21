@@ -44,7 +44,7 @@ class Bi2Bin(IsoFile):
 
     def dump(self):
         """Dump to console."""
-        print("bi2.bin:")
+        print("bi2.bin @ 0x%08X:" % self.offset)
         print(" Debug Monitor Size:   0x%08X" % self.debugMonitorSize)
         print(" Sim. Memory Size:     0x%08X (%s)" % (
             self.simMemSize,

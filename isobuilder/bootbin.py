@@ -25,7 +25,7 @@ class BootBin(IsoFile):
         self.fstSize          = 0
         self.maxFstSize       = 0 # for multi-disc games
         self.unk430           = 0
-        self.unk434           = 0
+        self.fileOffset       = 0
         self.unk438           = 0
         self.magic            = DVD_MAGIC
         self.isSystem         = True
@@ -57,7 +57,7 @@ class BootBin(IsoFile):
         self.fstSize          = file.readu32()
         self.maxFstSize       = file.readu32()
         self.unk430           = file.readu32()
-        self.unk434           = file.readu32()
+        self.fileOffset       = file.readu32()
         self.unk438           = file.readu32()
 
         if self.magic != DVD_MAGIC:
@@ -66,9 +66,36 @@ class BootBin(IsoFile):
         return self
 
 
+    def writeToFile(self, file:(str,BinaryFile), chunkSize:int=4096):
+        """Write this file's content to disk."""
+        if type(file) is str: file = BinaryFile(file, 'wb')
+        file.writeString(self.gameCode, length=4)
+        file.writeString(self.makerCode, length=2)
+        file.writeu8(self.discNo)
+        file.writeu8(self.version)
+        file.writeu8(1 if self.audioStreaming else 0)
+        file.writeu8(self.streamBufSize)
+        file.padUntil(0x1C)
+        file.writeu32(self.magic)
+        file.writeString(self.gameName, length=0x3E0)
+        file.padUntil(0x400)
+        file.writeu32(self.debugMonitorOffs)
+        file.writeu32(self.debugMonitorAddr)
+        file.padUntil(0x420)
+        file.writeu32(self.mainDolOffs)
+        file.writeu32(self.fstOffs)
+        file.writeu32(self.fstSize)
+        file.writeu32(self.maxFstSize)
+        file.writeu32(self.unk430)
+        file.writeu32(self.fileOffset)
+        file.writeu32(self.unk438)
+        file.padUntil(0x440)
+
+
+
     def dump(self):
         """Dump to console."""
-        print("boot.bin:")
+        print("boot.bin @ 0x%08X:" % self.offset)
         print(" Game Code:            \"%s\"" % self.gameCode)
         print(" Maker Code:           \"%s\"" % self.makerCode)
         print(" Disc #:               %d"     % self.discNo)
@@ -84,5 +111,6 @@ class BootBin(IsoFile):
         print(" FST Offset:           0x%08X" % self.fstOffs)
         print(" FST Size:             0x%08X" % self.fstSize)
         print(" FST Max Size:         0x%08X" % self.maxFstSize)
-        print(" Unknown 0x430:        0x%08X 0x%08X 0x%08X" % (
-            self.unk430, self.unk434, self.unk438))
+        print(" File Offset:          0x%08X" % self.fileOffset)
+        print(" Unknown 0x430:        0x%08X" % self.unk430)
+        print(" Unknown 0x438:        0x%08X" % self.unk438)

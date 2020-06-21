@@ -15,7 +15,7 @@ class BinaryFile:
         self.file.seek(offset+self.offset, origin)
 
     def tell(self):
-        return self.file.tell()
+        return self.offset + self.file.tell()
 
     def read(self, size):
         return self.file.read(size)
@@ -121,21 +121,45 @@ class BinaryFile:
         return self._writeFmt('%dd' % len(vals), *vals, offset=offset)
 
     def writeStruct(self, fmt, *vals, offset=None):
-        r = self._writeFmt(fmt, struct.calcsize(fmt), *vals, offset=offset)
-        if len(r) == 1: return r[0] # grumble
-        return r
+        return self._writeFmt(fmt, *vals, offset=offset)
 
-    def writeString(self, data, offset=None, encoding='utf-8'):
+    def writeString(self, data, offset=None, encoding='utf-8', length=None, padding=b'\0'):
         r = []
         if offset is not None: self.seek(offset)
-        return self.writeBytes(bytes(data, encoding))
+        raw = bytes(data, encoding)
+        if length is not None:
+            if len(raw) > length: raise ValueError("String too long for field (%d bytes, max is %d): %s" % (
+                len(raw), length, data))
+            elif len(raw) < length:
+                assert len(padding) > 0, "padding is empty"
+                pLen = length - len(raw)
+                raw = raw + (padding * (pLen // len(padding)))
+                # XXX this may fail if padding length is not a multiple
+                # of the actual amount of padding needed. do we care?
+        return self.writeBytes(raw)
 
     def writeBytes(self, data, offset=None):
         if offset is not None: self.seek(offset)
         return self.file.write(data)
 
+    def writePadding(self, length, offset=None, padding=b'\0'):
+        if offset is not None: self.seek(offset)
+        assert len(padding) > 0, "padding is empty"
+        val = padding * (length // len(padding))
+        # XXX this may fail if padding length is not a multiple
+        # of the actual amount of padding needed. do we care?
+        return self.file.write(val)
+
+    def padUntil(self, offset, padding=b'\0'):
+        cur = self.tell()
+        if cur >= offset: return
+        return self.writePadding(offset - cur, padding=padding)
+
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        pass
+        pass # XXX is this correct?
+
+    def __str__(self):
+        return "<BinaryFile(%s) @ 0x%x>" % (self.path, id(self))
