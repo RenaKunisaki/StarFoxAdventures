@@ -33,6 +33,10 @@ patchList:
 
     # enable debug functions on controller 3
     PATCH_BYTE 0x80014E73, 0x00000004
+
+    # patch chapter select to just Z button
+    PATCH_WORD 0x80119D90, 0x60000000
+
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -236,6 +240,8 @@ mainLoop: # called from main loop. r3 = mainLoop
     #LOADWL2 r5, mapCoords+ 4, r9
     LOADWL2 r4, mapCoords+ 8, r9
     LOADWL2 r5, mapCoords+12, r9
+    LOADBL2 r6, curMapLayer,  r9
+    extsb   r6, r6
     #ori     r8, r10, 0 # r9 = nearest object
     #ori     r9, r17, 0 # r10 = name
     CALL debugPrintf
@@ -243,7 +249,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     # display player state
     addi r3, r14, (.fmt_playerState - mainLoop)@l
     lwz  r9, 0x00B8(r16) # get animState
-    lfs  f1, 0x0098(r16) # get anim timer
+    #lfs  f1, 0x0098(r16) # get anim timer
     #lfs  f2, 0x0814(r9)  # get anim val
     lbz  r4, 0x0275(r9)  # get state ID
     lwz  r5, 0x03F0(r9)  # get flags
@@ -331,8 +337,8 @@ mainLoop: # called from main loop. r3 = mainLoop
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
 .fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
-.fmt_mapCoords:    .string "M:\x84%3d %3d\x83 "
-.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X %f\x83"
+.fmt_mapCoords:    .string "M:\x84%3d %3d %2d\x83 "
+.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
 .fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
 .fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"

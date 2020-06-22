@@ -58,6 +58,7 @@
 .set bEnableViewFinderHud,   0x803dcdfa #bool  viewfinder
 .set blurFilterArea,         0x803dce48 #vec3f blur filter area
 .set buttonsJustPressed,     0x803398e0 #u32
+.set curMapLayer,            0x803dcde1 #s8
 .set cMenuOpen,              0x803dd795 #bool
 .set cMenuState,             0x803dd7d4 #u8
 .set colorFilterColor,       0x803db630 #color
