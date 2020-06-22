@@ -10,7 +10,7 @@ class BootBin(IsoFile):
 
     def __init__(self, offset:int=0, file:BinaryFile=None):
         super().__init__("boot.bin", isDir=False, offset=offset,
-            size=BOOT_BIN_SIZE, file=file)
+            size=BOOT_BIN_SIZE, file=file, fileOffs=offset)
         self.gameName         = "No Name"
         self.gameCode         = "XXXX"
         self.makerCode        = "01"
@@ -90,6 +90,13 @@ class BootBin(IsoFile):
         file.writeu32(self.fileOffset)
         file.writeu32(self.unk438)
         file.padUntil(0x440)
+
+        # nobody seems to know what 0x430 and 0x438 are, but notably,
+        # 0x430 is the RAM address at which the FST is placed,
+        # minus 0x0140 0000. This might be a coincidence, and the
+        # game doesn't seem to care if it's incorrect.
+        # Note that 0x01400000 is the size of the GameCube's RAM
+        # minus 4MB...
 
 
 

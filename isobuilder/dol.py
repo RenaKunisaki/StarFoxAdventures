@@ -6,7 +6,7 @@ class DOL(IsoFile):
     """DOL file"""
 
     def __init__(self, path:str, offset:int=0, size:int=0, file:BinaryFile=None, isSystem=False):
-        super().__init__(path, isDir=False, offset=offset, size=size, file=file, isSystem=isSystem)
+        super().__init__(path, isDir=False, offset=offset, size=size, file=file, fileOffs=offset, isSystem=isSystem)
         self.textSections = []
         self.dataSections = []
         self.bssAddr      = 0

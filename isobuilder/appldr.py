@@ -7,7 +7,7 @@ class Appldr(IsoFile):
 
     def __init__(self, offset:int=0, file:BinaryFile=None):
         super().__init__("apploader.img", isDir=False, offset=offset,
-            size=0x2000, file=file)
+            size=0x2000, file=file, fileOffs=offset)
         self.buildDate   = "0000/00/00"
         self.entryPoint  = 0
         self.dataSize    = 0

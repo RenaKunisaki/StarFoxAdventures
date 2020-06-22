@@ -27,15 +27,20 @@ class GCISO(ISO):
     def readFile(self, path:str, offset:int=0):
         """Read ISO file."""
         file = BinaryFile(path, 'rb')
+
         print("Read boot.bin from 0x%08X" % offset)
         self.bootBin = BootBin(file=file, offset=offset)
+
         print("Read bi2.bin  from 0x%08X" % (offset+0x0440))
         self.bi2bin  = Bi2Bin (file=file, offset=offset+0x0440)
+
         print("Read appldr   from 0x%08X" % (offset+0x2440))
         self.appldr  = Appldr (file=file, offset=offset+0x2440)
+
         print("Read fst.bin  from 0x%08X" % (offset+self.bootBin.fstOffs))
         self.fstbin  = FstBin (file=file, size=self.bootBin.fstSize,
             offset=offset+self.bootBin.fstOffs)
+
         print("Read main.dol from 0x%08X" % (offset+self.bootBin.mainDolOffs))
         self.mainDol = DOL(file=file, path='main.dol', isSystem=True,
             offset=offset+self.bootBin.mainDolOffs)
@@ -55,11 +60,16 @@ class GCISO(ISO):
 
 
     def readSystemFilesFromDir(self, path):
-        J = os.path.join
-        self.bootBin = BootBin(file=J(path, 'boot.bin'))
-        self.bi2bin  = Bi2Bin (file=J(path, 'bi2.bin'))
-        self.appldr  = Appldr (file=J(path, 'apploader.img'))
-        self.mainDol = DOL    (file=J(path, 'main.dol'),
+        bootBin = os.path.join(path, 'boot.bin')
+        bi2bin  = os.path.join(path, 'bi2.bin')
+        appldr  = os.path.join(path, 'apploader.img')
+        mainDol = os.path.join(path, 'main.dol')
+        F       = os.path.isfile
+
+        if F(bootBin): self.bootBin = BootBin(file=bootBin)
+        if F(bi2bin):  self.bi2bin  = Bi2Bin (file=bi2bin)
+        if F(appldr):  self.appldr  = Appldr (file=appldr)
+        if F(mainDol): self.mainDol = DOL    (file=mainDol,
             isSystem=True, path='main.dol')
 
 
@@ -99,8 +109,7 @@ class GCISO(ISO):
         self.readSystemFilesFromDir(os.path.join(path, 'sys'))
         for file in fst.files:
             if file.isDir:
-                dirFile = IsoFile(file.path, isDir=True)
-                self.files.append(dirFile)
+                self.files.append(IsoFile(file.path, isDir=True))
             else:
                 self.addFile(os.path.join(path, 'files', '.'+file.path),
                     file.path)
@@ -129,6 +138,48 @@ class GCISO(ISO):
         file = IsoFile(name, file=path, size=os.stat(path).st_size)
         self.files.append(file)
         return file
+
+
+    def addOrReplaceFile(self, path:str, name:str):
+        """Add a file to the ISO, or replace one at the same path.
+
+        path: local file path.
+        name: ISO file path.
+        """
+        for i, file in enumerate(self.files):
+            if file.path == name:
+                print("Replace:", name)
+                file.replaceWith(path)
+                return
+        print("Add file: ", name)
+        file = self.addFile(path, name)
+        file.parent = self.getFile(os.path.dirname(name))
+
+
+    def createDir(self, name:str):
+        """Ensure the specified directory exists.
+
+        name: ISO file path.
+        """
+        file = self.getFile(name)
+        if file:
+            if file.isDir: return
+            raise NotADirectoryError("File %s already exists and is not a directory" % name)
+        print("Add dir:  ", name)
+        file = IsoFile(name, isDir=True)
+        file.parent = self.getFile(os.path.dirname(name))
+        self.files.append(file)
+
+
+    def getFile(self, path:str) -> IsoFile:
+        """Retrieve a file from the ISO.
+
+        path: ISO file path.
+        Returns the IsoFile, or None if not found.
+        """
+        for file in self.files:
+            if file.path == path: return file
+        return None
 
 
     def extract(self, path:str):
@@ -179,7 +230,14 @@ class GCISO(ISO):
         """Write ISO to disk."""
         if type(file) is str: file = BinaryFile(file, 'wb')
 
+        # Sort files by path, with the exception that '/'
+        # must sort before '.' (producing eg: "/foo", "/foo/bar.bin",
+        # "/foo.bin"), since the FST requires that entries directly
+        # follow their parents.
+        # If we don't do this, the game will silently fail to load
+        # any files that aren't in order.
         print("Building FST...")
+        self.files.sort(key=lambda f: f.path.lower().replace('/', '\x01'))
         self.fstbin.files = self.files
         self.fstbin.build()
 
@@ -201,6 +259,8 @@ class GCISO(ISO):
         self._alignTo(file, 256) # XXX fishy
 
         fstOffs = file.tell()
+        self.fstbin.files = self.files
+        self.fstbin.build()
         print("Write fst.bin  at 0x%08X" % file.tell())
         self.fstbin .writeToFile(file, chunkSize=chunkSize)
         # XXX why this padding? Dolphin refuses to see any files
@@ -221,27 +281,31 @@ class GCISO(ISO):
         files = list(filter(lambda f: not f.isDir, self.files))
         for i, f in enumerate(files):
             offset = file.tell()
-            f.offset = 0
+            f.offset = offset
             print("\r\x1B[KWrite %5d/%5d at 0x%08X size 0x%08X: %s" % (
                 i, len(files), offset, f.size, f.path),
                 end='', flush=True)
             f.writeToFile(file, chunkSize=chunkSize)
-            f.offset = offset
             self._alignTo(file, 4)
+        print('')
 
-        # now go back and update the file offset in boot.bin
-        # now that we know what it is.
-        print("\nUpdating boot.bin...")
-        self.bootBin.fileOffset = fileOffs
-        file.seek(self.bootBin.offset)
-        self.bootBin.writeToFile(file, chunkSize=chunkSize)
-
-        # and update the FST now that we know the file offsets.
+        # now go back and update the FST
+        # now that we know the file offsets.
         print("Updating FST...")
         self.fstbin.files = self.files
         self.fstbin.build()
         file.seek(fstOffs)
         self.fstbin .writeToFile(file, chunkSize=chunkSize)
+
+        # and update the file offset in boot.bin
+        # now that we know what it is.
+        print("Updating boot.bin...")
+        self.bootBin.fileOffset = fileOffs
+        self.bootBin.fstSize    = self.fstbin.size
+        self.bootBin.maxFstSize = max(self.fstbin.size, self.bootBin.maxFstSize)
+        #self.bootBin.unk430 = 0x80400000 - self.fstbin.size
+        file.seek(self.bootBin.offset)
+        self.bootBin.writeToFile(file, chunkSize=chunkSize)
 
 
     def _alignTo(self, file:BinaryFile, size:int):

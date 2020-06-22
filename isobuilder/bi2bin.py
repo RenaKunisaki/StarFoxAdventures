@@ -10,7 +10,7 @@ class Bi2Bin(IsoFile):
 
     def __init__(self, offset:int=0, file:BinaryFile=None):
         super().__init__("bi2.bin", isDir=False, offset=offset,
-            size=BI2_BIN_SIZE, file=file)
+            size=BI2_BIN_SIZE, file=file, fileOffs=offset)
         self.debugMonitorSize = 0
         self.simMemSize       = GC_MEM_SIZE
         self.argOffs          = 0

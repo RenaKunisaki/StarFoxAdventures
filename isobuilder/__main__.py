@@ -38,11 +38,55 @@ class App:
 
 
     def readIso(self, path:str):
-        """Read an ISO file."""
+        """Read an ISO file and print information about it."""
         iso = GCISO().readFile(path)
         iso.dump()
 
 
+    def extractIso(self, isoPath:str, outPath:str):
+        """Extract files from ISO."""
+        iso = GCISO().readFile(isoPath)
+        iso.extract(outPath)
+
+
+    def buildIso(self, filesPath:str, outPath:str):
+        """Build ISO from files."""
+        iso = GCISO()
+        iso.readDir(filesPath)
+        iso.writeToFile(outPath)
+
+
+    def patchIso(self, isoPath:str, destPath:str, files:str):
+        """Build a modified ISO given an original ISO and a set of
+        replacement files.
+
+        isoPath:  path to original ISO.
+        destPath: path to write new ISO.
+        files:    path to directory containing replacement files.
+        """
+        iso = GCISO().readFile(isoPath)
+        filePath = os.path.join(files, 'files')
+        self._doReplaceIsoFiles(iso, filePath, filePath)
+        iso.readSystemFilesFromDir(os.path.join(files, 'sys'))
+        # XXX do we need some way to delete files?
+        iso.writeToFile(destPath)
+
+
+    def _doReplaceIsoFiles(self, iso:GCISO, basePath:str, files:str, _depth=0):
+        assert _depth < 10, "Maxmimum depth exceeded"
+        names = list(filter(lambda n: n not in ('.', '..'),
+            os.listdir(files)))
+        for name in names:
+            path = os.path.join(basePath, files, name)
+            isoPath = path
+            if isoPath.startswith(basePath):
+                isoPath = isoPath[len(basePath):] # keep leading slash
+
+            if os.path.isdir(path):
+                iso.createDir(isoPath)
+                self._doReplaceIsoFiles(iso, basePath, path, _depth=_depth+1)
+            else:
+                iso.addOrReplaceFile(path, isoPath)
 
 
 def main(*args):

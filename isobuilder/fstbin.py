@@ -8,7 +8,7 @@ class FstBin(IsoFile):
     def __init__(self, offset:int=0, size:int=0, file:BinaryFile=None,
     files=None):
         super().__init__("fst.bin", isDir=False, offset=offset,
-            size=size, file=file)
+            size=size, file=file, fileOffs=offset)
         self._entries  = [] # internal list
         self.files     = [] # IsoFile
         self._strTable = []
@@ -60,10 +60,11 @@ class FstBin(IsoFile):
             if entry['isDir']:
                 f = IsoFile(entry['path'], isDir=True, parent=parent)
             else:
-                f = IsoFile(entry['path'], isDir=False,
-                    offset=entry['fileOffs'],
-                    size=entry['fileSize'],
-                    file=file, parent=parent)
+                f = IsoFile(entry['path'], parent=parent, isDir=False,
+                    fileOffs = entry['fileOffs'],
+                    offset   = entry['fileOffs'],
+                    size     = entry['fileSize'],
+                    file     = file)
             self.files.append(f)
 
         return self
@@ -173,6 +174,7 @@ class FstBin(IsoFile):
         # pad to 0x20
         ext = size & 0x1F
         if ext != 0: file.write(bytes(0x20 - ext))
+        self.size = file.tell() - start
 
 
     def dump(self):

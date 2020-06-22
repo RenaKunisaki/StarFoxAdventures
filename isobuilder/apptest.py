@@ -129,6 +129,10 @@ class AppTest:
                     if origData[i] != newData[i]:
                         dOffs = i
                         break
+                print("ERROR", origPath)
+                f = lambda d: ' '.join(map(lambda b: '%02X' % b, d))
+                print("Got:     ", f(newData[0:16]))
+                print("Expected:", f(origData[0:16]))
                 raise RuntimeError("File extracted incorrectly: %s (at 0x%X: 0x%02X should be 0x%02X)" % (
                     newPath,
                     offs + dOffs, newData[dOffs], origData[dOffs]
