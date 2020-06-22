@@ -95,7 +95,7 @@
 .set pdaOn,                  0x803dbbb0 #bool
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox
-.set playerLocked,           0x803dca3c #bool
+.set timeStop,               0x803dca3c #bool
 .set pPlayer,                0x803428f8
 .set shouldCloseCMenu,       0x803dd7b4 #bool
 .set shouldOpenCMenu,        0x803dd7d5 #u8

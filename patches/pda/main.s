@@ -271,8 +271,8 @@ menuHandleInput:
 
     # pause game
     li     r4, 1
-    LOADWH r5, playerLocked
-    STOREB r4, playerLocked, r5 # stops all objects
+    LOADWH r5, timeStop
+    STOREB r4, timeStop, r5 # stops all objects
     STOREB r4, pauseDisabled, r5 # inhibit pause menu
     # inhibit game timer
     LOAD   r5, 0x800140BC # gameTimerRun
@@ -433,8 +433,8 @@ menuHandleInput:
     li     r3, 0
     stb    r3, (menuVisible - mainLoop)(r14)
     stb    r3, (whichMenu - mainLoop)(r14)
-    LOADWH r5, playerLocked
-    STOREB r3, playerLocked, r5 # unpause game
+    LOADWH r5, timeStop
+    STOREB r3, timeStop, r5 # unpause game
     LOADWH r5, pauseDisabled
     STOREB r3, pauseDisabled, r5 # allow pause menu
 

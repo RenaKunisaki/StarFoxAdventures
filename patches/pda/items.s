@@ -66,27 +66,29 @@ itemAdjustFuncs_page2:
 
 
 itemDrawFuncs_page3: # Debug
-    .int title_page3          - mainLoop
-    .int drawItem_debugText   - mainLoop
-    .int drawItem_trickyDebug - mainLoop
-    .int drawItem_freeMove    - mainLoop
-    .int drawItem_reloadMap   - mainLoop
-    .int drawItem_warp        - mainLoop
-    .int drawItem_objects     - mainLoop
-    .int drawItem_gameBits    - mainLoop
-    .int drawItem_saveGame    - mainLoop
-    .int drawItem_heap        - mainLoop
-    .int drawItem_textTest    - mainLoop
+    .int title_page3           - mainLoop
+    .int drawItem_debugText    - mainLoop
+    .int drawItem_trickyDebug  - mainLoop
+    .int drawItem_freeMove     - mainLoop
+    .int drawItem_reloadMap    - mainLoop
+    .int drawItem_warp         - mainLoop
+    .int drawItem_objects      - mainLoop
+    .int drawItem_gameBits     - mainLoop
+    .int drawItem_saveGame     - mainLoop
+    .int drawItem_heap         - mainLoop
+    .int drawItem_textTest     - mainLoop
+    .int drawItem_frameAdvance - mainLoop
     .int 0
 
 itemAdjustFuncs_page3:
-    .int adjItem_debugText   - mainLoop
-    .int adjItem_trickyDebug - mainLoop
-    .int adjItem_freeMove    - mainLoop
-    .int adjItem_reloadMap   - mainLoop
-    .int adjItem_warp        - mainLoop
-    .int adjItem_objects     - mainLoop
-    .int adjItem_gameBits    - mainLoop
-    .int adjItem_saveGame    - mainLoop
-    .int adjItem_heap        - mainLoop
-    .int adjItem_textTest    - mainLoop
+    .int adjItem_debugText    - mainLoop
+    .int adjItem_trickyDebug  - mainLoop
+    .int adjItem_freeMove     - mainLoop
+    .int adjItem_reloadMap    - mainLoop
+    .int adjItem_warp         - mainLoop
+    .int adjItem_objects      - mainLoop
+    .int adjItem_gameBits     - mainLoop
+    .int adjItem_saveGame     - mainLoop
+    .int adjItem_heap         - mainLoop
+    .int adjItem_textTest     - mainLoop
+    .int adjItem_frameAdvance - mainLoop

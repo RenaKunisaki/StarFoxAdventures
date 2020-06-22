@@ -208,6 +208,7 @@ warpMenu_doInput:
     b       menuEndSub
 
 .warpMenu_doWarp:
+    #CALL    0x80056f7c # unloadMap
     lbz     r3, (warpMenuIdx - mainLoop)(r14)
     li      r4, 0
     CALL    warpToMap

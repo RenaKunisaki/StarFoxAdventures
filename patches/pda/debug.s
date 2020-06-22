@@ -151,3 +151,15 @@ adjItem_textTest:
     CALL  0x8012ea5c # params r4, r5 are unused
     mtlr  r20
     blr
+
+#######################################################################
+
+drawItem_frameAdvance:
+    addi  r4, r14, (s_frameAdv - mainLoop)
+    blr
+
+adjItem_frameAdvance: # r3 = amount to adjust by (0=A button)
+    li     r4, 0
+    LOADWH r5, timeStop
+    STOREB r4, timeStop, r5
+    blr
