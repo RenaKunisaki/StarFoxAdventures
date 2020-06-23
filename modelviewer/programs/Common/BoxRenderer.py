@@ -33,6 +33,8 @@ class BoxRenderer(gl.Pipeline):
 
     def addBox(self, pointA, pointB, color):
         """Add a box with one corner at pointA and the other at pointB."""
+        if self._nBoxes >= self.MAX_BOXES: return
+
         x1, y1, z1 = pointA
         x2, y2, z2 = pointB
         r, g, b, a = color
@@ -52,9 +54,6 @@ class BoxRenderer(gl.Pipeline):
 
     def run(self):
         if self._nBoxes == 0: return
-        self.ctx.glEnable(self.ctx.GL_BLEND)
-        self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
-            self.ctx.GL_ONE_MINUS_SRC_ALPHA)
         with self:
             self._bindBuffers()
             self.shader.vao.render(self.ctx.GL_POINTS, count=self._nBoxes)

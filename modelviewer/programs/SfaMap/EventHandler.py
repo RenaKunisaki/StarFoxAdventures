@@ -57,9 +57,7 @@ class EventHandler:
 
         elif key == '1':
             self.dlistRenderer.useFaceCulling = not self.dlistRenderer.useFaceCulling
-        elif key == '2':
-            self.boneRenderer.useDepthTest = not self.boneRenderer.useDepthTest
-
+        
         # w/s: move forward/backward
         elif key == 'w': self._translate[2] += 10.0
         elif key == 's': self._translate[2] -= 10.0

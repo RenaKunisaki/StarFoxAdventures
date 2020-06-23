@@ -11,9 +11,12 @@ from .SfaProgram import SfaProgram
 from .EventHandler import EventHandler
 from common.sfa.ModelLoader import ModelLoader
 from common.gamecube.DlistParser import DlistParser
+from common.BinaryFile import BinaryFile
+from common.sfa.zlb import Zlb
 from programs.Common.BoxRenderer import BoxRenderer
 from .DlistRenderer import DlistRenderer
 from .Menu import Menu, MainMenu
+from .Map import Map
 
 
 class FragmentShader(SfaProgram):
@@ -35,21 +38,23 @@ class SfaMapViewer(SfaProgram, EventHandler):
     def __init__(self, ctx):
         super().__init__(ctx)
 
+        self.curMap = Map(self)
+
         # setup shaders and subprograms
         self.fragShader      = FragmentShader(self.ctx)
         self.boxRenderer     = BoxRenderer(self, BoxShader(self.ctx))
         self.dlistRenderer   = DlistRenderer(self)
 
         # temporary until real texture support
-        tex = self.ctx.Texture("./texture.png")
-        self.dlistRenderer.setTexture('test', tex)
+        #tex = self.ctx.Texture("./texture.png")
+        #self.dlistRenderer.setTexture('test', tex)
 
         # set up UI
         self.frame         = 0
         self._mouseButtons = {}
         self._mouseOrigin  = [0, 0]
         self._translate    = [15, -15, -50]
-        self._rotate       = [0, 0, 0]
+        self._rotate       = [0, 240, 0]
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
         self.dlists        = []
@@ -60,49 +65,70 @@ class SfaMapViewer(SfaProgram, EventHandler):
         # by using log.dprint()
         log.setLevel('DPRINT')
 
-        if len(sys.argv) > 1:
-            path = sys.argv[1]
-            if os.path.isdir(path): self.loadDir(path, int(sys.argv[2]))
-            else: self.loadModel(path)
+        self.discRoot = 'files/'
+        if len(sys.argv) > 1: self.discRoot = sys.argv[1]
+
+        self.loadObjIndex()
+        self.loadObjectsTab()
+        self.loadObjectsBin()
+
+        if len(sys.argv) > 2: self.loadMap(sys.argv[2])
+        self.menu.refresh()
+
+
+    def loadObjIndex(self):
+        """Load OBJINDEX.bin"""
+        self.objIndex = []
+        with open(self.discRoot+'/OBJINDEX.bin', 'rb') as objIdxFile:
+            entries = objIdxFile.read()
+            for i in range(0, len(entries), 2):
+                it = struct.unpack_from('>H', entries, i)[0] # grumble
+                self.objIndex.append(it)
+
+    def loadObjectsTab(self):
+        """Load OBJECTS.tab"""
+        self.objsTab = []
+        with open(self.discRoot+'/OBJECTS.tab', 'rb') as objTabFile:
+            entries = objTabFile.read()
+            for i in range(0, len(entries), 4):
+                it = struct.unpack_from('>I', entries, i)[0] # grumble
+                self.objsTab.append(it)
+
+    def loadObjectsBin(self):
+        """Load OBJECTS.bin"""
+        self.objDefs = []
+        with open(self.discRoot+'/OBJECTS.bin', 'rb') as objBinFile:
+            for offs in self.objsTab:
+                try:
+                    objBinFile.seek(offs + 0x04)
+                    scale = struct.unpack('>f', objBinFile.read(4))[0] # grumble
+                    objBinFile.seek(offs + 0x91)
+                    name = objBinFile.read(11).decode('utf-8').replace('\0', '')
+                except struct.error:
+                    break
+                self.objDefs.append({
+                    'scale': scale,
+                    'name':  name,
+                })
+
+
+    def loadMap(self, name):
+        """Load given map."""
+        self.boxRenderer.reset()
+
+        #s = 1 # test box
+        #pointA = (0 - s, 0 - s, 0 - s)
+        #pointB = (0 + s, 0 + s, 0 + s)
+        #color  = (1, 1, 0, 0.5)
+        #self.boxRenderer.addBox(pointA, pointB, color)
+
+        self.curMap.load(name)
+        for obj in self.curMap.objects: obj.render(self)
 
 
     def _getShaderCodeFromFile(self, path):
         try: return resources.read_text(shaders, path)
         except FileNotFoundError: return resources.read_text(Common, path)
-
-
-    def loadDir(self, path, modelIdx=0):
-        modelsTab = {}
-        with open(path+'/MODELS.tab', 'rb') as file:
-            idx = 0
-            while True:
-                d = file.read(4)
-                if len(d) < 4: break
-                s = struct.unpack('>I', d)[0] # grumble
-                modelsTab[idx] = {
-                    'flags':  s >> 24,
-                    'offset': s & 0xFFFFFF,
-                }
-                idx += 1
-
-        if modelIdx not in modelsTab:
-            raise ValueError("Model %d not found in path %s" % (
-                modelIdx, path))
-        self.loadModel(path+'/MODELS.bin', modelsTab[modelIdx]['offset'])
-
-
-
-    def loadModel(self, path, offset=0):
-        # read the model
-        with open(path, 'rb') as file:
-            file.seek(offset)
-            loader = ModelLoader()
-            self.model = loader.loadFromFile(file)
-            self.dlistRenderer.setModel(self.model)
-            for i, dlist in enumerate(loader.dlists):
-                self.dlists.append(dlist)
-                self.dlistRenderer.addList(dlist)
-            self.menu.refresh()
 
 
     def enterMenu(self, menu):
@@ -116,16 +142,25 @@ class SfaMapViewer(SfaProgram, EventHandler):
 
     def run(self):
         """Render the scene."""
-        #self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
-        #self.ctx.glDepthFunc(self.ctx.GL_LESS)
+        self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
+        self.ctx.glDepthFunc(self.ctx.GL_LESS)
         #self.ctx.glDepthMask(self.ctx.GL_TRUE)
         #self.ctx.glDepthRange(1,0)
+        self.ctx.glEnable(self.ctx.GL_BLEND)
+        self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
+            self.ctx.GL_ONE_MINUS_SRC_ALPHA)
+        self.ctx.glDisable(self.ctx.GL_CULL_FACE)
 
-        log.dprint("Frame %d", self.frame)
+        self.boxRenderer.programs['fragment_shader'].setUniforms(
+            enableTexture = False,
+            #minAlpha      =  0.5,
+        )
+
+        log.dprint("Frame %d; objs %d", self.frame,
+            len(self.curMap.objects))
         self._setMtxs()
-        self.dlistRenderer.run()
-        if (self.frame & 1) == 0:
-            self.boxRenderer.run()
+        #self.dlistRenderer.run()
+        self.boxRenderer.run()
         self.menu.render()
 
         lines = (
@@ -142,13 +177,14 @@ class SfaMapViewer(SfaProgram, EventHandler):
         x, y, width, height = self.ctx.viewport
         a = width/height
         rx, ry, rz = self._rotate
+        t = self._translate
         mx=gl.Util.Matrix.rotateX(math.radians(rx))
         my=gl.Util.Matrix.rotateY(math.radians(ry))
         mz=gl.Util.Matrix.rotateZ(math.radians(rz))
-        mt=gl.Util.Matrix.translate(*self._translate)
-        mp=gl.Util.Matrix.perspective(60, a, 0.1, 100)
-        mv = (mx @ my @ mz) # modelview = all rotations
-        mp = mt @ mp # projection = perspective and translation
+        mt=gl.Util.Matrix.translate(-t[0], -t[1], -t[2])
+        mp=gl.Util.Matrix.perspective(60, a, 0.1, 10000)
+        mv = mt @ (mz @ my @ mx) # modelview = all rotations
+        #mp = mt @ mp # projection = perspective and translation
 
         # debug print
         #log.dprint("w=%d h=%d f=%d a=%f", width, height, self.frame,

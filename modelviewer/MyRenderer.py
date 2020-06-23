@@ -15,7 +15,7 @@ class MyRenderer(Renderer):
     def setup(self):
         """Called when we're ready to initialize our scene."""
         try:
-            self.bgColor  = (0.5, 0.0, 0.5, 0.0) # r, g, b, a
+            self.bgColor  = (0.0, 0.5, 0.5, 0.0) # r, g, b, a
             self.programs = {
                 #'test': TestProgram(self.ctx),
                 'debugText': DebugText(self.ctx),
@@ -34,7 +34,7 @@ class MyRenderer(Renderer):
         """Called when we need to redraw the scene."""
         #log.debug("Drawing")
         self.programs['debugText'].reset()
-        self.ctx.clear(color=self.bgColor, depth=100)
+        self.ctx.clear(color=self.bgColor, depth=1000000)
         #self.programs['test'].run()
         self.programs['sfa'].run()
         #self.programs['debugText'].printf("Howdy thar")
