@@ -7,7 +7,7 @@ import numpy as np
 import zlib
 import tempfile
 from . import Model
-from .DlistParser import DlistParser
+from common.gamecube.DlistParser import DlistParser
 
 
 class ModelLoader:

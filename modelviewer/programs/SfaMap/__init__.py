@@ -9,12 +9,10 @@ import numpy as np
 from . import shaders
 from .SfaProgram import SfaProgram
 from .EventHandler import EventHandler
-from .Parser.ModelLoader import ModelLoader
-from .Parser.DlistParser import DlistParser
-from .BoneRenderer import BoneRenderer
-from .BoxRenderer import BoxRenderer
+from common.sfa.ModelLoader import ModelLoader
+from common.gamecube.DlistParser import DlistParser
+from programs.Common.BoxRenderer import BoxRenderer
 from .DlistRenderer import DlistRenderer
-from .TextureRenderer import TextureRenderer
 from .Menu import Menu, MainMenu
 
 
@@ -24,31 +22,34 @@ class FragmentShader(SfaProgram):
     fragment_shader = (shaders, 'program.frag')
 
 
-class SfaModelViewer(SfaProgram, EventHandler):
-    """Render extracted SFA models."""
-    MAX_VTXS = 1024
+class BoxShader(SfaProgram):
+    separable       = True
+    vertex_shader   = (shaders, 'box.vert')
+    geometry_shader = (shaders, 'box.geom')
+
+
+class SfaMapViewer(SfaProgram, EventHandler):
+    """Render SFA maps."""
+    MAX_VTXS = 8192
 
     def __init__(self, ctx):
         super().__init__(ctx)
 
         # setup shaders and subprograms
         self.fragShader      = FragmentShader(self.ctx)
-        self.boneRenderer    = BoneRenderer(self)
-        self.boxRenderer     = BoxRenderer(self)
+        self.boxRenderer     = BoxRenderer(self, BoxShader(self.ctx))
         self.dlistRenderer   = DlistRenderer(self)
-        self.textureRenderer = TextureRenderer(self)
 
         # temporary until real texture support
         tex = self.ctx.Texture("./texture.png")
         self.dlistRenderer.setTexture('test', tex)
-        self.textureRenderer.setTexture(tex)
 
         # set up UI
         self.frame         = 0
         self._mouseButtons = {}
         self._mouseOrigin  = [0, 0]
         self._translate    = [15, -15, -50]
-        self._rotate       = [0, 180, 0] # for some reason the models face backward
+        self._rotate       = [0, 0, 0]
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
         self.dlists        = []
@@ -59,8 +60,6 @@ class SfaModelViewer(SfaProgram, EventHandler):
         # by using log.dprint()
         log.setLevel('DPRINT')
 
-        #self.loadModel('../dump/krystal.bin')
-        #self.loadModel(sys.argv[1])
         if len(sys.argv) > 1:
             path = sys.argv[1]
             if os.path.isdir(path): self.loadDir(path, int(sys.argv[2]))
@@ -103,28 +102,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
             for i, dlist in enumerate(loader.dlists):
                 self.dlists.append(dlist)
                 self.dlistRenderer.addList(dlist)
-                #bbox = dlist.list.bbox
-                #b1, b2 = bbox[0:3], bbox[3:]
-                #sc = 1024
-                #col = self.dlistRenderer._listToColor(i)
-                #self.boxRenderer.addBox(
-                #    (b1[0] / sc, b1[1] / sc, b1[2] / sc),
-                #    (b2[0] / sc, b2[1] / sc, b2[2] / sc),
-                #    (col[0], col[1], col[2], 0.2),
-                #)
             self.menu.refresh()
-
-        # draw each vertex as a point
-        #d=0.04
-        #for i, vtx in enumerate(self.model.vtxs):
-        #    self.boxRenderer.addBox(
-        #        (vtx.x-d, vtx.y-d, vtx.z-d),
-        #        (vtx.x+d, vtx.y+d, vtx.z+d),
-        #        (0, 0, 0, 0.5),
-        #    )
-
-        self.boneRenderer.setModel(self.model)
-        #self._renderHitboxes()
 
 
     def enterMenu(self, menu):
@@ -146,16 +124,12 @@ class SfaModelViewer(SfaProgram, EventHandler):
         log.dprint("Frame %d", self.frame)
         self._setMtxs()
         self.dlistRenderer.run()
-        self.boneRenderer.run()
         if (self.frame & 1) == 0:
             self.boxRenderer.run()
-        self.textureRenderer.run()
         self.menu.render()
 
         lines = (
             "[1] Face Culling: %s" % ("On" if self.dlistRenderer.useFaceCulling else "Off"),
-            "[2] Bone X-ray: %s" % (
-                "Off" if self.boneRenderer.useDepthTest else "On"),
         )
         for i, line in enumerate(lines):
             log.dprint("\x1B[%d,200H%s", (i*11)+5, line)
@@ -196,15 +170,5 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #    "%+7.2f %+7.2f %+7.2f %+7.2f\n", *mv.flatten())
         #"P=\n%sM=\n%s", p, mt @ (mx @ my @ mz))
 
-        #for i, bone in enumerate(self.model.bones):
-        #    head, tail = self._calcBonePos(self.model, bone)
-        #    log.dprint("%2d %+7.2f %+7.2f %+7.2f | %+7.2f %+7.2f %+7.2f",
-        #        i, head[0], head[1], head[2], tail[0], tail[1], tail[2])
-
-        self.boneRenderer   .setMtxs(mp, mv)
         self.boxRenderer    .setMtxs(mp, mv)
         self.dlistRenderer  .setMtxs(mp, mv)
-        self.textureRenderer.setMtxs(
-            gl.Util.Matrix.scale(3/width, 3/height) @
-            gl.Util.Matrix.translate(-0.9, -0.9, 0),
-            mv)

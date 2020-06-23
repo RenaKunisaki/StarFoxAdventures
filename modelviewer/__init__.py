@@ -5,11 +5,8 @@ log = logger.logging.getLogger(__name__)
 import gi
 gi.require_version('Gtk', '3.0'); from gi.repository import Gtk, GLib
 
-
-
 from app import MainWindow
 from MyRenderer import MyRenderer
-
 
 win = MainWindow(MyRenderer())
 

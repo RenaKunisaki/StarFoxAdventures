@@ -5,14 +5,6 @@ import math
 import sys
 import gl
 import numpy as np
-from .SfaProgram import SfaProgram
-from . import shaders
-
-
-class BoxShader(SfaProgram):
-    separable       = True
-    vertex_shader   = (shaders, 'box.vert')
-    geometry_shader = (shaders, 'box.geom')
 
 
 class BoxRenderer(gl.Pipeline):
@@ -21,9 +13,10 @@ class BoxRenderer(gl.Pipeline):
     vtxBufferFmt = "6f" # (x,y,z) A, (x,y,z) B
     colorBufferFmt = "4f" # (r,g,b,a) per box
 
-    def __init__(self, parent):
+    def __init__(self, parent, shader):
         self.parent = parent
-        self.shader  = BoxShader(self.parent.ctx)
+        #self.shader = BoxShader(self.parent.ctx)
+        self.shader = shader
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,

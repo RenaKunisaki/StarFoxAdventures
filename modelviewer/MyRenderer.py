@@ -6,18 +6,22 @@ import numpy as np
 from app import Renderer
 from programs.DebugText import DebugText
 #from programs.LineDraw import LineDraw
-from programs.SfaModel import SfaModelViewer
+#from programs.SfaModel import SfaModelViewer
+#from programs.SfaMapOverview import SfaMapOverview
+from programs.SfaMap import SfaMapViewer
 
 
 class MyRenderer(Renderer):
     def setup(self):
         """Called when we're ready to initialize our scene."""
         try:
-            self.bgColor  = (0.0, 0.5, 0.5, 0.0) # r, g, b, a
+            self.bgColor  = (0.5, 0.0, 0.5, 0.0) # r, g, b, a
             self.programs = {
                 #'test': TestProgram(self.ctx),
                 'debugText': DebugText(self.ctx),
-                'sfa': SfaModelViewer(self.ctx),
+                #'sfa': SfaModelViewer(self.ctx),
+                #'sfa': SfaMapOverview(self.ctx),
+                'sfa': SfaMapViewer(self.ctx),
             }
 
             log.debug("Init OK")
