@@ -66,11 +66,13 @@ objMenu_List: # draw list of objects.
     LOADWH  r15, loadedObjects
     LOADWL2 r16, numLoadedObjs, r15
     LOADWL2 r15, loadedObjects, r15
+    cmpwi   r16, 0
+    beq     .objMenu_List_noObjs
     slwi    r4,  r17, 2
     lwzx    r18, r4, r15   # r18 = ObjInstance*
     mr      r3, r18
-    bl      objMenu_drawCurObject
 
+    bl      objMenu_drawCurObject
     # first item (selected) in blue
     LOAD    r3, 0x00FFFFFF
     bl      menuSetTextColor
@@ -125,6 +127,14 @@ objMenu_List: # draw list of objects.
     cmpwi   r20, OBJ_MENU_YPOS + OBJ_MENU_HEIGHT - LINE_HEIGHT
     blt     .objMenu_List_nextObj
 
+    b       menuEndSub
+
+
+.objMenu_List_noObjs:
+    addi    r3, r14, s_noObjs - mainLoop
+    li      r5, OBJ_MENU_XPOS
+    li      r6, OBJ_MENU_XPOS
+    bl      menuDrawStr2
     b       menuEndSub
 
 
@@ -193,6 +203,8 @@ objMenu_List_doInput:
     li      r17, 0
 
 .objMenu_List_storeIdx:
+    cmpwi   r17, 0
+    blt     menuEndSub
     sth     r17, (objMenuIdx - mainLoop)(r14)
     # use a smaller repeat delay here because
     # this menu is long, and slow to render.

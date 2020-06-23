@@ -45,6 +45,13 @@ warpMenu_Main: # draw list of warps.
     li      r20, WARP_MENU_YPOS + 8 # string Y pos
     lfs     f30, (f_mapCellScale - mainLoop)(r14)
 
+    # mapCoordsToId looks relative to current layer,
+    # so temporarily reset that to 0
+    LOADWH  r9,  curMapLayer
+    LOADBL2 r31, curMapLayer, r9
+    li      r5,  0
+    STOREB  r5,  curMapLayer, r9
+
 .warpMenu_nextWarp:
     slwi    r9,  r17, 4
     add     r9,  r9, r15 # r4 = warp entry*
@@ -130,6 +137,9 @@ warpMenu_Main: # draw list of warps.
     li      r6,  WARP_MENU_YPOS + WARP_MENU_HEIGHT + 24 # Y pos
     CALL    gameTextShowStr
 
+    LOADWH  r9,  curMapLayer
+    STOREB  r31, curMapLayer, r9
+
     b       menuEndSub
 
 warpMenu_doInput:
@@ -175,9 +185,7 @@ warpMenu_doInput:
 .warpMenu_up2:
     cmpwi   r17, 0
     bge     .warpMenu_storeIdx
-    addi    r17, r17, MAX_WARP - 2
-    # by adding -2 there and then falling into the Down
-    # code, which adds 1, we avoid a branch.
+    addi    r17, r17, MAX_WARP - 1
 
 .warpMenu_down: # down pressed
     addi    r17, r17, 1
