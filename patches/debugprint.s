@@ -306,6 +306,20 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL   debugPrintf
 
 .noText:
+
+    # display sequence info (XXX incomplete/wrong)
+    LOADWH  r9, curSeqNo
+    LOADBL2 r4, curSeqNo, r9
+    cmpwi   r4, 0
+    beq     .noSeq
+
+    LOADBL2 r5, seqPos,    r9
+    LOADWL2 r6, seqLength, r9
+    LOADWL2 r7, curSeqObj, r9
+    addi    r3, r14, .fmt_seqState - mainLoop
+    CALL    debugPrintf
+
+.noSeq:
 .end:
     lwz  r14, SP_R14_SAVE(r1)
     lwz  r15, SP_R15_SAVE(r1)
@@ -342,4 +356,5 @@ mainLoop: # called from main loop. r3 = mainLoop
 .fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
 .fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
+.fmt_seqState:     .string "SEQ %02X pos %X/%X obj %08X\n"
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
