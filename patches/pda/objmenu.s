@@ -297,16 +297,18 @@ objMenu_List_doInput:
 
 
 objMenu_drawCurObject:
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r0
-    stw   r0, SP_LR_SAVE(r1)
-    stmw  r13, SP_GPR_SAVE(r1)
+    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0, SP_LR_SAVE(r1)
+    stmw    r13, SP_GPR_SAVE(r1)
 
     mr      r18, r3
     LOAD    r3, 0xFFFFFFFF
     bl      menuSetTextColor
+    li      r19, OBJ_INFO_XPOS + 8
+    li      r20, OBJ_INFO_YPOS + 8
 
-    # line 1: address, coords
+    # address, coords
     lfs     f1, 0x0C(r18)
     fctiwz  f2,f1
     stfd    f2,SP_FLOAT_TMP(r1)
@@ -324,68 +326,69 @@ objMenu_drawCurObject:
 
     mr      r5, r18 # address
     addi    r4, r14, fmt_objListCoords - mainLoop
-    addi    r3,  r1, SP_STR_BUF
-    CALL    sprintf
-    addi    r3,  r1, SP_STR_BUF
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  OBJ_INFO_XPOS + 8 # X pos
-    li      r6,  OBJ_INFO_YPOS + 8 # Y pos
-    CALL    gameTextShowStr
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
 
-    # line 2: flags
-    addi    r3,  r1, SP_STR_BUF
+    # ID, original coords
+    addi    r4, r14, fmt_objListNoSeq - mainLoop
+    lwz     r3, 0x4C(r18) # seq
+    cmpwi   r3, 0
+    beq     .objMenu_drawCurObject_noSeq
+    addi    r4, r14, fmt_objListOrigPos - mainLoop
+    lwz     r5, 0x14(r3) # ID
+
+    lfs     f1, 0x08(r3) # orig X
+    fctiwz  f2,f1
+    stfd    f2,SP_FLOAT_TMP(r1)
+    lwz     r6,SP_FLOAT_TMP+4(r1)
+
+    lfs     f1, 0x0C(r3) # orig Y
+    fctiwz  f2,f1
+    stfd    f2,SP_FLOAT_TMP(r1)
+    lwz     r7,SP_FLOAT_TMP+4(r1)
+
+    lfs     f1, 0x10(r3) # orig Z
+    fctiwz  f2,f1
+    stfd    f2,SP_FLOAT_TMP(r1)
+    lwz     r8,SP_FLOAT_TMP+4(r1)
+
+.objMenu_drawCurObject_noSeq:
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
+
+    # flags
     addi    r4, r14, fmt_objListFlags - mainLoop
     lhz     r5, 0x06(r18) # flags
     lbz     r6, 0xAF(r18) # flags
     lbz     r7, 0xB0(r18) # flags
-    CALL    sprintf
-    addi    r3,  r1, SP_STR_BUF
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  OBJ_INFO_XPOS + 8 # X pos
-    li      r6,  OBJ_INFO_YPOS + LINE_HEIGHT + 8 # Y pos
-    CALL    gameTextShowStr
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
 
-    # line 3: slot, map
-    addi    r3,  r1, SP_STR_BUF
+    # slot, map
     addi    r4, r14, fmt_objListMap - mainLoop
     lbz     r5, 0xAE(r18) # slot
     lbz     r6, 0x34(r18) # map
     lbz     r7, 0xAC(r18) # map 2
-    CALL    sprintf
-    addi    r3,  r1, SP_STR_BUF
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  OBJ_INFO_XPOS + 8 # X pos
-    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*2) + 8 # Y pos
-    CALL    gameTextShowStr
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
 
-    # line 4: seq
-    addi    r3,  r1, SP_STR_BUF
+    # seq
     addi    r4, r14, fmt_objListSeq - mainLoop
     lwz     r5, 0x4C(r18) # seq
     lhz     r6, 0xB4(r18) # curSeq
-    CALL    sprintf
-    addi    r3,  r1, SP_STR_BUF
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  OBJ_INFO_XPOS + 8 # X pos
-    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*3) + 8 # Y pos
-    CALL    gameTextShowStr
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
 
-    # line 5: event
-    addi    r3,  r1, SP_STR_BUF
+    # event
     addi    r4, r14, fmt_objListEvent - mainLoop
     lwz     r5, 0x60(r18) # event
-    CALL    sprintf
-    addi    r3,  r1, SP_STR_BUF
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  OBJ_INFO_XPOS + 8 # X pos
-    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*4) + 8 # Y pos
-    CALL    gameTextShowStr
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
 
-    # line 6: models
+    # models
     li      r7, 0
     lis     r8, 0x81FF
     lis     r9, 0x8000
-    addi    r3,  r1, SP_STR_BUF
     addi    r4, r14, fmt_objListModel - mainLoop
     lwz     r5, 0x7C(r18) # models
     lbz     r6, 0xAD(r18) # curModel
@@ -407,32 +410,21 @@ objMenu_drawCurObject:
     lhz     r7, 4(r7) # get model ID
 
 .objMenu_drawCurObject_noModel:
-    CALL    sprintf
-
-    addi    r3,  r1, SP_STR_BUF
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  OBJ_INFO_XPOS + 8 # X pos
-    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*5) + 8 # Y pos
-    CALL    gameTextShowStr
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
 
     # line 7: state
-    addi    r3,  r1, SP_STR_BUF
     addi    r4, r14, fmt_objListState - mainLoop
     lwz     r5, 0xB8(r18) # state
-    CALL    sprintf
-    addi    r3,  r1, SP_STR_BUF
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  OBJ_INFO_XPOS + 8 # X pos
-    li      r6,  OBJ_INFO_YPOS + (LINE_HEIGHT*6) + 8 # Y pos
-    CALL    gameTextShowStr
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
 
     # instructions
     addi    r3,  r14, fmt_objListInstrs - mainLoop
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
     li      r6,  OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - LINE_HEIGHT # Y pos
-    CALL    gameTextShowStr
-
+    bl      menuDrawStr
     b       menuEndSub
 
 

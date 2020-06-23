@@ -65,6 +65,8 @@
 .set controllerStates,       0x803398f0 #u16 buttons, s8 x, s8 y, s8 cx, s8 cy, s8 L, s8 R
 .set curGameText,            0x803dba70 #s16
 .set curMapId,               0x803dcec8 #int
+.set curSeqNo,               0x803dd08c #u8
+.set curSeqObj,              0x803dd0b8 #ObjInstance*
 .set dataFileBuffers,        0x8035f3e8 #void*[fileIdx]
 .set dataFileSize,           0x8035f0a8 #int32[fileIdx]
 .set debugLogBuffer,         0x803aa018
@@ -97,7 +99,9 @@
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox
 .set timeStop,               0x803dca3c #bool
-.set pPlayer,                0x803428f8
+.set pPlayer,                0x803428f8 #ObjInstance*
+.set seqLength,              0x803dd0c0 #s32
+.set seqPos,                 0x803dd0bc #s8
 .set shouldCloseCMenu,       0x803dd7b4 #bool
 .set shouldOpenCMenu,        0x803dd7d5 #u8
 .set timeDelta,              0x803db414 #float

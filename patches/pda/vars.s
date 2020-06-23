@@ -33,7 +33,7 @@ floatMagic:    .int 0x43300000,0x80000000
 #f_menuXPos:    .float MENU_XPOS
 #f_menuYPos:    .float MENU_YPOS
 f_menuWidth:   .float 320
-f_menuHeight:  .float 220
+f_menuHeight:  .float 230
 f_centerX:     .float 320
 f_centerY:     .float 240
 f_mapCellScale: .float 640.0
@@ -113,7 +113,9 @@ s_frameAdv:   .string "Advance Frame"
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "
 # right pane
-fmt_objListCoords: .string "%08X  %d, %d, %d"
+fmt_objListCoords: .string "%08X  %d, %d, %d" # address, x, y, z
+fmt_objListOrigPos:.string "%08X  %d, %d, %d" # ID, x, y, z
+fmt_objListNoSeq:  .string "NO SEQ"
 fmt_objListFlags:  .string "FLAG %04X %02X %02X"
 fmt_objListMap:    .string "SLOT %02X MAP %02X %02X"
 fmt_objListSeq:    .string "SEQ %08X %04X"

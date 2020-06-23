@@ -14,7 +14,7 @@ patchList:
 
 constants:
     .set MENU_WIDTH,320
-    .set MENU_HEIGHT,220
+    .set MENU_HEIGHT,230
     .set MENU_XPOS,320-(MENU_WIDTH/2)
     .set MENU_YPOS,240-(MENU_HEIGHT/2)
     .set LINE_HEIGHT,18
