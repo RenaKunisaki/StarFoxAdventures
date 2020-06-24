@@ -40,6 +40,7 @@ class ModelLoader:
             file.seek(curOffs) # go back
             self.model = Model(file)
 
+        #self._setupVtxDescrs()
         self._doRenderInstrs()
         return self.model
 
@@ -107,6 +108,27 @@ class ModelLoader:
         #    out.write(result)
 
 
+    def _setupVtxDescrs(self):
+        """Setup vertex descriptors."""
+        NONE   = 0
+        DIRECT = 1
+        IDX8   = 2
+        IDX16  = 3
+        #self._vtxFmt     = {'pos':0, 'nrm':0, 'col':0, 'tex':0}
+        if len(self.model.bones) < 2:
+            # gxSetTexMtxIdx(0);
+            pass
+        else:
+            self._vtxFmt['pos'] = DIRECT
+            # XXX this isn't quite right. where is ShaderDef set from?
+            # and there might be different settings per texture mtx 0-7
+            if self.curShader is not None and self.curShader.textureId[0] != 0:
+                self._vtxFmt['tex'] = DIRECT
+                if self.curShader.flags_40 & 0x01: # UseNormals
+                    self._vtxFmt['nrm'] = DIRECT
+
+
+
     def _doRenderInstrs(self):
         """Follow previously parsed render instructions for loaded model."""
         for instr in self.model.renderInstrs:
@@ -120,10 +142,14 @@ class ModelLoader:
 
             elif op == 'VFMT':
                 self._vtxFmt['pos'] = instr[1]
-                self._vtxFmt['nrm'] = instr[2]
-                self._vtxFmt['col'] = instr[3]
-                self._vtxFmt['tex'] = instr[4]
-                #log.debug("Set vtx fmt: %s", self._vtxFmt)
+                if self.curShader is not None:
+                    if self.curShader.flags_40 & 0x01: # UseNormals
+                        self._vtxFmt['nrm'] = instr[2]
+                    if self.curShader.flags_40 & 0x02: # UseColors
+                        self._vtxFmt['col'] = instr[3]
+                    if self.curShader.nTextures > 0:
+                        self._vtxFmt['tex'] = instr[4]
+                log.debug("Set vtx fmt: %s", self._vtxFmt)
 
             elif op == 'MTX':
                 # not sure why the game does this
@@ -145,6 +171,7 @@ class ModelLoader:
 
     def _callDlist(self, idx):
         parser = DlistParser(self.model, idx)
+        #self._setupVtxDescrs()
 
         attrs = {
             # XXX col and tex apply to all enabled attrs
@@ -166,13 +193,13 @@ class ModelLoader:
         if self.curShader and self.curShader.textureId[0] >= 0:
             attrs['TEX1'] = self._vtxFmt['tex']
 
-        if idx == 24: # HACK - Krystal eyes
-            # probably related to shader, they're the only ones
-            # using shader 3
-            attrs['PNMTXIDX'] = 1
-            attrs['T0MIDX'] = 1
-            attrs['COL0'] = 1
-            attrs['COL1'] = 1
+        #if idx == 24: # HACK - Krystal eyes
+        #    # probably related to shader, they're the only ones
+        #    # using shader 3
+        #    attrs['PNMTXIDX'] = 1
+        #    attrs['T0MIDX'] = 1
+        #    attrs['COL0'] = 1
+        #    attrs['COL1'] = 1
 
         parser.setVtxFmt(6, **attrs) # XXX always 6?
         parser.setShader(self.curShader)

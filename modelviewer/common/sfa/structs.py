@@ -65,7 +65,7 @@ class Shader(Struct):
         'textureId': ('2i', 0x34),
         'flags':     ('I',  0x3C),
         'flags_40':  ('B',  0x40),
-        'nColors':   ('B',  0x41),
+        'nTextures': ('B',  0x41),
     }
 
 class HitboxStruct(Struct):

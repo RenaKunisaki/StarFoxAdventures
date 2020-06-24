@@ -187,18 +187,19 @@ class DlistParser:
 
     def _resolveIndex(self, name, idx):
         """Given attribute name and index, return the referenced value."""
-        if   name == 'POS':
-            try: return self.model.vtxs[idx]
-            except IndexError: return self.model.vtxs[0]
-        elif name == 'NRM':
-            try: return self.model.normals[idx]
-            except IndexError: return self.model.normals[0]
-        elif name.startswith('TEX'):
-            try: return self.model.texCoords[idx]
-            except IndexError: return self.model.texCoords[0]
-        elif name.endswith('IDX'):
-            try: return self.mtxLut[idx//3]
-            except IndexError: return self.model.mtxLut[0]
+        if   name == 'POS': return self.model.vtxs[idx]
+        elif name == 'NRM': return self.model.normals[idx]
+        elif name.startswith('TEX'): return self.model.texCoords[idx]
+        elif name.endswith('IDX'): return self.mtxLut[idx//3]
+        else:
+            raise NotImplementedError("Not implemented indexed %s" % name)
+
+    def _getMaxIndex(self, name):
+        """Given attribute name, return the largest valid index."""
+        if   name == 'POS': return len(self.model.vtxs)
+        elif name == 'NRM': return len(self.model.normals)
+        elif name.startswith('TEX'): return len(self.model.texCoords)
+        elif name.endswith('IDX'): return len(self.mtxLut) * 3
         else:
             raise NotImplementedError("Not implemented indexed %s" % name)
 
@@ -209,8 +210,11 @@ class DlistParser:
         #log.debug("Vtx: %s", vtx)
         # convert types and apply mtxs
         p, n = vtx['POS'], vtx['NRM']
-        px, py, pz = p.x, p.y, p.z
-        nx, ny, nz = n.x, n.y, n.z
+        if type(p) is tuple: px, py, pz = p
+        else: px, py, pz = p.x, p.y, p.z
+        if type(n) is tuple: nx, ny, nz = n
+        else: nx, ny, nz = n.x, n.y, n.z
+
         if vtx['PNMTXIDX'] is not None:
             # we only store the translation vector, not whole mtx
             tx, ty, tz = vtx['PNMTXIDX']
@@ -224,7 +228,8 @@ class DlistParser:
         for i in range(8):
             p = vtx['TEX%d' % i]
             if p is not None:
-                x, y = p.x, p.y
+                if type(p) is tuple: x, y = p
+                else: x, y = p.x, p.y
                 # XXX
                 #if vtx['T%dMIDX' % i] is not None:
                 #    tx, ty = self.mtxLut[vtx['T%dMIDX' % i]]
@@ -254,11 +259,15 @@ class DlistParser:
                 vtx[name+'_idx'] = val
                 try:
                     val = self._resolveIndex(name, val)
-                except KeyError:
-                    log.warning("Vtx in list %d attr %s idx is invalid (%s / %s)",
-                        self.listIdx, name, val,
-                        ', '.join(map(str, self.mtxLut.keys())))
+                except (KeyError, IndexError):
+                    log.warning("Vtx[%06X] in list %d attr %s idx is invalid (%d / %d)",
+                        start+self.list.offset, self.listIdx, name, val,
+                        self._getMaxIndex(name))
                     val = self._resolveIndex(name, 0)
+            #elif 'POS' in name or 'NRM' in name:
+            #    val = (val, self.nextU16(), self.nextU16())
+            #elif 'TEX' in name:
+            #    val = (val, self.nextU16())
             vtx[name] = val
 
         #log.debug("VAT %d fmt %X, %X => %d bytes", vat, fmtLo, fmtHi, self._offset - start)
@@ -382,9 +391,9 @@ class DlistParser:
         except IndexError: name = 'unk%02X' % mode
 
         #if self.listIdx in range(12, 13):
-        #log.debug("%04X %2d Draw(#%3d: %d %s, VAT %d): %s",
-        #    self._offset - 3, self.listIdx,
-        #    len(self.polys), count, name, vat, self.describeVat(vat))
+        log.debug("%04X %2d Draw(#%3d: %d %s, VAT %d): %s",
+            self._offset - 3, self.listIdx,
+            len(self.polys), count, name, vat, self.describeVat(vat))
 
         for i in range(count):
             vtx = self.nextVertex(vat)
