@@ -187,10 +187,18 @@ class DlistParser:
 
     def _resolveIndex(self, name, idx):
         """Given attribute name and index, return the referenced value."""
-        if   name == 'POS': return self.model.vtxs[idx]
-        elif name == 'NRM': return self.model.normals[idx]
-        elif name.startswith('TEX'): return self.model.texCoords[idx]
-        elif name.endswith('IDX'): return self.mtxLut[idx//3]
+        if   name == 'POS':
+            try: return self.model.vtxs[idx]
+            except IndexError: return self.model.vtxs[0]
+        elif name == 'NRM':
+            try: return self.model.normals[idx]
+            except IndexError: return self.model.normals[0]
+        elif name.startswith('TEX'):
+            try: return self.model.texCoords[idx]
+            except IndexError: return self.model.texCoords[0]
+        elif name.endswith('IDX'):
+            try: return self.mtxLut[idx//3]
+            except IndexError: return self.model.mtxLut[0]
         else:
             raise NotImplementedError("Not implemented indexed %s" % name)
 

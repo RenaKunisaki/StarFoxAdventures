@@ -16,11 +16,11 @@ class MainMenu(Menu):
 
 
     def refresh(self):
-        self.items = ["Obj# Type UniqueID ObjName Pos"]
-        for i, obj in enumerate(self.parent.curMap.objects):
+        self.items = ["Obj# Type UniqueID ObjName     Modl Pos"]
+        for i, obj in enumerate(self.parent.game.map.objects):
             self.items.append(
-                "%04X %04X %08X %11s %+7.2f %+7.2f %+7.2f" % (i,
-                    obj.type, obj.uniqueId, obj.name,
+                "%04X %04X %08X %11s %04X %+7.2f %+7.2f %+7.2f" % (i,
+                    obj.type, obj.uniqueId, obj.name, obj.modelId,
                     obj.pos.x, obj.pos.y, obj.pos.z,
             ))
         self.cursorPos = 0
@@ -36,7 +36,7 @@ class MainMenu(Menu):
 
     def activate(self):
         if self.cursorPos > 0:
-            obj = self.parent.curMap.objects[self.cursorPos - 1]
+            obj = self.parent.game.map.objects[self.cursorPos - 1]
             self.parent._translate[0] = obj.pos.x
             self.parent._translate[1] = obj.pos.y + 2
             self.parent._translate[2] = obj.pos.z

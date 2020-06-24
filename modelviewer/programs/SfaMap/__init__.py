@@ -9,14 +9,12 @@ import numpy as np
 from . import shaders
 from .SfaProgram import SfaProgram
 from .EventHandler import EventHandler
-from common.sfa.ModelLoader import ModelLoader
-from common.gamecube.DlistParser import DlistParser
+#from common.gamecube.DlistParser import DlistParser
 from common.BinaryFile import BinaryFile
 from common.sfa.zlb import Zlb
 from programs.Common.BoxRenderer import BoxRenderer
-from .ModelRenderer import ModelRenderer
+from .SfaRoot import SfaRoot
 from .Menu import Menu, MainMenu
-from .Map import Map
 
 
 class FragmentShader(SfaProgram):
@@ -38,10 +36,6 @@ class SfaMapViewer(SfaProgram, EventHandler):
     def __init__(self, ctx):
         super().__init__(ctx)
 
-        self.curMap = Map(self)
-        self.models = {} # ID => Model
-        self.modelRenderers = {}
-
         # setup shaders and subprograms
         self.fragShader      = FragmentShader(self.ctx)
         self.boxRenderer     = BoxRenderer(self, BoxShader(self.ctx))
@@ -59,90 +53,25 @@ class SfaMapViewer(SfaProgram, EventHandler):
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
         self.dlists        = []
-        self.menu          = MainMenu(self)
         self._menuStack    = []
 
         # enable our local logger to print on the screen
         # by using log.dprint()
         log.setLevel('DPRINT')
 
-        self.discRoot = 'files/'
-        if len(sys.argv) > 1: self.discRoot = sys.argv[1]
-
-        self.loadObjIndex()
-        self.loadObjectsTab()
-        self.loadObjectsBin()
+        root = 'files/'
+        if len(sys.argv) > 1: root = sys.argv[1]
+        self.game = SfaRoot(self, root)
+        self.game.loadGlobalAssets()
 
         if len(sys.argv) > 2: self.loadMap(sys.argv[2])
+        self.menu = MainMenu(self)
         self.menu.refresh()
 
 
-    def loadObjIndex(self):
-        """Load OBJINDEX.bin"""
-        self.objIndex = []
-        with open(self.discRoot+'/OBJINDEX.bin', 'rb') as objIdxFile:
-            entries = objIdxFile.read()
-            for i in range(0, len(entries), 2):
-                it = struct.unpack_from('>H', entries, i)[0] # grumble
-                self.objIndex.append(it)
-
-    def loadObjectsTab(self):
-        """Load OBJECTS.tab"""
-        self.objsTab = []
-        with open(self.discRoot+'/OBJECTS.tab', 'rb') as objTabFile:
-            entries = objTabFile.read()
-            for i in range(0, len(entries), 4):
-                it = struct.unpack_from('>I', entries, i)[0] # grumble
-                self.objsTab.append(it)
-
-    def loadObjectsBin(self):
-        """Load OBJECTS.bin"""
-        self.objDefs = []
-        with open(self.discRoot+'/OBJECTS.bin', 'rb') as objBinFile:
-            for offs in self.objsTab:
-                try:
-                    objBinFile.seek(offs + 0x04)
-                    scale = struct.unpack('>f', objBinFile.read(4))[0] # grumble
-                    objBinFile.seek(offs + 0x91)
-                    name = objBinFile.read(11).decode('utf-8').replace('\0', '')
-                except struct.error:
-                    break
-                self.objDefs.append({
-                    'scale': scale,
-                    'name':  name,
-                })
-
-
     def loadMap(self, name):
-        """Load given map."""
         self.boxRenderer.reset()
-
-        with open('../dump/krystal.bin', 'rb') as file:
-            model = ModelLoader()
-            model.loadFromFile(file)
-        self.models[0] = model
-        self.curMap.load(name)
-        for i, obj in enumerate(self.curMap.objects):
-
-            s = self.objDefs[obj.type]['scale']
-            pointA = (obj.pos.x - s, obj.pos.y - s, obj.pos.z - s)
-            pointB = (obj.pos.x + s, obj.pos.y + s, obj.pos.z + s)
-            T = obj.type
-            color  = (
-                (( T       & 3) | (((T >>  6) & 7) << 2)) / 31,
-                (((T >> 2) & 3) | (((T >>  9) & 7) << 2)) / 31,
-                (((T >> 4) & 3) | (((T >> 12) & 7) << 2)) / 31,
-                0.5)
-            self.boxRenderer.addBox(pointA, pointB, color)
-
-            try: model = self.models[obj.modelId]
-            except KeyError: model = self.models[0]
-            if obj.modelId not in self.modelRenderers:
-                renderer = ModelRenderer(self)
-                renderer.setModel(model)
-                self.modelRenderers[obj.modelId] = renderer
-
-            if i < 32: obj.render()
+        self.game.loadMap(name)
 
 
     def _getShaderCodeFromFile(self, path):
@@ -162,14 +91,14 @@ class SfaMapViewer(SfaProgram, EventHandler):
     def run(self):
         """Render the scene."""
         log.dprint("Frame %d; objs %d", self.frame,
-            len(self.curMap.objects))
+            len(self.game.map.objects))
         self._setMtxs()
 
         self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
         self.ctx.glDepthFunc(self.ctx.GL_LESS)
         self.ctx.glDisable(self.ctx.GL_BLEND)
         self.ctx.glDisable(self.ctx.GL_CULL_FACE)
-        self.modelRenderers[0].render()
+        self.game.map.render()
 
         self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
         self.ctx.glDepthFunc(self.ctx.GL_LESS)
@@ -230,4 +159,4 @@ class SfaMapViewer(SfaProgram, EventHandler):
         #"P=\n%sM=\n%s", p, mt @ (mx @ my @ mz))
 
         self.boxRenderer.setMtxs(mp, mv)
-        self.modelRenderers[0].dlistRenderer.setMtxs(mp, mv)
+        self.game.setMtxs(mp, mv)

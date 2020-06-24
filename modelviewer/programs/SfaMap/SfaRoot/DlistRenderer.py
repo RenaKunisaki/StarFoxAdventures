@@ -6,8 +6,8 @@ import sys
 import gl
 import numpy as np
 from gl.Util import Matrix
-from .SfaProgram import SfaProgram
-from . import shaders
+from ..SfaProgram import SfaProgram
+from .. import shaders
 
 # This is a cut-down version of the DlistRenderer from the model viewer
 # program.

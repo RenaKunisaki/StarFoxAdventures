@@ -90,7 +90,9 @@ class Model:
         #log.debug("nNormals=%d from 0x%X", self.header.nNormals,
         #    self.header.normals)
         offs = self.header.normals + self.offset
-        self.normals = Vec3s.readFromFile(self.file, offs, self.header.nNormals)
+        try:
+            self.normals = Vec3s.readFromFile(self.file, offs, self.header.nNormals)
+        except struct.error: self.normals = []
         for vtx in self.normals:
             vtx.x /= 256.0
             vtx.y /= 256.0
@@ -100,7 +102,9 @@ class Model:
         #log.debug("nTexCoords=%d from 0x%X", self.header.nTexCoords,
         #    self.header.texCoords)
         offs = self.header.texCoords + self.offset
-        self.texCoords = Vec2s.readFromFile(self.file, offs, self.header.nTexCoords)
+        try:
+            self.texCoords = Vec2s.readFromFile(self.file, offs, self.header.nTexCoords)
+        except struct.error: self.texCoords = []
         for vtx in self.texCoords:
             vtx.x /= 1024.0
             vtx.y /= 1024.0

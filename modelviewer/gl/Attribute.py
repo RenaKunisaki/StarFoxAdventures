@@ -26,9 +26,9 @@ class Attribute:
         self.size, self.type = glSize.value, glType.value
 
         self.id = self.ctx.glGetAttribLocation(program.id, self.name)
-        log.debug("Attribute '%s': idx:%d ID:%d type:%s size:%d",
-            self.name, self.index, self.id,
-            self.ctx.constantName(self.type), self.size)
+        #log.debug("Attribute '%s': idx:%d ID:%d type:%s size:%d",
+        #    self.name, self.index, self.id,
+        #    self.ctx.constantName(self.type), self.size)
 
 
     def bindBuffer(self, buffer, type, size, normalized=False, stride=0, offset=0, convert=False, divisor=None):

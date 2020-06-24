@@ -32,9 +32,9 @@ class Uniform:
         # this still doesn't work for structs/arrays
         self.id = self.ctx.glGetUniformLocation(program.id, name)
 
-        log.debug("Uniform '%s': idx:%d ID:%d type:%s size:%d",
-            self.name, self.index, self.id,
-            self.ctx.constantName(self.type), self.size)
+        #log.debug("Uniform '%s': idx:%d ID:%d type:%s size:%d",
+        #    self.name, self.index, self.id,
+        #    self.ctx.constantName(self.type), self.size)
 
         self._makeGetter()
         self._makeSetter()
@@ -66,7 +66,7 @@ class Uniform:
         _set = getattr(self.ctx, func)
         if self.isArray:
             def set(val):
-                log.debug("uniform set %s %s %s", self.id, func, val)
+                #log.debug("uniform set %s %s %s", self.id, func, val)
                 _set(self.id, len(val), val)
         elif self._count == 1:
             def set(val):

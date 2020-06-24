@@ -53,7 +53,7 @@ class Buffer:
         self.bind()
         self.ctx.glBufferData(self.target, self.size, data, drawMode)
 
-        log.debug("Created buffer %d, size %d", self.id, self.size)
+        #log.debug("Created buffer %d, size %d", self.id, self.size)
 
 
     def bind(self, target=None):

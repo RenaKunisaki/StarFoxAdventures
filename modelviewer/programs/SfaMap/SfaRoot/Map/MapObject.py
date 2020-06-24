@@ -19,8 +19,8 @@ class MapObject:
         self.origType = objTyp
 
         if objTyp >= 0: # use OBJINDEX.bin to translate ID
-            if objTyp < len(parentMap.program.objIndex):
-                objTyp = parentMap.program.objIndex[objTyp]
+            if objTyp < len(parentMap.game.objIndex):
+                objTyp = parentMap.game.objIndex[objTyp]
             else: log.warning("Unknown object ID 0x%X", objTyp)
         else: objTyp = -objTyp # do not translate ID
         self.type = objTyp
@@ -31,13 +31,17 @@ class MapObject:
         self.pos       = Vec3f(romListEntry[0x08:0x14])
         self.uniqueId  = entry[10]
         self.seqData   = romListEntry[0x18:]
-        try: self.name = parentMap.program.objDefs[self.type]['name']
-        except IndexError: self.name = '?'
+        try:
+            self.objDef = parentMap.game.objDefs[self.type]
+        except IndexError:
+            log.warning("Missing objdef 0x%04X", self.type)
+            self.objDef = parentMap.game.objDefs[0]
 
-        self.modelId = 0 # XXX
+        self.name    = self.objDef.name
+        self.modelId = self.objDef.modelIds[0]
 
 
     def render(self):
         """Render this object."""
-        renderer = self.map.program.modelRenderers[self.modelId]
+        renderer = self.map.game.modelRenderers[self.modelId]
         renderer.addInstance((self.pos.x, self.pos.y, self.pos.z))

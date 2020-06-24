@@ -8,6 +8,7 @@ import zlib
 import tempfile
 from .Model import Model
 from common.gamecube.DlistParser import DlistParser
+from common.BinaryFile import BinaryFile
 
 
 class ModelLoader:
@@ -21,9 +22,9 @@ class ModelLoader:
         self.dlists      = []
 
 
-    def loadFromFile(self, file):
+    def loadFromFile(self, file:BinaryFile):
         curOffs = file.tell()
-        header  = struct.unpack('>I', file.read(4))[0] # grumble
+        header =  file.readu32()
         if header == 0xFACEFEED:
             self._loadFaceFeed(file)
 
@@ -48,7 +49,7 @@ class ModelLoader:
         Expects `file` to be seeked to just past the 0xFACEFEED word.
         """
         offs        = file.tell()
-        header      = struct.unpack('>8I', file.read(8*4))
+        header      = file.readStruct('8I')
         decLen      = header[0]
         zlbDataOffs = header[1]
         compLen     = header[2] # minus 0x10
@@ -57,7 +58,7 @@ class ModelLoader:
 
         # XXX the game doesn't actually do these checks.
         # it's entirely possible for there to not be a ZLB header here.
-        h2 = struct.unpack('>3sb3I', file.read(4*4))
+        h2 = file.readStruct('3sb3I')
         #log.debug("ZLB header: %s", h2)
         assert h2[0] == b'ZLB' and h2[1] == 0, \
             "Corrupt ZLB header following FACEFEED"
@@ -76,10 +77,7 @@ class ModelLoader:
         """Decompress model with ZLB header.
         Expects `file` to be seeked to just past the "ZLB\0" word.
         """
-        header  = struct.unpack('>3I', file.read(3*4))
-        version = header[0]
-        decLen  = header[1]
-        compLen = header[2]
+        version, decLen, compLen  = file.readStruct('3I')
         if version == 0x44495200: # "DIR\0"
             # is this ever used in the game?
             raise NotImplementedError("ZLB DIR not supported")

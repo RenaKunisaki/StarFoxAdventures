@@ -6,9 +6,9 @@ import numpy as np
 from app import Renderer
 from programs.DebugText import DebugText
 #from programs.LineDraw import LineDraw
-#from programs.SfaModel import SfaModelViewer
+from programs.SfaModel import SfaModelViewer
 #from programs.SfaMapOverview import SfaMapOverview
-from programs.SfaMap import SfaMapViewer
+#from programs.SfaMap import SfaMapViewer
 
 
 class MyRenderer(Renderer):
@@ -19,9 +19,9 @@ class MyRenderer(Renderer):
             self.programs = {
                 #'test': TestProgram(self.ctx),
                 'debugText': DebugText(self.ctx),
-                #'sfa': SfaModelViewer(self.ctx),
+                'sfa': SfaModelViewer(self.ctx),
                 #'sfa': SfaMapOverview(self.ctx),
-                'sfa': SfaMapViewer(self.ctx),
+                #'sfa': SfaMapViewer(self.ctx),
             }
 
             log.debug("Init OK")

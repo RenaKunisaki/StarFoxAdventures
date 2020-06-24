@@ -200,19 +200,19 @@ class Program:
     def _getVariables(self):
         """Get the attribues and uniforms."""
         nAttrs = self.ctx.glGetProgramiv(self.id, gl.GL_ACTIVE_ATTRIBUTES)
-        log.debug("Program has %d attrs", nAttrs)
+        #log.debug("Program has %d attrs", nAttrs)
         for i in range(nAttrs):
             a = Attribute(self, i)
             self.attribs[a.name] = a
 
         nUniforms = self.ctx.glGetProgramiv(self.id, gl.GL_ACTIVE_UNIFORMS)
-        log.debug("Program has %d uniforms", nUniforms)
+        #log.debug("Program has %d uniforms", nUniforms)
         for i in range(nUniforms):
             u = makeUniform(self, i)
             self.uniforms[u.name] = u
 
         nBlocks = self.ctx.glGetProgramiv(self.id, gl.GL_ACTIVE_UNIFORM_BLOCKS)
-        log.debug("Program has %d uniform blocks", nBlocks)
+        #log.debug("Program has %d uniform blocks", nBlocks)
         for i in range(nBlocks):
             u = UniformBlock(self, i)
             self.uniformBlocks[u.name] = u

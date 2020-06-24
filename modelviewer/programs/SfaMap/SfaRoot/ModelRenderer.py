@@ -5,8 +5,6 @@ import math
 import sys
 import gl
 import numpy as np
-from .SfaProgram import SfaProgram
-from . import shaders
 from .DlistRenderer import DlistRenderer
 
 class ModelRenderer:

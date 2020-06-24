@@ -63,7 +63,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #self.loadModel(sys.argv[1])
         if len(sys.argv) > 1:
             path = sys.argv[1]
-            if os.path.isdir(path): self.loadDir(path, int(sys.argv[2]))
+            if os.path.isdir(path): self.loadDir(path, int(sys.argv[2], 0))
             else: self.loadModel(path)
 
 
@@ -149,7 +149,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self.boneRenderer.run()
         if (self.frame & 1) == 0:
             self.boxRenderer.run()
-        self.textureRenderer.run()
+        #self.textureRenderer.run()
         self.menu.render()
 
         lines = (
@@ -172,7 +172,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         my=gl.Util.Matrix.rotateY(math.radians(ry))
         mz=gl.Util.Matrix.rotateZ(math.radians(rz))
         mt=gl.Util.Matrix.translate(*self._translate)
-        mp=gl.Util.Matrix.perspective(60, a, 0.1, 100)
+        mp=gl.Util.Matrix.perspective(60, a, 0.1, 10000)
         mv = (mx @ my @ mz) # modelview = all rotations
         mp = mt @ mp # projection = perspective and translation
 
