@@ -9,19 +9,25 @@ import numpy as np
 from . import shaders
 from .SfaProgram import SfaProgram
 from .EventHandler import EventHandler
-from .Parser.ModelLoader import ModelLoader
-from .Parser.DlistParser import DlistParser
+from common.sfa.ModelLoader import ModelLoader
+from common.gamecube.DlistParser import DlistParser
 from .BoneRenderer import BoneRenderer
-from .BoxRenderer import BoxRenderer
+from programs.Common.BoxRenderer import BoxRenderer
 from .DlistRenderer import DlistRenderer
 from .TextureRenderer import TextureRenderer
 from .Menu import Menu, MainMenu
+from common.BinaryFile import BinaryFile
 
 
 class FragmentShader(SfaProgram):
     """Subprogram for generic fragment shader."""
     separable       = True
     fragment_shader = (shaders, 'program.frag')
+
+class BoxShader(SfaProgram):
+    separable       = True
+    vertex_shader   = (shaders, 'box.vert')
+    geometry_shader = (shaders, 'box.geom')
 
 
 class SfaModelViewer(SfaProgram, EventHandler):
@@ -34,7 +40,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         # setup shaders and subprograms
         self.fragShader      = FragmentShader(self.ctx)
         self.boneRenderer    = BoneRenderer(self)
-        self.boxRenderer     = BoxRenderer(self)
+        self.boxRenderer     = BoxRenderer(self, BoxShader(self.ctx))
         self.dlistRenderer   = DlistRenderer(self)
         self.textureRenderer = TextureRenderer(self)
 
@@ -74,12 +80,11 @@ class SfaModelViewer(SfaProgram, EventHandler):
 
     def loadDir(self, path, modelIdx=0):
         modelsTab = {}
-        with open(path+'/MODELS.tab', 'rb') as file:
+        with BinaryFile(path+'/MODELS.tab', 'rb') as file:
             idx = 0
             while True:
-                d = file.read(4)
-                if len(d) < 4: break
-                s = struct.unpack('>I', d)[0] # grumble
+                try: s = file.readu32()
+                except struct.error: break
                 modelsTab[idx] = {
                     'flags':  s >> 24,
                     'offset': s & 0xFFFFFF,
@@ -95,8 +100,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
 
     def loadModel(self, path, offset=0):
         # read the model
-        with open(path, 'rb') as file:
-            file.seek(offset)
+        with BinaryFile(path, 'rb', offset=offset) as file:
             loader = ModelLoader()
             self.model = loader.loadFromFile(file)
             self.dlistRenderer.setModel(self.model)
