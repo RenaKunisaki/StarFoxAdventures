@@ -102,8 +102,8 @@ class DlistParser:
                 len(self.model.dlistPtrs))
             raise
         self.offset  = self.list.offset
-        log.debug("Parsing dlist %d (0x%X) size %d (0x%X) offs=0x%X", idx,
-            idx, self.list.size, self.list.size, self.list.offset)
+        #log.debug("Parsing dlist %d (0x%X) size %d (0x%X) offs=0x%X", idx,
+        #    idx, self.list.size, self.list.size, self.list.offset)
         self.model.file.seek(self.list.offset)
         self.bytes    = self.model.file.read(self.list.size)
         self._offset  = 0
@@ -337,7 +337,7 @@ class DlistParser:
                 else:
                     log.error("DlistParser: unknown opcode 0x%02X at 0x%04X", opcode, self._offset - 1)
                     return self
-            log.debug("Parsed OK, end=0x%04X", self._offset)
+            #log.debug("Parsed OK, end=0x%04X", self._offset)
         except IndexError:
             log.exception("Failed parsing dlist %d at 0x%04X",
                 self.listIdx, self._offset)

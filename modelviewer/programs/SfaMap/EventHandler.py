@@ -38,6 +38,9 @@ class EventHandler:
             # doesn't work because I guess my laptop doesn't
             # generate a press event for this button? only release.
             self._rotate[2] = self._rotOrigin[2] + (dy / 10)
+        self._rotate[0] = self._rotate[0] % 360
+        self._rotate[1] = self._rotate[1] % 360
+        self._rotate[2] = self._rotate[2] % 360
 
 
     def on_key_press(self, event):
@@ -57,7 +60,7 @@ class EventHandler:
 
         elif key == '1':
             self.dlistRenderer.useFaceCulling = not self.dlistRenderer.useFaceCulling
-        
+
         # w/s: move forward/backward
         elif key == 'w': self._translate[2] += 10.0
         elif key == 's': self._translate[2] -= 10.0
@@ -70,3 +73,7 @@ class EventHandler:
         # q/e: rotate Z
         #elif key == 'q': self._rotate[2] -= 10
         #elif key == 'e': self._rotate[2] += 10
+
+        self._rotate[0] = self._rotate[0] % 360
+        self._rotate[1] = self._rotate[1] % 360
+        self._rotate[2] = self._rotate[2] % 360

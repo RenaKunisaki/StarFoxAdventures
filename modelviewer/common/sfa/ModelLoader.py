@@ -6,7 +6,7 @@ import gl
 import numpy as np
 import zlib
 import tempfile
-from . import Model
+from .Model import Model
 from common.gamecube.DlistParser import DlistParser
 
 
@@ -53,12 +53,12 @@ class ModelLoader:
         zlbDataOffs = header[1]
         compLen     = header[2] # minus 0x10
         # other fields unknown
-        log.debug("FACEFEED header: %s", header)
+        #log.debug("FACEFEED header: %s", header)
 
         # XXX the game doesn't actually do these checks.
         # it's entirely possible for there to not be a ZLB header here.
         h2 = struct.unpack('>3sb3I', file.read(4*4))
-        log.debug("ZLB header: %s", h2)
+        #log.debug("ZLB header: %s", h2)
         assert h2[0] == b'ZLB' and h2[1] == 0, \
             "Corrupt ZLB header following FACEFEED"
         assert h2[2] == 1, "Unsupported ZLB version"
@@ -66,8 +66,8 @@ class ModelLoader:
         #assert h2[4] == compLen+0x10, \
         #    "ZLB/FACEFEED headers disagree on compLen"
 
-        log.debug("ZLB data at 0x%X (0x%X; now 0x%X)",
-            zlbDataOffs + offs, zlbDataOffs, offs)
+        #log.debug("ZLB data at 0x%X (0x%X; now 0x%X)",
+        #    zlbDataOffs + offs, zlbDataOffs, offs)
         #file.seek(zlbDataOffs + offs) # no idea
         self._decompress(file, decLen, compLen + 0x10)
 
@@ -93,8 +93,8 @@ class ModelLoader:
         """Decompress ZLB data from file, with given decompressed length
         and compressed length.
         """
-        log.debug("Decompress from offset 0x%X, dec=0x%X comp=0x%X",
-            file.tell(), decLen, compLen)
+        #log.debug("Decompress from offset 0x%X, dec=0x%X comp=0x%X",
+        #    file.tell(), decLen, compLen)
         compData = file.read(compLen)
         assert len(compData) == compLen, "Compressed file is truncated"
         result   = zlib.decompress(compData)
@@ -105,8 +105,8 @@ class ModelLoader:
         self.model = Model(tmp)
 
         # debug
-        with open('decodedmodel.bin', 'wb') as out:
-            out.write(result)
+        #with open('decodedmodel.bin', 'wb') as out:
+        #    out.write(result)
 
 
     def _doRenderInstrs(self):
@@ -114,7 +114,7 @@ class ModelLoader:
         for instr in self.model.renderInstrs:
             op = instr[0]
             if op == 'TEX':
-                log.debug("Set shader %d", instr[1])
+                #log.debug("Set shader %d", instr[1])
                 self.curShader = self.model.shaders[instr[1]]
 
             elif op == 'CALL':
@@ -125,7 +125,7 @@ class ModelLoader:
                 self._vtxFmt['nrm'] = instr[2]
                 self._vtxFmt['col'] = instr[3]
                 self._vtxFmt['tex'] = instr[4]
-                log.debug("Set vtx fmt: %s", self._vtxFmt)
+                #log.debug("Set vtx fmt: %s", self._vtxFmt)
 
             elif op == 'MTX':
                 # not sure why the game does this
@@ -161,10 +161,10 @@ class ModelLoader:
             'T7MIDX': self._vtxFmt['tex'],
         }
 
-        if self.curShader:
-            log.debug("Shader Texture ID is %d, %d", *self.curShader.textureId)
-        else:
-            log.debug("No shader")
+        #if self.curShader:
+        #    log.debug("Shader Texture ID is %d, %d", *self.curShader.textureId)
+        #else:
+        #    log.debug("No shader")
         if self.curShader and self.curShader.textureId[0] >= 0:
             attrs['TEX1'] = self._vtxFmt['tex']
 
@@ -179,7 +179,7 @@ class ModelLoader:
         parser.setVtxFmt(6, **attrs) # XXX always 6?
         parser.setShader(self.curShader)
         parser.setMtxLut(self.mtxLut)
-        log.debug("Parse dlist %d with attrs: %r", idx, attrs)
+        #log.debug("Parse dlist %d with attrs: %r", idx, attrs)
         dlist = parser.parse()
-        log.debug("Dlist %d has %d polys", idx, len(parser.polys))
+        #log.debug("Dlist %d has %d polys", idx, len(parser.polys))
         self.dlists.append(dlist)

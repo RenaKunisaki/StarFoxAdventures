@@ -23,6 +23,7 @@ class Uniform:
         self.name    = name.decode('ascii')
         self.size    = size
         self.type    = type
+        self.isArray = '[' in self.name
 
         # it would make entirely too much sense if the name we got
         # was the actual name.
@@ -59,9 +60,15 @@ class Uniform:
 
     def _makeSetter(self):
         dtype = _types[self._dtype]
-        func = 'glUniform%d%s' % (self._count, dtype['gltype'])
+        gtype = dtype['gltype']
+        if self.isArray: gtype += 'v'
+        func = 'glUniform%d%s' % (self._count, gtype)
         _set = getattr(self.ctx, func)
-        if self._count == 1:
+        if self.isArray:
+            def set(val):
+                log.debug("uniform set %s %s %s", self.id, func, val)
+                _set(self.id, len(val), val)
+        elif self._count == 1:
             def set(val):
                 _set(self.id, val)
         else:
@@ -192,9 +199,17 @@ class UniformMatrix4f(UniformMatrix): # 4x4
     _rows    = 4
     _columns = 4
 
-class UniformSampler2d(Uniform): # XXX
-    _dtype = 'i'
+class UniformSampler1d(Uniform): # XXX
+    _dtype = 'f'
     _count = 1
+
+class UniformSampler2d(Uniform): # XXX
+    _dtype = 'f'
+    _count = 2
+
+class UniformSampler3d(Uniform): # XXX
+    _dtype = 'f'
+    _count = 4
 
 
 _typeMap = {
@@ -219,7 +234,9 @@ _typeMap = {
     gl.GL_FLOAT_MAT4x2: UniformMatrix4x2f,
     gl.GL_FLOAT_MAT4x3: UniformMatrix4x3f,
     gl.GL_FLOAT_MAT4:   UniformMatrix4f,
+    gl.GL_SAMPLER_1D:   UniformSampler1d,
     gl.GL_SAMPLER_2D:   UniformSampler2d,
+    gl.GL_SAMPLER_3D:   UniformSampler3d,
 }
 
 

@@ -34,6 +34,7 @@ class Map:
             typ, length = struct.unpack_from('>hB', data, offs)
             if length == 0: break
             entry = data[offs:offs+(length*4)]
+            #log.debug("Load object %d", len(self.objects))
             obj   = MapObject(self, entry)
             self.objects.append(obj)
             offs += length * 4

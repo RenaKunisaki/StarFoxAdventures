@@ -31,7 +31,7 @@ class Attribute:
             self.ctx.constantName(self.type), self.size)
 
 
-    def bindBuffer(self, buffer, type, size, normalized=False, stride=0, offset=0, convert=False):
+    def bindBuffer(self, buffer, type, size, normalized=False, stride=0, offset=0, convert=False, divisor=None):
         """Bind a Buffer to this attribute.
 
         buffer: Buffer to bind.
@@ -58,3 +58,5 @@ class Attribute:
                         size, type, stride, offsetP)
                 else: self.ctx.glVertexAttribPointer(self.index + i,
                     size, type, normalized, stride, offsetP)
+                if divisor is not None:
+                    self.ctx.glVertexAttribDivisor(self.index+i, divisor)

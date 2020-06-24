@@ -9,6 +9,8 @@ from gl.Util import Matrix
 from .SfaProgram import SfaProgram
 from . import shaders
 
+# This is a cut-down version of the DlistRenderer from the model viewer
+# program.
 
 class DlistShader(SfaProgram):
     separable       = True
@@ -21,19 +23,17 @@ class DlistRenderParams:
     def __init__(self, dlist):
         self.dlist    = dlist
         self.vtxOffs  = 0 # offset into vtx buffer
-        self.polyOffs = 0 # for selecting individual polys
         self.nVtxs    = 0
         self.nPolys   = 0
-        self.enableOutline = True
-        self.enableFill    = True
-        self.polyIdx = -1 # all
 
 
 class DlistRenderer(gl.Pipeline):
     """Subprogram for rendering display lists."""
     MAX_VTXS = 65536
+    MAX_INSTANCES = 2048 # also update dlist.vert if changing this
     vtxBufferFmt = "5f" # (x,y,z,s,t)
-    colorBufferFmt = "2I" # (u8 r,g,b,a, int polyIdx)
+    colorBufferFmt = "4B" # (u8 r,g,b,a)
+    vtxOffsFmt = "3f" # (x,y,z)
 
     def __init__(self, parent):
         self.parent   = parent
@@ -42,7 +42,6 @@ class DlistRenderer(gl.Pipeline):
         self.textures = {}
         self.model    = None
         self.useFaceCulling = True
-        self._highlightFlash = 0
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
@@ -56,18 +55,31 @@ class DlistRenderer(gl.Pipeline):
 
         self._vtxSize   = struct.calcsize(self.vtxBufferFmt)
         self._colorSize = struct.calcsize(self.colorBufferFmt)
+        self._vtxOffsSize = struct.calcsize(self.vtxOffsFmt)
         self.bufVtxs   = self.ctx.Buffer(self._vtxSize * self.MAX_VTXS, True)
         self.bufColors = self.ctx.Buffer(self._colorSize * self.MAX_VTXS, True)
+        self.bufVtxOffs = self.ctx.Buffer(self._vtxOffsSize * self.MAX_INSTANCES, True)
         self._nVtxs   = 0
         self._nPolys  = 0
         self._prevPos = None
+        self._nInstances = 0
+
+
+    def addInstance(self, pos):
+        if self._nInstances >= self.MAX_INSTANCES:
+            log.warning("MAX_INSTANCES reached; discarding %s", pos)
+            return
+        offs = self._nInstances * self._vtxOffsSize
+        data = struct.pack(self.vtxOffsFmt, *pos)
+        self.bufVtxOffs.write(data, offs)
+        self._nInstances += 1
 
 
     def run(self):
-        if self.model is None: return
-        self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
-        if self.useFaceCulling: self.ctx.glEnable(self.ctx.GL_CULL_FACE)
-        else: self.ctx.glDisable(self.ctx.GL_CULL_FACE)
+        #if self.model is None: return
+        #self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
+        #if self.useFaceCulling: self.ctx.glEnable(self.ctx.GL_CULL_FACE)
+        #else: self.ctx.glDisable(self.ctx.GL_CULL_FACE)
         #self.ctx.glEnable(self.ctx.GL_CULL_FACE)
         #self.ctx.glDepthFunc(self.ctx.GL_LESS)
         #self.ctx.glEnable(self.ctx.GL_BLEND)
@@ -77,38 +89,17 @@ class DlistRenderer(gl.Pipeline):
         # nVtxs = # triangles since we use GL_TRIANGLES here,
         # so the division by 3 is done automatically
         with self:
-            self.textures['test'].bind() # XXX
+            #self.textures['test'].bind() # XXX
             self._bindBuffers()
-            for iList, dlist in enumerate(self.lists):
-                self._drawList(dlist)
+            self.shader.vao.renderInstanced(self.ctx.GL_TRIANGLES,
+                offset=0, length=self._nVtxs, count=self._nInstances)
+            #for iList, dlist in enumerate(self.lists):
+            #    self._drawList(dlist)
 
 
-    def _drawList(self, dlist):
-        gShader = self.programs['geometry_shader']
-
-        gShader.setUniforms(
-            enableFill    = False,
-            enableOutline = True,
-            selectedPoly  = -1,
-        )
-        self.shader.vao.render(self.ctx.GL_TRIANGLES,
-            count=dlist.nVtxs, offset=dlist.vtxOffs)
-
-        if dlist.polyIdx < 0: # render all
-            gShader.setUniforms(
-                enableFill    = dlist.enableFill,
-                enableOutline = False, #dlist.enableOutline,
-                selectedPoly  = -1,
-            )
-        else:
-            gShader.setUniforms(
-                enableFill    = True, #self._highlightFlash == 0,
-                enableOutline = False,
-                selectedPoly  = dlist.polyIdx + dlist.polyOffs,
-            )
-        self.shader.vao.render(self.ctx.GL_TRIANGLES,
-            count=dlist.nVtxs, offset=dlist.vtxOffs)
-        self._highlightFlash ^= 1
+    #def _drawList(self, dlist):
+    #    self.shader.vao.render(self.ctx.GL_TRIANGLES,
+    #        count=dlist.nVtxs, offset=dlist.vtxOffs)
 
 
     def setMtxs(self, projection, modelView):
@@ -137,8 +128,8 @@ class DlistRenderer(gl.Pipeline):
         param.nVtxs  = self._nVtxs  - param.vtxOffs
         param.nPolys = self._nPolys - param.polyOffs
 
-        log.debug("List %d generated %d vtxs, %d polys",
-            dlist.listIdx, param.nVtxs, param.nPolys)
+        #log.debug("List %d generated %d vtxs, %d polys",
+        #    dlist.listIdx, param.nVtxs, param.nPolys)
         #self._dumpDlist(dlist)
 
 
@@ -285,15 +276,8 @@ class DlistRenderer(gl.Pipeline):
         s, t = 0, 0
         if texCoord is not None: s, t = texCoord
 
-        r, g, b, a = color
-        color = (
-            (int(r*255) << 24) |
-            (int(g*255) << 16) |
-            (int(b*255) <<  8) |
-            (int(a*255)))
-
         vtxData = struct.pack(self.vtxBufferFmt, x, y, z, s, t)
-        colData = struct.pack(self.colorBufferFmt, color, self._nPolys)
+        colData = struct.pack(self.colorBufferFmt, *color)
         vtxOffs = self._nVtxs * self._vtxSize
         colOffs = self._nVtxs * self._colorSize
         self.bufVtxs  .write(vtxData, vtxOffs)
@@ -321,8 +305,15 @@ class DlistRenderer(gl.Pipeline):
                 stride=2 * gl.Util.SIZEOF_INT,
                 offset=0 * gl.Util.SIZEOF_INT)
 
-            # in int polyIdx
-            shader.attribs['polyIdx'].bindBuffer(
-                self.bufColors, self.ctx.GL_INT, 1,
-                stride=2 * gl.Util.SIZEOF_INT,
-                offset=1 * gl.Util.SIZEOF_INT)
+            # in vec3 offset
+            shader.attribs['offset'].bindBuffer(
+                self.bufVtxOffs, self.ctx.GL_FLOAT, 3,
+                stride=3 * gl.Util.SIZEOF_FLOAT,
+                offset=0 * gl.Util.SIZEOF_FLOAT,
+                divisor=1)
+            # divisor here is key. it tells to only advance by one
+            # per instance, meaning every vertex of the instance will
+            # receive the same value for this attribute.
+            # this lets us do instanced rendering without needing
+            # gl_InstanceID which is cursed and haunted and causes
+            # everything to not work.

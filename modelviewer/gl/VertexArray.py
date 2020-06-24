@@ -49,3 +49,15 @@ class VertexArray:
         self.bind()
         # XXX count=None should mean all... but how do we know how many?
         self.ctx.glDrawArrays(mode, offset, count)
+
+
+    def renderInstanced(self, mode, offset=0, length=0, count=0):
+        """Render multiple instances of vertex array.
+
+        mode: Type of primitives; eg GL_POINTS, GL_LINES...
+        offset: First index offset to render.
+        length: Number of indices to render.
+        count: Number of instances of this range to render.
+        """
+        self.bind()
+        self.ctx.glDrawArraysInstanced(mode, offset, length, count)

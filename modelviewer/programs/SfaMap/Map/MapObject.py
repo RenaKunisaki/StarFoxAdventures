@@ -4,11 +4,10 @@ import math
 import sys
 import os
 import os.path
-from common.sfa.ModelLoader import ModelLoader
-from common.gamecube.DlistParser import DlistParser
 from common.BinaryFile import BinaryFile
 from common.sfa.zlb import Zlb
 from common.math import Vec2s, Vec3s, Vec3f, Quaternion, Mtx43, Mtx44
+from ..ModelRenderer import ModelRenderer
 
 class MapObject:
     """An object on an SFA map."""
@@ -35,16 +34,10 @@ class MapObject:
         try: self.name = parentMap.program.objDefs[self.type]['name']
         except IndexError: self.name = '?'
 
+        self.modelId = 0 # XXX
 
-    def render(self, program):
+
+    def render(self):
         """Render this object."""
-        s = self.map.program.objDefs[self.type]['scale']
-        pointA = (self.pos.x - s, self.pos.y - s, self.pos.z - s)
-        pointB = (self.pos.x + s, self.pos.y + s, self.pos.z + s)
-        T = self.type
-        color  = (
-            (( T       & 3) | (((T >>  6) & 7) << 2)) / 31,
-            (((T >> 2) & 3) | (((T >>  9) & 7) << 2)) / 31,
-            (((T >> 4) & 3) | (((T >> 12) & 7) << 2)) / 31,
-            0.5)
-        program.boxRenderer.addBox(pointA, pointB, color)
+        renderer = self.map.program.modelRenderers[self.modelId]
+        renderer.addInstance((self.pos.x, self.pos.y, self.pos.z))

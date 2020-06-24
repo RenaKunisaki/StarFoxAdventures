@@ -18,11 +18,11 @@ class Model:
         # and a translation. since we don't need the camera matrix,
         # we'll store only the translation vector.
 
-        for name, field in ModelStruct._fields.items():
-            val = getattr(self.header, name)
-            name = name.ljust(20)
-            if type(val) is int: print(name, val, hex(val))
-            else: print(name, val)
+        #for name, field in ModelStruct._fields.items():
+        #    val = getattr(self.header, name)
+        #    name = name.ljust(20)
+        #    if type(val) is int: print(name, val, hex(val))
+        #    else: print(name, val)
         self._readBones()
         self._readVtxGroups()
         self._readVtxs()
@@ -36,8 +36,8 @@ class Model:
 
 
     def _readVtxGroups(self):
-        log.debug("nVtxGroups=%d from 0x%X", self.header.nVtxGroups,
-            self.header.vtxGroups)
+        #log.debug("nVtxGroups=%d from 0x%X", self.header.nVtxGroups,
+        #    self.header.vtxGroups)
         offs = self.header.vtxGroups + self.offset
         self.vtxGroups = ModelVtxGroup.readFromFile(self.file, offs, self.header.nVtxGroups)
 
@@ -59,8 +59,8 @@ class Model:
 
 
     def _readBones(self):
-        log.debug("nBones=%d from 0x%X", self.header.nBones,
-            self.header.bones)
+        #log.debug("nBones=%d from 0x%X", self.header.nBones,
+        #    self.header.bones)
         offs = self.header.bones + self.offset
         self.bones = Bone.readFromFile(self.file, offs, self.header.nBones)
 
@@ -77,8 +77,8 @@ class Model:
             #    tail[0], tail[1], tail[2])
 
     def _readVtxs(self):
-        log.debug("nVtxs=%d from 0x%X", self.header.nVtxs,
-            self.header.vtxs)
+        #log.debug("nVtxs=%d from 0x%X", self.header.nVtxs,
+        #    self.header.vtxs)
         offs = self.header.vtxs + self.offset
         self.vtxs = Vec3s.readFromFile(self.file, offs, self.header.nVtxs)
         for vtx in self.vtxs:
@@ -87,8 +87,8 @@ class Model:
             vtx.z /= 256.0
 
     def _readNormals(self):
-        log.debug("nNormals=%d from 0x%X", self.header.nNormals,
-            self.header.normals)
+        #log.debug("nNormals=%d from 0x%X", self.header.nNormals,
+        #    self.header.normals)
         offs = self.header.normals + self.offset
         self.normals = Vec3s.readFromFile(self.file, offs, self.header.nNormals)
         for vtx in self.normals:
@@ -97,8 +97,8 @@ class Model:
             vtx.z /= 256.0
 
     def _readTexCoords(self):
-        log.debug("nTexCoords=%d from 0x%X", self.header.nTexCoords,
-            self.header.texCoords)
+        #log.debug("nTexCoords=%d from 0x%X", self.header.nTexCoords,
+        #    self.header.texCoords)
         offs = self.header.texCoords + self.offset
         self.texCoords = Vec2s.readFromFile(self.file, offs, self.header.nTexCoords)
         for vtx in self.texCoords:
@@ -106,31 +106,31 @@ class Model:
             vtx.y /= 1024.0
 
     def _readShaders(self):
-        log.debug("nShaders=%d from 0x%X", self.header.nShaders,
-            self.header.shaders)
+        #log.debug("nShaders=%d from 0x%X", self.header.nShaders,
+        #    self.header.shaders)
         offs = self.header.shaders + self.offset
         self.shaders = Shader.readFromFile(self.file, offs, self.header.nShaders)
 
     def _readHitBoxes(self):
-        log.debug("nHitBoxes=%d from 0x%X", self.header.nHitBoxes,
-            self.header.hitboxes)
+        #log.debug("nHitBoxes=%d from 0x%X", self.header.nHitBoxes,
+        #    self.header.hitboxes)
         offs = self.header.hitboxes + self.offset
         self.hitboxes = HitboxStruct.readFromFile(self.file, offs, self.header.nHitBoxes)
 
     def _readRenderInstrs(self):
-        log.debug("nRenderInstrs=%d from 0x%X", self.header.nRenderInstrs,
-            self.header.renderInstrs)
+        #log.debug("nRenderInstrs=%d from 0x%X", self.header.nRenderInstrs,
+        #    self.header.renderInstrs)
         self.renderInstrs = RenderInstrParser(self).parse()
 
     def _readDlistPtrs(self):
-        log.debug("nDlists=%d from 0x%X", self.header.nDlists,
-            self.header.dlists)
+        #log.debug("nDlists=%d from 0x%X", self.header.nDlists,
+        #    self.header.dlists)
         offs = self.header.dlists + self.offset
         self.dlistPtrs = DisplayListPtr.readFromFile(self.file, offs, self.header.nDlists)
 
     def _readTextures(self):
-        log.debug("nTextures=%d from 0x%X", self.header.nTextures,
-            self.header.textures)
+        #log.debug("nTextures=%d from 0x%X", self.header.nTextures,
+        #    self.header.textures)
         self.file.seek(self.header.textures + self.offset)
         data = self.file.read(4*self.header.nTextures)
         self.textureIds = struct.unpack('>%dI' % self.header.nTextures, data)
