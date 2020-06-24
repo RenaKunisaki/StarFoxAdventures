@@ -142,18 +142,13 @@ class SfaModelViewer(SfaProgram, EventHandler):
 
     def run(self):
         """Render the scene."""
-        #self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
-        #self.ctx.glDepthFunc(self.ctx.GL_LESS)
-        #self.ctx.glDepthMask(self.ctx.GL_TRUE)
-        #self.ctx.glDepthRange(1,0)
-
         log.dprint("Frame %d", self.frame)
         self._setMtxs()
         self.dlistRenderer.run()
         self.boneRenderer.run()
         if (self.frame & 1) == 0:
-            self.boxRenderer.run()
-        #self.textureRenderer.run()
+            self.boxRenderer.run() # highlight boxes
+        #self.textureRenderer.run() # draw texture on screen
         self.menu.render()
 
         lines = (
@@ -179,6 +174,7 @@ class SfaModelViewer(SfaProgram, EventHandler):
         mp=gl.Util.Matrix.perspective(60, a, 0.1, 10000)
         mv = (mx @ my @ mz) # modelview = all rotations
         mp = mt @ mp # projection = perspective and translation
+        self.mtxProjection, self.mtxModelView = mp, mv
 
         # debug print
         #log.dprint("w=%d h=%d f=%d a=%f", width, height, self.frame,
@@ -188,17 +184,8 @@ class SfaModelViewer(SfaProgram, EventHandler):
         log.dprint("t=%+2.1f, %+2.1f, %+2.1f",
             self._translate[0], self._translate[1], self._translate[2])
         #log.dprint("B=%s", self._mouseButtons)
-        #log.dprint("\nPROJ\n" +
-        #    "%+7.2f %+7.2f %+7.2f %+7.2f\n"
-        #    "%+7.2f %+7.2f %+7.2f %+7.2f\n"
-        #    "%+7.2f %+7.2f %+7.2f %+7.2f\n"
-        #    "%+7.2f %+7.2f %+7.2f %+7.2f", *mp.flatten())
-        #log.dprint("MV\n" +
-        #    "%+7.2f %+7.2f %+7.2f %+7.2f\n"
-        #    "%+7.2f %+7.2f %+7.2f %+7.2f\n"
-        #    "%+7.2f %+7.2f %+7.2f %+7.2f\n"
-        #    "%+7.2f %+7.2f %+7.2f %+7.2f\n", *mv.flatten())
-        #"P=\n%sM=\n%s", p, mt @ (mx @ my @ mz))
+        #self._printMtxs()
+
 
         #for i, bone in enumerate(self.model.bones):
         #    head, tail = self._calcBonePos(self.model, bone)
@@ -212,3 +199,16 @@ class SfaModelViewer(SfaProgram, EventHandler):
             gl.Util.Matrix.scale(3/width, 3/height) @
             gl.Util.Matrix.translate(-0.9, -0.9, 0),
             mv)
+
+    def _printMtxs(self):
+        log.dprint("\nPROJ\n" +
+            "%+7.2f %+7.2f %+7.2f %+7.2f\n"
+            "%+7.2f %+7.2f %+7.2f %+7.2f\n"
+            "%+7.2f %+7.2f %+7.2f %+7.2f\n"
+            "%+7.2f %+7.2f %+7.2f %+7.2f", *self.mtxProjection.flatten())
+        log.dprint("MV\n" +
+            "%+7.2f %+7.2f %+7.2f %+7.2f\n"
+            "%+7.2f %+7.2f %+7.2f %+7.2f\n"
+            "%+7.2f %+7.2f %+7.2f %+7.2f\n"
+            "%+7.2f %+7.2f %+7.2f %+7.2f\n", *self.mtxModelView.flatten())
+        #"P=\n%sM=\n%s", p, mt @ (mx @ my @ mz))
