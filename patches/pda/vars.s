@@ -116,6 +116,7 @@ fmt_objListEntry:  .string "%04X %08X "
 fmt_objListCoords: .string "%08X  %d, %d, %d" # address, x, y, z
 fmt_objListOrigPos:.string "%08X  %d, %d, %d" # ID, x, y, z
 fmt_objListNoSeq:  .string "NO SEQ"
+fmt_objListFile:   .string "OBJDEF %08X"
 fmt_objListFlags:  .string "FLAG %04X %02X %02X"
 fmt_objListMap:    .string "SLOT %02X MAP %02X %02X"
 fmt_objListSeq:    .string "SEQ %08X %04X"

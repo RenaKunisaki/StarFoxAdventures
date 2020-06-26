@@ -356,6 +356,12 @@ objMenu_drawCurObject:
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
+    # ObjectFileStruct
+    addi    r4, r14, fmt_objListFile - mainLoop
+    lwz     r5, 0x50(r18) # files
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
+
     # flags
     addi    r4, r14, fmt_objListFlags - mainLoop
     lhz     r5, 0x06(r18) # flags
@@ -425,6 +431,38 @@ objMenu_drawCurObject:
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
     li      r6,  OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - LINE_HEIGHT # Y pos
     bl      menuDrawStr
+
+    # this doesn't work. we need to move the object in front of the
+    # camera, not to it. but we need to figure out the angle and distance.
+    # or somehow change the modelview matrix.
+    # maybe gxSetProjection(&hudMatrix,1);
+.if 0
+    # back up object coords
+    lwz     r3, 0x0C(r18)
+    stw     r3, SP_STR_BUF(r1)
+    lwz     r3, 0x10(r18)
+    stw     r3, (SP_STR_BUF+4)(r1)
+    lwz     r3, 0x14(r18)
+    stw     r3, (SP_STR_BUF+8)(r1)
+
+    lwz     r3, 0x0C(r21) # camera coords
+    stw     r3, 0x0C(r18)
+    lwz     r3, 0x10(r21)
+    stw     r3, 0x10(r18)
+    lwz     r3, 0x14(r21)
+    stw     r3, 0x14(r18)
+
+    mr      r3, r18
+    CALL    0x80041ac4 # ObjRenderModel
+
+    lwz     r3, SP_STR_BUF(r1)
+    stw     r3, 0x0C(r18)
+    lwz     r3, (SP_STR_BUF+4)(r1)
+    stw     r3, 0x10(r18)
+    lwz     r3, (SP_STR_BUF+8)(r1)
+    stw     r3, 0x14(r18)
+.endif
+
     b       menuEndSub
 
 
