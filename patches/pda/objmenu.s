@@ -419,11 +419,48 @@ objMenu_drawCurObject:
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
-    # line 7: state
+    # state
     addi    r4, r14, fmt_objListState - mainLoop
     lwz     r5, 0xB8(r18) # state
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
+
+    # parent, children
+    li      r15, 0
+.objMenu_drawCurObject_nextChild:
+    addi    r3,  r14, objMenuNameBuf - mainLoop
+    li      r4,  0
+    stb     r4,  0(r3)
+
+    slwi    r6,  r15, 2
+    add     r6,  r6,  r18
+    lwz     r5,  0xC4(r6) # child
+    cmpwi   r5,  0
+    beq     .objMenu_drawCurObject_noChild
+    lwz     r6,  0x50(r5) # file
+    cmpwi   r6,  0
+    beq     .objMenu_drawCurObject_noChild
+    addi    r4,  r6, 0x91 # name
+    addi    r3,  r14, objMenuNameBuf - mainLoop
+    li      r5,  11
+    CALL    strncpy
+.objMenu_drawCurObject_noChild:
+    slwi    r6,  r15, 2
+    add     r6,  r6,  r18
+    lwz     r5,  0xC4(r6) # child
+    addi    r6,  r14, objMenuNameBuf - mainLoop # name
+    li      r4,  0
+    stb     r4,  11(r6) # strncpy doesn't do this if src is long
+    addi    r4,  r14, fmt_objListParent - mainLoop
+    cmpwi   r15, 0
+    beq     .objMenu_drawCurObject_printChild
+    addi    r4,  r14, fmt_objListChild - mainLoop
+.objMenu_drawCurObject_printChild:
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
+    addi    r15, r15, 1
+    cmpwi   r15, 4
+    blt     .objMenu_drawCurObject_nextChild
 
     # instructions
     addi    r3,  r14, fmt_objListInstrs - mainLoop
@@ -468,4 +505,5 @@ objMenu_drawCurObject:
 
 objMenuIdx: .short 0 # which object
 objMenuState: .byte 0 # 0=list 1=view
+objMenuNameBuf: .byte 0,0,0,0, 0,0,0,0, 0,0,0,0
 .byte 0 # padding

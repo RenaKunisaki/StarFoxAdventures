@@ -123,6 +123,8 @@ fmt_objListSeq:    .string "SEQ %08X %04X"
 fmt_objListEvent:  .string "EVENT %08X"
 fmt_objListModel:  .string "MODEL %08X(%d) %04X"
 fmt_objListState:  .string "STATE %08X"
+fmt_objListParent: .string "PARENT %08X %s"
+fmt_objListChild:  .string "CHILD %08X %s"
 fmt_objListInstrs: .string "Z:Focus X:Delete Y:GoTo S:Player"
 s_noObjs:          .string "No objects"
 
