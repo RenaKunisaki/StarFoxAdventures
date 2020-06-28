@@ -1,6 +1,6 @@
 import struct
-from binaryfile import BinaryFile
-from isofile import IsoFile
+from .binaryfile import BinaryFile
+from .isofile import IsoFile
 
 class Appldr(IsoFile):
     """apploader.img file"""

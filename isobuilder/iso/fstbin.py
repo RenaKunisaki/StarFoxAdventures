@@ -1,6 +1,6 @@
 import struct
-from binaryfile import BinaryFile
-from isofile import IsoFile
+from .binaryfile import BinaryFile
+from .isofile import IsoFile
 
 class FstBin(IsoFile):
     """fst.bin file; contains ISO directory structure."""

@@ -5,7 +5,7 @@ import sys
 import inspect
 import hashlib
 import tempfile
-from gciso import GCISO
+from iso.gciso import GCISO
 from apptest import AppTest
 
 

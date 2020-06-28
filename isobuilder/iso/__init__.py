@@ -1,5 +1,5 @@
 import struct
-from binaryfile import BinaryFile
+from .binaryfile import BinaryFile
 
 class ISO:
     """Represents ISO file."""

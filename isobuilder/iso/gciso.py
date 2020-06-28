@@ -1,14 +1,14 @@
 import struct
 import os
 import os.path
-from binaryfile import BinaryFile
-from iso        import ISO
-from isofile    import IsoFile
-from dol        import DOL
-from appldr     import Appldr
-from bi2bin     import Bi2Bin
-from bootbin    import BootBin
-from fstbin     import FstBin
+from .binaryfile import BinaryFile
+from .           import ISO
+from .isofile    import IsoFile
+from .dol        import DOL
+from .appldr     import Appldr
+from .bi2bin     import Bi2Bin
+from .bootbin    import BootBin
+from .fstbin     import FstBin
 
 
 class GCISO(ISO):

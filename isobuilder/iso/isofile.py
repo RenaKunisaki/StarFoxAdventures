@@ -1,5 +1,5 @@
 import os
-from binaryfile import BinaryFile
+from .binaryfile import BinaryFile
 
 class IsoFile:
     """A file in an ISO."""

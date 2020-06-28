@@ -3,7 +3,7 @@ import os.path
 import sys
 import inspect
 import tempfile
-from gciso import GCISO
+from iso.gciso import GCISO
 
 class AppTest:
     """Tests for this app."""
@@ -131,8 +131,9 @@ class AppTest:
                         break
                 print("ERROR", origPath)
                 f = lambda d: ' '.join(map(lambda b: '%02X' % b, d))
-                print("Got:     ", f(newData[0:16]))
-                print("Expected:", f(origData[0:16]))
+                s = max(dOffs-8, 0)
+                print("Got:      ..." + f(newData[s:s+16]) + "...")
+                print("Expected: ..." + f(origData[s:s+16]) + "...")
                 raise RuntimeError("File extracted incorrectly: %s (at 0x%X: 0x%02X should be 0x%02X)" % (
                     newPath,
                     offs + dOffs, newData[dOffs], origData[dOffs]

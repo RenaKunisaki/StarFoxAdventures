@@ -1,6 +1,6 @@
 import struct
-from binaryfile import BinaryFile
-from isofile import IsoFile
+from .binaryfile import BinaryFile
+from .isofile import IsoFile
 
 DVD_MAGIC = 0xC2339F3D
 BOOT_BIN_SIZE = 0x440

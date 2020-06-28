@@ -1,6 +1,6 @@
 import struct
-from binaryfile import BinaryFile
-from isofile import IsoFile
+from .binaryfile import BinaryFile
+from .isofile import IsoFile
 
 GC_MEM_SIZE = 0x01800000
 BI2_BIN_SIZE = 0x2000
