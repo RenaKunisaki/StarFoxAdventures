@@ -66,7 +66,7 @@ class App:
         """
         iso = GCISO().readFile(isoPath)
         filePath = os.path.join(files, 'files')
-        self._doReplaceIsoFiles(iso, filePath, filePath)
+        self._doReplaceIsoFiles(iso, '', filePath)
         iso.readSystemFilesFromDir(os.path.join(files, 'sys'))
         # XXX do we need some way to delete files?
         iso.writeToFile(destPath)
@@ -82,6 +82,7 @@ class App:
             if isoPath.startswith(basePath):
                 isoPath = isoPath[len(basePath):] # keep leading slash
 
+            #print("add or replace file", path, isoPath)
             if os.path.isdir(path):
                 iso.createDir(isoPath)
                 self._doReplaceIsoFiles(iso, basePath, path, _depth=_depth+1)
