@@ -17,6 +17,7 @@
 .set gameTextShowStr,0x80015dc8 # char*, int box, int x, int y
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
 .set getButtonsJustPressed,0x80014e70 # u16 (int controller)
+.set gxBeginVtxs,0x8025889c #void(GXOpcode opcode,uint vat,uint nVtxs)
 .set iCacheFlush,0x80241ae0 #(dest, size) -> dest
 .set isCheatActive,0x800e7e94
 .set isCheatUnlocked,0x800e7efc
