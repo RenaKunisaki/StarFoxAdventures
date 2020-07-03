@@ -40,12 +40,13 @@ patchList:
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
-    .set STACK_SIZE,  0x30 # how much to reserve
+    .set STACK_SIZE,  0x40 # how much to reserve
     .set SP_LR_SAVE,  0x10
     .set SP_R14_SAVE, 0x14
     .set SP_R15_SAVE, 0x18
     .set SP_R16_SAVE, 0x1C
-    .set SP_FLOAT_TMP,0x20 # temporary storage for float conversion (8 byt
+    .set SP_FLOAT_TMP,0x20 # temporary storage for float conversion (8 bytes)
+    .set SP_OBJ_NAME, 0x28 # object name (12 bytes)
 
 entry: # called as soon as our patch is loaded.
     stwu  r1, -STACK_SIZE(r1) # get some stack space
@@ -187,24 +188,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpwi r16, 0
     beq   .noPlayer
 
-    # display nearby object
-    # this doesn't work because this function doesn't
-    # actually give us the nearest object, it does something
-    # with specific objects.
-    # if we were to iterate all objects, we'd need to filter for things
-    # like the staff, shield, backpack...
-    #li    r3, 0 # idx
-    #ori   r4, r16, 0 # obj
-    #li    r5, 0 # outDistance
-    #CALL  playerGetNearestObject
-    #ori   r10, r3, 0 # param for %p
-    #li    r17, 0
-    #cmpwi r3, 0
-    #beq   .noObject
-    #lwz   r3, 0x50(r3) # get file ptr
-    #addi  r17, r3, 0x91 # get name
-#.noObject:
-
     # display player coords
     # debugPrintf doesn't support eg '%+7.2f' so we'll just convert
     # to int to get rid of excess digits
@@ -242,22 +225,23 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADWL2 r5, mapCoords+12, r9
     LOADBL2 r6, curMapLayer,  r9
     extsb   r6, r6
+    LOADWL2 r7, curMapId,     r9
     #ori     r8, r10, 0 # r9 = nearest object
     #ori     r9, r17, 0 # r10 = name
     CALL debugPrintf
 
     # display player state
-    addi r3, r14, (.fmt_playerState - mainLoop)@l
-    lwz  r9, 0x00B8(r16) # get animState
-    #lfs  f1, 0x0098(r16) # get anim timer
-    #lfs  f2, 0x0814(r9)  # get anim val
-    lbz  r4, 0x0275(r9)  # get state ID
-    lwz  r5, 0x03F0(r9)  # get flags
-    lhz  r6, 0x00A0(r16) # get anim ID
-    # magic required to make floats print correctly
-    # no idea what this does
-    creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
-    CALL debugPrintf
+    #addi r3, r14, (.fmt_playerState - mainLoop)@l
+    #lwz  r9, 0x00B8(r16) # get animState
+    ##lfs  f1, 0x0098(r16) # get anim timer
+    ##lfs  f2, 0x0814(r9)  # get anim val
+    #lbz  r4, 0x0275(r9)  # get state ID
+    #lwz  r5, 0x03F0(r9)  # get flags
+    #lhz  r6, 0x00A0(r16) # get anim ID
+    ## magic required to make floats print correctly
+    ## no idea what this does
+    #creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
+    #CALL debugPrintf
 
 
 .noPlayer:
@@ -298,6 +282,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL  debugPrintf
 
     # display GameText info
+    # XXX why is this sometimes 0 when there is a text?
     LOADHA r4, curGameText
     cmpwi  r4, 0
     blt    .noText
@@ -320,6 +305,33 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL    debugPrintf
 
 .noSeq:
+
+    # display nearby object
+    # or really, the current "target" object (that the heart, A icon,
+    # etc is over)
+    LOADW r17, pCamera
+    cmpwi r17, 0
+    beq   .noObject
+
+    lwz   r4, 0x124(r17)
+    cmpwi r4, 0
+    beq   .noObject
+    lwz   r5,  0x50(r4) # get file ptr
+    cmpwi r5,  0
+    beq   .noObject
+
+    # manually copy the name since it's not terminated
+    addi    r3, r1, SP_OBJ_NAME
+    addi    r4, r5, 0x91 # name
+    li      r5, 11
+    CALL    strncpy
+    li      r4,  0
+    stb     r4,  (SP_OBJ_NAME+12)(r1) # strncpy doesn't do this if src is long
+    lwz     r4,  0x124(r17) # obj ptr
+    addi    r5,  r1, SP_OBJ_NAME
+    addi    r3,  r14, (.fmt_nearObj - mainLoop)@l
+    CALL    debugPrintf
+.noObject:
 .end:
     lwz  r14, SP_R14_SAVE(r1)
     lwz  r15, SP_R15_SAVE(r1)
@@ -351,8 +363,9 @@ mainLoop: # called from main loop. r3 = mainLoop
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
 .fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
-.fmt_mapCoords:    .string "M:\x84%3d %3d %2d\x83 "
-.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
+.fmt_mapCoords:    .string "M:\x84%3d %3d L%d %02X\x83\n"
+#.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
+.fmt_nearObj:      .string "O:\x84%08X %s\x83\n"
 .fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
 .fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
