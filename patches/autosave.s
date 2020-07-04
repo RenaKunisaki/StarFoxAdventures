@@ -1,9 +1,6 @@
 # autosave patch:
 # 1) saves the game when moving between maps
 # 2) removes "saving" message so that isn't so bothersome
-# NOTE: if you swap memory cards (or load a save state) this patch
-# will not show the "not same card" message but also will not save
-# and the game will remove the save option from the pause menu.
 .text
 .include "common.s"
 .include "globals.s"
@@ -70,10 +67,14 @@ onMapLoad:
     bl      .getpc
     .getpc: mflr r14
 
+
     LOADWH  r3, curSaveSlot
     LOADBL2 r4, curSaveSlot, r3
     cmpwi   r4, 0x80
     bge     .end # no save slot
+    LOADBL2 r4, 0x803db424, r3 # save status
+    cmpwi   r4, 1
+    bne     .end # cannot save
 
     # set text
     li    r4, 60
@@ -83,7 +84,7 @@ onMapLoad:
     # which is one of the most likely times to run out of memory
     # and crash, so it would be nice to save before that.
     # the message technically shows up after, but oh well.
-    CALL    0x800e86d0 # save
+    CALL    saveGame_save
     # XXX check for error
 .end:
     lwz     r5, SP_LR_SAVE(r1)

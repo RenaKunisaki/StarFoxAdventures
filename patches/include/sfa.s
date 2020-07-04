@@ -37,6 +37,7 @@
 .set objFree,0x8002cbc4 #ObjInstance*
 .set OSReport,0x8007d6dc
 .set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
+.set saveGame_save,0x800e86d0
 .set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
