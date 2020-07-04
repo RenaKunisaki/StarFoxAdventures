@@ -17,7 +17,7 @@ patchList:
     #PATCH_HWORD 0x8031b380, 0x0096 # fire spellstone 2
     #PATCH_HWORD 0x8031b390, 0x0096 # water spellstone 2
     PATCH_HWORD 0x8031b3e0, 0x0096 # fuel cells
-    PATCH_HWORD 0x8031b440, 0x0096 # give scarabs
+    #PATCH_HWORD 0x8031b440, 0x0096 # give scarabs
     # same applies here as for stones
     #PATCH_HWORD 0x8031b450, 0x0096 # cheat token 0
     #PATCH_HWORD 0x8031b460, 0x0096 # cheat token 3

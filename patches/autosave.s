@@ -12,8 +12,13 @@ patchList:
     PATCH_BL 0x8007db50, onSave
     PATCH_MAIN_LOOP mainLoop
     # disable message
-    #PATCH_WORD 0x8007db50, 0x60000000
-    #PATCH_WORD 0x8007db94, 0x60000000
+    #PATCH_WORD 0x8007db50, 0x60000000 # first second
+    #PATCH_WORD 0x8007db94, 0x60000000 # following seconds
+    # decided to leave the latter on the off chance something funny
+    # happens with the memory card and saving takes a while.
+    # and instead of disabling the former we hook it to show a message
+    # without blocking the game.
+
     # disable "not same memory card you last saved with" check,
     # since save states trigger that.
     # XXX look into how this check works and find a less invasive
