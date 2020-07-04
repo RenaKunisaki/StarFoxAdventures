@@ -6,11 +6,13 @@
 # and the game will remove the save option from the pause menu.
 .text
 .include "common.s"
+.include "globals.s"
 
 # define patches
 patchList:
     PATCH_ID "AutoSav" # must be 7 chars
-    PATCH_BL 0x80042ec4, main
+    PATCH_BL 0x80042ec4, onMapLoad
+    PATCH_MAIN_LOOP mainLoop
     # disable message
     PATCH_WORD 0x8007db50, 0x60000000
     PATCH_WORD 0x8007db94, 0x60000000
@@ -25,7 +27,35 @@ entry: # called as soon as our patch is loaded.
     # nothing to do
     blr
 
-main:
+mainLoop: # called from main loop. r3 = mainLoop
+    mr      r14, r3
+    mflr    r16
+    LOADW   r3, PATCH_STATE_PTR
+    lbz     r4, SAVE_TEXT_COUNTDOWN(r3)
+    cmpwi   r4, 0
+    beq     .noDrawSaveText
+
+    subi    r4, r4, 1
+    stb     r4, SAVE_TEXT_COUNTDOWN(r3)
+
+    # draw "Saving" text for a while, so it can be seen.
+    li      r3, 0xFF
+    li      r4, 0xFF
+    li      r5, 0xFF
+    li      r6, 0xFF
+    CALL    gameTextSetColor
+
+    addi    r3, r14, s_saving - mainLoop
+    li      r4, 0 # box
+    li      r5, 0 # x
+    li      r6, 0 # y
+    CALL    gameTextShowStr
+
+.noDrawSaveText:
+    mtlr    r16
+    blr
+
+onMapLoad:
     # called when about to load another map.
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     mflr    r5
@@ -39,17 +69,16 @@ main:
     LOADBL2 r4, curSaveSlot, r3
     cmpwi   r4, 0x80
     bge     .end # no save slot
-    li      r3, 0xFF
-    li      r4, 0xFF
-    li      r5, 0xFF
-    li      r6, 0xFF
-    CALL    gameTextSetColor
 
-    addi    r3, r14, s_saving - .getpc
-    li      r4, 0 # box
-    li      r5, 0 # x
-    li      r6, 0 # y
-    CALL    gameTextShowStr
+    # set text
+    LOADW r3, PATCH_STATE_PTR
+    li    r4, 60
+    stb   r4, SAVE_TEXT_COUNTDOWN(r3)
+
+    # we'll save immediately because we're about to load a new map,
+    # which is one of the most likely times to run out of memory
+    # and crash, so it would be nice to save before that.
+    # the message technically shows up after, but oh well.
     CALL    0x800e86d0 # save
     # XXX check for error
 .end:
