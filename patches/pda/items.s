@@ -78,6 +78,7 @@ itemDrawFuncs_page3: # Debug
     .int drawItem_heap         - mainLoop
     .int drawItem_textTest     - mainLoop
     .int drawItem_frameAdvance - mainLoop
+    #.int drawItem_Save         - mainLoop
     .int 0
 
 itemAdjustFuncs_page3:
@@ -92,3 +93,4 @@ itemAdjustFuncs_page3:
     .int adjItem_heap         - mainLoop
     .int adjItem_textTest     - mainLoop
     .int adjItem_frameAdvance - mainLoop
+    #.int adjItem_Save         - mainLoop

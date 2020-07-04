@@ -216,23 +216,47 @@ warpMenu_doInput:
     b       menuEndSub
 
 .warpMenu_doWarp:
-    #CALL    0x80056f7c # unloadMap
-    lbz     r3, (warpMenuIdx - mainLoop)(r14)
-    li      r4, 0
-    CALL    warpToMap
-    b       .warpMenu_close
+    CALL    0x80056f7c # unloadMap
+    #lbz     r3, (warpMenuIdx - mainLoop)(r14)
 
-.warpMenu_doJump:
-    # this doesn't really work
     lbz     r17, (warpMenuIdx - mainLoop)(r14)
     slwi    r9,  r17, 4
     add     r9,  r9, r15 # r4 = warp entry*
     lfs     f1,  0x00(r9) # X
     lfs     f2,  0x04(r9) # Y
     lfs     f3,  0x08(r9) # Z
-    LOADW   r16, pPlayer
-    stfs    f1,  0x0C(r16)
-    stfs    f2,  0x10(r16)
-    stfs    f3,  0x14(r16)
+    lha     r3,  0x0C(r9) # layer
+    #CALL    0x80020770
+    # this actually prevents the warp...
+    # I suspect the reason maps aren't initialized properly when we warp
+    # into them is just that the game state isn't right. things are set
+    # up to appear at certain points in the game and we're not at that
+    # point, so they don't show up.
+
+    #LOADWH  r8, 0x803dcaf8
+    #LOADWL2 r3, 0x803dcaf8, r8
+    #CALL    0x80042f78 # loadMapAndParent
+
+    lbz     r3, (warpMenuIdx - mainLoop)(r14)
+    li      r4, 0
+    CALL    warpToMap
+    b       .warpMenu_close
+
+.warpMenu_doJump:
+    lbz     r3, (warpMenuIdx - mainLoop)(r14)
+    li      r4, 1 # this param might mean "don't unload current map"?
+    CALL    warpToMap
+
+    # this doesn't really work
+    #lbz     r17, (warpMenuIdx - mainLoop)(r14)
+    #slwi    r9,  r17, 4
+    #add     r9,  r9, r15 # r4 = warp entry*
+    #lfs     f1,  0x00(r9) # X
+    #lfs     f2,  0x04(r9) # Y
+    #lfs     f3,  0x08(r9) # Z
+    #LOADW   r16, pPlayer
+    #stfs    f1,  0x0C(r16)
+    #stfs    f2,  0x10(r16)
+    #stfs    f3,  0x14(r16)
     #CALL    0x80020748 # mapReload
     b       .warpMenu_close

@@ -48,21 +48,22 @@ adjItem_trickyDebug: # r3 = amount to adjust by
 #######################################################################
 
 drawItem_freeMove:
-    addi  r4, r14, (s_FreeMove - mainLoop)
-    addi  r5, r14, (s_off - mainLoop)
-    LOADB r6, ENABLE_FREE_MOVE
-    cmpwi r6, 0
-    beq   .drawFreeMove_off
-    addi  r5, r14, (s_on - mainLoop)
+    addi    r4, r14, (s_FreeMove - mainLoop)
+    addi    r5, r14, (s_off - mainLoop)
+    LOADW   r6, PATCH_STATE_PTR
+    lbz     r6, ENABLE_FREE_MOVE(r6)
+    cmpwi   r6, 0
+    beq     .drawFreeMove_off
+    addi    r5, r14, (s_on - mainLoop)
 
 .drawFreeMove_off:
     blr
 
 adjItem_freeMove: # r3 = amount to adjust by
-    LOADWH  r3, ENABLE_FREE_MOVE
-    LOADBL2 r4, ENABLE_FREE_MOVE, r3
+    LOADW   r3, PATCH_STATE_PTR
+    lbz     r4, ENABLE_FREE_MOVE(r3)
     xori    r4, r4, 1
-    STOREB  r4, ENABLE_FREE_MOVE, r3
+    stb     r4, ENABLE_FREE_MOVE(r3)
     blr
 
 #######################################################################
@@ -163,3 +164,18 @@ adjItem_frameAdvance: # r3 = amount to adjust by (0=A button)
     LOADWH r5, timeStop
     STOREB r4, timeStop, r5
     blr
+
+#######################################################################
+
+# temporary item
+#drawItem_Save:
+#    addi  r4, r14, (s_Save - mainLoop)
+#    blr
+#
+#adjItem_Save: # r3 = amount to adjust by (0=A button)
+#    JUMP 0x800e86d0, r0
+    # this works but pops up the saving message
+    # looks like there's not much way to bypass that except
+    # to patch the save function
+    # NOPs at 8007db50, 8007db94 seem to be safe
+    # but when should we do the save? on loading a map?

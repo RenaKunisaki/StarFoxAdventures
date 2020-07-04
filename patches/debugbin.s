@@ -56,6 +56,7 @@
 
 .text
 .include "common.s"
+.include "globals.s"
 #81681f8c
 
 constants:
@@ -87,6 +88,10 @@ start:
     addi r3, r14, (.debugMsg - start)@l
     CALL OSReport
 
+    # set our state pointer
+    addi   r3, r14, patchStateVars - start
+    LOADWH r4, PATCH_STATE_PTR
+    STOREW r3, PATCH_STATE_PTR, r4
 
     # install main loop hook.
     addi   r5, r14, (mainLoop - start)@l # absolute destination address
@@ -307,6 +312,11 @@ mainLoop: # called from main loop
 mainLoopHooks:
     .rept MAX_MAIN_LOOP_HOOKS
     .int 0
+    .endr
+
+patchStateVars:
+    .rept PATCH_STATE_SIZE
+    .byte 0
     .endr
 
 .debugMsg:

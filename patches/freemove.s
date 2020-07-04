@@ -22,10 +22,6 @@ constants:
 
 
 entry: # called as soon as our patch is loaded.
-    # ensure this is off by default.
-    li      r3, 0
-    LOADWH  r4, ENABLE_FREE_MOVE
-    STOREB  r3, ENABLE_FREE_MOVE, r4
     blr
 
 
@@ -36,7 +32,8 @@ mainLoop: # called from main loop. r3 = mainLoop
     mr    r14, r3
 
     # is free move enabled?
-    LOADB r4, ENABLE_FREE_MOVE
+    LOADW r3, PATCH_STATE_PTR
+    lbz   r4, ENABLE_FREE_MOVE(r3)
     cmpwi r4, 0
     beq   .off
 
@@ -92,6 +89,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     # f7 = player sideways Z movement scale
 
     # do the move
+    # XXX force camera behind player
     LOADWH  r9, controllerStates
     LOADBL2 r3, controllerStates+2, r9 # stick X
     LOADBL2 r4, controllerStates+3, r9 # stick Y
@@ -102,6 +100,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     neg     r5, r5
     add     r5, r5, r6 # r5 = R - L
 
+    # press A to end free move
+    LOADHL2 r6, controllerStates, r9 # buttons
+    andi.   r6, r6, PAD_BUTTON_A
+    beq     .notAheld
+    LOADW   r3, PATCH_STATE_PTR
+    li      r4, 0
+    stb     r4, ENABLE_FREE_MOVE(r3)
+    b       .end
+.notAheld:
     # convert stick position to floats
     # adapted from http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/PPCNumerics/PPCNumerics-157.html
     lfd     f9, (.floatMagic - mainLoop)(r14) # load constant into f9

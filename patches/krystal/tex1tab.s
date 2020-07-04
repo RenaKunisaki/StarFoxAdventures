@@ -90,8 +90,8 @@ tex1TabPatch:
         mflr r30
     mr      r14, r30
 
-    LOADWH  r4, CUR_CHAR_ADDR
-    LOADBL2 r3, CUR_CHAR_ADDR, r4
+    LOADW   r4, PATCH_STATE_PTR
+    lbz     r3, CUR_CHAR_ADDR(r4)
     srwi    r3, r3, 7
 
 .if DEBUG

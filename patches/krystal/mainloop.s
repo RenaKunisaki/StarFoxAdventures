@@ -7,8 +7,8 @@ mainLoopPatch:
     mflr    r15
     stw     r15, SP_LR_SAVE(r1)
     mr      r10, r3
-    LOADWH  r16, CUR_CHAR_ADDR
-    LOADBL2 r15, CUR_CHAR_ADDR, r16
+    LOADW   r16, PATCH_STATE_PTR
+    lbz     r15, CUR_CHAR_ADDR(r16)
     andi.   r15, r15, 0x7F
 
     LOADW r3, pPlayer
@@ -47,9 +47,9 @@ settingsPatch:
     bne    .settingsPatch_disabled
     li     r3, 0x80
 .settingsPatch_disabled:
-    LOADWH r4, CUR_CHAR_ADDR
-    STOREB r3, CUR_CHAR_ADDR, r4
-    JUMP   0x8011C4BC, r0
+    LOADW   r16, PATCH_STATE_PTR
+    stb     r3, CUR_CHAR_ADDR(r16)
+    JUMP    0x8011C4BC, r0
 
 
 titlePatch:

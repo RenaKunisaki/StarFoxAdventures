@@ -109,6 +109,7 @@ s_SaveGame:   .string "SaveGame Data"
 s_Heap:       .string "Heap"
 s_TextTest:   .string "Show Text: %04X"
 s_frameAdv:   .string "Advance Frame"
+#s_Save:       .string "Save"
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "

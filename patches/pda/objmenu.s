@@ -469,35 +469,66 @@ objMenu_drawCurObject:
     li      r6,  OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - LINE_HEIGHT # Y pos
     bl      menuDrawStr
 
-    # this doesn't work. we need to move the object in front of the
-    # camera, not to it. but we need to figure out the angle and distance.
-    # or somehow change the modelview matrix.
-    # maybe gxSetProjection(&hudMatrix,1);
+    # this still needs work.
+    # - it renders in front of the menu, obscuring it
+    # - changing the object's position doesn't actually work here;
+    #   we probably need to actually update its matrix, like the camera's.
+    # really, we should turn this into a separate model viewer mode.
 .if 0
-    # back up object coords
-    lwz     r3, 0x0C(r18)
-    stw     r3, SP_STR_BUF(r1)
-    lwz     r3, 0x10(r18)
-    stw     r3, (SP_STR_BUF+4)(r1)
-    lwz     r3, 0x14(r18)
-    stw     r3, (SP_STR_BUF+8)(r1)
+    LOAD    r3, 0x80396880 # hudMatrix
+    li      r4, 1 # ortho
+    CALL    0x8025cf48 # gxSetProjection
 
-    lwz     r3, 0x0C(r21) # camera coords
-    stw     r3, 0x0C(r18)
-    lwz     r3, 0x10(r21)
-    stw     r3, 0x10(r18)
-    lwz     r3, 0x14(r21)
-    stw     r3, 0x14(r18)
+    # back up object coords
+    lwz     r3, 0x0C(r18) # X
+    stw     r3, SP_STR_BUF(r1)
+    lwz     r3, 0x10(r18) # Y
+    stw     r3, (SP_STR_BUF+4)(r1)
+    lwz     r3, 0x14(r18) # Z
+    stw     r3, (SP_STR_BUF+8)(r1)
+    lwz     r3, 0x00(r18) # rot X,Y
+    stw     r3, (SP_STR_BUF+12)(r1)
+    lwz     r3, 0x04(r18) # rot Z, ?
+    stw     r3, (SP_STR_BUF+16)(r1)
+
+    #lwz     r3, 0x0C(r21) # camera coords
+    #stw     r3, 0x0C(r18)
+    #lwz     r3, 0x10(r21)
+    #stw     r3, 0x10(r18)
+    #lwz     r3, 0x14(r21)
+    #stw     r3, 0x14(r18)
+    ##lwz     r3, 0x00(r21)
+    #li      r3, 0
+    #stw     r3, 0x00(r18)
+    ##lwz     r3, 0x04(r21)
+    #sth     r3, 0x04(r18)
 
     mr      r3, r18
+    lwz     r6, 0x7C(r3) # models
+    cmpwi   r6, 0
+    beq     .objMenu_drawCurObject_afterRenderModel
+
+    lbz     r5, 0xAD(r3) # cur model idx
+    extsb   r5, r5
+    rlwinm  r5, r5,0x2,0x0,0x1d
+    lwzx    r4, r6, r5 # cur model header
+    cmpwi   r4, 0
+    beq     .objMenu_drawCurObject_afterRenderModel
     CALL    0x80041ac4 # ObjRenderModel
 
+.objMenu_drawCurObject_afterRenderModel:
     lwz     r3, SP_STR_BUF(r1)
     stw     r3, 0x0C(r18)
     lwz     r3, (SP_STR_BUF+4)(r1)
     stw     r3, 0x10(r18)
     lwz     r3, (SP_STR_BUF+8)(r1)
     stw     r3, 0x14(r18)
+    lwz     r3, (SP_STR_BUF+12)(r1)
+    stw     r3, 0x00(r18)
+    lwz     r3, (SP_STR_BUF+16)(r1)
+    stw     r3, 0x04(r18)
+
+    # XXX restore the original projection matrix.
 .endif
 
     b       menuEndSub

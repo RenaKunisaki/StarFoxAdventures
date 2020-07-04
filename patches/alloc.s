@@ -1,5 +1,8 @@
 # alloc debug patch:
 # logs allocations and flags any that are absurd.
+# also, changes the "tag" of each allocation to the address of the
+# function that did the allocation.
+# hopefully this won't hurt anything.
 .text
 .include "common.s"
 

@@ -279,6 +279,10 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi  r3, r14, .fmt_gameState - mainLoop
     LOADW r4, 0x803dcb84 # numObjects
     LOADW r5, 0x803dcde8 # game state flags
+    LOADW r6, 0x803db700 # save status
+    LOADWH  r7, curSaveSlot
+    LOADBL2 r7, curSaveSlot, r7
+    extsb   r7, r7
     CALL  debugPrintf
 
     # display GameText info
@@ -306,9 +310,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 .noSeq:
 
-    # display nearby object
-    # or really, the current "target" object (that the heart, A icon,
-    # etc is over)
+    # display target (that the heart, A icon, etc is over)
     LOADW r17, pCamera
     cmpwi r17, 0
     beq   .noObject
@@ -327,8 +329,17 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL    strncpy
     li      r4,  0
     stb     r4,  (SP_OBJ_NAME+12)(r1) # strncpy doesn't do this if src is long
-    lwz     r4,  0x124(r17) # obj ptr
-    addi    r5,  r1, SP_OBJ_NAME
+    lwz     r4,  0x0124(r17) # obj ptr
+    lhz     r5,  0x0046(r4)  # defNo
+    lbz     r6,  0x0138(r17) # target type
+    addi    r7,  r1, SP_OBJ_NAME
+    li      r8,  0
+    lwz     r9,  0xB8(r4)    # anim
+    cmpwi   r9,  0
+    beq     .targetNoAnim
+    lbz     r8,  0x13(r9)    # cur HP damage - only for certain objects
+    lbz     r9,  0x28(r9)    # max HP
+.targetNoAnim:
     addi    r3,  r14, (.fmt_nearObj - mainLoop)@l
     CALL    debugPrintf
 .noObject:
@@ -365,9 +376,9 @@ mainLoop: # called from main loop. r3 = mainLoop
 .fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
 .fmt_mapCoords:    .string "M:\x84%3d %3d L%d %02X\x83\n"
 #.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
-.fmt_nearObj:      .string "O:\x84%08X %s\x83\n"
 .fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
-.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83\n"
+.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
+.fmt_nearObj:      .string "Target:\x84%08X %04X %X %s %d/%d\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
 .fmt_seqState:     .string "SEQ %02X pos %X/%X obj %08X\n"
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
