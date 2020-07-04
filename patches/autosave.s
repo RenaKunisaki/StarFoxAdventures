@@ -9,10 +9,17 @@
 patchList:
     PATCH_ID "AutoSav" # must be 7 chars
     PATCH_BL 0x80042ec4, onMapLoad
+    PATCH_BL 0x8007db50, onSave
     PATCH_MAIN_LOOP mainLoop
     # disable message
-    PATCH_WORD 0x8007db50, 0x60000000
-    PATCH_WORD 0x8007db94, 0x60000000
+    #PATCH_WORD 0x8007db50, 0x60000000
+    #PATCH_WORD 0x8007db94, 0x60000000
+    # disable "not same memory card you last saved with" check,
+    # since save states trigger that.
+    # XXX look into how this check works and find a less invasive
+    # way of fixing this.
+    PATCH_WORD 0x8007EF5C, 0x3B200000
+    PATCH_WORD 0x8007F15C, 0x3B200000
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -43,13 +50,21 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL    gameTextSetColor
 
     addi    r3, r14, s_saving - mainLoop
-    li      r4, 0 # box
+    li      r4, 0xA # box
     li      r5, 0 # x
     li      r6, 0 # y
     CALL    gameTextShowStr
 
 .noDrawSaveText:
     mtlr    r16
+    blr
+
+onSave:
+    # called when we would show the fullscreen "saving" message.
+    # we'll replace that function call with this one.
+    LOADW   r3, PATCH_STATE_PTR
+    li      r4, 60
+    stb     r4, SAVE_TEXT_COUNTDOWN(r3)
     blr
 
 onMapLoad:
@@ -76,16 +91,14 @@ onMapLoad:
     cmpwi   r4, 1
     bne     .end # cannot save
 
-    # set text
-    li    r4, 60
-    stb   r4, SAVE_TEXT_COUNTDOWN(r9)
-
     # we'll save immediately because we're about to load a new map,
     # which is one of the most likely times to run out of memory
     # and crash, so it would be nice to save before that.
     # the message technically shows up after, but oh well.
     CALL    saveGame_save
-    # XXX check for error
+    # XXX check for error? the game does throw up an error message
+    # for "not the same card" so maybe we don't need to do any
+    # checking here.
 .end:
     lwz     r5, SP_LR_SAVE(r1)
     mtlr    r5 # restore LR

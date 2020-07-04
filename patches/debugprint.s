@@ -286,6 +286,16 @@ mainLoop: # called from main loop. r3 = mainLoop
     extsb   r7, r7
     CALL  debugPrintf
 
+    # temporary: display save vars
+    #addi     r3, r14, .fmt_saveStatus - mainLoop
+    #LOADWH   r9, 0x803dd048
+    #LOADWL2  r4, 0x803dd048, r9
+    #LOADWL2  r5, 0x803dd04C, r9
+    #LOADWL2  r6, 0x803dd050, r9
+    #LOADWL2  r7, 0x803dd054, r9
+    #CALL  debugPrintf
+
+
     # display GameText info
     # XXX why is this sometimes 0 when there is a text?
     LOADHA r4, curGameText
@@ -379,6 +389,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 #.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
 .fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
 .fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
+#.fmt_saveStatus:   .string "S:\x84%08X %08X %08X %08X\x83\n"
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s %d/%d\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
 .fmt_seqState:     .string "SEQ %02X pos %X/%X obj %08X\n"
