@@ -100,15 +100,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     neg     r5, r5
     add     r5, r5, r6 # r5 = R - L
 
-    # press A to end free move
+    # press Z to end free move
     LOADHL2 r6, controllerStates, r9 # buttons
-    andi.   r6, r6, PAD_BUTTON_A
-    beq     .notAheld
+    andi.   r6, r6, PAD_BUTTON_Z
+    beq     .notZheld
     LOADW   r3, PATCH_STATE_PTR
     li      r4, 0
     stb     r4, ENABLE_FREE_MOVE(r3)
     b       .end
-.notAheld:
+.notZheld:
     # convert stick position to floats
     # adapted from http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/PPCNumerics/PPCNumerics-157.html
     lfd     f9, (.floatMagic - mainLoop)(r14) # load constant into f9

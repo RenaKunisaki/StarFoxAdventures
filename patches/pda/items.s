@@ -37,12 +37,14 @@ itemDrawFuncs_page1: # Game Settings
     .int drawItem_player      - mainLoop
     .int drawItem_FOV         - mainLoop
     .int drawItem_gameSpeed   - mainLoop
+    .int drawItem_autoSave    - mainLoop
     .int 0
 
 itemAdjustFuncs_page1:
     .int adjItem_player       - mainLoop
     .int adjItem_FOV          - mainLoop
     .int adjItem_gameSpeed    - mainLoop
+    .int adjItem_autoSave     - mainLoop
 
 
 

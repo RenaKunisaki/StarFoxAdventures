@@ -62,6 +62,11 @@ onMapLoad:
     stw     r5, SP_LR_SAVE(r1)
     stmw    r3, SP_GPR_SAVE(r1)
 
+    LOADW   r9,  PATCH_STATE_PTR
+    lbz     r4,  AUTOSAVE_ENABLED(r9)
+    cmpwi   r4,  0
+    beq     .end
+
     bl      .getpc
     .getpc: mflr r14
 
@@ -71,9 +76,8 @@ onMapLoad:
     bge     .end # no save slot
 
     # set text
-    LOADW r3, PATCH_STATE_PTR
     li    r4, 60
-    stb   r4, SAVE_TEXT_COUNTDOWN(r3)
+    stb   r4, SAVE_TEXT_COUNTDOWN(r9)
 
     # we'll save immediately because we're about to load a new map,
     # which is one of the most likely times to run out of memory

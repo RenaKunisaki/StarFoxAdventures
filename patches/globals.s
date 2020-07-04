@@ -9,3 +9,4 @@
 .set ENABLE_FREE_MOVE,0x00
 .set CUR_CHAR_ADDR,0x01 # which character model to use
 .set SAVE_TEXT_COUNTDOWN,0x02
+.set AUTOSAVE_ENABLED,0x03

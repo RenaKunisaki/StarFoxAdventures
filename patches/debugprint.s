@@ -279,7 +279,8 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi  r3, r14, .fmt_gameState - mainLoop
     LOADW r4, 0x803dcb84 # numObjects
     LOADW r5, 0x803dcde8 # game state flags
-    LOADW r6, 0x803db700 # save status
+    #LOADW r6, 0x803db700 # save status
+    LOADB r6, 0x803db424 # save status
     LOADWH  r7, curSaveSlot
     LOADBL2 r7, curSaveSlot, r7
     extsb   r7, r7

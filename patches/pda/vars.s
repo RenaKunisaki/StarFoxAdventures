@@ -86,6 +86,7 @@ s_Fox:        .string "Fox"
 s_Krystal:    .string "Krystal"
 s_FOV:        .string "FOV: %d"
 s_gameSpeed:  .string "Game Speed: %d%%"
+s_autoSave:   .string "Autosave: %s"
 
 # page 2
 title_page2:  .string "Audio"
