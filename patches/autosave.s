@@ -34,8 +34,8 @@ main:
 
     LOADWH  r3, curSaveSlot
     LOADBL2 r4, curSaveSlot, r3
-    cmpwi   r4, 0xFF
-    beq     .end # no save slot
+    cmpwi   r4, 0x80
+    bge     .end # no save slot
     CALL    0x800e86d0 # save
 .end:
     lwz     r5, SP_LR_SAVE(r1)
