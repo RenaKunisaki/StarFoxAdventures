@@ -71,6 +71,7 @@ itemDrawFuncs_page3: # Debug
     .int title_page3           - mainLoop
     .int drawItem_debugText    - mainLoop
     .int drawItem_trickyDebug  - mainLoop
+    #.int drawItem_debugObjs    - mainLoop
     .int drawItem_freeMove     - mainLoop
     .int drawItem_reloadMap    - mainLoop
     .int drawItem_warp         - mainLoop
@@ -86,6 +87,7 @@ itemDrawFuncs_page3: # Debug
 itemAdjustFuncs_page3:
     .int adjItem_debugText    - mainLoop
     .int adjItem_trickyDebug  - mainLoop
+    #.int adjItem_debugObjs    - mainLoop
     .int adjItem_freeMove     - mainLoop
     .int adjItem_reloadMap    - mainLoop
     .int adjItem_warp         - mainLoop

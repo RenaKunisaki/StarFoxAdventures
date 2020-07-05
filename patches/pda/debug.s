@@ -23,7 +23,7 @@ drawItem_trickyDebug:
     addi  r5, r14, (s_off - mainLoop)
     LOADB r6, 0x80148bc8
     cmpwi r6, 0x4B
-    bne   .drawDebugText_off
+    bne   .drawTrickyDebug_off
     addi  r5, r14, (s_on - mainLoop)
 
 .drawTrickyDebug_off:
@@ -44,6 +44,29 @@ adjItem_trickyDebug: # r3 = amount to adjust by
 # this value is original XOR patched. by XORing the value
 # with this constant, we toggle between the two.
 .trickyDebugXor: .int 0xdfdf1210
+
+#######################################################################
+
+.if 0 # this is bugged
+drawItem_debugObjs:
+    addi    r4, r14, (s_DebugObjs - mainLoop)
+    addi    r5, r14, (s_off - mainLoop)
+    LOADW   r6, PATCH_STATE_PTR
+    lbz     r6, SHOW_DEBUG_OBJS(r6)
+    cmpwi   r6, 0
+    beq     .drawDebugObjs_off
+    addi    r5, r14, (s_on - mainLoop)
+
+.drawDebugObjs_off:
+    blr
+
+adjItem_debugObjs: # r3 = amount to adjust by
+    LOADW   r3, PATCH_STATE_PTR
+    lbz     r4, SHOW_DEBUG_OBJS(r3)
+    xori    r4, r4, 1
+    stb     r4, SHOW_DEBUG_OBJS(r3)
+    blr
+.endif
 
 #######################################################################
 

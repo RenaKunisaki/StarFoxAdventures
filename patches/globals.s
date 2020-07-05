@@ -10,3 +10,4 @@
 .set CUR_CHAR_ADDR,0x01 # which character model to use
 .set SAVE_TEXT_COUNTDOWN,0x02
 .set AUTOSAVE_ENABLED,0x03
+.set SHOW_DEBUG_OBJS,0x04

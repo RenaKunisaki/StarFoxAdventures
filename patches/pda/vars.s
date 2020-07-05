@@ -26,7 +26,6 @@ gameSpeedMin:  .float   15 # 1/4 * 60; also the amount to adjust by
 gameSpeedMax:  .float  240 # 4 * 60
 gameSpeedDiv:  .float  0.6 # 60 / 100, to convert to percent
 volAdjStep:    .float  0.1
-floatMagic:    .int 0x43300000,0x80000000
 # lol of course we can't do this.
 #f_menuWidth:   .float MENU_WIDTH
 #f_menuHeight:  .float MENU_HEIGHT
@@ -101,6 +100,7 @@ s_stream:     .string "Stream Test: %04X %s"
 title_page3:  .string "Debug"
 s_DebugText:  .string "Debug Text: %s"
 s_TrickyDebug:.string "Tricky Debug Text: %s"
+s_DebugObjs:  .string "Debug Objects: %s"
 s_FreeMove:   .string "Free Move: %s"
 s_ReloadMap:  .string "Reload Map"
 s_Warp:       .string "Warp"

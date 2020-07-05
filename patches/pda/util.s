@@ -14,6 +14,9 @@ intToFloat: # convert r3 from int to float.
     frsp  f1, f1                 # double to single
     blr
 
+floatMagic:    .int 0x43300000,0x80000000
+
+
 adjItem_float: # r3=adj, r5=&val, f2=adjStep, f3=min, f4=max
     lfs     f1, 0(r5) # f1 = val
     cmpwi   r3, 0

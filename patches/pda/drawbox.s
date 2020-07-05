@@ -23,6 +23,9 @@ menuDrawBox:
     stmw   r13, SP_GPR_SAVE(r1)
 
     LOAD   r15, 0x803a89b0 # HUD textures
+    lwz    r16, 0(r15)
+    cmpwi  r16, 0
+    beq    menuEndSub
     mr     r16, r3 # X
     mr     r17, r4 # Y
     mr     r18, r5 # W

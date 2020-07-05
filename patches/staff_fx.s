@@ -8,7 +8,7 @@ patchList:
     PATCH_ID  "staffFX" # must be 7 chars
     PATCH_B 0x8016de60, doSwipe # bl gxBeginVtxs
     #PATCH_WORD 0x8016dd9c, 0x38a00003 # change color mode
-    PATCH_WORD 0x8016dd74, 0x60000000 # allow red to show
+    #PATCH_WORD 0x8016dd74, 0x60000000 # allow red to show
     # XXX this isn't very good as it leaves whatever other
     # texture active. should find a way to disable it or
     # point to an all-white texture.
