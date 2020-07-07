@@ -23,6 +23,7 @@ mkdir -p $TARGET/patches
 ./makedolpatch.sh autosave && mv -f autosave.bin $TARGET/patches/0010
 ./makedolpatch.sh debugobjs && mv -f debugobjs.bin $TARGET/patches/0011
 ./makedolpatch.sh inventory && mv -f inventory.bin $TARGET/patches/0012
+./makedolpatch.sh pad3 && mv -f pad3.bin $TARGET/patches/0013
 
 # extract Krystal model and texture to own files
 dd if=$TARGET/animtest/MODELS.bin of=$TARGET/patches/km1 bs=1 skip=210720 count=76608
