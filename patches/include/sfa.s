@@ -42,6 +42,7 @@
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
 .set strncpy,0x802917a8
+.set waitNextFrame,0x8004a868
 .set warpToMap,0x800552e8 # warpIdx, bool swapCharacter
 .set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
     # returns with r5 = out + rawLen
@@ -62,6 +63,7 @@
 .set buttonsJustPressed,     0x803398e0 #u32
 .set curMapLayer,            0x803dcde1 #s8
 .set curSaveSlot,            0x803db890 #s8
+.set cMenuEnabled,           0x803dd793 #bool
 .set cMenuOpen,              0x803dd795 #bool
 .set cMenuState,             0x803dd7d4 #u8
 .set colorFilterColor,       0x803db630 #color

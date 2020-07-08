@@ -214,17 +214,33 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL debugPrintf
 
     # display map cell
-    addi r3, r14, (.fmt_mapCoords - mainLoop)@l
-    LOADWH  r9, mapCoords
-    #LOADWL2 r4, mapCoords,    r9
-    #LOADWL2 r5, mapCoords+ 4, r9
-    LOADWL2 r4, mapCoords+ 8, r9
-    LOADWL2 r5, mapCoords+12, r9
-    LOADBL2 r6, curMapLayer,  r9
-    extsb   r6, r6
-    LOADWL2 r7, curMapId,     r9
-    #ori     r8, r10, 0 # r9 = nearest object
-    #ori     r9, r17, 0 # r10 = name
+    LOADWH  r3,  mapCoords
+    LOADWL2 r7,  curMapId, r3
+    cmpwi   r7,  0x50
+    blt     .notMap50
+    LOAD    r3,  0x803a314c
+    lbzx    r7,  r3,  r7
+.notMap50:
+    LOAD    r5,  0x80311810 # generic map flags
+    slwi    r4,  r7, 1
+    lhzx    r17, r5, r4 # get bit idx
+    LOAD    r5,  0x80311720 # map state
+    lhzx    r3,  r5, r4
+    CALL    mainGetBit
+    mr      r8,  r3
+    mr      r3,  r17
+    mr      r17, r8
+    CALL    mainGetBit
+    mr      r9,  r3
+    mr      r8,  r17
+
+    LOADWH  r3,  mapCoords
+    LOADWL2 r4,  mapCoords+ 8, r3
+    LOADWL2 r5,  mapCoords+12, r3
+    LOADBL2 r6,  curMapLayer,  r3
+    extsb   r6,  r6
+    LOADWL2 r7,  curMapId, r3
+    addi    r3,  r14, (.fmt_mapCoords - mainLoop)@l
     CALL debugPrintf
 
     # display player state
@@ -381,7 +397,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
 .fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
-.fmt_mapCoords:    .string "M:\x84%3d %3d L%d %02X\x83\n"
+.fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X S%X %08X\x83\n"
 #.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
 .fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
 .fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
