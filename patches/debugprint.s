@@ -65,10 +65,19 @@ entry: # called as soon as our patch is loaded.
     addi r3, r14, (bootMsg - patchList)@l
     CALL OSReport
 
+    # hold Z to enable debug text at boot
+    LOADWH  r9,  controllerStates
+    LOADHL2 r6,  controllerStates, r9 # buttons
+    andi.   r6,  r6, PAD_BUTTON_Z
+    beq     .notZheld
+    LOADWH  r4,  enableDebugText
+    li      r3,  1
+    STOREB  r3,  enableDebugText, r4
+.notZheld:
     lwz  r14, SP_R14_SAVE(r1)
     lwz  r3,  SP_LR_SAVE(r1)
-    mtlr r3 # restore LR
-    addi r1, r1, STACK_SIZE # restore stack ptr
+    mtlr r3   # restore LR
+    addi r1,  r1, STACK_SIZE # restore stack ptr
     blr
 
 
@@ -218,7 +227,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADWL2 r7,  curMapId, r3
     cmpwi   r7,  0x50
     blt     .notMap50
-    LOAD    r3,  0x803a314c
+    LOAD    r3,  0x803a314c # map ID translation table
     lbzx    r7,  r3,  r7
 .notMap50:
     LOAD    r5,  0x80311810 # generic map flags
@@ -241,7 +250,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     extsb   r6,  r6
     LOADWL2 r7,  curMapId, r3
     addi    r3,  r14, (.fmt_mapCoords - mainLoop)@l
-    CALL debugPrintf
+    CALL    debugPrintf
 
     # display player state
     #addi r3, r14, (.fmt_playerState - mainLoop)@l
@@ -291,21 +300,21 @@ mainLoop: # called from main loop. r3 = mainLoop
     # display game state info
     addi  r3, r14, .fmt_gameState - mainLoop
     LOADW r4, 0x803dcb84 # numObjects
-    LOADW r5, 0x803dcde8 # game state flags
+    #LOADW r5, 0x803dcde8 # game state flags
     #LOADW r6, 0x803db700 # save status
-    LOADB r6, 0x803db424 # save status
-    LOADWH  r7, curSaveSlot
-    LOADBL2 r7, curSaveSlot, r7
-    extsb   r7, r7
+    #LOADB r6, 0x803db424 # save status
+    #LOADWH  r7, curSaveSlot
+    #LOADBL2 r7, curSaveSlot, r7
+    #extsb   r7, r7
     CALL  debugPrintf
 
     # temporary: display item vars
-    addi     r3, r14, .fmt_itemState - mainLoop
-    LOADWH   r9, 0x803dd8c0
-    LOADHL2  r4, 0x803dd8c0, r9
-    LOADHL2  r5, 0x803dd8c2, r9
-    LOADHL2  r6, 0x803dd8b8, r9
-    CALL  debugPrintf
+    #addi     r3, r14, .fmt_itemState - mainLoop
+    #LOADWH   r9, 0x803dd8c0
+    #LOADHL2  r4, 0x803dd8c0, r9
+    #LOADHL2  r5, 0x803dd8c2, r9
+    #LOADHL2  r6, 0x803dd8b8, r9
+    #CALL  debugPrintf
 
 
     # display GameText info
@@ -400,8 +409,9 @@ mainLoop: # called from main loop. r3 = mainLoop
 .fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X S%X %08X\x83\n"
 #.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
 .fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
-.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
-.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
+#.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
+.fmt_gameState:    .string "Obj\x84%3d\x83\n"
+#.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s %d/%d\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
 .fmt_seqState:     .string "SEQ %02X pos %X/%X obj %08X\n"
