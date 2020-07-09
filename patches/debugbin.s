@@ -23,6 +23,7 @@
 # both aaaaaa and aaaaaa+1 (for 00,01) or aaaaaa+2 (for 02,03).
 #
 # C0000000 aaaaaaaa: call `aaaaaaaa` from the game main loop.
+# C0000001 aaaaaaaa: call `aaaaaaaa` from late in the game's init routine.
 # This should be an address relative to the start of the patch file.
 # The code is called with r3 = its own address, to help with writing
 # position-independent code.
@@ -54,6 +55,7 @@
 # 816820e8
 # 80003ebc
 
+.set DEBUG,1
 .text
 .include "common.s"
 .include "globals.s"
@@ -61,11 +63,13 @@
 
 constants:
     .set MAX_MAIN_LOOP_HOOKS,16
-    .set MAIN_LOOP_HOOK_ADDR,0x80020D4C
+    .set MAX_STARTUP_HOOKS,16
+    .set MAIN_LOOP_HOOK_ADDR,0x80020D4C # bl doNothing_80014F3C
+    .set STARTUP_HOOK_ADDR,0x80021038 # bl installBsodHandlers
     .set OP_WRITE8,0x00
     .set OP_WRITE16,0x02
     .set OP_WRITE32,0x04
-    .set OP_MAIN_LOOP,0xC0
+    .set OP_ADD_HOOK,0xC0
     .set OP_BRANCH,0xC6
     .set OP_NOP,0xFE
 
@@ -78,6 +82,9 @@ constants:
 start:
     # entry point of this file.
     # here we install hooks as needed.
+    # this is called very early in init, so we may not want to run
+    # most patches yet.
+
     mr   r14, r3 # save address of this code
     stwu r1, -STACK_SIZE(r1) # get some stack space
     mflr r3
@@ -85,13 +92,24 @@ start:
     #stw  r0,  SP_R0_SAVE(r1) # XXX needed?
 
     # say something to show we're alive.
-    addi r3, r14, (.debugMsg - start)@l
-    CALL OSReport
+    .if DEBUG
+        addi r3, r14, (.debugMsg - start)@l
+        CALL OSReport
+    .endif
 
     # set our state pointer
     addi   r3, r14, patchStateVars - start
     LOADWH r4, PATCH_STATE_PTR
     STOREW r3, PATCH_STATE_PTR, r4
+
+    # install startup hook.
+    addi   r5, r14, (startHook - start)@l # absolute destination address
+    LOAD   r4, STARTUP_HOOK_ADDR
+    sub    r7, r5, r4 # r7 = relative destination addr
+    rlwinm r7, r7, 0, 1, 29 # r7 = r7 & 0x07FFFFFC
+    oris   r7, r7, 0x4800
+    ori    r7, r7, 1 # make it a bl
+    stw    r7, 0(r4)
 
     # install main loop hook.
     addi   r5, r14, (mainLoop - start)@l # absolute destination address
@@ -147,8 +165,8 @@ start:
     beq     .write32
     cmpwi   r5, OP_BRANCH
     beq     .makeBl
-    cmpwi   r5, OP_MAIN_LOOP
-    beq     .addMainLoopHook
+    cmpwi   r5, OP_ADD_HOOK
+    beq     .addHook
     cmpwi   r5, OP_NOP
     beq     .nextListItem
 
@@ -216,22 +234,32 @@ start:
     stw    r7, 0(r4)
 
     # debug log
-    mr     r28, r3
-    addi   r3,  r14, (.s_makeBl - start)@l
-    mr     r5,  r26
-    mr     r6,  r7
-    CALL   OSReport
-    mr     r3,  r28 # addr
+    .if DEBUG
+        mr     r28, r3
+        addi   r3,  r14, (.s_makeBl - start)@l
+        mr     r5,  r26
+        mr     r6,  r7
+        CALL   OSReport
+        mr     r3,  r28 # addr
+    .endif
     li     r9,  4   # count
     b      .write_flush
 
+
+.addHook: # r4 = address; r3 -> patch list entry
+    addi   r7, r14, ((mainLoopHooks - start) - 4)@l
+    lwz    r5,  0(r3) # get opcode
+    andi.  r6,  r5, 1
+    beq    .addMainLoopHook
+
+    # add startup hook
+    addi   r7, r14, ((startupHooks - start) - 4)@l
 
 .addMainLoopHook: # r4 = address; r3 -> patch list entry
     lwz    r5, 4(r3) # get value
     lwz    r6, SP_PATCH_ADDR(r1) # get patch base address
     add    r5, r5, r6 # convert patch offset to absolute address
 
-    addi   r7, r14, ((mainLoopHooks - start) - 4)@l
 .tryNextHook:
     lwzu   r6, 4(r7)
     cmpwi  r6, 0
@@ -249,10 +277,12 @@ start:
 
     # now execute the patch
     addi   r17, r3, 8
-    addi   r4,  r15, -1
-    addi   r5,  r3, 8
-    addi   r3,  r14, (.s_run - start)@l
-    CALL   OSReport
+    .if DEBUG
+        addi   r4,  r15, -1
+        addi   r5,  r3, 8
+        addi   r3,  r14, (.s_run - start)@l
+        CALL   OSReport
+    .endif
 
     lwz    r3, SP_PATCH_ADDR(r1) # pass base address to patch code.
     mtspr  CTR, r17
@@ -264,12 +294,13 @@ start:
     beq    .noFree
 
     # flag 0x01: free this patch after executing it.
-    addi   r3, r14, (.s_free - start)@l
-    addi   r4, r15, -1
-    CALL   OSReport
+    .if DEBUG
+        addi   r3, r14, (.s_free - start)@l
+        addi   r4, r15, -1
+        CALL   OSReport
+    .endif
     lwz    r3, SP_PATCH_ADDR(r1)
     CALL   mm_free
-    # 81681d08
 
 
 .noFree:
@@ -283,16 +314,25 @@ start:
     blr
 
 
+startHook: # called from startup
+    stwu r1, -STACK_SIZE(r1) # get some stack space
+    mflr r3
+    stw  r3,  SP_LR_SAVE(r1)
+    CALL 0x80137d28 # installBsodHandlers() (replaced instr)
+    li   r15, (startupHooks - .mainLoop_getpc) - 4
+    b    .mainLoopDoHooks
 
 mainLoop: # called from main loop
     stwu r1, -STACK_SIZE(r1) # get some stack space
     mflr r3
     stw  r3,  SP_LR_SAVE(r1)
+    li   r15, (mainLoopHooks - .mainLoop_getpc) - 4
 
+.mainLoopDoHooks:
     bl .mainLoop_getpc
     .mainLoop_getpc:
         mflr r14
-    addi r15, r14, ((mainLoopHooks - .mainLoop_getpc) - 4)@l
+    add  r15, r15, r14
 
 .callNextHook:
     lwzu  r3, 4(r15)
@@ -309,6 +349,11 @@ mainLoop: # called from main loop
     blr
 
 
+startupHooks:
+    .rept MAX_STARTUP_HOOKS
+    .int 0
+    .endr
+
 mainLoopHooks:
     .rept MAX_MAIN_LOOP_HOOKS
     .int 0
@@ -319,20 +364,12 @@ patchStateVars:
     .byte 0
     .endr
 
-.debugMsg:
-    .string "hello, cruel world"
-
-.s_run:
-    .string "run patch %d @ %08X"
-
-.s_free:
-    .string "free patch %d"
-
-.patchPath:
-    .string "patches/0000"
-
-.patchFmt:
-    .string "%04d"
-
-.s_makeBl:
-    .string "branch %08X -> %08X: %08X"
+.patchPath: .string "patches/0000"
+.patchFmt:  .string "%04d"
+.if DEBUG
+    .debugMsg:  .string "hello, cruel world"
+    .s_run:     .string "run patch %d @ %08X"
+    .s_free:    .string "free patch %d"
+    .s_makeBl:  .string "branch %08X -> %08X: %08X"
+    .s_startup: .string "run startup hooks"
+.endif

@@ -145,6 +145,12 @@
     .int ((\dest) - patchList) | 0 # low bit clear = b
 .endm
 
+.macro PATCH_STARTUP dest
+    # call `dest` from game late init.
+    .int 0xC0000001
+    .int ((\dest) - patchList)
+.endm
+
 .macro PATCH_MAIN_LOOP dest
     # call `dest` from game main loop.
     .int 0xC0000000

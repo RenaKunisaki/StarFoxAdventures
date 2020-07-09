@@ -232,20 +232,103 @@ warpMenu_doInput:
     # into them is just that the game state isn't right. things are set
     # up to appear at certain points in the game and we're not at that
     # point, so they don't show up.
+    # but that doesn't explain why they do show up if we wander into
+    # a cave.
+    # it might just be loading based on the player's cell offset?
+
+    #CALL     0x800481b0 # map ID -> dir Idx
 
     #LOADWH  r8, 0x803dcaf8
     #LOADWL2 r3, 0x803dcaf8, r8
     #CALL    0x80042f78 # loadMapAndParent
 
+    #li      r3, 0x1E
+    #li      r4, 1
+    #CALL    0x800d7b04 # screen transition
+
+    lbz     r3, (warpMenuIdx - mainLoop)(r14)
+    li      r4, 0
+.warpMenu_doCallWarp:
+    #CALL    warpToMap
+
+    #li      r3, 7
+    #li      r4, 0
+    #CALL    0x80043560 # lockLevel
+
+    #li      r3, 0
+    #li      r4, 0
+    #li      r5, 1
+    #CALL    0x8004350C # unlockLevel
+
+    # update player cell
+    lbz     r17, (warpMenuIdx - mainLoop)(r14)
+    slwi    r9,  r17, 4
+    add     r9,  r9, r15 # r4 = warp entry*
+    lfs     f1,  0x00(r9) # X
+    lfs     f2,  0x04(r9) # Y
+    lfs     f3,  0x08(r9) # Z
+    lfs     f4,  (f_mapCellScale - mainLoop)(r14)
+    LOADWH  r4,  0x803dcdd8 # playerMapOffsetX
+    STOREF  f1,  0x803dcdd8, r4
+    STOREF  f3,  0x803dcddc, r4
+    LOADW   r5,  0x803dcea8
+    stfs    f1,  0x0C(r5)
+    stfs    f2,  0x10(r5)
+    stfs    f3,  0x14(r5)
+
+    LOADW   r16, pPlayer
+    stfs    f1,  0x0C(r16)
+    stfs    f2,  0x10(r16)
+    stfs    f3,  0x14(r16)
+
+    fctiwz  f0,  f1
+    stfd    f0,  SP_FLOAT_TMP(r1)
+    lwz     r3,  (SP_FLOAT_TMP+4)(r1)
+    STOREW  r3,  0x803dcdc8, r4
+    fctiwz  f0,  f3
+    stfd    f0,  SP_FLOAT_TMP(r1)
+    lwz     r3,  (SP_FLOAT_TMP+4)(r1)
+    STOREW  r3,  0x803dcdcc, r4
+
+    #fdivs   f1,  f1,  f4
+    #fdivs   f3,  f3,  f4
+    #fctiwz  f0,  f1
+    #stfd    f0,  SP_FLOAT_TMP(r1)
+    #lwz     r3,  (SP_FLOAT_TMP+4)(r1)
+    #STOREW  r3,  0x803dcdd0, r4
+    #fctiwz  f0,  f3
+    #stfd    f0,  SP_FLOAT_TMP(r1)
+    #lwz     r3,  (SP_FLOAT_TMP+4)(r1)
+    #STOREW  r3,  0x803dcdd4, r4
+
+    #li      r3, 7
+    #STOREW  r3, 0x803dcec8, r4 # curMapId
+
+    LOADWL2 r3, 0x803dcde8, r4
+    ori     r3, r3, 0x5000
+
+    #CALL    waitNextFrame
+
     lbz     r3, (warpMenuIdx - mainLoop)(r14)
     li      r4, 0
     CALL    warpToMap
+
+
+
+    #li      r3, 1
+    #LOADWH  r4, 0x803dca41
+    #STOREB  r3, 0x803dca41, r4 # shouldLoadMap
+    #li      r3, 0x7
+    #STOREW  r3, 0x803dcaf8, r4 # mapNoToLoad
+    ##STOREB  r3, 0x803dca39, r4 # anyQueuedLoads - prevents warp
+    #STOREW  r3, 0x803dcaf4, r4
+    ##CALL    0x800573f0 # mapReloadWithFadeout
     b       .warpMenu_close
 
 .warpMenu_doJump:
     lbz     r3, (warpMenuIdx - mainLoop)(r14)
     li      r4, 1 # this param might mean "don't unload current map"?
-    CALL    warpToMap
+    b       .warpMenu_doCallWarp
 
     # this doesn't really work
     #lbz     r17, (warpMenuIdx - mainLoop)(r14)
@@ -260,3 +343,5 @@ warpMenu_doInput:
     #stfs    f3,  0x14(r16)
     #CALL    0x80020748 # mapReload
     b       .warpMenu_close
+
+#f_mapCellScale: .float 640

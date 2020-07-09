@@ -4,11 +4,14 @@
 
 # patch at 802408a8: 4B FF FB 59  bl ClearArena (in _osInit())
 # or better, 80021038: 48 11 6C F1  bl installBsodHandlers (in init())
+# or, 80020e98: 4B FF 46 15  bl initControllers() (in init())
+
 # can probably insert at 80003E6C - 80004338, room for 307 instructions
 # 80003100 in RAM => 0x100 in DOL file
 # but that's only text0
 # 80021038 is text1, which should start at 0x2620, and 800066E0
 # the proper offset is 1cf78
+
 # we should make a script for this. it's really simple.
 # the DOL file just starts with 18 offsets, then 18 addresses, then 18 lengths.
 # each is one section, with text being the first 7 and data being the rest.
@@ -18,8 +21,9 @@
 
 # for now I'm gonna be lazy and just hardcode the jump
 # eventually a script should use these ints to know where to patch.
-.int 0x80021038, 0x4BFE2E35
-.int 0x80003E6C
+#.int 0x80021038, 0x4BFE2E35 # installBsodHandlers
+.int 0x80020E98, 0x4BFE2FD5 # where to patch the jump
+.int 0x80003E6C # where to insert
 
 constants:
     .set STACK_SIZE,0x40 # how much to reserve
@@ -32,7 +36,8 @@ start:
     mflr r3
     stw  r3,  SP_LR_SAVE(r1)
     stw  r0,  SP_R0_SAVE(r1)
-    CALL 0x80137d28 # installBsodHandlers()
+    #CALL 0x80137d28 # installBsodHandlers()
+    CALL  0x800154ac # initControllers
     lwz  r0,  SP_R0_SAVE(r1)
 
     # get filePath address

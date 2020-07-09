@@ -88,8 +88,14 @@ mainLoop: # called from main loop. r3 = mainLoop
     # f6 = player sideways X movement scale
     # f7 = player sideways Z movement scale
 
-    # do the move
     # XXX force camera behind player
+    # this method doesn't work
+    #li      r3,  0x3F80
+    #stw     r3,  0xF4(r21)
+    # would just copying target's rotation to camera work?
+    # if it rotates around target rather than its own position...
+
+    # do the move
     LOADWH  r9, controllerStates
     LOADBL2 r3, controllerStates+2, r9 # stick X
     LOADBL2 r4, controllerStates+3, r9 # stick Y
