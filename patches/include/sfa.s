@@ -7,7 +7,9 @@
 .set buttonDisable,0x80014b3c #int pad, u32 buttons
 .set ClearArena,0x80240400
 .set dCacheFlush,0x80241a50 #(dest, size) -> dest
+.set debugPrintDraw,0x801375c8
 .set debugPrintf,0x801378a8
+.set debugPrintfxy,0x80137b80 #x, y, fmt, ...
 .set DVDReadAsyncPrio,0x80248eac
 .set free,0x800233e8
 .set gameBitDecrement,0x8001fee8 #bitIdx

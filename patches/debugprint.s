@@ -18,7 +18,8 @@ patchList:
 
     # restore debugPrintf
     PATCH_WORD 0x801378A8, 0x480000A0 # debugPrintf
-    PATCH_B 0x8013798C, hook_logPrintf
+    PATCH_B    0x8013798C, hook_logPrintf
+    PATCH_BL   0x80020c74, hook_debugPrintDraw
 
     # patch debug print to move to the very edge of the screen.
     PATCH_HWORD 0x8013761A, 0
@@ -30,6 +31,12 @@ patchList:
     # we can even do 5 here, but then the letter B gets cut off
     # and looks like 8.
     PATCH_BYTE  0x80137317, 6
+
+    # make text a little smaller
+    PATCH_HWORD 0x803e23b8, 0x3FA0
+    #PATCH_HWORD 0x803dd9dc, 0x3FA0
+
+    PATCH_WORD 0x80137cf4, 0x3BFF000C # make debugPrintfxy text smaller
 
     # patch chapter select to just Z button
     PATCH_WORD 0x80119D90, 0x60000000
@@ -66,14 +73,15 @@ entry: # called as soon as our patch is loaded.
     CALL OSReport
 
     # hold Z to enable debug text at boot
-    LOADWH  r9,  controllerStates
-    LOADHL2 r6,  controllerStates, r9 # buttons
-    andi.   r6,  r6, PAD_BUTTON_Z
-    beq     .notZheld
-    LOADWH  r4,  enableDebugText
-    li      r3,  1
-    STOREB  r3,  enableDebugText, r4
-.notZheld:
+    # disabled because we do this in startmsg.s instead.
+#    LOADWH  r9,  controllerStates
+#    LOADHL2 r6,  controllerStates, r9 # buttons
+#    andi.   r6,  r6, PAD_BUTTON_Z
+#    beq     .notZheld
+#    LOADWH  r4,  enableDebugText
+#    li      r3,  1
+#    STOREB  r3,  enableDebugText, r4
+#.notZheld:
     lwz  r14, SP_R14_SAVE(r1)
     lwz  r3,  SP_LR_SAVE(r1)
     mtlr r3   # restore LR
@@ -105,6 +113,26 @@ hook_logPrintf: # hooked beginning of logPrintf
     lwz     r5, 0x68(r1)
     mtlr    r5
     JUMP    0x80137990, r0
+
+
+hook_debugPrintDraw: # hooked call to debugPrintDraw
+    # param: r3=unused
+    LOADB r4, enableDebugText
+    cmpwi r4, 0
+    beq   .hook_debugPrintDraw_off
+    JUMP  debugPrintDraw, r4
+
+.hook_debugPrintDraw_off: # debug text is off
+    # clear log buffers so we don't get a huge flood
+    # when we do turn debug text on
+    LOAD   r3, 0x803aa018
+    LOADWH r4, 0x803dbc14
+    STOREW r3, 0x803dbc14, r4 # reset debug log buffer
+    li     r3, 0
+    STOREW r3, 0x803dd9e4, r4
+    STOREH r3, 0x803dda18, r4
+    STOREH r3, 0x803dda1a, r4
+    blr
 
 
 mainLoop: # called from main loop. r3 = mainLoop
