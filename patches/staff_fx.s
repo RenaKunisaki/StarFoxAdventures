@@ -7,11 +7,8 @@
 patchList:
     PATCH_ID  "staffFX" # must be 7 chars
     PATCH_B 0x8016de60, doSwipe # bl gxBeginVtxs
-    #PATCH_WORD 0x8016dd9c, 0x38a00003 # change color mode
-    #PATCH_WORD 0x8016dd74, 0x60000000 # allow red to show
-    # XXX this isn't very good as it leaves whatever other
-    # texture active. should find a way to disable it or
-    # point to an all-white texture.
+    PATCH_WORD 0x8016dd9c, 0x38a00005 # change blend mode
+    PATCH_WORD 0x803dbd50, 0x0C9F0C9F # change texture IDs
 
     # make the grow/shrink animation run even if the staff was
     # "instantly" taken out/put away
@@ -44,25 +41,28 @@ doSwipe:
 
     CALL     gxBeginVtxs
 
+    mflr r7
+    bl       .getpc
+    .getpc:  mflr r14
+    mtlr     r7
+
+
     # simplified HSV-to-RGB conversion
     # SP_H stores the hue (0 to 7)
     # S, V are fixed
     lbz      r3, SP_H(r1)
     addi     r3, r3, 1
-    andi.    r3, r3, 0x1F
+    andi.    r3, r3, 0x3F
     stb      r3, SP_H(r1)
-    srwi.    r3, r3, 1 # slow down cycling
+    srwi.    r3, r3, 2 # slow down cycling
 
     addi     r4, r3, 2 # g
     addi     r5, r3, 8 # b
     andi.    r4, r4, 0xF
     andi.    r5, r5, 0xF
 
-    mflr r7
-    bl       .getpc
-    .getpc:  mflr r6
-    mtlr     r7
-    addi     r6, r6, .colorTbl - .getpc
+
+    addi     r6, r14, .colorTbl - .getpc
     lbzx     r3, r3, r6
     lbzx     r4, r4, r6
     lbzx     r5, r5, r6
@@ -160,5 +160,7 @@ doSwipe:
 .colorTbl:
 #    .byte 0xFF, 0xC0, 0xA0, 0x80, 0x60, 0x40, 0x20, 0x00
 #    .byte 0x00, 0x20, 0x40, 0x60, 0x80, 0xA0, 0xC0, 0xFF
+#    .byte 0x70, 0x60, 0x50, 0x40, 0x30, 0x20, 0x10, 0x00
+#    .byte 0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70
     .byte 0xFF, 0xE0, 0xD0, 0xC0, 0xB0, 0xA0, 0x90, 0x80
     .byte 0x80, 0x90, 0xA0, 0xB0, 0xC0, 0xD0, 0xE0, 0xFF

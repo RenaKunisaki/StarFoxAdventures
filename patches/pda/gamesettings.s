@@ -62,20 +62,27 @@ adjItem_gameSpeed: # r3 = amount to adjust by
 ##########################################################################
 
 drawItem_autoSave:
-    addi    r4, r14, (s_autoSave - mainLoop)
-    addi    r5, r14, (s_off - mainLoop)
-    LOADW   r7, PATCH_STATE_PTR
-    lbz     r6, AUTOSAVE_ENABLED(r7)
-    cmpwi   r6, 0
+    addi    r4,  r14, (s_autoSave - mainLoop)
+    addi    r5,  r14, (s_off - mainLoop)
+    #LOADW   r7,  PATCH_STATE_PTR
+    #lbz     r6,  AUTOSAVE_ENABLED(r7)
+    LOADWH  r7,  saveData
+    LOADBL2 r6,  (saveData+0x10), r7
+    andi.   r6,  r6, 0x80
+    cmpwi   r6,  0
     beq     .drawAutoSave_off
-    addi    r5, r14, (s_on - mainLoop)
+    addi    r5,  r14, (s_on - mainLoop)
 
 .drawAutoSave_off:
     blr
 
 adjItem_autoSave: # r3 = amount to adjust by
-    LOADW   r5, PATCH_STATE_PTR
-    lbz     r6, AUTOSAVE_ENABLED(r5)
-    xori    r6, r6, 1
-    stb     r6, AUTOSAVE_ENABLED(r5)
+    #LOADW   r5, PATCH_STATE_PTR
+    #lbz     r6, AUTOSAVE_ENABLED(r5)
+    #xori    r6, r6, 1
+    #stb     r6, AUTOSAVE_ENABLED(r5)
+    LOADWH  r7,  saveData
+    LOADBL2 r6,  (saveData+0x10), r7
+    xori    r6,  r6,  0x80
+    STOREB  r6,  (saveData+0x10), r7
     blr

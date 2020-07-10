@@ -42,7 +42,7 @@ doStartup: # called from late init
     LOADWH   r4,  enableDebugText
     STOREB   r3,  enableDebugText, r4
 
-    andi.    r0,  r6, PAD_BUTTON_Y | PAD_BUTTON_B
+    andi.    r0,  r6, PAD_BUTTON_Y | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_A
     cmpwi    r0,      PAD_BUTTON_Y | PAD_BUTTON_B
     bne      .doStartup_end
 

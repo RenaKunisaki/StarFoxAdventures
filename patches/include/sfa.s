@@ -107,6 +107,7 @@
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox
 .set timeStop,               0x803dca3c #bool
 .set pPlayer,                0x803428f8 #ObjInstance*
+.set saveData,               0x803a31c4 #SaveData
 .set seqLength,              0x803dd0c0 #s32
 .set seqPos,                 0x803dd0bc #s8
 .set shouldCloseCMenu,       0x803dd7b4 #bool

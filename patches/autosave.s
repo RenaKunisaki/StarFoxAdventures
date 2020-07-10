@@ -79,8 +79,12 @@ onMapLoad:
     stw     r5, SP_LR_SAVE(r1)
     stmw    r3, SP_GPR_SAVE(r1)
 
-    LOADW   r9,  PATCH_STATE_PTR
-    lbz     r4,  AUTOSAVE_ENABLED(r9)
+    #LOADW   r9,  PATCH_STATE_PTR
+    #lbz     r4,  AUTOSAVE_ENABLED(r9)
+
+    LOADWH  r9,  saveData
+    LOADBL2 r4,  (saveData+0x10), r9
+    andi.   r4,  r4, 0x80
     cmpwi   r4,  0
     beq     .end
 
