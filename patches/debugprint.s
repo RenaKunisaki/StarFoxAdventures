@@ -394,12 +394,11 @@ mainLoop: # called from main loop. r3 = mainLoop
     lbz     r6,  0x0138(r17) # target type
     addi    r7,  r1, SP_OBJ_NAME
     li      r8,  0
-    lwz     r9,  0xB8(r4)    # anim
+    lwz     r9,  0x4C(r4)    # seq
     cmpwi   r9,  0
-    beq     .targetNoAnim
-    lbz     r8,  0x13(r9)    # cur HP damage - only for certain objects
-    lbz     r9,  0x28(r9)    # max HP
-.targetNoAnim:
+    beq     .targetNoSeq
+    lwz     r8,  0x14(r9)    # unique ID
+.targetNoSeq:
     addi    r3,  r14, (.fmt_nearObj - mainLoop)@l
     CALL    debugPrintf
 .noObject:
@@ -440,7 +439,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
 .fmt_gameState:    .string "Obj\x84%3d\x83\n"
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
-.fmt_nearObj:      .string "Target:\x84%08X %04X %X %s %d/%d\x83\n"
+.fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
 .fmt_seqState:     .string "SEQ %02X pos %X/%X obj %08X\n"
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
