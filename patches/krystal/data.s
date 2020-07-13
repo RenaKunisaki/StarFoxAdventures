@@ -6,7 +6,7 @@ modelPath1:   .string "patches/km1"
 texturePath1: .string "patches/kt1"
 modelPath2:   .string "patches/km2"
 texturePath2: .string "patches/kt2"
-titleData:    .byte   0x52,0x75,0x6C,0x65,0x20,0x33,0x34,0x00
+#titleData:    .byte   0x52,0x75,0x6C,0x65,0x20,0x33,0x34,0x00
 
 .if DEBUG
     msg_loadAsset:       .string "Loading %s"

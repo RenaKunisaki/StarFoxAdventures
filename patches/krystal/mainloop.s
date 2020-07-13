@@ -42,6 +42,7 @@ mainLoopPatch:
     blr
 
 
+.if 0
 settingsPatch:
     cmpwi  r3, 0
     bne    .settingsPatch_disabled
@@ -78,3 +79,4 @@ titlePatch:
 .titlePatch_end:
     mtlr r14
     blr
+.endif
