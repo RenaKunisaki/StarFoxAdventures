@@ -2,7 +2,7 @@ from binaryfile import BinaryFile
 
 class TabFile:
     def __init__(self, file:(BinaryFile, str)):
-        if type(file) is str: file = BinaryFile(file)
+        if type(file) is str: file = BinaryFile(file, 'rb')
         self.file = file
 
     def getEntries(self):

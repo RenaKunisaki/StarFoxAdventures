@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
+import os
+import os.path
 import sys
 import inspect
 import struct
+import re
+import hashlib
+from PIL import Image
 from binaryfile import BinaryFile
 from tabfile import TabFile
 from zlb import Zlb
+from sfatexture import SfaTexture, ImageFormat
 
-def printf(fmt, *args):
-    print(fmt % args, end='')
+def printf(fmt, *args, **kw):
+    print(fmt % args, end='', flush=True, **kw)
 
 class App:
+    MAX_TEX0_ID = 0x35E
+    MAX_TEX1_ID = 0x900
+
     def __init__(self):
         pass
 
@@ -23,13 +32,14 @@ class App:
             and not func.startswith('_')
         ]
         for name, method in sorted(methods, key = lambda it: it[0]):
-            printf("%s: %s\n", name, method.__doc__)
+            printf("%s: %s\n", name,
+                getattr(method, '__doc__', "(no documentation)"))
 
 
     def compress(self, inPath, outPath, inOffset=0):
         """Compress a ZLB file."""
         if type(inOffset) is str: inOffset = int(inOffset, 0)
-        file = BinaryFile(inPath, offset=inOffset)
+        file = BinaryFile(inPath, 'rb', offset=inOffset)
         with open(outPath, 'wb') as outFile:
             outFile.write(Zlb(file).compress())
 
@@ -37,14 +47,14 @@ class App:
     def decompress(self, inPath, outPath, inOffset=0):
         """Decompress a ZLB file."""
         if type(inOffset) is str: inOffset = int(inOffset, 0)
-        file = BinaryFile(inPath, offset=inOffset)
+        file = BinaryFile(inPath, 'rb', offset=inOffset)
         with open(outPath, 'wb') as outFile:
             outFile.write(Zlb(file).decompress())
 
 
     def listTable(self, inPath):
         """List entries in a TAB file."""
-        file = BinaryFile(inPath)
+        file = BinaryFile(inPath, 'rb')
         tbl  = TabFile(file)
         print("Item C Flg Offset  (C=compressed?)")
         for i, entry in enumerate(tbl.getEntries()):
@@ -52,45 +62,332 @@ class App:
                 'Y' if entry['compressed'] else '-',
                 entry['flags'], entry['offset'])
 
+    def dumpTexture(self, path, outPath, raw=False, offset=0):
+        """Dump texture from file."""
+        if type(raw) is str: raw = (raw == '1')
+        if type(offset) is str: offset = int(offset, 0)
+        file = BinaryFile(path, 'rb', offset=offset)
+        head = file.readStruct('3b')
+        file.seek(0)
+        if head in (b'ZLB', b'DIR', b'\xFA\xCE\xFE'):
+            data = Zlb(file).decompress()
+        else:
+            size = file.readu32(offset=0x44)
+            file.seek(0)
+            data = file.read(size+0x60)
+        if raw:
+            with open(outPath, 'wb') as outFile:
+                outPath.write(data)
+        else:
+            tex = SfaTexture.fromData(data)
+            printf("Texture size: %dx%d, fmt %s, %d mipmaps\n",
+                tex.width, tex.height, tex.format.name,
+                tex.numMipMaps)
+            tex.image.save(outPath)
 
-    def dumpTable(self, tblPath, dataPath, outPath):
-        """Dump objects in file `dataPath` listed in table `tblPath` to dir `outPath`."""
-        file = BinaryFile(dataPath)
-        tbl  = TabFile(tblPath)
-        dumped = {0xFFFFFF: True}
-        entries = tbl.getEntries()
-        for i, entry in enumerate(entries):
-            offset = entry['offset']
-            compressed = entry['compressed']
-            if not dumped.get(offset, False):
-                printf("Dumping entry 0x%06X (%02X, %s)... ", offset,
-                    entry['flags'],
-                    "compressed" if compressed else "raw")
-                file.seek(offset)
-                if compressed: data = Zlb(file).decompress()
-                else:
-                    # we don't know the actual size, just guess...
-                    try: sz = entries[i+1]['offset'] - offset
-                    except IndexError: sz = 0x8000
-                    if sz > 0: data = file.readBytes(sz)
-                    else: data = None
-                if data is not None and len(data) > 0:
-                    with open("%s/%06X.bin" % (outPath, offset), 'wb') as outFile:
+
+    def dumpTextures(self, path, outPath, raw=False):
+        """Dump textures from files at `path` to dir `outPath`.
+
+        path: eg "warlock/TEX0" (no extension)
+        """
+        if type(raw) is str: raw = (raw == '1')
+        file = BinaryFile(path+'.bin', 'rb')
+        tbl  = BinaryFile(path+'.tab', 'rb') # don't use TabFile
+            # because it's not quite the same format here
+        idx   = -1
+        while True:
+            idx += 1
+            entry = tbl.readu32()
+            if entry == 0xFFFFFFFF: break
+            #if entry == 0x01000000: continue # skip
+            flags =  entry >> 30
+            count = (entry >> 24) & 0x3F
+            offs  = (entry & 0xFFFFFF) * 2
+            if flags == 0: continue # XXX meaning of these?
+            printf("%04X %06X %X %02X\n", idx, offs, flags, count)
+
+            try:
+                file.seek(offs)
+                if count > 1:
+                    offsets = file.readu32(count=count)
+                else: offsets = (0,)
+                #printf("%04X %02X %02X %06X %s\n", idx, flags, count, offs,
+                #    ' '.join(map(lambda n: '%08X'%n, offsets)))
+
+                for i, offset in enumerate(offsets):
+                    file.seek(offs + offset)
+                    data = Zlb(file).decompress()
+                    if raw:
+                        name = "%s/%04X.%02X.tex" % (outPath, idx, i)
+                        with open(name, 'wb') as outFile:
+                            outFile.write(data)
+                    else:
+                        tex  = SfaTexture.fromData(data)
+                        #printf("%04X.%02X: %3dx%3d %2dmip %s\n", idx, i,
+                        #    tex.width, tex.height, tex.numMipMaps, tex.format.name)
+                        name = "%s/%04X.%02X.%s.png" % (outPath, idx, i,
+                            tex.format.name)
+                        tex.image.save(name)
+            except Exception as ex:
+                printf("%04X ERROR: %s\n", idx, ex)
+
+
+    def packTexture(self, path, outPath, format, numMipMaps):
+        """Pack image at `path` to texture file."""
+        numMipMaps = int(numMipMaps)
+        assert numMipMaps > 0, "numMipMaps must be at least 1"
+        format = ImageFormat[format]
+        img = Image.open(path)
+        tex = SfaTexture.fromImage(img, fmt=format, numMipMaps=numMipMaps)
+        with open(outPath, 'wb') as file:
+            tex.writeToFile(file)
+
+
+    def packTextures(self, path, outPath, which):
+        """Pack images in `path` to TEXn.bin, TEXn.tab files, where n=which."""
+        textures = {} # ID => tex
+        # get list of files to pack
+        for name in os.listdir(path):
+            if re.match(r'^[0-9a-fA-F]+\.[0-9a-fA-F]+\.', name):
+                fields = name.split('.')
+                tid = int(fields[0], 16) # texture ID
+                mid = int(fields[1], 16) # mipmap ID
+                if tid not in textures: textures[tid] = {}
+                textures[tid][mid] = name
+
+        printf("Packing %d textures to %s.bin/tab\n", len(textures), outPath)
+
+        # write out bin and tab files
+        binFile = BinaryFile(outPath+'.bin', 'wb')
+        tabFile = BinaryFile(outPath+'.tab', 'wb')
+        maxId = self.MAX_TEX0_ID if str(which) == '0' else self.MAX_TEX1_ID
+        for tid in range(maxId):
+            if tid in textures:
+                printf("%04X... ", tid)
+                mips = textures[tid]
+                offs = binFile.tell()
+                nMips = len(mips)
+                printf("%2d mips, %08X  ", nMips, offs)
+                tabFile.writeu32(
+                    0x80000000 | (offs>>1) | (nMips << 24))
+
+                mipData = []
+                for mip in range(nMips):
+                    name = mips[mip]
+                    fPath = os.path.join(path, name)
+                    if name.endswith('.tex') or name.endswith('.bin'):
+                        with open(fPath, 'rb') as file:
+                            data = file.read()
+                    else: # image file
+                        fields = name.split('.')
+                        fmt = ImageFormat[fields[2]]
+                        img = Image.open(fPath)
+                        tex = SfaTexture.fromImage(img, fmt=format, numMipMaps=numMipMaps)
+                        data = tex.toData()
+                    data = Zlb(None).compress(data)
+                    pad = len(data) & 0x3
+                    if pad: data += b'\0' * (4 - pad)
+                    mipData.append(data)
+
+                # write the mipmap offsets
+                if nMips > 1:
+                    mipOffs = 4 * (nMips+1)
+                    for data in mipData:
+                        binFile.writeu32(mipOffs)
+                        mipOffs += len(data)
+                    binFile.writeu32(mipOffs)
+
+                # write the data
+                for data in mipData:
+                    binFile.write(data)
+
+                # align to 32 bytes - required by game
+                pad = binFile.tell() & 0x1F
+                if pad: binFile.write(b'\0' * (32 - pad))
+
+                printf("OK\n")
+            else:
+                tabFile.writeu32(0x01000000)
+        # write size of last item and terminator
+        tabFile.writeu32(binFile.tell() >> 1)
+        tabFile.writeu32(0xFFFFFFFF)
+        tabFile.writeu32(0xCFA2) # XXX what is this? never read?
+        tabFile.writeu32(0, 0, 0, 0, 0, 0, 0)
+        binFile.close()
+        tabFile.close()
+
+
+    def _dumpRaw(self, binPath, tabPath, outPath, ignoreFlags=False,
+    offsMask=0x0FFFFFFF, offsShift=0, nameFunc=None):
+        """Dump raw data listed in table, where the next entry is used
+        to calculate the size.
+        """
+        try: file = BinaryFile(binPath+'.bin', 'rb')
+        except FileNotFoundError: file = BinaryFile(binPath+'.BIN', 'rb')
+        try: tbl  = BinaryFile(tabPath+'.tab', 'rb')
+        except FileNotFoundError: tbl  = BinaryFile(tabPath+'.TAB', 'rb')
+
+        if nameFunc is None: nameFunc = lambda idx, data: '%04X.bin' % idx
+
+        idx   = 0
+        entry = tbl.readu32()
+        while True:
+            if entry == 0xFFFFFFFF: break
+            eNext = tbl.readu32()
+            flags = entry >> 24
+            if flags != 0 or ignoreFlags:
+                offs = entry & offsMask
+                if offsShift >= 0: offs = offs >> offsShift
+                else: offs = offs << -offsShift
+                try:
+                    file.seek(offs)
+                    head = file.read(3)
+                    file.seek(offs)
+                    if head in (b'ZLB', b'DIR', b'\xFA\xCE\xFE'):
+                        data = Zlb(file).decompress()
+                    else:
+                        oNext = eNext & offsMask
+                        if offsShift >= 0: oNext = oNext >> offsShift
+                        else: oNext = oNext << -offsShift
+                        data = file.read(oNext - offs)
+
+                    name = '%s/%s' % (outPath, nameFunc(idx,data))
+                    #printf("%04X %02X %06X %06X %s\n", idx, flags, offs, len(data), name)
+                    with open(name, 'wb') as outFile:
                         outFile.write(data)
-                    printf("OK (%d bytes)\n", len(data))
-                else:
-                    printf("empty\n")
-                dumped[offset] = True
+                except Exception as ex:
+                    printf("%04X %s ERROR: %s\n", idx, outPath, ex)
+            idx += 1
+            entry = eNext
+
+
+    def dumpModels(self, path, outPath):
+        """Dump models from files at `path` to dir `outPath`.
+
+        path: eg "warlock/MODELS" (no extension)
+        """
+        # XXX eventually decode them too
+        self._dumpRaw(path, path, outPath)
+
+    def dumpAnimations(self, path, outPath):
+        """Dump animations from files at `path` to dir `outPath`.
+
+        path: eg "warlock/ANIM" (no extension)
+        """
+        self._dumpRaw(path, path, outPath)
+
+    def dumpAnimCurv(self, path, outPath):
+        """Dump animation curves from files at `path` to dir `outPath`.
+
+        path: eg "warlock/ANIMCURV" (no extension)
+        """
+        self._dumpRaw(path, path, outPath)
+
+    def dumpVoxMap(self, path, outPath):
+        """Dump Voxmap data from files at `path` to dir `outPath`.
+
+        path: eg "warlock/VOXMAP" (no extension)
+        """
+        self._dumpRaw(path, path, outPath)
+
+    def dumpMod(self, path, outPath):
+        """Dump modXX data from files at `path` to dir `outPath`.
+
+        path: eg "warlock/mod16" (no extension)
+        """
+        self._dumpRaw(path+'.zlb', path, outPath,
+            nameFunc=lambda idx, data: struct.unpack_from('12s', data, 0xA4)[0].strip(b'\0').decode('utf-8')+'.bin')
+
+
+    def dumpMap(self, path, outPath):
+        """Dump all of a map's files at `path` to dir `outPath`.
+
+        path: eg "warlock"
+        """
+        J = os.path.join
+        outPath = os.path.realpath(outPath)
+        dirs = ('animations', 'animcurv', 'mod', 'models', 'TEX0', 'TEX1', 'voxmap')
+        for d in dirs:
+            os.makedirs(J(outPath, d), exist_ok=True)
+        self.dumpAnimations(J(path, 'ANIM'),     J(outPath, 'animations'))
+        self.dumpAnimCurv  (J(path, 'ANIMCURV'), J(outPath, 'animcurv'))
+        self.dumpModels    (J(path, 'MODELS'),   J(outPath, 'models'))
+        self.dumpTextures  (J(path, 'TEX0'),     J(outPath, 'TEX0'))
+        self.dumpTextures  (J(path, 'TEX1'),     J(outPath, 'TEX1'))
+        self.dumpVoxMap    (J(path, 'VOXMAP'),   J(outPath, 'voxmap'))
+        for name in os.listdir(path):
+            if re.match(r'^mod[0-9a-fA-F]+\.zlb', name):
+                self.dumpMod(J(path, name.split('.')[0]), J(outPath, 'mod'))
+
+
+    def dumpAllMaps(self, path, outPath):
+        """Dump all files of every map from `path` to `outpath`.
+
+        path: disc root.
+        """
+        errors = {} # map name => Exception
+        def isMap(name):
+            return os.path.isfile(os.path.join(path, name, 'MODELS.bin'))
+        maps = list(filter(isMap, os.listdir(path)))
+        for i, name in enumerate(maps):
+            try:
+                printf("Extracting %3d/%3d: %s... ", i+1, len(maps), name)
+                self.dumpMap(os.path.join(path, name),
+                    os.path.join(outPath, name))
+                print("OK")
+            except Exception as ex:
+                errors[name] = ex
+                print("Failed")
+        for name, ex in errors.items():
+            print("Failed extracting:", name, ex)
+
+
+    def _analyzeMapDump(self, path, base, _files={}, _depth=0):
+        assert _depth < 5, "Maximum depth exceeded"
+        for name in os.listdir(path):
+            fullPath = os.path.join(path, name)
+            if os.path.isdir(fullPath):
+                self._analyzeMapDump(fullPath, base, _files, _depth+1)
+            elif os.path.isfile(fullPath):
+                #print("Checking", fullPath)
+                hash = hashlib.md5()
+                with open(fullPath, 'rb') as file:
+                    hash.update(file.read())
+                hash = hash.hexdigest()
+                fName = fullPath[len(base):]
+                fName = os.path.join(*(fName.split(os.path.sep)[1:]))
+                if fName not in _files: _files[fName] = {}
+                _files[fName][hash] = fullPath
+            else:
+                print("Skipping non-file, non-directory object:", fullPath)
+        return _files
+
+
+    def analyzeMapDump(self, path):
+        """Examine all files dumped from maps in `path`.
+
+        Tests whether any maps have different versions.
+        """
+        files = self._analyzeMapDump(path, path)
+        names = list(sorted(files.keys()))
+        for name in names:
+            hashes = files[name]
+            if len(hashes) > 1:
+                print(name)
+                for hash, path in hashes.items():
+                    print('', path)
+
 
 
     def listAnimations(self, discRoot, modelId):
         """List the animation IDs used by given model."""
         modelId = int(modelId, 0)
-        modAnimTab = BinaryFile(discRoot+'/MODANIM.TAB')
+        modAnimTab = BinaryFile(discRoot+'/MODANIM.TAB', 'rb')
         modAnimOffs = modAnimTab.readu16(modelId << 1)
         nextOffs = modAnimTab.readu16((modelId+1) << 1)
         nAnims = (nextOffs - modAnimOffs) >> 1
-        modAnimBin = BinaryFile(discRoot+'/MODANIM.BIN')
+        modAnimBin = BinaryFile(discRoot+'/MODANIM.BIN', 'rb')
         animIds = modAnimBin.readBytes(nAnims*2, modAnimOffs)
         animIds = struct.unpack('>%dh' % nAnims, animIds)
         printf("%4d animations; MODANIM.BIN 0x%06X - 0x%06X, min 0x%04X max 0x%04X\n",
@@ -103,7 +400,7 @@ class App:
 
     def readRomList(self, path, discRoot):
         """Read romlist.zlb file."""
-        file = BinaryFile(path, offset=0)
+        file = BinaryFile(path, 'rb', offset=0)
         data = Zlb(file).decompress()
 
         # read OBJINDEX.bin
@@ -130,10 +427,8 @@ class App:
                 name = objBinFile.read(11).decode('utf-8').replace('\0', '')
                 objNames.append(name)
 
-
-        offs = 0
-        idx  = 0
-        printf("Idx  Offs Type ID   ObjName     Sz 03 04 05 06 07      X        Y        Z   14\n")
+        offs, idx = 0, 0
+        printf("Idx  Offs Type Obj  ObjName     Sz 03 04 05 06 07      X        Y        Z   UniqueID SeqData\n")
         while offs < len(data):
             entry = struct.unpack_from('>hBBBBBBfffI', data, offs)
             length = entry[1]
@@ -148,10 +443,10 @@ class App:
                 realTyp = '%04X' % realTyp
             else: name = "?"
 
-            # idx offs typ realTyp name sz 03 ID 05 06 07 X Y Z 14
+            # idx offs typ realTyp name sz 03 04 05 06 07 X Y Z ID
             printf("%04X %04X %04X %s %-11s %02X %02X %02X %02X %02X %02X %+8.2f %+8.2f %+8.2f %08X ",
                 idx, offs, typ, realTyp, name, *(entry[1:]))
-            for i in range(0x18, length*4, 4):
+            for i in range(0x18, length*4, 4): # SeqData
                 printf("%02X%02X%02X%02X ", *data[offs+i: offs+i+4])
             printf("\n")
 
