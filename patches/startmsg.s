@@ -80,12 +80,19 @@ main: # called from loading screen loop
     li       r4, 420 # Y
     addi     r5, r14, (.msg3 - .getpc)@l
 
+    cmpwi    r0, 600
+    bge      .end
+
     cmpwi    r0, 400
     bge      .doPrint
+    li       r3, 250 # X
+    #li       r4, 420 # Y
     addi     r5, r14, (.msg2 - .getpc)@l
 
     cmpwi    r0, 200
     bge      .doPrint
+    li       r3, 200 # X
+    #li       r4, 420 # Y
     addi     r5, r14, (.msg1 - .getpc)@l
 
 .doPrint:
@@ -101,5 +108,6 @@ main: # called from loading screen loop
 
 .msg1: .string "Amethyst Edition v1.0"
 .msg2: .string "segment6.net"
-.msg3: .ascii "This is a free fan creation.\n"
+.msg3:
+    .ascii "\t\tThis is a free fan creation.\n"
     .ascii "If you paid for this, you've been scammed.\0"
