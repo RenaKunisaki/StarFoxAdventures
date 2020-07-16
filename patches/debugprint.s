@@ -25,7 +25,9 @@ patchList:
     PATCH_HWORD 0x8013761A, 0
     PATCH_HWORD 0x8013762E, 0
     PATCH_HWORD 0x8013764A, 0
-    PATCH_HWORD 0x8013765E, 0
+    #PATCH_HWORD 0x8013765E, 0 # this causes a glitch at bottom when fading
+    PATCH_WORD  0x80137830, 0x38000000 # these two prevent fade glitch
+    PATCH_WORD  0x80137688, 0x38000000
 
     # make fixed width more reasonable
     # we can even do 5 here, but then the letter B gets cut off
