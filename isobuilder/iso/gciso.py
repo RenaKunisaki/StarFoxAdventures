@@ -148,7 +148,7 @@ class GCISO(ISO):
         """
         for i, file in enumerate(self.files):
             if file.path == name:
-                print("Replace:", name)
+                print("Replace:  ", name)
                 file.replaceWith(path)
                 return
         print("Add file: ", name)
@@ -163,7 +163,9 @@ class GCISO(ISO):
         """
         file = self.getFile(name)
         if file:
-            if file.isDir: return
+            if file.isDir:
+                print("Have dir: ", name)
+                return
             raise NotADirectoryError("File %s already exists and is not a directory" % name)
         print("Add dir:  ", name)
         file = IsoFile(name, isDir=True)
@@ -286,7 +288,11 @@ class GCISO(ISO):
                 i, len(files), offset, f.size, f.path),
                 end='', flush=True)
             f.writeToFile(file, chunkSize=chunkSize)
-            self._alignTo(file, 4)
+            # stream files must be aligned to 32K.
+            # may as well pad everything to 32K.
+            # it's a little wasteful, but the ISOs are usually heavily
+            # padded anyway.
+            self._alignTo(file, 32768)
         print('')
 
         # now go back and update the FST
