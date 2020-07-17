@@ -43,6 +43,9 @@ patchList:
     # patch chapter select to just Z button
     PATCH_WORD 0x80119D90, 0x60000000
 
+    # patch BSOD thread to show error even if debug text is off
+    PATCH_WORD 0x80137E28, 0x60000000
+
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -119,10 +122,12 @@ hook_logPrintf: # hooked beginning of logPrintf
 
 hook_debugPrintDraw: # hooked call to debugPrintDraw
     # param: r3=unused
-    LOADB r4, enableDebugText
-    cmpwi r4, 0
-    beq   .hook_debugPrintDraw_off
-    JUMP  debugPrintDraw, r4
+    # here we just ensure that the text doesn't show up when
+    # it isn't supposed to.
+    LOADB  r4, enableDebugText
+    cmpwi  r4, 0
+    beq    .hook_debugPrintDraw_off
+    JUMP   debugPrintDraw, r4
 
 .hook_debugPrintDraw_off: # debug text is off
     # clear log buffers so we don't get a huge flood
@@ -134,7 +139,9 @@ hook_debugPrintDraw: # hooked call to debugPrintDraw
     STOREW r3, 0x803dd9e4, r4
     STOREH r3, 0x803dda18, r4
     STOREH r3, 0x803dda1a, r4
-    blr
+    # even though debug text is off, we still need to call the function,
+    # or else there will be visual glitches.
+    JUMP   debugPrintDraw, r4
 
 
 mainLoop: # called from main loop. r3 = mainLoop
