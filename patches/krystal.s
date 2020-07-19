@@ -8,7 +8,7 @@
 # - Remove hardcoded file sizes.
 # TODO:
 # - Patch animations instead of using Fox's.
-.set     DEBUG,0
+.set     DEBUG,1
 .include "krystal/main.s"
 .include "krystal/modelsbin.s"
 .include "krystal/modelstab.s"
