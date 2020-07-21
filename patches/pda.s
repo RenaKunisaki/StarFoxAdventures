@@ -7,11 +7,16 @@
 
 # define patches
 patchList:
-    PATCH_ID "PDAMenu" # must be 7 chars
-    PATCH_BL 0x80133A54, itemHook
-    PATCH_MAIN_LOOP      mainLoop
-    PATCH_B 0x80018414,  textHook
-    PATCH_END PATCH_KEEP_AFTER_RUN
+    PATCH_ID   "PDAMenu" # must be 7 chars
+    PATCH_BL   0x80133A54, itemHook
+    PATCH_MAIN_LOOP        mainLoop
+    PATCH_B    0x80018414, textHook
+    PATCH_BL   0x800183dc, textDrawHook
+    # disable special case for spaces in text.
+    # it's not necessary anyway and interferes
+    # with our fixed width hack.
+    PATCH_WORD 0x80017C70, 0x2816ACAB
+    PATCH_END  PATCH_KEEP_AFTER_RUN
 
 constants:
     .set MENU_WIDTH,320

@@ -52,3 +52,20 @@ textHook:
     JUMP    0x80018418, r0
 
 .textHook_floatMagic:    .int 0x43300000,0x80000000
+
+textDrawHook:
+    # when in fixed width mode, move some thin characters over
+    # so they don't overlap the previous.
+    LOADW   r9,  PATCH_STATE_PTR
+    lbz     r9,  FORCE_TEXT_WIDTH(r9)
+    cmpwi   r9,  0
+    beq     .textDrawHook_end
+
+    sub     r0,  r5,  r3
+    cmpwi   r0,  0x28
+    bge     .textDrawHook_end
+    addi    r3,  r3,  8
+    addi    r5,  r5,  8
+
+.textDrawHook_end:
+    JUMP    0x80075e8c, r0
