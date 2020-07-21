@@ -6,24 +6,25 @@
 heapMenu:
     # subroutine: runs the Heap menu.
     # expects r14 = mainLoop.
-    stwu   r1, -STACK_SIZE(r1) # get some stack space
-    mflr   r0
-    stw    r0, SP_LR_SAVE(r1)
-    stmw   r13, SP_GPR_SAVE(r1)
+    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0, SP_LR_SAVE(r1)
+    stmw    r13, SP_GPR_SAVE(r1)
 
-    bl    menuHideHud
+    bl      menuHideHud
+    bl      menuSetFixedWidth
 
     # get the heap table
-    LOAD   r15, heaps
-    lbz    r3,  (whichHeap - mainLoop)(r14)
-    mulli  r3,  r3, 0x14
-    add    r15, r15, r3
-    lwz    r21, 0x0C(r15) # used blocks
-    lwz    r22, 0x10(r15) # data
+    LOAD    r15, heaps
+    lbz     r3,  (whichHeap - mainLoop)(r14)
+    mulli   r3,  r3, 0x14
+    add     r15, r15, r3
+    lwz     r21, 0x0C(r15) # used blocks
+    lwz     r22, 0x10(r15) # data
 
-    bl     heapMenu_doInput
-    bl     heapMenu_Main
-    b      menuEndSub
+    bl      heapMenu_doInput
+    bl      heapMenu_Main
+    b       menuEndSub
 
 
 heapMenu_Main: # draw list of entries.

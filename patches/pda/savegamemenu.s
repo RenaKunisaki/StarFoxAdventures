@@ -12,15 +12,16 @@
 savegameMenu:
     # subroutine: runs the SaveGame menu.
     # expects r14 = mainLoop.
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r0
-    stw   r0, SP_LR_SAVE(r1)
-    stmw  r13, SP_GPR_SAVE(r1)
+    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0,  SP_LR_SAVE(r1)
+    stmw    r13, SP_GPR_SAVE(r1)
 
-    bl    menuHideHud
-    bl    savegameMenu_doInput
-    bl    savegameMenu_Main
-    b     menuEndSub
+    bl      menuHideHud
+    bl      menuSetFixedWidth
+    bl      savegameMenu_doInput
+    bl      savegameMenu_Main
+    b       menuEndSub
 
 savegameMenu_itemStrs:
     .int s_savegameItem_Game    - mainLoop

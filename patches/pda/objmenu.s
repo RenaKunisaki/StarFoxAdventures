@@ -10,19 +10,20 @@
 objectMenu:
     # subroutine: runs the objects menu.
     # expects r14 = mainLoop.
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r0
-    stw   r0, SP_LR_SAVE(r1)
-    stmw  r13, SP_GPR_SAVE(r1)
+    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0, SP_LR_SAVE(r1)
+    stmw    r13, SP_GPR_SAVE(r1)
 
-    bl    menuHideHud
+    bl      menuHideHud
+    bl      menuSetFixedWidth
 
-    lbz   r3, (objMenuState - mainLoop)(r14)
-    slwi  r3, r3, 2
-    addi  r4, r14, objMenu_Funcs - mainLoop
-    lwzx  r3, r3, r4
-    add   r3, r3, r14
-    mtspr CTR, r3
+    lbz     r3, (objMenuState - mainLoop)(r14)
+    slwi    r3, r3, 2
+    addi    r4, r14, objMenu_Funcs - mainLoop
+    lwzx    r3, r3, r4
+    add     r3, r3, r14
+    mtspr   CTR, r3
     bctrl
 
     b       menuEndSub

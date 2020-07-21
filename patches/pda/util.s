@@ -42,6 +42,12 @@ adjItem_float: # r3=adj, r5=&val, f2=adjStep, f3=min, f4=max
     blr
 
 
+menuSetFixedWidth:
+    LOADW   r3, PATCH_STATE_PTR
+    li      r4, 11
+    stb     r4, FORCE_TEXT_WIDTH(r3)
+    blr
+
 menuHideHud:
     li     r3, 1
     LOADWH r4, hudHidden

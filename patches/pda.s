@@ -9,7 +9,8 @@
 patchList:
     PATCH_ID "PDAMenu" # must be 7 chars
     PATCH_BL 0x80133A54, itemHook
-    PATCH_MAIN_LOOP mainLoop
+    PATCH_MAIN_LOOP      mainLoop
+    PATCH_B 0x80018414,  textHook
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -29,17 +30,19 @@ constants:
     .set MENU_ID_HEAP,     5
     .set MENU_ID_SAVEGAME, 6
 
-    .set STACK_SIZE,0x180 # how much to reserve
-    .set SP_LR_SAVE,0x184 # this is what the game does
-    .set SP_ARG9, 0x08 # for eg sprintf
-    .set SP_ARG10,0x0C
-    .set SP_STR_BUF,0x40 # temporary string buffer
+    .set STACK_SIZE, 0x180 # how much to reserve
+    .set SP_LR_SAVE, 0x184 # this is what the game does
+    .set SP_ARG9,     0x08 # for eg sprintf
+    .set SP_ARG10,    0x0C
+    .set SP_ARG11,    0x10
+    .set SP_STR_BUF,  0x40 # temporary string buffer
     .set SP_FLOAT_TMP,0xA0 # temporary storage for float conversion (8 bytes)
-    .set SP_GPR_SAVE,0xA8
+    .set SP_GPR_SAVE, 0xA8
 
 entry: # called as soon as our patch is loaded.
     # nothing to do
     blr
+
 
 # include various submodules.
 # order is semi-important here.
@@ -69,6 +72,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/heaplist.s"
 .include "pda/heapmenu.s"
 .include "pda/savegamemenu.s"
+.include "pda/texthook.s"
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"

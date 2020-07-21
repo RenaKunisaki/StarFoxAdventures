@@ -12,10 +12,11 @@ warpMenu:
     stw   r0, SP_LR_SAVE(r1)
     stmw  r13, SP_GPR_SAVE(r1)
 
-    #bl    menuHideHud
-    bl     warpMenu_doInput
-    bl     warpMenu_Main
-    b      menuEndSub
+    #bl      menuHideHud
+    bl      menuSetFixedWidth
+    bl      warpMenu_doInput
+    bl      warpMenu_Main
+    b       menuEndSub
 
 
 warpMenu_Main: # draw list of warps.
@@ -131,11 +132,11 @@ warpMenu_Main: # draw list of warps.
     CALL    gameTextShowStr
 
     # instructions
-    addi    r3, r14, fmt_warpListInstrs - mainLoop
-    li      r4,  MENU_TEXTBOX_ID # box type
-    li      r5,  WARP_MENU_XPOS + 8  # X pos
-    li      r6,  WARP_MENU_YPOS + WARP_MENU_HEIGHT + 24 # Y pos
-    CALL    gameTextShowStr
+    #addi    r3, r14, fmt_warpListInstrs - mainLoop
+    #li      r4,  MENU_TEXTBOX_ID # box type
+    #li      r5,  WARP_MENU_XPOS + 8  # X pos
+    #li      r6,  WARP_MENU_YPOS + WARP_MENU_HEIGHT + 24 # Y pos
+    #CALL    gameTextShowStr
 
     LOADWH  r9,  curMapLayer
     STOREB  r31, curMapLayer, r9

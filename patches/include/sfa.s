@@ -69,6 +69,7 @@
 .set bEnableViewFinderHud,   0x803dcdfa #bool  viewfinder
 .set blurFilterArea,         0x803dce48 #vec3f blur filter area
 .set buttonsJustPressed,     0x803398e0 #u32
+.set curLanguage,            0x803dc9e4 #u32 English, French, German, Italian, Japanese, Spanish
 .set curMapLayer,            0x803dcde1 #s8
 .set curSaveSlot,            0x803db890 #s8
 .set cMenuEnabled,           0x803dd793 #bool
@@ -92,6 +93,7 @@
 .set fovY,                   0x803dc8a4 #float
 .set heaps,                  0x80340698 #Heap[4]
 .set hudHidden,              0x803dca3a #bool
+.set isJapanese,             0x803dc968 #bool
 .set loadedFileMapIds,       0x8035f548 #int16[fileIdx]
 .set loadedObjects,          0x803dcb88 #ObjInstance*
 .set mapCoords,              0x803dcdc8 #int mapX, mapZ, cellX, cellZ

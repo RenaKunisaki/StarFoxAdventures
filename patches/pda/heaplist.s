@@ -11,10 +11,11 @@ heapList:
     stw   r0, SP_LR_SAVE(r1)
     stmw  r13, SP_GPR_SAVE(r1)
 
-    #bl    menuHideHud
-    bl     heapList_doInput
-    bl     heapList_Main
-    b      menuEndSub
+    #bl      menuHideHud
+    bl      menuSetFixedWidth
+    bl      heapList_doInput
+    bl      heapList_Main
+    b       menuEndSub
 
 
 heapList_Main: # draw list of heaps.

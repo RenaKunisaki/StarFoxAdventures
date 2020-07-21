@@ -130,14 +130,15 @@ fmt_objListInstrs: .string "Z:Focus X:Delete Y:GoTo S:Player"
 s_noObjs:          .string "No objects"
 
 # GameBits
-fmt_bitListHeader: .string "BIdx    T Offs   Sz Unk: Val"
+fmt_bitListHeader: .string "Bit  T Offs Sz Unk: Val"
 fmt_bitListEntry:  .string "%04X %X %04X %02X %03X: %X"
 
 # Warps
 fmt_warpListEntry:  .string "%02X %02X %s"
 fmt_warpListCoords: .string "%f %f %f %d %02X"
 fmt_warpListNoMap:  .string "-"
-fmt_warpListInstrs: .string "A:Warp Z:Jump"
+#fmt_warpListInstrs: .string "A:Warp Z:Jump"
+#fmt_warpListInstrs: .string "A:Warp"
 
 # Heap
 fmt_heapListHeader: .string "N Bytes        Blocks  UsedBytes  UBlk  FreeBytes    FBlk Data"
@@ -171,6 +172,7 @@ s_savegameSavedObj:     .string "%08X %d %d %d"
 # plus it probably has soft reset hotkey already...
 # it does, X+B+Start
 # but maybe can do reset to title screen or reload save
+# - we can reset to title screen from pause menu.
 
 # other things to add:
 # - Arbitrary warp (set coords/layer manually)

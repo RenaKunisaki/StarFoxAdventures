@@ -32,10 +32,10 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 menuEndSub:
     # common end code for menu subroutines.
-    lwz  r0, SP_LR_SAVE(r1)
-    mtlr r0 # restore LR
-    lmw  r13, SP_GPR_SAVE(r1)
-    addi r1, r1, STACK_SIZE # restore stack ptr
+    lwz     r0,  SP_LR_SAVE(r1)
+    mtlr    r0   # restore LR
+    lmw     r13, SP_GPR_SAVE(r1)
+    addi    r1,  r1, STACK_SIZE # restore stack ptr
     blr
 
 checkMenuOpenKey:
@@ -63,6 +63,11 @@ menuPtrs: # menu main function pointers
 
 returnToMainMenu:
     # called from other menus
+    # reset text override
+    LOADW   r3,  PATCH_STATE_PTR
+    li      r4,  0
+    stb     r4,  FORCE_TEXT_WIDTH(r3)
+
     li   r3, MENU_ID_MAIN
 returnToMenu: # r3 = which
     stb  r3, (whichMenu - mainLoop)(r14)
