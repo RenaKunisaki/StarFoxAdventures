@@ -311,51 +311,63 @@ objMenu_drawCurObject:
     li      r19, OBJ_INFO_XPOS + 8
     li      r20, OBJ_INFO_YPOS + 8
 
-    # address, coords
+    # current coords
     lfs     f1, 0x0C(r18)
     fctiwz  f2,f1
     stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r6,SP_FLOAT_TMP+4(r1)
+    lwz     r5,SP_FLOAT_TMP+4(r1)
 
     lfs     f1, 0x10(r18)
     fctiwz  f2,f1
     stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r7,SP_FLOAT_TMP+4(r1)
+    lwz     r6,SP_FLOAT_TMP+4(r1)
 
     lfs     f1, 0x14(r18)
     fctiwz  f2,f1
     stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r8,SP_FLOAT_TMP+4(r1)
+    lwz     r7,SP_FLOAT_TMP+4(r1)
 
-    mr      r5, r18 # address
     addi    r4, r14, fmt_objListCoords - mainLoop
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
-    # ID, original coords
+    # original coords
     addi    r4, r14, fmt_objListNoSeq - mainLoop
     lwz     r3, 0x4C(r18) # seq
     cmpwi   r3, 0
     beq     .objMenu_drawCurObject_noSeq
     addi    r4, r14, fmt_objListOrigPos - mainLoop
-    lwz     r5, 0x14(r3) # ID
 
     lfs     f1, 0x08(r3) # orig X
     fctiwz  f2,f1
     stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r6,SP_FLOAT_TMP+4(r1)
+    lwz     r5,SP_FLOAT_TMP+4(r1)
 
     lfs     f1, 0x0C(r3) # orig Y
     fctiwz  f2,f1
     stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r7,SP_FLOAT_TMP+4(r1)
+    lwz     r6,SP_FLOAT_TMP+4(r1)
 
     lfs     f1, 0x10(r3) # orig Z
     fctiwz  f2,f1
     stfd    f2,SP_FLOAT_TMP(r1)
-    lwz     r8,SP_FLOAT_TMP+4(r1)
+    lwz     r7,SP_FLOAT_TMP+4(r1)
 
 .objMenu_drawCurObject_noSeq:
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
+
+    # address, ID
+    addi    r4, r14, fmt_objListAddr - mainLoop
+    li      r6, 0 # ID
+    lwz     r3, 0x4C(r18) # seq
+    cmpwi   r3, 0
+    beq     .objMenu_drawCurObject_noSeq2
+    addi    r4, r14, fmt_objListAddrId - mainLoop
+    lwz     r6, 0x14(r3) # ID
+
+.objMenu_drawCurObject_noSeq2:
+    mr      r5, r18 # address
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
@@ -370,6 +382,8 @@ objMenu_drawCurObject:
     lhz     r5, 0x06(r18) # flags
     lbz     r6, 0xAF(r18) # flags
     lbz     r7, 0xB0(r18) # flags
+    lbz     r8, 0xE3(r18) # flags
+    lbz     r9, 0xF8(r18) # flags
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
@@ -428,6 +442,18 @@ objMenu_drawCurObject:
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
+    # hitbox
+    addi    r4, r14, fmt_objListHitbox - mainLoop
+    lwz     r5, 0x54(r18)
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
+
+    # funcs
+    addi    r4, r14, fmt_objListFuncs - mainLoop
+    lwz     r5, 0x68(r18)
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
+
     # parent, children
     li      r15, 0
 .objMenu_drawCurObject_nextChild:
@@ -466,7 +492,13 @@ objMenu_drawCurObject:
     blt     .objMenu_drawCurObject_nextChild
 
     # instructions
-    addi    r3,  r14, fmt_objListInstrs - mainLoop
+    addi    r3,  r14, fmt_objListInstrs1 - mainLoop
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  OBJ_INFO_XPOS + 8 # X pos
+    li      r6,  OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (LINE_HEIGHT*2) # Y pos
+    bl      menuDrawStr
+
+    addi    r3,  r14, fmt_objListInstrs2 - mainLoop
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  OBJ_INFO_XPOS + 8 # X pos
     li      r6,  OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - LINE_HEIGHT # Y pos
