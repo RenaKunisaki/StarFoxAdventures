@@ -133,6 +133,10 @@ gamebitMenu_doInput:
     cmpwi   r9, 0x04
     bgt     .gameBitMenu_nextPage
 
+    # check Z - reset to zero
+    andi.   r10, r3,  PAD_BUTTON_Z
+    bne     .gameBitMenu_clear
+
     b       menuEndSub
 
 .gameBitMenu_up: # up pressed
@@ -176,6 +180,12 @@ gamebitMenu_doInput:
 .gameBitMenu_dec_noDelay:
     mr      r3, r17
     CALL    gameBitDecrement
+    b       menuEndSub
+
+.gameBitMenu_clear:
+    mr      r3,  r17
+    li      r4,  0
+    CALL    mainSetBits
     b       menuEndSub
 
 .gameBitMenu_prevPage:
