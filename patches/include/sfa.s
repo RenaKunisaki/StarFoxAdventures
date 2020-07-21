@@ -20,6 +20,11 @@
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
 .set getButtonsJustPressed,0x80014e70 # u16 (int controller)
 .set gxBeginVtxs,0x8025889c #void(GXOpcode opcode,uint vat,uint nVtxs)
+.set gxResetVtxDescr,0x802573f8
+.set gxSetBlendMode,0x8025c584
+.set gxSetPeControl_ZCompLoc_,0x800702b8
+.set GXSetTevAlphaIn,0x8025bff0
+.set gxSetVtxDescr,0x80256978 #(which, val)
 .set iCacheFlush,0x80241ae0 #(dest, size) -> dest
 .set isCheatActive,0x800e7e94
 .set isCheatUnlocked,0x800e7efc
@@ -28,6 +33,7 @@
     # outSize: if not NULL, receives file size.
 .set logSetColor,0x80137520 # r, g, b, a
 .set mainGetBit,0x8001ffb4
+.set mainSetBits,0x800200e8 # bit, val
 .set mapCoordsToId,0x80059ac0 #int (int x, int z, int layer)
 .set memcpy,0x80003494 # clobbers: r0, r6
 .set memset,0x800033D8 # clobbers: r0, r6, r7
