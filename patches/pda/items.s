@@ -38,6 +38,9 @@ itemDrawFuncs_page1: # Game Settings
     .int drawItem_FOV         - mainLoop
     .int drawItem_gameSpeed   - mainLoop
     .int drawItem_autoSave    - mainLoop
+.if 0
+    .int drawItem_language    - mainLoop
+.endif
     .int 0
 
 itemAdjustFuncs_page1:
@@ -45,6 +48,9 @@ itemAdjustFuncs_page1:
     .int adjItem_FOV          - mainLoop
     .int adjItem_gameSpeed    - mainLoop
     .int adjItem_autoSave     - mainLoop
+.if 0
+    .int adjItem_language     - mainLoop
+.endif
 
 
 

@@ -86,3 +86,55 @@ adjItem_autoSave: # r3 = amount to adjust by
     xori    r6,  r6,  0x80
     STOREB  r6,  (saveData+0x10), r7
     blr
+
+##########################################################################
+
+.if 0
+# need to figure out how to reload text and fonts.
+# may only be feasible on title screen.
+# logic for switching language from European version
+# doesn't appear to be present in this version.
+
+drawItem_language:
+    addi    r4,  r14, (s_language - mainLoop)
+    LOADW   r6,  curLanguage
+    slwi    r6,  r6,  1
+    addi    r5,  r14, .languageNames - mainLoop
+    lhzx    r5,  r5,  r6
+    add     r5,  r5,  r14
+    blr
+
+adjItem_language: # r3 = amount to adjust by (0=A button)
+    LOADWH  r5,  curLanguage
+    LOADWL2 r4,  curLanguage, r5
+    cmpwi   r3,  0
+    bne     .adjItem_language_notA
+    li      r3,  1 # A button = increase
+.adjItem_language_notA:
+
+    # do the adjustment and wrap
+    add     r4,  r4,  r3
+    cmpwi   r4,  6
+    blt     .adjItem_language_notLast
+    li      r4,  0
+.adjItem_language_notLast:
+    cmpwi   r4,  0
+    bge     .adjItem_language_notFirst
+    li      r4,  5
+.adjItem_language_notFirst:
+    STOREW  r4,  curLanguage, r5
+    #JUMP    0x8001a234, r3
+    #CALL    0x8001bbd8
+    li      r3, 3
+    li      r4, 2
+    JUMP    0x8001a66c, r5
+    blr
+
+.languageNames:
+    .short s_English  - mainLoop
+    .short s_French   - mainLoop
+    .short s_German   - mainLoop
+    .short s_Italian  - mainLoop
+    .short s_Japanese - mainLoop
+    .short s_Spanish  - mainLoop
+.endif

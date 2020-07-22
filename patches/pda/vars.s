@@ -88,6 +88,15 @@ s_Krystal:    .string "Krystal"
 s_FOV:        .string "FOV: %d"
 s_gameSpeed:  .string "Game Speed: %d%%"
 s_autoSave:   .string "Autosave: %s"
+.if 0
+s_language:   .string "Language: %s"
+s_English:    .string "English"
+s_French:     .string "French"
+s_German:     .string "German"
+s_Italian:    .string "Italian"
+s_Japanese:   .string "Japanese"
+s_Spanish:    .string "Spanish"
+.endif
 
 # page 2
 title_page2:  .string "Audio"
