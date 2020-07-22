@@ -58,6 +58,8 @@ doHudOverrides:
 .haveMap: # we do have a map to show.
     cmpwi   r6, 0 # override enabled?
     beq     .noMapOverride
+    cmpwi   r6, 0x100 # no pos override for small map
+    blt     .doMapSizeOverride
 
     # override position.
 .doMapPosOverride:

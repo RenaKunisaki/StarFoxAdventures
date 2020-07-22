@@ -59,6 +59,7 @@ saveMenuObjIdx:   .byte 0
 whichHeap:        .byte 0
 menuWasHudHidden: .byte 0
 menuWasPdaOn:     .byte 0 # for hiding map in objects list
+menuMapSize:      .byte 0
 
 # string pool
 # general
@@ -76,6 +77,7 @@ s_info:       .string "Information"
 s_MapSize:    .string "Map Size: %s"
 s_Normal:     .string "Normal"
 s_Huge:       .string "Huge"
+s_Small:      .string "Small"
 s_MapAlpha:   .string "Map Opacity: %d%%"
 
 # page 1
