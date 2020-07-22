@@ -16,19 +16,34 @@ def patch(path, offset, data):
     def apply(basePath):
         with open(os.path.join(basePath, path), 'r+b') as file:
             file.seek(offset)
-            if type(data) is int: data = b'\0' * data
-            file.write(data)
+            if type(data) is int: file.write(b'\0' * data)
+            else: file.write(data)
     patches.append(apply)
 
-#patch('OBJECTS.bin', 0xXXXXXXX)
+# replace some empty entries in warptab with more useful/interesting ones
+warptab = 'files/WARPTAB.bin'
+patch(warptab, 0x0010, pack('3fh', -9496,  -127, -19025, 0)) # animtest
+patch(warptab, 0x0040, pack('3fh', -7683,   -11,  14083, 0)) # rolling demo
+patch(warptab, 0x0070, pack('3fh',  3200,  -789,  28160, 0)) # willow grove
+patch(warptab, 0x0080, pack('3fh',  -640,   151,  28800, 0)) # discovery falls
+patch(warptab, 0x0090, pack('3fh',-12700, -1805,  28000, 0)) # boss Kamerian
+patch(warptab, 0x00A0, pack('3fh',-19000,  1280,  33920, 0)) # CloudRunner2Rac
+patch(warptab, 0x00B0, pack('3fh',  7200,   134,  31000, 0)) # MazeTest
+patch(warptab, 0x00D0, pack('3fh', 12800,   192,  30080, 0)) # old palace
+patch(warptab, 0x00E0, pack('3fh',     0,     0,  13440, 0)) # ship battle
+patch(warptab, 0x0110, pack('3fh', -7040,     0,  -8320, 0)) # Nik Test
+patch(warptab, 0x0140, pack('3fh', -6069,  -921,  -2738, 1)) # shop
 
+def applyFilePatches(basePath):
+    for patch in patches:
+        patch(basePath)
 
 
 def buildPatch(basePath, name, dest):
     cmd = ('./makedolpatch.sh', name)
     try: result = subprocess.run(cmd, capture_output=True)
     except KeyboardInterrupt: sys.exit(1)
-    output = result.stdout.decode('utf-8', 'replace').strip()
+    output = result.stderr.decode('utf-8', 'replace').strip()
     if output != '':
         print("Error building", name, output)
         sys.exit(1)
@@ -51,6 +66,7 @@ patchOrder = (
     #'debugobjs',
     #'inventory',
     'pad3',
+    'camera',
     'startmsg',
 )
 def buildPatches(basePath):
@@ -127,6 +143,7 @@ def applyDolPatch(basePath):
 def main():
     applyDolPatch(sys.argv[1])
     buildPatches(sys.argv[1])
+    applyFilePatches(sys.argv[1])
 
 if __name__ == '__main__':
     main()

@@ -69,16 +69,20 @@
 .set bEnableViewFinderHud,   0x803dcdfa #bool  viewfinder
 .set blurFilterArea,         0x803dce48 #vec3f blur filter area
 .set buttonsJustPressed,     0x803398e0 #u32
-.set curLanguage,            0x803dc9e4 #u32 English, French, German, Italian, Japanese, Spanish
-.set curMapLayer,            0x803dcde1 #s8
-.set curSaveSlot,            0x803db890 #s8
 .set cMenuEnabled,           0x803dd793 #bool
 .set cMenuOpen,              0x803dd795 #bool
 .set cMenuState,             0x803dd7d4 #u8
 .set colorFilterColor,       0x803db630 #color
 .set controllerStates,       0x803398f0 #u16 buttons, s8 x, s8 y, s8 cx, s8 cy, s8 L, s8 R
+.set controller1state,       0x803398f0 #alias for controllerStates
+.set controller2state,       0x803398fc
+.set controller3state,       0x80339908
+.set controller4state,       0x80339914
+.set curLanguage,            0x803dc9e4 #u32 English, French, German, Italian, Japanese, Spanish
 .set curGameText,            0x803dba70 #s16
 .set curMapId,               0x803dcec8 #int
+.set curMapLayer,            0x803dcde1 #s8
+.set curSaveSlot,            0x803db890 #s8
 .set curSeqNo,               0x803dd08c #u8
 .set curSeqObj,              0x803dd0b8 #ObjInstance*
 .set dataFileBuffers,        0x8035f3e8 #void*[fileIdx]
