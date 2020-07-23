@@ -35,21 +35,10 @@ hookFirstPerson:
 
 
 mainLoop: # called from main loop. r3 = mainLoop
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r4
-    stw   r4,  SP_LR_SAVE(r1)
-    mr    r14, r3
-
-    # is free move enabled?
-    LOADW r3, PATCH_STATE_PTR
-    lbz   r4, ENABLE_FREE_MOVE(r3)
-    cmpwi r4, 0
-    beq   .off
-
-    # inhibit C menu
-    li     r4, 1
-    LOADWH r5, shouldCloseCMenu
-    STOREB r4, shouldCloseCMenu, r5
+    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    mflr    r4
+    stw     r4,  SP_LR_SAVE(r1)
+    mr      r14, r3
 
     # get object of camera focus.
     LOADW   r21, pCamera
@@ -59,21 +48,46 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpwi   r16, 0
     beq     .end # no focus object
 
-    # was it just turned on?
-    lbz   r5, (.prevEnable - mainLoop)(r14)
-    cmpwi r5, 0
-    bne   .notJustTurnedOn
+    # is free move enabled?
+    LOADW   r3,  PATCH_STATE_PTR
+    lbz     r4,  ENABLE_FREE_MOVE(r3)
+    cmpwi   r4,  0
+    beq     .off
 
-    li    r3, 1
-    stb   r3, (.prevEnable - mainLoop)(r14)
+    # inhibit C menu
+    li      r4,  1
+    LOADWH  r5,  shouldCloseCMenu
+    STOREB  r4,  shouldCloseCMenu, r5
+
+    # was it just turned on?
+    lbz     r5,  (.prevEnable - mainLoop)(r14)
+    cmpwi   r5,  0
+    bne     .notJustTurnedOn
+
+    li      r3,  1
+    stb     r3,  (.prevEnable - mainLoop)(r14)
 
     # copy player coords to buffer
-    lwz   r3, 0x0C(r16)
-    stw   r3, (.freeMoveCoords   - mainLoop)(r14)
-    lwz   r3, 0x10(r16)
-    stw   r3, (.freeMoveCoords+4 - mainLoop)(r14)
-    lwz   r3, 0x14(r16)
-    stw   r3, (.freeMoveCoords+8 - mainLoop)(r14)
+    lwz     r3,  0x0C(r16)
+    stw     r3,  (.freeMoveCoords   - mainLoop)(r14)
+    lwz     r3,  0x10(r16)
+    stw     r3,  (.freeMoveCoords+4 - mainLoop)(r14)
+    lwz     r3,  0x14(r16)
+    stw     r3,  (.freeMoveCoords+8 - mainLoop)(r14)
+
+    lhz     r3,  0xB0(r16)
+    sth     r3,  (.prevFlagsTarget - mainLoop)(r14)
+    ori     r3,  r3, 0xA000 # disable hit detection and update
+    sth     r3,  0xB0(r16)
+
+    # also set flags for player in case different from target
+    LOADW   r3,  pPlayer
+    cmpwi   r3,  0
+    beq     .notJustTurnedOn # no player
+    lhz     r5,  0xB0(r3)
+    sth     r5,  (.prevFlagsPlayer - mainLoop)(r14)
+    ori     r5,  r5, 0xA000 # disable hit detection and update
+    sth     r5,  0xB0(r3)
 
 .notJustTurnedOn:
     # get the player's angle as X, Z multipliers
@@ -153,8 +167,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     fmuls f3, f3, f8
 
     # convert L/R to move Y
-    # XXX prevent L from centering the camera, since this interferes
-    # with our movement angles.
     xoris r5, r5, 0x8000
     stw   r5, SP_FLOAT_TMP+4(r1)
     lfd   f2, SP_FLOAT_TMP(r1)
@@ -224,9 +236,9 @@ mainLoop: # called from main loop. r3 = mainLoop
     #stw   r5, 0x98(r16) # clear animTimer
     #stw   r5, 0x9C(r16) # clear anim something
     #sth   r5, 0xA0(r16) # clear animID
-    lhz   r5, 0xB0(r16)
-    ori   r5, r5, 0x8000 # disable update
-    sth   r5, 0xB0(r16)
+    #lhz   r5, 0xB0(r16)
+    #ori   r5, r5, 0x8000 # disable update
+    #sth   r5, 0xB0(r16)
 
     # force player state even if target object isn't player,
     # so that the player isn't running around while we're
@@ -241,46 +253,54 @@ mainLoop: # called from main loop. r3 = mainLoop
     #stw     r5, 0x98(r3) # clear animTimer
     #stw     r5, 0x9C(r3) # clear anim something
     #sth     r5, 0xA0(r3) # clear animID
-    lhz     r5, 0xB0(r3)
-    ori     r5, r5, 0x8000 # disable update
-    sth     r5, 0xB0(r3)
+    #lhz     r5, 0xB0(r3)
+    #ori     r5, r5, 0x8000 # disable update
+    #sth     r5, 0xB0(r3)
 
     li      r4,  0
     LOADW   r5,  pCamera
     stw     r4,  0xF4(r5)
 
-
+    # this only applies to collisions with objects, not geometry.
+    #stw     r5,  0x54(r3) # hitbox
+    #cmpwi   r5,  0
+    #beq     .noHitbox
+    #lhz     r6,  0x60(r5)
+    #ori     r6,  r6,  0x01
+    #sth     r6,  0x60(r5)
+.noHitbox:
 
 .end:
     lwz  r3,  SP_LR_SAVE(r1)
-    mtlr r3 # restore LR
-    addi r1, r1, STACK_SIZE # restore stack ptr
+    mtlr r3   # restore LR
+    addi r1,  r1,  STACK_SIZE # restore stack ptr
     blr
 
 .off:
-    lbz   r5, (.prevEnable - mainLoop)(r14)
-    cmpwi r5, 0
+    lbz   r5,  (.prevEnable - mainLoop)(r14)
+    cmpwi r5,  0
     beq   .notJustTurnedOff
 
-    lhz   r5, 0xB0(r16)
-    andi. r5, r5, 0x7FFF # enable update
-    sth   r5, 0xB0(r16)
-
-    # enable update of Player (in case not focused object)
+    # restore player flags
     LOADW   r3,  pPlayer
     cmpwi   r3,  0
     beq     .notJustTurnedOff # no player
-    lhz     r5, 0xB0(r3)
-    andi.   r5, r5, 0x7FFF # enable update
-    sth     r5, 0xB0(r3)
+    lhz     r4,  (.prevFlagsPlayer - mainLoop)(r14)
+    sth     r4,  0xB0(r3)
+
+    # restore target flags
+    lhz     r4,  (.prevFlagsTarget - mainLoop)(r14)
+    sth     r4,  0xB0(r16)
 
 .notJustTurnedOff:
-    li    r3, 0
-    stb   r3, (.prevEnable - mainLoop)(r14)
-    b     .end
+    li      r3,  0
+    stb     r3,  (.prevEnable - mainLoop)(r14)
+    b       .end
 
-.floatMagic:     .int 0x43300000,0x80000000
-.freeMoveScale:  .float 0.07
-.freeMoveScale2: .float 0.35 # when Z held
-.freeMoveCoords: .int 0, 0, 0
-.prevEnable:     .byte 0
+.floatMagic:      .int 0x43300000,0x80000000
+.freeMoveScale:   .float 0.07
+.freeMoveScale2:  .float 0.35 # when Z held
+.freeMoveCoords:  .int 0, 0, 0
+.prevFlagsTarget: .short 0
+.prevFlagsPlayer: .short 0
+.prevEnable:      .byte 0
