@@ -89,6 +89,69 @@ adjItem_autoSave: # r3 = amount to adjust by
 
 ##########################################################################
 
+drawItem_camPad:
+    addi    r4,  r14, (s_camPad - mainLoop)
+    addi    r5,  r14, (s_pad3 - mainLoop)
+    LOADW   r7,  PATCH_STATE_PTR
+    lbz     r6,  CAMERA_OPTIONS(r7)
+    andi.   r6,  r6,  CAMERA_OPTION_PAD3
+    beq     .drawCamPad_off
+    addi    r5,  r14, (s_pad1 - mainLoop)
+
+.drawCamPad_off:
+    blr
+
+adjItem_camPad: # r3 = amount to adjust by
+    LOADW   r5, PATCH_STATE_PTR
+    lbz     r6, CAMERA_OPTIONS(r5)
+    xori    r6, r6, CAMERA_OPTION_PAD3
+    stb     r6, CAMERA_OPTIONS(r5)
+    blr
+
+##########################################################################
+
+drawItem_camInvX:
+    addi    r4,  r14, (s_camInvX - mainLoop)
+    addi    r5,  r14, (s_Normal - mainLoop)
+    LOADW   r7,  PATCH_STATE_PTR
+    lbz     r6,  CAMERA_OPTIONS(r7)
+    andi.   r6,  r6,  CAMERA_OPTION_INVERTX
+    beq     .drawCamInvX_off
+    addi    r5,  r14, (s_invert - mainLoop)
+
+.drawCamInvX_off:
+    blr
+
+adjItem_camInvX: # r3 = amount to adjust by
+    LOADW   r5, PATCH_STATE_PTR
+    lbz     r6, CAMERA_OPTIONS(r5)
+    xori    r6, r6, CAMERA_OPTION_INVERTX
+    stb     r6, CAMERA_OPTIONS(r5)
+    blr
+
+##########################################################################
+
+drawItem_camInvY:
+    addi    r4,  r14, (s_camInvY - mainLoop)
+    addi    r5,  r14, (s_Normal - mainLoop)
+    LOADW   r7,  PATCH_STATE_PTR
+    lbz     r6,  CAMERA_OPTIONS(r7)
+    andi.   r6,  r6,  CAMERA_OPTION_INVERTY
+    beq     .drawCamInvY_off
+    addi    r5,  r14, (s_invert - mainLoop)
+
+.drawCamInvY_off:
+    blr
+
+adjItem_camInvY: # r3 = amount to adjust by
+    LOADW   r5, PATCH_STATE_PTR
+    lbz     r6, CAMERA_OPTIONS(r5)
+    xori    r6, r6, CAMERA_OPTION_INVERTY
+    stb     r6, CAMERA_OPTIONS(r5)
+    blr
+
+##########################################################################
+
 .if 0
 # need to figure out how to reload text and fonts.
 # may only be feasible on title screen.

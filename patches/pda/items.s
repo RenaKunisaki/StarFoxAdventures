@@ -35,9 +35,12 @@ itemAdjustFuncs_page0:
 itemDrawFuncs_page1: # Game Settings
     .int title_page1          - mainLoop
     .int drawItem_player      - mainLoop
-    .int drawItem_FOV         - mainLoop
     .int drawItem_gameSpeed   - mainLoop
     .int drawItem_autoSave    - mainLoop
+    .int drawItem_FOV         - mainLoop
+    .int drawItem_camPad      - mainLoop
+    .int drawItem_camInvX     - mainLoop
+    .int drawItem_camInvY     - mainLoop
 .if 0
     .int drawItem_language    - mainLoop
 .endif
@@ -45,9 +48,12 @@ itemDrawFuncs_page1: # Game Settings
 
 itemAdjustFuncs_page1:
     .int adjItem_player       - mainLoop
-    .int adjItem_FOV          - mainLoop
     .int adjItem_gameSpeed    - mainLoop
     .int adjItem_autoSave     - mainLoop
+    .int adjItem_FOV          - mainLoop
+    .int adjItem_camPad       - mainLoop
+    .int adjItem_camInvX      - mainLoop
+    .int adjItem_camInvY      - mainLoop
 .if 0
     .int adjItem_language     - mainLoop
 .endif
