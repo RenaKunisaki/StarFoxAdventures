@@ -1,6 +1,11 @@
 # pad3 patch:
 # adds some additional functions to controller 3:
 # - hold Z: fast forward
+# - press X: toggle free move
+# also, enables some debug functions left in the original game:
+# - press A: print memory info to console (rather useless since it does this
+#   automatically every few seconds anyway)
+# - press B: refresh textures
 .text
 .include "common.s"
 .include "globals.s"
@@ -41,8 +46,8 @@ mainLoop: # called from main loop. r3 = mainLoop
     stmw    r3, SP_GPR_SAVE(r1)
     mr      r14, r3
 
-    LOADWH  r15, 0x80339908 # pad 3 buttons
-    LOADHL2 r3,  0x80339908, r15
+    LOADWH  r15, controllerStates
+    LOADHL2 r3,  controller3state, r15 # get buttons
 
     # get current time scale
     LOADWH  r16, physicsTimeScale
@@ -66,16 +71,24 @@ mainLoop: # called from main loop. r3 = mainLoop
     STOREW  r4,  physicsTimeScale, r16
     stb     r6,  (wasZ - mainLoop)(r14)
 
-    # check for X: enable free move
+    # check for X: toggle free move
     LOADHL2 r3,  0x80339908, r15
+    li      r4,  0  
     andi.   r0,  r3,  PAD_BUTTON_X
     beq     .notX
 
+    lbz     r6,  (wasX - mainLoop)(r14)
+    cmpwi   r6,  0
+    bne     .end
+
     LOADW   r3,  PATCH_STATE_PTR
-    li      r4,  1
+    lbz     r4,  ENABLE_FREE_MOVE(r3)
+    xori    r4,  r4,  1
     stb     r4,  ENABLE_FREE_MOVE(r3)
+    li      r4,  1
 
 .notX:
+    stb     r4,  (wasX - mainLoop)(r14)
 .end:
     lwz     r5,  SP_LR_SAVE(r1)
     mtlr    r5   # restore LR
@@ -83,5 +96,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi    r1,  r1, STACK_SIZE # restore stack ptr
     blr
 
+
 oldSpeed: .float 60 # previous game speed
 wasZ: .byte 0 # Z held before?
+wasX: .byte 0

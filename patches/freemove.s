@@ -10,6 +10,7 @@
 patchList:
     PATCH_ID        "FreeMov" # must be 7 chars
     PATCH_MAIN_LOOP mainLoop
+    PATCH_BL        0x80105df8, hookFirstPerson
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -23,6 +24,14 @@ constants:
 
 entry: # called as soon as our patch is loaded.
     blr
+
+
+hookFirstPerson:
+    LOADW   r5,  PATCH_STATE_PTR
+    lbz     r6,  ENABLE_FREE_MOVE(r5)
+    cmpwi   r6,  0
+    bnelr   # don't enter first person when in free move mode.
+    JUMP    0x80103950, r0 # cameraCheckEnterFirstPerson
 
 
 mainLoop: # called from main loop. r3 = mainLoop
@@ -106,24 +115,24 @@ mainLoop: # called from main loop. r3 = mainLoop
     neg     r5, r5
     add     r5, r5, r6 # r5 = R - L
 
-    # press Z to end free move
+    # press B to end free move
     LOADHL2 r6, controllerStates, r9 # buttons
-    andi.   r6, r6, PAD_BUTTON_Z
-    beq     .notZheld
+    andi.   r6, r6, PAD_BUTTON_B
+    beq     .notBheld
     LOADW   r3, PATCH_STATE_PTR
     li      r4, 0
     stb     r4, ENABLE_FREE_MOVE(r3)
     b       .end
-.notZheld:
+.notBheld:
     # convert stick position to floats
     # adapted from http://mirror.informatimago.com/next/developer.apple.com/documentation/mac/PPCNumerics/PPCNumerics-157.html
     lfd     f9, (.floatMagic - mainLoop)(r14) # load constant into f9
     lfs     f8, (.freeMoveScale - mainLoop)(r14)
     LOADHL2 r6, controllerStates, r9 # buttons
-    andi.   r6, r6, PAD_BUTTON_B
-    beq     .notBheld
+    andi.   r6, r6, PAD_BUTTON_Z
+    beq     .notZheld
     lfs     f8, (.freeMoveScale2 - mainLoop)(r14)
-.notBheld:
+.notZheld:
     lis     r6, 0x4330
     stw     r6, SP_FLOAT_TMP(r1) # store exponent part for integer
 
@@ -236,6 +245,11 @@ mainLoop: # called from main loop. r3 = mainLoop
     ori     r5, r5, 0x8000 # disable update
     sth     r5, 0xB0(r3)
 
+    li      r4,  0
+    LOADW   r5,  pCamera
+    stw     r4,  0xF4(r5)
+
+
 
 .end:
     lwz  r3,  SP_LR_SAVE(r1)
@@ -267,6 +281,6 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 .floatMagic:     .int 0x43300000,0x80000000
 .freeMoveScale:  .float 0.07
-.freeMoveScale2: .float 0.35 # when B held
+.freeMoveScale2: .float 0.35 # when Z held
 .freeMoveCoords: .int 0, 0, 0
 .prevEnable:     .byte 0
