@@ -111,13 +111,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     # f6 = player sideways X movement scale
     # f7 = player sideways Z movement scale
 
-    # XXX force camera behind player
-    # this method doesn't work
-    #li      r3,  0x3F80
-    #stw     r3,  0xF4(r21)
-    # would just copying target's rotation to camera work?
-    # if it rotates around target rather than its own position...
-
     # do the move
     LOADWH  r9, controllerStates
     LOADBL2 r3, controllerStates+2, r9 # stick X
@@ -203,13 +196,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     # copy saved coords to player
     lwz   r3, (.freeMoveCoords - mainLoop)(r14)
     stw   r3, 0x0C(r16)
-    #stw   r3, 0x18(r16)
+    stw   r3, 0x18(r16)
     lwz   r3, (.freeMoveCoords+4 - mainLoop)(r14)
     stw   r3, 0x10(r16)
-    #stw   r3, 0x1C(r16)
+    stw   r3, 0x1C(r16)
     lwz   r3, (.freeMoveCoords+8 - mainLoop)(r14)
     stw   r3, 0x14(r16)
-    #stw   r3, 0x20(r16)
+    stw   r3, 0x20(r16)
+    # if we don't change 0C, 10, 14, the player won't move, but the
+    # camera will. could make a free camera mode...
 
     # use C stick to rotate
     # the animState rotation overrides the object rotation
@@ -217,14 +212,14 @@ mainLoop: # called from main loop. r3 = mainLoop
     lwz     r4, 0xB8(r16) # animState
     LOADBL2 r3, controllerStates+4, r9 # CX
     extsb   r3, r3
-    mulli   r3, r3, -8
+    mulli   r3, r3, -16
     lha     r5, 0x0478(r4)
     add     r5, r5, r3
     sth     r5, 0x0478(r4)
     sth     r5, 0x0000(r16)
     LOADBL2 r3, controllerStates+5, r9 # CY
     extsb   r3, r3
-    mulli   r3, r3, -8
+    mulli   r3, r3, -16
     lha     r5, 0x02(r16)
     add     r5, r5, r3
     sth     r5, 0x02(r16)
@@ -232,13 +227,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     # force player state
     li    r5, 1
     sth   r5, 0x0274(r4)
-    #li    r5, 0
-    #stw   r5, 0x98(r16) # clear animTimer
-    #stw   r5, 0x9C(r16) # clear anim something
-    #sth   r5, 0xA0(r16) # clear animID
-    #lhz   r5, 0xB0(r16)
-    #ori   r5, r5, 0x8000 # disable update
-    #sth   r5, 0xB0(r16)
 
     # force player state even if target object isn't player,
     # so that the player isn't running around while we're
@@ -246,29 +234,27 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADW   r3,  pPlayer
     cmpwi   r3,  0
     beq     .end # no player
-    lwz     r4, 0xB8(r3) # animState
-    li      r5, 1
-    sth     r5, 0x0274(r4)
-    #li      r5, 0
-    #stw     r5, 0x98(r3) # clear animTimer
-    #stw     r5, 0x9C(r3) # clear anim something
-    #sth     r5, 0xA0(r3) # clear animID
-    #lhz     r5, 0xB0(r3)
-    #ori     r5, r5, 0x8000 # disable update
-    #sth     r5, 0xB0(r3)
+    lwz     r4,  0xB8(r3) # animState
+    li      r5,  1
+    sth     r5,  0x0274(r4)
 
-    li      r4,  0
-    LOADW   r5,  pCamera
-    stw     r4,  0xF4(r5)
+    # force camera behind player.
+    lha     r3,  0(r16)
+    addi    r4,  r1, SP_OUT_X
+    addi    r5,  r1, SP_OUT_Z
+    CALL    angleToVec2
+    lfs     f1,  (.camDist - mainLoop)(r14)
+    addi    r3,  r1, SP_OUT_X
+    mr      r4,  r4
+    CALL    vec3f_scale
+    lfs     f4,  SP_OUT_X(r1)
+    lfs     f5,  SP_OUT_Z(r1)
 
-    # this only applies to collisions with objects, not geometry.
-    #stw     r5,  0x54(r3) # hitbox
-    #cmpwi   r5,  0
-    #beq     .noHitbox
-    #lhz     r6,  0x60(r5)
-    #ori     r6,  r6,  0x01
-    #sth     r6,  0x60(r5)
-.noHitbox:
+    LOADW   r4,  pCamera
+    stfs    f4,  0x0C(r4)
+    stfs    f5,  0x14(r4)
+    lfs     f1,  0x10(r16)
+    stfs    f1,  0x10(r4)
 
 .end:
     lwz  r3,  SP_LR_SAVE(r1)
@@ -297,6 +283,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     stb     r3,  (.prevEnable - mainLoop)(r14)
     b       .end
 
+.camDist:         .float 15 # distance for camera to follow behind player
 .floatMagic:      .int 0x43300000,0x80000000
 .freeMoveScale:   .float 0.07
 .freeMoveScale2:  .float 0.35 # when Z held

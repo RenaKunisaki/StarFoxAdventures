@@ -42,6 +42,7 @@
     # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
     # if modelNum is negative, don't use MODELIND.bin
 .set multVectorByObjMtx,0x8000e0a0 #f1:x f2:y f3:z r3:*outX r4:*outY r5:*outZ r6:obj
+.set objDisableHitbox,0x80035f00 #ObjInstance* - only for next frame
 .set objFree,0x8002cbc4 #ObjInstance*
 .set OSReport,0x8007d6dc
 .set padGetStickX,0x80014cc0 #s8 (int pad)
@@ -52,6 +53,7 @@
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
 .set strncpy,0x802917a8
+.set vec3f_scale,0x80292c74 #void (double scale, vec3f *in, vec3f *out)
 .set waitNextFrame,0x8004a868
 .set warpToMap,0x800552e8 # warpIdx, bool swapCharacter
 .set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
