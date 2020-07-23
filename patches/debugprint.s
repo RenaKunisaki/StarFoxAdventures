@@ -44,7 +44,7 @@ patchList:
     PATCH_WORD 0x80119D90, 0x60000000
 
     # patch BSOD thread to show error even if debug text is off
-    PATCH_WORD 0x80137E28, 0x60000000
+    PATCH_BL   0x80137E08,  hook_bsod
 
     PATCH_END PATCH_KEEP_AFTER_RUN
 
@@ -142,6 +142,16 @@ hook_debugPrintDraw: # hooked call to debugPrintDraw
     # even though debug text is off, we still need to call the function,
     # or else there will be visual glitches.
     JUMP   debugPrintDraw, r4
+
+
+hook_bsod: # hooked call to storeRegs24 from BSOD render
+    mflr    r3
+    CALL    0x802860d0 # storeRegs24
+    mtlr    r3
+    LOADWH  r3,  enableDebugText
+    li      r28, 1
+    STOREB  r28, enableDebugText, r3
+    blr
 
 
 mainLoop: # called from main loop. r3 = mainLoop
@@ -287,6 +297,10 @@ mainLoop: # called from main loop. r3 = mainLoop
     extsb   r6,  r6
     LOADWL2 r7,  curMapId, r3
     addi    r3,  r14, (.fmt_mapCoords - mainLoop)@l
+    CALL    debugPrintf
+
+    # %s is bugged...
+    LOADW   r3,  pCurMapInfo # map name
     CALL    debugPrintf
 
     # display player state
@@ -442,9 +456,9 @@ mainLoop: # called from main loop. r3 = mainLoop
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
 .fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
-.fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X S%X %08X\x83\n"
+.fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X S%X %08X\x83 "
 #.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
-.fmt_cameraCoords: .string "C:\x84%6d %6d %6d\x83 "
+.fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 "
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
 .fmt_gameState:    .string "Obj\x84%3d\x83\n"
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
