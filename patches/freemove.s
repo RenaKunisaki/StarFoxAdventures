@@ -224,10 +224,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     add     r5, r5, r3
     sth     r5, 0x02(r16)
 
-    # force player state
-    li    r5, 1
-    sth   r5, 0x0274(r4)
-
     # force player state even if target object isn't player,
     # so that the player isn't running around while we're
     # moving some other object.
