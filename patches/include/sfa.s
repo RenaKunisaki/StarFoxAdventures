@@ -44,6 +44,8 @@
 .set multVectorByObjMtx,0x8000e0a0 #f1:x f2:y f3:z r3:*outX r4:*outY r5:*outZ r6:obj
 .set objFree,0x8002cbc4 #ObjInstance*
 .set OSReport,0x8007d6dc
+.set padGetStickX,0x80014cc0 #s8 (int pad)
+.set padGetStickY,0x80014c6c #s8 (int pad)
 .set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
 .set saveGame_save,0x800e86d0
 .set sprintf,0x8028f688

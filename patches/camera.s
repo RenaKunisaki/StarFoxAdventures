@@ -11,6 +11,9 @@ patchList:
     PATCH_B   0x80014c64, hook_padGetCX
     PATCH_B   0x80014c10, hook_padGetCY
     PATCH_B   0x80133af0, hook_minimap
+    PATCH_B   0x801084c8, hook_firstPerson
+    PATCH_B   0x8029b03c, hook_aimY
+    PATCH_B   0x8029b08c, hook_aimX
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -81,6 +84,44 @@ hook_minimap: # replaces bl getButtonsHeld
 .hook_minimap_disabled:
     CALL    getButtonsJustPressed
     JUMP    0x80133af4, r0 # back to original code
+
+
+hook_firstPerson:
+    lfs     f1, -0x4d20(r2) # replaced
+    LOADW   r3,  PATCH_STATE_PTR
+    lbz     r3,  CAMERA_OPTIONS(r3)
+
+    andi.   r4,  r3,  CAMERA_OPTION_INVERTX
+    beq     .hook_firstPerson_noXInvert
+    neg     r28, r28
+.hook_firstPerson_noXInvert:
+    andi.   r4,  r3,  CAMERA_OPTION_INVERTY
+    bne     .hook_firstPerson_noYInvert
+    neg     r29, r29
+.hook_firstPerson_noYInvert:
+    JUMP    0x801084cc, r0
+
+
+hook_aimY:
+    fdivs   f0,  f1,  f0 # replaced
+    LOADW   r4,  PATCH_STATE_PTR
+    lbz     r4,  CAMERA_OPTIONS(r4)
+    andi.   r5,  r4,  CAMERA_OPTION_INVERTY
+    bne     .hook_aimY_noInvert
+    fneg    f0,  f0
+.hook_aimY_noInvert:
+    JUMP    0x8029b040, r4
+
+hook_aimX:
+    fdivs   f0,  f1,  f0 # replaced
+    LOADW   r4,  PATCH_STATE_PTR
+    lbz     r4,  CAMERA_OPTIONS(r4)
+    andi.   r5,  r4,  CAMERA_OPTION_INVERTX
+    beq     .hook_aimX_noInvert
+    fneg    f0,  f0
+.hook_aimX_noInvert:
+    JUMP    0x8029b090, r4
+
 
 
 # hook camera update function to inject our own rotation offsets.
