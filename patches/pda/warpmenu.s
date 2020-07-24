@@ -2,7 +2,7 @@
 .set WARP_MENU_YPOS,   56
 .set WARP_MENU_WIDTH, 600
 .set WARP_MENU_HEIGHT,300
-.set MAX_WARP,         75
+.set MAX_WARP,         74
 
 warpMenu:
     # subroutine: runs the Warp menu.
@@ -249,7 +249,7 @@ warpDefs:
     DEFINEWARP      0,      0,  13440,  0, warpNameShipBattle
     DEFINEWARP  -9495,   -127, -19015,  0, warpNameAnimTest
     DEFINEWARP  13440,   -127,  -5120,  0, warpNameWGshrine
-    DEFINEWARP  -7040,   -127,  -8320,  0, warpNameNikTest
+    #DEFINEWARP  -7040,   -127,  -8320,  0, warpNameNikTest # crashes
     DEFINEWARP   7680,   -127,  14080,  0, warpNameRollDemo
     DEFINEWARP -12800,   -127,  27520,  0, warpNameKamerian
     DEFINEWARP -10240,   -127,  27520,  0, warpNameDuster
