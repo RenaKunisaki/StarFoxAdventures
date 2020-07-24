@@ -290,6 +290,14 @@ menuHandleInput:
     # r3=buttons, r4=stick X, r5=stick Y,
     # r6=CX, r7=CY, r8=L, r9=R
 
+    lbz     r10, (menuPage - mainLoop)(r14)
+    slwi    r10, r10, 2 # r2 *= 4
+    addi    r10, r10, pageInputFuncs - mainLoop
+    lwzx    r10, r10, r14
+    add     r10, r10, r14
+    mtspr   CTR, r10
+    bctrl   # call input func
+
     andi.   r10, r3, PAD_BUTTON_B
     bne     .close # B pressed -> close menu
     andi.   r10, r3, PAD_BUTTON_A

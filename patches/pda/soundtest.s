@@ -95,3 +95,30 @@ adjItem_streamTest:
     mtlr  r20
     li    r9, 0 # no sound effect
     blr
+
+inputFuncAudio:
+    # r3=buttons, r4=stick X, r5=stick Y,
+    # r6=CX, r7=CY, r8=L, r9=R
+    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0,  SP_LR_SAVE(r1)
+    stmw    r3,  SP_GPR_SAVE(r1)
+
+    andi.   r10, r3,  PAD_BUTTON_Z
+    beq     .inputFuncAudio_end
+
+    CALL    0x8000d0c0 # stopAllStreams
+
+    #LOAD    r10, 0x80336d90
+    li      r3,  0
+    lhz     r4, (soundTestId - mainLoop)(r14)
+    #LOADWH  r10, 0x803dc878
+    #STOREH  r3,  0x803dc878, r10
+    CALL    0x8000b824 # objStopSound_
+
+.inputFuncAudio_end:
+    lwz     r0,  SP_LR_SAVE(r1)
+    mtlr    r0   # restore LR
+    lmw     r3,  SP_GPR_SAVE(r1)
+    addi    r1,  r1, STACK_SIZE # restore stack ptr
+    blr

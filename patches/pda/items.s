@@ -110,3 +110,13 @@ itemAdjustFuncs_page3:
     .int adjItem_textTest     - mainLoop
     .int adjItem_frameAdvance - mainLoop
     #.int adjItem_Save         - mainLoop
+
+
+pageInputFuncs:
+    .int inputFuncDummy       - mainLoop # PDA Menu
+    .int inputFuncDummy       - mainLoop # Game Settings
+    .int inputFuncAudio       - mainLoop # Audio
+    .int inputFuncDummy       - mainLoop # Debug
+
+
+inputFuncDummy: blr
