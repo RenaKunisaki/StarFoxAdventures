@@ -39,7 +39,7 @@ adjItem_music:
     bge   .musicNotMax
     li    r4, 0x63
 .musicNotMax:
-    cmpwi r4, 0x640
+    cmpwi r4, 0x64
     blt   .musicNotMin
     li    r4, 0
 .musicNotMin:
