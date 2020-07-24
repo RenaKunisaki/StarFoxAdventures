@@ -204,9 +204,9 @@ menuGetInput:
     b       .notNeutral
 
 .notOpening:
-    LOADHA r4, curGameText
-    cmpwi  r4, 0
-    bge    .ignore
+    #LOADHA r4, curGameText
+    #cmpwi  r4, 0
+    #bge    .ignore
 
     # get the controller state
     # r6 = stick X, r7 = stick Y

@@ -275,7 +275,7 @@ objMenu_List_doInput:
     stw     r3,  0x14(r21)
     stw     r3,  0x20(r21)
     mr      r3,  r21
-    CALL    0x80035f00 # objDisableHitbox
+    CALL    objDisableHitbox
     b       .objMenu_end
 
 .objMenu_toPlayer: # move cursor to Player object
