@@ -37,9 +37,9 @@ adjItem_music:
     add   r4, r4, r3
     cmpwi r4, 0
     bge   .musicNotMax
-    li    r4, 0x58
+    li    r4, 0x63
 .musicNotMax:
-    cmpwi r4, 0x59
+    cmpwi r4, 0x640
     blt   .musicNotMin
     li    r4, 0
 .musicNotMin:
