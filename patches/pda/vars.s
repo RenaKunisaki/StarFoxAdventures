@@ -19,6 +19,7 @@ five:          .float    5
 f_24:          .float   24
 sixty:         .float   60
 oneHundred:    .float  100
+f_127:         .float  127
 twoFiveFive:   .float  255
 f_3600:        .float 3600
 fovMax:        .float  175 # the most the game will do

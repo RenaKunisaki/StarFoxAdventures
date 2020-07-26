@@ -11,13 +11,24 @@ drawItem_volume:
     blr
 
 adjItem_volMusic: # r3 = amount to adjust by
-    LOAD    r5, volumeMusic
+    LOAD    r5,  volumeMusic
+    LOAD    r6,  saveData+SAVEDATA_MUSIC_VOL
 
 adjItem_volume:
     lfs     f2, (volAdjStep - mainLoop)(r14) # f2 = 0.1
     lfs     f3, (zero - mainLoop)(r14) # f3 = 0
     lfs     f4, (two - mainLoop)(r14) # f4 = 2
-    b       adjItem_float
+    mflr    r9
+    bl      adjItem_float
+    mtlr    r9
+
+    lfs     f2,  (f_127 - mainLoop)(r14)
+    fmuls   f1,  f1,  f2
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r5,  (SP_FLOAT_TMP+4)(r1)
+    stb     r5,  0(r6)
+    blr
 
 ####################################################################
 
@@ -28,7 +39,8 @@ drawItem_volSFX:
     b       drawItem_volume
 
 adjItem_volSFX: # r3 = amount to adjust by
-    LOAD    r5, volumeSFX
+    LOAD    r5,  volumeSFX
+    LOAD    r6,  saveData+SAVEDATA_SFX_VOL
     b       adjItem_volume
 
 ####################################################################
@@ -58,5 +70,7 @@ adjItem_volCutScene: # r3 = amount to adjust by
     bge     .adjVolCs_notMin
     li      r4, 0
 .adjVolCs_notMin:
-    STOREB  r4, volumeCutScenes, r5
+    STOREB  r4,  volumeCutScenes, r5
+    LOADWH  r5,  saveData
+    STOREB  r4,  SAVEDATA_CUTSCENE_VOL+saveData, r5
     blr
