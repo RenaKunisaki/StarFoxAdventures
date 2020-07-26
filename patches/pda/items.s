@@ -65,6 +65,7 @@ itemDrawFuncs_page2: # Audio
     .int drawItem_volMusic    - mainLoop
     .int drawItem_volSFX      - mainLoop
     .int drawItem_volCutScene - mainLoop
+    .int drawItem_soundMode   - mainLoop
     .int drawItem_sound       - mainLoop
     .int drawItem_music       - mainLoop
     .int drawItem_streamTest  - mainLoop
@@ -74,6 +75,7 @@ itemAdjustFuncs_page2:
     .int adjItem_volMusic     - mainLoop
     .int adjItem_volSFX       - mainLoop
     .int adjItem_volCutScene  - mainLoop
+    .int adjItem_soundMode    - mainLoop
     .int adjItem_sound        - mainLoop
     .int adjItem_music        - mainLoop
     .int adjItem_streamTest   - mainLoop

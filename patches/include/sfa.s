@@ -49,6 +49,7 @@
 .set padGetStickY,0x80014c6c #s8 (int pad)
 .set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
 .set saveGame_save,0x800e86d0
+.set setSoundMode,0x80009920 #void (u8 mode, bool force)
 .set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
@@ -128,6 +129,7 @@
 .set seqPos,                 0x803dd0bc #s8
 .set shouldCloseCMenu,       0x803dd7b4 #bool
 .set shouldOpenCMenu,        0x803dd7d5 #u8
+.set soundMode,              0x803db1e8 #u8 (Stereo, Surround, Mono, Headphones)
 .set timeDelta,              0x803db414 #float
 .set viewportAspect,         0x803db268 #float
 .set volumeCutScenes,        0x803db253 #s8

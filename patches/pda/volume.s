@@ -71,6 +71,34 @@ adjItem_volCutScene: # r3 = amount to adjust by
     li      r4, 0
 .adjVolCs_notMin:
     STOREB  r4,  volumeCutScenes, r5
-    LOADWH  r5,  saveData
+    LOADWH  r5,  SAVEDATA_CUTSCENE_VOL+saveData
     STOREB  r4,  SAVEDATA_CUTSCENE_VOL+saveData, r5
     blr
+
+####################################################################
+
+drawItem_soundMode:
+    addi    r4,  r14, (s_soundMode - mainLoop)
+    LOADWH  r6,  soundMode
+    LOADBL2 r6,  soundMode, r6
+    slwi    r6,  r6,  1
+    addi    r5,  r14, .soundModeLabels - mainLoop
+    lhzx    r5,  r5,  r6
+    add     r5,  r5,  r14
+    blr
+
+.soundModeLabels:
+    .short s_stereo     - mainLoop
+    .short s_surround   - mainLoop
+    .short s_mono       - mainLoop
+    .short s_headphones - mainLoop
+
+adjItem_soundMode: # r3 = amount to adjust by
+    LOADWH  r6,  soundMode
+    LOADBL2 r6,  soundMode, r6
+    add     r6,  r6,  r3
+    andi.   r3,  r6,  3
+    LOADWH  r5,  SAVEDATA_SOUND_MODE+saveData
+    STOREB  r3,  SAVEDATA_SOUND_MODE+saveData, r5
+    li      r4,  1 # force
+    JUMP    setSoundMode, r0
