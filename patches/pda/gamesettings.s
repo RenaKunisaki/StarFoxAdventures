@@ -169,6 +169,28 @@ adjItem_camInvY: # r3 = amount to adjust by
 
 ##########################################################################
 
+drawItem_widescreen:
+    addi    r4,  r14, (s_widescreen - mainLoop)
+    addi    r5,  r14, (s_off - mainLoop)
+    LOADW   r7,  renderFlags
+    andi.   r7,  r7,  8 # widescreen
+    beqlr
+    addi    r5,  r14, (s_on - mainLoop)
+    blr
+
+adjItem_widescreen: # r3 = amount to adjust by
+    LOADWH  r7,  renderFlags
+    LOADWL2 r3,  renderFlags, r7
+    srwi    r3,  r3,  3
+    xori    r3,  r3,  1
+    andi.   r3,  r3,  1
+
+    LOADWH  r5,  saveData
+    STOREB  r3,  SAVEDATA_WIDESCREEN+saveData, r5
+    JUMP    setWidescreen, r0
+
+##########################################################################
+
 .if 0
 # need to figure out how to reload text and fonts.
 # may only be feasible on title screen.

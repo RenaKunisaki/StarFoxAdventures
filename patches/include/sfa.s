@@ -50,6 +50,8 @@
 .set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
 .set saveGame_save,0x800e86d0
 .set setSoundMode,0x80009920 #void (u8 mode, bool force)
+.set setSubtitlesEnabled,0x8001bcd8
+.set setWidescreen,0x8005cd54 #int (bool) always returns 0
 .set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
@@ -73,6 +75,7 @@
 .set bEnableSpiritVision,    0x803dcdf9 #bool  spirit vision filter
 .set bEnableViewFinderHud,   0x803dcdfa #bool  viewfinder
 .set blurFilterArea,         0x803dce48 #vec3f blur filter area
+.set bSubtitlesEnabled,      0x803dca00 #int
 .set buttonsJustPressed,     0x803398e0 #u32
 .set cMenuEnabled,           0x803dd793 #bool
 .set cMenuOpen,              0x803dd795 #bool
@@ -99,6 +102,7 @@
 .set distortionFilterColor,  0x803dce40 #color distortion filter color
 .set distortionFilterVector, 0x803821c8 #vec3f
 .set enableDebugText,        0x803dda28 #bool
+.set enableRumble,           0x803dc909 #bool
 .set fovY,                   0x803dc8a4 #float
 .set heaps,                  0x80340698 #Heap[4]
 .set hudHidden,              0x803dca3a #bool
@@ -124,6 +128,7 @@
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox
 .set timeStop,               0x803dca3c #bool
 .set pPlayer,                0x803428f8 #ObjInstance*
+.set renderFlags,            0x803dcde8 #u32
 .set saveData,               0x803a31c4 #SaveData
 .set seqLength,              0x803dd0c0 #s32
 .set seqPos,                 0x803dd0bc #s8

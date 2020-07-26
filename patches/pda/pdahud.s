@@ -54,3 +54,45 @@ adjItem_PDAHUD:
     or      r7,  r7,  r6
     STOREB  r7,  SAVEDATA_OPTIONS+saveData, r5
     blr
+
+##########################################################################
+
+# putting these here because Game Settings is crowded
+# and PDA Menu is a reasonable place for UI settings.
+
+drawItem_subtitles:
+    addi    r4,  r14, (s_subtitles - mainLoop)
+    addi    r5,  r14, (s_off - mainLoop)
+    LOADW   r6,  bSubtitlesEnabled
+    cmpwi   r6,  0
+    beqlr
+    addi    r5,  r14, (s_on - mainLoop)
+    blr
+
+adjItem_subtitles: # r3 = amount to adjust by
+    LOADW   r3,  bSubtitlesEnabled
+    xori    r3,  r3,  1
+    LOADWH  r5,  SAVEDATA_SUBTITLES+saveData
+    STOREB  r3,  SAVEDATA_SUBTITLES+saveData, r5
+    JUMP    setSubtitlesEnabled, r0
+
+##########################################################################
+
+drawItem_rumble:
+    addi    r4,  r14, (s_rumble - mainLoop)
+    addi    r5,  r14, (s_off - mainLoop)
+    LOADWH  r6,  enableRumble
+    LOADBL2 r6,  enableRumble, r6
+    cmpwi   r6,  0
+    beqlr
+    addi    r5,  r14, (s_on - mainLoop)
+    blr
+
+adjItem_rumble: # r3 = amount to adjust by
+    LOADWH  r6,  enableRumble
+    LOADBL2 r3,  enableRumble, r6
+    xori    r3,  r3,  1
+    STOREB  r3,  enableRumble, r6
+    LOADWH  r5,  SAVEDATA_RUMBLE+saveData
+    STOREB  r3,  SAVEDATA_RUMBLE+saveData, r5
+    blr

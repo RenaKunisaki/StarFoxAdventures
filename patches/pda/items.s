@@ -24,12 +24,16 @@ itemDrawFuncs_page0: # PDA Menu
     .int drawItem_PDAHUD      - mainLoop
     .int drawItem_bigMap      - mainLoop
     .int drawItem_mapAlpha    - mainLoop
+    .int drawItem_subtitles   - mainLoop
+    .int drawItem_rumble      - mainLoop
     .int 0 # drawfuncs table must be null terminated
 
 itemAdjustFuncs_page0:
     .int adjItem_PDAHUD       - mainLoop
     .int adjItem_bigMap       - mainLoop
     .int adjItem_mapAlpha     - mainLoop
+    .int adjItem_subtitles    - mainLoop
+    .int adjItem_rumble       - mainLoop
 
 
 itemDrawFuncs_page1: # Game Settings
@@ -38,6 +42,7 @@ itemDrawFuncs_page1: # Game Settings
     .int drawItem_gameSpeed   - mainLoop
     .int drawItem_autoSave    - mainLoop
     .int drawItem_FOV         - mainLoop
+    .int drawItem_widescreen  - mainLoop
     .int drawItem_camPad      - mainLoop
     .int drawItem_camInvX     - mainLoop
     .int drawItem_camInvY     - mainLoop
@@ -51,6 +56,7 @@ itemAdjustFuncs_page1:
     .int adjItem_gameSpeed    - mainLoop
     .int adjItem_autoSave     - mainLoop
     .int adjItem_FOV          - mainLoop
+    .int adjItem_widescreen   - mainLoop
     .int adjItem_camPad       - mainLoop
     .int adjItem_camInvX      - mainLoop
     .int adjItem_camInvY      - mainLoop
