@@ -27,6 +27,12 @@ adjItem_bigMap: # r3 = amount to adjust by (0=A button)
 .adjItem_bigMap_notZero:
 
     stb     r4,  (menuMapSize - mainLoop)(r14) # store the setting
+    LOADWH  r5,  saveData
+    LOADBL2 r7,  SAVEDATA_OPTIONS+saveData, r5
+    andi.   r7,  r7,  (~SAVEDATA_OPTION_MAP_SIZE) & 0xFFFF
+    #slwi    r6,  r6,  0
+    or      r7,  r7,  r4
+    STOREB  r7,  SAVEDATA_OPTIONS+saveData, r5
 
     # get the override for this setting
     slwi    r4,  r4,  1

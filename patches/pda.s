@@ -16,6 +16,8 @@ patchList:
     # it's not necessary anyway and interferes
     # with our fixed width hack.
     PATCH_WORD 0x80017C70, 0x2816ACAB
+    # hook into loadSaveSettings to repurpose some unused settings.
+    PATCH_B    0x800e7f9c, saveLoadHook
     PATCH_END  PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -77,6 +79,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/heaplist.s"
 .include "pda/heapmenu.s"
 .include "pda/savegamemenu.s"
+.include "pda/savegame.s"
 .include "pda/texthook.s"
 
 # for proper memory alignment, this file must be included last.

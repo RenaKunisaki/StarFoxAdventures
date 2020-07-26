@@ -256,5 +256,6 @@ warpDefs:
     DEFINEWARP  -7040,   -127,  29440,  0, warpNameDiamondBay
     DEFINEWARP   -640,   -127,  28800,  0, warpNameDiscovery
     DEFINEWARP   3200,   -127,  28160,  0, warpNameWillow
-    DEFINEWARP  12800,   -127,  30080,  0, warpNameOldKP
+    DEFINEWARP  12800,    973,  30080,  0, warpNameOldKP
+    #DEFINEWARP   3693,    -37,    238,  0, warpNameOldKP
     DEFINEWARP -19200,   -127,  33920,  0, warpNameCloudRace2

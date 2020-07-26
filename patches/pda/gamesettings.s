@@ -14,29 +14,40 @@ adjItem_FOV: # r3 = amount to adjust by
     lfs     f2, (five   - mainLoop)(r14) # f2 = step
     lfs     f3, (five   - mainLoop)(r14) # f3 = min
     lfs     f4, (fovMax - mainLoop)(r14) # f4 = max
-    b       adjItem_float
+    mflr    r9
+    bl      adjItem_float
+    mtlr    r9
+
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r6,  (SP_FLOAT_TMP+4)(r1)
+    LOADWH  r5,  saveData
+    STOREB  r6,  SAVEDATA_FOV+saveData, r5
+    blr
 
 fovOverride: .float 60
 
 ##########################################################################
 
 drawItem_player:
-    addi    r4, r14, (s_Player - mainLoop)
-    addi    r5, r14, (s_Krystal - mainLoop)
-    LOADW   r6, PATCH_STATE_PTR
-    lbz     r6, CUR_CHAR_ADDR(r6)
-    andi.   r6, r6, 0x7F
-    cmpwi   r6, 0
+    addi    r4,  r14, (s_Player - mainLoop)
+    addi    r5,  r14, (s_Krystal - mainLoop)
+    LOADW   r6,  PATCH_STATE_PTR
+    lbz     r6,  CUR_CHAR_ADDR(r6)
+    andi.   r6,  r6, 0x7F
+    cmpwi   r6,  0
     beq     .drawPlayer_krystal
-    addi    r5, r14, (s_Fox - mainLoop)
+    addi    r5,  r14, (s_Fox - mainLoop)
 .drawPlayer_krystal:
     blr
 
 adjItem_player: # r3 = amount to adjust by
-    LOADW   r5, PATCH_STATE_PTR
-    lbz     r6, CUR_CHAR_ADDR(r5)
-    xori    r6, r6, 1
-    stb     r6, CUR_CHAR_ADDR(r5)
+    LOADW   r5,  PATCH_STATE_PTR
+    lbz     r6,  CUR_CHAR_ADDR(r5)
+    xori    r6,  r6, 1
+    stb     r6,  CUR_CHAR_ADDR(r5)
+    LOADWH  r5,  saveData
+    STOREB  r6,  SAVEDATA_CUR_CHAR+saveData, r5
     blr
 
 ##########################################################################
@@ -102,10 +113,12 @@ drawItem_camPad:
     blr
 
 adjItem_camPad: # r3 = amount to adjust by
-    LOADW   r5, PATCH_STATE_PTR
-    lbz     r6, CAMERA_OPTIONS(r5)
-    xori    r6, r6, CAMERA_OPTION_PAD3
-    stb     r6, CAMERA_OPTIONS(r5)
+    LOADW   r5,  PATCH_STATE_PTR
+    lbz     r6,  CAMERA_OPTIONS(r5)
+    xori    r6,  r6, CAMERA_OPTION_PAD3
+    stb     r6,  CAMERA_OPTIONS(r5)
+    LOADWH  r5,  saveData
+    STOREB  r6,  SAVEDATA_CAMERA_OPTIONS+saveData, r5
     blr
 
 ##########################################################################
@@ -123,10 +136,12 @@ drawItem_camInvX:
     blr
 
 adjItem_camInvX: # r3 = amount to adjust by
-    LOADW   r5, PATCH_STATE_PTR
-    lbz     r6, CAMERA_OPTIONS(r5)
-    xori    r6, r6, CAMERA_OPTION_INVERTX
-    stb     r6, CAMERA_OPTIONS(r5)
+    LOADW   r5,  PATCH_STATE_PTR
+    lbz     r6,  CAMERA_OPTIONS(r5)
+    xori    r6,  r6, CAMERA_OPTION_INVERTX
+    stb     r6,  CAMERA_OPTIONS(r5)
+    LOADWH  r5,  saveData
+    STOREB  r6,  SAVEDATA_CAMERA_OPTIONS+saveData, r5
     blr
 
 ##########################################################################
@@ -144,10 +159,12 @@ drawItem_camInvY:
     blr
 
 adjItem_camInvY: # r3 = amount to adjust by
-    LOADW   r5, PATCH_STATE_PTR
-    lbz     r6, CAMERA_OPTIONS(r5)
-    xori    r6, r6, CAMERA_OPTION_INVERTY
-    stb     r6, CAMERA_OPTIONS(r5)
+    LOADW   r5,  PATCH_STATE_PTR
+    lbz     r6,  CAMERA_OPTIONS(r5)
+    xori    r6,  r6, CAMERA_OPTION_INVERTY
+    stb     r6,  CAMERA_OPTIONS(r5)
+    LOADWH  r5,  saveData
+    STOREB  r6,  SAVEDATA_CAMERA_OPTIONS+saveData, r5
     blr
 
 ##########################################################################
