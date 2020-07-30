@@ -14,6 +14,7 @@ patchList:
     PATCH_B   0x801084c8, hook_firstPerson
     PATCH_B   0x8029b03c, hook_aimY
     PATCH_B   0x8029b08c, hook_aimX
+    PATCH_BL  0x80108758, hook_viewFinderZoom
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -122,6 +123,24 @@ hook_aimX:
 .hook_aimX_noInvert:
     JUMP    0x8029b090, r4
 
+
+hook_viewFinderZoom:
+    # replace "bl padGetCY" in viewfinder controls.
+    # remap to L/R, because using D-pad is very slow and not analog.
+    LOADW   r4,  PATCH_STATE_PTR
+    lbz     r4,  CAMERA_OPTIONS(r4)
+    andi.   r4,  r4, CAMERA_OPTION_PAD3
+    beq     .hook_viewFinderZoom_disabled
+
+    LOADWH  r9,  controllerStates
+    LOADBL2 r5,  controllerStates+6, r9 # L
+    LOADBL2 r6,  controllerStates+7, r9 # R
+    neg     r6,  r6
+    add     r3,  r6,  r5 # return L - R
+    blr
+
+.hook_viewFinderZoom_disabled:
+    JUMP   0x80014bc4, r0
 
 
 # hook camera update function to inject our own rotation offsets.
