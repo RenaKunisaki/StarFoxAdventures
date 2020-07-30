@@ -32,7 +32,19 @@ mainLoopPatch:
     # set correct model for selected character.
     stb     r15, 0xAD(r3) # model index
     lwz     r4,  0xB8(r3)
-    stb     r15, 0x081B(r4) # voice and backpack
+    sth     r15, 0x081A(r4) # voice and backpack
+
+    # set some animation-related variables which depend on the character.
+    addi    r5,   r20,  varsKrystal - mainLoopPatch
+    cmpwi   r15,  0
+    beq     .mainLoopPatch_krystal
+    addi    r5,   r20,  varsFox - mainLoopPatch
+.mainLoopPatch_krystal:
+    lwz     r3,   0x00(r5)
+    stw     r3,   0x07DC(r4)
+    lwz     r3,   0x04(r5)
+    stw     r3,   0x0874(r4)
+
 
     # set correct model for AnimFoxLink object, which is the "afterimage"
     # during the WarpStone sequence.
@@ -47,6 +59,14 @@ mainLoopPatch:
     lmw     r3, SP_GPR_SAVE(r1)
     addi    r1, r1, STACK_SIZE # restore stack ptr
     blr
+
+varsKrystal:
+    .float 28.8 # field 0x7DC, unknown purpose
+    .float 33.0 # ledge grab height
+varsFox:
+    .float 25.3 # field 0x7DC
+    .float 27.8 # ledge grab height
+
 
 
 mainLoopPatchObjModel:
