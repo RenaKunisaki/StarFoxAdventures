@@ -55,7 +55,7 @@
 # 816820e8
 # 80003ebc
 
-.set DEBUG,1
+.set DEBUG,0
 .text
 .include "common.s"
 .include "globals.s"
