@@ -26,7 +26,7 @@ fovMax:        .float  175 # the most the game will do
 gameSpeedMin:  .float   15 # 1/4 * 60; also the amount to adjust by
 gameSpeedMax:  .float  240 # 4 * 60
 gameSpeedDiv:  .float  0.6 # 60 / 100, to convert to percent
-volAdjStep:    .float  0.1
+volAdjStep:    .float  0.01
 # lol of course we can't do this.
 #f_menuWidth:   .float MENU_WIDTH
 #f_menuHeight:  .float MENU_HEIGHT
