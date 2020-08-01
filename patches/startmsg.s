@@ -42,14 +42,6 @@ doStartup: # called from late init
     LOADWH   r4,  enableDebugText
     STOREB   r3,  enableDebugText, r4
 
-    andi.    r0,  r6, PAD_BUTTON_Y | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_A
-    cmpwi    r0,      PAD_BUTTON_Y | PAD_BUTTON_B
-    bne      .doStartup_end
-
-    LOADW    r6, PATCH_STATE_PTR
-    li       r5, 0x80
-    stb      r5, CUR_CHAR_ADDR(r6)
-.doStartup_end:
     lwz      r0, SP_LR_SAVE(r1)
     mtlr     r0 # restore LR
     lmw      r3, SP_GPR_SAVE(r1)
@@ -106,7 +98,7 @@ main: # called from loading screen loop
     JUMP     0x80115d44, r0 # jump back to game code
 
 
-.msg1: .string "Amethyst Edition v1.0"
+.msg1: .string "Amethyst Edition v1.3"
 .msg2: .string "segment6.net"
 .msg3:
     .ascii "\t\tThis is a free fan creation.\n"
