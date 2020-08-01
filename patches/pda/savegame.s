@@ -10,16 +10,17 @@ saveLoadHook:
     .saveLoadHook_getpc: mflr r14
     subi    r14,  r14,  .saveLoadHook_getpc - mainLoop
 
-    LOADWH   r9,  controllerStates
-    LOADHL2  r6,  controllerStates, r9 # buttons
-    andi.    r0,  r6, PAD_BUTTON_Y | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_A | PAD_BUTTON_MENU
-    cmpwi    r0,  PAD_BUTTON_X | PAD_BUTTON_MENU
-    bne      .saveLoadHook_notC
-    lbz      r5,  SAVEDATA_CUR_CHAR(r3)
-    xori     r5,  r5, 0x80
-    stb      r5,  SAVEDATA_CUR_CHAR(r3)
+    lbz     r5,  SAVEDATA_CUR_CHAR(r3)
+    andi.   r5,  r5,  0x7F
+    LOADWH  r9,  controllerStates
+    LOADHL2 r6,  controllerStates, r9 # buttons
+    andi.   r0,  r6, PAD_BUTTON_Y | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_A | PAD_BUTTON_MENU
+    cmpwi   r0,  PAD_BUTTON_X | PAD_BUTTON_MENU
+    bne     .saveLoadHook_notC
+    xori    r5,  r5, 0x80
 
 .saveLoadHook_notC:
+    stb     r5,  SAVEDATA_CUR_CHAR(r3)
     LOADW   r9,  PATCH_STATE_PTR
 
     lbz     r4,  SAVEDATA_CAMERA_OPTIONS(r3)
