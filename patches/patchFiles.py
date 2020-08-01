@@ -68,6 +68,7 @@ patchOrder = (
     'pad3',
     'camera',
     'startmsg',
+    #'ybutton',
 )
 def buildPatches(basePath):
     buildPatch(basePath, 'debugbin', os.path.join(basePath, 'files', 'debug.bin'))
