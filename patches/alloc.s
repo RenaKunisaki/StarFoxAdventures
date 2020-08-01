@@ -5,6 +5,7 @@
 # hopefully this won't hurt anything.
 .text
 .include "common.s"
+.set ENABLE_LOG,0
 
 # define patches
 patchList:
@@ -35,12 +36,14 @@ main:
     .getpc:
         mflr r31
 
+.if ENABLE_LOG
     addi r3, r31, (.msg - .getpc)@l
     mr   r4, r9  # lr
     mr   r5, r28 # size
     mr   r6, r29 # tag
     mr   r7, r30 # name
     CALL OSReport
+.endif
 
     # check size
     srwi  r4, r28, 16
@@ -63,5 +66,6 @@ main:
     li   r0, 1 # replaced
     JUMP 0x80023d04, r31 # return to original code
 
-.msg:
-    .string "%08X alloc %08X %08X %s"
+.if ENABLE_LOG
+    .msg: .string "%08X alloc %08X %08X %s"
+.endif
