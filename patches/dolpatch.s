@@ -22,7 +22,7 @@
 # for now I'm gonna be lazy and just hardcode the jump
 # eventually a script should use these ints to know where to patch.
 #.int 0x80021038, 0x4BFE2E35 # installBsodHandlers
-.int 0x80020E98, 0x4BFE2FD5 # where to patch the jump
+.int 0x80020E98 #, 0x4BFE2FD5 # where to patch the jump
 .int 0x80003E6C # where to insert
 
 constants:

@@ -6,6 +6,8 @@
 .include "common.s"
 .include "globals.s"
 
+.set SHOW_PLAYER_FLAGS,0
+
 # define patches
 patchList:
     PATCH_ID        "DbgText" # must be 7 chars
@@ -316,6 +318,14 @@ mainLoop: # called from main loop. r3 = mainLoop
     #creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
     #CALL debugPrintf
 
+.if SHOW_PLAYER_FLAGS
+    addi r3, r14, (.fmt_playerAnimData - mainLoop)@l
+    lwz  r9, 0x00B8(r16) # get animState
+    lwz  r4, 0x03F0(r9)
+    lwz  r5, 0x03F4(r9)
+    CALL    debugPrintf
+.endif
+
 
 .noPlayer:
     # get camera object
@@ -462,6 +472,9 @@ mainLoop: # called from main loop. r3 = mainLoop
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
 .fmt_gameState:    .string "Obj\x84%3d\x83\n"
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
+.if SHOW_PLAYER_FLAGS
+    .fmt_playerAnimData: .string "\nF:\x84%08X %08X\x83"
+.endif
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
 .fmt_seqState:     .string "SEQ %02X pos %X/%X obj %08X\n"

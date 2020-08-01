@@ -6,6 +6,12 @@
 .include "common.s"
 .include "globals.s"
 
+.macro STOREVEC3F rs, rd, offs
+    stfs  \rs,     (\offs)(\rd)
+    stfs  (\rs+1), (\offs+4)(\rd)
+    stfs  (\rs+2), (\offs+8)(\rd)
+.endm
+
 # define patches
 patchList:
     PATCH_ID        "FreeMov" # must be 7 chars
@@ -189,21 +195,38 @@ mainLoop: # called from main loop. r3 = mainLoop
     fadds  f6, f6, f3
 
     # save
-    stfs    f4, (.freeMoveCoords   - mainLoop)(r14)
-    stfs    f5, (.freeMoveCoords+4 - mainLoop)(r14)
-    stfs    f6, (.freeMoveCoords+8 - mainLoop)(r14)
+    STOREVEC3F f4, r14, (.freeMoveCoords   - mainLoop)
 
     # copy saved coords to player
+    # why yes, this *is* nuts.
+    # a bunch of these probably can be removed.
+    # XXX this probably breaks lots of things if target isn't player.
+    lwz   r4, 0xB8(r16)
     lwz   r3, (.freeMoveCoords - mainLoop)(r14)
-    stw   r3, 0x0C(r16)
-    stw   r3, 0x18(r16)
-    lwz   r3, (.freeMoveCoords+4 - mainLoop)(r14)
-    stw   r3, 0x10(r16)
-    stw   r3, 0x1C(r16)
-    lwz   r3, (.freeMoveCoords+8 - mainLoop)(r14)
-    stw   r3, 0x14(r16)
-    stw   r3, 0x20(r16)
-    # if we don't change 0C, 10, 14, the player won't move, but the
+    STOREVEC3F f4, r16, 0x0C
+    STOREVEC3F f4, r16, 0x18
+    STOREVEC3F f4, r16, 0x80
+    STOREVEC3F f4, r16, 0x8C
+    STOREVEC3F f4, r4,  0x0C
+    STOREVEC3F f4, r4,  0x18
+    STOREVEC3F f4, r4,  0x24
+    STOREVEC3F f4, r4,  0x3C
+    STOREVEC3F f4, r4,  0x48
+    STOREVEC3F f4, r4,  0x54
+    #STOREVEC3F f4, r4,  0x6C
+    #STOREVEC3F f4, r4,  0x78
+    #STOREVEC3F f4, r4,  0x84
+    #STOREVEC3F f4, r4,  0x9C
+    #STOREVEC3F f4, r4,  0xA8
+    STOREVEC3F f4, r4,  0xB4
+    STOREVEC3F f4, r4,  0xE8
+    STOREVEC3F f4, r4,  0x118
+    #STOREVEC3F f4, r4,  0x148
+    #STOREVEC3F f4, r4,  0x178
+    stfs  f5, 0x1BC(r4) # Y only
+    stfs  f5, 0x1F4(r4) # Y only
+
+    # if we don't change r16+0C, the player won't move, but the
     # camera will. could make a free camera mode...
 
     # use C stick to rotate
