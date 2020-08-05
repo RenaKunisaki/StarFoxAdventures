@@ -108,7 +108,7 @@ itemDrawFuncs_video:
     .int drawItem_PDAHUD      - mainLoop
     .int drawItem_mapSize     - mainLoop
     .int drawItem_mapAlpha    - mainLoop
-    .int drawItem_mapZoom     - mainLoop
+    #.int drawItem_mapZoom     - mainLoop
     .int drawItem_furEffect   - mainLoop
     .int 0
 
@@ -116,8 +116,8 @@ itemAdjustFuncs_video:
     .int adjItem_PDAHUD       - mainLoop
     .int adjItem_mapSize      - mainLoop
     .int adjItem_mapAlpha     - mainLoop
-    .int drawItem_mapZoom     - mainLoop
-    .int drawItem_furEffect   - mainLoop
+    #.int adjItem_mapZoom      - mainLoop
+    .int adjItem_furEffect    - mainLoop
 
 
 itemDrawFuncs_camera:

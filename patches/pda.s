@@ -84,6 +84,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/savegamemenu.s"
 .include "pda/savegame.s"
 .include "pda/texthook.s"
+.include "pda/furfx.s"
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"
