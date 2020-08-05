@@ -7,7 +7,7 @@
 warpMenu:
     # subroutine: runs the Warp menu.
     # expects r14 = mainLoop.
-    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r0
     stw     r0,  SP_LR_SAVE(r1)
     stmw    r13, SP_GPR_SAVE(r1)
@@ -20,21 +20,21 @@ warpMenu:
 
 
 warpMenu_Main: # draw list of warps.
-    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r0
     stw     r0,  SP_LR_SAVE(r1)
     stmw    r13, SP_GPR_SAVE(r1)
 
     # draw the box
-    li      r3, WARP_MENU_XPOS   # X
-    li      r4, WARP_MENU_YPOS   # Y
-    li      r5, WARP_MENU_WIDTH  # width
-    li      r6, WARP_MENU_HEIGHT # height
+    li      r3,  WARP_MENU_XPOS   # X
+    li      r4,  WARP_MENU_YPOS   # Y
+    li      r5,  WARP_MENU_WIDTH  # width
+    li      r6,  WARP_MENU_HEIGHT # height
     li      r20, 255 # opacity
     bl      menuDrawBox
 
     # first item (selected) in blue
-    LOAD    r3, 0x00FFFFFF
+    LOAD    r3,  0x00FFFFFF
     bl      menuSetTextColor
 
     lbz     r17, (warpMenuIdx - mainLoop)(r14)
@@ -43,7 +43,7 @@ warpMenu_Main: # draw list of warps.
 
 .warpMenu_nextWarp:
     slwi    r9,  r17, 4
-    add     r9,  r9, r15  # r4 = warp entry*
+    add     r9,  r9,  r15  # r4 = warp entry*
     lha     r5,  0x0E(r9) # name offset
     add     r3,  r5,  r14
     li      r4,  MENU_TEXTBOX_ID # box type
@@ -51,7 +51,7 @@ warpMenu_Main: # draw list of warps.
     mr      r6,  r20 # Y pos
     CALL    gameTextShowStr
 
-    LOAD    r3, 0xFFFFFFFF
+    LOAD    r3,  0xFFFFFFFF
     bl      menuSetTextColor
 
     # next line
@@ -65,7 +65,7 @@ warpMenu_Main: # draw list of warps.
 
 
 warpMenu_doInput:
-    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r0
     stw     r0,  SP_LR_SAVE(r1)
     stmw    r13, SP_GPR_SAVE(r1)
@@ -83,21 +83,21 @@ warpMenu_doInput:
     bne     .warpMenu_doSwap
 
     # check analog stick
-    cmpwi   r5,  0x10
+    cmpwi   r5,   0x10
     bgt     .warpMenu_up
-    cmpwi   r5, -0x10
+    cmpwi   r5,  -0x10
     blt     .warpMenu_down
 
     # check C stick - same as analog but no delay
-    cmpwi   r7,  0x10
+    cmpwi   r7,   0x10
     bgt     .warpMenu_up
-    cmpwi   r7, -0x10
+    cmpwi   r7,  -0x10
     blt     .warpMenu_down
 
     # check L/R - jump by page
-    cmpwi   r8,  0x04
+    cmpwi   r8,   0x04
     bgt     .warpMenu_prevPage
-    cmpwi   r9,  0x04
+    cmpwi   r9,   0x04
     bgt     .warpMenu_nextPage
 
     b       menuEndSub

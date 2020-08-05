@@ -46,6 +46,12 @@ mainLoop: # called from main loop. r3 = mainLoop
     stw     r4,  SP_LR_SAVE(r1)
     mr      r14, r3
 
+    # is the PDA menu not open?
+    LOADW   r3,  PATCH_STATE_PTR
+    lbz     r4,  PDA_MENU_OPEN(r3)
+    cmpwi   r4,  0
+    bne     .end
+
     # get object of camera focus.
     LOADW   r21, pCamera
     cmpwi   r21, 0
@@ -55,12 +61,11 @@ mainLoop: # called from main loop. r3 = mainLoop
     beq     .end # no focus object
 
     # is free move enabled?
-    LOADW   r3,  PATCH_STATE_PTR
     lbz     r4,  ENABLE_FREE_MOVE(r3)
     cmpwi   r4,  0
     beq     .off
 
-    # inhibit C menu
+        # inhibit C menu
     li      r4,  1
     LOADWH  r5,  shouldCloseCMenu
     STOREB  r4,  shouldCloseCMenu, r5

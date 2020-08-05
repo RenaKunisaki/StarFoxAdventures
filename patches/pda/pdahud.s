@@ -1,20 +1,20 @@
 drawItem_PDAHUD:
-    addi    r4, r14, (s_PDAHUD - mainLoop)
-    LOADWH  r7, pdaOn
-    LOADBL2 r6, pdaOn, r7
-    cmpwi   r6, 0
+    addi    r4,  r14, (s_PDAHUD - mainLoop)
+    LOADWH  r7,  pdaOn
+    LOADBL2 r6,  pdaOn, r7
+    cmpwi   r6,  0
     beq     .draw_pda_off
-    LOADBL2 r6, minimapMode, r7
+    LOADBL2 r6,  minimapMode, r7
     b       .draw_pda
 
 .draw_pda_off:
-    li      r6, 3
+    li      r6,  3
 
 .draw_pda:
-    slwi    r6, r6, 1 # r6 = offs into pdaModeStrs
-    addi    r6, r6, .pdaModeStrs - mainLoop # r6 = addr of str offs
-    lhzx    r6, r6, r14 # r6 = str offs from mainLoop
-    add     r5, r6, r14 # r5 = str
+    slwi    r6,  r6,  1 # r6 = offs into pdaModeStrs
+    addi    r6,  r6,  .pdaModeStrs - mainLoop # r6 = addr of str offs
+    lhzx    r6,  r6,  r14 # r6 = str offs from mainLoop
+    add     r5,  r6,  r14 # r5 = str
     blr
 
 .pdaModeStrs:
@@ -33,8 +33,8 @@ adjItem_PDAHUD:
     li      r6,  3
 
 .adjPDA:
-    add     r6,  r6, r3 # r3 = adjust amount
-    andi.   r6,  r6, 3
+    add     r6,  r6,  r3 # r3 = adjust amount
+    andi.   r6,  r6,  3
     cmpwi   r6,  3
     beq     .pdaOff
     STOREB  r6,  minimapMode, r7

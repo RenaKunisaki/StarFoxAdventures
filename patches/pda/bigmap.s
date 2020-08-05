@@ -1,4 +1,4 @@
-drawItem_bigMap:
+drawItem_mapSize:
     addi    r4,  r14, (s_MapSize - mainLoop)
     lbz     r6,  (menuMapSize - mainLoop)(r14)
     slwi    r6,  r6,  1
@@ -8,23 +8,23 @@ drawItem_bigMap:
     blr
 
 
-adjItem_bigMap: # r3 = amount to adjust by (0=A button)
+adjItem_mapSize: # r3 = amount to adjust by (0=A button)
     lbz     r4,  (menuMapSize - mainLoop)(r14)
     cmpwi   r3,  0
-    bne     .adjItem_bigMap_notA
+    bne     .adjItem_mapSize_notA
     li      r3,  1 # A button = increase
-.adjItem_bigMap_notA:
+.adjItem_mapSize_notA:
 
     # do the adjustment and wrap
     add     r4,  r4,  r3
     cmpwi   r4,  3
-    blt     .adjItem_bigMap_notThree
+    blt     .adjItem_mapSize_notThree
     li      r4,  0
-.adjItem_bigMap_notThree:
+.adjItem_mapSize_notThree:
     cmpwi   r4,  0
-    bge     .adjItem_bigMap_notZero
+    bge     .adjItem_mapSize_notZero
     li      r4,  2
-.adjItem_bigMap_notZero:
+.adjItem_mapSize_notZero:
 
     stb     r4,  (menuMapSize - mainLoop)(r14) # store the setting
     LOADWH  r5,  saveData

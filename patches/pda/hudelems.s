@@ -1,18 +1,18 @@
 doHudElementOverrides:
-    addi  r4, r14, (hudElementOverrides_addrs - mainLoop) - 4
-    addi  r5, r14, (hudElementOverrides_values_off - mainLoop) - 4
-    lbz   r3, (hudFullScreen - mainLoop)(r14)
-    cmpwi r3, 0
-    beq   .doHudElementOverrides_next
-    addi  r5, r14, (hudElementOverrides_values_on - mainLoop) - 4
+    addi    r4,  r14, (hudElementOverrides_addrs - mainLoop) - 4
+    addi    r5,  r14, (hudElementOverrides_values_off - mainLoop) - 4
+    lbz     r3,  (hudFullScreen - mainLoop)(r14)
+    cmpwi   r3,  0
+    beq     .doHudElementOverrides_next
+    addi    r5,  r14, (hudElementOverrides_values_on - mainLoop) - 4
 
 .doHudElementOverrides_next:
-    lwzu  r6, 4(r4) # get addr
-    cmpwi r6, 0
-    beq   .doHudElementOverrides_end
-    lwzu  r7, 4(r5)
-    stw   r7, 0(r6)
-    b     .doHudElementOverrides_next
+    lwzu    r6,  4(r4) # get addr
+    cmpwi   r6,  0
+    beq     .doHudElementOverrides_end
+    lwzu    r7,  4(r5)
+    stw     r7,  0(r6)
+    b       .doHudElementOverrides_next
 
 .doHudElementOverrides_end:
     blr

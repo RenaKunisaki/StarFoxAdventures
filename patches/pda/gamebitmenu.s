@@ -7,9 +7,9 @@
 gamebitMenu:
     # subroutine: runs the GameBits menu.
     # expects r14 = mainLoop.
-    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r0
-    stw     r0, SP_LR_SAVE(r1)
+    stw     r0,  SP_LR_SAVE(r1)
     stmw    r13, SP_GPR_SAVE(r1)
 
     #bl     menuHideHud
@@ -20,26 +20,26 @@ gamebitMenu:
 
 
 gamebitMenu_Main: # draw list of bits.
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r0
-    stw   r0, SP_LR_SAVE(r1)
-    stmw  r13, SP_GPR_SAVE(r1)
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0,  SP_LR_SAVE(r1)
+    stmw    r13, SP_GPR_SAVE(r1)
 
     # get the bit table
-    LOADW r15, 0x803dcadc
-    cmpwi r15, 0
-    beq   menuEndSub
+    LOADW   r15, 0x803dcadc
+    cmpwi   r15, 0
+    beq     menuEndSub
 
     # draw the box
-    li      r3, GAMEBIT_MENU_XPOS   # X
-    li      r4, GAMEBIT_MENU_YPOS   # Y
-    li      r5, GAMEBIT_MENU_WIDTH  # width
-    li      r6, GAMEBIT_MENU_HEIGHT # height
+    li      r3,  GAMEBIT_MENU_XPOS   # X
+    li      r4,  GAMEBIT_MENU_YPOS   # Y
+    li      r5,  GAMEBIT_MENU_WIDTH  # width
+    li      r6,  GAMEBIT_MENU_HEIGHT # height
     li      r20, 255 # opacity
     bl      menuDrawBox
 
     # first item (selected) in blue
-    LOAD    r3, 0x00FFFFFF
+    LOAD    r3,  0x00FFFFFF
     bl      menuSetTextColor
 
     # draw the header
@@ -57,7 +57,7 @@ gamebitMenu_Main: # draw list of bits.
     lwzx    r18, r4, r15   # r18 = bit def
 
     # get value
-    mr      r3, r17
+    mr      r3,  r17
     CALL    mainGetBit
     mr      r10, r3
 
@@ -81,7 +81,7 @@ gamebitMenu_Main: # draw list of bits.
     mr      r6,  r20 # Y pos
     CALL    gameTextShowStr
 
-    LOAD    r3, 0xFFFFFFFF
+    LOAD    r3,  0xFFFFFFFF
     bl      menuSetTextColor
 
     # next line
@@ -95,9 +95,9 @@ gamebitMenu_Main: # draw list of bits.
     b       menuEndSub
 
 gamebitMenu_doInput:
-    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r0
-    stw     r0, SP_LR_SAVE(r1)
+    stw     r0,  SP_LR_SAVE(r1)
     stmw    r13, SP_GPR_SAVE(r1)
     lhz     r17, (bitMenuIdx - mainLoop)(r14)
 
@@ -105,33 +105,33 @@ gamebitMenu_doInput:
     bl      menuGetInput
     # r3=buttons, r4=stick X, r5=stick Y,
     # r6=CX, r7=CY, r8=L, r9=R
-    andi.   r10, r3, PAD_BUTTON_B
+    andi.   r10, r3,  PAD_BUTTON_B
     bne     .gameBitMenu_close
 
     # check analog stick
-    cmpwi   r5, 0x10
+    cmpwi   r5,   0x10
     bgt     .gameBitMenu_up
-    cmpwi   r5, -0x10
+    cmpwi   r5,  -0x10
     blt     .gameBitMenu_down
-    cmpwi   r4, 0x10
+    cmpwi   r4,   0x10
     bgt     .gameBitMenu_inc
-    cmpwi   r4, -0x10
+    cmpwi   r4,  -0x10
     blt     .gameBitMenu_dec
 
     # check C stick - same as analog but no delay
-    cmpwi   r7, 0x10
+    cmpwi   r7,   0x10
     bgt     .gameBitMenu_up
-    cmpwi   r7, -0x10
+    cmpwi   r7,  -0x10
     blt     .gameBitMenu_down
-    cmpwi   r6, 0x10
+    cmpwi   r6,   0x10
     bgt     .gameBitMenu_inc
-    cmpwi   r6, -0x10
+    cmpwi   r6,  -0x10
     blt     .gameBitMenu_dec
 
     # check L/R - jump by page
-    cmpwi   r8, 0x04
+    cmpwi   r8,   0x04
     bgt     .gameBitMenu_prevPage
-    cmpwi   r9, 0x04
+    cmpwi   r9,   0x04
     bgt     .gameBitMenu_nextPage
 
     # check Z - reset to zero
@@ -157,29 +157,29 @@ gamebitMenu_doInput:
 .gameBitMenu_storeIdx:
     sth     r17, (bitMenuIdx - mainLoop)(r14)
     # don't use any delay if using C stick.
-    andi.   r7, r7, 0xF0 # deadzone
+    andi.   r7,  r7,  0xF0 # deadzone
     bne     menuEndSub
     li      r3,  MOVE_DELAY
     stb     r3,  (menuJustMoved - mainLoop)(r14)
     b       menuEndSub
 
 .gameBitMenu_inc:
-    andi.   r6, r6, 0xF0 # deadzone
+    andi.   r6,  r6,  0xF0 # deadzone
     bne     .gameBitMenu_inc_noDelay
     li      r3,  MOVE_DELAY
     stb     r3,  (menuJustMoved - mainLoop)(r14)
 .gameBitMenu_inc_noDelay:
-    mr      r3, r17
+    mr      r3,  r17
     CALL    gameBitIncrement
     b       menuEndSub
 
 .gameBitMenu_dec:
-    andi.   r6, r6, 0xF0 # deadzone
+    andi.   r6,  r6,  0xF0 # deadzone
     bne     .gameBitMenu_dec_noDelay
     li      r3,  MOVE_DELAY
     stb     r3,  (menuJustMoved - mainLoop)(r14)
 .gameBitMenu_dec_noDelay:
-    mr      r3, r17
+    mr      r3,  r17
     CALL    gameBitDecrement
     b       menuEndSub
 

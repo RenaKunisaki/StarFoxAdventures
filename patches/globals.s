@@ -13,6 +13,7 @@
 .set SHOW_DEBUG_OBJS,    0x04
 .set FORCE_TEXT_WIDTH,   0x05
 .set CAMERA_OPTIONS,     0x06
+.set PDA_MENU_OPEN,      0x07
 
 # camera option bits
 .set CAMERA_OPTION_PAD3,    0x01 # use controller 3 to move

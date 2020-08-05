@@ -9,7 +9,7 @@ textHook:
     # f22 = current X position
     # r22 = character
 
-    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r5
     stw     r5,  SP_LR_SAVE(r1)
     stmw    r3,  SP_GPR_SAVE(r1)
@@ -38,17 +38,17 @@ textHook:
 
     fmadds  f22, f2,  f0,  f22
 
-    lwz     r0, SP_LR_SAVE(r1)
-    mtlr    r0  # restore LR
-    lmw     r3, SP_GPR_SAVE(r1)
-    addi    r1, r1, STACK_SIZE # restore stack ptr
+    lwz     r0,  SP_LR_SAVE(r1)
+    mtlr    r0   # restore LR
+    lmw     r3,  SP_GPR_SAVE(r1)
+    addi    r1,  r1,  STACK_SIZE # restore stack ptr
     JUMP    0x80018454, r21
 
 .textHook_noOverride:
-    lwz     r0, SP_LR_SAVE(r1)
-    mtlr    r0  # restore LR
-    lmw     r3, SP_GPR_SAVE(r1)
-    addi    r1, r1, STACK_SIZE # restore stack ptr
+    lwz     r0,  SP_LR_SAVE(r1)
+    mtlr    r0   # restore LR
+    lmw     r3,  SP_GPR_SAVE(r1)
+    addi    r1,  r1,  STACK_SIZE # restore stack ptr
     JUMP    0x80018418, r0
 
 .textHook_floatMagic:    .int 0x43300000,0x80000000

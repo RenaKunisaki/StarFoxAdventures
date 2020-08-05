@@ -1,7 +1,7 @@
 saveLoadHook:
     # hook loadSaveSettings. replace some unused settings.
     # r3 = &saveData
-    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r5
     stw     r5,  SP_LR_SAVE(r1)
     stmw    r3,  SP_GPR_SAVE(r1)
@@ -14,7 +14,7 @@ saveLoadHook:
     andi.   r5,  r5,  0x7F
     LOADWH  r9,  controllerStates
     LOADHL2 r6,  controllerStates, r9 # buttons
-    andi.   r0,  r6, PAD_BUTTON_Y | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_A | PAD_BUTTON_MENU
+    andi.   r0,  r6,  PAD_BUTTON_Y | PAD_BUTTON_B | PAD_BUTTON_X | PAD_BUTTON_A | PAD_BUTTON_MENU
     cmpwi   r0,  PAD_BUTTON_X | PAD_BUTTON_MENU
     bne     .saveLoadHook_notC
     xori    r5,  r5, 0x80
@@ -69,5 +69,5 @@ saveLoadHook:
     lwz     r3,  SP_LR_SAVE(r1)
     mtlr    r3   # restore LR
     lmw     r3,  SP_GPR_SAVE(r1)
-    addi    r1,  r1, STACK_SIZE # restore stack ptr
+    addi    r1,  r1,  STACK_SIZE # restore stack ptr
     JUMP    0x800e7fd4, r3 # skip reading unused settings.

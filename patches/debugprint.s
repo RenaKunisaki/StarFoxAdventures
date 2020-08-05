@@ -7,6 +7,7 @@
 .include "globals.s"
 
 .set SHOW_PLAYER_FLAGS,0
+.set SHOW_SEQ_DATA,1
 
 # define patches
 patchList:
@@ -390,6 +391,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 .noText:
 
     # display sequence info (XXX incomplete/wrong)
+.if SHOW_SEQ_DATA
     LOADWH  r9, curSeqNo
     LOADBL2 r4, curSeqNo, r9
     cmpwi   r4, 0
@@ -400,6 +402,22 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADWL2 r7, curSeqObj, r9
     addi    r3, r14, .fmt_seqState - mainLoop
     CALL    debugPrintf
+
+    # are we doing this right? looks like all floats...
+    LOADW   r16, pPlayer
+    cmpwi   r16, 0
+    beq     .noSeq
+    lwz     r3,  0xB8(r16)
+    lbz     r4,  0x57(r3)
+    lwz     r5,  0x58(r3)
+    lwz     r6,  0x5C(r3)
+    lwz     r7,  0x60(r3)
+    lwz     r8,  0x64(r3)
+    lwz     r9,  0x68(r3)
+    lwz     r10, 0x6C(r3)
+    addi    r3,  r14, .fmt_seq2 - mainLoop
+    CALL    debugPrintf
+.endif # SHOW_SEQ_DATA
 
 .noSeq:
 
@@ -477,5 +495,10 @@ mainLoop: # called from main loop. r3 = mainLoop
 .endif
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
-.fmt_seqState:     .string "SEQ %02X pos %X/%X obj %08X\n"
+
+.if SHOW_SEQ_DATA
+    .fmt_seqState:     .string "SEQ \x84%02X\x83 pos \x84%X/%X\x83 obj \x84%08X\x83\n"
+    .fmt_seq2:         .string "57:\x84%02X\x83 58:\x84%08X\x83 5C:\x84%08X\x83 60:\x84%08X\x83 64:\x84%08X\x83 68:\x84%08X\x83\n"
+.endif
+
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"

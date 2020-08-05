@@ -6,10 +6,10 @@
 heapList:
     # subroutine: runs the Heap List menu.
     # expects r14 = mainLoop.
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r0
-    stw   r0, SP_LR_SAVE(r1)
-    stmw  r13, SP_GPR_SAVE(r1)
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0,  SP_LR_SAVE(r1)
+    stmw    r13, SP_GPR_SAVE(r1)
 
     #bl      menuHideHud
     bl      menuSetFixedWidth
@@ -19,23 +19,23 @@ heapList:
 
 
 heapList_Main: # draw list of heaps.
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r0
-    stw   r0, SP_LR_SAVE(r1)
-    stmw  r13, SP_GPR_SAVE(r1)
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0,  SP_LR_SAVE(r1)
+    stmw    r13, SP_GPR_SAVE(r1)
 
     # get the heap table
-    LOAD  r15, heaps
+    LOAD    r15, heaps
 
     # draw the box
-    li      r3, HEAP_LIST_XPOS   # X
-    li      r4, HEAP_LIST_YPOS   # Y
-    li      r5, HEAP_LIST_WIDTH  # width
-    li      r6, HEAP_LIST_HEIGHT # height
+    li      r3,  HEAP_LIST_XPOS   # X
+    li      r4,  HEAP_LIST_YPOS   # Y
+    li      r5,  HEAP_LIST_WIDTH  # width
+    li      r6,  HEAP_LIST_HEIGHT # height
     li      r20, 255 # opacity
     bl      menuDrawBox
 
-    LOAD    r3, 0xFFFFFFFF
+    LOAD    r3,  0xFFFFFFFF
     bl      menuSetTextColor
 
     # draw the header
@@ -59,13 +59,13 @@ heapList_Main: # draw list of heaps.
     bne     .heapList_notSelected
     li      r3,  0
 .heapList_notSelected:
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
+    li      r4,  255
+    li      r5,  255
+    li      r6,  255
     CALL    gameTextSetColor
 
     # make line
-    addi    r3,  r1, SP_STR_BUF
+    addi    r3,  r1,  SP_STR_BUF
     addi    r4,  r14, fmt_heapListEntry - mainLoop
     mr      r5,  r17       # index
     lwz     r6,  0x00(r18) # total bytes
@@ -74,12 +74,12 @@ heapList_Main: # draw list of heaps.
     lwz     r9,  0x0C(r18) # used blocks
     lwz     r10, 0x10(r18) # data
     stw     r10, SP_ARG10(r1)
-    sub     r10, r7, r9 # free blocks
+    sub     r10, r7,  r9 # free blocks
     stw     r10, SP_ARG9(r1)
-    sub     r10, r6, r8 # free bytes
+    sub     r10, r6,  r8 # free bytes
     CALL    sprintf
 
-    addi    r3,  r1, SP_STR_BUF
+    addi    r3,  r1,  SP_STR_BUF
     li      r4,  MENU_TEXTBOX_ID # box type
     li      r5,  HEAP_LIST_XPOS + 8  # X pos
     mr      r6,  r20 # Y pos
@@ -96,9 +96,9 @@ heapList_Main: # draw list of heaps.
     b       menuEndSub
 
 heapList_doInput:
-    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r0
-    stw     r0, SP_LR_SAVE(r1)
+    stw     r0,  SP_LR_SAVE(r1)
     stmw    r13, SP_GPR_SAVE(r1)
     lbz     r17, (whichHeap - mainLoop)(r14)
 
@@ -106,17 +106,17 @@ heapList_doInput:
     bl      menuGetInput
     # r3=buttons, r4=stick X, r5=stick Y,
     # r6=CX, r7=CY, r8=L, r9=R
-    andi.   r10, r3, PAD_BUTTON_B
+    andi.   r10, r3,  PAD_BUTTON_B
     bne     .heapList_close
-    andi.   r10, r3, PAD_BUTTON_A
+    andi.   r10, r3,  PAD_BUTTON_A
     bne     .heapList_open
 
     # check analog stick
-    cmpwi   r5, 0x10
+    cmpwi   r5,   0x10
     bgt     .heapList_up
-    cmpwi   r5, -0x10
+    cmpwi   r5,  -0x10
     blt     .heapList_down
-    cmpwi   r4, 0x10
+    cmpwi   r4,   0x10
     b       menuEndSub
 
 .heapList_up: # up pressed
@@ -142,7 +142,7 @@ heapList_doInput:
     b       menuEndSub
 
 .heapList_open:
-    li      r3, 0
-    sth     r3, (heapMenuIdx - mainLoop)(r14)
-    li      r3, MENU_ID_HEAP
+    li      r3,  0
+    sth     r3,  (heapMenuIdx - mainLoop)(r14)
+    li      r3,  MENU_ID_HEAP
     b       returnToMenu
