@@ -36,6 +36,7 @@ constants:
     .set MENU_ID_HEAP_LIST,4
     .set MENU_ID_HEAP,     5
     .set MENU_ID_SAVEGAME, 6
+    .set MENU_ID_TEXTURES, 7
 
     .set STACK_SIZE, 0x180 # how much to reserve
     .set SP_LR_SAVE, 0x184 # this is what the game does
@@ -85,6 +86,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/savegame.s"
 .include "pda/texthook.s"
 .include "pda/furfx.s"
+.include "pda/texturedebug.s"
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"

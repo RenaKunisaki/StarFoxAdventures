@@ -39,11 +39,12 @@ f_centerY:     .float 240
 f_mapCellScale: .float 640.0
 
 # menu state
-heapMenuIdx:   .short 0
-bitMenuIdx:    .short 0
-streamTestId:  .short 0
-soundTestId:   .short 0
-textTestId:    .short 0
+heapMenuIdx:    .short 0
+bitMenuIdx:     .short 0
+streamTestId:   .short 0
+soundTestId:    .short 0
+textTestId:     .short 0
+textureDebugId: .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
 hudFullScreen:    .byte 1
@@ -135,6 +136,7 @@ s_Debug:          .string "Debug"
 s_DebugText:      .string "Debug Text"
 s_Map:            .string "Map"
 s_Data:           .string "Data"
+s_Textures:       .string "Textures"
 s_TextTest:       .string "Show Text: %04X"
 s_frameAdv:       .string "Advance Frame"
 
@@ -211,6 +213,9 @@ s_savegameCoordZ:       .string "Z %f"
 s_savegameLayer:        .string "Rot %d Grid %d unk %04X"
 s_savegameMap:          .string "Map: %s"
 s_savegameSavedObj:     .string "%08X %d %d %d"
+
+# Textures
+s_textureId:            .string "Tex %04X: ID %04X @%08X"
 
 
 warpNameHollowOutside: .string "ThornTail Hollow - Outside"

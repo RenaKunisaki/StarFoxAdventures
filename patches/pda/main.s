@@ -64,6 +64,7 @@ menuPtrs: # menu main function pointers
     .int heapList     - mainLoop
     .int heapMenu     - mainLoop
     .int savegameMenu - mainLoop
+    .int textureMenu  - mainLoop
 
 returnToMainMenu:
     # called from other menus

@@ -165,6 +165,7 @@ itemDrawFuncs_debug:
     .int drawItem_debugText    - mainLoop
     .int drawItem_debugMap     - mainLoop
     .int drawItem_debugData    - mainLoop
+    .int drawItem_textureDebug - mainLoop
     .int drawItem_textTest     - mainLoop
     .int drawItem_frameAdvance - mainLoop
     .int 0
@@ -173,6 +174,7 @@ itemAdjustFuncs_debug:
     .int adjItem_debugText    - mainLoop
     .int adjItem_debugMap     - mainLoop
     .int adjItem_debugData    - mainLoop
+    .int adjItem_textureDebug - mainLoop
     .int adjItem_textTest     - mainLoop
     .int adjItem_frameAdvance - mainLoop
 

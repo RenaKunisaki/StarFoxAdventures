@@ -34,6 +34,16 @@ adjItem_debugData: # r3 = amount to adjust by (0=A button)
 
 #######################################################################
 
+drawItem_textureDebug:
+    addi    r4,  r14, (s_Textures - mainLoop)
+    blr
+
+adjItem_textureDebug: # r3 = amount to adjust by (0=A button)
+    li      r4,  MENU_ID_TEXTURES
+    b       .debug_setMenu
+
+#######################################################################
+
 drawItem_textTest:
     addi    r4,  r14, (s_TextTest - mainLoop)
     lhz     r5,  (textTestId - mainLoop)(r14)
