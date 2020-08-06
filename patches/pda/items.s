@@ -177,14 +177,18 @@ itemAdjustFuncs_debug:
     .int adjItem_frameAdvance - mainLoop
 
 itemDrawFuncs_debugText:
-    .int s_DebugText                - mainLoop # title
-    .int drawItem_debugText_master  - mainLoop
-    .int drawItem_debugText_tricky  - mainLoop
+    .int s_DebugText                    - mainLoop # title
+    .int drawItem_debugText_master      - mainLoop
+    .int drawItem_debugText_tricky      - mainLoop
+    .int drawItem_debugText_playerState - mainLoop
+    .int drawItem_debugText_seqState    - mainLoop
     .int 0
 
 itemAdjustFuncs_debugText:
-    .int adjItem_debugText_master  - mainLoop
-    .int adjItem_debugText_tricky  - mainLoop
+    .int adjItem_debugText_master      - mainLoop
+    .int adjItem_debugText_tricky      - mainLoop
+    .int adjItem_debugText_playerState - mainLoop
+    .int adjItem_debugText_seqState    - mainLoop
 
 itemDrawFuncs_debugMap:
     .int s_Map                 - mainLoop # title

@@ -3,10 +3,9 @@ drawItem_debugText_master:
     addi    r5,  r14, (s_off - mainLoop)
     LOADB   r6,  enableDebugText
     cmpwi   r6,  0
-    beq     .drawDebugText_off
+debugText_printOffOn:
+    beqlr
     addi    r5,  r14, (s_on - mainLoop)
-
-.drawDebugText_off:
     blr
 
 adjItem_debugText_master: # r3 = amount to adjust by (0=A button)
@@ -23,11 +22,7 @@ drawItem_debugText_tricky:
     addi    r5,  r14, (s_off - mainLoop)
     LOADB   r6,  0x80148bc8
     cmpwi   r6,  0x4B
-    bne     .drawTrickyDebug_off
-    addi    r5,  r14, (s_on - mainLoop)
-
-.drawTrickyDebug_off:
-    blr
+    b       debugText_printOffOn
 
 adjItem_debugText_tricky: # r3 = amount to adjust by (0=A button)
     LOAD    r3,  0x80148bc8
@@ -46,3 +41,35 @@ adjItem_debugText_tricky: # r3 = amount to adjust by (0=A button)
 .trickyDebugXor: .int 0xdfdf1210
 
 #######################################################################
+
+drawItem_debugText_playerState:
+    addi    r4,  r14, (s_PlayerState - mainLoop)
+    li      r8,  DEBUG_TEXT_PLAYER_STATE
+debugText_drawItem:
+    addi    r5,  r14, (s_off - mainLoop)
+    LOADW   r7,  PATCH_STATE_PTR
+    lbz     r6,  DEBUG_TEXT_FLAGS(r7)
+    and.    r6,  r6,  r8
+    b       debugText_printOffOn
+
+adjItem_debugText_playerState: # r3 = amount to adjust by (0=A button)
+    li      r7,  DEBUG_TEXT_PLAYER_STATE
+debugText_toggleItem:
+    LOADW   r5,  PATCH_STATE_PTR
+    lbz     r6,  DEBUG_TEXT_FLAGS(r5)
+    xor     r6,  r6,  r7
+    stb     r6,  DEBUG_TEXT_FLAGS(r5)
+    blr
+
+##########################################################################
+
+drawItem_debugText_seqState:
+    addi    r4,  r14, (s_SeqState - mainLoop)
+    li      r8,  DEBUG_TEXT_SEQ_STATE
+    b       debugText_drawItem
+
+adjItem_debugText_seqState: # r3 = amount to adjust by (0=A button)
+    li      r7,  DEBUG_TEXT_SEQ_STATE
+    b       debugText_toggleItem
+
+##########################################################################

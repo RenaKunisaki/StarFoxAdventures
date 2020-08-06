@@ -6,9 +6,6 @@
 .include "common.s"
 .include "globals.s"
 
-.set SHOW_PLAYER_FLAGS,0
-.set SHOW_SEQ_DATA,1
-
 # define patches
 patchList:
     PATCH_ID        "DbgText" # must be 7 chars
@@ -158,54 +155,57 @@ hook_bsod: # hooked call to storeRegs24 from BSOD render
 
 
 mainLoop: # called from main loop. r3 = mainLoop
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r4
-    stw   r4,  SP_LR_SAVE(r1)
-    stw   r14, SP_R14_SAVE(r1)
-    stw   r15, SP_R15_SAVE(r1)
-    stw   r16, SP_R16_SAVE(r1)
-    mr    r14, r3
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    mflr    r4
+    stw     r4,  SP_LR_SAVE(r1)
+    stw     r14, SP_R14_SAVE(r1)
+    stw     r15, SP_R15_SAVE(r1)
+    stw     r16, SP_R16_SAVE(r1)
+    mr      r14, r3
 
     # the patch that restores debug print functions also overrides
     # this variable, and won't affect our bar drawing,
     # so manually check it before doing things.
-    LOADB r4, enableDebugText
-    cmpwi r4, 0
-    beq   .end
+    LOADB   r4,  enableDebugText
+    cmpwi   r4,  0
+    beq     .end
+
+    LOADW   r19,  PATCH_STATE_PTR
+    lbz     r19,  DEBUG_TEXT_FLAGS(r19)
 
     # don't make debug text flash with HUD text
     # XXX why doesn't this work?
-    li      r3, 255
-    li      r4, 255
-    li      r5, 255
-    li      r6, 255
+    li      r3,  255
+    li      r4,  255
+    li      r5,  255
+    li      r6,  255
     CALL    gameTextSetColor
 
-    LOAD  r18, 0x803a89b0 # HUD textures
+    LOAD    r18, 0x803a89b0 # HUD textures
 
     # draw full bar at reduced opacity to show range
-    lfs     f1, (.cpuBarX - mainLoop)(r14)
-    lfs     f2, (.cpuBarY - mainLoop)(r14)
-    li      r6, 200    # width
-    li      r3, 11     # texture (box left side, but we flip it)
-    li      r4, 0x7F   # opacity
-    li      r7, 30     # height
+    lfs     f1,  (.cpuBarX - mainLoop)(r14)
+    lfs     f2,  (.cpuBarY - mainLoop)(r14)
+    li      r6,  200    # width
+    li      r3,  11     # texture (box left side, but we flip it)
+    li      r4,  0x7F   # opacity
+    li      r7,  30     # height
     bl      .drawBarWithOpacityAndHeight
 
     # display CPU usage
     # XXX this isn't a very good indicator. it's frame time, which is
     # always going to be at least 16.7ms because it includes idle time.
     # is there a proper CPU usage variable anywhere?
-    LOADWH  r4, msecsThisFrame
-    LOADFL2 f1, msecsThisFrame, r4
-    lfs     f2, (.timeDeltaScale - mainLoop)(r14)
-    fmuls   f2, f2, f1
-    fctiwz  f2, f2
-    stfd    f2, SP_FLOAT_TMP(r1)
-    lwz     r6, SP_FLOAT_TMP+4(r1) # width
-    lfs     f1, (.cpuBarX - mainLoop)(r14) # X
-    lfs     f2, (.cpuBarY - mainLoop)(r14) # Y
-    li      r3, 13     # texture
+    LOADWH  r4,  msecsThisFrame
+    LOADFL2 f1,  msecsThisFrame, r4
+    lfs     f2,  (.timeDeltaScale - mainLoop)(r14)
+    fmuls   f2,  f2, f1
+    fctiwz  f2,  f2
+    stfd    f2,  SP_FLOAT_TMP(r1)
+    lwz     r6,  SP_FLOAT_TMP+4(r1) # width
+    lfs     f1,  (.cpuBarX - mainLoop)(r14) # X
+    lfs     f2,  (.cpuBarY - mainLoop)(r14) # Y
+    li      r3,  13     # texture
     bl      .drawBar
 
     # display heap stats: free bytes, free blocks
@@ -306,28 +306,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADW   r3,  pCurMapInfo # map name
     CALL    debugPrintf
 
-    # display player state
-    #addi r3, r14, (.fmt_playerState - mainLoop)@l
-    #lwz  r9, 0x00B8(r16) # get animState
-    ##lfs  f1, 0x0098(r16) # get anim timer
-    ##lfs  f2, 0x0814(r9)  # get anim val
-    #lbz  r4, 0x0275(r9)  # get state ID
-    #lwz  r5, 0x03F0(r9)  # get flags
-    #lhz  r6, 0x00A0(r16) # get anim ID
-    ## magic required to make floats print correctly
-    ## no idea what this does
-    #creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
-    #CALL debugPrintf
-
-.if SHOW_PLAYER_FLAGS
-    addi r3, r14, (.fmt_playerAnimData - mainLoop)@l
-    lwz  r9, 0x00B8(r16) # get animState
-    lwz  r4, 0x03F0(r9)
-    lwz  r5, 0x03F4(r9)
-    CALL    debugPrintf
-.endif
-
-
 .noPlayer:
     # get camera object
     LOADW r16, pCamera
@@ -378,6 +356,26 @@ mainLoop: # called from main loop. r3 = mainLoop
     #LOADHL2  r6, 0x803dd8b8, r9
     #CALL  debugPrintf
 
+    # display player state
+    andi.   r0,  r19, DEBUG_TEXT_PLAYER_STATE
+    beq     .noPlayerState
+    LOADW   r16, pPlayer
+    cmpwi   r16, 0
+    beq     .noPlayerState
+    addi    r3,  r14, (.fmt_playerState - mainLoop)@l
+    lwz     r9,  0x00B8(r16) # get animState
+    lfs     f1,  0x0098(r16) # get anim timer
+    lfs     f2,  0x0814(r9)  # get anim val
+    lbz     r4,  0x0275(r9)  # get state ID
+    lwz     r5,  0x03F0(r9)  # get flags
+    lwz     r6,  0x03F0(r9)  # get flags 2
+    lhz     r7,  0x00A0(r16) # get anim ID
+    # magic required to make floats print correctly
+    # no idea what this does
+    creqv   4*cr1+eq,4*cr1+eq,4*cr1+eq
+    CALL    debugPrintf
+.noPlayerState:
+
 
     # display GameText info
     # XXX why is this sometimes 0 when there is a text?
@@ -391,16 +389,17 @@ mainLoop: # called from main loop. r3 = mainLoop
 .noText:
 
     # display sequence info (XXX incomplete/wrong)
-.if SHOW_SEQ_DATA
-    LOADWH  r9, curSeqNo
-    LOADBL2 r4, curSeqNo, r9
-    cmpwi   r4, 0
+    andi.   r0,  r19,  DEBUG_TEXT_SEQ_STATE
+    beq     .noSeq
+    LOADWH  r9,  curSeqNo
+    LOADBL2 r4,  curSeqNo, r9
+    cmpwi   r4,  0
     beq     .noSeq
 
-    LOADBL2 r5, seqPos,    r9
-    LOADWL2 r6, seqLength, r9
-    LOADWL2 r7, curSeqObj, r9
-    addi    r3, r14, .fmt_seqState - mainLoop
+    LOADBL2 r5,  seqPos,    r9
+    LOADWL2 r6,  seqLength, r9
+    LOADWL2 r7,  curSeqObj, r9
+    addi    r3,  r14, .fmt_seqState - mainLoop
     CALL    debugPrintf
 
     # are we doing this right? looks like all floats...
@@ -417,7 +416,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     lwz     r10, 0x6C(r3)
     addi    r3,  r14, .fmt_seq2 - mainLoop
     CALL    debugPrintf
-.endif # SHOW_SEQ_DATA
 
 .noSeq:
 
@@ -485,20 +483,14 @@ mainLoop: # called from main loop. r3 = mainLoop
 .floatMagic: .int 0x43300000,0x80000000
 .fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
 .fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X S%X %08X\x83 "
-#.fmt_playerState:  .string "S:\x84%02X %08X\x83 A:\x84%04X\x83\n"
+.fmt_playerState:  .string "S:\x84%02X %08X %08X\x83 A:\x84%04X %f %f\x83\n"
 .fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 "
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
 .fmt_gameState:    .string "Obj\x84%3d\x83\n"
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
-.if SHOW_PLAYER_FLAGS
-    .fmt_playerAnimData: .string "\nF:\x84%08X %08X\x83"
-.endif
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
-
-.if SHOW_SEQ_DATA
-    .fmt_seqState:     .string "SEQ \x84%02X\x83 pos \x84%X/%X\x83 obj \x84%08X\x83\n"
-    .fmt_seq2:         .string "57:\x84%02X\x83 58:\x84%08X\x83 5C:\x84%08X\x83 60:\x84%08X\x83 64:\x84%08X\x83 68:\x84%08X\x83\n"
-.endif
+.fmt_seqState:     .string "SEQ \x84%02X\x83 pos \x84%X/%X\x83 obj \x84%08X\x83\n"
+.fmt_seq2:         .string "57:\x84%02X\x83 58:\x84%08X\x83 5C:\x84%08X\x83 60:\x84%08X\x83 64:\x84%08X\x83 68:\x84%08X\x83\n"
 
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"

@@ -142,6 +142,8 @@ s_frameAdv:       .string "Advance Frame"
 #title_page5:      .string "Debug Text"
 s_Master:         .string "Master: %s"
 s_Tricky:         .string "Tricky: %s"
+s_PlayerState:    .string "Player State: %s"
+s_SeqState:       .string "Seq State: %s"
 
 # Debug Map menu
 #title_page7:      .string "Map"
