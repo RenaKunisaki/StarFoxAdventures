@@ -97,6 +97,7 @@ s_Spanish:        .string "Spanish"
 .endif
 s_subtitles:      .string "Subtitles: %s"
 s_rumble:         .string "Rumble: %s"
+s_rumbleBlur:     .string "Rumble Blur: %s"
 
 # page 1
 s_VideoSettings:  .string "Video Settings"

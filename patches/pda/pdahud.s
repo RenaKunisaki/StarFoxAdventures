@@ -96,3 +96,26 @@ adjItem_rumble: # r3 = amount to adjust by
     LOADWH  r5,  SAVEDATA_RUMBLE+saveData
     STOREB  r3,  SAVEDATA_RUMBLE+saveData, r5
     blr
+
+##########################################################################
+
+drawItem_rumbleBlur:
+    addi    r4,  r14, (s_rumbleBlur - mainLoop)
+    li      r8,  EXTRA_FEATURE_RUMBLE_BLUR
+drawExtraFeatureItem:
+    addi    r5,  r14, (s_off - mainLoop)
+    LOADW   r7,  PATCH_STATE_PTR
+    lbz     r6,  EXTRA_FEATURE_FLAGS(r7)
+    and.    r6,  r6,  r8
+    b       debugText_printOffOn
+
+adjItem_rumbleBlur: # r3 = amount to adjust by
+    li      r7,  EXTRA_FEATURE_RUMBLE_BLUR
+toggleExtraFeatureItem:
+    LOADW   r5,  PATCH_STATE_PTR
+    lbz     r6,  EXTRA_FEATURE_FLAGS(r5)
+    xor     r6,  r6,  r7
+    stb     r6,  EXTRA_FEATURE_FLAGS(r5)
+    LOADWH  r5,  SAVEDATA_EXTRA_OPTIONS+saveData
+    STOREB  r6,  SAVEDATA_EXTRA_OPTIONS+saveData, r5
+    blr

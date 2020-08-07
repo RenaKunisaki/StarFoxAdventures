@@ -23,6 +23,8 @@ saveLoadHook:
     stb     r5,  SAVEDATA_CUR_CHAR(r3)
     LOADW   r9,  PATCH_STATE_PTR
 
+    lbz     r4,  SAVEDATA_EXTRA_OPTIONS(r3)
+    stb     r4,  EXTRA_FEATURE_FLAGS(r9)
     lbz     r4,  SAVEDATA_CAMERA_OPTIONS(r3)
     stb     r4,  CAMERA_OPTIONS(r9)
     lbz     r4,  SAVEDATA_CUR_CHAR(r3)
@@ -63,8 +65,6 @@ saveLoadHook:
     LOADWH  r7,  pdaOn
     STOREB  r6,  pdaOn, r7
     STOREB  r4,  minimapMode, r7
-
-
 
     lwz     r3,  SP_LR_SAVE(r1)
     mtlr    r3   # restore LR

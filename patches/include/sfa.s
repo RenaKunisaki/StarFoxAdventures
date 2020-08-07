@@ -129,6 +129,7 @@
 .set timeStop,               0x803dca3c #bool
 .set pPlayer,                0x803428f8 #ObjInstance*
 .set renderFlags,            0x803dcde8 #u32
+.set rumbleTimer,            0x803dc90c #float
 .set saveData,               0x803a31c4 #SaveData
 .set seqLength,              0x803dd0c0 #s32
 .set seqPos,                 0x803dd0bc #s8

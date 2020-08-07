@@ -15,6 +15,7 @@
 .set CAMERA_OPTIONS,     0x06
 .set PDA_MENU_OPEN,      0x07
 .set DEBUG_TEXT_FLAGS,   0x08 # which debug texts are enabled
+.set EXTRA_FEATURE_FLAGS,0x09
 
 # camera option bits
 .set CAMERA_OPTION_PAD3,    0x01 # use controller 3 to move
@@ -25,7 +26,11 @@
 .set DEBUG_TEXT_PLAYER_STATE, 0x01
 .set DEBUG_TEXT_SEQ_STATE,    0x02
 
+# extra feature flag bits
+.set EXTRA_FEATURE_RUMBLE_BLUR, 0x01
+
 # offsets into saveData
+.set SAVEDATA_EXTRA_OPTIONS,  0x01 # unused
 .set SAVEDATA_SUBTITLES,      0x02
 .set SAVEDATA_CAMERA_OPTIONS, 0x03 # replace unused HUD setting
 .set SAVEDATA_WIDESCREEN,     0x06
