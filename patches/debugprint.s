@@ -368,7 +368,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     lfs     f2,  0x0814(r9)  # get anim val
     lbz     r4,  0x0275(r9)  # get state ID
     lwz     r5,  0x03F0(r9)  # get flags
-    lwz     r6,  0x03F0(r9)  # get flags 2
+    lwz     r6,  0x03F4(r9)  # get flags 2
     lhz     r7,  0x00A0(r16) # get anim ID
     # magic required to make floats print correctly
     # no idea what this does
