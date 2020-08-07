@@ -62,6 +62,7 @@ whichHeap:        .byte 0
 menuWasHudHidden: .byte 0
 menuWasPdaOn:     .byte 0 # for hiding map in objects list
 menuMapSize:      .byte 0
+textureDebugMip:  .byte 0
 
 # string pool
 # general
@@ -215,7 +216,8 @@ s_savegameMap:          .string "Map: %s"
 s_savegameSavedObj:     .string "%08X %d %d %d"
 
 # Textures
-s_textureId:            .string "Tex %04X: ID %04X @%08X"
+s_textureId:            .string "Tex %04X.%02X: ID %c%04X @%08X"
+s_textureInfo:          .string "Flags: %08X RefCnt: %3d Fmt: %02X; %d x %d"
 
 
 warpNameHollowOutside: .string "ThornTail Hollow - Outside"
