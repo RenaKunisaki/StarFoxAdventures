@@ -2,7 +2,7 @@
 .set WARP_MENU_YPOS,   56
 .set WARP_MENU_WIDTH, 600
 .set WARP_MENU_HEIGHT,300
-.set MAX_WARP,         74
+.set MAX_WARP,         79
 
 warpMenu:
     # subroutine: runs the Warp menu.
@@ -191,13 +191,17 @@ warpDefs:
     DEFINEWARP  13154,    -83,   2880,  0, warpNameKPinside
     DEFINEWARP  13201,   1278,   2239,  0, warpNameKPfinalboss
     DEFINEWARP  12188,   1379,   2461,  0, warpNameKPtop
-    DEFINEWARP   3336,   6484,   4183,  0, warpNameIMtop
+    DEFINEWARP   3584,   6397,   4374,  0, warpNameIMtop
     DEFINEWARP  -4159,   -521,   4159,  0, warpNameSHwarp
     DEFINEWARP  -2634,   -130,   2167,  0, warpNameSHspout
     DEFINEWARP  -5408,   -822,   1610,  0, warpNameSHent
     DEFINEWARP   -511,    -41,   2951,  0, warpNameSHbot
     DEFINEWARP  -7378,  -1557,   8935,  0, warpNameDIMpad
     DEFINEWARP  -7957,  -1177,  14025,  0, warpNameDIMfort
+    DEFINEWARP  10093,   -859,  14547,  0, warpNameDIMbike
+    DEFINEWARP  -9075,  -1713,  17999, -2, warpNameDIMinterior
+    DEFINEWARP -10460,  -2025,  17882, -2, warpNameDIMice
+    DEFINEWARP  -7949,  -2627,  17001, -2, warpNameDIMbot
     DEFINEWARP -11923,   -268,   -331,  0, warpNameMMPhut
     DEFINEWARP -11839,     52,  -4791,  0, warpNameMMPwarp
     DEFINEWARP -13440,   -111,   -381,  0, warpNameMMPvolcano
@@ -225,6 +229,7 @@ warpDefs:
     DEFINEWARP -16322,   -777, -13271,  0, warpNameWCpyramid
     DEFINEWARP -16322,  -1209, -13518,  0, warpNameWCboss
     DEFINEWARP -13753,  -1714,  11227,  0, warpNameDragRock
+    DEFINEWARP -17799,  -1764,   9032,  0, warpNameDragRockBird
     DEFINEWARP  14079,   -204, -17065,  0, warpNameTestCombat
     DEFINEWARP  17919,   -204, -10669,  0, warpNameTestStrength
     DEFINEWARP  17919,   -204, -14511,  0, warpNameTestKnowledge

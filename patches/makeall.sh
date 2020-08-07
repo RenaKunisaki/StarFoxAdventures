@@ -15,6 +15,6 @@ cp $TARGET/sys/main.dol.orig $TARGET/sys/main.dol
 # extract Krystal model and texture to own files
 echo "Extract Krystal model..."
 dd if=$TARGET/files/animtest/MODELS.bin of=$TARGET/files/patches/km1 bs=1 skip=210720 count=76608 > /dev/null
-echo "Extract Krystal texture..."
-dd if=$TARGET/files/animtest/TEX1.bin of=$TARGET/files/patches/kt1 bs=1 skip=288864 count=104960 > /dev/null
-cp krystal/km2 krystal/kt2 $TARGET/files/patches/
+#echo "Extract Krystal texture..."
+#dd if=$TARGET/files/animtest/TEX1.bin of=$TARGET/files/patches/kt1 bs=1 skip=288864 count=104960 > /dev/null
+cp krystal/km2 krystal/kt2 krystal/kt1 $TARGET/files/patches/
