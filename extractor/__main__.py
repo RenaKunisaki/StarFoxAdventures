@@ -77,7 +77,7 @@ class App:
             data = file.read(size+0x60)
         if raw:
             with open(outPath, 'wb') as outFile:
-                outPath.write(data)
+                outFile.write(data)
         else:
             tex = SfaTexture.fromData(data)
             printf("Texture size: %dx%d, fmt %s, %d mipmaps\n",
@@ -140,6 +140,23 @@ class App:
         format = ImageFormat[format]
         img = Image.open(path)
         tex = SfaTexture.fromImage(img, fmt=format, numMipMaps=numMipMaps)
+        with open(outPath, 'wb') as file:
+            tex.writeToFile(file)
+
+
+    def packMultiTexture(self, format, *paths):
+        """Pack images at `paths` to texture file.
+
+        Last path is output file. Others are mipmaps in order.
+        """
+        assert len(paths) > 1, "Usage: packMultiTexture format inPath [inPath...] outPath"
+        format = ImageFormat[format]
+        images = []
+        paths  = list(paths) # make mutable
+        outPath = paths.pop()
+        for path in paths:
+            images.append(Image.open(path))
+        tex = SfaTexture.fromImageSet(images, fmt=format)
         with open(outPath, 'wb') as file:
             tex.writeToFile(file)
 
@@ -428,11 +445,10 @@ class App:
                 objNames.append(name)
 
         offs, idx = 0, 0
-        printf("Idx  Offs Type Obj  ObjName     Sz 03 04 05 06 07      X        Y        Z   UniqueID SeqData\n")
+        printf("Idx  Offs Type Obj  ObjName     Sz MapStates------X Fl 06 07      X        Y        Z   UniqueID SeqData\n")
         while offs < len(data):
-            entry = struct.unpack_from('>hBBBBBBfffI', data, offs)
-            length = entry[1]
-            typ = entry[0]
+            typ, length, states3, flags, states5, b6, b7, x, y, z, uniqueId = \
+                struct.unpack_from('>hBBBBBBfffI', data, offs)
             if typ >= 0:
                 if typ < len(objIndex): realTyp = objIndex[typ]
                 else: realTyp = "????"
@@ -443,9 +459,17 @@ class App:
                 realTyp = '%04X' % realTyp
             else: name = "?"
 
-            # idx offs typ realTyp name sz 03 04 05 06 07 X Y Z ID
-            printf("%04X %04X %04X %s %-11s %02X %02X %02X %02X %02X %02X %+8.2f %+8.2f %+8.2f %08X ",
-                idx, offs, typ, realTyp, name, *(entry[1:]))
+            states = []
+            for i in range(8):
+                states.append('-' if (states3 >> i) & 1 else ('%X' % (i+1)))
+            for i in range(8):
+                states.append('-' if (states5 >> (7-i)) else ('%X' % ((i+9) & 0xF)))
+            states = ''.join(states)
+
+            # idx offs typ realTyp name sz states flags 06 07 X Y Z ID
+            printf("%04X %04X %04X %s %-11s %02X %s %02X %02X %02X %+8.2f %+8.2f %+8.2f %08X ",
+                idx, offs, typ, realTyp, name, length, states, flags, b6, b7, x, y, z,
+                uniqueId)
             for i in range(0x18, length*4, 4): # SeqData
                 printf("%02X%02X%02X%02X ", *data[offs+i: offs+i+4])
             printf("\n")
@@ -474,13 +498,21 @@ def main(*args):
 
         sig   = inspect.signature(func)
         nArg  = len(sig.parameters)
-        fArgs = args[1:nArg+1]
-        args  = args[nArg+1:]
+        isVararg = any(map(
+            lambda p: p.kind == inspect.Parameter.VAR_POSITIONAL, sig.parameters.values()))
+        if isVararg:
+            fArgs = args[1:]
+            args  = []
+        else:
+            fArgs = args[1:nArg+1]
+            args  = args[nArg+1:]
 
         if len(fArgs) < nArg:
             msg = [method]
-            for name in sig.parameters:
-                msg.append(name)
+            for param in sig.parameters.values():
+                if param.kind == inspect.Parameter.VAR_POSITIONAL:
+                    msg.append(param.name + '...')
+                else: msg.append(param.name)
             print("Usage:", ' '.join(msg))
             return 1
 
