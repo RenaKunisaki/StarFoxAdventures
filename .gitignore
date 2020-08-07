@@ -5,6 +5,7 @@
 *.gci
 *.img
 *.dol
+*.old
 *.lock*
 __pycache__
 **/build/*
@@ -12,6 +13,7 @@ __pycache__
 **/old/*
 **/dump/*
 **/discroot/*
+**/junk/*
 
 # from https://github.com/github/gitignore
 # Object files
