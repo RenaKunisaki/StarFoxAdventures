@@ -198,7 +198,7 @@ warpDefs:
     DEFINEWARP   -511,    -41,   2951,  0, warpNameSHbot
     DEFINEWARP  -7378,  -1557,   8935,  0, warpNameDIMpad
     DEFINEWARP  -7957,  -1177,  14025,  0, warpNameDIMfort
-    DEFINEWARP  10093,   -859,  14547,  0, warpNameDIMbike
+    DEFINEWARP -10036,   -775,  14822,  0, warpNameDIMbike
     DEFINEWARP  -9075,  -1713,  17999, -2, warpNameDIMinterior
     DEFINEWARP -10460,  -2025,  17882, -2, warpNameDIMice
     DEFINEWARP  -7949,  -2627,  17001, -2, warpNameDIMbot
