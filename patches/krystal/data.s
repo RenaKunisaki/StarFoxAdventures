@@ -16,4 +16,8 @@ texturePath2: .string "patches/kt2"
     msg_whichTex1Bin:    .string "Using TEX1.bin %s"
     msg_whichTex1Tab:    .string "Using TEX1.tab %d"
     msg_doTex1TabPatch:  .string "Patch TEX1.tab %X -> %X"
+    msg_tex1TabNoTex:    .string "New texture not loaded"
+    msg_tex1TabNoTab:    .string "TEX1.tab not loaded"
+    msg_tex1TabNoBin:    .string "TEX1.bin not loaded"
+    msg_tex1PatchDone:   .string "Textures installed OK"
 .endif

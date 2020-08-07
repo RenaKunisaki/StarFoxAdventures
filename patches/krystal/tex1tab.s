@@ -7,7 +7,7 @@ tex1_doPatch:
     # r4 = tex1.tab file ID * 4
     lwzx    r9,  r3, r11 # r9 = &TEX1.bin
     cmpwi   r9,  0
-    beq     .tex1_doPatch_end # not loaded, skip
+    beq     .tex1_doPatch_noBin # not loaded, skip
 
     # get the size of this file
     lwzx    r5, r3, r12 # r5 = size
@@ -17,15 +17,15 @@ tex1_doPatch:
 
     add     r7, r5, r9 # r7 = the actual address
     lwz     r7, 0(r7)
-    cmpwi   r7, 0x14 # is our texture here?
-    bne     .tex1_doPatch_end
+    cmpwi   r7, 0x1C # is our texture here?
+    bne     .tex1_doPatch_notLoaded
 
     # OK, r5 is valid.
 
     srwi    r5, r5, 1 # divide by 2 as the game expects
     lwzx    r9, r4, r11 # r9 = TEX1.tab
     cmpwi   r9, 0
-    beq     .tex1_doPatch_end # table not loaded!? idk why this happens.
+    beq     .tex1_doPatch_noTable # table not loaded!? idk why this happens.
 
     li      r3, TEX1_BASE_ID
     mr      r4, r14
@@ -71,7 +71,42 @@ tex1_doPatch:
     bne     .tex1_doPatch_next
 
 .tex1_doPatch_end:
+.if DEBUG
+    mflr    r20
+    addi    r3,  r30,  msg_tex1PatchDone - .tex1Tab_getpc
+    CALL    OSReport
+    mtlr    r20
+.endif
     blr
+
+.if DEBUG
+.tex1_doPatch_noTable:
+    mflr    r20
+    addi    r3,  r30,  msg_tex1TabNoTab - .tex1Tab_getpc
+    CALL    OSReport
+    mtlr    r20
+    blr
+
+.tex1_doPatch_noBin:
+    mflr    r20
+    addi    r3,  r30,  msg_tex1TabNoBin - .tex1Tab_getpc
+    CALL    OSReport
+    mtlr    r20
+    blr
+
+.tex1_doPatch_notLoaded:
+    mflr    r20
+    addi    r3,  r30,  msg_tex1TabNoTex - .tex1Tab_getpc
+    CALL    OSReport
+    mtlr    r20
+    blr
+
+.else # not DEBUG
+.tex1_doPatch_noTable:
+.tex1_doPatch_noBin:
+.tex1_doPatch_notLoaded:
+    blr
+.endif
 
 
 tex1TabPatch:
@@ -124,23 +159,43 @@ tex1TabPatch:
     bl      tex1_doPatch
     b       endTabPatch # reuse code
 
+#tex1Tab_data1:
+#    .int dataFileSize # for quick access
+#    # copied from TEX1.tab and offset by the first entry.
+#    .int 0x84000000 # 0724 eyelid
+#    .int 0x81002DB0 # 0725 fur
+#    .int 0x8100BD80 # 0726 ? maybe hair sides?
+#    .int 0x01000000 # 0727 unused
+#    .int 0x8100C6E0 # 0728 eyeball
+#    .int 0x8100CA70 # 0729 hair front
+#    .int 0x8100CBB0 # 072A hair back
+#
+#tex1Tab_data2: # for alt
+#    .int dataFileSize # for quick access
+#    .int 0x84000000 # 0724 eyelid
+#    .int 0x81002DB0 # 0725 fur
+#    .int 0x81012308 # 0726 ? maybe hair sides?
+#    .int 0x01000000 # 0727 unused
+#    .int 0x81012C68 # 0728 eyeball
+#    .int 0x81012FF8 # 0729 hair front
+#    .int 0x81013138 # 072A hair back
+
 tex1Tab_data1:
     .int dataFileSize # for quick access
-    # copied from TEX1.tab and offset by the first entry.
-    .int 0x84000000 # eye texture
-    .int 0x81002DB0 # fur texture
-    .int 0x8100BD80 # ? maybe hair sides?
-    .int 0x01000000
-    .int 0x8100C6E0 # another eye texture?
-    .int 0x8100CA70 # hair front
-    .int 0x8100CBB0 # hair back
+    .int 0x87000000 # 0724 @ 000000
+    .int 0x810038F0 # 0725 @ 0071E0
+    .int 0x8100C8E0 # 0726 @ 0191C0
+    .int 0x01000000 # 0727
+    .int 0x8100D230 # 0728 @ 01A460
+    .int 0x8100D5C0 # 0729 @ 01AB80
+    .int 0x8100D710 # 072A @ 01AE20
 
 tex1Tab_data2: # for alt
     .int dataFileSize # for quick access
-    .int 0x84000000
-    .int 0x81002DB0
-    .int 0x81012308
-    .int 0x01000000
-    .int 0x81012C68
-    .int 0x81012FF8
-    .int 0x81013138
+    .int 0x87000000 # 0724
+    .int 0x810038F0 # 0725
+    .int 0x81013DCE # 0726
+    .int 0x01000000 # 0727
+    .int 0x81014D5C # 0728
+    .int 0x8101538A # 0729
+    .int 0x81015628 # 072A
