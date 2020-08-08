@@ -11,6 +11,11 @@
 .text
 .include "common.s"
 .include "globals.s"
+.set INVENTORY_DEBUG,   1
+.set INVENTORY_XPOS,   40
+.set INVENTORY_YPOS,   40
+.set INVENTORY_WIDTH, 540
+.set INVENTORY_HEIGHT,400
 
 # define patches
 patchList:
@@ -52,9 +57,10 @@ padHook: # called from pad read. r3 = padHook, r4 = pad states ptr
     li      r5,  PAD_BUTTON_A
     sth     r5,  0x00(r4)
 
+.if INVENTORY_DEBUG
     addi    r3,  r14, s_mash - padHook
     CALL    debugPrintf
-    #CALL    OSReport
+.endif
 
     b       .end
 
@@ -66,9 +72,14 @@ mainLoop: # called from main loop. r3 = mainLoop
     stw     r4,  SP_LR_SAVE(r1)
     mr      r14, r3
 
-
     LOADWH  r16, controllerStates
+    LOADWH  r3,  whichControllerFrame
+    LOADBL2 r3,  whichControllerFrame,  r3
+    cmpwi   r3,  0
+    beq     .mainLoop_notAltController
+    addi    r16, r16, 0x30
 
+.mainLoop_notAltController:
     # is the menu open?
     lbz     r3, (isVisible - mainLoop)(r14)
     cmpwi   r3, 0
@@ -122,8 +133,10 @@ mainLoop: # called from main loop. r3 = mainLoop
     beq    .mainLoop_notJustOpened
     subi   r4,  r3, 1
     stb    r4,  (openTimer - mainLoop)(r14)
+.if INVENTORY_DEBUG
     addi   r3,  r14, s_openTimer - mainLoop
     CALL   debugPrintf
+.endif
     b      .end
 
 
@@ -297,9 +310,11 @@ menuDoInput: # return r3 = 1 to keep open, 0 to close
     b       .menuDoInput_storeCursorPos
 
 .menuDoInput_use: # use selected item
+.if INVENTORY_DEBUG
     addi    r3,  r14, s_useItem - mainLoop
     lhz     r4,  (curItemBit - mainLoop)(r14)
     CALL    OSReport
+.endif
     CALL    0x8004a868 # waitNextFrame
 
     lhz     r3,  (curItemBit - mainLoop)(r14)
@@ -337,16 +352,24 @@ drawMenu:
     mflr    r4
     stw     r4,  SP_LR_SAVE(r1)
 
-    li      r3,  20 # X
-    li      r4,  20 # Y
-    li      r5, 600 # W
-    li      r6, 440 # H
+    #bl      menuHideHud
+
+    li      r3,  INVENTORY_XPOS
+    li      r4,  INVENTORY_YPOS
+    li      r5,  INVENTORY_WIDTH
+    li      r6,  INVENTORY_HEIGHT
     bl      menuDrawBoxOpaque
-    li      r3,  20 # X
-    li      r4,  20 # Y
-    li      r5, 600 # W
-    li      r6, 440 # H
-    bl      menuDrawBoxOpaque # again to make it more opaque
+    #li      r3,  INVENTORY_XPOS
+    #li      r4,  INVENTORY_YPOS
+    #li      r5,  INVENTORY_WIDTH
+    #li      r6,  INVENTORY_HEIGHT
+    #bl      menuDrawBoxOpaque # again to make it more opaque
+    #li      r3,  260
+    #li      r4,   30
+    #li      r5,  100
+    #li      r6,   20
+    #bl      menuDrawBoxOpaque # outline title
+    # doesn't really work. shows over text, and outline below is visible.
 
     addi    r3,  r14, s_title - mainLoop
     li      r4,  0 # box ID
@@ -389,12 +412,12 @@ drawMenu:
     # set item draw position
     andi.   r3,  r21, 0xF8
     slwi    r3,  r3,  3
-    addi    r3,  r3,  32
+    addi    r3,  r3,  INVENTORY_YPOS + 24
     bl      intToFloat # Y
     fmr     f2,  f1
     andi.   r3,  r21, 7
     slwi    r3,  r3,  6
-    addi    r3,  r3,  40
+    addi    r3,  r3,  INVENTORY_XPOS + 20
     bl      intToFloat # X
     mr      r3,  r18
     li      r4,  0xFF # opacity
@@ -411,10 +434,10 @@ drawMenu:
     # XXX do not draw the interior
     andi.   r3,  r21, 0xF8
     slwi    r3,  r3,  3
-    addi    r4,  r3,  24 # Y
+    addi    r4,  r3,  INVENTORY_YPOS + 16 # Y
     andi.   r3,  r21, 7
     slwi    r3,  r3,  6
-    addi    r3,  r3,  32 # X
+    addi    r3,  r3,  INVENTORY_XPOS + 12 # X
     li      r5,  64   # W
     li      r6,  64   # H
     li      r20, 0x80 # opacity
@@ -468,8 +491,9 @@ openTimer:  .byte 0 # frame countdown to respond after opening
 cMenuTimer: .byte 0 # frame countdown to restore C menu
 numItems:   .byte 0 # number of items on menu
 s_title:    .string "Inventory"
+.if INVENTORY_DEBUG
 s_useItem:  .string "Use item 0x%04X"
 s_openTimer:.string "Open timer %d"
 s_cTimer:   .string "C timer %d"
 s_mash:     .string "PRESSING A NOW"
-.align 4
+.endif

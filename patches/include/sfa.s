@@ -141,6 +141,7 @@
 .set volumeCutScenes,        0x803db253 #s8
 .set volumeMusic,            0x803bd754 #float
 .set volumeSFX,              0x803bd784 #float
+.set whichControllerFrame,   0x803dc94c #u8
 .set yButtonItem,            0x803dd88a #GameBit16
 
 # misc constants
