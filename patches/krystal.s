@@ -16,4 +16,5 @@
 .include "krystal/tex1tab.s"
 .include "krystal/savegame.s"
 .include "krystal/mainloop.s"
+.include "krystal/eyes.s"
 .include "krystal/data.s"

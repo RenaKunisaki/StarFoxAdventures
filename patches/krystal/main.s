@@ -40,6 +40,7 @@ patchList:
     PATCH_B         0x802B6F28, loadSaveGamePatch
     #PATCH_B         0x8011C420, settingsPatch
     #PATCH_BL        0x8011D4BC, titlePatch
+    PATCH_B         0x80087050, eyePatch
     PATCH_MAIN_LOOP mainLoopPatch
     PATCH_WORD      0x802B08D8, 0x38000001 # let Krystal use staff
     PATCH_WORD      0x80295BE0, 0x38600001 # let Krystal use map, PDA, etc
