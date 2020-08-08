@@ -55,16 +55,20 @@ saveLoadHook:
     sth     r5,  (minimapSizeOverride - mainLoop)(r14)
 
     andi.   r5,  r4,  SAVEDATA_OPTION_PDA_MODE
-    srwi    r4,  r4,  2
+    srwi    r5,  r5,  2
     li      r6,  1
-    cmpwi   r4,  3
+    cmpwi   r5,  3
     bne     .saveLoadHook_pdaOn
     li      r6,  0
-    li      r4,  0
+    li      r5,  0
 .saveLoadHook_pdaOn:
     LOADWH  r7,  pdaOn
     STOREB  r6,  pdaOn, r7
-    STOREB  r4,  minimapMode, r7
+    STOREB  r5,  minimapMode, r7
+
+    #lbz     r4,  SAVEDATA_OPTIONS(r3)
+    andi.   r5,  r4,  SAVEDATA_OPTION_FUR_FX
+    bnel    adjItem_furEffect
 
     lwz     r3,  SP_LR_SAVE(r1)
     mtlr    r3   # restore LR

@@ -47,4 +47,5 @@
 # autosave is handled elsewhere because I did it earlier
 
 .set SAVEDATA_OPTION_MAP_SIZE,0x03
-.set SAVEDATA_OPTION_PDA_MODE,0x03 << 2
+.set SAVEDATA_OPTION_PDA_MODE,0x0C
+.set SAVEDATA_OPTION_FUR_FX,  0x10

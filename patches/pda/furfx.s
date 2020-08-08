@@ -28,6 +28,12 @@ adjItem_furEffect: # r3 = amount to adjust by (0=A button)
 #    subi    r5,  r5,  1
 #    cmpwi   r5,  0
 #    bne     .adjItem_furEffect_next
+
+    LOADWH  r5,  saveData
+    LOADBL2 r7,  SAVEDATA_OPTIONS+saveData, r5
+    xori    r7,  r7,  SAVEDATA_OPTION_FUR_FX
+    STOREB  r7,  SAVEDATA_OPTIONS+saveData, r5
+
     blr
 
 #.furFx_addrs:
