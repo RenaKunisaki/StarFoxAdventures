@@ -53,7 +53,7 @@ def buildPatch(basePath, name, dest):
 patchOrder = (
     'debugprint',
     'krystal',
-    'cmenu',
+    #'cmenu',
     'climb',
     'pausemenu',
     'pda',
@@ -65,7 +65,7 @@ patchOrder = (
     'staff_fx',
     'autosave',
     #'debugobjs',
-    #'inventory',
+    'inventory',
     'pad3',
     'camera',
     'startmsg',
@@ -73,6 +73,7 @@ patchOrder = (
     'rumble',
 )
 def buildPatches(basePath):
+    print("Building debug.bin...")
     buildPatch(basePath, 'debugbin', os.path.join(basePath, 'files', 'debug.bin'))
     for i, name in enumerate(patchOrder):
         print("Building", name)

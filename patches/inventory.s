@@ -10,11 +10,13 @@
 # opens the menu also speaks to NPCs.
 .text
 .include "common.s"
+.include "globals.s"
 
 # define patches
 patchList:
     PATCH_ID        "Invntry" # must be 7 chars
     PATCH_MAIN_LOOP mainLoop
+    PATCH_PAD_HOOK  padHook
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -26,12 +28,44 @@ constants:
 entry: # called as soon as our patch is loaded.
     blr
 
+padHook: # called from pad read. r3 = padHook, r4 = pad states ptr
+    # crazy enough, this seems to be the only reliable way to actually
+    # "use" an item: actually simulate some A presses.
+    # all the various "use item" routines actually just check for buttons.
+    # XXX find a way to prevent the player pulling out their staff or
+    # talking to NPCs or etc if we select an unusable item.
+    stwu    r1, -STACK_SIZE(r1) # get some stack space
+    stmw    r3,  SP_GPR_SAVE(r1)
+    mflr    r5
+    stw     r5,  SP_LR_SAVE(r1)
+    mr      r14, r3
+
+    lbz     r3, (isVisible - padHook)(r14)
+    cmpwi   r3, 0
+    bne     .end
+
+    lbz     r5,  (cMenuTimer - padHook)(r14)
+    andi.   r5,  r5,  1
+    cmpwi   r5,  0
+    beq     .end
+
+    li      r5,  PAD_BUTTON_A
+    sth     r5,  0x00(r4)
+
+    addi    r3,  r14, s_mash - padHook
+    CALL    debugPrintf
+    #CALL    OSReport
+
+    b       .end
+
+
 mainLoop: # called from main loop. r3 = mainLoop
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stmw    r3,  SP_GPR_SAVE(r1)
     mflr    r4
     stw     r4,  SP_LR_SAVE(r1)
     mr      r14, r3
+
 
     LOADWH  r16, controllerStates
 
@@ -56,10 +90,10 @@ mainLoop: # called from main loop. r3 = mainLoop
     # XXX on open, check cursor pos is valid, in case we lost an item.
 
     # don't immediately respond to A press
-    li      r3,  60
+    li      r3,  3
     stb     r3,  (moveTimer - mainLoop)(r14)
     stb     r3,  (cMenuTimer - mainLoop)(r14)
-    li      r3,  20
+    li      r3,  5
     stb     r3,  (openTimer - mainLoop)(r14)
 
     # don't have other things respond to it either
@@ -119,6 +153,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     #li      r3,  0 # pad
     #li      r4,  PAD_BUTTON_A|PAD_BUTTON_Y
     #CALL    0x80014b3c # buttonDisable
+    #li      r4,  PAD_BUTTON_A
+    #STOREH  r4,  controllerStates, r16
+    #STOREH  r4,  controllerStates+0x30, r16
+    #LOADWH  r3,  0x803dc91c
+    #STOREH  r4,  0x803dc91c, r3
+    #LOADWH  r3,  0x803398d0
+    #STOREW  r4,  0x803398d0, r3
+    #STOREW  r4,  0x803398e0, r3
+    #STOREW  r4,  0x803398c0, r3
     lhz     r3,  (curItemBit - mainLoop)(r14)
     LOADWH  r4,  0x803dd8c2 # selectedItem
     STOREH  r3,  0x803dd8c2, r4 # itemBeingUsed
@@ -428,3 +471,5 @@ s_title:    .string "Inventory"
 s_useItem:  .string "Use item 0x%04X"
 s_openTimer:.string "Open timer %d"
 s_cTimer:   .string "C timer %d"
+s_mash:     .string "PRESSING A NOW"
+.align 4

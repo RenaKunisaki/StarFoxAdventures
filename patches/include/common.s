@@ -157,6 +157,13 @@
     .int ((\dest) - patchList)
 .endm
 
+.macro PATCH_PAD_HOOK dest
+    # call `dest` from controller read.
+    # r4 = pointer to new controller states.
+    .int 0xC0000002
+    .int ((\dest) - patchList)
+.endm
+
 .macro PATCH_BYTE addr, val
     # write byte `val` to `addr`
     .int ((\addr) & 0x01FFFFFF) | 0x00000000

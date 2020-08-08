@@ -8,6 +8,7 @@ TARGET=~/projects/sfa
 set -e
 mkdir -p $TARGET/files/patches
 rm -f $TARGET/files/patches/*
+echo "Make main patch..."
 ./makedolpatch.sh dolpatch
 cp $TARGET/sys/main.dol.orig $TARGET/sys/main.dol
 ./patchFiles.py $TARGET

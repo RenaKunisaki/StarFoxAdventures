@@ -24,6 +24,7 @@
 #
 # C0000000 aaaaaaaa: call `aaaaaaaa` from the game main loop.
 # C0000001 aaaaaaaa: call `aaaaaaaa` from late in the game's init routine.
+# C0000002 aaaaaaaa: call `aaaaaaaa` just after reading controller input.
 # This should be an address relative to the start of the patch file.
 # The code is called with r3 = its own address, to help with writing
 # position-independent code.
@@ -59,13 +60,15 @@
 .text
 .include "common.s"
 .include "globals.s"
-#81681f8c
 
 constants:
     .set MAX_MAIN_LOOP_HOOKS,16
     .set MAX_STARTUP_HOOKS,16
+    .set MAX_PAD_HOOKS,16
     .set MAIN_LOOP_HOOK_ADDR,0x80020D4C # bl doNothing_80014F3C
     .set STARTUP_HOOK_ADDR,0x80021038 # bl installBsodHandlers
+    .set PAD_HOOK_ADDR,0x80014f90 # 482398D5 bl padReadControllers
+
     .set OP_WRITE8,0x00
     .set OP_WRITE16,0x02
     .set OP_WRITE32,0x04
@@ -73,11 +76,12 @@ constants:
     .set OP_BRANCH,0xC6
     .set OP_NOP,0xFE
 
-    .set STACK_SIZE,0x40 # how much to reserve
-    .set SP_LR_SAVE,0x10
-    .set SP_R0_SAVE,0x14
-    .set SP_PATCH_ADDR,0x18
-    .set SP_FLAGS_ADDR,0x1C
+    .set STACK_SIZE,0xC0 # how much to reserve
+    .set SP_LR_SAVE,0xC4
+    .set SP_TMP1,0x10
+    .set SP_PATCH_ADDR,0x14
+    .set SP_FLAGS_ADDR,0x18
+    .set SP_GPR_SAVE,0x1C
 
 start:
     # entry point of this file.
@@ -110,6 +114,8 @@ start:
     oris   r7, r7, 0x4800
     ori    r7, r7, 1 # make it a bl
     stw    r7, 0(r4)
+    li     r7, 0
+    icbi   r7, r4
 
     # install main loop hook.
     addi   r5, r14, (mainLoop - start)@l # absolute destination address
@@ -119,6 +125,19 @@ start:
     oris   r7, r7, 0x4800
     ori    r7, r7, 1 # make it a bl
     stw    r7, 0(r4)
+    li     r7, 0
+    icbi   r7, r4
+
+    # install pad hook.
+    addi   r5, r14, (padHook - start)@l # absolute destination address
+    LOAD   r4, PAD_HOOK_ADDR
+    sub    r7, r5, r4 # r7 = relative destination addr
+    rlwinm r7, r7, 0, 1, 29 # r7 = r7 & 0x07FFFFFC
+    oris   r7, r7, 0x4800
+    ori    r7, r7, 1 # make it a bl
+    stw    r7, 0(r4)
+    li     r7, 0
+    icbi   r7, r4
 
 
     # load patches
@@ -249,8 +268,11 @@ start:
 .addHook: # r4 = address; r3 -> patch list entry
     addi   r7, r14, ((mainLoopHooks - start) - 4)@l
     lwz    r5,  0(r3) # get opcode
-    andi.  r6,  r5, 1
+    andi.  r6,  r5, 3
+    cmpwi  r6,  0
     beq    .addMainLoopHook
+    cmpwi  r6,  2
+    beq    .addPadHook
 
     # add startup hook
     addi   r7, r14, ((startupHooks - start) - 4)@l
@@ -267,6 +289,10 @@ start:
     stw    r5, 0(r7)
     b      .nextListItem
     # XXX ensure we don't run out of hooks
+
+.addPadHook:
+    addi   r7, r14, ((padHooks - start) - 4)@l
+    b      .addMainLoopHook
 
 
 .endList:
@@ -316,14 +342,34 @@ start:
 
 startHook: # called from startup
     stwu r1, -STACK_SIZE(r1) # get some stack space
+    stmw r3,  SP_GPR_SAVE(r1)
     mflr r3
     stw  r3,  SP_LR_SAVE(r1)
     CALL 0x80137d28 # installBsodHandlers() (replaced instr)
     li   r15, (startupHooks - .mainLoop_getpc) - 4
     b    .mainLoopDoHooks
 
+padHook: # called from pad update
+    stwu r1, -STACK_SIZE(r1) # get some stack space
+    stmw r3,  SP_GPR_SAVE(r1)
+    mflr r4
+    stw  r4,  SP_LR_SAVE(r1)
+    CALL 0x8024e864 # padReadControllers() (replaced instr)
+    lwz  r4,  SP_GPR_SAVE(r1) # pass output pointer as param
+    stw  r3,  SP_TMP1(r1) # save result
+    li   r15, (padHooks - .mainLoop_getpc) - 4
+    bl   .mainLoopDoHooks
+
+    lwz  r4, SP_LR_SAVE(r1)
+    mtlr r4 # restore LR
+    lwz  r3, SP_TMP1(r1) # restore result
+    addi r1, r1, STACK_SIZE # restore stack ptr
+    blr
+
+
 mainLoop: # called from main loop
     stwu r1, -STACK_SIZE(r1) # get some stack space
+    stmw r3,  SP_GPR_SAVE(r1)
     mflr r3
     stw  r3,  SP_LR_SAVE(r1)
     li   r15, (mainLoopHooks - .mainLoop_getpc) - 4
@@ -345,6 +391,7 @@ mainLoop: # called from main loop
 .mainLoopDone:
     lwz  r3, SP_LR_SAVE(r1)
     mtlr r3 # restore LR
+    lmw    r3,  SP_GPR_SAVE(r1)
     addi r1, r1, STACK_SIZE # restore stack ptr
     blr
 
@@ -356,6 +403,11 @@ startupHooks:
 
 mainLoopHooks:
     .rept MAX_MAIN_LOOP_HOOKS
+    .int 0
+    .endr
+
+padHooks:
+    .rept MAX_PAD_HOOKS
     .int 0
     .endr
 
