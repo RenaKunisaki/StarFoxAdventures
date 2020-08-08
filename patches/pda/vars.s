@@ -98,6 +98,7 @@ s_Spanish:        .string "Spanish"
 s_subtitles:      .string "Subtitles: %s"
 s_rumble:         .string "Rumble: %s"
 s_rumbleBlur:     .string "Rumble Blur: %s"
+s_backpack:       .string "Backpack: %s"
 
 # page 1
 s_VideoSettings:  .string "Video Settings"

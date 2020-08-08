@@ -8,6 +8,41 @@ mainLoop: # called from main loop. r3 = mainLoop
     # do HUD overrides, even if menu isn't open.
     bl      doHudOverrides
 
+    # do backpack
+    LOADW   r8,  pBackpack
+    cmpwi   r8,  0
+    beq     .mainLoop_doneBackpack
+    LOADW   r9,  pPlayer
+    cmpwi   r9,  0
+    beq     .mainLoop_doneBackpack
+
+    li      r5,  0
+    LOADWH  r7,  saveData
+    LOADBL2 r7,  SAVEDATA_OPTIONS+saveData, r7
+    andi.   r7,  r7,  SAVEDATA_OPTION_BACKPACK
+    srwi    r7,  r7,  5
+    cmpwi   r7,  1
+    beq     .mainLoop_backpackOn
+    cmpwi   r7,  2
+    beq     .mainLoop_backpackOff
+    # else, normal (on for Fox, off for Krystal)
+    lwz     r9,  0xB8(r9) # get AnimState
+    lhz     r9,  0x081A(r9) # isFox
+    xori    r9,  r9,  1
+    slwi    r5,  r9,  14
+    b       .mainLoop_setBackpack
+
+.mainLoop_backpackOff:
+    li      r5,  0x4000 # invisible flag
+
+.mainLoop_backpackOn:
+.mainLoop_setBackpack:
+    lhz     r6,  0x06(r8)
+    andi.   r6,  r6,  (~0x4000) & 0xFFFF
+    or      r6,  r6,  r5
+    sth     r6,  0x06(r8)
+
+.mainLoop_doneBackpack:
     # check if the menu is open.
     lbz     r4,  (menuVisible - mainLoop)(r14)
     cmpwi   r4,  0

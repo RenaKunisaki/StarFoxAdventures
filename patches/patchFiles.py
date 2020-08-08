@@ -53,7 +53,7 @@ def buildPatch(basePath, name, dest):
 patchOrder = (
     'debugprint',
     'krystal',
-    #'cmenu',
+    'cmenu',
     'climb',
     'pausemenu',
     'pda',
@@ -65,7 +65,7 @@ patchOrder = (
     'staff_fx',
     'autosave',
     #'debugobjs',
-    'inventory',
+    #'inventory',
     'pad3',
     'camera',
     'startmsg',

@@ -93,6 +93,7 @@ itemDrawFuncs_gameSettings:
     .int drawItem_subtitles   - mainLoop
     .int drawItem_rumble      - mainLoop
     .int drawItem_rumbleBlur  - mainLoop
+    .int drawItem_backpack    - mainLoop
     .int 0 # drawfuncs table must be null terminated
 
 itemAdjustFuncs_gameSettings:
@@ -103,6 +104,7 @@ itemAdjustFuncs_gameSettings:
     .int adjItem_subtitles    - mainLoop
     .int adjItem_rumble       - mainLoop
     .int adjItem_rumbleBlur   - mainLoop
+    .int adjItem_backpack     - mainLoop
 
 
 itemDrawFuncs_video:

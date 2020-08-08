@@ -16,6 +16,7 @@ patchList:
     # it's not necessary anyway and interferes
     # with our fixed width hack.
     PATCH_WORD 0x80017C70, 0x2816ACAB
+    PATCH_WORD 0x802B6414, 0x60000000 # disable normal backpack handling
     # hook into loadSaveSettings to repurpose some unused settings.
     PATCH_B    0x800e7f9c, saveLoadHook
     PATCH_END  PATCH_KEEP_AFTER_RUN
@@ -87,6 +88,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/texthook.s"
 .include "pda/furfx.s"
 .include "pda/texturedebug.s"
+.include "pda/backpack.s"
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"

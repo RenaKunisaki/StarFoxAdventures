@@ -120,6 +120,7 @@
 .set numLoadedObjs,          0x803dcb84 #int
 .set oneOverTimeDelta,       0x803db418 #float
 .set pauseDisabled,          0x803dd789 #bool
+.set pBackpack,              0x803de448 #ObjInstance*
 .set pCamera,                0x803dd524 #Camera*
 .set pCurMapInfo,            0x803dce78 #MapInfoEntry*
 .set pCurSaveGame,           0x803dd498 #SaveGame*

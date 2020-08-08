@@ -39,6 +39,7 @@ padHook: # called from pad read. r3 = padHook, r4 = pad states ptr
     # all the various "use item" routines actually just check for buttons.
     # XXX find a way to prevent the player pulling out their staff or
     # talking to NPCs or etc if we select an unusable item.
+    # PlayerAnimState has some button variables...
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stmw    r3,  SP_GPR_SAVE(r1)
     mflr    r5
