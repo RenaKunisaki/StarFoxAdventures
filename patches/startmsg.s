@@ -98,7 +98,7 @@ main: # called from loading screen loop
     JUMP     0x80115d44, r0 # jump back to game code
 
 
-.msg1: .string "Amethyst Edition v1.4"
+.msg1: .string "Amethyst Edition v1.5"
 .msg2: .string "segment6.net"
 .msg3:
     .ascii "\t\tThis is a free fan creation.\n"
