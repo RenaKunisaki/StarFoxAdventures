@@ -14,9 +14,9 @@ adjItem_FOV: # r3 = amount to adjust by
     lfs     f2,  (five   - mainLoop)(r14) # f2 = step
     lfs     f3,  (five   - mainLoop)(r14) # f3 = min
     lfs     f4,  (fovMax - mainLoop)(r14) # f4 = max
-    mflr    r9
+    mflr    r8
     bl      adjItem_float
-    mtlr    r9
+    mtlr    r8
 
     fctiwz  f1,  f1
     stfd    f1,  SP_FLOAT_TMP(r1)
