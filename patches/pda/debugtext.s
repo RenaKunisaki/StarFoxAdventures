@@ -21,7 +21,7 @@ drawItem_debugText_tricky:
     addi    r4,  r14, (s_Tricky - mainLoop)
     addi    r5,  r14, (s_off - mainLoop)
     LOADB   r6,  0x80148bc8
-    cmpwi   r6,  0x4B
+    cmpwi   r6,  0x94
     b       debugText_printOffOn
 
 adjItem_debugText_tricky: # r3 = amount to adjust by (0=A button)
