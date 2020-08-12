@@ -32,16 +32,32 @@ doStartup: # called from late init
     stmw     r3, SP_GPR_SAVE(r1)
 
     # if Z isn't held, turn debug text back off.
-    li       r3,  0
-    LOADWH   r9,  controllerStates
-    LOADHL2  r6,  controllerStates, r9 # buttons
-    andi.    r0,  r6, PAD_BUTTON_Z
-    beq      .notZheld
-    li       r3,  1
+    li      r3,  0
+    LOADWH  r9,  controllerStates
+    LOADHL2 r6,  controllerStates, r9 # buttons
+    andi.   r0,  r6, PAD_BUTTON_Z
+    beq     .notZheld
+    li      r3,  1
 .notZheld:
-    LOADWH   r4,  enableDebugText
-    STOREB   r3,  enableDebugText, r4
+    LOADWH  r4,  enableDebugText
+    STOREB  r3,  enableDebugText, r4
 
+    cmpwi   r3,  1
+    bne     .skipDebugText
+
+    # turn on Tricky debug text
+    #LOAD    r4,  0x80148BC8
+    #LOAD    r5,  0x4BFEED80
+    #stw     r5,  0(r4)
+    #li      r3,  0
+    #icbi    r4,  r3 # flush instruction cache
+
+    # turn on other debug text
+    LOADW   r4,  PATCH_STATE_PTR
+    li      r3,  0xFF
+    stb     r3,  DEBUG_TEXT_FLAGS(r4)
+
+.skipDebugText:
     lwz      r0, SP_LR_SAVE(r1)
     mtlr     r0 # restore LR
     lmw      r3, SP_GPR_SAVE(r1)
