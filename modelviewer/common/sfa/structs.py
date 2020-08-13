@@ -33,36 +33,36 @@ class DisplayListPtr(Struct):
     _size   = 0x1C
     _order  = '>'
     _fields = {
-        'offset':  ('I',  0x00),
-        'size':    ('H',  0x04),
-        'bbox':    ('6h', 0x06),
-        # 'specialBitAddr': ???
-        'unk12':   ('B', 0x12),
-        'shaderId':('B', 0x13), # maybe u16
-        'unk14':   ('H', 0x14), # related to shader
-        'unk16':   ('H', 0x16),
-        'unk18':   ('I', 0x18), # always 07 00 00 00?
+        'offset':         ('I', 0x00),
+        'size':           ('H', 0x04),
+        'bbox':           ('6h',0x06),
+        'unk12':          ('B', 0x12),
+        'shaderId':       ('B', 0x13), # maybe u16
+        'specialBitAddr': ('H', 0x14), # related to shader
+        'unk16':          ('H', 0x16),
+        'unk18':          ('I', 0x18), # always 07 00 00 00?
     }
 
-class ShaderColor(Struct):
-    _size   = 8
+class ShaderLayer(Struct):
+    _size   = 0x08
     _order  = '>'
     _fields = {
-        'flags0': ('B',  0x00),
-        'color':  ('3B', 0x04), # not plain RGB
+        'texture':             ('I',  0x00),
+        'tevMode':             ('B',  0x04),
+        'enableTexChainStuff': ('B',  0x05),
+        'scrollingTexMtx':     ('B',  0x06),
     }
 
 class Shader(Struct):
     _size   = 0x44
     _order  = '>'
     _fields = {
-        'color0':    (ShaderColor, 0x00),
-        'color1':    (ShaderColor, 0x08),
-        'color2':    (ShaderColor, 0x10),
-        'color3':    (ShaderColor, 0x18),
+        'auxTex0':   ('I',  0x08),
+        'auxTex1':   ('I',  0x14),
         'alpha':     ('B',  0x22),
         'unk24':     ('4I', 0x24),
-        'textureId': ('2i', 0x34),
+        'auxTex2':   ('I',  0x34),
+        'furTexture':('I',  0x38),
         'flags':     ('I',  0x3C),
         'flags_40':  ('B',  0x40),
         'nTextures': ('B',  0x41),

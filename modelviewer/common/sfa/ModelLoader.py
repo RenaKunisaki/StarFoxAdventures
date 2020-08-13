@@ -110,22 +110,27 @@ class ModelLoader:
 
     def _setupVtxDescrs(self):
         """Setup vertex descriptors."""
-        NONE   = 0
-        DIRECT = 1
-        IDX8   = 2
-        IDX16  = 3
+        NONE, DIRECT, IDX8, IDX16 = 0, 1, 2, 3
         #self._vtxFmt     = {'pos':0, 'nrm':0, 'col':0, 'tex':0}
-        if len(self.model.bones) < 2:
+        if len(self.model.bones) >= 2:
             # gxSetTexMtxIdx(0);
-            pass
-        else:
             self._vtxFmt['pos'] = DIRECT
-            # XXX this isn't quite right. where is ShaderDef set from?
-            # and there might be different settings per texture mtx 0-7
-            if self.curShader is not None and self.curShader.textureId[0] != 0:
-                self._vtxFmt['tex'] = DIRECT
-                if self.curShader.flags_40 & 0x01: # UseNormals
-                    self._vtxFmt['nrm'] = DIRECT
+            texMtx = 0
+            if (self.curShader.auxTex0 != 0
+            or  self.curShader.auxTex1 != 0):
+                if self.curSeq.auxTex2 != 0:
+                    self._vtxFmt['tex%d' % texMtx] = DIRECT
+                    self._vtxFmt['tex%d' % (texMtx+1)] = DIRECT
+                    texMtx += 2
+                self._vtxFmt['tex%d' % texMtx] = DIRECT
+                texMtx += 1
+
+            # texMtxCount is 0 for character models.
+            # for map models it's in the model struct.
+            #texMtx = 7
+            #for i in range(texMtxCount):
+            #    self._vtxFmt['tex%d' % texMtx] = DIRECT
+            #    texMtx -= 1
 
 
 
@@ -190,8 +195,8 @@ class ModelLoader:
         #    log.debug("Shader Texture ID is %d, %d", *self.curShader.textureId)
         #else:
         #    log.debug("No shader")
-        if self.curShader and self.curShader.textureId[0] >= 0:
-            attrs['TEX1'] = self._vtxFmt['tex']
+        #if self.curShader and self.curShader.textureId[0] >= 0:
+        #    attrs['TEX1'] = self._vtxFmt['tex']
 
         #if idx == 24: # HACK - Krystal eyes
         #    # probably related to shader, they're the only ones

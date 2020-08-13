@@ -16,7 +16,7 @@ class MainMenu(Menu):
 
 
     def refresh(self):
-        self.items = ["List Offset Polys Sh Unk"]
+        self.items = ["List Offset Polys Sh Spec Unk"]
         for i, dlist in enumerate(self.parent.dlists):
             bbox = dlist.list.bbox
             sc = 1024
@@ -25,12 +25,11 @@ class MainMenu(Menu):
                 bbox[3]/sc, bbox[4]/sc, bbox[5]/sc,
             )
             self.items.append(
-                "%4d %06X %5d %02X %02X %04X %04X %08X" % (
+                "%4d %06X %5d %02X %04X %02X %04X %08X" % (
                     i, dlist.offset, len(dlist.polys),
                     #bb,
-                    dlist.list.shaderId,
-                    dlist.list.unk12, dlist.list.unk14,
-                    dlist.list.unk16, dlist.list.unk18,
+                    dlist.list.shaderId, dlist.list.specialBitAddr,
+                    dlist.list.unk12, dlist.list.unk16, dlist.list.unk18,
             ))
         self.cursorPos = 0
 
