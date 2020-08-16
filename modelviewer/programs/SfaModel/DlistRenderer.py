@@ -43,6 +43,7 @@ class DlistRenderer(gl.Pipeline):
         self.model    = None
         self.useFaceCulling = True
         self._highlightFlash = 0
+        self.forceWireFrame = False
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
@@ -51,7 +52,7 @@ class DlistRenderer(gl.Pipeline):
         )
         self.programs['fragment_shader'].setUniforms(
             enableTexture = True,
-            #minAlpha      =  0.5,
+            minAlpha      =  0.01,
         )
 
         self._vtxSize   = struct.calcsize(self.vtxBufferFmt)
@@ -70,9 +71,9 @@ class DlistRenderer(gl.Pipeline):
         else: self.ctx.glDisable(self.ctx.GL_CULL_FACE)
         #self.ctx.glEnable(self.ctx.GL_CULL_FACE)
         #self.ctx.glDepthFunc(self.ctx.GL_LESS)
-        #self.ctx.glEnable(self.ctx.GL_BLEND)
-        #self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
-        #    self.ctx.GL_ONE_MINUS_SRC_ALPHA)
+        self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA,
+            self.ctx.GL_ONE_MINUS_SRC_ALPHA)
+        self.ctx.glEnable(self.ctx.GL_BLEND)
 
         # nVtxs = # triangles since we use GL_TRIANGLES here,
         # so the division by 3 is done automatically
@@ -90,11 +91,19 @@ class DlistRenderer(gl.Pipeline):
             enableFill    = False,
             enableOutline = True,
             selectedPoly  = -1,
+            lineAlpha     = 0.1,
         )
         self.shader.vao.render(self.ctx.GL_TRIANGLES,
             count=dlist.nVtxs, offset=dlist.vtxOffs)
 
-        if dlist.polyIdx < 0: # render all
+        if self.forceWireFrame:
+            gShader.setUniforms(
+                enableFill    = False,
+                enableOutline = True,
+                selectedPoly  = -1,
+                lineAlpha     = 0.8,
+            )
+        elif dlist.polyIdx < 0: # render all
             gShader.setUniforms(
                 enableFill    = dlist.enableFill,
                 enableOutline = False, #dlist.enableOutline,

@@ -42,5 +42,6 @@ class MainWindow(Gtk.Window):
             return False # don't call again
         GLib.timeout_add(500, redraw)
 
-        self.set_default_size(1920-121, 1080) # arbitrary default size
+        # arbitrary default size that fits nicely with my laptop.
+        self.set_default_size(1799, 1080)
         self.show_all()

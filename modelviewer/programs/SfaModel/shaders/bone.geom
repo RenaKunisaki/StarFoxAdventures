@@ -1,5 +1,5 @@
 #version 330
-/* Geometry shader for boxes.
+/* Geometry shader for bones.
  */
 #include "common.geom"
 layout(points) in;

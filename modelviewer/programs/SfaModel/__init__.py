@@ -12,10 +12,12 @@ from .EventHandler import EventHandler
 from common.sfa.ModelLoader import ModelLoader
 from common.gamecube.DlistParser import DlistParser
 from .BoneRenderer import BoneRenderer
+from .LineRenderer import LineRenderer
 from programs.Common.BoxRenderer import BoxRenderer
+from programs.Common.SphereRenderer import SphereRenderer
 from .DlistRenderer import DlistRenderer
 from .TextureRenderer import TextureRenderer
-from .Menu import Menu, MainMenu
+from .Menu import Menu, MainMenu, BoneMenu, HitboxMenu, AttachPointMenu
 from common.BinaryFile import BinaryFile
 
 
@@ -29,18 +31,57 @@ class BoxShader(SfaProgram):
     vertex_shader   = (shaders, 'box.vert')
     geometry_shader = (shaders, 'box.geom')
 
+class SphereShader(SfaProgram):
+    separable       = True
+    vertex_shader   = (shaders, 'sphere.vert')
+    geometry_shader = (shaders, 'sphere.geom')
+    #fragment_shader = (shaders, 'sphere.frag')
+
 
 class SfaModelViewer(SfaProgram, EventHandler):
     """Render extracted SFA models."""
     MAX_VTXS = 1024
 
+    # copied from OBJECTS.bin for now
+    attachPoints = (
+        #     X        Y        Z  rotX    rotY    rotZ    bone
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x08),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x0E),
+        (     0,       0,   1.485, 0x3FFF, 0xDF4B, 0x0000, 0x02),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x02),
+        (     0,  44.000, -12.000, 0x0000, 0x0000, 0x0000, 0xFF),
+        (     0,       0,   1.980, 0x0000, 0x0000, 0x0000, 0x10),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x1C),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x18),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x06),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x0C),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x11),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x00),
+        (-1.944,   0.978,   1.873, 0x0000, 0x0000, 0x0000, 0x02),
+        (-0.049,   0.978,   1.873, 0x0000, 0x0000, 0x0000, 0x02),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x0E),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x1A),
+        (     0,       0,       0, 0x0000, 0x0000, 0x0000, 0x16),
+        (     0,  -0.990,  -3.960, 0x0000, 0x0000, 0x0000, 0x1C),
+        (     0,  -0.990,  -3.960, 0x0000, 0x0000, 0x0000, 0x18),
+        (     0,       0,  -0.990, 0x0000, 0x0000, 0x0000, 0x11),
+    )
+
     def __init__(self, ctx):
         super().__init__(ctx)
+        self.model = None
+        self.showHitboxes = True
+        self.highlightedHitbox = -1
+        self.showAttachPoints = True
+        self.highlightedAttachPoint = -1
+        self.showBones = True
 
         # setup shaders and subprograms
         self.fragShader      = FragmentShader(self.ctx)
         self.boneRenderer    = BoneRenderer(self)
+        self.lineRenderer    = LineRenderer(self)
         self.boxRenderer     = BoxRenderer(self, BoxShader(self.ctx))
+        self.sphereRenderer  = SphereRenderer(self, SphereShader(self.ctx))
         self.dlistRenderer   = DlistRenderer(self)
         self.textureRenderer = TextureRenderer(self)
 
@@ -58,7 +99,10 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
         self.dlists        = []
-        self.menu          = MainMenu(self)
+        #self.menu          = MainMenu(self)
+        #self.menu          = BoneMenu(self)
+        #self.menu          = HitboxMenu(self)
+        self.menu          = AttachPointMenu(self)
         self._menuStack    = []
 
         # enable our local logger to print on the screen
@@ -128,7 +172,21 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #    )
 
         self.boneRenderer.setModel(self.model)
-        #self._renderHitboxes()
+
+        log.debug("%d hitboxes", len(self.model.hitboxes))
+        self._firstHitboxIdx = self.boxRenderer._nBoxes
+        for i, box in enumerate(self.model.hitboxes):
+            log.debug("%02X|%04X|%04X|%+7.4f|%+7.4f|%+7.4f|%+7.4f|%04X|%02X|%02X|",
+                i, box.bone, box.unk02, box.radius,
+                box.pos[0], box.pos[1], box.pos[2],
+                box.unk14, box.unk16, box.unk17)
+
+        log.debug("%d bones", len(self.model.bones))
+        for i, bone in enumerate(self.model.bones):
+            log.debug("%02X|%02X|%02X|%02X|%02X|%+7.4f %+7.4f %+7.4f|%+7.4f %+7.4f %+7.4f|",
+                i, bone.parent, bone.unk01, bone.unk02, bone.unk03,
+                bone.head.x, bone.head.y, bone.head.z,
+                bone.tail.x, bone.tail.y, bone.tail.z)
 
 
     def enterMenu(self, menu):
@@ -144,22 +202,98 @@ class SfaModelViewer(SfaProgram, EventHandler):
         """Render the scene."""
         log.dprint("Frame %d", self.frame)
         self._setMtxs()
+        self.boxRenderer.reset()
+        self.lineRenderer.reset()
+        self.sphereRenderer.reset()
+
+        if self.showHitboxes: self._renderHitboxes()
+        if self.showAttachPoints: self._renderAttachPoints()
         self.dlistRenderer.run()
-        self.boneRenderer.run()
-        if (self.frame & 1) == 0:
-            self.boxRenderer.run() # highlight boxes
+        if self.showBones: self.boneRenderer.run()
+        self.lineRenderer.run()
+        self.boxRenderer.run()
+        self.sphereRenderer.run()
         #self.textureRenderer.run() # draw texture on screen
+        log.dprint('\n\n') # space out menu from keys
         self.menu.render()
 
         lines = (
             "[1] Face Culling: %s" % ("On" if self.dlistRenderer.useFaceCulling else "Off"),
-            "[2] Bone X-ray: %s" % (
+            "[2] Wireframe: %s" % ("On" if self.dlistRenderer.forceWireFrame else "Off"),
+            "[3] Bone X-ray: %s" % (
                 "Off" if self.boneRenderer.useDepthTest else "On"),
+            "[4] Bones: %s" % ("On" if self.showBones else "Off"),
+            "[5] Hit Spheres: %s" % ("On" if self.showHitboxes else "Off"),
+            "[6] Attach Points: %s" % ("On" if self.showAttachPoints else "Off"),
         )
         for i, line in enumerate(lines):
             log.dprint("\x1B[%d,200H%s", (i*11)+5, line)
 
         self.frame += 1
+
+
+    def _renderHitboxes(self):
+        self._firstHitboxIdx = self.sphereRenderer._nSpheres
+        for i, box in enumerate(self.model.hitboxes):
+            x, y, z = box.pos
+            radius  = box.radius
+            bone = self.model.bones[box.bone]
+            head, tail = self.model.calcBonePos(bone, True)
+            x, y, z = x+head[0], y+head[1], z+head[2]
+
+            sc = 1.0
+            if i == self.highlightedHitbox and self.frame & 1 == 0:
+                r, g, b, a, sc = 1.0, 0.0, 0.0, 0.5, 1.1
+            elif self.highlightedHitbox == -1:
+                r, g, b, a = box.unk14, box.unk16 / 0x14, box.unk17 / 0x14, 0.2
+            else: r, g, b, a = 0, 0, 0, 0.2
+            #else: continue
+
+            self.sphereRenderer.addSphere(
+                (x, y, z), radius*sc,
+                (r, g, b, a),
+            )
+            #self.boxRenderer.addBox(
+            #    (x-radius, y-radius, z-radius),
+            #    (x+radius, y+radius, z+radius),
+            #    (r, g, b, a),
+            #)
+
+    def _renderAttachPoints(self):
+        # these are in OBJECTS.bin, and I've just copied them into
+        # this script for testing.
+        for i, point in enumerate(self.attachPoints):
+            x, y, z, rx, ry, rz, bIdx = point
+            if bIdx != 0xFF:
+                bone = self.model.bones[bIdx]
+                head, tail = self.model.calcBonePos(bone, True)
+                x1, y1, z1 = x+head[0], y+head[1], z+head[2]
+                x2, y2, z2 = x+tail[0], y+tail[1], z+tail[2]
+            if i == self.highlightedAttachPoint and self.frame & 1 == 0:
+                r, g, b, a, sc = 1.0, 0.0, 0.0, 0.5, 1.1
+            elif self.highlightedAttachPoint == -1:
+                r, g, b, a, sc = 1.0, 0.0, 0.0, 0.5, 1.0
+            else:
+                r, g, b, a, sc = 0.0, 0.0, 0.0, 0.2, 1.0
+            #self.sphereRenderer.addSphere((x1, y1, z1), sc, (r, g, b, a))
+
+            rx  = (rx / 65536) * math.pi * 2
+            ry  = (ry / 65536) * math.pi * 2
+            rz  = (rz / 65536) * math.pi * 2
+            mrx = gl.Util.Matrix.rotateX(rx)
+            mry = gl.Util.Matrix.rotateY(ry)
+            mrz = gl.Util.Matrix.rotateZ(rz)
+            mr  = mrx @ mry @ mrz
+            #s   = 0.1 * sc
+            v1  = gl.Util.Matrix.translate(x1, y1, z1) @ mr
+            v2  = gl.Util.Matrix.translate(x2, y2, z2) @ mr
+            #log.dprint("%2d %+7.2f %+7.2f %+7.2f %+7.2f\n   %+7.2f %+7.2f %+7.2f %+7.2f\n   %+7.2f %+7.2f %+7.2f %+7.2f\n   %+7.2f %+7.2f %+7.2f %+7.2f",
+            #    i, *v1[0], *v1[1], *v1[2], *v1[3])
+            self.lineRenderer.addLine(
+                v1[3][0:3], v2[3][0:3],
+                (r, g, b, a), (1, 1, 1, 1),
+            )
+
 
 
     def _setMtxs(self):
@@ -193,7 +327,9 @@ class SfaModelViewer(SfaProgram, EventHandler):
         #        i, head[0], head[1], head[2], tail[0], tail[1], tail[2])
 
         self.boneRenderer   .setMtxs(mp, mv)
+        self.lineRenderer   .setMtxs(mp, mv)
         self.boxRenderer    .setMtxs(mp, mv)
+        self.sphereRenderer .setMtxs(mp, mv)
         self.dlistRenderer  .setMtxs(mp, mv)
         self.textureRenderer.setMtxs(
             gl.Util.Matrix.scale(3/width, 3/height) @

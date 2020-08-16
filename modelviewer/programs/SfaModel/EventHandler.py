@@ -58,7 +58,12 @@ class EventHandler:
         elif key == '1':
             self.dlistRenderer.useFaceCulling = not self.dlistRenderer.useFaceCulling
         elif key == '2':
+            self.dlistRenderer.forceWireFrame = not self.dlistRenderer.forceWireFrame
+        elif key == '3':
             self.boneRenderer.useDepthTest = not self.boneRenderer.useDepthTest
+        elif key == '4': self.showBones = not self.showBones
+        elif key == '5': self.showHitboxes = not self.showHitboxes
+        elif key == '6': self.showAttachPoints = not self.showAttachPoints
 
         # w/s: move forward/backward
         elif key == 'w': self._translate[2] += 10.0

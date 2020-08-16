@@ -7,15 +7,14 @@ import gl
 import numpy as np
 
 
-class BoxRenderer(gl.Pipeline):
-    """Subprogram for rendering boxes."""
-    MAX_BOXES = 8192
-    vtxBufferFmt = "6f" # (x,y,z) A, (x,y,z) B
-    colorBufferFmt = "4f" # (r,g,b,a) per box
+class SphereRenderer(gl.Pipeline):
+    """Subprogram for rendering spheres."""
+    MAX_SPHERES = 8192
+    vtxBufferFmt = "4f" # x, y, z, radius
+    colorBufferFmt = "4f" # (r,g,b,a) per sphere
 
     def __init__(self, parent, shader):
         self.parent = parent
-        #self.shader = BoxShader(self.parent.ctx)
         self.shader = shader
 
         super().__init__(parent.ctx,
@@ -26,39 +25,38 @@ class BoxRenderer(gl.Pipeline):
 
         self._vtxSize   = struct.calcsize(self.vtxBufferFmt)
         self._colorSize = struct.calcsize(self.colorBufferFmt)
-        self.bufVtxs   = self.ctx.Buffer(self._vtxSize * self.MAX_BOXES, True)
-        self.bufColors = self.ctx.Buffer(self._colorSize * self.MAX_BOXES, True)
-        self._nBoxes = 0
+        self.bufVtxs   = self.ctx.Buffer(self._vtxSize   * self.MAX_SPHERES, True)
+        self.bufColors = self.ctx.Buffer(self._colorSize * self.MAX_SPHERES, True)
+        self._nSpheres = 0
 
 
-    def addBox(self, pointA, pointB, color):
-        """Add a box with one corner at pointA and the other at pointB."""
-        if self._nBoxes >= self.MAX_BOXES: return
+    def addSphere(self, pos, radius, color):
+        """Add a sphere."""
+        if self._nSpheres >= self.MAX_SPHERES: return
 
-        x1, y1, z1 = pointA
-        x2, y2, z2 = pointB
+        x, y, z    = pos
         r, g, b, a = color
 
-        vtxData = struct.pack(self.vtxBufferFmt, x1, y1, z1, x2, y2, z2)
+        vtxData = struct.pack(self.vtxBufferFmt,   x, y, z, radius)
         colData = struct.pack(self.colorBufferFmt, r, g, b, a)
-        vtxOffs = self._nBoxes * self._vtxSize
-        colOffs = self._nBoxes * self._colorSize
-        self.bufVtxs.write(vtxData, vtxOffs)
+        vtxOffs = self._nSpheres * self._vtxSize
+        colOffs = self._nSpheres * self._colorSize
+        self.bufVtxs  .write(vtxData, vtxOffs)
         self.bufColors.write(colData, colOffs)
-        self._nBoxes += 1
+        self._nSpheres += 1
 
 
     def reset(self):
-        self._nBoxes = 0
+        self._nSpheres = 0
 
 
     def run(self):
-        if self._nBoxes == 0: return
+        if self._nSpheres == 0: return
         self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA, self.ctx.GL_ONE_MINUS_SRC_ALPHA)
         self.ctx.glEnable(self.ctx.GL_BLEND)
         with self:
             self._bindBuffers()
-            self.shader.vao.render(self.ctx.GL_POINTS, count=self._nBoxes)
+            self.shader.vao.render(self.ctx.GL_POINTS, count=self._nSpheres)
 
 
     def setMtxs(self, projection, modelView):
@@ -67,20 +65,20 @@ class BoxRenderer(gl.Pipeline):
 
     def _bindBuffers(self):
         with self.shader as shader:
-            # in vec3 vertA
-            shader.attribs['vertA'].bindBuffer(
+            # in vec3 pos
+            shader.attribs['pos'].bindBuffer(
                 self.bufVtxs, self.ctx.GL_FLOAT, 3,
-                stride=6 * gl.Util.SIZEOF_FLOAT,
+                stride=4 * gl.Util.SIZEOF_FLOAT,
                 offset=0 * gl.Util.SIZEOF_FLOAT)
 
-            # in vec3 vertB
-            shader.attribs['vertB'].bindBuffer(
-                self.bufVtxs, self.ctx.GL_FLOAT, 3,
-                stride=6 * gl.Util.SIZEOF_FLOAT,
+            # in float radius
+            shader.attribs['radius'].bindBuffer(
+                self.bufVtxs, self.ctx.GL_FLOAT, 1,
+                stride=4 * gl.Util.SIZEOF_FLOAT,
                 offset=3 * gl.Util.SIZEOF_FLOAT)
 
             # in vec4 vtxColor
-            shader.attribs['vtxColor'].bindBuffer(
+            shader.attribs['color'].bindBuffer(
                 self.bufColors, self.ctx.GL_FLOAT, 4,
                 stride=4 * gl.Util.SIZEOF_FLOAT,
                 offset=0 * gl.Util.SIZEOF_FLOAT)

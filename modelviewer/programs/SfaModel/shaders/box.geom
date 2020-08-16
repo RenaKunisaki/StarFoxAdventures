@@ -40,7 +40,6 @@ void drawBox(vec3 vA, vec3 vB, vec4 color) {
     EndPrimitive();
 }
 
-
 void main() {
     for(int i = 0; i < gl_in.length(); i++) { //for each primitive
         drawBox(vertex[i].vtxA, vertex[i].vtxB, vertex[i].color);

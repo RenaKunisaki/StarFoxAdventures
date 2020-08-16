@@ -72,9 +72,13 @@ class HitboxStruct(Struct):
     _size   = 0x18
     _order  = '>'
     _fields = {
-        'unk00': ('I',  0x00),
-        'unk04': ('4f', 0x04),
-        'unk14': ('I',  0x14),
+        'bone':  ('h',  0x00),
+        'unk02': ('H',  0x02),
+        'radius':('f',  0x04),
+        'pos':   ('3f', 0x08),
+        'unk14': ('H',  0x14),
+        'unk16': ('B',  0x16),
+        'unk17': ('B',  0x17),
     }
 
 class ModelStruct(Struct):

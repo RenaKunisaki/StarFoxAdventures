@@ -9,24 +9,23 @@ from .SfaProgram import SfaProgram
 from . import shaders
 
 
-class BoneShader(SfaProgram):
+class LineShader(SfaProgram):
     separable       = True
-    vertex_shader   = (shaders, 'bone.vert')
-    geometry_shader = (shaders, 'bone.geom')
+    vertex_shader   = (shaders, 'line.vert')
+    geometry_shader = (shaders, 'line.geom')
 
 
-class BoneRenderer(gl.Pipeline):
-    """Subprogram for rendering bones."""
-    MAX_BONES = 1024
+class LineRenderer(gl.Pipeline):
+    """Subprogram for rendering thick lines."""
+    MAX_LINES = 1024
     vtxBufferFmt = "6f" # (x,y,z) head, (x,y,z) tail
-    colorBufferFmt = "8f" # (r,g,b,a) per bone (head, tail)
+    colorBufferFmt = "8f" # (r,g,b,a) per line (head, tail)
 
     def __init__(self, parent):
         self.parent = parent
-        self.shader = BoneShader(self.parent.ctx)
-        self.model  = None
-        self._highlighted = -1
-        self._highlightFlash = 0
+        self.shader = LineShader(self.parent.ctx)
+        self.lineWidth = 8
+        self._nLines = 0
 
         super().__init__(parent.ctx,
             vertex_shader   = self.shader,
@@ -36,57 +35,47 @@ class BoneRenderer(gl.Pipeline):
 
         self._vtxSize   = struct.calcsize(self.vtxBufferFmt)
         self._colorSize = struct.calcsize(self.colorBufferFmt)
-        self.bufVtxs   = self.ctx.Buffer(self._vtxSize * self.MAX_BONES, True)
-        self.bufColors = self.ctx.Buffer(self._colorSize * self.MAX_BONES, True)
+        self.bufVtxs    = self.ctx.Buffer(self._vtxSize   * self.MAX_LINES, True)
+        self.bufColors  = self.ctx.Buffer(self._colorSize * self.MAX_LINES, True)
         self.useDepthTest = True
 
 
-    def setModel(self, model):
-        self.model = model
-        self._nBones = len(self.model.bones)
+    def addLine(self, pointA, pointB, colorA, colorB):
+        """Add a line from pointA to pointB."""
+        if self._nLines >= self.MAX_LINES: return
 
-        vtxData, vtxColors = [], []
-        for i, bone in enumerate(self.model.bones):
-            head, tail = self.model.calcBonePos(bone, True)
-            vtxData.append(struct.pack('6f', # x, y, z - head, tail
-                head[0], head[1], head[2],
-                tail[0], tail[1], tail[2],
-            ))
-            vtxColors.append(struct.pack('8f', 1, 1, 1, 1,  1, 0, 0, 1))
+        x1, y1, z1 = pointA
+        x2, y2, z2 = pointB
+        r1, g1, b1, a1 = colorA
+        r2, g2, b2, a2 = colorB
 
-        vtxData   = b''.join(vtxData)
-        vtxColors = b''.join(vtxColors)
-        self.bufVtxs.write(vtxData)
-        self.bufColors.write(vtxColors)
+        vtxData = struct.pack(self.vtxBufferFmt, x1, y1, z1, x2, y2, z2)
+        colData = struct.pack(self.colorBufferFmt, r1, g1, b1, a1, r2, g2, b2, a2)
+        vtxOffs = self._nLines * self._vtxSize
+        colOffs = self._nLines * self._colorSize
+        self.bufVtxs.write(vtxData, vtxOffs)
+        self.bufColors.write(colData, colOffs)
+        self._nLines += 1
 
 
-    def highlightBone(self, idx):
-        self._highlighted = idx
+    def reset(self):
+        self._nLines = 0
 
 
 
     def run(self):
-        if self.model is None: return
-
-
-        vtxColors = []
-        for i, bone in enumerate(self.model.bones):
-            if i == self._highlighted and self._highlightFlash == 0:
-                vtxColors.append(struct.pack('8f', 0, 1, 0, 1,  0, 1, 0, 1))
-            else:
-                vtxColors.append(struct.pack('8f', 1, 1, 1, 1,  1, 0, 0, 1))
-
-        vtxColors = b''.join(vtxColors)
-        self.bufColors.write(vtxColors)
-        self._highlightFlash ^= 1
+        if self._nLines == 0: return
+        self.ctx.glBlendFunc(self.ctx.GL_SRC_ALPHA, self.ctx.GL_ONE_MINUS_SRC_ALPHA)
+        self.ctx.glEnable(self.ctx.GL_BLEND)
 
         if self.useDepthTest: self.ctx.glEnable(self.ctx.GL_DEPTH_TEST)
         else: self.ctx.glDisable(self.ctx.GL_DEPTH_TEST)
         self.ctx.glDisable(self.ctx.GL_CULL_FACE)
-        self.ctx.glLineWidth(2)
+        self.ctx.glLineWidth(self.lineWidth)
+
         with self:
             self._bindBuffers()
-            self.shader.vao.render(self.ctx.GL_POINTS, count=self._nBones)
+            self.shader.vao.render(self.ctx.GL_POINTS, count=self._nLines)
 
 
     def setMtxs(self, projection, modelView):
