@@ -161,21 +161,41 @@ drawHitbox:
     LOADWH  r6,  playerMapOffsetX
     LOADFL2 f1,  playerMapOffsetX, r6
     LOADFL2 f2,  playerMapOffsetZ, r6
+
     LOADW   r6,  pPlayer
     cmpwi   r6,  0
     beq     .drawHitbox_end
-    lfs     f3,  0x0C(r6) # player X
-    lfs     f5,  0x14(r6) # player Z
-    fsubs   f1,  f3,  f1  # player X - playerMapOffsetX
-    fsubs   f3,  f5,  f2  # player Z - playerMapOffsetZ
-    lfs     f2,  0x10(r6) # player Y
-    lfs     f4,  (f_1 - .drawHitbox_getpc)(r14) # radius
+
+    lbz     r4,  0xAD(r6) # curModel
+    slwi    r4,  r4,  2
+    lwz     r3,  0x7C(r6) # Model**
+    lwzx    r3,  r3,  r4  # Model*
+    cmpwi   r3,  0
+    beq     .drawHitbox_end
+
+    lwz     r4,  0(r3)    # ModelFileHeader*
+    lbz     r19, 0xF7(r4) # nSpheres
+    lwz     r20, 0x50(r3) # Model->curHitSpherePos
+
+.drawHitbox_nextSphere:
+    cmpwi   r19, 0
+    beq     .drawHitbox_end
+    subi    r19, r19, 1
+
+    #addi    r3,  r3,  0x20
+    lfs     f1,  0x04(r20) # sphere X
+    lfs     f2,  0x08(r20) # sphere Y
+    lfs     f3,  0x0C(r20) # sphere Z
+    lfs     f4,  0x00(r20) # radius
+    addi    r20, r20, 0x10
+
     lis     r29, 0xCC01
     li      r3,  0xFF # R
-    li      r4,  0x00 # G
-    li      r5,  0x00 # B
-    li      r6,  0x40 # A
+    li      r4,  0xFF # G
+    li      r5,  0x80 # B
+    li      r6,  0x20 # A
     bl      drawSphere
+    b       .drawHitbox_nextSphere
 
 .drawHitbox_end:
     lwz     r5,  SP_LR_SAVE(r1)
@@ -207,9 +227,6 @@ drawSphere:
     stw     r4,  SP_SAVE_G(r1)
     stw     r5,  SP_SAVE_B(r1)
     stw     r6,  SP_SAVE_A(r1)
-
-    #addi    r7,  r14, sphereVtxs - .drawHitbox_getpc
-    #li      r8,  NUM_SPHERE_VTXS
 
     lis     r29, 0xCC01
     li      r15, 0    # vtx idx
@@ -275,6 +292,19 @@ sphereVtxs: # precomputed by sphere.py
     .float -0.86603,  0.50000,  0.00000
 
 sphereVtxIdxs: # unwrapped vtx idxs
+    # faces are:
+    #  0  1 | 1  2 | 2  3 | 3  0
+    #  4  5 | 5  6 | 6  7 | 7  4
+    # ------+------+------+------
+    #  4  5 | 5  6 | 6  7 | 7  4
+    #  8  9 | 9 10 |10 11 |11  8
+    # ------+------+------+------
+    #  8  9 | 9 10 |10 11 |11  8
+    # 12 13 |13 14 |14 15 |15 12
+    # ------+------+------+------
+    # 12 13 |13 14 |14 15 |15 12
+    #  0  1 | 1  2 | 2  3 | 3  0
+
     .byte  0,  1,  4,  5
     .byte  1,  2,  5,  6
     .byte  2,  3,  6,  7
@@ -295,8 +325,7 @@ sphereVtxIdxs: # unwrapped vtx idxs
     .byte 14, 15,  2,  3
     .byte 15, 12,  3,  0
 
-s_vtx: .string "V %08X %d %d,%d %f %f %f sc %f"
+s_hitbox: .string "\x84%08X P %f %f %f R %f\x83\n"
 .endif # ENABLE_DRAW_HITBOX
-
 
 msg_noHitbox: .string "Object %08X '%s' has no hitbox!"
