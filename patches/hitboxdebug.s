@@ -103,7 +103,7 @@ drawHitbox:
     mflr    r5
     stw     r5,  SP_LR_SAVE(r1)
 
-    #CALL    0x8016dbf4 # replaced
+    CALL    0x8016dbf4 # replaced
     #CALL    0x800799c0
     #CALL    0x800796f0
     #CALL    0x80079804
@@ -111,14 +111,14 @@ drawHitbox:
     bl      .drawHitbox_getpc
     .drawHitbox_getpc: mflr r14
 
-    lfs     f1,  (f_0 - .drawHitbox_getpc)(r14)
-    lfs     f2,  (f_0 - .drawHitbox_getpc)(r14)
-    lfs     f3,  (f_0 - .drawHitbox_getpc)(r14)
-    lfs     f4,  (f_0 - .drawHitbox_getpc)(r14)
-    li      r3,  0
-    stw     r3,  SP_STR_BUF(r1)
-    addi    r4,  r1,  SP_STR_BUF
-    CALL    0x8025c2d4 # GXSetFog
+    #lfs     f1,  (f_0 - .drawHitbox_getpc)(r14)
+    #lfs     f2,  (f_0 - .drawHitbox_getpc)(r14)
+    #lfs     f3,  (f_0 - .drawHitbox_getpc)(r14)
+    #lfs     f4,  (f_0 - .drawHitbox_getpc)(r14)
+    #li      r3,  0
+    #stw     r3,  SP_STR_BUF(r1)
+    #addi    r4,  r1,  SP_STR_BUF
+    #CALL    0x8025c2d4 # GXSetFog
 
     #li      r3,  0x1
     #li      r4,  0x3
@@ -140,7 +140,6 @@ drawHitbox:
     #li      r3,  0x0
     #CALL    0x80258b24 #gxSetNumTextures_80258b24
 
-    # XXX we need to reset these afterward.
     CALL    gxResetVtxDescr
     li      r3,  0x09 # POS
     li      r4,  0x01 # DIRECT
@@ -155,8 +154,8 @@ drawHitbox:
     CALL    0x8000f54c # getCameraMtxs
     li      r4,  0
     CALL    0x8025d0a8 # gxSetMtx
-    li      r3,  0x0
-    CALL    0x8025d124 # gxSetTexMtxIdx
+    #li      r3,  0x0
+    #CALL    0x8025d124 # gxSetTexMtxIdx
 
     LOADWH  r6,  playerMapOffsetX
     LOADFL2 f1,  playerMapOffsetX, r6
@@ -176,6 +175,7 @@ drawHitbox:
     lwz     r4,  0(r3)    # ModelFileHeader*
     lbz     r19, 0xF7(r4) # nSpheres
     lwz     r20, 0x50(r3) # Model->curHitSpherePos
+    lwz     r21, 0x54(r6) # obj->hitbox
 
 .drawHitbox_nextSphere:
     cmpwi   r19, 0
@@ -187,14 +187,28 @@ drawHitbox:
     lfs     f2,  0x08(r20) # sphere Y
     lfs     f3,  0x0C(r20) # sphere Z
     lfs     f4,  0x00(r20) # radius
-    addi    r20, r20, 0x10
 
     lis     r29, 0xCC01
     li      r3,  0xFF # R
     li      r4,  0xFF # G
     li      r5,  0x80 # B
+    lbz     r4,  0xAC(r21)
+    lbz     r3,  0xAF(r21)
+    slwi    r3,  r3,  4
+    slwi    r4,  r4,  4
+    #slwi    r6,  r6,  4
+    #sub     r4,  r4,  r6
+    #lbz     r3,  0x03(r21)
+    #slwi    r3,  r3,  4
+    #lbz     r4,  0x14(r21)
+    #slwi    r4,  r4,  4
+    #lbz     r5,  0x16(r21)
+    #slwi    r5,  r5,  4
     li      r6,  0x20 # A
     bl      drawSphere
+
+    addi    r20, r20, 0x10
+    #addi    r21, r21, 0x18
     b       .drawHitbox_nextSphere
 
 .drawHitbox_end:
@@ -205,7 +219,6 @@ drawHitbox:
     blr
 
 f_0:  .float 0.0
-f_1:  .float 10.0
 
 drawSphere:
     # f1, f2, f3 = X, Y, Z
