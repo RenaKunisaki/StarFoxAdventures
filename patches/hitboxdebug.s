@@ -11,26 +11,27 @@ patchList:
     PATCH_B   0x800348c8, checkHitbox
 .if ENABLE_DRAW_HITBOX
     # these are do-nothing calls before and after drawing each object.
-    # but it's not safe to hook them to draw things unless we figure out
-    # how to properly back up and restore the graphics state, so that
-    # we don't get weird artifacts.
-    #PATCH_BL  0x8003bb00, drawHitbox
-    #PATCH_BL  0x8003b9d4, drawHitbox
-    PATCH_BL  0x8005c664, drawHitbox # replace quakeSpellTextureFn_8016dbf4()
+    #PATCH_BL  0x8003bb00, drawHitbox # after draw
+    #PATCH_BL  0x8003b9d4, drawHitbox # before draw
+    #PATCH_BL  0x8005c664, drawHitbox # replace quakeSpellTextureFn_8016dbf4()
     #PATCH_BL  0x8005c6a4, drawHitbox # replace renderGlows()
     #PATCH_BL  0x8005c52c, drawHitbox # replace renderParticles()
+    # but let's use this one, so we get *all* objects.
+    PATCH_BL  0x80041ae0, drawHitbox # objGetCurModelPtr() in objRenderModel
 .endif
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
-    .set STACK_SIZE,0x180 # how much to reserve
-    .set SP_LR_SAVE,0x184 # this is what the game does
-    .set SP_STR_BUF, 0x20
-    .set SP_SAVE_R,  0x20
-    .set SP_SAVE_G,  0x24
-    .set SP_SAVE_B,  0x28
-    .set SP_SAVE_A,  0x2C
-    .set SP_GPR_SAVE,0xA0
+    .set STACK_SIZE,  0x200 # how much to reserve
+    .set SP_LR_SAVE,  0x204 # this is what the game does
+    .set SP_RET,       0x1C
+    .set SP_STR_BUF,   0x20
+    .set SP_SAVE_R,    0x20
+    .set SP_SAVE_G,    0x24
+    .set SP_SAVE_B,    0x28
+    .set SP_SAVE_A,    0x2C
+    .set SP_DESCR_SAVE,0x30
+    .set SP_GPR_SAVE, 0x110
 
 entry: # called as soon as our patch is loaded.
     # nothing to do
@@ -97,16 +98,29 @@ checkHitbox: # called by our hook, from the patch list.
 # work on rendering hitboxes. disabled for now.
 # right now it just draws a rainbow square below the player.
 .if ENABLE_DRAW_HITBOX
-drawHitbox:
+drawHitbox: # r31 = ObjInstance*
     stwu    r1, -STACK_SIZE(r1) # get some stack space
     stmw    r3,  SP_GPR_SAVE(r1)
     mflr    r5
     stw     r5,  SP_LR_SAVE(r1)
 
-    CALL    0x8016dbf4 # replaced
-    #CALL    0x800799c0
-    #CALL    0x800796f0
-    #CALL    0x80079804
+    CALL    0x8002b588 # objGetCurModelPtr() (replaced)
+    stw     r3,  SP_RET(r1)
+
+    addi    r3,  r1,  SP_DESCR_SAVE
+    CALL    gxGetVtxDescrs
+
+    #CALL    0x8016dbf4 # replaced: quakeSpellTextureFn_8016dbf4()
+    CALL    0x800799c0
+    CALL    0x800796f0
+    CALL    0x80079804
+
+    li       r3,  0
+    CALL     0x8025b71c # gxResetIndCmd
+    li       r3,  1
+    CALL     0x80259e58 # gxSetNumColors
+    li       r3,  0
+    CALL     0x802581e0 # gxSetNumTextures
 
     bl      .drawHitbox_getpc
     .drawHitbox_getpc: mflr r14
@@ -120,23 +134,27 @@ drawHitbox:
     #addi    r4,  r1,  SP_STR_BUF
     #CALL    0x8025c2d4 # GXSetFog
 
-    #li      r3,  0x1
-    #li      r4,  0x3
-    #li      r5,  0x0
-    #CALL    0x80070310 #gxSetZMode_
-    li      r3,  0x1
-    li      r4,  0x4
-    li      r5,  0x2
-    li      r6,  0x5
+    # this is close, but the boxes' alpha changes sometimes,
+    # or they turn black, and they obscure the actual model.
+    # also we need to reset these when done so objects render correctly.
+
+    li      r3,  0x1 # compare enable
+    li      r4,  GX_LESS # func
+    li      r5,  0x1 # update enable
+    CALL    0x80070310 #gxSetZMode_
+    li      r3,  GX_BM_BLEND  # type
+    li      r4,  GX_BL_SRCALPHA # srcFactor
+    li      r5,  GX_BL_DSTCLR # dstFactor
+    li      r6,  GX_LO_NOP    # logicOp
     CALL    gxSetBlendMode
     #li      r3,  0x1
     #CALL    gxSetPeControl_ZCompLoc_
-    #li      r3,  0x7
-    #li      r4,  0x0
-    #li      r5,  0x0
-    #li      r6,  0x7
-    #li      r7,  0x0
-    #CALL    GXSetTevAlphaIn
+    li      r3,  0x7
+    li      r4,  0x0
+    li      r5,  0x0
+    li      r6,  0x7
+    li      r7,  0x0
+    CALL    GXSetTevAlphaIn
     #li      r3,  0x0
     #CALL    0x80258b24 #gxSetNumTextures_80258b24
 
@@ -161,7 +179,8 @@ drawHitbox:
     LOADFL2 f1,  playerMapOffsetX, r6
     LOADFL2 f2,  playerMapOffsetZ, r6
 
-    LOADW   r6,  pPlayer
+    #LOADW   r6,  pPlayer
+    mr      r6,  r31
     cmpwi   r6,  0
     beq     .drawHitbox_end
 
@@ -175,7 +194,15 @@ drawHitbox:
     lwz     r4,  0(r3)    # ModelFileHeader*
     lbz     r19, 0xF7(r4) # nSpheres
     lwz     r20, 0x50(r3) # Model->curHitSpherePos
-    lwz     r21, 0x54(r6) # obj->hitbox
+    lwz     r21, 0x54(r6) # obj->hitstate
+
+    #lbz     r4,  0xAC(r21)
+    #lbz     r5,  0xAD(r21)
+    #lbz     r6,  0xAE(r21)
+    #lbz     r7,  0xAF(r21)
+    #addi    r3,  r14,  s_hitState - .drawHitbox_getpc
+    ##creqv   4*cr1+eq,4*cr1+eq,4*cr1+eq # magic incantation to print floats
+    #CALL    debugPrintf
 
 .drawHitbox_nextSphere:
     cmpwi   r19, 0
@@ -190,12 +217,12 @@ drawHitbox:
 
     lis     r29, 0xCC01
     li      r3,  0xFF # R
-    li      r4,  0xFF # G
-    li      r5,  0x80 # B
-    lbz     r4,  0xAC(r21)
-    lbz     r3,  0xAF(r21)
-    slwi    r3,  r3,  4
-    slwi    r4,  r4,  4
+    li      r4,  0x00 # G
+    li      r5,  0x00 # B
+    #lbz     r5,  0xAC(r21)
+    #lbz     r3,  0xAF(r21)
+    #slwi    r3,  r3,  4
+    #slwi    r5,  r5,  4
     #slwi    r6,  r6,  4
     #sub     r4,  r4,  r6
     #lbz     r3,  0x03(r21)
@@ -212,9 +239,13 @@ drawHitbox:
     b       .drawHitbox_nextSphere
 
 .drawHitbox_end:
+    addi    r3,  r1,  SP_DESCR_SAVE
+    CALL    gxSetVtxDescrs
+.drawHitbox_end2:
     lwz     r5,  SP_LR_SAVE(r1)
     mtlr    r5   # restore LR
     lmw     r3,  SP_GPR_SAVE(r1)
+    lwz     r3,  SP_RET(r1)
     addi    r1,  r1, STACK_SIZE # restore stack ptr
     blr
 
@@ -279,7 +310,7 @@ drawSphere:
 
     addi    r15, r15, 1
     cmpwi   r15, NUM_SPHERE_VTXS
-    beq     .drawHitbox_end # reuse function epilogue to save a few bytes
+    beq     .drawHitbox_end2 # reuse function epilogue to save a few bytes
 
     addi    r16, r16, 1
     cmpwi   r16, NUM_SPHERE_STACKS * NUM_SPHERE_SLICES
@@ -338,6 +369,8 @@ sphereVtxIdxs: # unwrapped vtx idxs
     .byte 14, 15,  2,  3
     .byte 15, 12,  3,  0
 
+s_hitState: .byte 0x84
+    .string "Poly:%02X ?:%02X %02X State:%02X\x83\n"
 s_hitbox: .string "\x84%08X P %f %f %f R %f\x83\n"
 .endif # ENABLE_DRAW_HITBOX
 

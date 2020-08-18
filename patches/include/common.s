@@ -27,6 +27,46 @@
 .set PAD_BUTTON_Y,    0x0800
 .set PAD_BUTTON_MENU, 0x1000 # Start
 
+.set GX_BM_BLEND,        1
+.set GX_BM_LOGIC,        2
+.set GX_BM_NONE,         0
+.set GX_BM_SUBTRACT,     3
+.set GX_MAX_BLENDMODE,   4
+.set GX_BL_DSTALPHA,     6
+.set GX_BL_DSTCLR,       GX_BL_SRCCLR
+.set GX_BL_INVDSTALPHA,  7
+.set GX_BL_INVDSTCLR,    GX_BL_INVSRCCLR
+.set GX_BL_INVSRCALPHA,  5
+.set GX_BL_INVSRCCLR,    3
+.set GX_BL_ONE,          1
+.set GX_BL_SRCALPHA,     4
+.set GX_BL_SRCCLR,       2
+.set GX_BL_ZERO,         0
+.set GX_LO_AND,          1
+.set GX_LO_CLEAR,        0
+.set GX_LO_COPY,         3
+.set GX_LO_EQUIV,        9
+.set GX_LO_INV,         10
+.set GX_LO_INVAND,       4
+.set GX_LO_INVCOPY,     12
+.set GX_LO_INVOR,       13
+.set GX_LO_NAND,        14
+.set GX_LO_NOOP,         5
+.set GX_LO_NOR,          8
+.set GX_LO_OR,           7
+.set GX_LO_REVAND,       2
+.set GX_LO_REVOR,       11
+.set GX_LO_SET,         15
+.set GX_LO_XOR,          6
+.set GX_ALWAYS,          7
+.set GX_EQUAL,           2
+.set GX_GEQUAL,          6
+.set GX_GREATER,         4
+.set GX_LEQUAL,          3
+.set GX_LESS,            1
+.set GX_NEQUAL,          5
+.set GX_NEVER,           0
+
 # we can't use `bl` instruction because it's relative and we don't
 # know where our code will end up. so we use this instead.
 # this clobbers lr and r0

@@ -20,11 +20,14 @@
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
 .set getButtonsJustPressed,0x80014e70 # u16 (int controller)
 .set gxBeginVtxs,0x8025889c #void(GXOpcode opcode,uint vat,uint nVtxs)
+.set gxGetVtxDescr,0x802571d4 #void(int bit, int *out)
+.set gxGetVtxDescrs,0x80257388 #void(u32*)
 .set gxResetVtxDescr,0x802573f8
 .set gxSetBlendMode,0x8025c584
 .set gxSetPeControl_ZCompLoc_,0x800702b8
 .set GXSetTevAlphaIn,0x8025bff0
 .set gxSetVtxDescr,0x80256978 #(which, val)
+.set gxSetVtxDescrs,0x80256cd8 #void(u32*)
 .set iCacheFlush,0x80241ae0 #(dest, size) -> dest
 .set isCheatActive,0x800e7e94
 .set isCheatUnlocked,0x800e7efc
@@ -127,6 +130,8 @@
 .set pdaOn,                  0x803dbbb0 #bool
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox
+.set playerMapOffsetX,       0x803dcdd8 #float
+.set playerMapOffsetZ,       0x803dcddc #float
 .set timeStop,               0x803dca3c #bool
 .set pPlayer,                0x803428f8 #ObjInstance*
 .set renderFlags,            0x803dcde8 #u32
