@@ -9,6 +9,7 @@
 .set MENU_PAGE_DEBUG_TEXT,    5
 .set MENU_PAGE_DEBUG_MAP,     6
 .set MENU_PAGE_DEBUG_DATA,    7
+.set MENU_PAGE_DEBUG_RENDER,  8
 
 menuPages:
     .int itemDrawFuncs_gameSettings   - mainLoop
@@ -27,6 +28,8 @@ menuPages:
     .int itemAdjustFuncs_debugMap     - mainLoop
     .int itemDrawFuncs_debugData      - mainLoop
     .int itemAdjustFuncs_debugData    - mainLoop
+    .int itemDrawFuncs_debugRender    - mainLoop
+    .int itemAdjustFuncs_debugRender  - mainLoop
     .int 0
 
 menuPageStructure:
@@ -70,7 +73,12 @@ menuPageStructure:
     .byte MENU_PAGE_DEBUG      # parent
     .byte 0
     # Debug Data
-    .byte MENU_PAGE_DEBUG_MAP  # previous
+    .byte MENU_PAGE_DEBUG_MAP    # previous
+    .byte MENU_PAGE_DEBUG_RENDER # next
+    .byte MENU_PAGE_DEBUG        # parent
+    .byte 0
+    # Debug Render
+    .byte MENU_PAGE_DEBUG_DATA # previous
     .byte MENU_PAGE_DEBUG_TEXT # next
     .byte MENU_PAGE_DEBUG      # parent
     .byte 0
@@ -169,7 +177,7 @@ itemDrawFuncs_debug:
     .int drawItem_debugText    - mainLoop
     .int drawItem_debugMap     - mainLoop
     .int drawItem_debugData    - mainLoop
-    .int drawItem_textureDebug - mainLoop
+    .int drawItem_debugRender  - mainLoop
     .int drawItem_textTest     - mainLoop
     .int drawItem_frameAdvance - mainLoop
     .int 0
@@ -178,7 +186,7 @@ itemAdjustFuncs_debug:
     .int adjItem_debugText    - mainLoop
     .int adjItem_debugMap     - mainLoop
     .int adjItem_debugData    - mainLoop
-    .int adjItem_textureDebug - mainLoop
+    .int adjItem_debugRender  - mainLoop
     .int adjItem_textTest     - mainLoop
     .int adjItem_frameAdvance - mainLoop
 
@@ -212,7 +220,6 @@ itemAdjustFuncs_debugMap:
     #.int adjItem_debugObjs    - mainLoop
     .int adjItem_objList      - mainLoop
 
-
 itemDrawFuncs_debugData:
     .int s_Data                - mainLoop # title
     .int drawItem_gameBits     - mainLoop
@@ -225,6 +232,16 @@ itemAdjustFuncs_debugData:
     .int adjItem_saveGame     - mainLoop
     .int adjItem_heap         - mainLoop
 
+itemDrawFuncs_debugRender:
+    .int s_Render              - mainLoop # title
+    .int drawItem_textureDebug - mainLoop
+    .int drawItem_hitboxes     - mainLoop
+    .int 0
+
+itemAdjustFuncs_debugRender:
+    .int adjItem_textureDebug - mainLoop
+    .int adjItem_hitboxes     - mainLoop
+
 
 pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Game Settings
@@ -235,6 +252,7 @@ pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Debug Text
     .int inputFuncDummy       - mainLoop # Debug Map
     .int inputFuncDummy       - mainLoop # Debug Data
+    .int inputFuncDummy       - mainLoop # Debug Render
 
 
 inputFuncDummy: blr

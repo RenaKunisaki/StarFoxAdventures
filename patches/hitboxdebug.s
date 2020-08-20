@@ -1,6 +1,7 @@
 # temporary patch to diagnose a game crash that happened to me.
 .text
 .include "common.s"
+.include "globals.s"
 
 .set ENABLE_DRAW_HITBOX, 1
 
@@ -106,6 +107,11 @@ drawHitbox: # r31 = ObjInstance*
 
     CALL    0x8002b588 # objGetCurModelPtr() (replaced)
     stw     r3,  SP_RET(r1)
+
+    LOADW   r4,  PATCH_STATE_PTR
+    lbz     r4,  DEBUG_RENDER_FLAGS(r4)
+    andi.   r4,  r4,  DEBUG_RENDER_HITBOXES
+    beq     .drawHitbox_end2
 
     addi    r3,  r1,  SP_DESCR_SAVE
     CALL    gxGetVtxDescrs

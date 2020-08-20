@@ -139,7 +139,7 @@ s_Debug:          .string "Debug"
 s_DebugText:      .string "Debug Text"
 s_Map:            .string "Map"
 s_Data:           .string "Data"
-s_Textures:       .string "Textures"
+s_Render:         .string "Render"
 s_TextTest:       .string "Show Text: %04X"
 s_frameAdv:       .string "Advance Frame"
 
@@ -163,6 +163,10 @@ s_ObjList:        .string "Object List"
 s_GameBits:       .string "GameBits"
 s_SaveGame:       .string "SaveGame Data"
 s_Heap:           .string "Heap"
+
+# Debug Render menu
+s_Textures:       .string "Textures"
+s_Hitboxes:       .string "Hitboxes: %s"
 
 
 # Objects menu

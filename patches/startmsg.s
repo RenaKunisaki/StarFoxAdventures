@@ -45,7 +45,7 @@ doStartup: # called from late init
     cmpwi   r3,  1
     bne     .skipDebugText
 
-    # turn on Tricky debug text
+    # turn on Tricky debug text (let's not; it's annoying)
     #LOAD    r4,  0x80148BC8
     #LOAD    r5,  0x4BFEED80
     #stw     r5,  0(r4)

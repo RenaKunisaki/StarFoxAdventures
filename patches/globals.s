@@ -16,6 +16,7 @@
 .set PDA_MENU_OPEN,      0x07
 .set DEBUG_TEXT_FLAGS,   0x08 # which debug texts are enabled
 .set EXTRA_FEATURE_FLAGS,0x09
+.set DEBUG_RENDER_FLAGS, 0x0A
 
 # camera option bits
 .set CAMERA_OPTION_PAD3,    0x01 # use controller 3 to move
@@ -28,6 +29,9 @@
 
 # extra feature flag bits
 .set EXTRA_FEATURE_RUMBLE_BLUR, 0x01
+
+# debug render flag bits
+.set DEBUG_RENDER_HITBOXES,  0x01
 
 # offsets into saveData
 .set SAVEDATA_EXTRA_OPTIONS,  0x01 # unused
