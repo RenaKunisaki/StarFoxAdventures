@@ -81,7 +81,7 @@ with open(sys.argv[1], 'rb') as file:
                         c = file.read(2)
                         b = '<UNK %02X%02X>' % (c[0], c[1])
                 else: b = '\\xEF\\x%02X' % c
-            #elif b == 0: break
+            elif b == 0: break
 
             if type(b) is not str:
                 if b > 127 or b < 32: b = "\\x%02X" % b
