@@ -65,7 +65,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     cmpwi   r4,  0
     beq     .off
 
-        # inhibit C menu
+    # inhibit C menu
     li      r4,  1
     LOADWH  r5,  shouldCloseCMenu
     STOREB  r4,  shouldCloseCMenu, r5
@@ -134,12 +134,15 @@ mainLoop: # called from main loop. r3 = mainLoop
     add     r5, r5, r6 # r5 = R - L
 
     # press B to end free move
-    LOADHL2 r6, controllerStates, r9 # buttons
-    andi.   r6, r6, PAD_BUTTON_B
+    LOADHL2 r6,  controllerStates, r9 # buttons
+    andi.   r6,  r6, PAD_BUTTON_B
     beq     .notBheld
-    LOADW   r3, PATCH_STATE_PTR
-    li      r4, 0
-    stb     r4, ENABLE_FREE_MOVE(r3)
+    LOADW   r3,  PATCH_STATE_PTR
+    lbz     r4,  PDA_MENU_OPEN(r3)
+    cmpwi   r4,  0
+    bne     .notBheld # don't close if PDA menu is still closing
+    #li      r4,  0
+    stb     r4,  ENABLE_FREE_MOVE(r3)
     b       .end
 .notBheld:
     # convert stick position to floats
