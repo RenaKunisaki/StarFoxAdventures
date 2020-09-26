@@ -29,6 +29,7 @@
 
 # extra feature flag bits
 .set EXTRA_FEATURE_RUMBLE_BLUR, 0x01
+.set EXTRA_FEATURE_UWU,         0x02
 
 # debug render flag bits
 .set DEBUG_RENDER_HITBOXES,  0x01
