@@ -211,6 +211,7 @@ itemDrawFuncs_debugMap:
     .int drawItem_warp         - mainLoop
     #.int drawItem_debugObjs    - mainLoop
     .int drawItem_objList      - mainLoop
+    .int drawItem_spawn        - mainLoop
     .int 0
 
 itemAdjustFuncs_debugMap:
@@ -219,6 +220,7 @@ itemAdjustFuncs_debugMap:
     .int adjItem_warp         - mainLoop
     #.int adjItem_debugObjs    - mainLoop
     .int adjItem_objList      - mainLoop
+    .int adjItem_spawn        - mainLoop
 
 itemDrawFuncs_debugData:
     .int s_Data                - mainLoop # title

@@ -71,6 +71,7 @@ patchOrder = (
     'startmsg',
     #'ybutton',
     'rumble',
+    'uwu',
 )
 def buildPatches(basePath):
     print("Building debug.bin...")

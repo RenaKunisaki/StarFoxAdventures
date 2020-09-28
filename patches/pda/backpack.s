@@ -37,5 +37,6 @@ backpackStrPtrs:
     .short s_Normal - mainLoop
     .short s_on     - mainLoop
     .short s_off    - mainLoop
+    .short 0 # padding
 
 #######################################################################

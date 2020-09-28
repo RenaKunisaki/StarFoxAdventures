@@ -45,8 +45,10 @@
     # int modelNum,ModelFlags_loadCharacter flags,uint *outSize)
     # if modelNum is negative, don't use MODELIND.bin
 .set multVectorByObjMtx,0x8000e0a0 #f1:x f2:y f3:z r3:*outX r4:*outY r5:*outZ r6:obj
+.set objAlloc,0x8002bdf4 #size, type -> MapRomListEntry*
 .set objDisableHitbox,0x80035f00 #ObjInstance* - only for next frame
 .set objFree,0x8002cbc4 #ObjInstance*
+.set objInstantiateCharacter,0x8002df90 #ObjDef*, flags, mapId, objNo. *matrix -> ObjInstance*
 .set OSReport,0x8007d6dc
 .set padGetStickX,0x80014cc0 #s8 (int pad)
 .set padGetStickY,0x80014c6c #s8 (int pad)
@@ -158,6 +160,7 @@
 .set CHEAT_SEPIA_MODE,1
 .set CHEAT_MUSIC_TEST,2
 .set CHEAT_DINO_LANGUAGE,3
+.set MAX_OBJIND_ID,0x890 # num entries in OBJINDEX.BIN
 
 # SFA file IDs
 .set AUDIO_TAB,0x00

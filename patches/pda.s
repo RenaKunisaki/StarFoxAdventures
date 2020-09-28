@@ -38,6 +38,7 @@ constants:
     .set MENU_ID_HEAP,     5
     .set MENU_ID_SAVEGAME, 6
     .set MENU_ID_TEXTURES, 7
+    .set MENU_ID_SPAWN,    8
 
     .set STACK_SIZE, 0x180 # how much to reserve
     .set SP_LR_SAVE, 0x184 # this is what the game does
@@ -46,7 +47,8 @@ constants:
     .set SP_ARG11,    0x10
     .set SP_STR_BUF,  0x40 # temporary string buffer
     .set SP_FLOAT_TMP,0xA0 # temporary storage for float conversion (8 bytes)
-    .set SP_GPR_SAVE, 0xA8
+    .set SP_BUF2,     0xA8 # more padding so SP_FLOAT_TMP can be used as 2nd strbuf
+    .set SP_GPR_SAVE, 0xB0
 
 entry: # called as soon as our patch is loaded.
     # nothing to do
@@ -90,6 +92,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/furfx.s"
 .include "pda/texturedebug.s"
 .include "pda/backpack.s"
+.include "pda/spawn.s"
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"

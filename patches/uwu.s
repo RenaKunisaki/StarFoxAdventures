@@ -32,7 +32,7 @@ main: # called by our hook, from the patch list.
     LOADW   r4,  PATCH_STATE_PTR
     lbz     r5,  EXTRA_FEATURE_FLAGS(r4)
     andi.   r5,  r5,  EXTRA_FEATURE_UWU
-    #beq     .disabled
+    beq     .disabled
 
     # scan the string and replace letters as appropriate.
     subi    r4,  r26, 1

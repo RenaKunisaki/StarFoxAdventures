@@ -10,6 +10,8 @@
 # because it makes it easier to see when a constant is duplicated
 # and just reuse it for both labels.
 
+.set SPAWN_MENU_MAX_PARAMS,16
+
 # float constants
 f_m60:         .float  -60
 zero:          .float    0
@@ -39,6 +41,11 @@ f_centerY:     .float 240
 f_mapCellScale: .float 640.0
 
 # menu state
+spawnMenuParams:
+    .rept SPAWN_MENU_MAX_PARAMS
+    .int  0
+    .endr
+spawnMenuType:  .short 0x176
 heapMenuIdx:    .short 0
 bitMenuIdx:     .short 0
 streamTestId:   .short 0
@@ -47,6 +54,10 @@ textTestId:     .short 0
 textureDebugId: .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
+spawnMenuNumParams:   .byte 0
+spawnMenuCursor:      .byte 0
+spawnMenuCursorX:     .byte 0
+spawnMenuFlags:       .byte 1
 hudFullScreen:    .byte 1
 menuVisible:      .byte 0
 menuSelItem:      .byte 0
@@ -192,6 +203,15 @@ fmt_objListInstrs1:.string "Z:Focus S:Player"
 fmt_objListInstrs2:.string "Y:GoTo  X:Delete"
 s_noObjs:          .string "No objects"
 
+# Spawn menu
+s_spawn:           .string "Spawn Object"
+s_spawnType:       .string "Object:     %04X (%04X) %s"
+s_spawnNumParams:  .string "Params:     %d"
+s_spawnFlags:      .string "Flags:      %s %02X"
+#s_spawnMap:        .string "Map: %02X"
+s_spawnParam:      .string "Param %02X:   %08X"
+s_spawnInstrs:     .string "Start:Spawn B:Exit X:+ Y:-"
+
 # GameBits
 fmt_bitListHeader: .string "Bit  T Offs Sz Unk: Val"
 fmt_bitListEntry:  .string "%04X %X %04X %02X %03X: %X"
@@ -225,7 +245,7 @@ s_savegameSavedObj:     .string "%08X %d %d %d"
 s_textureId:            .string "Tex %04X.%02X: ID %c%04X @%08X"
 s_textureInfo:          .string "Flags: %08X RefCnt: %3d Fmt: %02X; %d x %d"
 
-
+# Warps
 warpNameHollowOutside: .string "ThornTail Hollow - Outside"
 warpNameEggCave:       .string "ThornTail Hollow - Egg Cave"
 warpNameHollowBottom:  .string "ThornTail Hollow - Bottom"

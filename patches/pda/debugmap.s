@@ -76,3 +76,13 @@ adjItem_objList: # r3 = amount to adjust by (0=A button)
     blr
 
 #######################################################################
+
+drawItem_spawn:
+    addi    r4,  r14, (s_spawn - mainLoop)
+    blr
+
+adjItem_spawn: # r3 = amount to adjust by (0=A button)
+    li      r4,  MENU_ID_SPAWN
+    b       .debug_setMenu
+
+#######################################################################
