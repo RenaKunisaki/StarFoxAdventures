@@ -57,6 +57,7 @@
 .set setSoundMode,0x80009920 #void (u8 mode, bool force)
 .set setSubtitlesEnabled,0x8001bcd8
 .set setWidescreen,0x8005cd54 #int (bool) always returns 0
+.set shiftJisGetNextChar,0x80015cb8 # char *text, char *outSize -> int chr
 .set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
@@ -86,6 +87,7 @@
 .set cMenuOpen,              0x803dd795 #bool
 .set cMenuState,             0x803dd7d4 #u8
 .set colorFilterColor,       0x803db630 #color
+.set controlCharLength,      0x802c86f0 #(int char, int length/2) x 46
 .set controllerStates,       0x803398f0 #u16 buttons, s8 x, s8 y, s8 cx, s8 cy, s8 L, s8 R
 .set controller1state,       0x803398f0 #alias for controllerStates
 .set controller2state,       0x803398fc

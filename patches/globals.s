@@ -17,6 +17,7 @@
 .set DEBUG_TEXT_FLAGS,   0x08 # which debug texts are enabled
 .set EXTRA_FEATURE_FLAGS,0x09
 .set DEBUG_RENDER_FLAGS, 0x0A
+.set TEMP_FEATURE_FLAGS, 0x0B # extra features that don't get saved
 
 # camera option bits
 .set CAMERA_OPTION_PAD3,    0x01 # use controller 3 to move
@@ -29,7 +30,9 @@
 
 # extra feature flag bits
 .set EXTRA_FEATURE_RUMBLE_BLUR, 0x01
-.set EXTRA_FEATURE_UWU,         0x02
+
+# temp feature flag bits
+.set TEMP_FEATURE_APRIL1,       0x01
 
 # debug render flag bits
 .set DEBUG_RENDER_HITBOXES,  0x01

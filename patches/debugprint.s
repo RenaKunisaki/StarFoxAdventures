@@ -337,19 +337,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi r3, r14, (.fmt_cameraCoords - mainLoop)@l
     CALL debugPrintf
 
-    # display time info
-    #CALL 0x80246c70 # __OSGetSystemTime -> u64 ticks in r3, r4
-    #stw  r3, SP_FLOAT_TMP(r1)
-    #stw  r4, (SP_FLOAT_TMP+4)(r1)
-    #lfd  f1, SP_FLOAT_TMP(r1)
-    #fcfid f1 # u64 -> double (how do you do this on 32-bit PPC!?)
-    #frsp  f1 # double -> float
-    #lfs   f2, (TIMER_SCALE - mainLoop)(r14)
-    #fdivs f1, f1, f2
-    #addi r3, r14, .fmt_time - mainLoop
-    #creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
-    #CALL  debugPrintf
-
     # display game state info
     addi  r3, r14, .fmt_gameState - mainLoop
     LOADW r4, 0x803dcb84 # numObjects
@@ -486,8 +473,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     mtlr    r29
     blr
 
-#TIMER_SCALE: .float 33000000
-
 #.timeDeltaScale: .float 6.25 # 100 / 16
 .timeDeltaScale: .float 12.0 # 200 / 16.666666...
 #.timeDeltaScale: .float 18.75 # 300 / 16
@@ -500,7 +485,6 @@ mainLoop: # called from main loop. r3 = mainLoop
 .fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X S%X %08X\x83 "
 .fmt_playerState:  .string "S:\x84%02X %08X %08X\x83 A:\x84%04X %f %f\x83\n"
 .fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 "
-#.fmt_time:         .string "\nT:%f"
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
 .fmt_gameState:    .string "Obj\x84%3d\x83\n"
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
