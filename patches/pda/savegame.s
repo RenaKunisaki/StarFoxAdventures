@@ -1,3 +1,4 @@
+.ascii "savegame" # 8 byte file ID for debug
 saveLoadHook:
     # hook loadSaveSettings. replace some unused settings.
     # r3 = &saveData

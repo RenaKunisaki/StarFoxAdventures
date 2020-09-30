@@ -1,3 +1,5 @@
+.ascii "dbgrendr" # 8 byte file ID for debug
+
 drawItem_textureDebug:
     addi    r4,  r14, (s_Textures - mainLoop)
     blr

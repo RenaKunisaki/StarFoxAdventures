@@ -1,3 +1,5 @@
+.ascii "settings" # 8 byte file ID for debug
+
 drawItem_FOV:
     mr      r7,  r3
     lfs     f1,  (fovOverride - mainLoop)(r14)

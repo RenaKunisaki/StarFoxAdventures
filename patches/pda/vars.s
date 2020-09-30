@@ -1,3 +1,4 @@
+.ascii "vars    " # 8 byte file ID for debug
 # Variables and constant pools go here.
 # To optimize memory layout, these should be in order from largest
 # to smallest data types (ie int/float/pointer, short, byte/string).
@@ -11,6 +12,7 @@
 # and just reuse it for both labels.
 
 .set SPAWN_MENU_MAX_PARAMS,16
+.align 4 # just in case
 
 # float constants
 f_m60:         .float  -60
@@ -45,6 +47,7 @@ spawnMenuParams:
     .rept SPAWN_MENU_MAX_PARAMS
     .int  0
     .endr
+spawnMenuObjId: .int   -1
 spawnMenuType:  .short 0x176
 heapMenuIdx:    .short 0
 bitMenuIdx:     .short 0
@@ -58,6 +61,13 @@ spawnMenuNumParams:   .byte 0
 spawnMenuCursor:      .byte 0
 spawnMenuCursorX:     .byte 0
 spawnMenuFlags:       .byte 1
+spawnMenuLoadFlags:   .byte 0xA
+spawnMenuMapStates1:  .byte 0
+spawnMenuMapStates2:  .byte 4
+spawnMenuBound:       .byte 100
+spawnMenuUnk7:        .byte 0x96
+spawnMenuMapId:       .byte 0xEE
+spawnMenuObjNo:       .byte 0xBB
 hudFullScreen:    .byte 1
 menuVisible:      .byte 0
 menuSelItem:      .byte 0
@@ -205,10 +215,17 @@ s_noObjs:          .string "No objects"
 
 # Spawn menu
 s_spawn:           .string "Spawn Object"
-s_spawnType:       .string "Object:     %04X (%04X) %s"
-s_spawnNumParams:  .string "Params:     %d"
-s_spawnFlags:      .string "Flags:      %s %02X"
-#s_spawnMap:        .string "Map: %02X"
+s_spawnType:       .string "Object:      %04X (%04X) %s"
+s_spawnNumParams:  .string "Params:      %d"
+s_spawnFlags:      .string "Spawn Flags: %s %02X"
+s_loadFlags:       .string "Load  Flags: %s %02X"
+s_mapStates1:      .string "Map States1: %s %02X"
+s_mapStates2:      .string "Map States2: %s %02X"
+s_bound:           .string "Bounds:      %s %02X"
+s_unk7:            .string "Unk07:       %s %02X"
+s_objID:           .string "Obj ID:      %08X"
+s_spawnMap:        .string "Map ID:      %s %02X"
+s_spawnObjNo:      .string "Obj No.:     %s %02X"
 s_spawnParam:      .string "Param %02X:   %08X"
 s_spawnInstrs:     .string "Start:Spawn B:Exit X:+ Y:-"
 

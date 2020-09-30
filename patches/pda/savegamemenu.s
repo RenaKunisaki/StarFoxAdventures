@@ -1,3 +1,4 @@
+.ascii "savemenu" # 8 byte file ID for debug
 .set SAVEGAME_MENU_XPOS,    5
 .set SAVEGAME_MENU_YPOS,   40
 .set SAVEGAME_MENU_WIDTH, 310

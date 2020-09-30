@@ -1,3 +1,5 @@
+.ascii "texthook" # 8 byte file ID for debug
+
 textHook:
     # hook into textRenderStr and override the calculation
     # of the character width.

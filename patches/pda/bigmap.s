@@ -1,3 +1,5 @@
+.ascii "bigmap  " # 8 byte file ID for debug
+
 drawItem_mapSize:
     addi    r4,  r14, (s_MapSize - mainLoop)
     lbz     r6,  (menuMapSize - mainLoop)(r14)

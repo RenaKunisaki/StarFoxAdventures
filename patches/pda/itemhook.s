@@ -1,3 +1,5 @@
+.ascii "itemhook" # 8 byte file ID for debug
+
 itemHook: # called when the PDA is being toggled on/off by player.
     # r13 = &pdaOn + 0x7630
     stwu    r1,  -STACK_SIZE(r1) # get some stack space

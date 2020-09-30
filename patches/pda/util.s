@@ -1,3 +1,4 @@
+.ascii "util    " # 8 byte file ID for debug
 # some generic code used by multiple submodules.
 
 intToFloat: # convert r3 from int to float.

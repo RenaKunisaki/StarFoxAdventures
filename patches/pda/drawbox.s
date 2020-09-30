@@ -1,3 +1,5 @@
+.ascii "drawbox " # 8 byte file ID for debug
+
 menuDrawBoxOpaque:
     li      r20, 0xFF
 

@@ -1,3 +1,5 @@
+.ascii "bitmenu " # 8 byte file ID for debug
+
 .set GAMEBIT_MENU_XPOS,  130
 .set GAMEBIT_MENU_YPOS,   70
 .set GAMEBIT_MENU_WIDTH, 360

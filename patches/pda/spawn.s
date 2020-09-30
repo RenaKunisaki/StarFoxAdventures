@@ -1,9 +1,22 @@
+.ascii "spawn   " # 8 byte file ID for debug
+
 .set SPAWN_MENU_XPOS,    15
 .set SPAWN_MENU_YPOS,    50
-.set SPAWN_MENU_WIDTH,  620
+.set SPAWN_MENU_WIDTH,  600
 .set SPAWN_MENU_HEIGHT, 360
-.set SPAWN_MENU_EXTRA_LINES, 3
-.set SPAWN_MENU_CURSOR_X_OFFS, 148
+.set SPAWN_MENU_CURSOR_X_OFFS, 159
+.set SPAWN_MENU_ITEM_OBJECT,     0
+.set SPAWN_MENU_ITEM_NUM_PARAMS, 1
+.set SPAWN_MENU_ITEM_SPAWN_FLAGS,2
+.set SPAWN_MENU_ITEM_LOAD_FLAGS, 3
+.set SPAWN_MENU_ITEM_MAP_STATES1,4
+.set SPAWN_MENU_ITEM_MAP_STATES2,5
+.set SPAWN_MENU_ITEM_BOUNDS,     6
+.set SPAWN_MENU_ITEM_UNK7,       7
+.set SPAWN_MENU_ITEM_OBJID,      8
+.set SPAWN_MENU_ITEM_MAPID,      9
+.set SPAWN_MENU_ITEM_OBJNO,     10
+.set SPAWN_MENU_ITEM_PARAMS,    11
 
 spawnMenu:
     # subroutine: runs the Spawn Object menu.
@@ -43,7 +56,7 @@ spawnMenu_Main: # draw the menu
     # draw cursor
     lbz     r3,  (spawnMenuCursorX - mainLoop)(r14)
     lbz     r4,  (spawnMenuCursor  - mainLoop)(r14)
-    cmpwi   r4,  1
+    cmpwi   r4,  SPAWN_MENU_ITEM_NUM_PARAMS
     beq     .spawnMenu_skipCursor # don't draw for num params
     mulli   r3,  r3,  11
     addi    r3,  r3,  SPAWN_MENU_CURSOR_X_OFFS
@@ -58,7 +71,7 @@ spawnMenu_Main: # draw the menu
     li      r19, SPAWN_MENU_XPOS + 8 # line X pos
     li      r20, SPAWN_MENU_YPOS + 8 # line Y pos
     lbz     r21, (spawnMenuNumParams - mainLoop)(r14)
-    addi    r21, r21, SPAWN_MENU_EXTRA_LINES
+    addi    r21, r21, SPAWN_MENU_ITEM_PARAMS
     lbz     r22, (spawnMenuCursor - mainLoop)(r14)
     li      r23, 0 # current line
 
@@ -73,16 +86,32 @@ spawnMenu_Main: # draw the menu
 
 .spawnMenu_setColor:
     bl      menuSetTextColor
-    cmpwi   r23, 0
+    cmpwi   r23, SPAWN_MENU_ITEM_OBJECT
     beq     .spawnMenu_drawType
-    cmpwi   r23, 1
+    cmpwi   r23, SPAWN_MENU_ITEM_NUM_PARAMS
     beq     .spawnMenu_drawNumParams
-    cmpwi   r23, 2
-    beq     .spawnMenu_drawFlags
+    cmpwi   r23, SPAWN_MENU_ITEM_SPAWN_FLAGS
+    beq     .spawnMenu_drawSpawnFlags
+    cmpwi   r23, SPAWN_MENU_ITEM_LOAD_FLAGS
+    beq     .spawnMenu_drawLoadFlags
+    cmpwi   r23, SPAWN_MENU_ITEM_MAP_STATES1
+    beq     .spawnMenu_drawMapStates1
+    cmpwi   r23, SPAWN_MENU_ITEM_MAP_STATES2
+    beq     .spawnMenu_drawMapStates2
+    cmpwi   r23, SPAWN_MENU_ITEM_BOUNDS
+    beq     .spawnMenu_drawBounds
+    cmpwi   r23, SPAWN_MENU_ITEM_UNK7
+    beq     .spawnMenu_drawUnk7
+    cmpwi   r23, SPAWN_MENU_ITEM_OBJID
+    beq     .spawnMenu_drawObjId
+    cmpwi   r23, SPAWN_MENU_ITEM_MAPID
+    beq     .spawnMenu_drawMapId
+    cmpwi   r23, SPAWN_MENU_ITEM_OBJNO
+    beq     .spawnMenu_drawObjNo
 
     # else, draw params
     addi    r4,  r14, s_spawnParam - mainLoop
-    subi    r5,  r23, 3
+    subi    r5,  r23, SPAWN_MENU_ITEM_PARAMS
     slwi    r5,  r5,  2
     addi    r6,  r5,  spawnMenuParams - mainLoop
     lwzx    r6,  r6,  r14
@@ -104,13 +133,59 @@ spawnMenu_Main: # draw the menu
     lbz     r5,  (spawnMenuNumParams - mainLoop)(r14)
     b       .spawnMenu_drawLine
 
-.spawnMenu_drawFlags: # draw spawn flags
-    addi    r4,  r1,  SP_FLOAT_TMP # reused as second str buf
+.spawnMenu_drawSpawnFlags: # draw spawn flags
     lbz     r3,  (spawnMenuFlags - mainLoop)(r14)
-    bl      spawnMenu_printBinary
     addi    r4,  r14, s_spawnFlags - mainLoop
+    b       .spawnMenu_drawBinaryItem
+
+.spawnMenu_drawLoadFlags:
+    lbz     r3,  (spawnMenuLoadFlags - mainLoop)(r14)
+    addi    r4,  r14, s_loadFlags - mainLoop
+    b       .spawnMenu_drawBinaryItem
+
+.spawnMenu_drawMapStates1:
+    lbz     r3,  (spawnMenuMapStates1 - mainLoop)(r14)
+    addi    r4,  r14, s_mapStates1 - mainLoop
+    b       .spawnMenu_drawBinaryItem
+
+.spawnMenu_drawMapStates2:
+    lbz     r3,  (spawnMenuMapStates2 - mainLoop)(r14)
+    addi    r4,  r14, s_mapStates2 - mainLoop
+    b       .spawnMenu_drawBinaryItem
+
+.spawnMenu_drawBounds:
+    lbz     r3,  (spawnMenuBound - mainLoop)(r14)
+    addi    r4,  r14, s_bound - mainLoop
+    b       .spawnMenu_drawBinaryItem
+
+.spawnMenu_drawUnk7:
+    lbz     r3,  (spawnMenuUnk7 - mainLoop)(r14)
+    addi    r4,  r14, s_unk7 - mainLoop
+    b       .spawnMenu_drawBinaryItem
+
+.spawnMenu_drawObjId:
+    addi    r4,  r14, s_objID - mainLoop
+    lwz     r5,  (spawnMenuObjId - mainLoop)(r14)
+    b       .spawnMenu_drawLine
+
+.spawnMenu_drawMapId: # XXX this shouldn't be binary
+    lbz     r3,  (spawnMenuMapId - mainLoop)(r14)
+    addi    r4,  r14, s_spawnMap - mainLoop
+    b       .spawnMenu_drawBinaryItem
+
+.spawnMenu_drawObjNo:
+    lbz     r3,  (spawnMenuObjNo - mainLoop)(r14)
+    addi    r4,  r14, s_spawnObjNo - mainLoop
+    #b       .spawnMenu_drawBinaryItem
+
+.spawnMenu_drawBinaryItem: # r3 = value, r4 = string
+    mr      r15, r3
+    mr      r16, r4
+    addi    r4,  r1,  SP_FLOAT_TMP # reused as second str buf
+    bl      spawnMenu_printBinary
+    mr      r4,  r16
     addi    r5,  r1,  SP_FLOAT_TMP
-    lbz     r6,  (spawnMenuFlags - mainLoop)(r14) # also show hex
+    mr      r6,  r15  # also show hex
     #b       .spawnMenu_drawLine
 
 .spawnMenu_drawLine:
@@ -213,13 +288,11 @@ spawnMenu_doInput:
     andi.   r10, r3,  PAD_BUTTON_B
     bne     .spawnMenu_close
     andi.   r10, r3,  PAD_BUTTON_MENU
-    bne     .spawnMenu_doSpawn_normal
-    andi.   r10, r3,  PAD_BUTTON_Z
-    bne     .spawnMenu_doSpawn_neg
+    bne     .spawnMenu_doSpawn
     andi.   r10, r3,  PAD_BUTTON_X
-    bne     .spawnMenu_increment
+    bne     .spawnMenu_incDigit
     andi.   r10, r3,  PAD_BUTTON_Y
-    bne     .spawnMenu_decrement
+    bne     .spawnMenu_decDigit
 
     # check analog stick
     cmpwi   r5,   0x10
@@ -231,6 +304,7 @@ spawnMenu_doInput:
     cmpwi   r4,  -0x10
     blt     .spawnMenu_left
 
+    # XXX use L/R to adjust fast (entire value)
 
     b       menuEndSub
 
@@ -247,7 +321,7 @@ spawnMenu_doInput:
 
 .spawnMenu_moveCursor: # range check
     lbz     r3,  (spawnMenuNumParams - mainLoop)(r14)
-    addi    r3,  r3, SPAWN_MENU_EXTRA_LINES
+    addi    r3,  r3, SPAWN_MENU_ITEM_PARAMS
     cmpwi   r15, 0
     blt     .spawnMenu_cursorWrapTop
     cmpw    r15, r3
@@ -279,26 +353,42 @@ spawnMenu_doInput:
     stb     r4,  (spawnMenuCursorX - mainLoop)(r14)
     b       .spawnMenu_afterMove
 
-.spawnMenu_decrement: # ? pressed - subtract 1 from selected
+.spawnMenu_decDigit: # ? pressed - subtract 1 from selected
     li      r3,  -1
     b       .spawnMenu_adjust
 
-.spawnMenu_increment: # ? pressed - add 1 to selected
+.spawnMenu_incDigit: # ? pressed - add 1 to selected
     li      r3,  1
 
 .spawnMenu_adjust:
+    li      r4,  7
     lbz     r16, (spawnMenuCursorX - mainLoop)(r14)
-    cmpwi   r15, 0
+    sub     r16, r4,  r16 # invert cursor direction
+    cmpwi   r15, SPAWN_MENU_ITEM_OBJECT
     beq     .spawnMenu_adjType
-    cmpwi   r15, 1
+    cmpwi   r15, SPAWN_MENU_ITEM_NUM_PARAMS
     beq     .spawnMenu_adjNumParams
-    cmpwi   r15, 2
+    cmpwi   r15, SPAWN_MENU_ITEM_SPAWN_FLAGS
     beq     .spawnMenu_adjFlags
+    cmpwi   r15, SPAWN_MENU_ITEM_LOAD_FLAGS
+    beq     .spawnMenu_adjLoadFlags
+    cmpwi   r15, SPAWN_MENU_ITEM_MAP_STATES1
+    beq     .spawnMenu_adjMapStates1
+    cmpwi   r15, SPAWN_MENU_ITEM_MAP_STATES2
+    beq     .spawnMenu_adjMapStates2
+    cmpwi   r15, SPAWN_MENU_ITEM_BOUNDS
+    beq     .spawnMenu_adjBound
+    cmpwi   r15, SPAWN_MENU_ITEM_UNK7
+    beq     .spawnMenu_adjUnk7
+    cmpwi   r15, SPAWN_MENU_ITEM_OBJID
+    beq     .spawnMenu_adjObjId
+    cmpwi   r15, SPAWN_MENU_ITEM_MAPID
+    beq     .spawnMenu_adjMapId
+    cmpwi   r15, SPAWN_MENU_ITEM_OBJNO
+    beq     .spawnMenu_adjObjNo
 
     # else adjust parameter
-    li      r6,  7
-    sub     r16, r6,  r16 # invert cursor direction
-    subi    r15, r15, 3
+    subi    r15, r15, SPAWN_MENU_ITEM_PARAMS
     slwi    r15, r15, 2
     addi    r17, r15, spawnMenuParams - mainLoop
     lwzx    r4,  r17, r14
@@ -307,12 +397,7 @@ spawnMenu_doInput:
     b       .spawnMenu_afterMove
 
 .spawnMenu_adjType:
-    cmpwi   r16, 3
-    ble     .spawnMenu_adjType_notEnd
-    li      r16, 3
-.spawnMenu_adjType_notEnd:
-    li      r5,  3
-    sub     r16, r5,  r16 # invert cursor direction
+    subi    r16, r16, 4 # only 4 digits. (negative just does nothing.)
     lhz     r4,  (spawnMenuType - mainLoop)(r14)
     bl      spawnMenu_adjustDigit
     sth     r4,  (spawnMenuType - mainLoop)(r14)
@@ -333,14 +418,52 @@ spawnMenu_doInput:
     li      r4,  SPAWN_MENU_MAX_PARAMS
     b       .spawnMenu_storeNumParams
 
+.spawnMenu_adjBinary: # r3 = offset of value from mainLoop
+    lbzx    r4,  r3,  r14
+    li      r5,  1
+    slw     r5,  r5,  r16
+    xor     r4,  r4,  r5
+    stbx    r4,  r3,  r14
+    b       .spawnMenu_afterMove
+
 .spawnMenu_adjFlags:
-    li      r3,  7
-    sub     r16, r3,  r16 # invert cursor direction
-    lbz     r4,  (spawnMenuFlags - mainLoop)(r14)
-    li      r3,  1
-    slw     r3,  r3,  r16
-    xor     r4,  r4,  r3
-    stb     r4,  (spawnMenuFlags - mainLoop)(r14)
+    li      r3,  spawnMenuFlags - mainLoop
+    b       .spawnMenu_adjBinary
+
+.spawnMenu_adjLoadFlags:
+    li      r3,  spawnMenuLoadFlags - mainLoop
+    b       .spawnMenu_adjBinary
+
+.spawnMenu_adjMapStates1:
+    li      r3,  spawnMenuMapStates1 - mainLoop
+    b       .spawnMenu_adjBinary
+
+.spawnMenu_adjMapStates2:
+    li      r3,  spawnMenuMapStates2 - mainLoop
+    b       .spawnMenu_adjBinary
+
+.spawnMenu_adjBound:
+    li      r3,  spawnMenuBound - mainLoop
+    b       .spawnMenu_adjBinary
+
+.spawnMenu_adjUnk7:
+    li      r3,  spawnMenuUnk7 - mainLoop
+    b       .spawnMenu_adjBinary
+
+.spawnMenu_adjMapId: # XXX shouldn't be binary
+    li      r3,  spawnMenuMapId - mainLoop
+    b       .spawnMenu_adjBinary
+
+.spawnMenu_adjObjNo:
+    li      r3,  spawnMenuObjNo - mainLoop
+    b       .spawnMenu_adjBinary
+
+.spawnMenu_adjObjId:
+    subi    r15, r15, 3
+    slwi    r15, r15, 2
+    lwz     r4,  (spawnMenuObjId - mainLoop)(r14)
+    bl      spawnMenu_adjustDigit
+    stw     r4,  (spawnMenuObjId - mainLoop)(r14)
     b       .spawnMenu_afterMove
 
 spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
@@ -366,18 +489,11 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     mtlr    r9
     blr
 
-.spawnMenu_doSpawn_normal:
-    lhz     r4,  (spawnMenuType - mainLoop)(r14)
-    b       .spawnMenu_doSpawn
-
-.spawnMenu_doSpawn_neg:
-    lhz     r4,  (spawnMenuType - mainLoop)(r14)
-    neg     r4,  r4
-
 .spawnMenu_doSpawn: # actually spawn the object.
     lbz     r3,  (spawnMenuNumParams - mainLoop)(r14)
     slwi    r3,  r3,  2
     addi    r3,  r3,  0x18
+    lhz     r4,  (spawnMenuType - mainLoop)(r14)
     CALL    objAlloc
 
     LOADW   r21, pCamera
@@ -398,12 +514,21 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     stw     r4,  0x10(r3)
 
 .spawnMenu_noCamera:
+    lbz     r4,  (spawnMenuLoadFlags - mainLoop)(r14)
+    stb     r4,  0x04(r3)
+    lbz     r4,  (spawnMenuMapStates1 - mainLoop)(r14)
+    stb     r4,  0x03(r3)
+    lbz     r4,  (spawnMenuMapStates2 - mainLoop)(r14)
+    stb     r4,  0x05(r3)
+    lbz     r4,  (spawnMenuBound - mainLoop)(r14)
+    stb     r4,  0x06(r3)
+    lbz     r4,  (spawnMenuUnk7 - mainLoop)(r14)
+    stb     r4,  0x07(r3)
     lbz     r4,  (spawnMenuFlags - mainLoop)(r14)
-    li      r5, -1 # map
-    li      r6, -1 # objNo
+    lbz     r5,  (spawnMenuMapId - mainLoop)(r14)
+    lbz     r6,  (spawnMenuObjNo - mainLoop)(r14)
     li      r7,  0 # matrix*
     CALL    objInstantiateCharacter
-    #bl      returnToMainMenu
     b       menuEndSub
 
 #.spawnMenu_yOffs: .float 40

@@ -1,3 +1,5 @@
+.ascii "debug   " # 8 byte file ID for debug
+
 drawItem_debugText:
     addi    r4,  r14, (s_DebugText - mainLoop)
     blr

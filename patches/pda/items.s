@@ -1,3 +1,4 @@
+.ascii "items   " # 8 byte file ID for debug
 # pointers to the submodules.
 
 .set MENU_PAGE_NONE,          0xFF

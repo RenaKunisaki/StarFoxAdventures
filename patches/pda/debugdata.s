@@ -1,3 +1,5 @@
+.ascii "dbgdata " # 8 byte file ID for debug
+
 drawItem_gameBits:
     addi    r4,  r14, (s_GameBits - mainLoop)
     blr

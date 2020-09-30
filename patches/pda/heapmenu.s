@@ -1,3 +1,5 @@
+.ascii "heapmenu" # 8 byte file ID for debug
+
 .set HEAP_MENU_XPOS,   70
 .set HEAP_MENU_YPOS,   50
 .set HEAP_MENU_WIDTH, 500

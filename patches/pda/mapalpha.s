@@ -1,3 +1,5 @@
+.ascii "mapalpha" # 8 byte file ID for debug
+
 drawItem_mapAlpha:
     addi    r4,  r14, (s_MapAlpha - mainLoop)
     lbz     r5,  (minimapAlphaOverride - mainLoop)(r14)

@@ -1,3 +1,4 @@
+.ascii "volume  " # 8 byte file ID for debug
 drawItem_volMusic:
     addi    r4,  r14, (s_volMusic - mainLoop)
     LOADWH  r5,  volumeMusic

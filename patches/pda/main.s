@@ -1,3 +1,5 @@
+.ascii "main    " # 8 byte file ID for debug
+
 mainLoop: # called from main loop. r3 = mainLoop
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r5

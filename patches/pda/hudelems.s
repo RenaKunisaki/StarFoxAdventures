@@ -1,3 +1,5 @@
+.ascii "hudelems" # 8 byte file ID for debug
+
 doHudElementOverrides:
     addi    r4,  r14, (hudElementOverrides_addrs - mainLoop) - 4
     addi    r5,  r14, (hudElementOverrides_values_off - mainLoop) - 4

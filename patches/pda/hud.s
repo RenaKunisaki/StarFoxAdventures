@@ -1,3 +1,4 @@
+.ascii "hud     " # 8 byte file ID for debug
 # patches to override various HUD settings.
 
 doHudOverrides:

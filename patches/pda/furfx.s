@@ -1,3 +1,5 @@
+.ascii "furfx   " # 8 byte file ID for debug
+
 drawItem_furEffect:
     addi    r4,  r14, (s_FurEffect - mainLoop)
     addi    r5,  r14, (s_Normal - mainLoop)

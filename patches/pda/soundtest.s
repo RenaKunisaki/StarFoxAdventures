@@ -1,3 +1,5 @@
+.ascii "sndtest " # 8 byte file ID for debug
+
 drawItem_sound:
     addi    r4,  r14, (s_sound - mainLoop)
     lhz     r5,  (soundTestId - mainLoop)(r14)

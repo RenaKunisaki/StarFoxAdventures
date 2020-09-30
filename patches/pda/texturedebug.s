@@ -1,3 +1,5 @@
+.ascii "txtrdbg " # 8 byte file ID for debug
+
 .set TEXTURE_MENU_XPOS,    15
 .set TEXTURE_MENU_YPOS,    40
 .set TEXTURE_MENU_WIDTH,  620

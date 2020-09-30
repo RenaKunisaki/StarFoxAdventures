@@ -1,3 +1,5 @@
+.ascii "anim    " # 8 byte file ID for debug
+
 doAnimation:
     # expects r19 = boxAddr, f1 = menuAnimTimer
     lfs     f2,  (f_menuWidth   - mainLoop)(r14) # f2 = width

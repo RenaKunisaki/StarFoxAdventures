@@ -1,3 +1,4 @@
+.ascii "pdahud  " # 8 byte file ID for debug
 drawItem_PDAHUD:
     addi    r4,  r14, (s_PDAHUD - mainLoop)
     LOADWH  r7,  pdaOn

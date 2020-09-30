@@ -1,3 +1,5 @@
+.ascii "heaplist" # 8 byte file ID for debug
+
 .set HEAP_LIST_XPOS,    0
 .set HEAP_LIST_YPOS,  120
 .set HEAP_LIST_WIDTH, 635

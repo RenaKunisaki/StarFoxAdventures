@@ -1,3 +1,4 @@
+.ascii "warpmenu" # 8 byte file ID for debug
 .set WARP_MENU_XPOS,   20
 .set WARP_MENU_YPOS,   56
 .set WARP_MENU_WIDTH, 600

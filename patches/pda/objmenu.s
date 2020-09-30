@@ -1,3 +1,4 @@
+.ascii "objmenu " # 8 byte file ID for debug
 .set OBJ_MENU_XPOS,   10
 .set OBJ_MENU_YPOS,   20
 .set OBJ_MENU_WIDTH, 300
