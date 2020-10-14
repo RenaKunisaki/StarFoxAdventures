@@ -44,6 +44,15 @@ export default class Context {
             throw new Error("GL init failed (maybe not supported on this browser?)");
         }
         console.log("GL init OK");
+
+        //enable DDS textures (though we don't currently use them)
+        //https://developer.mozilla.org/en-US/docs/Web/API/WEBGL_compressed_texture_s3tc
+        this._gl_extensions.compressed_texture_s3tc = (
+            gl.getExtension('WEBGL_compressed_texture_s3tc') ||
+            gl.getExtension('MOZ_WEBGL_compressed_texture_s3tc') ||
+            gl.getExtension('WEBKIT_WEBGL_compressed_texture_s3tc'));
+
+        //bind events
         canvas.addEventListener('resize', e => this._onResize(e));
         canvas.addEventListener('mousemove', e => this._onMouseMove(e));
 
@@ -60,13 +69,6 @@ export default class Context {
         this._initMatrices();
         this.setupViewport();
         this._setupDepthTexture();
-
-        //enable DDS textures (though we don't currently use them)
-        //https://developer.mozilla.org/en-US/docs/Web/API/WEBGL_compressed_texture_s3tc
-        this._gl_extensions.compressed_texture_s3tc = (
-            gl.getExtension('WEBGL_compressed_texture_s3tc') ||
-            gl.getExtension('MOZ_WEBGL_compressed_texture_s3tc') ||
-            gl.getExtension('WEBKIT_WEBGL_compressed_texture_s3tc'));
 
         this.gx = new GX(this);
     }

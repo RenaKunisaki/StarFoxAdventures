@@ -3,10 +3,43 @@ import {get, isPowerOf2} from '/js/Util.js';
 export default class Texture {
     /** A texture that can be bound to GL.
      */
-    constructor(gl) {
-        this.gl = gl;
+    constructor(context) {
+        this.context = context;
+        this.gl      = context.gl;
+        const gl     = context.gl;
         this.texture = gl.createTexture();
-        gl.bindTexture(gl.TEXTURE_2D, this.texture);
+        this.bind();
+    }
+
+    bind(target=null) {
+        const gl = this.gl;
+        if(target == null) target = gl.TEXTURE_2D;
+        gl.bindTexture(target, this.texture);
+        return this;
+    }
+
+    _buildMipMaps() {
+        const gl = this.gl;
+        // WebGL1 has different requirements for power of 2 images
+        // vs non power of 2 images so check if the image is a
+        // power of 2 in both dimensions.
+        if (isPowerOf2(this.width) && isPowerOf2(this.height)) {
+            // Yes, it's a power of 2. Generate mips.
+            gl.generateMipmap(gl.TEXTURE_2D);
+        } else {
+            // No, it's not a power of 2. Turn off mips and set
+            // wrapping to clamp to edge
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        }
+    }
+
+    loadFromImage(url) {
+        /** Load texture from image file.
+         */
+        const gl   = this.gl;
+        this.image = new Image();
 
         // Because images have to be download over the internet
         // they might take a moment until they are ready.
@@ -24,20 +57,6 @@ export default class Texture {
         gl.texImage2D(gl.TEXTURE_2D, this.level, this.internalFormat,
             this.width, this.height, this.border, this.srcFormat, this.srcType,
             pixel);
-    }
-
-    bind(target=null) {
-        const gl = this.gl;
-        if(target == null) target = gl.TEXTURE_2D;
-        gl.bindTexture(target, this.texture);
-        return this;
-    }
-
-    loadFromImage(url) {
-        /** Load texture from image file.
-         */
-        const gl   = this.gl;
-        this.image = new Image();
 
         //we do this instead of using an async method because we need to wait
         //for the onload callback which isn't async
@@ -45,26 +64,31 @@ export default class Texture {
             this.image.onload = e => {
                 this.width  = this.image.width;
                 this.height = this.image.height;
-                gl.bindTexture(gl.TEXTURE_2D, this.texture);
+                this.bind();
                 gl.texImage2D(gl.TEXTURE_2D, this.level, this.internalFormat,
                     this.srcFormat, this.srcType, this.image);
-
-                // WebGL1 has different requirements for power of 2 images
-                // vs non power of 2 images so check if the image is a
-                // power of 2 in both dimensions.
-                if (isPowerOf2(this.image.width) && isPowerOf2(this.image.height)) {
-                    // Yes, it's a power of 2. Generate mips.
-                    gl.generateMipmap(gl.TEXTURE_2D);
-                } else {
-                    // No, it's not a power of 2. Turn off mips and set
-                    // wrapping to clamp to edge
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-                    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-                }
+                this._buildMipMaps();
                 resolve(this);
             };
             this.image.src = url;
         });
+    }
+
+    loadDXT1(data, width, height) {
+        /** Construct from raw DDS DXT1/BC1 data.
+         *  data: ArrayBuffer containing image data.
+         *  width, height: Image dimensions.
+         */
+        const gl    = this.gl;
+        const fmt   = this.context._gl_extensions.compressed_texture_s3tc
+        this.width  = width;
+        this.height = height;
+        this.bind();
+        //data = new DataView(data.buffer, 0, 65536);
+        console.log("Load DXT1 size %dx%d, %d bytes", width, height,
+            data.byteLength, data);
+        gl.compressedTexImage2D(gl.TEXTURE_2D, 0,
+            fmt.COMPRESSED_RGBA_S3TC_DXT1_EXT, width, height, 0, data);
+        return this;
     }
 }

@@ -17,9 +17,20 @@ from aiohttp import web
 import datetime
 import subprocess
 import zlib
+import struct
+from texture import ImageFormat, BITS_PER_PIXEL, decode_image, encode_image
 
 
 class ZlibView(aiohttp.web.View):
+    """A view that decompresses ZLB.
+
+    Given a request path like: /zlb/path?offset=x&length=y
+    attempts to decompress the ZLB data at offset `x` with length `y`
+    from the specified file.
+    If decompression fails, returns error 500.
+    If the file doesn't exist, returns error 404.
+    Otherwise, returns the uncompressed data.
+    """
     async def get(self):
         """Handle GET request."""
         path = self.request.match_info['path']
@@ -36,6 +47,63 @@ class ZlibView(aiohttp.web.View):
                     return await self.request.app.sendError(400, self.request, str(ex))
                 return await self.request.app.sendData(data, self.request,
                     content_type="application/octet-stream")
+        except FileNotFoundError as ex:
+            return await self.request.app.sendError(404, self.request, str(ex))
+        except Exception as ex:
+            return await self.request.app.sendError(500, self.request, str(ex))
+
+
+class TextureView(aiohttp.web.View):
+    """A view that decodes textures.
+
+    Given a request path like: /texture/path?offset=x
+    attempts to decode a texture from the given path at the given offset
+    and return it as a PNG image.
+    If decoding fails, returns error 500.
+    If the file doesn't exist, returns error 404.
+    Otherwise, returns the image.
+    """
+    async def get(self):
+        """Handle GET request."""
+        path = self.request.match_info['path']
+        while path.startswith('/'): path = path[1:]
+        path = path.replace('..', '%2E%2E')
+        try:
+            with open(path, 'rb') as file:
+                offset = int(self.request.query.get('offset', 0))
+                file.seek(offset)
+                try:
+                    zlbHeader = file.read(16)
+                    sig, ver, compLen, rawLen = struct.unpack_from('>4I', zlbHeader)
+                    if sig != 0x5A4C4200:
+                        log.error("Not ZLB: 0x%08X @ 0x%06X in %s",
+                            sig, offset, path)
+                        return await self.request.app.sendError(500, self.request, "Not ZLB")
+
+                    data = zlib.decompress(file.read(compLen))
+                    width, height = struct.unpack_from('>HH', data, 0x0A)
+                    nFrames = struct.unpack_from('>B', data, 0x19)[0] # grumble
+                    fmtId = struct.unpack_from('>B', data, 0x16)[0] # grumble
+                    format = ImageFormat(fmtId)
+                    bpp = BITS_PER_PIXEL[format]
+                    dataLen = width * height * bpp // 8
+                    image = decode_image(data[0x60:],
+                        None, # palette_data
+                        format, # image_format
+                        None, # palette_format
+                        0, # num_colors (for palettes)
+                        width, height)
+
+                    # convert to PNG
+                    data = io.BytesIO()
+                    image.save(data, 'PNG')
+
+                except Exception as ex:
+                    return await self.request.app.sendError(400, self.request, str(ex))
+
+                return await self.request.app.sendData(data.getvalue(), self.request,
+                    content_type="image/png")
+
         except FileNotFoundError as ex:
             return await self.request.app.sendError(404, self.request, str(ex))
         except Exception as ex:
@@ -66,6 +134,7 @@ class WebServer(web.Application):
 
     def _setupRoutes(self):
         self.addView('/zlb/{path:.*}', ZlibView)
+        self.addView('/texture/{path:.*}', TextureView)
 
         def handle_page(request):
             try:

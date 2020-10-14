@@ -1,6 +1,7 @@
 import {get, validNumber, hexdump} from '/js/Util.js';
 import SfaBitStream from '/js/gl/sfa/SfaBitStream.js';
 import Texture from '/js/gl/Texture.js';
+import TextureLoader from './TextureLoader.js';
 import {ModelHeader, Bone, DisplayListPtr, Shader, ShaderLayer, ModelVtxGroup} from './structs.js';
 
 export default class Model {
@@ -19,7 +20,7 @@ export default class Model {
         this.normals      = null;
         this.texCoords    = null;
         this.hitBoxes     = null;
-        this.textures     = {};
+        this.textures     = [];
         this.shaders      = null;
         this.renderInstrs = null;
         this.dlistPtrs    = null;
@@ -32,6 +33,7 @@ export default class Model {
 
     async load(path) {
         /** Download model file.
+         *  XXX this isn't used. See ModelLoader.
          */
         const data = (await get({
             path:         path,
@@ -75,6 +77,17 @@ export default class Model {
         } */
 
         return this;
+    }
+
+    async _downloadTextures() {
+        //download textures
+        const mapName = 'warlock'; // XXX
+        const TL = new TextureLoader(this.gx);
+        console.log("Texture IDs:", this.textureIds);
+        for(const id of this.textureIds) {
+            console.log("Download texture 0x%s", id.toString(16));
+            this.textures.push(await TL.loadFromMap(mapName, id));
+        }
     }
 
     calcBonePos(bone, relative, _depth=0) {
@@ -203,8 +216,12 @@ export default class Model {
         /** Read texture list from file.
          */
         const offs = this.header.textures;
-        const size = this.header.nTextures * 4;
-        return new Int32Array(this.rawData.slice(offs, offs+size));
+        const res  = [];
+        const data = new DataView(this.rawData);
+        for(let i=0; i<this.header.nTextures; i++) {
+            res.push(data.getInt32(offs+(i*4)));
+        }
+        return res;
     }
 
     _readShaders() {

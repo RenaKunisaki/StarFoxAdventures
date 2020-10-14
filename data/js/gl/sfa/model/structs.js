@@ -129,3 +129,17 @@ export const ModelVtxGroup = Struct({
     'weight': ['B', 0x02], // for bone0
     'unk03':  ['B', 0x03], // always 0; padding?
 });
+
+export const TextureHeader = Struct({
+    'width':  ['H',  0x0A],
+    'height': ['H',  0x0C],
+    'unk0F':  ['B',  0x0F], //always 1?
+    'unk10':  ['B',  0x10], //always 1?
+    'format': ['B',  0x16], //format ID
+    'unk17':  ['B',  0x17], //always 1?
+    'unk18':  ['B',  0x18], //always 1?
+    'nFrames':['B',  0x19],
+    'unk1A':  ['B',  0x1A], //always 1?
+    'unk1D':  ['B',  0x1D], //always 6?
+    'unk5F':  ['B',  0x5F], //to set struct size
+});

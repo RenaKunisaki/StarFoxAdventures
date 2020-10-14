@@ -9,7 +9,10 @@ export function get(params) {
      */
     if(typeof params == 'string') params = {path:params};
 
-    const firefux = '?_='+performance.now();
+    let firefux = '_='+performance.now();
+    if(params.path.indexOf('?') >= 0) firefux = '&'+firefux;
+    else firefux='?'+firefux;
+
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest();
         if(params.mimeType != undefined) xhr.overrideMimeType(params.mimeType);

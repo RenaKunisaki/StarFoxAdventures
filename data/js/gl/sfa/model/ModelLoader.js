@@ -42,12 +42,7 @@ export default class ModelLoader {
         }
         const model = new Model(this.gx);
         model._parseData(data);
-
-        //XXX proper texture loading.
-        model.textures[0] = await (new Texture(this.gx.gl).loadFromImage('/textures/texture.png'));
-        for(let i=1; i<model.header.nTextures; i++) {
-            model.textures[i] = await (new Texture(this.gx.gl).loadFromImage('/textures/blank.png'));
-        }
+        await model._downloadTextures();
         return model;
     }
 
