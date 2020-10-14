@@ -1,0 +1,97 @@
+html, body {
+    background: #000;
+    color: #FFF;
+}
+
+a { color: #00CCFF }
+
+table {
+    border-top: 1px #FFF solid;
+    border-left: 1px #FFF solid;
+}
+
+td, th {
+    border-right: 1px #FFF solid;
+    border-bottom: 1px #FFF solid;
+    border-collapse: collapse;
+    padding: 2px;
+}
+
+tr:first-child th {
+    position: sticky;
+    top: 0;
+    background: #000;
+}
+th.hex { text-align: right }
+
+tr:nth-child(2n) { background: #333 }
+tr:nth-child(2n+1) { background: #000 }
+tr:hover { background: #666 }
+
+.hex {
+    font-family: monospace;
+    /* text-align: right; */
+}
+
+.number {
+    font-family: monospace;
+    text-align: right;
+}
+
+.str, .datatype {
+    font-family: monospace;
+}
+
+.maps, .objlist { font-family: monospace; }
+
+tr.map .name { width: 12em }
+tr.map .count { width: 2em }
+
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
+#controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20em;
+    padding: 4px;
+    border-right:  1px #CCC solid;
+    border-bottom: 1px #CCC solid;
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 0.8em;
+}
+
+#controls .box {
+    border: 1px #CCC solid;
+    margin: 2px;
+    padding: 2px;
+}
+
+.gl-view-control {
+    border: 3px #888 ridge;
+}
+
+.gl-view-control button {
+    font-size: 0.9em;
+}
+
+#controls input {
+    width: 5em;
+    background: rgba(0, 0, 0, 0.25);
+    color: #FFF;
+    font-family: monospace;
+    font-size: 1em;
+}
+
+#glPicker { font-family: monospace }
+
+#controls table {
+    font-size: 0.9em;
+}
+
+#glPicker th {
+    text-align: left;
+}
