@@ -6,8 +6,8 @@ import Context from './gl/Context.js';
 import ViewControl from './gl/ViewControl.js';
 import LightControl from './gl/LightControl.js';
 import Picker from './gl/Picker.js';
-import ModelLoader from './gl/sfa/ModelLoader.js';
-import ModelRenderer from './gl/sfa/ModelRenderer.js';
+import ModelLoader from './gl/sfa/model/ModelLoader.js';
+import ModelRenderer from './gl/sfa/model/ModelRenderer.js';
 import ModelDataView from './ModelDataView.js';
 
 let gl; //Context

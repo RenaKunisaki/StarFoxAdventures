@@ -2,7 +2,7 @@ import {get} from '/js/Util.js';
 import {E} from '/js/Element.js';
 //import Program from './Program.js';
 import GX from './gx/GX.js';
-import Model from './sfa/Model.js';
+import Model from './sfa/model/Model.js';
 import DataBuffer from './gx/DataBuffer.js';
 
 const RADIANS = Math.PI / 180;

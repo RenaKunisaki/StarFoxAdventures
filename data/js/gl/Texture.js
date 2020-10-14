@@ -39,6 +39,8 @@ export default class Texture {
         const gl   = this.gl;
         this.image = new Image();
 
+        //we do this instead of using an async method because we need to wait
+        //for the onload callback which isn't async
         return new Promise((resolve, reject) => {
             this.image.onload = e => {
                 this.width  = this.image.width;

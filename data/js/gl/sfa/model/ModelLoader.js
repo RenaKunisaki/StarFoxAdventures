@@ -1,5 +1,5 @@
 import {get, validNumber} from '/js/Util.js';
-import Decompressor from './Decompressor.js';
+import Decompressor from '/js/gl/sfa/Decompressor.js';
 import Model from './Model.js';
 import Texture from '/js/gl/Texture.js';
 
