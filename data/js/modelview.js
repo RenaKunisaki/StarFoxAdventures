@@ -8,7 +8,8 @@ import LightControl from './gl/LightControl.js';
 import Picker from './gl/Picker.js';
 import ModelLoader from './gl/sfa/model/ModelLoader.js';
 import ModelRenderer from './gl/sfa/model/ModelRenderer.js';
-import ModelDataView from './ModelDataView.js';
+//import ModelDataView from './ModelDataView.js';
+import TextureView from './gl/TextureView.js';
 
 let gl; //Context
 
@@ -44,6 +45,9 @@ class ModelViewer {
 
         this.picker = new Picker(this.gl);
         this.controls.append(this.picker.element);
+
+        this.textureView = new TextureView(this.gl);
+        this.controls.append(this.textureView.element);
     }
 
     async init() {
@@ -58,6 +62,7 @@ class ModelViewer {
         this.gl.redraw();
         this.gl.gx.printStats();
         console.log("Model", model);
+        this.textureView.setModel(model);
         //this.dataView = new ModelDataView(model);
         //this.controls.append(this.dataView.element);
         //this.dataView.refresh();

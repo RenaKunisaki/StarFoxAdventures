@@ -35,6 +35,24 @@ export default class Texture {
         }
     }
 
+    makeSolidColor(r, g, b, a) {
+        /** Make a 1x1 solid-color texture.
+         */
+        const gl            = this.gl;
+        this.level          = 0;
+        this.internalFormat = gl.RGBA;
+        this.width          = 1;
+        this.height         = 1;
+        this.border         = 0;
+        this.srcFormat      = gl.RGBA;
+        this.srcType        = gl.UNSIGNED_BYTE;
+        const pixel         = new Uint8Array([r, g, b, a]);
+        this.bind();
+        gl.texImage2D(gl.TEXTURE_2D, this.level, this.internalFormat,
+            this.width, this.height, this.border, this.srcFormat, this.srcType,
+            pixel);
+    }
+
     loadFromImage(url) {
         /** Load texture from image file.
          */

@@ -3,6 +3,7 @@ import CP from './CP.js';
 import XF from './XF.js';
 import DlistParser from './DlistParser.js';
 import Program from '../Program.js';
+import Texture from '../Texture.js';
 import {get} from '/js/Util.js';
 
 export default class GX {
@@ -15,6 +16,9 @@ export default class GX {
     constructor(context) {
         this.context = context;
         this.gl      = context.gl;
+        this.blankTexture = new Texture(context);
+        this.blankTexture.makeSolidColor(255, 255, 255, 0);
+        this.MAX_TEXTURES = 2;
 
         //the order the fields appear in in a display list.
         //this never changes, but is here so that other classes can
@@ -160,10 +164,13 @@ export default class GX {
                 matModelView:  this.program.getUniformLocation('matModelView'),
                 matNormal:     this.program.getUniformLocation('matNormal'),
                 useId:         this.program.getUniformLocation('useId'),
-                uSampler:      this.program.getUniformLocation('uSampler'),
                 ambLightColor: this.program.getUniformLocation('ambLightColor'),
                 dirLightColor: this.program.getUniformLocation('dirLightColor'),
                 dirLightVector:this.program.getUniformLocation('dirLightVector'),
+                uSampler:      [
+                    this.program.getUniformLocation('uSampler0'),
+                    this.program.getUniformLocation('uSampler1'),
+                ],
             },
         };
     }

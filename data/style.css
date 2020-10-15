@@ -78,6 +78,10 @@ body {
     font-size: 0.9em;
 }
 
+.gl-texture-view {
+    border: 1px #CCC solid;
+}
+
 #controls input {
     width: 5em;
     background: rgba(0, 0, 0, 0.25);

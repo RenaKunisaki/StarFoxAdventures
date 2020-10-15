@@ -37,7 +37,11 @@ export default class ModelRenderer {
             ( 3 << 22) | //TEX0FMT:   3 (s16)
             (10 << 25) | //TEX0SHFT: 10 (divide by 1024)
             0); //XXX more...
-        cp.setReg(0x86, 0); //VCD_B (TEX1-4)
+        this.gx.cp.setReg(0x86, //CP_VAT_REG_B
+            ( 1 <<  0) | //TEX1CNT
+            ( 3 <<  1) | //TEX1FMT
+            (10 <<  4) | //TEX1SHFT
+            ( 1 << 31)); //VCACHE_ENHANCE (must be 1)
         cp.setReg(0x96, 0); //VCD_C (TEX4-7)
         cp.setReg(0xB0, 6); //Stride POS
         cp.setReg(0xB1, this.model.header.flags24 & 0x8 ? 9 : 3); //Stride NRM
@@ -45,6 +49,7 @@ export default class ModelRenderer {
         //XXX B3? (COL1)
         cp.setReg(0xB4, 4); //Stride TEX0
         cp.setReg(0xB5, 4); //Stride TEX1
+
         //XXX more...
     }
 
@@ -107,18 +112,25 @@ export default class ModelRenderer {
         const gl  = this.gl;
         const ops = this.model.renderOps;
         const idx = ops.read(6);
-        this.curTexture = this.model.textures[idx];
-        this.curShader  = this.model.shaders [idx];
+        this.curShader = this.model.shaders[idx];
+        //this.curTexture = this.model.textures[this.curShader.layer[0].texture];
         this.curShaderIdx = idx;
         //console.log("Select texture %d: shader flags=%s", idx,
         //    this.curShader.attrFlags);
 
-        //XXX proper texturing.
-        const tex = this.curShader.texture18;
-        gl.activeTexture(gl.TEXTURE0); // Tell WebGL we want to affect texture unit 0
-        this.model.textures[tex].bind(); // Bind the texture to texture unit 0
-        // Tell the shader we bound the texture to texture unit 0
-        gl.uniform1i(this.gx.programInfo.uniforms.uSampler, 0);
+        const nLayers = this.curShader ? this.curShader.nLayers : 0;
+        for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
+            let tex = this.gx.blankTexture;
+            if(i < nLayers) {
+                const idx = this.curShader.layer[i].texture;
+                if(idx >= 0 && this.model.textures[idx]) {
+                    tex = this.model.textures[idx];
+                }
+            }
+            gl.activeTexture(gl.TEXTURE0 + i);
+            tex.bind();
+            gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
+        }
     }
 
     _renderOpCallList() {
@@ -126,30 +138,6 @@ export default class ModelRenderer {
          */
         const ops = this.model.renderOps;
         const idx = ops.read(8);
-        if(idx == 24) { //HACK
-            //console.log("DLIST DUMP", hexdump(this.model.dlists[idx]));
-            //this is probably related to shaders since this is the only list
-            //that uses shader #3
-            this.gx.cp.setReg(0x56, //VCD_LO
-                (1 <<  0) | //PNMTXIDX
-                (1 <<  1) | //T0MIDX
-                (1 <<  2) | //T1MIDX
-                (3 <<  9) | //POS
-                (3 << 11) | //NRM
-                (1 << 13) | //COL0
-                (1 << 15)   //COL1
-            );
-            this.gx.cp.setReg(0x66, //VCD_HI (texcoords)
-                (0 <<  0) | //TEX0
-                (0 <<  2) | //TEX1
-            0);
-            this.gx.cp.setReg(0x86, //CP_VAT_REG_B
-                ( 1 <<  0) | //TEX1CNT
-                ( 3 <<  1) | //TEX1FMT
-                (10 <<  4) | //TEX1SHFT
-                ( 1 << 31)); //VCACHE_ENHANCE (must be 1)
-            //return; //skip this one for now... XXX
-        }
         const dlistData = {
             POS:  this.model.rawVtxs,
             NRM:  this.model.rawNormals,
@@ -164,6 +152,10 @@ export default class ModelRenderer {
             _debug: {
                 shader:    this.curShader,
                 shaderIdx: this.curShaderIdx,
+                textureIdx:[
+                    this.curShader.layer[0].texture,
+                    this.curShader.layer[1].texture,
+                ],
             },
         };
         //console.log("Execute list", idx);

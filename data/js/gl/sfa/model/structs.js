@@ -80,11 +80,11 @@ export const DisplayListPtr = Struct({
 
 export const ShaderLayer = Struct({
     //this might be totally wrong...
-    'unk00':               ['I',  0x00],
+    'texture':             ['I',  0x00], //index into model's texture list
     'tevMode':             ['B',  0x04],
     'enableTexChainStuff': ['B',  0x05],
     'scrollingTexMtx':     ['B',  0x06],
-    'unk07':               ['3B', 0x07],
+    'unk07':               ['B',  0x07],
 });
 
 export const Shader = Struct({
@@ -95,18 +95,14 @@ export const Shader = Struct({
     'unk0D':     ['3B', 0x0D],
     'unk10':     ['4B', 0x10],
     'auxTex1':   ['i',  0x14],
-    'texture18': ['i',  0x18], //seems to be main texture (index into texture list)
+    'texture18': ['i',  0x18], //same as 0x24 but not sure where it's used
     'unk1C':     ['i',  0x1C],
-    //'layer':     [ShaderLayer[2], 0x20],
-    'unk20':     ['I',  0x20],
-    'unk24':     ['I',  0x24],
-    'unk28':     ['I',  0x28],
-    'unk2C':     ['I',  0x2C],
-    'unk30':     ['I',  0x30],
-    'auxTex2':   ['i',  0x34],
-    'furTexture':['i',  0x38],
-    'flags':     ['I',  0x3C],
-    'attrFlags': ['B',  0x40],
+    'unk20':     ['i',  0x20],
+    'layer':     [ShaderLayer[2], 0x24],
+    'auxTex2':   ['i',  0x34], //affects CP regs
+    'furTexture':['i',  0x38], //which texture for fur effect
+    'flags':     ['I',  0x3C], //affects lighting
+    'attrFlags': ['B',  0x40], //affects CP/XF, can crash Dolphin
     'nLayers':   ['B',  0x41],
     '_pad42':    ['2B', 0x42],
 });

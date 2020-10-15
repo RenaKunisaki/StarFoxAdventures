@@ -3,7 +3,8 @@
 varying lowp  vec4      vColor;    //vertex color
 varying highp vec3      vLighting; //light color
 varying highp vec2      vTexCoord; //texture coord
-uniform       sampler2D uSampler;  //texture
+uniform       sampler2D uSampler0; //texture 0
+uniform       sampler2D uSampler1; //texture 1
 varying highp vec4      vId;       //ID for picker
 uniform       bool      useId;     //are we rendering for picker?
 
@@ -17,14 +18,9 @@ void main() {
             vId.a / 255.0);
     }
     else { //render for display.
-        //without texture:
-        //highp vec3 color = vColor.rgb * vLighting;
-        //gl_FragColor = vec4(color.r, color.g, color.b, vColor.a);
-
-        //with texture:
-        highp vec4 texelColor = texture2D(uSampler, vTexCoord) * vColor;
-        gl_FragColor = vec4(texelColor.rgb * vLighting, texelColor.a);
-        //gl_FragColor = vec4(texelColor.rgb * vLighting, 1);
-        //gl_FragColor = vec4(texelColor.rgb * vLighting, vColor.a);
+        highp vec4 tex0 = texture2D(uSampler0, vTexCoord);
+        highp vec4 tex1 = texture2D(uSampler1, vTexCoord);
+        highp vec4 col  = mix(tex0, tex1, (1.0-tex0.a) * tex1.a) * vColor;
+        gl_FragColor    = vec4(col.rgb * vLighting, col.a);
     }
 }
