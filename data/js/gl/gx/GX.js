@@ -18,6 +18,8 @@ export default class GX {
         this.gl      = context.gl;
         this.blankTexture = new Texture(context);
         this.blankTexture.makeSolidColor(255, 255, 255, 0);
+        //if changing this we need to also add more samplers in the fragment
+        //shader and update loadPrograms()
         this.MAX_TEXTURES = 2;
 
         //the order the fields appear in in a display list.

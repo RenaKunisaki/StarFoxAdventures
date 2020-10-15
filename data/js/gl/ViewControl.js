@@ -21,6 +21,7 @@ export default class ViewControl {
         this.txtRotX   = E.input('x-rotate angle float', {type:'number', step:15});
         this.txtRotY   = E.input('y-rotate angle float', {type:'number', step:15});
         this.txtRotZ   = E.input('z-rotate angle float', {type:'number', step:15});
+        this.txtFov    = E.input('fov angle float',      {type:'number', step:5});
 
         this.btnReset = E.button('reset', "Reset");
         this.btnReset.addEventListener('click', e => this._reset());
@@ -51,6 +52,10 @@ export default class ViewControl {
                     E.td(this.txtRotY),
                     E.td(this.txtRotZ),
                 ),
+                E.tr(
+                    E.th(null, "FOV"),
+                    E.td(this.txtFov),
+                ),
             ),
         );
         this.txtPosX  .setAttribute('value', this.context.view.pos.x);
@@ -62,6 +67,7 @@ export default class ViewControl {
         this.txtRotX  .setAttribute('value', this.context.view.rotation.x);
         this.txtRotY  .setAttribute('value', this.context.view.rotation.y);
         this.txtRotZ  .setAttribute('value', this.context.view.rotation.z);
+        this.txtFov   .setAttribute('value', this.context.fov);
         //input event fires for *every* change.
         //change event only fires when committing, eg pressing Enter.
         this.txtPosX  .addEventListener('input', e => this._onPosChange(e));
@@ -73,6 +79,7 @@ export default class ViewControl {
         this.txtRotX  .addEventListener('input', e => this._onRotChange(e));
         this.txtRotY  .addEventListener('input', e => this._onRotChange(e));
         this.txtRotZ  .addEventListener('input', e => this._onRotChange(e));
+        this.txtFov   .addEventListener('input', e => this._onFovChange(e));
     }
 
     _onPosChange(event) {
@@ -99,6 +106,12 @@ export default class ViewControl {
         this.context.view.rotation.z = this.txtRotZ.value;
         this.context.redraw();
     }
+    _onFovChange(event) {
+        /** Called when the value of FOV input changes.
+         */
+        this.context.fov = this.txtFov.value;
+        this.context.redraw();
+    }
 
     _reset() {
         this.txtPosX.value = 0;
@@ -110,6 +123,7 @@ export default class ViewControl {
         this.txtRotX.value = 0;
         this.txtRotY.value = 0;
         this.txtRotZ.value = 0;
+        this.txtFov.value = 60;
         this.context.view.pos.x = this.txtPosX.value;
         this.context.view.pos.y = this.txtPosY.value;
         this.context.view.pos.z = this.txtPosZ.value;
