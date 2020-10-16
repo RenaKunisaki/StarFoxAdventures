@@ -1,4 +1,5 @@
 import {get} from '/js/Util.js';
+import ModelLoader from './model/ModelLoader.js';
 import TextureLoader from './model/TextureLoader.js';
 
 export default class AssetLoader {
@@ -18,6 +19,31 @@ export default class AssetLoader {
             this.assetList = xhr.responseXML;
         }
         return this.assetList;
+    }
+
+    async loadModel(id) {
+        /** Attempt to load the model with the specified ID.
+         *  ID: Model ID.
+         *  Returns the model, or null if it's not found.
+         */
+        const assetList = await this._getAssetList();
+        const hid = (id & 0x7FFF).toString(16).padStart(4, '0').toUpperCase();
+
+        //find any map that has this model.
+        const map = assetList.evaluate(
+            `//assets/models/model[@idx="0x${hid}"]/map`, assetList,
+            null, XPathResult.ANY_UNORDERED_NODE_TYPE, null).singleNodeValue;
+        if(!map) {
+            console.error("No map found for model 0x%s", hid);
+            return null;
+        }
+
+        //download it.
+        console.log("Download model 0x%s from map:", hid, map.getAttribute('dir'));
+        const TL = new ModelLoader(this.gx);
+        const path = '/disc/' + map.getAttribute('dir') + '/MODELS.bin';
+        const entry = parseInt(map.getAttribute('entry')) & 0x00FFFFFF;
+        return await TL.loadFromModelsBin(path, entry)
     }
 
     async loadTexture(id) {

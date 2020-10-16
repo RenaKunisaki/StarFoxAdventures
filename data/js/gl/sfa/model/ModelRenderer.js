@@ -153,8 +153,8 @@ export default class ModelRenderer {
                 shader:    this.curShader,
                 shaderIdx: this.curShaderIdx,
                 textureIdx:[
-                    this.curShader.layer[0].texture,
-                    this.curShader.layer[1].texture,
+                    this.curShader ? this.curShader.layer[0].texture : null,
+                    this.curShader ? this.curShader.layer[1].texture : null,
                 ],
             },
         };
@@ -182,7 +182,8 @@ export default class ModelRenderer {
         let COL      = [colSize, 0];
         let TMIDX    = [0, 0, 0, 0, 0, 0, 0, 0];
         let TEX      = [texSize, 0, 0, 0, 0, 0, 0, 0];
-        if(this.curShader.unk00 || this.curShader.unk04) { //XXX if(shader has texture or lighting)
+        if(this.curShader && (this.curShader.unk00 || this.curShader.unk04)) {
+            //XXX if(shader has texture or lighting)
             //console.log("Shader auxTex2=", this.curShader.auxTex2);
             TMIDX[0] = 1;
             if(this.curShader.auxTex2 > 0) {
@@ -197,9 +198,11 @@ export default class ModelRenderer {
             //this is probably right since anything else fails to parse
             TMIDX[7-i] = 1;
         }
-        for(let i=0; i<this.curShader.nLayers; i++) {
-            TEX[i] = texSize;
-            //don't set TMIDX here. this is directly copied from game code.
+        if(this.curShader) {
+            for(let i=0; i<this.curShader.nLayers; i++) {
+                TEX[i] = texSize;
+                //don't set TMIDX here. this is directly copied from game code.
+            }
         }
 
         this.gx.cp.setReg(0x56, //VCD FMT LO
@@ -217,6 +220,7 @@ export default class ModelRenderer {
         /** Load one of the model's matrices into GX XF registers.
          *  Matrices come from the bones and vertex groups.
          */
+        //XXX I think this works differently if the model has no bones.
         const lut = [ //no idea why the game does this.
              0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 0, 0,
             10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0, 0];

@@ -6,7 +6,7 @@ import Context from './gl/Context.js';
 import ViewControl from './gl/ViewControl.js';
 import LightControl from './gl/LightControl.js';
 import Picker from './gl/Picker.js';
-import ModelLoader from './gl/sfa/model/ModelLoader.js';
+import AssetLoader from './gl/sfa/AssetLoader.js';
 import ModelRenderer from './gl/sfa/model/ModelRenderer.js';
 //import ModelDataView from './ModelDataView.js';
 import TextureView from './gl/TextureView.js';
@@ -96,9 +96,11 @@ class ModelViewer {
 function main() {
     const viewer = new ModelViewer();
     viewer.init().then(() => {
-        const path = '/disc/warlock/MODELS.bin';
-        const loader = new ModelLoader(viewer.gl.gx);
-        loader.loadFromModelsBin(path, 0x0901C0).then(model => {
+        let id = window.location.hash;
+        if(id == null || id.length < 1) id = 0x4E8;
+        else id = parseInt(id.substr(1), 16);
+        const loader = new AssetLoader(viewer.gl.gx);
+        loader.loadModel(id).then(model => {
             viewer.showModel(model);
         })
     });
