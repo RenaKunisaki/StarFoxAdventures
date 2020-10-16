@@ -1,7 +1,8 @@
 import {get, validNumber, hexdump} from '/js/Util.js';
 import SfaBitStream from '/js/gl/sfa/SfaBitStream.js';
 import Texture from '/js/gl/Texture.js';
-import TextureLoader from './TextureLoader.js';
+//import TextureLoader from './TextureLoader.js';
+import AssetLoader from '../AssetLoader.js';
 import {ModelHeader, Bone, DisplayListPtr, Shader, ShaderLayer, ModelVtxGroup} from './structs.js';
 
 export default class Model {
@@ -81,12 +82,10 @@ export default class Model {
 
     async _downloadTextures() {
         //download textures
-        const mapName = 'warlock'; // XXX
-        const TL = new TextureLoader(this.gx);
+        const AL = new AssetLoader(this.gx);
         console.log("Texture IDs:", this.textureIds);
         for(const id of this.textureIds) {
-            console.log("Download texture 0x%s", id.toString(16));
-            this.textures.push(await TL.loadFromMap(mapName, id));
+            this.textures.push(await AL.loadTexture(id));
         }
     }
 

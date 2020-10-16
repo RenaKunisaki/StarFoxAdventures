@@ -47,10 +47,11 @@ export default class Context {
 
         //enable DDS textures (though we don't currently use them)
         //https://developer.mozilla.org/en-US/docs/Web/API/WEBGL_compressed_texture_s3tc
-        this._gl_extensions.compressed_texture_s3tc = (
+        //disabled because we do texture decoding server-side because lol
+        /* this._gl_extensions.compressed_texture_s3tc = (
             gl.getExtension('WEBGL_compressed_texture_s3tc') ||
             gl.getExtension('MOZ_WEBGL_compressed_texture_s3tc') ||
-            gl.getExtension('WEBKIT_WEBGL_compressed_texture_s3tc'));
+            gl.getExtension('WEBKIT_WEBGL_compressed_texture_s3tc')); */
 
         //bind events
         canvas.addEventListener('resize', e => this._onResize(e));

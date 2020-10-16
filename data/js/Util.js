@@ -1,7 +1,7 @@
 export function get(params) {
     /** Fetch some remote resource.
      *  path: URI to fetch.
-     *  type: MIME type override to use.
+     *  mimeType: MIME type override to use.
      *  respType: 'text' or 'arraybuffer' to override responseType.
      *  Returns a Promise which resolves to the XHR object once the request
      *  is completed, which you can use to retrieve the response in the
