@@ -59,9 +59,9 @@ export default class XF {
          */
         if(this._mtx.POS[idx] == undefined) {
             console.error("Position matrix "+String(idx)+" is undefined");
-            return mat4.create();
             //debugger;
-            throw new Error("Position matrix "+String(idx)+" is undefined");
+            return mat4.create();
+            //throw new Error("Position matrix "+String(idx)+" is undefined");
         }
         return this._mtx.POS[idx];
     }

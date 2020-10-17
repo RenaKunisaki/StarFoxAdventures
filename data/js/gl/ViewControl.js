@@ -115,8 +115,8 @@ export default class ViewControl {
 
     _reset() {
         this.txtPosX.value = 0;
-        this.txtPosY.value = -20;
-        this.txtPosZ.value = -60;
+        this.txtPosY.value = 0;
+        this.txtPosZ.value = -100;
         this.txtScaleX.value = 1;
         this.txtScaleY.value = 1;
         this.txtScaleZ.value = 1;

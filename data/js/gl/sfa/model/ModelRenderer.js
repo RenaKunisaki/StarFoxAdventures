@@ -167,8 +167,6 @@ export default class ModelRenderer {
          */
         const ops   = this.model.renderOps;
         const flags = this.curShader ? this.curShader.attrFlags : 0;
-        //XXX this behaves different if model has < 2 bones: 8003e638
-
         let posSize = ops.read(1) ? 3 : 2;
         let nrmSize = (flags & 1) ? (ops.read(1) ? 3 : 2) : 0; //has normals?
         let colSize = (flags & 2) ? (ops.read(1) ? 3 : 2) : 0; //has colors?
@@ -176,32 +174,35 @@ export default class ModelRenderer {
         //console.log("Set vfmt: pos=%d nrm=%d col=%d tex=%d flags=0x%s",
         //    posSize, nrmSize, colSize, texSize, flags.toString(16));
 
-        let PNMTXIDX = 1; //always
+        let PNMTXIDX = 0;
         let POS      = posSize;
         let NRM      = nrmSize;
         let COL      = [colSize, 0];
         let TMIDX    = [0, 0, 0, 0, 0, 0, 0, 0];
         let TEX      = [texSize, 0, 0, 0, 0, 0, 0, 0];
-        if(this.curShader && (this.curShader.unk00 || this.curShader.unk04)) {
-            //XXX if(shader has texture or lighting)
-            //console.log("Shader auxTex2=", this.curShader.auxTex2);
-            TMIDX[0] = 1;
-            if(this.curShader.auxTex2 > 0) {
-                TMIDX[1] = 1;
-                TMIDX[2] = 1;
+        if(this.model.header.nBones >= 2) { //8003e638
+            PNMTXIDX = 1;
+            if(this.curShader && (this.curShader.unk00 || this.curShader.unk04)) {
+                //XXX if(shader has texture or lighting)
+                //console.log("Shader auxTex2=", this.curShader.auxTex2);
+                TMIDX[0] = 1;
+                if(this.curShader.auxTex2 > 0) {
+                    TMIDX[1] = 1;
+                    TMIDX[2] = 1;
+                }
+                //this is slightly different from what the game code does but the
+                //result is the same; setting idx 0 or 2 to 1 depending on auxTex2
             }
-            //this is slightly different from what the game code does but the
-            //result is the same; setting idx 0 or 2 to 1 depending on auxTex2
-        }
-        for(let i=0; i<this.model.header.nTexMtxs; i++) {
-            //XXX not entirely sure how this works
-            //this is probably right since anything else fails to parse
-            TMIDX[7-i] = 1;
-        }
-        if(this.curShader) {
-            for(let i=0; i<this.curShader.nLayers; i++) {
-                TEX[i] = texSize;
-                //don't set TMIDX here. this is directly copied from game code.
+            for(let i=0; i<this.model.header.nTexMtxs; i++) {
+                //XXX not entirely sure how this works
+                //this is probably right since anything else fails to parse
+                TMIDX[7-i] = 1;
+            }
+            if(this.curShader) {
+                for(let i=0; i<this.curShader.nLayers; i++) {
+                    TEX[i] = texSize;
+                    //don't set TMIDX here. this is directly copied from game code.
+                }
             }
         }
 

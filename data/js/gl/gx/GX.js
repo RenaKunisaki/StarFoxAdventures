@@ -200,12 +200,14 @@ export default class GX {
             vtx.dlist = this.stats.nDlists;
             this.vtxLog.push(vtx);
 
-            geomBound.xMin = Math.min(geomBound.xMin, vtx.POS[0]);
-            geomBound.yMin = Math.min(geomBound.yMin, vtx.POS[1]);
-            geomBound.zMin = Math.min(geomBound.zMin, vtx.POS[2]);
-            geomBound.xMax = Math.max(geomBound.xMax, vtx.POS[0]);
-            geomBound.yMax = Math.max(geomBound.yMax, vtx.POS[1]);
-            geomBound.zMax = Math.max(geomBound.zMax, vtx.POS[2]);
+            if(vtx.POS) {
+                geomBound.xMin = Math.min(geomBound.xMin, vtx.POS[0]);
+                geomBound.yMin = Math.min(geomBound.yMin, vtx.POS[1]);
+                geomBound.zMin = Math.min(geomBound.zMin, vtx.POS[2]);
+                geomBound.xMax = Math.max(geomBound.xMax, vtx.POS[0]);
+                geomBound.yMax = Math.max(geomBound.yMax, vtx.POS[1]);
+                geomBound.zMax = Math.max(geomBound.zMax, vtx.POS[2]);
+            }
         }
         this.stats.nVtxs += vtxs.length;
     }
@@ -228,17 +230,19 @@ export default class GX {
             case 0: case 1: //quads, also quads
                 //there's no quads mode in modern GL so we need to convert
                 //to triangles.
-                glVtxCount = 0;
+                res.glVtxCount = 0;
                 for(let i=0; i<vtxs.length; i += 4) {
                     //XXX find a more efficient way to do this.
                     //we can probably use index buffers instead of repeating
                     //vertices, use one big buffer instead of refilling a small
                     //one many times, not use gl.STATIC_DRAW, etc.
                     const v0=vtxs[i], v1=vtxs[i+1], v2=vtxs[i+2], v3=vtxs[i+3];
-                    const pm0=this.xf.getPosMtx(v0.PNMTXIDX);
-                    const pm1=this.xf.getPosMtx(v1.PNMTXIDX);
-                    const pm2=this.xf.getPosMtx(v2.PNMTXIDX);
-                    const pm3=this.xf.getPosMtx(v3.PNMTXIDX);
+                    const mi0=v0.PNMTXIDX, mi1=v1.PNMTXIDX;
+                    const mi2=v2.PNMTXIDX, mi3=v3.PNMTXIDX;
+                    const pm0=(mi0 == undefined) ? null : this.xf.getPosMtx(mi0);
+                    const pm1=(mi1 == undefined) ? null : this.xf.getPosMtx(mi1);
+                    const pm2=(mi2 == undefined) ? null : this.xf.getPosMtx(mi2);
+                    const pm3=(mi3 == undefined) ? null : this.xf.getPosMtx(mi3);
                     const nm0=null; //this.xf.getNrmMtx(v0.PNMTXIDX);
                     const nm1=null; //this.xf.getNrmMtx(v1.PNMTXIDX);
                     const nm2=null; //this.xf.getNrmMtx(v2.PNMTXIDX);
@@ -251,7 +255,7 @@ export default class GX {
                     this.vtxBuf.setMtxs(m0); this.vtxBuf.addVtx(v0);
                     this.vtxBuf.setMtxs(m2); this.vtxBuf.addVtx(v2);
                     this.vtxBuf.setMtxs(m3); this.vtxBuf.addVtx(v3);
-                    glVtxCount += 6;
+                    res.glVtxCount += 6;
                 }
                 res.glMode = gl.TRIANGLES;
                 break;
@@ -266,7 +270,8 @@ export default class GX {
         }
         if(mode != 0 && mode != 1) { //add vtxs to buffer if we didn't already
             for(let i=0; i<vtxs.length; i++) {
-                const pm = this.xf.getPosMtx(vtxs[i].PNMTXIDX);
+                const mi = vtxs[i].PNMTXIDX;
+                const pm = (mi==undefined) ? null : this.xf.getPosMtx(mi);
                 const nm = null; //this.xf.getNrmMtx(vtxs[i].PNMTXIDX);
                 this.vtxBuf.setMtxs({POS:pm, NRM:nm});
                 this.vtxBuf.addVtx(vtxs[i]);

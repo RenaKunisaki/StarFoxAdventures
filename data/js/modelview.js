@@ -58,8 +58,16 @@ class ModelViewer {
         /** Display SFA model.
          */
         this._renderer = new Renderer(this.gl.gx, model);
-        this.gl.setRenderer(this._renderer);
-        this.gl.redraw();
+        try {
+            this.gl.setRenderer(this._renderer);
+            this.gl.redraw();
+        }
+        catch(ex) {
+            const err = document.getElementById('error');
+            err.innerText = "Render failed";
+            err.style.display = '';
+            console.error(ex);``
+        }
         this.gl.gx.printStats();
         console.log("Model", model);
         this.textureView.setModel(model);
@@ -101,10 +109,13 @@ function main() {
         else id = parseInt(id.substr(1), 16);
         const loader = new AssetLoader(viewer.gl.gx);
         loader.loadModel(id).then(model => {
-            viewer.showModel(model);
+            if(model == null) {
+                const err = document.getElementById('error');
+                err.innerText = "Model not found";
+                err.style.display = '';
+            }
+            else viewer.showModel(model);
         })
     });
-    //gl.showModel('krystalmodel.bin');
-    //gl.showModel('model0.bin');
 }
 setupMain(main);

@@ -261,7 +261,8 @@ export default class DlistParser {
                     const idx = (fmt == 2 ? dl.nextU8() : dl.nextU16());
                     const src = this.data[field];
                     if(src == null) {
-                        throw new Error("Field is null: " + String(field));
+                        //throw new Error("Field is null: " + String(field));
+                        vtx[field] = null;
                     }
                     else {
                         if(this.gx.cp.arrayStride[field] == undefined) {
@@ -287,6 +288,7 @@ export default class DlistParser {
             }
         }
         vtx.dataLength = this.data.dlist.offset - vtx.offset;
+        if(!vtx.POS) debugger;
 
         //debug: color by shader ID
         if(this.data._debug) {

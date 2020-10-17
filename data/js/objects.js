@@ -4,7 +4,7 @@
 import {E} from './Element.js';
 import {get, getObjects, getGameTexts, getMaps, getBits, finishLoading, setupMain} from './Util.js';
 
-let gameTexts, maps, gameBits;
+let gameTexts, maps, gameBits, modelInfo;
 
 function makeTableForObject(objs, obj) {
     let   id    = obj.getAttribute('id').substr(2);
@@ -24,7 +24,12 @@ function makeTableForObject(objs, obj) {
     const tModels = E.table('models');
     for(const mod of obj.getElementsByTagName('model')) {
         const trModel = E.tr('model');
-        trModel.append(E.td('id hex', mod.getAttribute('id').substr(2)));
+        const mid = mod.getAttribute('id').substr(2);
+        trModel.append(
+            E.td('id hex',
+                E.a(null, {href:'/modelview.html#'+mid}, mid),
+            ),
+        );
         let textId = mod.getAttribute('text');
         if(textId != null) {
             let text = gameTexts[String(parseInt(textId) + 10000)];
@@ -36,7 +41,15 @@ function makeTableForObject(objs, obj) {
             tdText.setAttribute('title', "Text ID: "+textId);
             trModel.append(tdText);
         }
-        else trModel.append(E.td(null, '-'))
+        else {
+            let text = '-';
+            const info = modelInfo.getElementById('0x'+mid);
+            if(info) {
+                try { text = info.getElementsByTagName('description')[0].textContent; }
+                catch(ex) {}
+            }
+            trModel.append(E.td('gametext str', text));
+        }
         tModels.append(trModel);
     }
     tr.append(E.td('models', tModels));
@@ -170,6 +183,7 @@ async function main() {
     gameTexts  = await getGameTexts();
     maps       = await getMaps();
     gameBits   = await getBits();
+    modelInfo  = (await get({path:'models.xml', mimeType:'text/xml; charset=utf-8'})).responseXML;
     makeObjectsTable(objs);
 }
 setupMain(main);

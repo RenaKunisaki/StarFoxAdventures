@@ -56,6 +56,7 @@ export default class Model {
             const [head, tail] = this.calcBonePos(bone, false);
             this.xlates.push(tail);
         }
+        if(this.bones.length == 0) this.xlates.push([0, 0, 0]);
         this.vtxGroups    = this._readVtxGroups();
         this.rawVtxs      = this._readVtxs();
         this.rawNormals   = this._readNormals();

@@ -32,23 +32,23 @@ export function get(params) {
 }
 
 export async function getGameTexts() {
-    const xhr = await get('gametext.json', 'application/json');
+    const xhr = await get({path:'gametext.json', mimeType:'application/json'});
     return JSON.parse(xhr.responseText);
 }
 export async function getObjects() {
-    const xhr = await get('objects.xml', 'text/xml; charset=utf-8');
+    const xhr = await get({path:'objects.xml', mimeType:'text/xml; charset=utf-8'});
     return xhr.responseXML;
 }
 export async function getMaps() {
-    const xhr = await get('maps.xml', 'text/xml; charset=utf-8');
+    const xhr = await get({path:'maps.xml', mimeType:'text/xml; charset=utf-8'});
     return xhr.responseXML;
 }
 export async function getBits() {
-    const xhr = await get('gamebits.xml', 'text/xml; charset=utf-8');
+    const xhr = await get({path:'gamebits.xml', mimeType:'text/xml; charset=utf-8'});
     return xhr.responseXML;
 }
 export async function getDLLs() {
-    const xhr = await get('dlls.xml', 'text/xml; charset=utf-8');
+    const xhr = await get({path:'dlls.xml', mimeType:'text/xml; charset=utf-8'});
     return xhr.responseXML;
 }
 
@@ -132,6 +132,7 @@ export function validVector(v) {
      *  This differs from validMatrix() in that it does not throw an error
      *  if all elements are zero or if there are more than 16 elements.
      */
+    if(!v) { debugger; throw new Error("Vector is "+String(v)); }
     for(const n of v) validNumber(n);
     return v;
 }

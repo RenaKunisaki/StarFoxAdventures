@@ -99,3 +99,17 @@ body {
 #glPicker th {
     text-align: left;
 }
+
+#error {
+    position: fixed;
+    top:        45%;
+    bottom:     45%;
+    left:       25%;
+    right:      25%;
+    border:     3px #F88 ridge;
+    background: rgba(255, 0, 0, 0.5);
+    color:      #FFF;
+    padding:    1em;
+    text-align: center;
+    font-size:  1.2em;
+}

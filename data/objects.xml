@@ -31,12 +31,12 @@
     <params/>
   </object>
   <object id="0x0005" name="TrickyBadge" type="effect" def="0x0244">
-    <description/>
+    <description>Star Fox emblem</description>
     <model id="0x0007"/>
     <params/>
   </object>
   <object id="0x0006" name="TrickyBadge" type="effect" def="0x0254">
-    <description/>
+    <description>Duplicate of 0x0005? Model is missing.</description>
     <model id="0x0008"/>
     <params/>
   </object>
@@ -10026,7 +10026,7 @@
     <exampleParams>00000000 00000000 00000000</exampleParams>
   </object>
   <object id="0x05A6" name="LightSource" def="0x075D" dll="0x0206">
-    <description>burning sound effect?</description>
+    <description>burning sound effect? appears as large gray arrow</description>
     <model id="0x045F"/>
   </object>
   <object id="0x05A7" name="FXEmit" def="0x00D4" dll="0x012B">
@@ -10106,7 +10106,7 @@
     <model id="0x0000"/>
   </object>
   <object id="0x05AC" name="StaffAction" def="0x064D" dll="0x011C">
-    <description/>
+    <description>Appears as LEV CTRL cube</description>
     <model id="0x0467"/>
   </object>
   <object id="0x05AD" name="StaffBoostP" def="0x064F" dll="0x011C">
@@ -10133,7 +10133,7 @@
     <exampleParams>00000000 00010005 0C00FFFF FFFF0000</exampleParams>
   </object>
   <object id="0x05AE" name="StaffBoulde" def="0x0650" dll="0x011C">
-    <description/>
+    <description>Has scarabs under it</description>
     <map id="0x07" count="7"/>
     <map id="0x0E" count="6"/>
     <map id="0x12" count="2"/>
@@ -10146,14 +10146,14 @@
     <exampleParams>55000000 02010102 1800FFFF FFFF0000</exampleParams>
   </object>
   <object id="0x05AF" name="StaffBoulde" def="0x0651" dll="0x011C">
-    <description/>
+    <description>Snow-covered boulder with scarabs under it</description>
     <map id="0x0A" count="8"/>
     <model id="0x008A" text="0x0070"/>
     <params length="0x28"/>
     <exampleParams>38000000 02010003 0C00FFFF FFFF0000</exampleParams>
   </object>
   <object id="0x05B0" name="StaffBoulde" def="0x0668" dll="0x011C">
-    <description/>
+    <description>Covers entrance to magic caves</description>
     <map id="0x07" count="1"/>
     <map id="0x0E" count="1"/>
     <map id="0x12" count="1"/>
