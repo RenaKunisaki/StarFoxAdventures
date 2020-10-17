@@ -25,24 +25,26 @@ export default class ModelRenderer {
         const cp = this.gx.cp;
         //set up GX for the model format.
         //most of this is just extracted from the game code and/or guessed.
-        cp.setReg(0x56, 0x1F03); //VCD_LO
-        cp.setReg(0x66, 3); //VCD_HI (texcoords)
-        cp.setReg(0x76, //VCD_A
-            ( 1 <<  0) | //POSCNT:    1 (x,y,z)
-            ( 3 <<  1) | //POSFMT:    3 (s16)
-            ( 8 <<  4) | //POSSHFT:   8 (divide by 256)
-            ( 0 <<  9) | //NRMCNT:    0 (one normal, not three)
-            ( 3 << 10) | //NRMFMT:    3 (s16)
-            ( 1 << 21) | //TEX0CNT:   1 (s,t)
-            ( 3 << 22) | //TEX0FMT:   3 (s16)
-            (10 << 25) | //TEX0SHFT: 10 (divide by 1024)
-            0); //XXX more...
-        this.gx.cp.setReg(0x86, //CP_VAT_REG_B
-            ( 1 <<  0) | //TEX1CNT
-            ( 3 <<  1) | //TEX1FMT
-            (10 <<  4) | //TEX1SHFT
-            ( 1 << 31)); //VCACHE_ENHANCE (must be 1)
-        cp.setReg(0x96, 0); //VCD_C (TEX4-7)
+        for(let i=0; i<8; i++) {
+            cp.setReg(0x50+i, 0x1F03); //VCD_LO
+            cp.setReg(0x60+i, 3); //VCD_HI (texcoords)
+            cp.setReg(0x70+i, //VCD_A
+                ( 1 <<  0) | //POSCNT:    1 (x,y,z)
+                ( 3 <<  1) | //POSFMT:    3 (s16)
+                ( 8 <<  4) | //POSSHFT:   8 (divide by 256)
+                ( 0 <<  9) | //NRMCNT:    0 (one normal, not three)
+                ( 3 << 10) | //NRMFMT:    3 (s16)
+                ( 1 << 21) | //TEX0CNT:   1 (s,t)
+                ( 3 << 22) | //TEX0FMT:   3 (s16)
+                (10 << 25) | //TEX0SHFT: 10 (divide by 1024)
+                0); //XXX more...
+            cp.setReg(0x80+i, //CP_VAT_REG_B
+                ( 1 <<  0) | //TEX1CNT
+                ( 3 <<  1) | //TEX1FMT
+                (10 <<  4) | //TEX1SHFT
+                ( 1 << 31)); //VCACHE_ENHANCE (must be 1)
+            cp.setReg(0x90+i, 0); //VCD_C (TEX4-7)
+        }
         cp.setReg(0xB0, 6); //Stride POS
         cp.setReg(0xB1, this.model.header.flags24 & 0x8 ? 9 : 3); //Stride NRM
         cp.setReg(0xB2, 2); //Stride COL0
@@ -206,15 +208,18 @@ export default class ModelRenderer {
             }
         }
 
-        this.gx.cp.setReg(0x56, //VCD FMT LO
-            PNMTXIDX |
-            (TMIDX[0] <<  1) | (TMIDX[1] <<  2) | (TMIDX[2] <<  3) |
-            (TMIDX[3] <<  4) | (TMIDX[4] <<  5) | (TMIDX[5] <<  6) |
-            (TMIDX[6] <<  7) | (TMIDX[7] <<  8) | (POS <<  9) | (NRM << 11) |
-            (COL[0] << 13) | (COL[1] << 15));
-        this.gx.cp.setReg(0x66, //VCD FMT HI
-            TEX[0] | (TEX[1] <<  2) | (TEX[2] <<  4) | (TEX[3] <<  6) |
-            (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
+        //XXX this can't be right. how does the game decide which VAT to set?
+        for(let i=0; i<8; i++) {
+            this.gx.cp.setReg(0x56, //VCD FMT LO
+                PNMTXIDX |
+                (TMIDX[0] <<  1) | (TMIDX[1] <<  2) | (TMIDX[2] <<  3) |
+                (TMIDX[3] <<  4) | (TMIDX[4] <<  5) | (TMIDX[5] <<  6) |
+                (TMIDX[6] <<  7) | (TMIDX[7] <<  8) | (POS <<  9) | (NRM << 11) |
+                (COL[0] << 13) | (COL[1] << 15));
+            this.gx.cp.setReg(0x66, //VCD FMT HI
+                TEX[0] | (TEX[1] <<  2) | (TEX[2] <<  4) | (TEX[3] <<  6) |
+                (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
+        }
     }
 
     _renderOpMatrix() {

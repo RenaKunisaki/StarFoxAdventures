@@ -23,33 +23,46 @@ function makeTableForObject(objs, obj) {
     //make models subtable
     const tModels = E.table('models');
     for(const mod of obj.getElementsByTagName('model')) {
-        const trModel = E.tr('model');
         const mid = mod.getAttribute('id').substr(2);
-        trModel.append(
-            E.td('id hex',
-                E.a(null, {href:'/modelview.html#'+mid}, mid),
-            ),
-        );
+
+        //get models.xml data
+        let infoText = '', isMissing = false, modelType = 'unknown';
+        const modInfo = modelInfo.getElementById('0x'+mid);
+        if(modInfo) {
+            isMissing = modInfo.getAttribute('missing');
+            modelType = modInfo.getAttribute('type');
+            try { infoText = modInfo.getElementsByTagName('description')[0].textContent; }
+            catch(ex) {}
+        }
+
+        //get in-game text
+        let gameText = null;
         let textId = mod.getAttribute('text');
         if(textId != null) {
-            let text = gameTexts[String(parseInt(textId) + 10000)];
-            let tdText;
-            if(text) {
-                tdText = E.td('gametext str', text.phrases.join('; '));
-            }
-            else tdText = E.td('gametext str', '<'+textId.substr(2)+'>');
-            tdText.setAttribute('title', "Text ID: "+textId);
+            gameText = gameTexts[String(parseInt(textId) + 10000)];
+            if(gameText) gameText = gameText.phrases.join('; ');
+            else gameText = '<'+textId.substr(2)+'>';
+        }
+
+        //build row
+        const trModel = E.tr('model model-type-'+modelType);
+
+        //build link/ID cell
+        trModel.append(
+            E.td('id hex', E.a(isMissing ? 'missing-model' : '', {
+                href:'/modelview.html#'+mid,
+                title: infoText,
+            }, mid)),
+        );
+
+        //build text cell
+        if(gameText != null) {
+            const tdText = E.td('gametext str', gameText);
+            if(textId != null) tdText.setAttribute('title', "Text ID: "+textId);
             trModel.append(tdText);
         }
-        else {
-            let text = '-';
-            const info = modelInfo.getElementById('0x'+mid);
-            if(info) {
-                try { text = info.getElementsByTagName('description')[0].textContent; }
-                catch(ex) {}
-            }
-            trModel.append(E.td('gametext str', text));
-        }
+        else trModel.append(E.td('str', infoText));
+
         tModels.append(trModel);
     }
     tr.append(E.td('models', tModels));

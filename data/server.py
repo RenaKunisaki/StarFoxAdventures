@@ -11,6 +11,7 @@ import os
 import os.path
 import sys
 import time
+import json
 import asyncio
 import aiohttp
 from aiohttp import web
@@ -63,9 +64,26 @@ class TextureView(aiohttp.web.View):
     If the file doesn't exist, returns error 404.
     Otherwise, returns the image.
     """
+    _metadata = {} # texID => info
     async def get(self):
         """Handle GET request."""
         path = self.request.match_info['path']
+
+        # ugly hack to pass the actual texture info to the client.
+        # we can't use HTTP headers because it's a regular image
+        # download and there's no way I know of to catch that.
+        # instead of having the client download the entire texture
+        # again just to decompress it and read the header, we provide
+        # this endpoint to read back the header info of a previously
+        # loaded texture.
+        tid = int(self.request.query.get('id', 0))
+        if self.request.query.get('get', None) == 'info':
+            if tid not in self._metadata:
+                return await self.request.app.sendError(404, self.request)
+            return await self.request.app.sendData(
+                json.dumps(self._metadata[tid]), self.request,
+                content_type="application/json")
+
         while path.startswith('/'): path = path[1:]
         path = path.replace('..', '%2E%2E')
         try:
@@ -100,6 +118,14 @@ class TextureView(aiohttp.web.View):
 
                 except Exception as ex:
                     return await self.request.app.sendError(400, self.request, str(ex))
+
+                self._metadata[tid] = {
+                    'format':       hex(fmtId),
+                    'offset':       hex(offset),
+                    'nFrames':      str(nFrames),
+                    'packedLength': hex(compLen),
+                    'rawLength':    hex(rawLen),
+                }
 
                 return await self.request.app.sendData(data.getvalue(), self.request,
                     content_type="image/png")

@@ -2,6 +2,10 @@ html, body {
     background: #000;
     color: #FFF;
 }
+body {
+    width:  100vw;
+    height: 100vh;
+}
 
 a { color: #00CCFF }
 
@@ -47,10 +51,9 @@ tr:hover { background: #666 }
 tr.map .name { width: 12em }
 tr.map .count { width: 2em }
 
-body {
-    width: 100vw;
-    height: 100vh;
-}
+.missing-model { font-style: italic }
+.gametext { font-style: italic }
+
 
 #controls {
     position: fixed;

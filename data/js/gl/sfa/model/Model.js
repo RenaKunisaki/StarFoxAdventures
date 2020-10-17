@@ -98,7 +98,7 @@ export default class Model {
          *    own transforms).
          *  Returns [head, tail], each of which are [x,y,z] coord.
          */
-        console.assert(_depth < 10);
+        console.assert(_depth < 20);
         validNumber(bone.head[0], bone.head[1], bone.head[2]);
         validNumber(bone.tail[0], bone.tail[1], bone.tail[2]);
         let head = [bone.head[0], bone.head[1], bone.head[2]];

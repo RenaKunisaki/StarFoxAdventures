@@ -1,6 +1,6 @@
 import {get, validNumber} from '/js/Util.js';
 import {TextureHeader} from './structs.js';
-import Texture from '/js/gl/Texture.js';
+import SfaTexture from '../SfaTexture.js';
 
 const ImageFormat = {
     I4:     0,
@@ -57,7 +57,17 @@ export default class TextureLoader {
         ////now data is the raw texture object, which has a header.
         //return this._buildTexture(data);
 
-        return await this._getPng(zlbOffs, binFile, binName);
+        if(group == 0) id |= 0x8000;
+        const res  = await this._getPng(zlbOffs, binFile, binName, id);
+        const info = JSON.parse((await get({path:`/texture/?get=info&id=${id}`})).responseText);
+        res.id           = id;
+        res.group        = group;
+        res.format       = parseInt(info.format);
+        res.offset       = parseInt(info.offset);
+        res.nFrames      = parseInt(info.nFrames);
+        res.packedLength = parseInt(info.packedLength);
+        res.rawLength    = parseInt(info.rawLength);
+        return res;
     }
 
     async _getTabEntry(tabName, id) {
@@ -86,13 +96,13 @@ export default class TextureLoader {
         ];
     }
 
-    async _getPng(zlbOffs, binFile, binName) {
+    async _getPng(zlbOffs, binFile, binName, id) {
         //WebGL DXT1 seems to not work properly or not support this format
         //so we'll once again rely on the server to decode it for us.
         //const header  = new TextureHeader(data);
         //console.log("Texture header", header._toString());
-        const texture = new Texture(this.gx.context);
-        return await texture.loadFromImage(`/texture/${binName}?offset=${zlbOffs}`);
+        const texture = new SfaTexture(this.gx.context);
+        return await texture.loadFromImage(`/texture/${binName}?offset=${zlbOffs}&id=${id}`);
     }
 
     async _decompressTexture(zlbOffs, binFile, binName) {
