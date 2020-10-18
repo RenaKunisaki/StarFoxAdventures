@@ -25,10 +25,7 @@
   <model id="0x0007" type="object">
     <description>Star Fox emblem</description>
   </model>
-  <!-- XXX we might combine this with assets.xml and indicate missing by
-       the absence of any map entries
-  -->
-  <model id="0x0008" type="object" missing="1">
+  <model id="0x0008" type="object">
     <description>Duplicate of 0x0007?</description>
   </model>
   <model id="0x0009" type="character">
@@ -46,11 +43,17 @@
   <model id="0x0010" type="effect">
     <description>Small grey sphere</description>
   </model>
+  <model id="0x0012" type="effect">
+    <description>Orange ground quake effect</description>
+  </model>
   <model id="0x0013" type="effect">
     <description>Red ground quake effect</description>
   </model>
   <model id="0x0014" type="effect">
     <description>Blue ground quake effect</description>
+  </model>
+  <model id="0x0015" type="effect">
+    <description>Green ground quake effect</description>
   </model>
   <model id="0x0016" type="character">
     <description>Blue SharpClaw</description>
@@ -76,13 +79,13 @@
   <model id="0x002A" type="enemy">
     <description>Dino enemy (Kooshy)</description>
   </model>
-  <model id="0x002B" type="enemy" missing="1">
+  <model id="0x002B" type="enemy">
     <description>Grimble</description>
   </model>
   <model id="0x002C" type="enemy">
     <description>A toad with a mushroom on its head (PinPon)</description>
   </model>
-  <model id="0x002D" type="enemy" missing="1">
+  <model id="0x002D" type="enemy">
     <description>Hagabon</description>
   </model>
   <model id="0x002E" type="enemy">
@@ -91,13 +94,13 @@
   <model id="0x0030" type="scenery">
     <description>Hole for Kaldachom</description>
   </model>
-  <model id="0x0031" type="enemy" missing="1">
+  <model id="0x0031" type="enemy">
     <description>Mikaladon</description>
   </model>
   <model id="0x0032" type="enemy">
     <description>Tiny dragon thing (WB)</description>
   </model>
-  <model id="0x0033" type="enemy" missing="1">
+  <model id="0x0033" type="enemy">
     <description>Weevil</description>
   </model>
   <model id="0x0034" type="enemy">
@@ -121,10 +124,10 @@
   <model id="0x003A" type="scenery">
     <description>Big dead tree (snow version)</description>
   </model>
-  <model id="0x003B" type="scenery" missing="1">
+  <model id="0x003B" type="scenery">
     <description>Tumbleweed</description>
   </model>
-  <model id="0x003C" type="scenery" missing="1">
+  <model id="0x003C" type="scenery">
     <description>Tumbleweed</description>
   </model>
   <model id="0x003D" type="enemy">
@@ -136,13 +139,13 @@
   <model id="0x0040" type="enemy">
     <description>A raptor (ShadowHunte)</description>
   </model>
-  <model id="0x0042" type="enemy" missing="1">
+  <model id="0x0042" type="enemy">
     <description>SwampStride</description>
   </model>
   <model id="0x0044" type="hazard">
     <description>Ice ball</description>
   </model>
-  <model id="0x0046" type="scenery" missing="1">
+  <model id="0x0046" type="scenery">
     <description>KooshyHill</description>
   </model>
   <model id="0x0048" type="projectile">
@@ -178,44 +181,50 @@
   <model id="0x0058">
     <description>Green rock?</description>
   </model>
-  <model id="0x0059" missing="1">
+  <model id="0x0059">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x005A" missing="1">
+  <model id="0x005A">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x005B" missing="1">
+  <model id="0x005B">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x005C" missing="1">
+  <model id="0x005C">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x005D" missing="1">
+  <model id="0x005D">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x005E" missing="1">
+  <model id="0x005E">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x005F" missing="1">
+  <model id="0x005F">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x0060" missing="1">
+  <model id="0x0060">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x0061" missing="1">
+  <model id="0x0061">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x0062" missing="1">
+  <model id="0x0062">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x0063" missing="1">
+  <model id="0x0063">
     <description>DIMBossIceS</description>
   </model>
-  <model id="0x0064" missing="1">
+  <model id="0x0064">
     <description>DIMBossIceS</description>
   </model>
   <model id="0x006C" type="scenery">
     <description>Big metal spiky ball</description>
+  </model>
+  <model id="0x006D" type="enemy">
+    <description>T-Rex Boss</description>
+  </model>
+  <model id="0x006E" type="enemy">
+    <description>T-Rex Boss</description>
   </model>
   <model id="0x006F" type="scenery">
     <description>Floor tile with sun</description>
@@ -268,7 +277,7 @@
   <model id="0x0093" type="character">
     <description>Chained yellow dinosaur</description>
   </model>
-  <model id="0x00AA" type="effect" missing="1">
+  <model id="0x00AA" type="effect">
     <description>FlameBall</description>
   </model>
   <model id="0x00B1" type="object">
@@ -312,6 +321,9 @@
   </model>
   <model id="0x010D" type="scenery">
     <description>Stone tablet with writing</description>
+  </model>
+  <model id="0x0116" type="scenery">
+    <description>A rock</description>
   </model>
   <model id="0x0118" type="scenery">
     <description>A fish</description>
@@ -409,7 +421,7 @@
   <model id="0x02D1" type="scenery">
     <description>N64 logo</description>
   </model>
-  <model id="0x02D3" type="scenery" missing="1">
+  <model id="0x02D3" type="scenery">
     <description>Rare logo</description>
   </model>
   <model id="0x02D5" type="debug">
@@ -433,14 +445,32 @@
   <model id="0x02FC" type="object">
     <description>Snow bike</description>
   </model>
-  <model id="0x031B" type="debug">
+  <model id="0x0310" type="object">
+    <description>Yellow crystal</description>
+  </model>
+  <model id="0x0311" type="object">
+    <description>Light blue crystal</description>
+  </model>
+  <model id="0x031B" type="object">
     <description>Red crystal</description>
+  </model>
+  <model id="0x031C" type="object">
+    <description>Green crystal</description>
+  </model>
+  <model id="0x031D" type="object">
+    <description>Blue crystal</description>
   </model>
   <model id="0x0324" type="item">
     <description>CloudRunner Flute</description>
   </model>
+  <model id="0x032B" type="object">
+    <description>Door with sun</description>
+  </model>
   <model id="0x0336" type="object">
     <description>Big red button</description>
+  </model>
+  <model id="0x0345" type="object">
+    <description>2D sprite of metal panel</description>
   </model>
   <model id="0x0353" type="object">
     <description>Yellow/purple egg</description>
@@ -463,16 +493,22 @@
   <model id="0x03A1" type="scenery">
     <description>U pipe</description>
   </model>
+  <model id="0x03DB" type="object">
+    <description>Silver key</description>
+  </model>
   <model id="0x034B" type="character">
     <description>Blue pterodactyl</description>
   </model>
-  <model id="0x034C" type="character" missing="1">
+  <model id="0x034C" type="character">
     <description>CFrunnersta</description>
+  </model>
+  <model id="0x0435" type="character">
+    <description>King EarthWalker</description>
   </model>
   <model id="0x0439" type="item">
     <description>Map</description>
   </model>
-  <model id="0x0442" type="item" missing="1">
+  <model id="0x0442" type="item">
     <description>SPStaffHitB</description>
   </model>
   <model id="0x0443" type="item">
@@ -481,7 +517,7 @@
   <model id="0x0444" type="item">
     <description>Rock Candy</description>
   </model>
-  <model id="0x0445" type="item" missing="1">
+  <model id="0x0445" type="item">
     <description>PDA</description>
   </model>
   <model id="0x0446" type="item">
@@ -571,8 +607,14 @@
   <model id="0x047E" type="debug">
     <description>Three arrows</description>
   </model>
+  <model id="0x0486" type="effect">
+    <description>Blue laser</description>
+  </model>
   <model id="0x0487" type="effect">
-    <description>Gray sphere</description>
+    <description>Green laser</description>
+  </model>
+  <model id="0x0488" type="effect">
+    <description>Red laser</description>
   </model>
   <model id="0x0489" type="effect">
     <description>Fireball</description>
@@ -606,6 +648,12 @@
   </model>
   <model id="0x04B4" type="effect">
     <description>2D sun sprite</description>
+  </model>
+  <model id="0x04BA" type="effect">
+    <description>Vortex</description>
+  </model>
+  <model id="0x04D3" type="object">
+    <description>Cactus</description>
   </model>
   <model id="0x04D6" type="effect">
     <description>Missile flame</description>

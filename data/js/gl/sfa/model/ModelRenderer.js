@@ -16,6 +16,7 @@ export default class ModelRenderer {
          */
         this.curTexture = null;
         this.curShader  = null;
+        this._didRender = false;
     }
 
     _setupToRender() {
@@ -76,7 +77,9 @@ export default class ModelRenderer {
     render() {
         /** Render the model.
          */
+        //if(this._didRender) return;
         const gx=this.gx, gl=this.gl, model=this.model;
+        this.gx.reset();
         this._setupToRender();
 
         //parse render ops
@@ -105,6 +108,7 @@ export default class ModelRenderer {
                         (ops.offset-4).toString(16));
             }
         }
+        this._didRender = true;
     }
 
     _renderOpTexture() {

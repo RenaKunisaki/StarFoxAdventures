@@ -194,7 +194,6 @@ export default class Context {
             this.clearColor[2], this.clearColor[3]);
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this.gx.reset();
         //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
         this.renderer.render();
         //this.gx.drawBoundCube();
@@ -204,7 +203,6 @@ export default class Context {
         gl.clearColor(1.0, 1.0, 1.0, 1.0);
         gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        this.gx.reset();
         gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
         this.renderer.renderPickBuffer();
     }

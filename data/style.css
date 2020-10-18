@@ -51,7 +51,7 @@ tr:hover { background: #666 }
 tr.map .name { width: 12em }
 tr.map .count { width: 2em }
 
-.missing-model { font-style: italic }
+.missing-model { color: #F88 }
 .gametext { font-style: italic }
 
 

@@ -4,7 +4,7 @@
 import {E} from './Element.js';
 import {get, getObjects, getGameTexts, getMaps, getBits, finishLoading, setupMain} from './Util.js';
 
-let gameTexts, maps, gameBits, modelInfo;
+let gameTexts, maps, gameBits, modelInfo, assetList;
 
 function makeTableForObject(objs, obj) {
     let   id    = obj.getAttribute('id').substr(2);
@@ -29,10 +29,16 @@ function makeTableForObject(objs, obj) {
         let infoText = '', isMissing = false, modelType = 'unknown';
         const modInfo = modelInfo.getElementById('0x'+mid);
         if(modInfo) {
-            isMissing = modInfo.getAttribute('missing');
             modelType = modInfo.getAttribute('type');
             try { infoText = modInfo.getElementsByTagName('description')[0].textContent; }
             catch(ex) {}
+        }
+
+        //check if present in any map
+        if(!assetList.evaluate(
+            `//assets/models/model[@idx="0x${mid}"]/map`, assetList,
+            null, XPathResult.ANY_UNORDERED_NODE_TYPE, null).singleNodeValue) {
+            isMissing = true;
         }
 
         //get in-game text
@@ -197,6 +203,7 @@ async function main() {
     maps       = await getMaps();
     gameBits   = await getBits();
     modelInfo  = (await get({path:'models.xml', mimeType:'text/xml; charset=utf-8'})).responseXML;
+    assetList  = (await get({path:'assets.xml', mimeType:'text/xml; charset=utf-8'})).responseXML;
     makeObjectsTable(objs);
 }
 setupMain(main);

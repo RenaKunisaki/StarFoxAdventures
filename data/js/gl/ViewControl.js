@@ -26,7 +26,7 @@ export default class ViewControl {
         this.btnReset = E.button('reset', "Reset");
         this.btnReset.addEventListener('click', e => this._reset());
 
-        this.element = E.details('gl-view-control',
+        this.element = E.details('gl-view-control', {open:'open'},
             E.summary(null, "View"),
             E.table(
                 E.tr(E.th(this.btnReset),

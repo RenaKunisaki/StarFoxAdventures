@@ -2,6 +2,7 @@ import {E} from '/js/Element.js';
 
 export default class ModelDataView {
     /** Widget for exploring the data in a model, or really any object.
+     *  Not currently used.
      */
     constructor(object) {
         this.obj = object;
