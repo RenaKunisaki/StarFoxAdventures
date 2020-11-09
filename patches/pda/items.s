@@ -2,15 +2,16 @@
 # pointers to the submodules.
 
 .set MENU_PAGE_NONE,          0xFF
-.set MENU_PAGE_GAME_SETTINGS, 0
-.set MENU_PAGE_VIDEO,         1
-.set MENU_PAGE_CAMERA,        2
-.set MENU_PAGE_AUDIO,         3
-.set MENU_PAGE_DEBUG,         4
-.set MENU_PAGE_DEBUG_TEXT,    5
-.set MENU_PAGE_DEBUG_MAP,     6
-.set MENU_PAGE_DEBUG_DATA,    7
-.set MENU_PAGE_DEBUG_RENDER,  8
+.set MENU_PAGE_GAME_SETTINGS, 0x00
+.set MENU_PAGE_VIDEO,         0x01
+.set MENU_PAGE_CAMERA,        0x02
+.set MENU_PAGE_AUDIO,         0x03
+.set MENU_PAGE_DEBUG,         0x04
+.set MENU_PAGE_DEBUG_TEXT,    0x05
+.set MENU_PAGE_DEBUG_MAP,     0x06
+.set MENU_PAGE_DEBUG_DATA,    0x07
+.set MENU_PAGE_DEBUG_RENDER,  0x08
+.set MENU_PAGE_DEBUG_CHEAT,   0x09
 
 menuPages:
     .int itemDrawFuncs_gameSettings   - mainLoop
@@ -31,6 +32,8 @@ menuPages:
     .int itemAdjustFuncs_debugData    - mainLoop
     .int itemDrawFuncs_debugRender    - mainLoop
     .int itemAdjustFuncs_debugRender  - mainLoop
+    .int itemDrawFuncs_debugCheat     - mainLoop
+    .int itemAdjustFuncs_debugCheat   - mainLoop
     .int 0
 
 menuPageStructure:
@@ -79,9 +82,14 @@ menuPageStructure:
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
     # Debug Render
-    .byte MENU_PAGE_DEBUG_DATA # previous
-    .byte MENU_PAGE_DEBUG_TEXT # next
-    .byte MENU_PAGE_DEBUG      # parent
+    .byte MENU_PAGE_DEBUG_DATA  # previous
+    .byte MENU_PAGE_DEBUG_CHEAT # next
+    .byte MENU_PAGE_DEBUG       # parent
+    .byte 0
+    # Debug Cheat
+    .byte MENU_PAGE_DEBUG_RENDER # previous
+    .byte MENU_PAGE_DEBUG_TEXT   # next
+    .byte MENU_PAGE_DEBUG        # parent
     .byte 0
 
 # ENSURE THAT THESE TABLES MATCH.
@@ -226,12 +234,14 @@ itemAdjustFuncs_debugMap:
 itemDrawFuncs_debugData:
     .int s_Data                - mainLoop # title
     .int drawItem_gameBits     - mainLoop
+    .int drawItem_debugCheat   - mainLoop
     .int drawItem_saveGame     - mainLoop
     .int drawItem_heap         - mainLoop
     .int 0
 
 itemAdjustFuncs_debugData:
     .int adjItem_gameBits     - mainLoop
+    .int adjItem_debugCheat   - mainLoop
     .int adjItem_saveGame     - mainLoop
     .int adjItem_heap         - mainLoop
 
@@ -245,6 +255,28 @@ itemAdjustFuncs_debugRender:
     .int adjItem_textureDebug - mainLoop
     .int adjItem_hitboxes     - mainLoop
 
+itemDrawFuncs_debugCheat:
+    .int s_EditPlayerState     - mainLoop # title
+    .int drawItem_curHP        - mainLoop
+    .int drawItem_maxHP        - mainLoop
+    .int drawItem_curMP        - mainLoop
+    .int drawItem_maxMP        - mainLoop
+    .int drawItem_curMoney     - mainLoop
+    .int drawItem_curLives     - mainLoop
+    .int drawItem_maxLives     - mainLoop
+    .int drawItem_unlockAll    - mainLoop
+    .int 0
+
+itemAdjustFuncs_debugCheat:
+    .int adjItem_curHP         - mainLoop
+    .int adjItem_maxHP         - mainLoop
+    .int adjItem_curMP         - mainLoop
+    .int adjItem_maxMP         - mainLoop
+    .int adjItem_curMoney      - mainLoop
+    .int adjItem_curLives      - mainLoop
+    .int adjItem_maxLives      - mainLoop
+    .int adjItem_unlockAll     - mainLoop
+
 
 pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Game Settings
@@ -256,6 +288,7 @@ pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Debug Map
     .int inputFuncDummy       - mainLoop # Debug Data
     .int inputFuncDummy       - mainLoop # Debug Render
+    .int inputFuncDummy       - mainLoop # Debug Cheat
 
 
 inputFuncDummy: blr

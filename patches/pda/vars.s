@@ -11,7 +11,7 @@
 # because it makes it easier to see when a constant is duplicated
 # and just reuse it for both labels.
 
-.set SPAWN_MENU_MAX_PARAMS,16
+.set SPAWN_MENU_MAX_PARAMS,10
 .align 4 # just in case
 
 # float constants
@@ -48,7 +48,7 @@ spawnMenuParams:
     .int  0
     .endr
 spawnMenuObjId: .int   -1
-spawnMenuType:  .short 0x176
+spawnMenuType:  .short 0x2CF
 heapMenuIdx:    .short 0
 bitMenuIdx:     .short 0
 streamTestId:   .short 0
@@ -60,14 +60,14 @@ minimapAlphaOverride: .byte 255
 spawnMenuNumParams:   .byte 0
 spawnMenuCursor:      .byte 0
 spawnMenuCursorX:     .byte 0
-spawnMenuFlags:       .byte 1
-spawnMenuLoadFlags:   .byte 0xA
+spawnMenuFlags:       .byte 5
+spawnMenuLoadFlags:   .byte 0x8
 spawnMenuMapStates1:  .byte 0
 spawnMenuMapStates2:  .byte 4
 spawnMenuBound:       .byte 100
 spawnMenuUnk7:        .byte 0x96
-spawnMenuMapId:       .byte 0xEE
-spawnMenuObjNo:       .byte 0xBB
+spawnMenuMapId:       .byte 0xFF
+spawnMenuObjNo:       .byte 0xFF
 hudFullScreen:    .byte 1
 menuVisible:      .byte 0
 menuSelItem:      .byte 0
@@ -189,6 +189,17 @@ s_Heap:           .string "Heap"
 s_Textures:       .string "Textures"
 s_Hitboxes:       .string "Hitboxes: %s"
 
+# Debug Cheat menu
+s_EditPlayerState:.string "Edit Player State"
+s_curHP:          .string "Cur HP: %d"
+s_maxHP:          .string "Max HP: %d"
+s_curMP:          .string "Cur MP: %d"
+s_maxMP:          .string "Max MP: %d"
+s_curMoney:       .string "Money: %d"
+s_curLives:       .string "Cur Lives: %d"
+s_maxLives:       .string "Max Lives: %d"
+s_unlockAll:      .string "Unlock Everything"
+
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "
@@ -226,8 +237,9 @@ s_unk7:            .string "Unk07:       %s %02X"
 s_objID:           .string "Obj ID:      %08X"
 s_spawnMap:        .string "Map ID:      %s %02X"
 s_spawnObjNo:      .string "Obj No.:     %s %02X"
-s_spawnParam:      .string "Param %02X:   %08X"
+s_spawnParam:      .string "Param %02X:    %08X"
 s_spawnInstrs:     .string "Start:Spawn B:Exit X:+ Y:-"
+s_spawned:         .string "Spawned obj: %08X @ %f, %f, %f"
 
 # GameBits
 fmt_bitListHeader: .string "Bit  T Offs Sz Unk: Val"

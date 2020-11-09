@@ -46,6 +46,16 @@ adjItem_debugRender: # r3 = amount to adjust by (0=A button)
 
 #######################################################################
 
+drawItem_debugCheat:
+    addi    r4,  r14, (s_EditPlayerState - mainLoop)
+    blr
+
+adjItem_debugCheat: # r3 = amount to adjust by (0=A button)
+    li      r4,  MENU_PAGE_DEBUG_CHEAT
+    b       .debugSetPage
+
+#######################################################################
+
 drawItem_textTest:
     addi    r4,  r14, (s_TextTest - mainLoop)
     lhz     r5,  (textTestId - mainLoop)(r14)

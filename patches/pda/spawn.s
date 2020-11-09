@@ -3,7 +3,7 @@
 .set SPAWN_MENU_XPOS,    15
 .set SPAWN_MENU_YPOS,    50
 .set SPAWN_MENU_WIDTH,  600
-.set SPAWN_MENU_HEIGHT, 360
+.set SPAWN_MENU_HEIGHT, 405
 .set SPAWN_MENU_CURSOR_X_OFFS, 159
 .set SPAWN_MENU_ITEM_OBJECT,     0
 .set SPAWN_MENU_ITEM_NUM_PARAMS, 1
@@ -111,10 +111,11 @@ spawnMenu_Main: # draw the menu
 
     # else, draw params
     addi    r4,  r14, s_spawnParam - mainLoop
-    subi    r5,  r23, SPAWN_MENU_ITEM_PARAMS
+    subi    r5,  r23, (SPAWN_MENU_ITEM_PARAMS - 0)
     slwi    r5,  r5,  2
     addi    r6,  r5,  spawnMenuParams - mainLoop
     lwzx    r6,  r6,  r14
+    addi    r5,  r5,  0x18
     b       .spawnMenu_drawLine
 
 
@@ -493,7 +494,7 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     lbz     r3,  (spawnMenuNumParams - mainLoop)(r14)
     slwi    r3,  r3,  2
     addi    r3,  r3,  0x18
-    lhz     r4,  (spawnMenuType - mainLoop)(r14)
+    lha     r4,  (spawnMenuType - mainLoop)(r14)
     CALL    objAlloc
 
     LOADW   r21, pCamera
@@ -504,32 +505,69 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     beq     .spawnMenu_noCamera # no focus object
 
     # spawn at location of focused object.
-    lwz     r4,  0x0C(r16)
-    stw     r4,  0x08(r3)
+    lfs     f2,  (.spawnMenu_yOffs  - mainLoop)(r14)
+    lfs     f3,  (.spawnMenu_xzOffs - mainLoop)(r14)
+
+    lfs     f1,  0x0C(r16)
+    fadds   f1,  f1,  f3
+    stfs    f1,  0x08(r3) # X
+
     lfs     f1,  0x10(r16)
-    lfs     f2,  (.spawnMenu_yOffs - mainLoop)(r14)
     fadds   f1,  f1,  f2 # offset to near player's eye level
     stfs    f1,  0x0C(r3) # so it won't fall through ground
-    lwz     r4,  0x14(r16)
-    stw     r4,  0x10(r3)
+
+    lfs     f1,  0x14(r16)
+    fadds   f1,  f1,  f3
+    stfs    f1,  0x10(r3) # Z
 
 .spawnMenu_noCamera:
-    lbz     r4,  (spawnMenuLoadFlags - mainLoop)(r14)
-    stb     r4,  0x04(r3)
     lbz     r4,  (spawnMenuMapStates1 - mainLoop)(r14)
     stb     r4,  0x03(r3)
+    lbz     r4,  (spawnMenuLoadFlags  - mainLoop)(r14)
+    stb     r4,  0x04(r3)
     lbz     r4,  (spawnMenuMapStates2 - mainLoop)(r14)
     stb     r4,  0x05(r3)
-    lbz     r4,  (spawnMenuBound - mainLoop)(r14)
+    lbz     r4,  (spawnMenuBound      - mainLoop)(r14)
     stb     r4,  0x06(r3)
-    lbz     r4,  (spawnMenuUnk7 - mainLoop)(r14)
+    lbz     r4,  (spawnMenuUnk7       - mainLoop)(r14)
     stb     r4,  0x07(r3)
-    lbz     r4,  (spawnMenuFlags - mainLoop)(r14)
-    lbz     r5,  (spawnMenuMapId - mainLoop)(r14)
-    lbz     r6,  (spawnMenuObjNo - mainLoop)(r14)
+    lwz     r4,  (spawnMenuObjId      - mainLoop)(r14)
+    stw     r4,  0x14(r3)
+    lbz     r4,  (spawnMenuFlags      - mainLoop)(r14)
+    lbz     r5,  (spawnMenuMapId      - mainLoop)(r14)
+    extsb   r5,  r5
+    lbz     r6,  (spawnMenuObjNo      - mainLoop)(r14)
+    extsb   r6,  r6
+    #li      r4,  4
+    #li      r5,  -1
+    #li      r6,  -1
     li      r7,  0 # matrix*
     CALL    objInstantiateCharacter
+
+    li      r4,  0
+    CALL    0x8002b884 # objSetModel
+    # some objects like to spawn invisible.
+    lhz     r4,  0x06(r3)
+    andi.   r4,  r4, (~0x6000) & 0xFFFF
+    sth     r4,  0x06(r3)
+    lbz     r4,  0xAF(r3)
+    andi.   r4,  r4, (~0x28) & 0xFFFF
+    stb     r4,  0xAF(r3)
+    lbz     r4,  0x20(r3)
+    andi.   r4,  r4, (~0x28) & 0xFFFF
+    stb     r4,  0x20(r3)
+
+    mr      r4,  r3
+    addi    r3,  r14, s_spawned - mainLoop
+    cmpwi   r4,  0
+    beq     .spawnFailed
+    lfs     f1,  0x0C(r4)
+    lfs     f2,  0x10(r4)
+    lfs     f3,  0x14(r4)
+.spawnFailed:
+    CALL    OSReport
     b       menuEndSub
 
-#.spawnMenu_yOffs: .float 40
-.spawnMenu_yOffs: .float 0
+.spawnMenu_xzOffs: .float 10
+.spawnMenu_yOffs:  .float 40
+#.spawnMenu_yOffs: .float 0

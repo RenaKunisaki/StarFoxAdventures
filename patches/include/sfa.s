@@ -53,6 +53,7 @@
 .set padGetStickX,0x80014cc0 #s8 (int pad)
 .set padGetStickY,0x80014c6c #s8 (int pad)
 .set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
+.set SaveGame_getCurCharacterState,0x800e9b9c
 .set saveGame_save,0x800e86d0
 .set setSoundMode,0x80009920 #void (u8 mode, bool force)
 .set setSubtitlesEnabled,0x8001bcd8
@@ -108,6 +109,7 @@
 .set distortionFilterAngle2, 0x803dce44 #float distortion filter angle 2
 .set distortionFilterColor,  0x803dce40 #color distortion filter color
 .set distortionFilterVector, 0x803821c8 #vec3f
+.set dllRefCount,            0x8033931c #s16 per DLL
 .set enableDebugText,        0x803dda28 #bool
 .set enableRumble,           0x803dc909 #bool
 .set fovY,                   0x803dc8a4 #float
