@@ -52,6 +52,7 @@
 .set OSReport,0x8007d6dc
 .set padGetStickX,0x80014cc0 #s8 (int pad)
 .set padGetStickY,0x80014c6c #s8 (int pad)
+.set playerDie,0x802aaa80 #void (ObjInstance*)
 .set playerGetNearestObject,0x80036e58 # int idx,ObjInstance *obj,float *outDistance, return ObjInstance*
 .set SaveGame_getCurCharacterState,0x800e9b9c
 .set saveGame_save,0x800e86d0

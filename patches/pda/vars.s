@@ -199,6 +199,7 @@ s_curMoney:       .string "Money: %d"
 s_curLives:       .string "Cur Lives: %d"
 s_maxLives:       .string "Max Lives: %d"
 s_unlockAll:      .string "Unlock Everything"
+s_killMe:         .string "Kill Player"
 
 
 # Objects menu

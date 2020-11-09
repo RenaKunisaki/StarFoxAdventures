@@ -265,6 +265,7 @@ itemDrawFuncs_debugCheat:
     .int drawItem_curLives     - mainLoop
     .int drawItem_maxLives     - mainLoop
     .int drawItem_unlockAll    - mainLoop
+    .int drawItem_killMe       - mainLoop
     .int 0
 
 itemAdjustFuncs_debugCheat:
@@ -276,6 +277,7 @@ itemAdjustFuncs_debugCheat:
     .int adjItem_curLives      - mainLoop
     .int adjItem_maxLives      - mainLoop
     .int adjItem_unlockAll     - mainLoop
+    .int adjItem_killMe        - mainLoop
 
 
 pageInputFuncs:

@@ -1,5 +1,35 @@
 .ascii "dbgcheat" # 8 byte file ID for debug
 
+debugCheatAdjustValue:
+    # r5 = value, r6 = max, r20 = adjust amount
+    # if adjusting fast, clamps to zero/max.
+    # if pressing A, resets to max.
+    # if adjust is 0 (A button), refill to max.
+    cmpwi   r20, 0
+    bne     .debugCheatAdjustValue_noRefill
+    mr      r5,  r6 # refill to max
+
+.debugCheatAdjustValue_noRefill:
+    # if adjust is by more than 1, clamp to zero/max.
+    add     r5,  r5,  r20
+    cmpwi   r20, -1
+    blt     .debugCheatAdjustValue_clamp
+    cmpwi   r20,  1
+    blelr
+
+.debugCheatAdjustValue_clamp:
+    cmpwi   r5,  0
+    blt     .debugCheatAdjustValue_clampToZero # cur < 0 ?
+    cmpw    r5,  r6
+    bltlr   # cur < max ?
+    mr      r5,  r6 # cur = max
+    blr
+
+.debugCheatAdjustValue_clampToZero:
+    li      r5,  0
+    blr
+
+
 drawItem_curHP:
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
     mflr    r0
@@ -25,12 +55,8 @@ adjItem_curHP: # r3 = amount to adjust by (0=A button)
     mr      r21, r9 # sound effect ID
     CALL    SaveGame_getCurCharacterState
     lbz     r5,  0x00(r3) # get cur
-    cmpwi   r20, 0
-    bne     .adjCurHp_noRefill
-    lbz     r5,  0x01(r3) # get max
-
-.adjCurHp_noRefill:
-    add     r5,  r5,  r20
+    lbz     r6,  0x01(r3) # get max
+    bl      debugCheatAdjustValue
     stb     r5,  0x00(r3)
 
 dbgCheatAdjEnd:
@@ -90,14 +116,9 @@ adjItem_curMP: # r3 = amount to adjust by (0=A button)
     mr      r21, r9 # sound effect ID
     CALL    SaveGame_getCurCharacterState
     lha     r5,  0x04(r3) # get cur
-    cmpwi   r20, 0
-    bne     .adjCurMp_noRefill
     lha     r5,  0x06(r3) # get max
-
-.adjCurMp_noRefill:
-    add     r5,  r5,  r20
+    bl      debugCheatAdjustValue
     sth     r5,  0x04(r3)
-
     b       dbgCheatAdjEnd
 
 #######################################################################
@@ -153,9 +174,9 @@ adjItem_curMoney: # r3 = amount to adjust by (0=A button)
     mr      r21, r9 # sound effect ID
     CALL    SaveGame_getCurCharacterState
     lbz     r5,  0x08(r3)
-    add     r5,  r5,  r20
+    li      r6,  255
+    bl      debugCheatAdjustValue
     stb     r5,  0x08(r3)
-
     b       dbgCheatAdjEnd
 
 #######################################################################
@@ -182,14 +203,9 @@ adjItem_curLives: # r3 = amount to adjust by (0=A button)
     mr      r21, r9 # sound effect ID
     CALL    SaveGame_getCurCharacterState
     lbz     r5,  0x09(r3) # get cur
-    cmpwi   r20, 0
-    bne     .adjCurLives_noRefill
-    li      r5,  10
-
-.adjCurLives_noRefill:
-    add     r5,  r5,  r20
+    lbz     r6,  0x0A(r3) # get max
+    bl      debugCheatAdjustValue
     stb     r5,  0x09(r3)
-
     b       dbgCheatAdjEnd
 
 #######################################################################
@@ -247,6 +263,26 @@ adjItem_unlockAll: # r3 = amount to adjust by (0=A button)
     b       .unlockAll_next
 
 .unlockAll_done:
+    b       dbgCheatAdjEnd
+
+#######################################################################
+
+drawItem_killMe:
+    addi    r4,  r14, (s_killMe - mainLoop)
+    blr
+
+adjItem_killMe: # r3 = amount to adjust by (0=A button)
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    mflr    r0
+    stw     r0,  SP_LR_SAVE(r1)
+    stmw    r13, SP_GPR_SAVE(r1)
+    mr      r21, r9
+
+    cmpwi   r3,  0
+    bne     dbgCheatAdjEnd
+
+    LOADW   r3,  pPlayer
+    CALL    playerDie
     b       dbgCheatAdjEnd
 
 .unlockAll_table: # GameBits to set to max
