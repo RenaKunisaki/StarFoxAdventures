@@ -43,11 +43,14 @@ f_centerY:     .float 240
 f_mapCellScale: .float 640.0
 
 # menu state
+spawnMenuObjId: .int -1
 spawnMenuParams:
     .rept SPAWN_MENU_MAX_PARAMS
     .int  0
     .endr
-spawnMenuObjId: .int   -1
+spawnMenuXPos:  .int 0
+spawnMenuYPos:  .int 0
+spawnMenuZPos:  .int 0
 spawnMenuType:  .short 0x2CF
 heapMenuIdx:    .short 0
 bitMenuIdx:     .short 0
@@ -238,8 +241,11 @@ s_unk7:            .string "Unk07:       %s %02X"
 s_objID:           .string "Obj ID:      %08X"
 s_spawnMap:        .string "Map ID:      %s %02X"
 s_spawnObjNo:      .string "Obj No.:     %s %02X"
+s_xPos:            .string "X Position:  %08X"
+s_yPos:            .string "Y Position:  %08X"
+s_zPos:            .string "Z Position:  %08X"
 s_spawnParam:      .string "Param %02X:    %08X"
-s_spawnInstrs:     .string "Start:Spawn B:Exit X:+ Y:-"
+s_spawnInstrs:     .string "Start:Spawn B:Exit X:+ Y:- Z:Player Coords"
 s_spawned:         .string "Spawned obj: %08X @ %f, %f, %f"
 
 # GameBits

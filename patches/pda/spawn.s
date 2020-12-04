@@ -16,7 +16,10 @@
 .set SPAWN_MENU_ITEM_OBJID,      8
 .set SPAWN_MENU_ITEM_MAPID,      9
 .set SPAWN_MENU_ITEM_OBJNO,     10
-.set SPAWN_MENU_ITEM_PARAMS,    11
+.set SPAWN_MENU_ITEM_XPOS,      11
+.set SPAWN_MENU_ITEM_YPOS,      12
+.set SPAWN_MENU_ITEM_ZPOS,      13
+.set SPAWN_MENU_ITEM_PARAMS,    14
 
 spawnMenu:
     # subroutine: runs the Spawn Object menu.
@@ -108,6 +111,12 @@ spawnMenu_Main: # draw the menu
     beq     .spawnMenu_drawMapId
     cmpwi   r23, SPAWN_MENU_ITEM_OBJNO
     beq     .spawnMenu_drawObjNo
+    cmpwi   r23, SPAWN_MENU_ITEM_XPOS
+    beq     .spawnMenu_drawXPos
+    cmpwi   r23, SPAWN_MENU_ITEM_YPOS
+    beq     .spawnMenu_drawYPos
+    cmpwi   r23, SPAWN_MENU_ITEM_ZPOS
+    beq     .spawnMenu_drawZPos
 
     # else, draw params
     addi    r4,  r14, s_spawnParam - mainLoop
@@ -167,6 +176,22 @@ spawnMenu_Main: # draw the menu
 .spawnMenu_drawObjId:
     addi    r4,  r14, s_objID - mainLoop
     lwz     r5,  (spawnMenuObjId - mainLoop)(r14)
+    b       .spawnMenu_drawLine
+
+# XXX these should be decimal
+.spawnMenu_drawXPos:
+    addi    r4,  r14, s_xPos - mainLoop
+    lwz     r5,  (spawnMenuXPos - mainLoop)(r14)
+    b       .spawnMenu_drawLine
+
+.spawnMenu_drawYPos:
+    addi    r4,  r14, s_yPos - mainLoop
+    lwz     r5,  (spawnMenuYPos - mainLoop)(r14)
+    b       .spawnMenu_drawLine
+
+.spawnMenu_drawZPos:
+    addi    r4,  r14, s_zPos - mainLoop
+    lwz     r5,  (spawnMenuZPos - mainLoop)(r14)
     b       .spawnMenu_drawLine
 
 .spawnMenu_drawMapId: # XXX this shouldn't be binary
@@ -294,6 +319,8 @@ spawnMenu_doInput:
     bne     .spawnMenu_incDigit
     andi.   r10, r3,  PAD_BUTTON_Y
     bne     .spawnMenu_decDigit
+    andi.   r10, r3,  PAD_BUTTON_Z
+    bne     .spawnMenu_grabCoords
 
     # check analog stick
     cmpwi   r5,   0x10
@@ -307,6 +334,37 @@ spawnMenu_doInput:
 
     # XXX use L/R to adjust fast (entire value)
 
+    b       menuEndSub
+
+.spawnMenu_grabCoords: # copy focused object coords to spawn coords
+    # get object of camera focus.
+    LOADW   r21, pCamera
+    cmpwi   r21, 0
+    beq     menuEndSub # no camera
+    lwz     r16, 0xA4(r21)
+    cmpwi   r16, 0
+    beq     menuEndSub # no focus object
+
+    lfs     f1,  0x0C(r16) # X pos
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r3,  (SP_FLOAT_TMP+4)(r1)
+    addi    r3,  r3, 5 # offset to not be directly on player
+    stw     r3,  (spawnMenuXPos - mainLoop)(r14)
+
+    lfs     f1,  0x10(r16) # Y pos
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r3,  (SP_FLOAT_TMP+4)(r1)
+    addi    r3,  r3, 30 # don't spawn at feet and fall through ground
+    stw     r3,  (spawnMenuYPos - mainLoop)(r14)
+
+    lfs     f1,  0x14(r16) # Z pos
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r3,  (SP_FLOAT_TMP+4)(r1)
+    addi    r3,  r3, 5 # offset to not be directly on player
+    stw     r3,  (spawnMenuZPos - mainLoop)(r14)
     b       menuEndSub
 
 .spawnMenu_close:
@@ -387,6 +445,12 @@ spawnMenu_doInput:
     beq     .spawnMenu_adjMapId
     cmpwi   r15, SPAWN_MENU_ITEM_OBJNO
     beq     .spawnMenu_adjObjNo
+    cmpwi   r15, SPAWN_MENU_ITEM_XPOS
+    beq     .spawnMenu_adjXPos
+    cmpwi   r15, SPAWN_MENU_ITEM_YPOS
+    beq     .spawnMenu_adjYPos
+    cmpwi   r15, SPAWN_MENU_ITEM_ZPOS
+    beq     .spawnMenu_adjZPos
 
     # else adjust parameter
     subi    r15, r15, SPAWN_MENU_ITEM_PARAMS
@@ -467,6 +531,30 @@ spawnMenu_doInput:
     stw     r4,  (spawnMenuObjId - mainLoop)(r14)
     b       .spawnMenu_afterMove
 
+.spawnMenu_adjXPos:
+    subi    r15, r15, 3
+    slwi    r15, r15, 2
+    lwz     r4,  (spawnMenuXPos - mainLoop)(r14)
+    bl      spawnMenu_adjustDigit
+    stw     r4,  (spawnMenuXPos - mainLoop)(r14)
+    b       .spawnMenu_afterMove
+
+.spawnMenu_adjYPos:
+    subi    r15, r15, 3
+    slwi    r15, r15, 2
+    lwz     r4,  (spawnMenuYPos - mainLoop)(r14)
+    bl      spawnMenu_adjustDigit
+    stw     r4,  (spawnMenuYPos - mainLoop)(r14)
+    b       .spawnMenu_afterMove
+
+.spawnMenu_adjZPos:
+    subi    r15, r15, 3
+    slwi    r15, r15, 2
+    lwz     r4,  (spawnMenuZPos - mainLoop)(r14)
+    bl      spawnMenu_adjustDigit
+    stw     r4,  (spawnMenuZPos - mainLoop)(r14)
+    b       .spawnMenu_afterMove
+
 spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     # r3: amount to adjust by.
     # r4: value to adjust.
@@ -496,31 +584,29 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     addi    r3,  r3,  0x18
     lha     r4,  (spawnMenuType - mainLoop)(r14)
     CALL    objAlloc
+    mr      r5,  r3
 
-    LOADW   r21, pCamera
-    cmpwi   r21, 0
-    beq     .spawnMenu_noCamera
-    lwz     r16, 0xA4(r21)
-    cmpwi   r16, 0
-    beq     .spawnMenu_noCamera # no focus object
+    lwz     r3,  (spawnMenuXPos       - mainLoop)(r14)
+    bl      intToFloat
+    stfs    f1,  0x08(r5) # X
 
-    # spawn at location of focused object.
-    lfs     f2,  (.spawnMenu_yOffs  - mainLoop)(r14)
-    lfs     f3,  (.spawnMenu_xzOffs - mainLoop)(r14)
+    lwz     r3,  (spawnMenuYPos       - mainLoop)(r14)
+    bl      intToFloat
+    stfs    f1,  0x0C(r5) # Y
 
-    lfs     f1,  0x0C(r16)
-    fadds   f1,  f1,  f3
-    stfs    f1,  0x08(r3) # X
+    lwz     r3,  (spawnMenuZPos       - mainLoop)(r14)
+    bl      intToFloat
+    stfs    f1,  0x10(r5) # Z
 
-    lfs     f1,  0x10(r16)
-    fadds   f1,  f1,  f2 # offset to near player's eye level
-    stfs    f1,  0x0C(r3) # so it won't fall through ground
+    # copy params and object ID
+    addi    r3,  r5,  0x14 # dest
+    addi    r4,  r14, spawnMenuObjId - mainLoop # src
+    lbz     r5,  (spawnMenuNumParams - mainLoop)(r14)
+    addi    r5,  r5,  1 # for obj ID, and avoids size of zero
+    slwi    r5,  r5,  2 # len
+    CALL    memcpy # returns dest
+    subi    r3,  r3,  0x14
 
-    lfs     f1,  0x14(r16)
-    fadds   f1,  f1,  f3
-    stfs    f1,  0x10(r3) # Z
-
-.spawnMenu_noCamera:
     lbz     r4,  (spawnMenuMapStates1 - mainLoop)(r14)
     stb     r4,  0x03(r3)
     lbz     r4,  (spawnMenuLoadFlags  - mainLoop)(r14)
@@ -531,8 +617,6 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     stb     r4,  0x06(r3)
     lbz     r4,  (spawnMenuUnk7       - mainLoop)(r14)
     stb     r4,  0x07(r3)
-    lwz     r4,  (spawnMenuObjId      - mainLoop)(r14)
-    stw     r4,  0x14(r3)
     lbz     r4,  (spawnMenuFlags      - mainLoop)(r14)
     lbz     r5,  (spawnMenuMapId      - mainLoop)(r14)
     extsb   r5,  r5
@@ -568,6 +652,6 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     CALL    OSReport
     b       menuEndSub
 
-.spawnMenu_xzOffs: .float 10
-.spawnMenu_yOffs:  .float 40
+#.spawnMenu_xzOffs: .float 10
+#.spawnMenu_yOffs:  .float 40
 #.spawnMenu_yOffs: .float 0
