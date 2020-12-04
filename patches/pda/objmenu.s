@@ -78,7 +78,6 @@ objMenu_List: # draw list of objects.
     bl      objMenu_drawCurObject
     # first item (selected) in blue
     LOAD    r3,  0x00FFFFFF
-    bl      menuSetTextColor
 
     li      r20, OBJ_MENU_YPOS + 8 # string Y pos
 
@@ -93,16 +92,15 @@ objMenu_List: # draw list of objects.
     bne     .objMenu_List_notFocused
 
     LOAD    r3,  0xFF00FFFF # pink (RGBA)
-    bl      menuSetTextColor
     b       .objMenu_List_notTarget
 
 .objMenu_List_notFocused:
     cmpw    r18, r23 # is this the target object?
     bne     .objMenu_List_notTarget
     LOAD    r3,  0xFFFF00FF # yellow
-    bl      menuSetTextColor
 
 .objMenu_List_notTarget:
+    bl      menuSetTextColor
     # make line
     addi    r3,  r1,  SP_STR_BUF
     addi    r4,  r14, fmt_objListEntry - mainLoop
@@ -129,7 +127,6 @@ objMenu_List: # draw list of objects.
     CALL    gameTextShowStr
 
     LOAD    r3,  0xFFFFFFFF
-    bl      menuSetTextColor
 
     # next line
     addi    r17, r17, 1
