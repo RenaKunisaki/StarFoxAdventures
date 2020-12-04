@@ -100,7 +100,9 @@ objMenu_List: # draw list of objects.
     addi    r4,  r14, fmt_objListEntry - mainLoop
     mr      r5,  r17 # idx
     #mr      r6,  r18 # addr
-    lwz     r6,  0x44(r18) # id and objdef
+    #lwz     r6,  0x44(r18) # id and objdef
+    lwz      r6,  0x4C(r18) # ObjDef*
+    lwz      r6,  0x14(r6)  # unique ID
     CALL    sprintf
 
     # manually copy the name since it's not terminated
