@@ -47,6 +47,7 @@ objMenu_List: # draw list of objects.
     cmpwi   r21, 0
     beq     .objMenu_List_noCamera
     lwz     r22, 0xA4(r21)
+    lwz     r23, 0x124(r21) # target object for A button
 
 .objMenu_List_noCamera: # draw the list
     # draw the boxes
@@ -91,10 +92,17 @@ objMenu_List: # draw list of objects.
     cmpw    r18, r22 # is this the focused object?
     bne     .objMenu_List_notFocused
 
-    LOAD    r3,  0xFF00FFFF
+    LOAD    r3,  0xFF00FFFF # pink (RGBA)
     bl      menuSetTextColor
+    b       .objMenu_List_notTarget
 
 .objMenu_List_notFocused:
+    cmpw    r18, r23 # is this the target object?
+    bne     .objMenu_List_notTarget
+    LOAD    r3,  0xFFFF00FF # yellow
+    bl      menuSetTextColor
+
+.objMenu_List_notTarget:
     # make line
     addi    r3,  r1,  SP_STR_BUF
     addi    r4,  r14, fmt_objListEntry - mainLoop
