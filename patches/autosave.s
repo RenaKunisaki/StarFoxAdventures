@@ -82,10 +82,24 @@ onMapLoad:
     #LOADW   r9,  PATCH_STATE_PTR
     #lbz     r4,  AUTOSAVE_ENABLED(r9)
 
+    # is autosave enabled?
     LOADWH  r9,  saveData
     LOADBL2 r4,  (saveData+0x10), r9
     andi.   r4,  r4, 0x80
     cmpwi   r4,  0
+    beq     .end
+
+    # prevent autosave in certain camera modes.
+    # this avoids saving when it's normally not possible which
+    # can break scripted events.
+    LOADW   r4,  cameraMode
+    cmpwi   r4,  0x45 # bike
+    beq     .end
+    cmpwi   r4,  0x47 # test of strength
+    beq     .end
+    cmpwi   r4,  0x4C # cutscene
+    beq     .end
+    cmpwi   r4,  0x4D # speaking to NPC
     beq     .end
 
     bl      .getpc
