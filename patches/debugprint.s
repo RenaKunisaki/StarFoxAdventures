@@ -5,6 +5,7 @@
 .text
 .include "common.s"
 .include "globals.s"
+.set REDIRECT_TO_CONSOLE,0 # send on-screen prints to console instead
 
 # define patches
 patchList:
@@ -18,7 +19,11 @@ patchList:
 
     # restore debugPrintf
     PATCH_WORD 0x801378A8, 0x480000A0 # debugPrintf
+.if REDIRECT_TO_CONSOLE
+    PATCH_B    0x80137948, hook_logPrintf # patch very beginning
+.else
     PATCH_B    0x8013798C, hook_logPrintf
+.endif
     PATCH_BL   0x80020c74, hook_debugPrintDraw
 
     # patch debug print to move to the very edge of the screen.
@@ -95,6 +100,9 @@ entry: # called as soon as our patch is loaded.
 
 
 hook_logPrintf: # hooked beginning of logPrintf
+.if REDIRECT_TO_CONSOLE
+    JUMP    OSReport, r0
+.else
     stw     r10, 0x24(r1) # replaced
     mflr    r11
     stw     r11, 0x68(r1) # stash lr too
@@ -118,6 +126,7 @@ hook_logPrintf: # hooked beginning of logPrintf
     lwz     r5, 0x68(r1)
     mtlr    r5
     JUMP    0x80137990, r0
+.endif
 
 
 hook_debugPrintDraw: # hooked call to debugPrintDraw
@@ -172,6 +181,11 @@ mainLoop: # called from main loop. r3 = mainLoop
 
     LOADW   r19,  PATCH_STATE_PTR
     lbz     r19,  DEBUG_TEXT_FLAGS(r19)
+
+.if REDIRECT_TO_CONSOLE # print a header message
+    addi    r3,  r14, (.fmt_start - mainLoop)@l
+    CALL    debugPrintf
+.endif
 
     # don't make debug text flash with HUD text
     # XXX why doesn't this work?
@@ -280,10 +294,10 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOAD    r3,  0x803a314c # map ID translation table
     lbzx    r7,  r3,  r7
 .notMap50:
-    LOAD    r5,  0x80311810 # generic map flags
+    LOAD    r5,  0x80311810 # objgroup flags
     slwi    r4,  r7, 1
     lhzx    r17, r5, r4 # get bit idx
-    LOAD    r5,  0x80311720 # map state
+    LOAD    r5,  0x80311720 # act number
     lhzx    r3,  r5, r4
     CALL    mainGetBit
     mr      r8,  r3
@@ -303,8 +317,11 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL    debugPrintf
 
     # %s is bugged...
-    LOADW   r3,  pCurMapInfo # map name
-    CALL    debugPrintf
+#.if REDIRECT_TO_CONSOLE
+#.else
+#    LOADW   r3,  pCurMapInfo # map name
+#    CALL    debugPrintf
+#.endif
 
 .noPlayer:
     # get camera object
@@ -328,14 +345,44 @@ mainLoop: # called from main loop. r3 = mainLoop
     stfd   f2,SP_FLOAT_TMP(r1)
     lwz    r6,SP_FLOAT_TMP+4(r1)
 
+    LOADW  r7,  cameraMode
+    LOADW  r8,  0x803dc8f0
+    LOADW  r9,  0x803dc8f4
+
     #lfs   f2, 0x10(r16)
     #lfs   f3, 0x14(r16)
     ## magic required to make floats print correctly
     ## no idea what this does
     #creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
 
-    addi r3, r14, (.fmt_cameraCoords - mainLoop)@l
-    CALL debugPrintf
+    addi    r3, r14, (.fmt_cameraCoords - mainLoop)@l
+    CALL    debugPrintf
+
+    # display heap stats
+    LOAD    r16, 0x803406A0 # heap 0
+    li      r15, 0 # idx
+    li      r5,  0 # total bytes
+    li      r6,  0 # total blocks
+    li      r7,  0 # used bytes
+    li      r8,  0 # used blocks
+.printNextHeap:
+    lwz     r9,  0x0C(r16) # total bytes
+    add     r5,  r5,  r9
+    lwz     r9,  0x00(r16) # total blocks
+    add     r6,  r6,  r9
+    lwz     r9,  0x10(r16) # used bytes
+    add     r7,  r7,  r9
+    lwz     r9,  0x04(r16) # used blocks
+    add     r8,  r8,  r9
+    addi    r16, r16, 0x14 # heap entry size
+    addi    r15, r15, 1
+    cmpwi   r15, 4
+    bne     .printNextHeap
+
+    mulli   r7,  r7,  100
+    divwu   r5,  r7,  r5 # used bytes percent
+    mulli   r8,  r8,  100
+    divwu   r6,  r8,  r6 # used blocks percent
 
     # display game state info
     addi  r3, r14, .fmt_gameState - mainLoop
@@ -364,6 +411,8 @@ mainLoop: # called from main loop. r3 = mainLoop
     beq     .noPlayerState
     addi    r3,  r14, (.fmt_playerState - mainLoop)@l
     lwz     r9,  0x00B8(r16) # get animState
+    cmpwi   r9,  0
+    beq     .noPlayerState
     lfs     f1,  0x0098(r16) # get anim timer
     lfs     f2,  0x0814(r9)  # get anim val
     lbz     r4,  0x0275(r9)  # get state ID
@@ -389,6 +438,8 @@ mainLoop: # called from main loop. r3 = mainLoop
 .noText:
 
     # display sequence info (XXX incomplete/wrong)
+.if REDIRECT_TO_CONSOLE
+.else
     andi.   r0,  r19,  DEBUG_TEXT_SEQ_STATE
     beq     .noSeq
     LOADWH  r9,  curSeqNo
@@ -416,6 +467,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     lwz     r10, 0x6C(r3)
     addi    r3,  r14, .fmt_seq2 - mainLoop
     CALL    debugPrintf
+.endif
 
 .noSeq:
 
@@ -452,6 +504,12 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL    debugPrintf
 .noObject:
 .end:
+
+.if REDIRECT_TO_CONSOLE # print a footer message
+    addi    r3,  r14, (.fmt_end - mainLoop)@l
+    CALL    debugPrintf
+.endif
+
     lwz  r14, SP_R14_SAVE(r1)
     lwz  r15, SP_R15_SAVE(r1)
     lwz  r16, SP_R16_SAVE(r1)
@@ -461,6 +519,9 @@ mainLoop: # called from main loop. r3 = mainLoop
     blr
 
 .drawBar:
+.if REDIRECT_TO_CONSOLE
+.drawBarWithOpacityAndHeight:
+.else
     li      r4, 0xFF    # opacity
     li      r7, 5       # height
 .drawBarWithOpacityAndHeight:
@@ -471,6 +532,7 @@ mainLoop: # called from main loop. r3 = mainLoop
     mflr    r29
     CALL    0x8007681c  # draw scaled texture
     mtlr    r29
+.endif
     blr
 
 #.timeDeltaScale: .float 6.25 # 100 / 16
@@ -481,16 +543,35 @@ mainLoop: # called from main loop. r3 = mainLoop
 .heapBarY:       .float 466
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
+
+.if REDIRECT_TO_CONSOLE
+.fmt_playerCoords: .string ">> P:%6d %6d %6d %08X"
+.fmt_mapCoords:    .string ">> M:%3d,%3d,%d #%02X S%X %08X"
+.fmt_playerState:  .string ">> S:%02X %08X %08X A:%04X %f %f"
+.fmt_cameraCoords: .string ">> C:%6d %6d %6d M%02X %02X %02X"
+#.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
+.fmt_gameState:    .string ">> O:%3d M:%3d/%3d"
+#.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
+.fmt_nearObj:      .string ">> T:%08X %04X %X %s ID:%06X"
+.fmt_textState:    .string ">> X:%04X %08X"
+.fmt_seqState:     .string ">> Q:%02X pos %X/%X obj %08X"
+.fmt_seq2:         .string ">> 57:%02X 58:%08X 5C:%08X 60:%08X 64:%08X 68:%08X"
+.fmt_start:        .string ">> START"
+.fmt_end:          .string ">> END"
+
+.else
+
 .fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
 .fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X S%X %08X\x83 "
 .fmt_playerState:  .string "S:\x84%02X %08X %08X\x83 A:\x84%04X %f %f\x83\n"
-.fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 "
+.fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 M\x84%02X %02X %02X\x83 "
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
-.fmt_gameState:    .string "Obj\x84%3d\x83\n"
+.fmt_gameState:    .string "Obj\x84%3d\x83 Mem \x84%3d/%3d\x83\n"
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
 .fmt_seqState:     .string "SEQ \x84%02X\x83 pos \x84%X/%X\x83 obj \x84%08X\x83\n"
 .fmt_seq2:         .string "57:\x84%02X\x83 58:\x84%08X\x83 5C:\x84%08X\x83 60:\x84%08X\x83 64:\x84%08X\x83 68:\x84%08X\x83\n"
+.endif
 
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
