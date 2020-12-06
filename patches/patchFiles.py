@@ -59,9 +59,9 @@ patchOrder = (
     'pda',
     'freemove',
     'alloc',
-    #'gamebit',
+    'gamebit',
     'hitboxdebug',
-    #'dll',
+    'dll',
     'staff_fx',
     'autosave',
     #'debugobjs',
@@ -72,6 +72,7 @@ patchOrder = (
     #'ybutton',
     'rumble',
     'uwu',
+    'worldmap',
 )
 def buildPatches(basePath):
     print("Building debug.bin...")
