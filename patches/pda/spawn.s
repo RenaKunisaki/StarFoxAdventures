@@ -275,11 +275,21 @@ spawnMenu_getObjName: # copy object name to buf at r4
     lwz     r16, (OBJECTS_TAB*4)(r15)
     slwi    r17, r3,  2
     lwzx    r17, r17, r16 # get offset
+    cmpwi   r17,  0
+    beq     .spawnMenu_getObjName_invalid
 
     # look at the corresponding offset + 0x91 in OBJECTS.BIN
     addi    r17, r17, 0x91
     lwz     r16, (OBJECTS_BIN*4)(r15)
     add     r16, r16, r17
+    # sanity check
+    # shift by 20 so we don't have to deal with sign and can use cmpwi
+    srwi    r15, r16, 20
+    cmpwi   r15, 0x800
+    blt     .spawnMenu_getObjName_invalid
+    cmpwi   r15, 0x818
+    bge     .spawnMenu_getObjName_invalid
+
 
     # copy 11 chars to output
     li      r15, 0
@@ -579,10 +589,10 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
     blr
 
 .spawnMenu_doSpawn: # actually spawn the object.
-    lbz     r3,  (spawnMenuNumParams - mainLoop)(r14)
+    lbz     r3,  (spawnMenuNumParams  - mainLoop)(r14)
     slwi    r3,  r3,  2
     addi    r3,  r3,  0x18
-    lha     r4,  (spawnMenuType - mainLoop)(r14)
+    lha     r4,  (spawnMenuType       - mainLoop)(r14)
     CALL    objAlloc
     mr      r5,  r3
 
@@ -600,8 +610,8 @@ spawnMenu_adjustDigit: # adjust one digit at a time in a hex number.
 
     # copy params and object ID
     addi    r3,  r5,  0x14 # dest
-    addi    r4,  r14, spawnMenuObjId - mainLoop # src
-    lbz     r5,  (spawnMenuNumParams - mainLoop)(r14)
+    addi    r4,  r14, spawnMenuObjId  - mainLoop # src
+    lbz     r5,  (spawnMenuNumParams  - mainLoop)(r14)
     addi    r5,  r5,  1 # for obj ID, and avoids size of zero
     slwi    r5,  r5,  2 # len
     CALL    memcpy # returns dest
