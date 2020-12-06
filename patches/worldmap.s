@@ -60,20 +60,119 @@ main: # called every frame on the "go/cancel" screen of world map.
     cmpwi   r4,  0x3B
     beq     .warpToWallCity
     # else must be dragon rock
+
+    # duplicate some game code...
+    # XXX should these be done every time?
+    li      r3,  0x05DB # DR_ObjGroups
+    li      r4,  0
+    CALL    mainSetBits
+    li      r3,  0x02
+    li      r4,  0x0F
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x02
+    li      r4,  0x10
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x0E7B
+    li      r4,  0
+    CALL    mainSetBits
+    li      r3,  0x09E9
+    li      r4,  0
+    CALL    mainSetBits
     li      r3,  0x79
     b       .doWarp
 
 .warpToPlanet:
+    # Warp to ThornTail Hollow or Krazoa Palace depending on game state.
+    li      r3,  0x0C85 # HaveKrazoaSpirit6
+    CALL    mainGetBit
+    cmpwi   r3,  0 # if we have last spirit, go to Krazoa Palace.
+    bne     .warpToPalace
+    # else, go to Hollow.
     li      r3,  0x6C
     b       .doWarp
+
 .warpToDarkIce:
+    li      r3,  0x13
+    li      r4,  0
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x13
+    li      r4,  0x16
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
     li      r3,  0x77
     b       .doWarp
+
 .warpToCloudRunner:
+    li      r3,  0x0458 # CF_ObjGroups
+    li      r4,  0
+    CALL    mainSetBits
+    li      r3,  0x047C # CD_ObjGroups
+    li      r4,  0
+    CALL    mainSetBits
+    li      r3,  0x04A3 # CR_ObjGroups
+    li      r4,  0
+    CALL    mainSetBits
+    li      r3,  0x0C
+    li      r4,  0
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x0D73
+    li      r4,  0
+    CALL    mainSetBits
+
     li      r3,  0x63
     b       .doWarp
+
 .warpToWallCity:
+    li      r3,  0x036A # WC_ObjGroups
+    li      r4,  0
+    CALL    mainSetBits
+    li      r3,  0x0D
+    li      r4,  0x00
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x0D
+    li      r4,  0x01
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x0D
+    li      r4,  0x05
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x0D
+    li      r4,  0x0A
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x0D
+    li      r4,  0x0B
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x0E05
+    li      r4,  0
+    CALL    mainSetBits
     li      r3,  0x78
+    b       .doWarp
+
+.warpToPalace:
+    li      r3,  0x0405 # WM_ObjGroups
+    li      r4,  0
+    CALL    mainSetBits
+    li      r3,  0x0B
+    li      r4,  5
+    CALL    gplaySetAct
+    li      r3,  0x0B
+    li      r4,  0x0A
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x0B
+    li      r4,  0x0B
+    li      r5,  1
+    CALL    gplaySetObjGroupStatus
+    li      r3,  0x22
+    #b       .doWarp
 
 .doWarp:
     li      r4,  0
