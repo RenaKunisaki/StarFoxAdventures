@@ -5,12 +5,14 @@
 # hopefully this won't hurt anything.
 .text
 .include "common.s"
+.include "globals.s"
 .set ENABLE_LOG,0
 
 # define patches
 patchList:
     PATCH_ID        "alloc  " # must be 7 chars
     PATCH_B         0x80023D00, onAlloc
+    PATCH_B         0x80023B0C, onAllocFail
     PATCH_MAIN_LOOP mainLoop
     PATCH_END       PATCH_KEEP_AFTER_RUN
 
@@ -63,7 +65,7 @@ mainLoop:
     cmpwi   r5,  95
     bge     .emergencyFree
 
-.end:
+end:
     lwz     r9, SP_LR_SAVE(r1)
     mtlr    r9 # restore LR
     lmw     r3, SP_GPR_SAVE(r1)
@@ -74,6 +76,7 @@ mainLoop:
     addi    r3,  r14, s_emergFree - mainLoop
     CALL    OSReport
 
+.emergencyFreeDo:
     LOADWH  r15, loadedObjects
     LOADWL2 r16, numLoadedObjs, r15
     LOADWL2 r15, loadedObjects, r15
@@ -220,6 +223,38 @@ onAlloc:
 
     li      r0,  1 # replaced
     JUMP    0x80023d04, r31 # return to original code
+
+
+onAllocFail:
+    # replaces an OSReport call logging alloc failures
+    # r3: str, r4: name, r5: region, r6: tag, r7: size, r8: largest
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    stmw    r3,  SP_GPR_SAVE(r1)
+    mflr    r11
+    stw     r11, SP_LR_SAVE(r1)
+    CALL    OSReport # replaced
+
+    # also log it
+    LOADW   r3,  PATCH_STATE_PTR
+    lbz     r4,  ALLOC_FAIL_POS(r3) # get buffer pos
+    slwi    r4,  r4,  3 # multiply by 8
+    addi    r4,  r4,  ALLOC_FAIL_LOG # to buffer start
+    lwz     r5,  (SP_GPR_SAVE+(3*4))(r1) # retrieve stored r6 (tag)
+    lwz     r6,  (SP_GPR_SAVE+(4*4))(r1) # retrieve stored r7 (size)
+    stwx    r5,  r4,  r3 # store tag
+    addi    r4,  r4,  4
+    stwx    r6,  r4,  r3 # store size
+
+    # increment log pointer
+    lbz     r4,  ALLOC_FAIL_POS(r3)
+    addi    r4,  r4,  1
+    andi.   r4,  r4,  (ALLOC_FAIL_MAX - 1)
+    stb     r4,  ALLOC_FAIL_POS(r3)
+
+    # finally, do an emergency free.
+    # XXX we should ideally try to free enough to cover this allocation,
+    # instead of just a single object.
+    b       .emergencyFreeDo
 
 .if ENABLE_LOG
     .msg: .string "%08X alloc %08X %08X %s"
