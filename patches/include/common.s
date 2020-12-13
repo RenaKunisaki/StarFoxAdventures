@@ -26,6 +26,7 @@
 .set PAD_BUTTON_X,    0x0400
 .set PAD_BUTTON_Y,    0x0800
 .set PAD_BUTTON_MENU, 0x1000 # Start
+.set PAD_ALL_BUTTONS, 0x1F7F
 
 .set GX_BM_BLEND,        1
 .set GX_BM_LOGIC,        2

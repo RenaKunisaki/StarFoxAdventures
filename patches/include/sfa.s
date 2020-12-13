@@ -7,9 +7,11 @@
 .set buttonDisable,0x80014b3c #int pad, u32 buttons
 .set ClearArena,0x80240400
 .set dCacheFlush,0x80241a50 #(dest, size) -> dest
+.set dCacheStore,0x80241a1c #(dest, size) -> dest
 .set debugPrintDraw,0x801375c8
 .set debugPrintf,0x801378a8
 .set debugPrintfxy,0x80137b80 #x, y, fmt, ...
+.set drawTexture,0x8007719c #double x,double y,Texture *texture,uint opacity,uint scale
 .set DVDReadAsyncPrio,0x80248eac
 .set free,0x800233e8
 .set gameBitDecrement,0x8001fee8 #bitIdx
@@ -19,6 +21,8 @@
 .set gameTextShowStr,0x80015dc8 # char*, int box, int x, int y
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
 .set getButtonsJustPressed,0x80014e70 # u16 (int controller)
+.set gplaySetAct,0x800e9870 # u32 map, u32 act
+.set gplaySetObjGroupStatus,0x800e8ff8 # MapDirIdx32 map,uint group,int set
 .set gxBeginVtxs,0x8025889c #void(GXOpcode opcode,uint vat,uint nVtxs)
 .set gxGetVtxDescr,0x802571d4 #void(int bit, int *out)
 .set gxGetVtxDescrs,0x80257388 #void(u32*)
@@ -49,7 +53,9 @@
 .set objDisableHitbox,0x80035f00 #ObjInstance* - only for next frame
 .set objFree,0x8002cbc4 #ObjInstance*
 .set objInstantiateCharacter,0x8002df90 #ObjDef*, flags, mapId, objNo. *matrix -> ObjInstance*
+.set OSDisableInterrupts,0x8024377c # returns prev MSR
 .set OSReport,0x8007d6dc
+.set OSRestoreInterrupts,0x802437a4 # param is prev MSR from OSDisableInterrupts
 .set padGetStickX,0x80014cc0 #s8 (int pad)
 .set padGetStickY,0x80014c6c #s8 (int pad)
 .set playerDie,0x802aaa80 #void (ObjInstance*)
@@ -65,6 +71,8 @@
 .set strlen,0x802918a4
 .set strncpy,0x802917a8
 .set vec3f_scale,0x80292c74 #void (double scale, vec3f *in, vec3f *out)
+.set VISetNextFrameBuffer,0x8024d670
+.set VIWaitForRetrace,0x8024c8f0
 .set waitNextFrame,0x8004a868
 .set warpToMap,0x800552e8 # warpIdx, bool swapCharacter
 .set zlbDecompress,0x8004B658 # void *data,uint compLen,void *out
@@ -85,6 +93,7 @@
 .set blurFilterArea,         0x803dce48 #vec3f blur filter area
 .set bSubtitlesEnabled,      0x803dca00 #int
 .set buttonsJustPressed,     0x803398e0 #u32
+.set cameraMode,             0x803dd510 #DLL_ID
 .set cMenuEnabled,           0x803dd793 #bool
 .set cMenuOpen,              0x803dd795 #bool
 .set cMenuState,             0x803dd7d4 #u8
@@ -97,6 +106,7 @@
 .set controller4state,       0x80339914
 .set curLanguage,            0x803dc9e4 #u32 English, French, German, Italian, Japanese, Spanish
 .set curGameText,            0x803dba70 #s16
+.set curMapAct,              0x803dd495 #u8
 .set curMapId,               0x803dcec8 #int
 .set curMapLayer,            0x803dcde1 #s8
 .set curSaveSlot,            0x803db890 #s8
@@ -136,6 +146,7 @@
 .set pCurSaveGame,           0x803dd498 #SaveGame*
 .set pdaOn,                  0x803dbbb0 #bool
 .set physicsTimeScale,       0x803dea9c #float, default 60.0
+.set pLastSavedGame,         0x803dcae0 #mainSetBits uses this
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox
 .set playerMapOffsetX,       0x803dcdd8 #float
 .set playerMapOffsetZ,       0x803dcddc #float
