@@ -16,6 +16,12 @@ intToFloat: # convert r3 from int to float.
 
 floatMagic:    .int 0x43300000,0x80000000
 
+# for float to int:
+# lfs     f1,  0x0C(r16) # X pos
+# fctiwz  f1,  f1
+# stfd    f1,  SP_FLOAT_TMP(r1)
+# lwz     r3,  (SP_FLOAT_TMP+4)(r1)
+
 
 adjItem_float: # r3=adj, r5=&val, f2=adjStep, f3=min, f4=max
     lfs     f1,  0(r5) # f1 = val

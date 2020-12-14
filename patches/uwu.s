@@ -7,7 +7,7 @@
 .text
 .include "common.s"
 .include "globals.s"
-.set UWU_DEBUG,1
+.set UWU_DEBUG,0
 
 # define patches
 patchList:

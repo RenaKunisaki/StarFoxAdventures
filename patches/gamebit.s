@@ -74,12 +74,13 @@ main:
     addi r1, r1, STACK_SIZE # restore stack ptr
     JUMP 0x800e87b0, r4 # isSaveGameLoading
 
-.ignoreList: # these change pretty much every frame
+.ignoreList:
     .short 0x7511 # dummy entry
     #.short 0x0960, 0x0961, 0x0964, 0x0965, 0x0969, 0x096B, 0x0986
-    .short 0x0A7F, 0x0A8B
-    .short 0x0CBB
-    .short 0x0E26 # toggled constantly in Dragon Rock
+    .short 0x0A7F # toggled just about every frame
+    #.short 0x0A8B
+    .short 0x0CBB # toggled very freequently
+    #.short 0x0E26 # toggled constantly in Dragon Rock
     #.short 0x0EB5
     #.short 0x0F10, 0x0F46
     .short 0

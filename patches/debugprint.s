@@ -55,7 +55,7 @@ patchList:
 
 constants:
     .set STACK_SIZE,  0x40 # how much to reserve
-    .set SP_LR_SAVE,  0x10
+    .set SP_LR_SAVE,  0x44
     .set SP_R14_SAVE, 0x14
     .set SP_R15_SAVE, 0x18
     .set SP_R16_SAVE, 0x1C

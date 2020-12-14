@@ -12,8 +12,8 @@ patchList:
 
 constants:
     .set STACK_SIZE, 0x80 # how much to reserve
-    .set SP_LR_SAVE, 0x10
-    .set SP_GPR_SAVE,0x18
+    .set SP_LR_SAVE, 0x84
+    .set SP_GPR_SAVE,0x10
 
 entry: # called as soon as our patch is loaded.
     blr # nothing to do here

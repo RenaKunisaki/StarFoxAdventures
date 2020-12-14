@@ -212,7 +212,7 @@ onAlloc:
 
     # trigger a BSOD
     li    r3, 0
-    stw   r3, 0x0BAD(r3)
+    stb   r3, 0x0BAD(r3)
 
 .ok:
     lwz     r9,  SP_LR_SAVE(r1)

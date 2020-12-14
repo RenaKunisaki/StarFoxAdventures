@@ -12,6 +12,7 @@
 .set MENU_PAGE_DEBUG_DATA,    0x07
 .set MENU_PAGE_DEBUG_RENDER,  0x08
 .set MENU_PAGE_DEBUG_CHEAT,   0x09
+.set MENU_PAGE_DEBUG_MISC,    0x0A
 
 menuPages:
     .int itemDrawFuncs_gameSettings   - mainLoop
@@ -34,6 +35,8 @@ menuPages:
     .int itemAdjustFuncs_debugRender  - mainLoop
     .int itemDrawFuncs_debugCheat     - mainLoop
     .int itemAdjustFuncs_debugCheat   - mainLoop
+    .int itemDrawFuncs_debugMisc      - mainLoop
+    .int itemAdjustFuncs_debugMisc    - mainLoop
     .int 0
 
 menuPageStructure:
@@ -88,6 +91,11 @@ menuPageStructure:
     .byte 0
     # Debug Cheat
     .byte MENU_PAGE_DEBUG_RENDER # previous
+    .byte MENU_PAGE_DEBUG_MISC   # next
+    .byte MENU_PAGE_DEBUG        # parent
+    .byte 0
+    # Debug Misc
+    .byte MENU_PAGE_DEBUG_CHEAT  # previous
     .byte MENU_PAGE_DEBUG_TEXT   # next
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
@@ -189,6 +197,7 @@ itemDrawFuncs_debug:
     .int drawItem_debugRender  - mainLoop
     .int drawItem_textTest     - mainLoop
     .int drawItem_frameAdvance - mainLoop
+    .int drawItem_debugMisc    - mainLoop
     .int 0
 
 itemAdjustFuncs_debug:
@@ -198,6 +207,7 @@ itemAdjustFuncs_debug:
     .int adjItem_debugRender  - mainLoop
     .int adjItem_textTest     - mainLoop
     .int adjItem_frameAdvance - mainLoop
+    .int adjItem_debugMisc    - mainLoop
 
 itemDrawFuncs_debugText:
     .int s_DebugText                    - mainLoop # title
@@ -279,6 +289,13 @@ itemAdjustFuncs_debugCheat:
     .int adjItem_unlockAll     - mainLoop
     .int adjItem_killMe        - mainLoop
 
+itemDrawFuncs_debugMisc:
+    .int s_Misc                - mainLoop # title
+    .int drawItem_crash        - mainLoop
+    .int 0
+
+itemAdjustFuncs_debugMisc:
+    .int adjItem_crash         - mainLoop
 
 pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Game Settings
@@ -291,6 +308,7 @@ pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Debug Data
     .int inputFuncDummy       - mainLoop # Debug Render
     .int inputFuncDummy       - mainLoop # Debug Cheat
+    .int inputFuncDummy       - mainLoop # Debug Misc
 
 
 inputFuncDummy: blr

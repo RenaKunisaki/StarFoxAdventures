@@ -77,6 +77,7 @@ entry: # called as soon as our patch is loaded.
 .include "pda/debugtext.s"
 .include "pda/debugrender.s"
 .include "pda/debugcheat.s"
+.include "pda/debugmisc.s"
 .include "pda/bigmap.s"
 .include "pda/mapalpha.s"
 .include "pda/volume.s"

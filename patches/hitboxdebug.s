@@ -96,8 +96,6 @@ checkHitbox: # called by our hook, from the patch list.
 .endm
 
 
-# work on rendering hitboxes. disabled for now.
-# right now it just draws a rainbow square below the player.
 .if ENABLE_DRAW_HITBOX
 drawHitbox: # r31 = ObjInstance*
     stwu    r1, -STACK_SIZE(r1) # get some stack space

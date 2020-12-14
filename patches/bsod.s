@@ -5,6 +5,9 @@
 .include "globals.s"
 .set BSOD_MAX_PAGE,6
 
+# idea: press Z to save to slot 3 or some other file on the memory card,
+# so you can hopefully not lose progress.
+
 # define patches
 patchList:
     PATCH_ID        "BSOD   " # must be 7 chars
@@ -149,6 +152,7 @@ end:
     b       bsodLoop
 
 .reset:
+    # this seems to fail more often than not
     li      r3,  1
     LOADWH  r4,  0x803dca3e
     STOREB  r3,  0x803dca3e, r4 # shouldResetNextFrame
@@ -157,6 +161,10 @@ end:
     STOREB  r3,  0x803dc951, r4 # inhibitReset
     li      r3,  4 # GAME_STATE_RESETNOW
     STOREB  r3,  0x803dca3d, r4 # gameState
+    lwz     r3,  -0x57b0(r13)
+    CALL    VISetNextFrameBuffer
+    CALL    0x8024d554 # unknown
+    CALL    VIWaitForRetrace
     JUMP    0x80021364, r0
 
 clearFrameBuffer: # expects frame buffer in r15

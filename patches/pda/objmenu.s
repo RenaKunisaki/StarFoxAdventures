@@ -381,7 +381,8 @@ objMenu_drawCurObject:
 
     # ObjectFileStruct
     addi    r4,  r14, fmt_objListFile - mainLoop
-    lwz     r5,  0x50(r18) # files
+    lwz     r5,  0x50(r18) # file
+    lwz     r6,  0x46(r18) # objId and defNo
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 

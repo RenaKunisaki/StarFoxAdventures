@@ -204,6 +204,9 @@ s_maxLives:       .string "Max Lives: %d"
 s_unlockAll:      .string "Unlock Everything"
 s_killMe:         .string "Kill Player"
 
+# Debug Misc menu
+s_Misc:           .string "Misc"
+s_CrashGame:      .string "Crash Game"
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "
@@ -213,7 +216,7 @@ fmt_objListOrigPos:.string "ORIG %d, %d, %d"
 fmt_objListAddrId: .string "ADDR   %08X ID %08X"
 fmt_objListAddr:   .string "ADDR   %08X ID --"
 fmt_objListNoSeq:  .string "NO SEQ"
-fmt_objListFile:   .string "OBJDEF %08X"
+fmt_objListFile:   .string "OBJDEF %08X %08X"
 fmt_objListFlags:  .string "FLAG   %04X %02X %02X %02X %02X"
 fmt_objListMap:    .string "SLOT   %02X MAP %02X %02X"
 fmt_objListSeq:    .string "SEQ    %08X %04X"

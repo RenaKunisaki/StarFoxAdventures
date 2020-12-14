@@ -21,7 +21,7 @@ patchList:
 
 constants:
     .set STACK_SIZE,0x30 # how much to reserve
-    .set SP_LR_SAVE,0x10
+    .set SP_LR_SAVE,0x34
     .set SP_OUT_X,0x14
     .set SP_OUT_Y,0x18
     .set SP_OUT_Z,0x1C
@@ -69,6 +69,9 @@ mainLoop: # called from main loop. r3 = mainLoop
     li      r4,  1
     LOADWH  r5,  shouldCloseCMenu
     STOREB  r4,  shouldCloseCMenu, r5
+
+    # TEST FOR BSOD
+    #stb     r4,  0xBAC(r4)
 
     # was it just turned on?
     lbz     r5,  (.prevEnable - mainLoop)(r14)
