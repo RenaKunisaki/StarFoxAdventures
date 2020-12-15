@@ -16,6 +16,7 @@ patchList:
     PATCH_B   0x8029b08c, hook_aimX
     PATCH_BL  0x80108758, hook_viewFinderZoom
     PATCH_B   0x801030c0, cameraUpdate
+    PATCH_B   0x8002e97c, camUpdateOverrideTimeStop
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -337,6 +338,30 @@ cameraHook:
     JUMP    0x80103290, r0
 
 
+
+camUpdateOverrideTimeStop:
+    # hook the end of updateObjects()
+    # if time is stopped, the camera won't update.
+    # we need to override that when debug mode is on.
+    addi    r11, r1,  0x30 # replaced
+    cmpwi   r29, 0 # is time stopped?
+    beq     .timeStopOverrideEnd # nope, don't do anything.
+
+    # is the camera in debug mode?
+    LOADW   r29, PATCH_STATE_PTR
+    lbz     r0,  DEBUG_CAM_MODE(r29)
+    cmpwi   r0,  0
+    beq     .timeStopOverrideEnd # nope, still don't do anything.
+
+    # debug mode is active, so override the time stop.
+    mflr    r29
+    CALL    0x801030c0 # update the camera
+    mtlr    r29
+
+.timeStopOverrideEnd:
+    JUMP    0x8002e980, r0 # back to original code
+
+
 # hook the entire camera update function for debug stuff.
 cameraUpdate: # r3: frames
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
@@ -410,16 +435,20 @@ cameraUpdate: # r3: frames
     # else must be free mode
 
 doDebugCamFree:
-    #   left stick Y: move forward/backward
-    #   left stick X: turn left/right
-    #   CX: tilt up/down
-    #   CY: move left/right
-    #   L/R: move up/down
-    # * start: toggle time stop
+    #   SY:    move forward/backward
+    #   SX:    turn left/right
+    #   CX:    tilt up/down
+    #   CY:    move left/right
+    #   L/R:   move up/down
+    #   start: toggle time stop
+    # * X:     toggle HUD/debug text
+    # * Y:     reset rotation
     # hold Z to modify:
-    # * CX: roll (or just keep using pad 3 L/R for this?)
+    # * CX:    roll (or just keep using pad 3 L/R for this?)
     # * start: advance frame
-    #   others: same buf faster
+    # * Y:     move camera back to player
+    # * X:     move player to camera
+    #   else:  same but faster
     # * not implemented yet
 
     # we need this for intToFloat
@@ -473,10 +502,36 @@ doDebugCamFree:
     divw    r4,  r4,  r5 # don't be crazy fast
     bl      doMoveXZ
 
+    # check buttons
+    lbz     r3,  (padDelay - .cameraUpdate_getpc)(r14)
+    cmpwi   r3,  0
+    beq     .debugCamCheckPad
+    subi    r3,  r3,  1
+    stb     r3,  (padDelay - .cameraUpdate_getpc)(r14)
+    b       .debugCamSkipPad
+
+    .debugCamCheckPad:
+    LOADHL2 r3,  (controller4state+0), r17 # buttons
+    andi.   r0,  r3,  PAD_BUTTON_MENU
+    bne     .debugCamToggleTimeStop
+
+.debugCamSkipPad:
     # now we need to update the actual view matrix to match the camera.
     mr      r3,  r15
     CALL    0x80101980 # cameraUpdateViewMtx
     b       .cameraUpdate_skip
+
+.debugCamToggleTimeStop:
+    LOADWH  r3,  timeStop
+    LOADBL2 r4,  timeStop, r3
+    xori    r4,  r4,  1
+    STOREB  r4,  timeStop, r3
+    b       .debugCamDoneInput
+
+.debugCamDoneInput:
+    li      r3,  120
+    stb     r3,  (padDelay - .cameraUpdate_getpc)(r14)
+    b       .debugCamSkipPad
 
 
 doDebugCamStay:
@@ -503,6 +558,7 @@ doDebugCamStay:
 
     # tilt to point to player
     # (Y rotation value, even though it's local X-axis rotation...)
+    # XXX not working?
     lfs     f1,  0x10(r15) # cam Y
     lfs     f2,  0x10(r16) # focus Y
     LOADW   r3,  0x803dd530 # target Y offset (look at head, not feet)
@@ -518,15 +574,14 @@ doDebugCamStay:
 
     # we don't need to do anything with roll/Z value.
 
-    # still call free mode, so we can move
+    # still call free mode, so we can move the camera.
     b       doDebugCamFree
 
 
 floatMagic: .int 0x43300000,0x80000000
 f_zero: .float 0
-prevX: .byte 0 # previous sitck X
+prevX: .byte 0 # previous stick X
+padDelay: .byte 9
 s_xpos: .string "X\t%6d\t%5d"
 s_ypos: .string "Y\t%6d\t%5d"
 s_zpos: .string "Z\t%6d\t%5d"
-s_move: .string "MOVE %d %d"
-s_trig: .string "S %f C %f M %f %f"
