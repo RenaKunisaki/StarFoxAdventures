@@ -68,6 +68,12 @@
 .set GX_NEQUAL,          5
 .set GX_NEVER,           0
 
+# magic required to make floats print correctly
+# no idea what this does
+.macro MAGIC_FLOAT_INCANTATION
+    creqv 4*cr1+eq,4*cr1+eq,4*cr1+eq
+.endm
+
 # we can't use `bl` instruction because it's relative and we don't
 # know where our code will end up. so we use this instead.
 # this clobbers lr and r0
@@ -136,6 +142,10 @@
 
 .macro LOADFL2 reg, addr, base
     lfs \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
+.endm
+
+.macro LOADFDL2 reg, addr, base
+    lfd \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
 .endm
 
 .macro LOAD reg, val

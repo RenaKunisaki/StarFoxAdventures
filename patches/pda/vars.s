@@ -208,6 +208,12 @@ s_killMe:         .string "Kill Player"
 s_Misc:           .string "Misc"
 s_CrashGame:      .string "Crash Game"
 
+# Debug Camera menu
+s_Camera:         .string "Camera"
+s_Mode:           .string "Mode: %s"
+s_Stay:           .string "Stay"
+s_Free:           .string "Free"
+
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "
 # right pane

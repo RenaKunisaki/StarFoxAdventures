@@ -13,6 +13,7 @@
 .set MENU_PAGE_DEBUG_RENDER,  0x08
 .set MENU_PAGE_DEBUG_CHEAT,   0x09
 .set MENU_PAGE_DEBUG_MISC,    0x0A
+.set MENU_PAGE_DEBUG_CAMERA,  0x0B
 
 menuPages:
     .int itemDrawFuncs_gameSettings   - mainLoop
@@ -37,6 +38,8 @@ menuPages:
     .int itemAdjustFuncs_debugCheat   - mainLoop
     .int itemDrawFuncs_debugMisc      - mainLoop
     .int itemAdjustFuncs_debugMisc    - mainLoop
+    .int itemDrawFuncs_debugCamera    - mainLoop
+    .int itemAdjustFuncs_debugCamera  - mainLoop
     .int 0
 
 menuPageStructure:
@@ -70,9 +73,9 @@ menuPageStructure:
     .byte MENU_PAGE_NONE          # parent
     .byte 0
     # Debug Text
-    .byte MENU_PAGE_DEBUG_DATA # previous
-    .byte MENU_PAGE_DEBUG_MAP  # next
-    .byte MENU_PAGE_DEBUG      # parent
+    .byte MENU_PAGE_DEBUG_CAMERA # previous
+    .byte MENU_PAGE_DEBUG_MAP    # next
+    .byte MENU_PAGE_DEBUG        # parent
     .byte 0
     # Debug Map
     .byte MENU_PAGE_DEBUG_TEXT # previous
@@ -96,6 +99,11 @@ menuPageStructure:
     .byte 0
     # Debug Misc
     .byte MENU_PAGE_DEBUG_CHEAT  # previous
+    .byte MENU_PAGE_DEBUG_CAMERA # next
+    .byte MENU_PAGE_DEBUG        # parent
+    .byte 0
+    # Debug Camera
+    .byte MENU_PAGE_DEBUG_MISC   # previous
     .byte MENU_PAGE_DEBUG_TEXT   # next
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
@@ -193,6 +201,7 @@ itemDrawFuncs_debug:
     .int s_Debug               - mainLoop # title
     .int drawItem_debugText    - mainLoop
     .int drawItem_debugMap     - mainLoop
+    .int drawItem_debugCamera  - mainLoop
     .int drawItem_debugData    - mainLoop
     .int drawItem_debugRender  - mainLoop
     .int drawItem_textTest     - mainLoop
@@ -203,6 +212,7 @@ itemDrawFuncs_debug:
 itemAdjustFuncs_debug:
     .int adjItem_debugText    - mainLoop
     .int adjItem_debugMap     - mainLoop
+    .int adjItem_debugCamera  - mainLoop
     .int adjItem_debugData    - mainLoop
     .int adjItem_debugRender  - mainLoop
     .int adjItem_textTest     - mainLoop
@@ -297,6 +307,14 @@ itemDrawFuncs_debugMisc:
 itemAdjustFuncs_debugMisc:
     .int adjItem_crash         - mainLoop
 
+itemDrawFuncs_debugCamera:
+    .int s_Camera              - mainLoop # title
+    .int drawItem_dbgCamMode   - mainLoop
+    .int 0
+
+itemAdjustFuncs_debugCamera:
+    .int adjItem_dbgCamMode    - mainLoop
+
 pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Game Settings
     .int inputFuncDummy       - mainLoop # Video
@@ -309,6 +327,7 @@ pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Debug Render
     .int inputFuncDummy       - mainLoop # Debug Cheat
     .int inputFuncDummy       - mainLoop # Debug Misc
+    .int inputFuncDummy       - mainLoop # Debug Camera
 
 
 inputFuncDummy: blr

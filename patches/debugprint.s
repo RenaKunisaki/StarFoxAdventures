@@ -330,17 +330,17 @@ mainLoop: # called from main loop. r3 = mainLoop
     beq   .noCamera
 
     # display camera coords
-    lfs    f1, 0x0C(r16)
+    lfs    f1, 0x18(r16)
     fctiwz f2,f1
     stfd   f2,SP_FLOAT_TMP(r1)
     lwz    r4,SP_FLOAT_TMP+4(r1)
 
-    lfs    f1, 0x10(r16)
+    lfs    f1, 0x1C(r16)
     fctiwz f2,f1
     stfd   f2,SP_FLOAT_TMP(r1)
     lwz    r5,SP_FLOAT_TMP+4(r1)
 
-    lfs    f1, 0x14(r16)
+    lfs    f1, 0x20(r16)
     fctiwz f2,f1
     stfd   f2,SP_FLOAT_TMP(r1)
     lwz    r6,SP_FLOAT_TMP+4(r1)

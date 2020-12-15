@@ -66,6 +66,16 @@ adjItem_debugMisc: # r3 = amount to adjust by (0=A button)
 
 #######################################################################
 
+drawItem_debugCamera:
+    addi    r4,  r14, (s_Camera - mainLoop)
+    blr
+
+adjItem_debugCamera: # r3 = amount to adjust by (0=A button)
+    li      r4,  MENU_PAGE_DEBUG_CAMERA
+    b       .debugSetPage
+
+#######################################################################
+
 drawItem_textTest:
     addi    r4,  r14, (s_TextTest - mainLoop)
     lhz     r5,  (textTestId - mainLoop)(r14)

@@ -15,14 +15,86 @@ patchList:
     PATCH_B   0x8029b03c, hook_aimY
     PATCH_B   0x8029b08c, hook_aimX
     PATCH_BL  0x80108758, hook_viewFinderZoom
+    PATCH_B   0x801030c0, cameraUpdate
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
-    .set STACK_SIZE,  0x80 # how much to reserve
-    .set SP_LR_SAVE,  0x84
-    .set SP_GPR_SAVE, 0x10
+    .set STACK_SIZE,   0xC0 # how much to reserve
+    .set SP_LR_SAVE,   0xC4
+    .set SP_FLOAT_TMP, 0x10
+    .set SP_CAM_DIST,  0x20
+    .set SP_GPR_SAVE,  0x30
 
 entry: # called as soon as our patch is loaded.
+    blr
+
+intToFloat: # convert r3 from int to float.
+    # stores result in f1.
+    # requires magic constant in f9: .int 0x43300000,0x80000000
+    # clobbers r0, r3, SP_FLOAT_TMP
+    #lfd     f9,  (floatMagic - mainLoop)(r14) # load constant into f9
+    lis     r0,  0x4330
+    stw     r0,  SP_FLOAT_TMP(r1)   # store exponent part for integer
+    xoris   r3,  r3,  0x8000        # invert sign of integer
+    stw     r3,  SP_FLOAT_TMP+4(r1) # store fraction part for integer
+    lfd     f1,  SP_FLOAT_TMP(r1)   # load integer in double format into f1
+    fsub    f1,  f1,  f9            # f1 contains converted integer
+    frsp    f1,  f1                 # double to single
+    blr
+
+
+doMoveXZ:
+    # expects r15 = camera, r3 = forward motion, r4 = sideways motion
+    # this is a subroutine because I originally planned to go a different
+    # way with it and can't be arsed to change it.
+    mflr    r29
+
+    # convert motion vector to floats-
+    bl      intToFloat
+    stfs    f1,  (SP_CAM_DIST + 0x00)(r1) # +00 = fwd
+    mr      r3,  r4
+    bl      intToFloat
+    stfs    f1,  (SP_CAM_DIST + 0x04)(r1) # +04 = sideways
+
+    # convert rotation to radians
+    lha     r3,  0x00(r15) # get rotation (0-65535)
+    addi    r3,  r3,  0x4000 # not sure why we need this...
+    bl      intToFloat # f1 = rotation (0-65535.0)
+    LOADWH  r9,  0x803de7d8 # magic constant s16 to radians
+    LOADFDL2 f2,  0x803de7d8, r9
+    fdivs   f1,  f1,  f2 # f1 = rotation in radians
+    stfs    f1,  (SP_FLOAT_TMP + 0x00)(r1)
+
+    # compute sin(r) and cos(r)
+    CALL    sinf
+    stfs    f1,  (SP_CAM_DIST + 0x08)(r1) # +08 = sin(r)
+    lfs     f1,  (SP_FLOAT_TMP + 0x00)(r1)
+    CALL    cosf
+
+    fmr     f4,  f1                       # f4 = cos(r)
+    lfs     f5,  (SP_CAM_DIST + 0x08)(r1) # f5 = sin(r)
+    lfs     f6,  (SP_CAM_DIST + 0x00)(r1) # f6 = fwd
+    lfs     f7,  (SP_CAM_DIST + 0x04)(r1) # f7 = side
+
+    # x += (fwd * cos(r)) - (side * sin(r))
+    fmuls   f1,  f6,  f4 # f1 = fwd  * cos(r)
+    fmuls   f2,  f7,  f5 # f2 = side * sin(r)
+    fsubs   f1,  f1,  f2
+    fmr     f8,  f1
+    lfs     f2,  0x18(r15)
+    fadds   f2,  f2,  f1
+    stfs    f2,  0x18(r15)
+
+    # z += (fwd * sin(r)) + (side * cos(r))
+    fmuls   f1,  f6,  f5 # f1 = fwd  * sin(r)
+    fmuls   f2,  f7,  f4 # f2 = side * cos(r)
+    fadds   f1,  f1,  f2
+    fmr     f9,  f1
+    lfs     f2,  0x20(r15)
+    fadds   f2,  f2,  f1
+    stfs    f2,  0x20(r15)
+
+    mtlr    r29
     blr
 
 # if we're using the C stick to control the camera, then we must remap the
@@ -264,4 +336,197 @@ cameraHook:
     addi    r1,  r1, STACK_SIZE # restore stack ptr
     JUMP    0x80103290, r0
 
+
+# hook the entire camera update function for debug stuff.
+cameraUpdate: # r3: frames
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    stmw    r3,  SP_GPR_SAVE(r1)
+    mflr    r4
+    stw     r4,  SP_LR_SAVE(r1)
+
+    bl .cameraUpdate_getpc
+    .cameraUpdate_getpc: mflr r14
+    mtlr    r4
+
+    LOADW   r15, PATCH_STATE_PTR
+    lbz     r0,  DEBUG_CAM_MODE(r15)
+    cmpwi   r0,  0
+    bne     .cameraUpdate_debug
+
+    # jump back to original update function.
+    lwz     r5,  SP_LR_SAVE(r1)
+    mtlr    r5   # restore LR
+    lmw     r3,  SP_GPR_SAVE(r1)
+    addi    r1,  r1, STACK_SIZE # restore stack ptr
+    stwu    r1,  -0x10(r1) # replaced
+    JUMP    0x801030c4, r0
+
+.cameraUpdate_skip:
+    # draw debug info
+    LOADW   r15, pCamera
+    addi    r5,  r14, s_xpos - .cameraUpdate_getpc
+    lfs     f1,  0x18(r15)
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r6,  (SP_FLOAT_TMP+4)(r1)
+    lhz     r7,  0x00(r15)
+    li      r3,  24 # X
+    li      r4,  400 # Y
+    CALL    debugPrintfxy
+
+    addi    r5,  r14, s_ypos - .cameraUpdate_getpc
+    lfs     f1,  0x1C(r15)
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r6,  (SP_FLOAT_TMP+4)(r1)
+    lhz     r7,  0x02(r15)
+    li      r3,  24 # X
+    li      r4,  411 # Y
+    CALL    debugPrintfxy
+
+    addi    r5,  r14, s_zpos - .cameraUpdate_getpc
+    lfs     f1,  0x20(r15)
+    fctiwz  f1,  f1
+    stfd    f1,  SP_FLOAT_TMP(r1)
+    lwz     r6,  (SP_FLOAT_TMP+4)(r1)
+    lhz     r7,  0x04(r15)
+    li      r3,  24 # X
+    li      r4,  422 # Y
+    CALL    debugPrintfxy
+
+    # skip original update function.
+    lwz     r5,  SP_LR_SAVE(r1)
+    mtlr    r5   # restore LR
+    lmw     r3,  SP_GPR_SAVE(r1)
+    addi    r1,  r1, STACK_SIZE # restore stack ptr
+    blr
+
+
+.cameraUpdate_debug:
+    LOADW   r15, pCamera
+    lwz     r16, 0xA4(r15) # focused object
+    cmpwi   r0,  DEBUG_CAM_STAY
+    beq     doDebugCamStay
+    # else must be free mode
+
+doDebugCamFree:
+    #   left stick Y: move forward/backward
+    #   left stick X: turn left/right
+    #   CX: tilt up/down
+    #   CY: move left/right
+    #   L/R: move up/down
+    # * start: toggle time stop
+    # hold Z to modify:
+    # * CX: roll (or just keep using pad 3 L/R for this?)
+    # * start: advance frame
+    #   others: same buf faster
+    # * not implemented yet
+
+    # we need this for intToFloat
+    lfd     f9,  (floatMagic - .cameraUpdate_getpc)(r14)
+
+    LOADWH  r17, controllerStates
+    LOADHL2 r3,  (controller4state+0), r17 # buttons
+    srwi    r3,  r3,  4
+    andi.   r9,  r3,  1 # isolate Z button
+
+    # turn left/right
+    LOADBL2 r3,  (controller4state+2), r17 # left stick X
+    extsb   r3,  r3
+    lha     r4,  0x00(r15)
+    slwi    r3,  r3,  1
+    slw     r3,  r3,  r9 # double rotation if Z held
+    add     r4,  r4,  r3
+    sth     r4,  0x00(r15)
+
+    # tilt up/down
+    LOADBL2 r3,  (controller4state+5), r17 # CY
+    extsb   r3,  r3
+    lha     r4,  0x02(r15)
+    slwi    r3,  r3,  1
+    slw     r3,  r3,  r9 # double rotation if Z held
+    add     r4,  r4,  r3
+    sth     r4,  0x02(r15)
+
+    # move up/down
+    LOADBL2 r5,  (controller4state+6), r17 # L
+    LOADBL2 r6,  (controller4state+7), r17 # R
+    neg     r5,  r5
+    add     r5,  r5,  r6 # r5 = R - L
+    slw     r3,  r5,  r9 # double speed if Z held
+    li      r4,  16
+    divw    r3,  r3,  r4 # don't be crazy fast
+    bl      intToFloat
+    lfs     f2,  0x1C(r15)
+    fadds   f2,  f2,  f1
+    stfs    f2,  0x1C(r15)
+
+    # move forward/back/left/right
+    li      r5,  16
+    LOADBL2 r3,  (controller4state+3), r17 # left stick Y
+    extsb   r3,  r3
+    slw     r3,  r3,  r9 # double speed if Z held
+    divw    r3,  r3,  r5 # don't be crazy fast
+    LOADBL2 r4,  (controller4state+4), r17 # CX
+    extsb   r4,  r4
+    slw     r4,  r4,  r9 # double speed if Z held
+    divw    r4,  r4,  r5 # don't be crazy fast
+    bl      doMoveXZ
+
+    # now we need to update the actual view matrix to match the camera.
+    mr      r3,  r15
+    CALL    0x80101980 # cameraUpdateViewMtx
+    b       .cameraUpdate_skip
+
+
+doDebugCamStay:
+    # same as free, but still rotate to point to target.
+    lfs     f1,  (f_zero - .cameraUpdate_getpc)(r14) # Y offset
+    mr      r3,  r15  # camera
+    addi    r4,  r1,  SP_CAM_DIST + 0x00 # outX
+    addi    r5,  r1,  SP_CAM_DIST + 0x04 # outY
+    addi    r6,  r1,  SP_CAM_DIST + 0x08 # outZ
+    addi    r7,  r1,  SP_CAM_DIST + 0x0C # outXZ
+    li      r8,  0 # bUseCurPos
+    CALL    cameraGetFocusObjDistance
+
+    # pan to point to player (or whatever is focused)
+    # (X rotation value, even though it's Y-axis rotation...)
+    lfs     f1,  (SP_CAM_DIST + 0x00)(r1) # outX
+    lfs     f2,  (SP_CAM_DIST + 0x08)(r1) # outZ
+    CALL    atan2 # now r3 = 0-65535 angle
+
+    # not exactly sure why this is necessary.
+    li      r4,  -0x8000
+    sub     r3,  r4,  r3
+    sth     r3,  0x00(r15)
+
+    # tilt to point to player
+    # (Y rotation value, even though it's local X-axis rotation...)
+    lfs     f1,  0x10(r15) # cam Y
+    lfs     f2,  0x10(r16) # focus Y
+    LOADW   r3,  0x803dd530 # target Y offset (look at head, not feet)
+    cmpwi   r3,  0
+    beq     .debugCamStayNoOffset
+    lfs     f3,  0x8C(r3)
+    fadds   f2,  f2,  f3
+.debugCamStayNoOffset:
+    fsubs   f1,  f1,  f2 # camY - focusY
+    lfs     f2,  (SP_CAM_DIST + 0x0C)(r1) # distXZ
+    CALL    atan2 # now r3 = 0-65535 angle
+    sth     r3,  0x02(r15)
+
+    # we don't need to do anything with roll/Z value.
+
+    # still call free mode, so we can move
+    b       doDebugCamFree
+
+
+floatMagic: .int 0x43300000,0x80000000
+f_zero: .float 0
 prevX: .byte 0 # previous sitck X
+s_xpos: .string "X\t%6d\t%5d"
+s_ypos: .string "Y\t%6d\t%5d"
+s_zpos: .string "Z\t%6d\t%5d"
+s_move: .string "MOVE %d %d"
+s_trig: .string "S %f C %f M %f %f"

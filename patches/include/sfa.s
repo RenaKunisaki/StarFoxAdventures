@@ -3,9 +3,14 @@
 .set __save_gpr,0x802860a8
 .set allocTagged,0x80023cc8 #void* (uint size,AllocTag tag,char *name)
 .set angleToVec2,0x80292f14 #void (int angle, float *outX, float *outY)
+.set atan2,0x800217c0 #int (float y, float x); returns angle as s16 0-65535 (or -32768-32767?)
 .set audioPlaySound,0x8000bb18 #(ObjInstance *sourceObj,SoundId soundid)
 .set buttonDisable,0x80014b3c #int pad, u32 buttons
+.set cameraGetFocusObjDistance,0x80102914 #void (float offsY, Camera *this,
+    #float *outX, float *outY, float *outZ, optional float *outXZ,
+    # BOOL bUseCurPos)
 .set ClearArena,0x80240400
+.set cosf,0x80294204 # float(float)
 .set dCacheFlush,0x80241a50 #(dest, size) -> dest
 .set dCacheStore,0x80241a1c #(dest, size) -> dest
 .set debugPrintDraw,0x801375c8
@@ -66,6 +71,7 @@
 .set setSubtitlesEnabled,0x8001bcd8
 .set setWidescreen,0x8005cd54 #int (bool) always returns 0
 .set shiftJisGetNextChar,0x80015cb8 # char *text, char *outSize -> int chr
+.set sinf,0x80294098 # float(float)
 .set sprintf,0x8028f688
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
