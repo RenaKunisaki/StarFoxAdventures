@@ -638,7 +638,7 @@ pageFuncs:
     .short drawPage6 - .getpc
 
 bsodPage: .byte 0
-padDelay: .byte 0
+padDelay: .byte 180
 
 s_errMain:
     .ascii  "       --- FLAGRANT SYSTEM ERROR ---\n"
