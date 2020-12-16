@@ -295,6 +295,13 @@ spawnMenu_getObjName: # copy object name to buf at r4
     li      r15, 0
 .spawnMenu_getObjName_nextChar:
     lbzx    r17, r16, r15
+    cmpwi   r17, 0x7F
+    bgt     .spawnMenu_getObjName_badChar
+    cmpwi   r17, 0x20
+    bge     .spawnMenu_getObjName_storeChar
+.spawnMenu_getObjName_badChar:
+    li      r17, 0
+.spawnMenu_getObjName_storeChar:
     stbx    r17, r4,  r15
     addi    r15, r15, 1
     cmpwi   r15, 11
