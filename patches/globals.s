@@ -2,7 +2,7 @@
 # (mainly the PDA Menu) know where to find them.
 
 .set PATCH_STATE_PTR,0x8000000C # address to store pointer to our state
-.set PATCH_STATE_SIZE,0x124 # bytes
+.set PATCH_STATE_SIZE,0x110 # bytes
 
 # offsets within state
 # state always starts at an address aligned to 4 bytes.
@@ -19,14 +19,11 @@
 .set DEBUG_RENDER_FLAGS, 0x0A
 .set TEMP_FEATURE_FLAGS, 0x0B # extra features that don't get saved
 .set DEBUG_CAM_MODE,     0x0C
-# 0x0D - 0x0F: reserved
-.set DEBUG_CAM_POS,      0x10 # vec3f 0x10-0x1B
-.set DEBUG_CAM_ROT,      0x1C # vec3s 0x1C-0x21
-# 0x22 - 0x23: reserved
+# 0x0D - 0x0E: reserved
 .set ALLOC_FAIL_MAX,     32 # max alloc fails to keep in log (must be power of 2)
 .set ALLOC_FAIL_POS,     0x0F # position to write next log entry
 .set ALLOC_FAIL_LOG,     0x10 # log of (caller/tag, size) of alloc fails
-# 0x24 + (32 * 8) bytes = 0x124
+# 0x24 + (32 * 8) bytes = 0x110
 
 # camera option bits
 .set CAMERA_OPTION_PAD3,    0x01 # use controller 3 to move

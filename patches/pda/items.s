@@ -1,4 +1,4 @@
-.ascii "items   " # 8 byte file ID for debug
+.ascii "pdaItems" # 8 byte file ID for debug
 # pointers to the submodules.
 
 .set MENU_PAGE_NONE,          0xFF
@@ -14,6 +14,7 @@
 .set MENU_PAGE_DEBUG_CHEAT,   0x09
 .set MENU_PAGE_DEBUG_MISC,    0x0A
 .set MENU_PAGE_DEBUG_CAMERA,  0x0B
+.set MENU_PAGE_DEBUG_ENV,     0x0C
 
 menuPages:
     .int itemDrawFuncs_gameSettings   - mainLoop
@@ -40,6 +41,8 @@ menuPages:
     .int itemAdjustFuncs_debugMisc    - mainLoop
     .int itemDrawFuncs_debugCamera    - mainLoop
     .int itemAdjustFuncs_debugCamera  - mainLoop
+    .int itemDrawFuncs_debugEnv       - mainLoop
+    .int itemAdjustFuncs_debugEnv     - mainLoop
     .int 0
 
 menuPageStructure:
@@ -104,6 +107,11 @@ menuPageStructure:
     .byte 0
     # Debug Camera
     .byte MENU_PAGE_DEBUG_MISC   # previous
+    .byte MENU_PAGE_DEBUG_ENV    # next
+    .byte MENU_PAGE_DEBUG        # parent
+    .byte 0
+    # Debug Environment
+    .byte MENU_PAGE_DEBUG_CAMERA # previous
     .byte MENU_PAGE_DEBUG_TEXT   # next
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
@@ -204,6 +212,7 @@ itemDrawFuncs_debug:
     .int drawItem_debugCamera  - mainLoop
     .int drawItem_debugData    - mainLoop
     .int drawItem_debugRender  - mainLoop
+    .int drawItem_debugEnv     - mainLoop
     .int drawItem_textTest     - mainLoop
     .int drawItem_frameAdvance - mainLoop
     .int drawItem_debugMisc    - mainLoop
@@ -215,6 +224,7 @@ itemAdjustFuncs_debug:
     .int adjItem_debugCamera  - mainLoop
     .int adjItem_debugData    - mainLoop
     .int adjItem_debugRender  - mainLoop
+    .int adjItem_debugEnv     - mainLoop
     .int adjItem_textTest     - mainLoop
     .int adjItem_frameAdvance - mainLoop
     .int adjItem_debugMisc    - mainLoop
@@ -269,11 +279,40 @@ itemDrawFuncs_debugRender:
     .int s_Render              - mainLoop # title
     .int drawItem_textureDebug - mainLoop
     .int drawItem_hitboxes     - mainLoop
+    .int drawItem_blurFilter   - mainLoop
+    .int drawItem_motionBlur   - mainLoop
+    .int drawItem_heatEffect   - mainLoop
+    .int drawItem_monochrome   - mainLoop
+    .int drawItem_spiritVision - mainLoop
+    .int drawItem_distortion   - mainLoop
+    .int drawItem_colorFilter  - mainLoop
+    .int drawItem_colorFilterR - mainLoop
+    .int drawItem_colorFilterG - mainLoop
+    .int drawItem_colorFilterB - mainLoop
     .int 0
 
 itemAdjustFuncs_debugRender:
     .int adjItem_textureDebug - mainLoop
     .int adjItem_hitboxes     - mainLoop
+    .int adjItem_blurFilter   - mainLoop
+    .int adjItem_motionBlur   - mainLoop
+    .int adjItem_heatEffect   - mainLoop
+    .int adjItem_monochrome   - mainLoop
+    .int adjItem_spiritVision - mainLoop
+    .int adjItem_distortion   - mainLoop
+    .int adjItem_colorFilter  - mainLoop
+    .int adjItem_colorFilterR - mainLoop
+    .int adjItem_colorFilterG - mainLoop
+    .int adjItem_colorFilterB - mainLoop
+
+itemDrawFuncs_debugEnv:
+    .int s_Environment        - mainLoop # title
+    .int drawItem_timeOfDay   - mainLoop
+    .int 0
+
+itemAdjustFuncs_debugEnv:
+    .int adjItem_timeOfDay    - mainLoop
+
 
 itemDrawFuncs_debugCheat:
     .int s_EditPlayerState     - mainLoop # title
@@ -308,12 +347,14 @@ itemAdjustFuncs_debugMisc:
     .int adjItem_crash         - mainLoop
 
 itemDrawFuncs_debugCamera:
-    .int s_Camera              - mainLoop # title
-    .int drawItem_dbgCamMode   - mainLoop
+    .int s_Camera               - mainLoop # title
+    .int drawItem_dbgCamMode    - mainLoop
+    .int drawItem_camInterpMode - mainLoop
     .int 0
 
 itemAdjustFuncs_debugCamera:
     .int adjItem_dbgCamMode    - mainLoop
+    .int adjItem_camInterpMode - mainLoop
 
 pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Game Settings
@@ -328,6 +369,7 @@ pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Debug Cheat
     .int inputFuncDummy       - mainLoop # Debug Misc
     .int inputFuncDummy       - mainLoop # Debug Camera
+    .int inputFuncDummy       - mainLoop # Debug Environment
 
 
 inputFuncDummy: blr

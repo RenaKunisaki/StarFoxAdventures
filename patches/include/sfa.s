@@ -131,6 +131,7 @@
 .set enableRumble,           0x803dc909 #bool
 .set fovY,                   0x803dc8a4 #float
 .set heaps,                  0x80340698 #Heap[4]
+.set heatEffectIntensity,    0x803dcdfc #int, but only up to 255
 .set hudHidden,              0x803dca3a #bool
 .set isJapanese,             0x803dc968 #bool
 .set loadedFileMapIds,       0x8035f548 #int16[fileIdx]

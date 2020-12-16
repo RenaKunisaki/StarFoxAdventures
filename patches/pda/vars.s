@@ -1,4 +1,4 @@
-.ascii "vars    " # 8 byte file ID for debug
+.ascii "pda/vars" # 8 byte file ID for debug
 # Variables and constant pools go here.
 # To optimize memory layout, these should be in order from largest
 # to smallest data types (ie int/float/pointer, short, byte/string).
@@ -21,7 +21,7 @@ one:           .float    1
 two:           .float    2
 five:          .float    5
 f_24:          .float   24
-sixty:         .float   60
+f_60:          .float   60
 oneHundred:    .float  100
 f_127:         .float  127
 twoFiveFive:   .float  255
@@ -191,6 +191,17 @@ s_Heap:           .string "Heap"
 # Debug Render menu
 s_Textures:       .string "Textures"
 s_Hitboxes:       .string "Hitboxes: %s"
+s_BlurFilter:     .string "Blur Filter:    %s"
+s_MotionBlur:     .string "Motion Blur:    %3d"
+s_HeatEffect:     .string "Heat Effect:    %3d"
+s_Monochrome:     .string "Monochrome:     %s"
+s_SpiritVision:   .string "Spirit Vision:  %s"
+s_Distortion:     .string "Distort Filter: %s"
+s_ColorFilter:    .string "Color Filter:   %s"
+s_Red:            .string "Red:            %3d"
+s_Green:          .string "Green:          %3d"
+s_Blue:           .string "Blue:           %3d"
+s_Alpha:          .string "Alpha:          %3d"
 
 # Debug Cheat menu
 s_EditPlayerState:.string "Edit Player State"
@@ -213,6 +224,12 @@ s_Camera:         .string "Camera"
 s_Mode:           .string "Mode: %s"
 s_Stay:           .string "Stay"
 s_Free:           .string "Free"
+s_InterpMode:     .string "Interp Mode: %d"
+
+# Debug Environment menu
+s_Environment:     .string "Environment"
+s_timeOfDay:       .string "Time: %02d:%02d:%02d"
+s_timeOfDayNA:     .string "Time: N/A"
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "
@@ -372,7 +389,6 @@ warpNameDiscovery:     .string "Unused: Discovery Falls"
 warpNameWillow:        .string "Unused: Willow Grove"
 warpNameOldKP:         .string "Unused: Old Krazoa Palace"
 warpNameCloudRace2:    .string "Unused: CloudRunner Race 2"
-
 
 
 # 803dca3e bool shouldResetNextFrame

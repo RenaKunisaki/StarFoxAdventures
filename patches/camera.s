@@ -395,6 +395,8 @@ cameraUpdate: # r3: frames
     stfd    f1,  SP_FLOAT_TMP(r1)
     lwz     r6,  (SP_FLOAT_TMP+4)(r1)
     lhz     r7,  0x00(r15)
+    li      r8,  182 # ~65535/360
+    divwu   r7,  r7,  r8
     li      r3,  24 # X
     li      r4,  400 # Y
     CALL    debugPrintfxy
@@ -405,6 +407,8 @@ cameraUpdate: # r3: frames
     stfd    f1,  SP_FLOAT_TMP(r1)
     lwz     r6,  (SP_FLOAT_TMP+4)(r1)
     lhz     r7,  0x02(r15)
+    li      r8,  182 # ~65535/360
+    divwu   r7,  r7,  r8
     li      r3,  24 # X
     li      r4,  411 # Y
     CALL    debugPrintfxy
@@ -415,6 +419,8 @@ cameraUpdate: # r3: frames
     stfd    f1,  SP_FLOAT_TMP(r1)
     lwz     r6,  (SP_FLOAT_TMP+4)(r1)
     lhz     r7,  0x04(r15)
+    li      r8,  182 # ~65535/360
+    divwu   r7,  r7,  r8
     li      r3,  24 # X
     li      r4,  422 # Y
     CALL    debugPrintfxy
@@ -582,6 +588,6 @@ floatMagic: .int 0x43300000,0x80000000
 f_zero: .float 0
 prevX: .byte 0 # previous stick X
 padDelay: .byte 9
-s_xpos: .string "X\t%6d\t%5d"
-s_ypos: .string "Y\t%6d\t%5d"
-s_zpos: .string "Z\t%6d\t%5d"
+s_xpos: .string "X\t%6d\t%3d"
+s_ypos: .string "Y\t%6d\t%3d"
+s_zpos: .string "Z\t%6d\t%3d"

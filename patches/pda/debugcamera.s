@@ -37,3 +37,22 @@ adjItem_dbgCamMode: # r3 = amount to adjust by (0=A button)
     b       .adjItem_dbgCamMode_store
 
 #######################################################################
+
+# seems to do not much of anything
+drawItem_camInterpMode:
+    addi    r4,  r14, (s_InterpMode - mainLoop)
+    li      r5,  -1
+    LOADW   r6,  pCamera
+    cmpwi   r6,  0
+    beqlr
+    lbz     r5,  0x0139(r6)
+    blr
+
+adjItem_camInterpMode: # r3 = amount to adjust by
+    LOADW   r6,  pCamera
+    cmpwi   r6,  0
+    beqlr
+    lbz     r4,  0x0139(r6)
+    add     r4,  r4,  r3
+    stb     r4,  0x0139(r6)
+    blr
