@@ -108,7 +108,10 @@ objMenu_List: # draw list of objects.
     #mr      r6,  r18 # addr
     #lwz     r6,  0x44(r18) # id and objdef
     lwz      r6,  0x4C(r18) # ObjDef*
+    cmpwi    r6,  0
+    beq      .objMenu_List_noObjDef
     lwz      r6,  0x14(r6)  # unique ID
+.objMenu_List_noObjDef:
     CALL    sprintf
 
     # manually copy the name since it's not terminated
