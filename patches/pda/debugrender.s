@@ -138,19 +138,20 @@ adjItem_spiritVision: # r3 = amount to adjust by (0=A button)
 
 #######################################################################
 
-drawItem_distortion:
-    addi    r4,  r14, (s_Distortion - mainLoop)
-    addi    r5,  r14, (s_off - mainLoop)
-    LOADB   r6,  bEnableDistortionFilter
-    cmpwi   r6,  0
-    b       debugText_printOffOn
-
-adjItem_distortion: # r3 = amount to adjust by (0=A button)
-    LOADWH  r3,  bEnableDistortionFilter
-    LOADBL2 r4,  bEnableDistortionFilter, r3
-    xori    r4,  r4,  1
-    STOREB  r4,  bEnableDistortionFilter, r3
-    blr
+# not really useful
+#drawItem_distortion:
+#    addi    r4,  r14, (s_Distortion - mainLoop)
+#    addi    r5,  r14, (s_off - mainLoop)
+#    LOADB   r6,  bEnableDistortionFilter
+#    cmpwi   r6,  0
+#    b       debugText_printOffOn
+#
+#adjItem_distortion: # r3 = amount to adjust by (0=A button)
+#    LOADWH  r3,  bEnableDistortionFilter
+#    LOADBL2 r4,  bEnableDistortionFilter, r3
+#    xori    r4,  r4,  1
+#    STOREB  r4,  bEnableDistortionFilter, r3
+#    blr
 
 #######################################################################
 

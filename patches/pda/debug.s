@@ -76,28 +76,6 @@ adjItem_debugCamera: # r3 = amount to adjust by (0=A button)
 
 #######################################################################
 
-drawItem_textTest:
-    addi    r4,  r14, (s_TextTest - mainLoop)
-    lhz     r5,  (textTestId - mainLoop)(r14)
-    blr
-
-adjItem_textTest:
-    # r3 = amount to adjust by (0 = A button)
-    # r9 = sound effect to play after calling this
-    lha     r4,  (textTestId - mainLoop)(r14)
-    add     r4,  r4,  r3
-    sth     r4,  (textTestId - mainLoop)(r14)
-    cmpwi   r3,  0
-    bnelr
-    lhz     r3,  (textTestId - mainLoop)(r14)
-    li      r6,  1 # hide HUD and lock player
-    mflr    r20
-    CALL    0x8012ea5c # params r4, r5 are unused
-    mtlr    r20
-    blr
-
-#######################################################################
-
 drawItem_frameAdvance:
     addi    r4,  r14, (s_frameAdv - mainLoop)
     blr

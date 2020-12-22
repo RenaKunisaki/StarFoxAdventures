@@ -57,6 +57,7 @@ bitMenuIdx:     .short 0
 streamTestId:   .short 0
 soundTestId:    .short 0
 textTestId:     .short 0
+textTestBox:    .short 0x82
 textureDebugId: .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
@@ -103,6 +104,8 @@ s_pad1:           .string "Controller 1"
 s_pad3:           .string "Controller 3"
 s_Fox:            .string "Fox"
 s_Krystal:        .string "Krystal"
+s_xDec:           .string "X: %d"
+s_yDec:           .string "Y: %d"
 
 
 # page 0
@@ -164,7 +167,6 @@ s_DebugText:      .string "Debug Text"
 s_Map:            .string "Map"
 s_Data:           .string "Data"
 s_Render:         .string "Render"
-s_TextTest:       .string "Show Text: %04X"
 s_frameAdv:       .string "Advance Frame"
 
 # Debug Text menu
@@ -196,7 +198,7 @@ s_MotionBlur:     .string "Motion Blur:    %3d"
 s_HeatEffect:     .string "Heat Effect:    %3d"
 s_Monochrome:     .string "Monochrome:     %s"
 s_SpiritVision:   .string "Spirit Vision:  %s"
-s_Distortion:     .string "Distort Filter: %s"
+#s_Distortion:     .string "Distort Filter: %s"
 s_ColorFilter:    .string "Color Filter:   %s"
 s_Red:            .string "Red:            %3d"
 s_Green:          .string "Green:          %3d"
@@ -224,12 +226,17 @@ s_Camera:         .string "Camera"
 s_Mode:           .string "Mode: %s"
 s_Stay:           .string "Stay"
 s_Free:           .string "Free"
-s_InterpMode:     .string "Interp Mode: %d"
+#s_InterpMode:     .string "Interp Mode: %d"
 
 # Debug Environment menu
 s_Environment:     .string "Environment"
 s_timeOfDay:       .string "Time: %02d:%02d:%02d"
 s_timeOfDayNA:     .string "Time: N/A"
+
+# Debug GameText menu
+s_GameText:        .string "GameText"
+s_TextTest:        .string "Text: %04X"
+s_TextBox:         .string "Window: %04X"
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "

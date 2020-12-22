@@ -1,48 +1,51 @@
 .ascii "pdaItems" # 8 byte file ID for debug
 # pointers to the submodules.
 
-.set MENU_PAGE_NONE,          0xFF
-.set MENU_PAGE_GAME_SETTINGS, 0x00
-.set MENU_PAGE_VIDEO,         0x01
-.set MENU_PAGE_CAMERA,        0x02
-.set MENU_PAGE_AUDIO,         0x03
-.set MENU_PAGE_DEBUG,         0x04
-.set MENU_PAGE_DEBUG_TEXT,    0x05
-.set MENU_PAGE_DEBUG_MAP,     0x06
-.set MENU_PAGE_DEBUG_DATA,    0x07
-.set MENU_PAGE_DEBUG_RENDER,  0x08
-.set MENU_PAGE_DEBUG_CHEAT,   0x09
-.set MENU_PAGE_DEBUG_MISC,    0x0A
-.set MENU_PAGE_DEBUG_CAMERA,  0x0B
-.set MENU_PAGE_DEBUG_ENV,     0x0C
+.set MENU_PAGE_NONE,           0xFF
+.set MENU_PAGE_GAME_SETTINGS,  0x00
+.set MENU_PAGE_VIDEO,          0x01
+.set MENU_PAGE_CAMERA,         0x02
+.set MENU_PAGE_AUDIO,          0x03
+.set MENU_PAGE_DEBUG,          0x04
+.set MENU_PAGE_DEBUG_TEXT,     0x05
+.set MENU_PAGE_DEBUG_MAP,      0x06
+.set MENU_PAGE_DEBUG_DATA,     0x07
+.set MENU_PAGE_DEBUG_RENDER,   0x08
+.set MENU_PAGE_DEBUG_CHEAT,    0x09
+.set MENU_PAGE_DEBUG_MISC,     0x0A
+.set MENU_PAGE_DEBUG_CAMERA,   0x0B
+.set MENU_PAGE_DEBUG_ENV,      0x0C
+.set MENU_PAGE_DEBUG_GAMETEXT, 0x0D
 
 menuPages:
-    .int itemDrawFuncs_gameSettings   - mainLoop
-    .int itemAdjustFuncs_gameSettings - mainLoop
-    .int itemDrawFuncs_video          - mainLoop
-    .int itemAdjustFuncs_video        - mainLoop
-    .int itemDrawFuncs_camera         - mainLoop
-    .int itemAdjustFuncs_camera       - mainLoop
-    .int itemDrawFuncs_audio          - mainLoop
-    .int itemAdjustFuncs_audio        - mainLoop
-    .int itemDrawFuncs_debug          - mainLoop
-    .int itemAdjustFuncs_debug        - mainLoop
-    .int itemDrawFuncs_debugText      - mainLoop
-    .int itemAdjustFuncs_debugText    - mainLoop
-    .int itemDrawFuncs_debugMap       - mainLoop
-    .int itemAdjustFuncs_debugMap     - mainLoop
-    .int itemDrawFuncs_debugData      - mainLoop
-    .int itemAdjustFuncs_debugData    - mainLoop
-    .int itemDrawFuncs_debugRender    - mainLoop
-    .int itemAdjustFuncs_debugRender  - mainLoop
-    .int itemDrawFuncs_debugCheat     - mainLoop
-    .int itemAdjustFuncs_debugCheat   - mainLoop
-    .int itemDrawFuncs_debugMisc      - mainLoop
-    .int itemAdjustFuncs_debugMisc    - mainLoop
-    .int itemDrawFuncs_debugCamera    - mainLoop
-    .int itemAdjustFuncs_debugCamera  - mainLoop
-    .int itemDrawFuncs_debugEnv       - mainLoop
-    .int itemAdjustFuncs_debugEnv     - mainLoop
+    .int itemDrawFuncs_gameSettings    - mainLoop
+    .int itemAdjustFuncs_gameSettings  - mainLoop
+    .int itemDrawFuncs_video           - mainLoop
+    .int itemAdjustFuncs_video         - mainLoop
+    .int itemDrawFuncs_camera          - mainLoop
+    .int itemAdjustFuncs_camera        - mainLoop
+    .int itemDrawFuncs_audio           - mainLoop
+    .int itemAdjustFuncs_audio         - mainLoop
+    .int itemDrawFuncs_debug           - mainLoop
+    .int itemAdjustFuncs_debug         - mainLoop
+    .int itemDrawFuncs_debugText       - mainLoop
+    .int itemAdjustFuncs_debugText     - mainLoop
+    .int itemDrawFuncs_debugMap        - mainLoop
+    .int itemAdjustFuncs_debugMap      - mainLoop
+    .int itemDrawFuncs_debugData       - mainLoop
+    .int itemAdjustFuncs_debugData     - mainLoop
+    .int itemDrawFuncs_debugRender     - mainLoop
+    .int itemAdjustFuncs_debugRender   - mainLoop
+    .int itemDrawFuncs_debugCheat      - mainLoop
+    .int itemAdjustFuncs_debugCheat    - mainLoop
+    .int itemDrawFuncs_debugMisc       - mainLoop
+    .int itemAdjustFuncs_debugMisc     - mainLoop
+    .int itemDrawFuncs_debugCamera     - mainLoop
+    .int itemAdjustFuncs_debugCamera   - mainLoop
+    .int itemDrawFuncs_debugEnv        - mainLoop
+    .int itemAdjustFuncs_debugEnv      - mainLoop
+    .int itemDrawFuncs_debugGameText   - mainLoop
+    .int itemAdjustFuncs_debugGameText - mainLoop
     .int 0
 
 menuPageStructure:
@@ -111,7 +114,12 @@ menuPageStructure:
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
     # Debug Environment
-    .byte MENU_PAGE_DEBUG_CAMERA # previous
+    .byte MENU_PAGE_DEBUG_CAMERA   # previous
+    .byte MENU_PAGE_DEBUG_GAMETEXT # next
+    .byte MENU_PAGE_DEBUG          # parent
+    .byte 0
+    # Debug GameText
+    .byte MENU_PAGE_DEBUG_ENV    # previous
     .byte MENU_PAGE_DEBUG_TEXT   # next
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
@@ -206,28 +214,28 @@ itemAdjustFuncs_audio:
 
 
 itemDrawFuncs_debug:
-    .int s_Debug               - mainLoop # title
-    .int drawItem_debugText    - mainLoop
-    .int drawItem_debugMap     - mainLoop
-    .int drawItem_debugCamera  - mainLoop
-    .int drawItem_debugData    - mainLoop
-    .int drawItem_debugRender  - mainLoop
-    .int drawItem_debugEnv     - mainLoop
-    .int drawItem_textTest     - mainLoop
-    .int drawItem_frameAdvance - mainLoop
-    .int drawItem_debugMisc    - mainLoop
+    .int s_Debug                - mainLoop # title
+    .int drawItem_debugText     - mainLoop
+    .int drawItem_debugMap      - mainLoop
+    .int drawItem_debugCamera   - mainLoop
+    .int drawItem_debugData     - mainLoop
+    .int drawItem_debugRender   - mainLoop
+    .int drawItem_debugEnv      - mainLoop
+    .int drawItem_debugGameText - mainLoop
+    .int drawItem_frameAdvance  - mainLoop
+    .int drawItem_debugMisc     - mainLoop
     .int 0
 
 itemAdjustFuncs_debug:
-    .int adjItem_debugText    - mainLoop
-    .int adjItem_debugMap     - mainLoop
-    .int adjItem_debugCamera  - mainLoop
-    .int adjItem_debugData    - mainLoop
-    .int adjItem_debugRender  - mainLoop
-    .int adjItem_debugEnv     - mainLoop
-    .int adjItem_textTest     - mainLoop
-    .int adjItem_frameAdvance - mainLoop
-    .int adjItem_debugMisc    - mainLoop
+    .int adjItem_debugText     - mainLoop
+    .int adjItem_debugMap      - mainLoop
+    .int adjItem_debugCamera   - mainLoop
+    .int adjItem_debugData     - mainLoop
+    .int adjItem_debugRender   - mainLoop
+    .int adjItem_debugEnv      - mainLoop
+    .int adjItem_debugGameText - mainLoop
+    .int adjItem_frameAdvance  - mainLoop
+    .int adjItem_debugMisc     - mainLoop
 
 itemDrawFuncs_debugText:
     .int s_DebugText                    - mainLoop # title
@@ -284,7 +292,7 @@ itemDrawFuncs_debugRender:
     .int drawItem_heatEffect   - mainLoop
     .int drawItem_monochrome   - mainLoop
     .int drawItem_spiritVision - mainLoop
-    .int drawItem_distortion   - mainLoop
+    #.int drawItem_distortion   - mainLoop
     .int drawItem_colorFilter  - mainLoop
     .int drawItem_colorFilterR - mainLoop
     .int drawItem_colorFilterG - mainLoop
@@ -299,7 +307,7 @@ itemAdjustFuncs_debugRender:
     .int adjItem_heatEffect   - mainLoop
     .int adjItem_monochrome   - mainLoop
     .int adjItem_spiritVision - mainLoop
-    .int adjItem_distortion   - mainLoop
+    #.int adjItem_distortion   - mainLoop
     .int adjItem_colorFilter  - mainLoop
     .int adjItem_colorFilterR - mainLoop
     .int adjItem_colorFilterG - mainLoop
@@ -349,12 +357,22 @@ itemAdjustFuncs_debugMisc:
 itemDrawFuncs_debugCamera:
     .int s_Camera               - mainLoop # title
     .int drawItem_dbgCamMode    - mainLoop
-    .int drawItem_camInterpMode - mainLoop
+    #.int drawItem_camInterpMode - mainLoop
     .int 0
 
 itemAdjustFuncs_debugCamera:
     .int adjItem_dbgCamMode    - mainLoop
-    .int adjItem_camInterpMode - mainLoop
+    #.int adjItem_camInterpMode - mainLoop
+
+itemDrawFuncs_debugGameText:
+    .int s_GameText             - mainLoop # title
+    .int drawItem_textTest      - mainLoop
+    .int drawItem_gameTextBox - mainLoop
+    .int 0
+
+itemAdjustFuncs_debugGameText:
+    .int adjItem_textTest    - mainLoop
+    .int adjItem_gameTextBox - mainLoop
 
 pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Game Settings
@@ -370,6 +388,7 @@ pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Debug Misc
     .int inputFuncDummy       - mainLoop # Debug Camera
     .int inputFuncDummy       - mainLoop # Debug Environment
+    .int inputFuncDummy       - mainLoop # Debug GameText
 
 
 inputFuncDummy: blr
