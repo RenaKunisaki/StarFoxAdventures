@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<staticAddrs>
+  <!-- companion to alloctags.xml - defines some static pointers that are
+  often used as parameters, which won't show up in a heap scan. -->
+  <var addr="0x803A4278" type="Camera" name="camera" />
+  <var addr="0x803428F8" type="ObjInstance*" name="pPlayer" />
+  <var addr="0x803428FC" type="ObjInstance*" name="pTricky" />
+  <var addr="0x809F3F80" type="ObjInstance" name="player" />
+</staticAddrs>

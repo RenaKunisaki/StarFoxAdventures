@@ -39,12 +39,32 @@ class ZlibView(aiohttp.web.View):
         path = path.replace('..', '%2E%2E')
         log.info("ZLB: path=%r Q=%r", path, self.request.query)
         try:
+            useHeader = self.request.query.get('header', '0')
             with open(path, 'rb') as file:
-                file.seek(int(self.request.query.get('offset', 0)))
-                data = file.read(int(self.request.query.get('length', 0)))
+                file.seek(0, 2)
+                fileSize = file.tell()
+                offs = int(self.request.query.get('offset', 0))
+                file.seek(offs)
+
+                if useHeader == '1':
+                    sig = file.read(4)
+                    if sig != b'ZLB\0':
+                        return await self.request.app.sendError(400, self.request,
+                            "Not ZLB (0x%02X%02X%02X%02X)" % sig)
+                    ver, decLen, compLen = struct.unpack('>3I', file.read(12))
+                    if ver != 1:
+                        return await self.request.app.sendError(400, self.request,
+                            "Unsupported version 0x%X" % ver)
+
+                    data = file.read(compLen)
+                else:
+                    length = int(self.request.query.get('length', fileSize-offs))
+                    log.debug("FileSize=0x%X offset=0x%X len=0x%X", fileSize, offs, length)
+                    data = file.read()
                 try:
                     data = zlib.decompress(data)
                 except Exception as ex:
+                    log.exception("ZLB decompression failed")
                     return await self.request.app.sendError(400, self.request, str(ex))
                 return await self.request.app.sendData(data, self.request,
                     content_type="application/octet-stream")
@@ -143,9 +163,12 @@ class WebServer(web.Application):
         '.html':     'text/html',
         '.jpg':      'image/jpg',
         '.js':	     'application/x-javascript',
+        '.json':     'application/json',
         '.manifest': 'text/cache-manifest',
+        '.mp4':      'video/mp4',
         '.png':      'image/png',
         '.svg':	     'image/svg+xml',
+        '.xml':	     'text/xml',
     }
 
     def __init__(self):

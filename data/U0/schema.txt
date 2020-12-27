@@ -1,0 +1,169 @@
+each document's root tag is the same as its name, eg assets.xml -> assets.
+
+- assets.xml # lists which assets are present in which maps
+    - models
+        - model
+            - idx="0x0000" # index
+            - map # tells that the model is present in this map
+                dir="animtest" # map directory name
+                entry="0x00000000" # entry from MODELS.TAB
+                idx="0x0000" # index into MODELS.TAB
+    - tex0
+        - texture
+            - idx="0x0000"
+            - map # tells that the texture is present in this map
+                - dir="animtest" # map directory name
+                - entry="0x00000000" entry from TEX0.TAB
+    - tex1 # same as tex0
+
+- dllfuncs.xml # defines the common functions for DLLs
+    -interface
+        - description
+        - extends
+            - interface="foo"
+        - function
+            - idx="0" # index into the DLL's function table
+            - name="initialise" # a name for the function
+            - description
+            - params
+                # empty = no params; missing = unknown params
+                - param
+                    - reg="r3" # register, eg r3, f1
+                    - type="ObjInstance*" # parameter data type
+                    - name="obj" # parameter name
+                    - allowNull="1"
+            - return
+                - reg="r3" # assumed r3 if missing
+                - type="int" # can be "void"
+                # missing = unknown
+                # this is a separate tag so it can have description and reg
+                # and to not conflict with stub return value
+
+- dlls.xml # lists known information about DLLs
+    - dll
+        - id="0x0000" # DLL ID
+        - name="UI" # a name for the DLL
+        - address="0x8031C020" # RAM address from pointer table
+        - dolOffs="0x319020" # where that RAM address is in main.dol
+        - unk08="0x00000000"
+        - unk0E="0x0000"
+        - prev="0xFFFFFFFF" # supposed to be a pointer?
+        - next="0xFFFFFFFF" # supposed to be a pointer?
+        - description
+        - functions
+            - function
+                - idx="0x0" # index into function table
+                - address="0x00000000" # function RAM address
+                - name="render" # function name
+                - valid="0" # is address valid?
+                - stub="1" # is function a stub?
+                - return="123" # if stub, constant return value if any
+                - param # same as dllfuncs
+        - objparams # for DLLs used by multiple objects
+            - length="0x24" # parameter length if known
+            - param
+                - type="s16" # data type
+                    # s8, u8, s16, s32, s64..., float, double, GameBit
+                    # pad8, pad16...
+                    # pointer
+                - offset="0x18" # offset into objdef
+                - name="key" # a name for the parameter (suitable for C code)
+                - description
+                - note
+
+- gamebits.xml # lists known game bits
+    - bit
+        - id="0x0000"
+        - table="0" # which table it belongs to (0=temp)
+        - unk1="0x00"
+        - unk2="0x0"
+        - max="1" # maximum possible value
+        - name="NoBallsAllowed"
+        - text: description
+
+- gametext.json
+
+- maps.xml # describes maps
+    - map
+        - blockTable="0x000000"  # offset in MAPS.bin of the block list
+        - dir="shipbattle"       # directory name
+        - dirId="0x00"           # index into game's internal dir list
+        - height="1"             # height in blocks
+        - id="0x00"              # some maps don't have an ID
+        - infoOffset="0x000000"  # offset in MAPS.bin of the size and origin data
+        - internalName="Ship Battle" # name from MAPINFO.bin
+        - layer="1"              # map layer
+        - link0="1"              # first linked map ID
+        - link1="1"              # second linked map ID
+        - originX="1"            # block position of origin
+        - originY="1"            # block position of origin
+        - param3="0x00"          # param from MAPINFO.bin
+        - param4="0x00"          # param from MAPINFO.bin
+        - parent="0x00"          # parent dir ID
+        - rects1="0x000000"      # offset in MAPS.bin
+        - rects2="0x000000"      # offset in MAPS.bin
+        - rects3="0x000000"      # offset in MAPS.bin
+        - rects4="0x000000"      # offset in MAPS.bin of some data related to view regions
+        - romlist="frontend"     # romlist file name
+        - romlistOffs="0x000000" # offset in MAPS.bin of header that tells size of romlist
+        - type="0"               # type from MAPINFO.bin
+        - unk08="0x00000000"
+        - unk0C="0x00000000"
+        - unk10="0x00000000"
+        - unk14="0x00000000"
+        - unk18="0x00000000"
+        - unk1C="0x0000"
+        - unk1E="0x0000"
+        - unused="1" # marks unused maps
+        - width="1"  # width in blocks
+        - worldX="1" # world X coord in blocks
+        - worldY="1" # world Y coord in blocks
+        - text: map name
+
+- models.xml # extra info about models
+    - model
+        - id="0x0000"
+        - type="debug" # arbitrary category I made up
+            # character
+            # debug
+            # effect
+            # enemy
+            # hazard
+            # item
+            # object
+            # projectile
+            # scenery
+        - description
+
+- objects.xml # info about objects
+    - object
+        - id="0x0000"
+        - name="Krystal" # obj name - truncated at 11 or 15 chars in game data
+        - def="0x0000" # object def number
+        - dll="0x0000" # DLL that this object loads
+        - nPlayerObjs="1"
+        - map="0xF" # map ID defined in object data (not sure what for)
+        - type="boss" # arbitrary category I made up
+            # boss
+            # control
+            # decal
+            # effect
+            # enemy
+            # hazard
+            # npc
+            # player
+            # weapon
+        - description
+        - map # indicates that the object is present in this map
+            - id="0x00" # map ID
+            - count="1" # how many of this object are in this map
+        - model # lists object's models
+            - id="0x0000"
+            - text="0x0000" # GameText ID shown by PDA info mode
+        - params # lists known parameters in objdef; empty=none, missing=unknown
+            # params before 0x18 are common to all objects, so omitted
+            - length="0x00" # known parameter length (at least 0x18)
+            - param # same as for objparams
+        - note
+        - spawn # a description of when this object spawns
+        - exampleParams # hexdump of an instance's param data (from 0x18 onward)

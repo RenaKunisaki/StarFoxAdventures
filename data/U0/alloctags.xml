@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+<alloctags>
+  <!-- return addresses from allocTagged() calls - identifies the exact type.
+  Amethyst mod injects these in place of the original tags. -->
+  <tag id="0x80006708" name="LAction" />
+  <tag id="0x80008E74" name="AudioRelated" />
+  <tag id="0x8000a1f0" name="Audio" /> <!-- generic AudioAlloc func -->
+  <tag id="0x800128ac" name="VOX_800128ac" />
+  <tag id="0x80013374" name="Voxmap" />
+  <tag id="0x800135cc" name="CameraVox" />
+  <tag id="0x80013a18" name="ModelStruct_80013a18" />
+  <tag id="0x80013db0" name="ModelStruct_80013db0" />
+  <tag id="0x800159d0" name="FACEFEED_800159d0" />
+  <tag id="0x80015a2c" name="DvdReadBufferAsync" />
+  <tag id="0x80015b2c" name="DvdReadBuffer" />
+  <tag id="0x800171f4" name="TextRelated_800171f4" />
+  <tag id="0x80018ea0" name="TextRelated_80018ea0" />
+  <tag id="0x8001a960" name="FontTexture" />
+  <tag id="0x8001a9d0" name="CompressedFont" /> <!-- from GC BIOS -->
+  <tag id="0x8001a9e4" name="DecompressedFont" /> <!-- from GC BIOS -->
+  <tag id="0x8001b198" name="LanguageRelated_8001b198" />
+  <tag id="0x8001de74" name="Light" />
+  <!-- the mmStore items are a very rare instance of the game actually
+  providing a name for the block -->
+  <tag id="0x80022bd0" name="mmStore" />
+  <tag id="0x80022c20" name="mmStore->ptrStore" />
+  <tag id="0x800241c0" name="Stack" />
+  <tag id="0x80024fc4" name="Animation_80024fc4" /> <!-- ANIM.BIN entry -->
+  <tag id="0x800250c0" name="Animation_800250c0" /> <!-- ANIM.BIN entry -->
+  <tag id="0x800251bc" name="Animation_800251bc" /> <!-- ANIM.BIN entry -->
+  <tag id="0x800252b8" name="Animation_800252b8" /> <!-- ANIM.BIN entry -->
+  <tag id="0x80025698" name="Animation_80025698" /> <!-- ANIM.BIN entry -->
+  <tag id="0x80026d28" name="ModelStruct_80026d28" />
+  <tag id="0x80026d4c" name="ModelStruct_80026d4c" />
+  <tag id="0x80026da0" name="ModelStruct_80026da0" />
+  <tag id="0x800282c4" name="Animation_800282c4" /> <!-- ANIM.BIN entry -->
+  <tag id="0x8002922c" name="Model" />
+  <tag id="0x800296e0" name="ModelData_800296e0" />
+  <tag id="0x8002BE20" name="ObjDef" />
+  <tag id="0x8002c3bc" name="ModLinesTab" />
+  <tag id="0x8002c3fc" name="ModLinesBin" />
+  <tag id="0x8002c4cc" name="ObjectFileStruct" />
+  <tag id="0x8002D91C" name="ObjInstance" />
+  <!-- Object state is *also* ObjInstance? or is this just memory reuse shenanigans? -->
+  <tag id="0x8002e9b0" name="ObjDefs_8002e9b0" />
+  <tag id="0x8002e9c4" name="ObjDefs_8002e9c4" />
+  <tag id="0x8002e9d8" name="ObjDefs_8002e9d8" />
+  <tag id="0x8002ea7c" name="ObjIDs" />
+  <tag id="0x8002ea90" name="ObjRefCounts" />
+  <tag id="0x8002eb0c" name="LoadedObjects" />
+  <tag id="0x80036b28" name="ObjBuf_80036b28" />
+  <tag id="0x80036b3c" name="ObjBuf_80036b3c" />
+  <tag id="0x80036b50" name="ObjBuf_80036b50" />
+  <tag id="0x80036b64" name="ObjBuf_80036b64" />
+  <tag id="0x80036b78" name="ObjBuf_80036b78" />
+  <tag id="0x80036b90" name="ObjBuf_80036b90" />
+  <tag id="0x80036ba4" name="ObjBuf_80036ba4" />
+  <tag id="0x800379b4" name="ObjFieldDC" />
+  <tag id="0x80041f58" name="MovieTexture_80041f58" />
+  <tag id="0x80042174" name="MovieTexture_80042174" />
+  <tag id="0x80042044" name="MovieTexture_80042044" />
+  <!-- data files from maps -->
+  <tag id="0x8004460c" name="MapAnimCurvTab" />
+  <tag id="0x80044850" name="MapAnimCurvBin" />
+  <tag id="0x80044a94" name="MapVoxmapBin" />
+  <tag id="0x80044c94" name="MapVoxmapTab" />
+  <tag id="0x80044ee0" name="MapBlocksBin" />
+  <tag id="0x800451bc" name="MapBlocksTab" />
+  <tag id="0x800453e4" name="MapModelsBin" />
+  <tag id="0x8004563c" name="MapModelsTab" />
+  <tag id="0x80045864" name="MapAnimBin" />
+  <tag id="0x80045aa4" name="MapAnimTab" />
+  <tag id="0x80045cd0" name="MapTex0Bin" />
+  <tag id="0x80045f14" name="MapTex0Tab" />
+  <tag id="0x80046168" name="MapTex1Bin" />
+  <tag id="0x800463a8" name="MapTex1Tab" />
+  <tag id="0x80048068" name="MapTex1Bin_80048068" />
+  <tag id="0x80048138" name="MapTex1Bin_80048138" />
+  <tag id="0x800483b8" name="CompressedRomListAsync" />
+  <tag id="0x80048454" name="CompressedRomList" />
+  <tag id="0x800486cc" name="Tex1Mipmap" />
+  <tag id="0x80049000" name="TempFileBuffer_80049000" />
+  <tag id="0x800491b4" name="DataFile" />
+  <tag id="0x80049354" name="DataFile_80049354" />
+  <tag id="0x8004b5f8" name="TrickyVox" />
+  <tag id="0x8004b644" name="Unknown32ByteBuffer" />
+  <tag id="0x800537d8" name="Texture" />
+  <tag id="0x80053940" name="Texture" />
+  <tag id="0x80053ae8" name="Texture" />
+  <tag id="0x800548e0" name="Texture" />
+  <tag id="0x80054cdc" name="Texture" />
+  <tag id="0x80054dd0" name="TextureData_80054dd0" />
+  <tag id="0x80054f34" name="TextureData_80054dd0" />
+  <tag id="0x80058efc" name="MapRect" />
+  <tag id="0x80058f18" name="LinkedMaps" />
+  <tag id="0x80058f34" name="MapBlockLayers" />
+  <tag id="0x80058f50" name="MapCellValidFlags" />
+  <tag id="0x80059f54" name="MapsBinEntry" />
+  <tag id="0x8005ca7c" name="pMapBlocks" />
+  <tag id="0x8005ca90" name="pLoadedBlocks" />
+  <tag id="0x8005caa4" name="pIsBlockSlotUsed" />
+  <tag id="0x8005cab8" name="curMapInfo" />
+  <tag id="0x8005cacc" name="mapLayerBlockIdxs" />
+  <tag id="0x8005cae0" name="mapLayerBlockStructs" />
+  <tag id="0x8005caf4" name="mapBlocks_8005caf4" />
+  <tag id="0x8005ccc0" name="mapBlocks_8005ccc0" />
+  <tag id="0x8005cce0" name="mapBlocks_8005cce0" />
+  <tag id="0x80060940" name="HitsBinEntry" />
+  <tag id="0x80060af0" name="BlocksBinEntry" />
+  <tag id="0x8006215c" name="Vec3fArray" />
+  <tag id="0x80062c5c" name="Vec3fArrayForTextures" />
+  <tag id="0x800649b4" name="IntersectPoint" />
+  <tag id="0x800699c0" name="IntersectPoint_800699c0" />
+  <tag id="0x800699d8" name="IntersectPoint_800699d8" />
+  <tag id="0x800699f0" name="IntersectPoint_800699f0" />
+  <tag id="0x80069a08" name="IntersectPoint_80069a08" />
+  <tag id="0x80069a20" name="IntersectPoint_80069a20" />
+  <tag id="0x8007d770" name="SaveGameBuffer" />
+  <tag id="0x8007d9ec" name="SaveGameBuffer" />
+  <tag id="0x8007eb80" name="SaveGameWriteBuffer" />
+  <tag id="0x8007ef98" name="MemCardBuffer" />
+  <tag id="0x8007f890" name="SaveGameBuffer" />
+  <tag id="0x8007fa74" name="MemCardBuffer" />
+  <tag id="0x80080fc0" name="ObjSeqTabEntry" />
+  <tag id="0x80080ff4" name="ObjSeqBinEntry" />
+  <tag id="0x80082398" name="AnimCurvRomTab" />
+  <tag id="0x80082f5c" name="RomCurve" />
+  <tag id="0x800886f0" name="ObjSeqData_800886f0" />
+  <tag id="0x8008be24" name="TexturePtrs" />
+  <tag id="0x8008e8b8" name="TexturePtrs_8008e8b8" />
+  <tag id="0x8008fb70" name="TexturePtrs_8008fb70" />
+  <tag id="0x80091a48" name="TexturePtrsCloud_80091a48" />
+  <tag id="0x80091d98" name="TexturePtrsCloud_80091d98" />
+  <tag id="0x80093e00" name="TitleScreenFile_80093e00" />
+  <tag id="0x80093f3c" name="TitleScreenFile_80093f3c" />
+  <tag id="0x80095454" name="WaterVecs" />
+  <tag id="0x80095468" name="WaterFx_80095468" />
+  <tag id="0x80095590" name="WaterFx_80095590" />
+  <tag id="0x800968e0" name="WaterFxMain" />
+  <tag id="0x8009ff94" name="expgfx" />
+  <tag id="0x800a2f88" name="dll_0B_800a2f88" />
+  <tag id="0x800a4c6c" name="Texture_800a4c6c" />
+  <tag id="0x800a4c88" name="Texture_800a4c88" />
+  <tag id="0x800a4ca4" name="Texture_800a4ca4" />
+  <tag id="0x800a4cc0" name="Texture_800a4cc0" />
+  <tag id="0x800a4cdc" name="Texture_800a4cdc" />
+  <tag id="0x800a4cf8" name="Texture_800a4cf8" />
+  <tag id="0x800a4d14" name="Texture_800a4d14" />
+  <tag id="0x800e9d7c" name="SaveGame" />
+  <tag id="0x800ea708" name="ScreensBinEntry" />
+  <tag id="0x801017c8" name="CameraParams_801017c8" />
+  <tag id="0x80102bf4" name="CamActionsBinEntry" />
+  <tag id="0x80102d4c" name="CamActionsBinEntry" />
+  <tag id="0x80102ecc" name="CamActionsBinEntry" />
+  <tag id="0x80102ff4" name="CameraParams_80102ff4" />
+  <tag id="0x80106634" name="CameraParamsModeNormal" />
+  <tag id="0x801074e8" name="CameraParamsModeStaffAim" />
+  <tag id="0x80107fb0" name="CameraParamsModeBike" />
+  <tag id="0x80109248" name="CameraParamsModeViewfinder" />
+  <tag id="0x80109ad0" name="CameraParamsMode46" />
+  <tag id="0x80109f50" name="CameraParamsModeStatic" />
+  <tag id="0x8010bb10" name="CameraParamsModeTestStrength" />
+  <tag id="0x8010cd9c" name="CameraParamsModeCombat" />
+  <tag id="0x8010d2c0" name="CameraParamsModeShipBattle" />
+  <tag id="0x8010d850" name="CameraParamsModeClimb" />
+  <tag id="0x8010e034" name="CameraParamsModeNpcSpeak" />
+  <tag id="0x8010f270" name="CameraParamsModeWorldMap" />
+  <tag id="0x8010f518" name="CameraParamsMode4F" />
+  <tag id="0x8010fa2c" name="CameraParamsModeCrawl" />
+  <tag id="0x8010fc24" name="CameraParamsModeCannon" />
+  <tag id="0x801105c8" name="CameraParamsModeCloudRunner" />
+  <tag id="0x80110bac" name="CameraParamsMode54" />
+  <tag id="0x80110dec" name="CameraParamsMode55" />
+  <tag id="0x80112470" name="dll_19_80112470" />
+  <tag id="0x801162d8" name="AttractModeVec3fArray" />
+  <tag id="0x801162ec" name="AttractModeVec3fArray" />
+  <tag id="0x80116300" name="AttractModeVec3fArray" />
+  <tag id="0x80116314" name="AttractModeVec3fArray" />
+  <tag id="0x80116330" name="AttractModeVec3fArray" />
+  <tag id="0x8011634c" name="AttractModeVec3fArray" />
+  <tag id="0x80116360" name="AttractModeVec3fArray" />
+  <tag id="0x8011b3dc" name="SaveSelectScreen_8011b3dc" />
+  <tag id="0x8011b3f0" name="SaveSelectScreen_8011b3f0" />
+  <tag id="0x8011b5a4" name="SaveSelectScreen_8011b5a4" />
+  <tag id="0x8011fcb4" name="AirMeter" />
+  <tag id="0x8011fd88" name="AirMeterType0" />
+  <tag id="0x80131d74" name="dll_3D_80131d74" />
+  <tag id="0x80131e1c" name="dll_3D_80131e1c" />
+  <tag id="0x80131ec4" name="dll_3D_80131ec4" />
+  <tag id="0x8014df2c" name="ModelStruct" /> <!-- from EnemyC9 -->
+  <tag id="0x8014ede8" name="ModelStruct" /> <!-- from Hagabon -->
+  <tag id="0x8014f584" name="ModelStruct" /> <!-- from SwarmBaddie -->
+  <tag id="0x8014fe5c" name="ModelStruct" /> <!-- from WispBaddie -->
+  <tag id="0x8016ef5c" name="ModelStruct" /> <!-- from Staff -->
+  <tag id="0x80190258" name="LFXEmitter_80190258" />
+  <tag id="0x80190288" name="LACTIONSEntry" />
+  <tag id="0x80192454" name="WaveAnim_80192454" />
+  <tag id="0x80192474" name="WaveAnim_80192474" />
+  <tag id="0x80192714" name="WaveAnim_80192714" />
+  <tag id="0x80192c24" name="AlphaAnim_80192c24" />
+  <tag id="0x801937cc" name="GroundAnim_801937cc" />
+  <tag id="0x80195214" name="XYZAnim_80195214" />
+  <tag id="0x801ae8fc" name="LACTIONSEntry" />
+  <tag id="0x801ae934" name="LACTIONSEntry" />
+  <tag id="0x801b7cac" name="LACTIONSEntry" />
+  <tag id="0x801b7ce4" name="LACTIONSEntry" />
+  <tag id="0x801c134c" name="DFropenode_801c134c" />
+  <tag id="0x801c6f68" name="ObjDef" /> <!-- sharpclawGr -->
+  <tag id="0x801edb20" name="SnowBike_801edb20" />
+  <tag id="0x801edc7c" name="SnowBikeModelStruct" />
+  <tag id="0x801f7b80" name="WM_sun_801f7b80" />
+  <tag id="0x802b6dc4" name="WeaponData" />
+  <!-- original tags, seemingly arbitrary -->
+  <tag id="0x00000002" name="ScreensBin" />
+  <tag id="0x00000005" name="Map Blocks" />
+  <tag id="0x00000006" name="Texture" />
+  <tag id="0x00000009" name="Model Data" />
+  <tag id="0x0000000A" name="Models" />
+  <tag id="0x0000000B" name="MaybeAudio" />
+  <tag id="0x0000000E" name="Objects" />
+  <tag id="0x00000010" name="VOX" />
+  <tag id="0x00000011" name="Stack" /> <!-- data type, not call stack -->
+  <tag id="0x00000013" name="WaterFX" />
+  <tag id="0x00000015" name="Texture Data?" />
+  <tag id="0x00000017" name="Texture Ptrs" />
+  <tag id="0x00000018" name="Vec3f Array" />
+  <tag id="0x0000001A" name="ModelStruct/Font/Light" />
+  <tag id="0x000000FF" name="Unknown32ByteBuffer" />
+  <tag id="0x7D7D7D7D" name="Data File" />
+  <tag id="0x7F7F7FFF" name="Compressed File" />
+  <tag id="0xA0A0A0A0" name="Texture" />
+  <tag id="0xFACEFEED" name="FACEFEED" />
+  <tag id="0xFFFF00FF" name="IntersectPoint/Savegame" />
+  <tag id="0xFFFFFFFF" name="Savegame" />
+</alloctags>

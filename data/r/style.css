@@ -1,0 +1,403 @@
+/* ******************************** general ******************************** */
+html, body {
+    background: #000;
+    color: #FFF;
+}
+body {
+    width:  100vw;
+    height: 100vh;
+}
+
+a { color: #00CCFF }
+
+table {
+    border-top: 1px #FFF solid;
+    border-left: 1px #FFF solid;
+}
+
+td, th {
+    border-right: 1px #FFF solid;
+    border-bottom: 1px #FFF solid;
+    border-collapse: collapse;
+    padding: 2px;
+}
+
+tr:first-child th {
+    position: sticky;
+    top: 0;
+    background: #000;
+}
+th { font-family: monospace; }
+th.hex { text-align: right }
+
+tr:nth-child(2n) { background: #333 }
+tr:nth-child(2n+1) { background: #000 }
+tr:hover { background: #666 }
+
+td ul { padding-left: 1em }
+
+.hex {
+    font-family: monospace;
+    /* text-align: right; */
+}
+
+.number, .float, .int {
+    font-family: monospace;
+    text-align: right;
+}
+
+.str, .string, .datatype, .coords {
+    font-family: monospace;
+}
+
+.unused    { color: #888 }
+.valid     { color: #0F0 }
+.invalid   { color: #F00 }
+.different { color: #F0F }
+.error     { color: #F00 }
+.warning   { color: #FF0 }
+
+#mainNav {
+    font-size: 0.8em;
+    margin-bottom: 0.5em;
+}
+
+.header, h2 {
+    background: linear-gradient(#009DF3, #0000F0);
+    border: 1px #DDD solid;
+    text-align: center;
+    font-size: 1em;
+    padding: 2px;
+    margin: 0;
+}
+
+table .controls {
+    border-bottom: 1px #FFF solid;
+}
+.columnPicker {
+    position: absolute;
+    border:   1px #FFF solid;
+    background: rgba(0, 0, 0, 0.75);
+    list-style-type: none;
+}
+.table h1 {
+    font-size: 1em;
+    margin: 0;
+    display: inline-block;
+}
+.table .controls {
+    position: relative;
+    height: 1.5em;
+    background: linear-gradient(#009DF3, #0000F0);
+    border: 1px #DDD solid;
+}
+.table .controls button {
+    font-size: 0.8em;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.box {
+    display: inline-block;
+    margin-right: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+/* ******************************** object list ******************************** */
+
+
+.maps, .objlist { font-family: monospace; }
+
+tr.map .name { width: 12em }
+tr.map .count { width: 2em }
+
+.missing-model { color: #F88 }
+.gametext { font-style: italic }
+
+.dll .name { text-align: left }
+.dll, .params { font-family: monospace; }
+.dll .objlist .name { padding-left: 0.5em; }
+.dll.stub { background-color: #440 }
+.dll.missing { background-color: #400 }
+.dll .funclist { text-align: left }
+.dll .funclist th { font-size: 0.8em }
+th.sep, td.sep { border-right: 5px #CCC solid }
+
+td.dll .name { padding-left: 0.5em }
+
+
+
+/* ******************************** object info ******************************** */
+
+
+.objinfo .box {
+    display: inline-block;
+    border: 1px #CCC solid;
+    font-family: monospace;
+}
+
+
+/* ******************************** DLL info ******************************** */
+
+
+.dll-objlist, .dll-summary {
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 0.5em;
+}
+
+.dll-objlist {
+    float: right;
+    width: 16em;
+    max-height: 50vh;
+    overflow: auto;
+    border: 1px #CCC solid;
+    font-family: monospace;
+    margin-right: 2em;
+}
+
+.allocTag { font-family: monospace }
+.allocTag.null { color: #999 }
+
+.dll-funclist th { text-align: left }
+.dll-funclist .function {
+    background: linear-gradient(#009DF3, #0000F0);
+}
+
+
+/* ******************************** map list ******************************** */
+
+
+.hex-00, .hex-FF, .zero { color: #888 }
+.dir0x05 { color: #888 }
+
+
+/* ******************************** map info ******************************** */
+
+.mapinfo th { text-align: left }
+
+.mapgrid td {
+    font-family: monospace;
+    font-size: 0.9em;
+    width:  128px;
+    height: 64px; /* square somehow... */
+    padding: 2px;
+    background: #000;
+}
+.mapgrid td .line {
+    white-space: nowrap;
+}
+.mapgrid td.empty {
+    background: #444;
+}
+.mapgrid td.origin {
+    background: #464;
+}
+
+
+/* ******************************** game bits ******************************** */
+
+.bitTable0 { color: #888 }
+.bitTable1 { color: #F88 }
+.bitTable2 { color: #8F8 }
+.bitTable3 { color: #FF8 }
+.hint {
+    font-style: italic;
+    white-space: pre-line;
+}
+.objref span { margin-right: 0.5em }
+
+/* ******************************** video log ******************************** */
+
+
+.log-view {
+    position:    fixed;
+    overflow:    auto;
+    font-family: monospace;
+    border:      1px #888 solid;
+}
+
+.log-view .repeat::before { content: ' [' }
+.log-view .repeat::after  { content: ']' }
+.log-view .repeat {
+    color: #888;
+}
+
+#mainLogView {
+    bottom:      1.5em;
+    width:       640px;
+    right:       0.5em;
+    top:         720px;
+}
+#dllLogView {
+    bottom:      1.5em;
+    right:       680px;
+    left:        1280px;
+    top:         720px;
+}
+#bitLogView {
+    bottom:      20em;
+    left:        0.5em;
+    width:       44em;
+    top:         8em;
+}
+
+.log-item.future { color: #888 }
+
+video {
+    position: fixed;
+    /* left:     44em; */
+    width:    1280px;
+    right:    0;
+    top:      0;
+    border:   1px #888 solid;
+}
+
+.video-debug {
+    position: fixed;
+    left:     58em;
+    right:    0;
+    bottom:   1em;
+    height:   1em;
+    font-family: monospace;
+}
+
+.video-dprint {
+    position: fixed;
+    left:     17em;
+    top:      0;
+    font-family: monospace;
+}
+
+.dll-view {
+    position: fixed;
+    bottom: 0.5em;
+    left:   22.5em;
+    border-collapse: collapse;
+}
+.dll-view td {
+    width:  3px; /* lol */
+    height: 4px;
+    background: #000;
+    border-collapse: collapse;
+    border-right: 1px #888 solid;
+    border-bottom: 1px #888 solid;
+}
+.dll-view td.loaded {
+    background: #0F0;
+}
+
+.gamebit-view {
+    position: fixed;
+    bottom: 0.5em;
+    left: 0.5em;
+    border-collapse: collapse;
+}
+.gamebit-view td {
+    width:  3px; /* lol */
+    height: 4px;
+    background: #000;
+    border-collapse: collapse;
+    border-right: 1px #888 solid;
+    border-bottom: 1px #888 solid;
+}
+.gamebit-view td.defined {
+    background: #440;
+}
+.gamebit-view td.nonzero {
+    background: #0F0;
+}
+
+.video-info {
+    position: fixed;
+    left:   22.5em;
+    bottom: 7em;
+}
+
+
+/* ******************************** model viewer ******************************** */
+
+
+#controls {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 20em;
+    padding: 4px;
+    border-right:  1px #CCC solid;
+    border-bottom: 1px #CCC solid;
+    background: rgba(0, 0, 0, 0.25);
+    font-size: 0.8em;
+}
+
+#controls .box {
+    border: 1px #CCC solid;
+    margin: 2px;
+    padding: 2px;
+}
+
+.gl-view-control {
+    border: 3px #888 ridge;
+}
+
+.gl-view-control button {
+    font-size: 0.9em;
+}
+
+.gl-texture-view {
+    border: 1px #CCC solid;
+}
+
+#controls input {
+    width: 5em;
+    background: rgba(0, 0, 0, 0.25);
+    color: #FFF;
+    font-family: monospace;
+    font-size: 1em;
+}
+
+#glPicker { font-family: monospace }
+
+#controls table {
+    font-size: 0.9em;
+}
+
+#glPicker th {
+    text-align: left;
+}
+
+.dlist-viewer details {
+    padding-left: 1em;
+}
+
+#error {
+    position: fixed;
+    top:        45%;
+    bottom:     45%;
+    left:       25%;
+    right:      25%;
+    border:     3px #F88 ridge;
+    background: rgba(255, 0, 0, 0.5);
+    color:      #FFF;
+    padding:    1em;
+    text-align: center;
+    font-size:  1.2em;
+}
+
+.hexview {
+    position: fixed;
+    top: 1em;
+    right: 1em;
+    border: 3px #888 ridge;
+    background: rgba(0, 0, 0, 0.5);
+    font-family: monospace;
+}
+
+.hexView th {
+    font-family: monospace;
+}
+
+.hexview .byte00, .hexview .byteFF {
+    color: #888;
+}

@@ -1,33 +1,26 @@
 # StarFoxAdventures
-Reverse engineering notes for SFA
+Reverse engineering notes for SFA.
 
-All work here is being done on USA v1.0. `GSAE01.map` is automatically exported from Ghidra and contains symbols found by Dolphin as well as by me.
+Most of the information is in the wiki pages. This repository mainly contains code for patches, scripts, and extracted data.
 
-*NOTE:* some findings were incorrectly listed as being for v1.01, when they were actually for v1.0. These should have all been corrected now.
+## Directory Listing
+### data
+Contains a lot of information extracted from the game and/or written by hand, as well as a script that presents it in a web browser.
 
-## Eventual goals
+### debugger
+A script that connects to a modified Gecko code handler (source included) to communicate with the game and read out state information, call functions, etc. Probably won't work on real hardware, but could be adapted to. (Modified code handler is because the original is painfully slow due to hardware limitations.)
 
-* Play as Krystal throughout the game
-    * Reimplement two-character mechanic
-* Rip sound effects, textures, models
-* Replace models?
-* Find any interesting hidden goodies
-    * Get the lighting debugger working, if it's able to work at all
-    * Get `animtest` and any other unused maps to load
+### extractor
+Old script for extracting various resources.
 
-## Subprojects
+### isobuilder
+Program for extracting, building, and patching GameCube ISOs.
 
-### Debugger
-This program connects to a USB Gecko interface and allows for reading and writing the game's memory. It provides some higher-level game-specific functions such as listing all loaded objects and the heap contents.
-Right now it only works with a modified `codehandler.bin` in Dolphin. This handler doesn't wait for confirmation from the client before sending more data, which makes it much faster, but probably too unreliable to use on real hardware. Eventually I intend to adapt it to work with both versions.
-This handler does still support Gecko codes just fine, though, and shouldn't interfere with normal operation of this or any other games.
-It requires the Gecko be connected to memory card slot B. (See Dolphin's Gamecube settings.)
+### misc-scripts
+Various small scripts I've used. Some are obsolete.
 
-### Extractor
-This program extracts resources from the game files. It's very much a work in progress and probably doesn't work well for many files yet. It might undergo massive changes including the interface.
-
-### Modelviewer
-This program attempts to render model data extracted from the game files. It's still very limited:
+### modelviewer
+Old, crude model viewer.
 - Doesn't extract the model itself (use the Extractor program for that)
 - Doesn't decode textures (loads them from a PNG file)
 - Doesn't support animations
@@ -35,3 +28,9 @@ This program attempts to render model data extracted from the game files. It's s
 - Navigate by dragging the mouse buttons, arrow keys, A, and S
 - Very likely to not work on any machine besides my own without a bit of hacking
 - Also includes a nifty GLSL Python framework I made which can be useful for other projects (and in fact was ripped from one)
+
+### patches
+Source for Amethyst Edition mod.
+
+### GSAE01.map
+Symbol map automatically exported from Ghidra. Symbol names made up by me for the most part.

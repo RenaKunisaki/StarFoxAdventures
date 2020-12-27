@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<dllfuncs>
+  <function idx="0" name="initialise" return="void">
+    <description>Called when DLL is loaded</description>
+    <param reg="r3" type="DLL*" name="self">
+      <description>The DLL itself</description>
+    </param>
+    <param reg="r4" type="int" name="param">
+      <description>Parameter passed to dll_load</description>
+    </param>
+  </function>
+  <function idx="1" name="release" return="void">
+    <description>Called when DLL is unloaded</description>
+  </function>
+  <function idx="2">
+    <description>Unused?</description>
+  </function>
+  <function idx="3" name="init" return="void">
+    <description>Set up object instance</description>
+    <param reg="r3" type="ObjInstance*" name="obj" />
+    <param reg="r4" type="ObjDef*" name="objDef" />
+    <param reg="r5" type="ObjInstance*" name="obj2" />
+    <param reg="r6" type="DllInitFlags" name="flags" />
+    <param reg="f1" type="float" name="x" />
+    <param reg="f2" type="float" name="y" />
+    <param reg="f3" type="float" name="z" />
+  </function>
+  <function idx="4" name="update" return="void">
+    <description>Update object instance</description>
+    <param reg="r3" type="ObjInstance*" name="obj" />.
+  </function>
+  <function idx="5" name="hitDetect">
+    <description>Override hit detection</description>
+    <param reg="r3" type="ObjInstance*" name="obj" />
+  </function>
+  <function idx="6" name="render">
+    <description>Override render</description>
+    <param reg="r3" type="ObjInstance*" name="obj" />
+    <param reg="r4" />
+    <param reg="r5" />
+    <param reg="r6" />
+    <param reg="r7" />
+    <param reg="r8" type="bool" />
+  </function>
+  <function idx="7" name="free">
+    <description>Free object instance</description>
+    <param reg="r3" type="ObjInstance*" name="obj" />
+    <param reg="r4" type="int" />
+  </function>
+  <function idx="8">
+    <description></description>
+    <param reg="r3" type="ObjInstance*" name="obj" />
+  </function>
+  <function idx="9" name="getExtraSize" return="int">
+    <description>Get extra size for object</description>
+  </function>
+</dllfuncs>
