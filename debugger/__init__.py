@@ -2,6 +2,7 @@
 import re
 import sys
 import time
+import math
 import struct
 import inspect
 from util import printf, hexdump
@@ -117,6 +118,19 @@ class App:
         except KeyboardInterrupt:
             self.client.conn.send(b"\xAA")
 
+    def watchMap(self):
+        """Monitor loaded map blocks."""
+        self._checkConnected()
+        print("\x1B[2J\x1B[H", end='') # clear; cursor to 1,1
+        try:
+            while True:
+                print("\x1B[H", end='') # cursor to 1,1
+                self.game.showMapBlocks()
+                self.client.conn.send(b"\xAA") # ACK; BB=retry, CC=cancel
+                time.sleep(0.05)
+        except KeyboardInterrupt:
+            self.client.conn.send(b"\xAA")
+
     def pause(self):
         """Freeze the game."""
         self._checkConnected()
@@ -214,6 +228,18 @@ class App:
         else: charId = int(charId)
         self.game.warpToMap(mapId, charId)
 
+    def setPos(self, x, y, z, layer):
+        """Set player coordinates."""
+        self._checkConnected()
+        x, y, z, layer = float(x), float(y), float(z), int(layer)
+        #pPlayer = self.client.read(0x803428f8, '>I')
+        #self.client.write(pPlayer+0x0C, struct.pack('>3f', x, y, z))
+        pWarpTab = self.client.read(0x8035f458, '>I')
+        # overwrite unused entry 0x01
+        self.client.write(pWarpTab + 0x10, struct.pack(
+            '>3fh', x, y, z, layer))
+        self.game.warpToMap(1, 0)
+
     def getDebugLog(self):
         """Display debug log messages from the game."""
         print(self.game.getDebugLog())
@@ -252,8 +278,10 @@ class App:
                 map = self.game.getCurMap()
                 pPlayer = self.client.read(0x803428f8, '>I')
                 x, y, z = self.client.read(pPlayer+0x0C, '>3f')
+                # XXX what are these?
                 mapX, mapZ, cellX, cellZ = \
                     self.client.read(0x803dcdc8, '>4i')
+                #cellX, cellZ = math.ceil(x/640), math.ceil(z/640)
                 animId  = self.client.read(pPlayer+0xA0, '>H')
                 playTime = self.client.read(0x803a32a8 + 0x560, '>f') # frames
                 playerState = self.client.read(0x803A32A8, 24)

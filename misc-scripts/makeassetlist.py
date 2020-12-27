@@ -41,7 +41,6 @@ maps = (
     'bosstrex',
     'capeclaw',
     'clouddungeon',
-    #'cloudjoin',
     'cloudrace',
     #'cloudtreasure',
     'crfort',
@@ -50,11 +49,13 @@ maps = (
     #'dbay',
     'dbshrine',
     'desert',
+    #'dfalls',
     'dfptop',
     'dfshrine',
     'dragrock',
     'dragrockbot',
     'ecshrine',
+    #'frontend',
     'gamefront',
     'gpshrine',
     'greatfox',
@@ -80,6 +81,7 @@ maps = (
     'nwshrine',
     'shipbattle',
     'shop',
+    #'swapcircle',
     'swaphol',
     'swapholbot',
     'volcano',
@@ -112,8 +114,16 @@ eModels = ET.SubElement(root, 'models');
 for mapName, table in mapTables.items():
     modelsTab = table['models']
     for i, idx in enumerate(table['modelInd']):
+    #for i in range(len(modelsTab)):
+        #idx = i
         entry = modelsTab[idx]
-        if idx != 0 and entry != 0:
+        # i = model ID, idx = index into this MODELS.tab
+        # entry = entry from this MODELS.tab
+        # but somehow, this is backward!?
+        # model ID can be negative to prevent this remap but is that used?
+        # eg in warlock, entry 0x4E8 = 0, entry 0x54F = 0x4E8
+        # and 0 doesn't mean "don't remap", it means use model 0, so...?
+        if (idx != 0 and entry != 0) or i == 0:
             if idx not in modelElems:
                 modelElems[idx] = ET.SubElement(eModels, 'model', {'idx':'0x%04X'%idx})
             eModel = modelElems[idx]
@@ -128,7 +138,8 @@ tex0Elems = {}
 eTex0 = ET.SubElement(root, 'tex0');
 for mapName, table in mapTables.items():
     for i, entry in enumerate(table['tex0']):
-        if entry != 0:
+        # hack to check if it's not a dummy entry
+        if entry != 0 and entry != 0x81000040 and entry != 0x01000000:
             if i not in tex0Elems:
                 tex0Elems[i] = ET.SubElement(eTex0, 'texture', {'idx':'0x%04X'%i})
             eTex = tex0Elems[i]
@@ -142,7 +153,7 @@ tex1Elems = {}
 eTex1 = ET.SubElement(root, 'tex1');
 for mapName, table in mapTables.items():
     for i, entry in enumerate(table['tex1']):
-        if entry != 0:
+        if entry != 0 and entry != 0x81000040 and entry != 0x01000000:
             if i not in tex1Elems:
                 tex1Elems[i] = ET.SubElement(eTex1, 'texture', {'idx':'0x%04X'%i})
             eTex = tex1Elems[i]

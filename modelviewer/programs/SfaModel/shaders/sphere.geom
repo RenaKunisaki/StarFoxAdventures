@@ -39,7 +39,7 @@ void drawSphere(vec3 pos, float radius, vec4 color) {
             int v3 = v1 - nSlices;
             int v4 = v3 - 1;
             drawVtx(vtxs[v1], color);
-            drawVtx(vtxs[v3], color);
+            drawVtx(vtxs[v3], color); //note order here: 1 3 2 4
             drawVtx(vtxs[v2], color);
             drawVtx(vtxs[v4], color);
         }

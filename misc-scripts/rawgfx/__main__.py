@@ -26,6 +26,11 @@ class MainWindow(Gtk.Window):
         self.offset = 0
         self.format = imageFormats[0]
 
+        file.seek(0, 2)
+        self.fileSize = file.tell()
+        file.seek(0)
+
+
         self.set_default_size(1024, 768)
 
         mainBox = Gtk.Box(orientation='horizontal')
@@ -57,6 +62,14 @@ class MainWindow(Gtk.Window):
         self.txtOffs.set_text('000000')
         self.txtOffs.connect('changed', lambda widget: self.redraw())
         box.pack_start(self.txtOffs, False, False, 0)
+
+        # size box
+        box = Gtk.Box(orientation='horizontal')
+        rightBox.pack_start(box, False, False, 0)
+        box.pack_start(Gtk.Label(label="Size: 0x"), False, False, 0)
+        self.txtFileSize = Gtk.Entry(editable = False)
+        self.txtFileSize.set_text('%06X' % self.fileSize)
+        box.pack_start(self.txtFileSize, False, False, 0)
 
         # width box
         box = Gtk.Box(orientation='horizontal')
@@ -97,7 +110,7 @@ class MainWindow(Gtk.Window):
         self.redraw()
 
     def _on_key(self, widget, event):
-        lineSize = self.width * self.format.bytes
+        lineSize = self.width * self.format.bits * 8
         if event.keyval == Gdk.KEY_Up:
             offs = self.offset - lineSize
             if offs < 0: offs = 0

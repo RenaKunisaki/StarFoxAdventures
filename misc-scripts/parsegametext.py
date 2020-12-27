@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 import sys
-import json
 import struct
+import os
+import os.path
+import re
+import xml.etree.ElementTree as ET
 
-with open(sys.argv[1], 'rb') as file:
+def readCharStructs(file):
     numCharStructs = struct.unpack('>I', file.read(4))[0] # grumble
     charStructs = []
     for i in range(numCharStructs):
@@ -21,7 +24,10 @@ with open(sys.argv[1], 'rb') as file:
             'font':      fields[ 9],
             'texture':   fields[10],
         })
+    return charStructs
 
+
+def readTextList(file):
     numTexts, unknown = struct.unpack('>HH', file.read(4))
     #print("numTexts=", numTexts, "unknown=", unknown)
 
@@ -47,6 +53,11 @@ with open(sys.argv[1], 'rb') as file:
     file.seek(0, 2)
     offsets.append(file.tell())
     file.seek(p)
+    return texts, offsets, numStrs, unknown
+
+
+def readTexts(file):
+    texts, offsets, numStrs, unknown = readTextList(file)
 
     strs = []
     base = file.tell()
@@ -59,27 +70,35 @@ with open(sys.argv[1], 'rb') as file:
             b = file.read(1)
             if len(b) == 0: break
             b = b[0]
-            #if b == 0xEE:
-            #    c = file.read(4)
-            #    b = '<EE %02X%02X%02X%02X>' % (c[0], c[1], c[2], c[3])
+            if b == 0xEE:
+                c = file.read(4)
+                b = '<EE %02X%02X%02X%02X>' % (c[0], c[1], c[2], c[3])
             if b == 0xEF: # control code
                 c = file.read(1)[0]
                 if c == 0xA3:
                     c = file.read(1)[0]
                     if c == 0xB4:
-                        # set styles or something
-                        # used for area names, "no controller" msg
                         c = file.read(2)
-                        b = "<STYLE %02X%02X>" % (c[0], c[1])
+                        c = (c[0] * 256) + c[1]
+                        b = "<SCALE 0x%X>" % c
                     elif c == 0xB7:
                         # switch font texture
                         # used to display buttons and faces
                         # 2: buttons, 4: default, 5: faces
                         c = file.read(2)
                         b = "<FONT %02X%02X>" % (c[0], c[1])
+                    elif c == 0xB8: b = '<JUSTIFY LEFT>'
+                    elif c == 0xB9: b = '<JUSTIFY RIGHT>'
+                    elif c == 0xBA: b = '<JUSTIFY CENTER>'
+                    elif c == 0xBB: b = '<JUSTIFY FULL>'
+                    elif c == 0xBF:
+                        c = file.read(8)
+                        b = "<COLOR %02X%02X%02X%02X %02X%02X%02X%02X>" % (
+                            c[0], c[1], c[2], c[3], c[4], c[5], c[6], c[7])
                     else:
-                        c = file.read(2)
-                        b = '<UNK %02X%02X>' % (c[0], c[1])
+                        #c = file.read(2)
+                        #b = '<UNK %02X%02X>' % (c[0], c[1])
+                        b = '\\x%02X' % c
                 else: b = '\\xEF\\x%02X' % c
             elif b == 0: break
 
@@ -100,8 +119,80 @@ with open(sys.argv[1], 'rb') as file:
             phrases.append(strs[i+text['phrases']])
         text['phrases'] = phrases
 
-    print(json.dumps({
-        'unknown': unknown,
-        'charStructs': charStructs,
-        'texts': texts,
-    }, sort_keys=True, indent=4))
+    return texts, unknown
+
+
+def readGameTextFile(path):
+    with open(path, 'rb') as file:
+        charStructs = readCharStructs(file)
+        texts, unknown = readTexts(file)
+        return texts, unknown, charStructs
+
+
+def printJson(allTexts):
+    print(json.dumps(allTexts))
+
+def printHeader(allTexts):
+    print("typedef enum {")
+    for id, text in allTexts.items():
+        s = ' '.join(text['phrases'])
+        s = re.sub(r'\<[^\>]*\>', '', s)
+        s = re.sub(r'[^0-9A-Za-z]+', '_', s)
+        s = re.sub(r'__+', '_', s)
+        print("T%04X_%s = 0x%X," % (id, s, id))
+    print("} GameTextId32;")
+
+def printXml(allTexts):
+    eTexts = ET.Element('gametext')
+    for id, text in allTexts.items():
+        eText = ET.SubElement(eTexts, 'text', {
+            'id':       '0x%04X' % id,
+            #'nPhrases': str(text['nPhrases']),
+            'window':   str(text['window']),
+            'alignH':   str(text['alignH']),
+            'alignV':   str(text['alignV']),
+            'language': str(text['language']),
+        })
+        for dir in text.get('dirs', []):
+            ET.SubElement(eText, 'dir', {'name':dir})
+        for phrase in text['phrases']:
+            ET.SubElement(eText, 'phrase').text = phrase
+    print(ET.tostring(eTexts, encoding='unicode'))
+
+
+def readAllTexts(path, lang="English"):
+    allTexts = {}
+    for dir in os.listdir(os.path.join(path, 'gametext')):
+        try:
+            texts, unk, chars = readGameTextFile(os.path.join(path, 'gametext', dir, lang+'.bin'))
+        except FileNotFoundError:
+            continue
+
+        # this is ugly and assumes the text/params don't vary between dirs...
+        for id, text in texts.items():
+            if id not in allTexts:
+                if 'dirs' not in text: text['dirs'] = []
+                text['dirs'].append(dir)
+                allTexts[id] = text
+            else:
+                if 'dirs' not in allTexts[id]: allTexts[id]['dirs'] = []
+                allTexts[id]['dirs'].append(dir)
+
+    #printJson(allTexts)
+    #printHeader(allTexts)
+    printXml(allTexts)
+
+
+
+def main():
+    #texts, unknown, charStructs = readGameTextFile(sys.argv[1])
+    #print(json.dumps({
+    #    'unknown': unknown,
+    #    'charStructs': charStructs,
+    #    'texts': texts,
+    #}, sort_keys=True, indent=4))
+    readAllTexts(sys.argv[1])
+
+
+if __name__ == '__main__':
+    main()

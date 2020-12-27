@@ -29,8 +29,14 @@ Old, crude model viewer.
 - Very likely to not work on any machine besides my own without a bit of hacking
 - Also includes a nifty GLSL Python framework I made which can be useful for other projects (and in fact was ripped from one)
 
+### notes
+Unsorted notes, largely out of date.
+
 ### patches
 Source for Amethyst Edition mod.
 
 ### GSAE01.map
 Symbol map automatically exported from Ghidra. Symbol names made up by me for the most part.
+
+### makeRelease.sh
+Script to build Amethyst patch.

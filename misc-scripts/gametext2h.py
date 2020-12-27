@@ -15,40 +15,25 @@ def readStrs(file):
     for i in range(numStrs):
         offsets.append(struct.unpack('>I', file.read(4))[0]) # grumble
 
+    p = file.tell()
+    file.seek(0, 2)
+    offsets.append(file.tell())
+    file.seek(p)
+
     strs = []
     base = file.tell()
     for i in range(numStrs):
-        file.seek(base + offsets[i])
+        offs = base + offsets[i]
+        offsEnd = base + offsets[i+1]
+        file.seek(offs)
         s = []
-        while True:
-            b = file.read(1)[0]
-            if b == 0xEF: # control code
-                c = file.read(1)[0]
-                if c == 0xA3:
-                    c = file.read(1)[0]
-                    if c == 0xB4:
-                        # set styles or something
-                        # used for area names, "no controller" msg
-                        c = file.read(2)
-                        #b = "<STYLE %02X%02X>" % (c[0], c[1])
-                        b = ''
-                    elif c == 0xB7:
-                        # switch font texture
-                        # used to display buttons and faces
-                        # 2: buttons, 4: default, 5: faces
-                        c = file.read(2)
-                        #b = "<FONT %02X%02X>" % (c[0], c[1])
-                        b = ''
-                    else:
-                        c = file.read(2)
-                        #b = '<UNK %02X%02X>' % (c[0], c[1])
-                        b = ''
-                #else: b = '\\xEF\\x%02X' % c
-                else: b = ''
-            elif b == 0: break
+        while file.tell() < offsEnd-1:
+            b = file.read(1)
+            if len(b) == 0: break
+            b = b[0]
 
             if type(b) is not str:
-                if b > 127 or b < 32: b = '' #b = "\\x%02X" % b
+                if b > 127 or b < 32: b = ''
                 else: b = chr(b)
             s.append(b)
         strs.append(''.join(s))
@@ -106,12 +91,14 @@ listDir('../discroot/gametext')
 rx = re.compile(r'[^0-9a-zA-Z_]+')
 with open('gametext.h', 'wt') as file:
     file.write("enum GameTextId {\n")
-    for id, text in texts.items():
+    for id in sorted(texts.keys()):
+        text = texts[id]
         name = '_'.join(text['phrases'])
         name = name.replace("'", '')
         name = name.replace('"', '')
         name = rx.sub('_', name)[:32]
         # Ghidra won't accept enum starting with a number,
         # even though it will if manually entered...
+        file.write('\n/* ' + ('\n\t'.join(text['phrases'])) + ' */\n')
         file.write('T%04X_%s = 0x%04X,\n' % (id, name, id))
     file.write("};\n")

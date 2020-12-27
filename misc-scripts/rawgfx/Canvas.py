@@ -31,7 +31,7 @@ class Canvas(DrawingArea):
         width   = self.parent.width
         height  = int(self.height / self.parent.scale)
         nPixels = width * height
-        nBytes  = nPixels * self.parent.format.bytes
+        nBytes  = nPixels * self.parent.format.bits * 8
         if height < 1: return
 
         #buf = bytearray(width * height)

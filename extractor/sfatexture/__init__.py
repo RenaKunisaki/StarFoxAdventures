@@ -13,11 +13,12 @@ class SfaTexture:
     """Texture file in SFA."""
 
     def __init__(self):
-        self.width      = None
-        self.height     = None
-        self.format     = None
-        self.numMipMaps = None
-        self.image      = None
+        self.width        = None
+        self.height       = None
+        self.format       = None
+        self.numMipMaps   = None
+        self.image        = None
+        self.mipMapImages = None
 
 
     def _fromData(self, header:bytes, data:bytes):
@@ -76,6 +77,23 @@ class SfaTexture:
         return self
 
 
+    @staticmethod
+    def fromImageSet(img:list,
+    fmt:ImageFormat=ImageFormat.RGBA32) -> SfaTexture:
+        """Instantiate texture from multiple images.
+
+        Each image is one mipmap. This is used for textures that use mipmaps
+        as variations instead of actual smaller versions, such as eyes.
+        """
+        self = SfaTexture()
+        self.width, self.height = img[0].size
+        self.format = ImageFormat(fmt)
+        self.numMipMaps = len(img)
+        self.image = img[0]
+        self.mipMapImages = img[1:]
+        return self
+
+
     def _makeHeader(self) -> bytearray:
         """Build the SFA texture file header for this texture."""
         header = bytearray(0x60)
@@ -106,5 +124,6 @@ class SfaTexture:
         header = self._makeHeader()
         imageData, paletteData, colors = encode_image(
             self.image, self.format, None,
-            mipmap_count=self.numMipMaps-1)
+            mipmap_count=self.numMipMaps-1,
+            mipmap_images=self.mipMapImages)
         return header + imageData.getbuffer()

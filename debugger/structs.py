@@ -30,13 +30,15 @@ class Struct:
 class ObjectFileStruct(Struct):
     SIZE = 0xA0
     _fields = {
-        "unk00":   ('>2f', 0x00),
-        "flags44": ('>I',  0x44),
-        "nModels": ('B',   0x55),
-        "nVecs":   ('B',   0x5A),
-        "flags5F": ('B',   0x5F),
-        "vecs":    ('>9f', 0x6C),
-        "name":    ('11s', 0x91),
+        "unk00":    ('>2f', 0x00),
+        "pTextures":('>I',  0x0C),
+        "flags44":  ('>I',  0x44),
+        "nModels":  ('B',   0x55),
+        "nTextures":('B',   0x59),
+        "nVecs":    ('B',   0x5A),
+        "flags5F":  ('B',   0x5F),
+        "vecs":     ('>9f', 0x6C),
+        "name":     ('11s', 0x91),
     }
 
     def __init__(self, client, addr):
@@ -70,7 +72,7 @@ class GameObject(Struct):
         'shadow':   (">I",  0x64),
         'fPtrs':    (">I",  0x68),
         'p6C':      (">I",  0x6C),
-        'p70':      (">I",  0x70),
+        'pTextures':(">I",  0x70),
         'p74':      (">I",  0x74),
         'p78':      (">I",  0x78),
         'models':   (">I",  0x7C),
@@ -108,16 +110,21 @@ class GameObject(Struct):
                 val = "%08X: %s" % (ptr, val)
             if type(val) is int: val = hex(val)
             printf("%-10s: %s\n", name, val)
+        printf("File:")
+        for name in self.file._fields.keys():
+            val = getattr(self.file, name)
+            if type(val) is int: val = hex(val)
+            printf("  %-10s: %s\n", name, val)
 
 
 class HeapStruct(Struct):
     SIZE = 0x14
     _fields = {
-        "avail":    ('>I', 0x00),
-        "used":     ('>I', 0x04),
-        "data":     ('>I', 0x08),
-        "size":     ('>I', 0x0C),
-        "usedSize": ('>I', 0x10),
+        "avail":    ('>I', 0x00), # total blocks
+        "used":     ('>I', 0x04), # used blocks
+        "data":     ('>I', 0x08), # address of start of heap
+        "size":     ('>I', 0x0C), # total bytes
+        "usedSize": ('>I', 0x10), # used bytes
     }
 
 class HeapEntry(Struct):
@@ -148,7 +155,7 @@ class HeapEntry(Struct):
         0x000000FF: "Unknown 32-byte buffer",
         0x7D7D7D7D: "Data File",
         0x7F7F7FFF: "Compressed File",
-        0xFFFF00FF: "Unknown, Map-related",
+        0xFFFF00FF: "Intersect Point", # also savegame
         0xFFFFFFFF: "Savegame",
     }
 
@@ -245,8 +252,8 @@ class Model(Struct):
         "pVtxs":        ('>2I', 0x1C), # vec3s*
         "pNormals":     ('>I',  0x24),
         "pAnim":        ('>3I', 0x28),
-        "pTextures":    ('>I',  0x34),
-        "pFunc38":      ('>I',  0x38),
+        "pShaders":     ('>I',  0x34),
+        "texFunc":      ('>I',  0x38),
         "unk3C":        ('>I',  0x3C),
         "pAnimBuf":     ('>I',  0x40),
         "unk44":        ('>I',  0x44),
@@ -274,7 +281,7 @@ class Model(Struct):
             self.pMtxBufs) # pMtxBufs is same as pMtxs[0] ?
         printf("  Vtxs:    %4d @ 0x%08X,0x%08X\n", self.header.nVtxs, *self.pVtxs)
         printf("  Normals: %4d @ 0x%08X\n", self.header.nNormals, self.pNormals)
-        printf("  Func 38: 0x%08X\n", self.pFunc38)
+        printf("  TexFunc: 0x%08X\n", self.texFunc)
         printf("  Anims:   0x%08X 0x%08X 0x%08X, buf 0x%08X\n",
             self.pAnim[0], self.pAnim[1], self.pAnim[2],
             self.pAnimBuf)
@@ -326,3 +333,11 @@ class Model(Struct):
             self.header.unkE0, self.header.unkEE[0], self.header.unkEE[1])
         printf("      F6=%02X FB=%02X\n",
             self.header.unkF6, self.header.unkFB)
+
+        textureIds = self.client.read(self.header.pTextures,
+            '>%dI' % self.header.nTextures)
+        shaders = self.client.read(self.pShaders,
+            '>%dI' % self.header.nTextures)
+        for i in range(self.header.nTextures):
+            printf("        Texture %2d: ID %08X, shader %08X\n", i,
+                textureIds[i], shaders[i])

@@ -142,19 +142,24 @@ class Game:
 
     def listLoadedObjects(self):
         # read ptr to object list
+        pPlayer = self.client.read(0x803428f8, '>I')
         cnt, ptr = self.client.read(0x803dcb84, ">II")
         if ptr == 0:
             print("objPtr is NULL")
             return
+        ptrs = self.client.read(ptr, ">%dI" % cnt)
+
         printf("objPtr = %08X nObjs = %d\n", ptr, cnt)
         printf("\x1B[1mObj│Address │Name       │ID  │Def │ModelPtr│XPos     │YPos     │ZPos     │Ch│Seq\x1B[0m\n")
         for i in range(cnt):
+            pObj = ptrs[i]
             pObj = self.client.read(ptr + (i*4), ">I")
             if pObj == 0:
                 printf("NULL at object %d\n", i)
                 break
 
             obj = GameObject(self.client, pObj)
+            if obj == pPlayer: printf("\x1B[1m") # bold
             printf("\x1B[48;5;%dm%3d│%08X│%-11s│%04X│%04X│%08X│%+9.2f│%+9.2f│%+9.2f│%2d│%08X %d\x1B[0m\n",
                 ROW_COLOR[i&1],
                 i, pObj, obj.name,
@@ -291,6 +296,31 @@ class Game:
             'field_1d': field_1d,
             'field_1e': field_1e,
         }
+
+
+    def showMapBlocks(self):
+        pIsBlockSlotUsed, numTrkBlkTabEntries, unk92, pLoadedBlocks, \
+            loadedBlockCount, unk99, unk9A, unk9B, pMapBlocks = \
+            self.client.read(0x803dce8c, '>IHHIBBBBI')
+        pLayer = self.client.read(0x803822b4, '>5I')
+        isBlockSlotUsed = self.client.read(pIsBlockSlotUsed, '>64B')
+        loadedBlocks = self.client.read(pLoadedBlocks, '>64h')
+        idxs = []
+        for ly in range(5):
+            idxs.append(self.client.read(pLayer[ly], '>256b'))
+        printf("%2d blocks", loadedBlockCount)
+        for ly in range(1):
+            printf("\nLayer %d:", ly)
+            for y in range(16):
+                printf("\n  ")
+                for x in range(16):
+                    idx = idxs[ly][(y*16)+x]
+                    if idx >= 0: printf("%04X ", loadedBlocks[idx])
+                    else: printf("---- ")
+                    #printf("%02X ", idx)
+        printf("\n")
+
+
 
     def warpToMap(self, mapId, charId=None):
         if charId is not None:

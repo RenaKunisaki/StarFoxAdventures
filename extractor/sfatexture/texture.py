@@ -837,7 +837,7 @@ def encode_image_from_path(new_image_file_path, image_format, palette_format, mi
   new_image_data, new_palette_data, encoded_colors = encode_image(image, image_format, palette_format, mipmap_count=mipmap_count)
   return (new_image_data, new_palette_data, encoded_colors, image_width, image_height)
 
-def encode_image(image, image_format, palette_format, mipmap_count=1):
+def encode_image(image, image_format, palette_format, mipmap_count=1, mipmap_images=None):
   image = image.convert("RGBA")
   image_width, image_height = image.size
 
@@ -858,7 +858,10 @@ def encode_image(image, image_format, palette_format, mipmap_count=1):
     if i != 0:
       mipmap_width //= 2
       mipmap_height //= 2
-      mipmap_image = image.resize((mipmap_width, mipmap_height), Image.NEAREST)
+      if mipmap_images is None:
+          mipmap_image = image.resize((mipmap_width, mipmap_height), Image.NEAREST)
+      else:
+          mipmap_image = mipmap_images[i-1]
 
     mipmap_image_data = encode_mipmap_image(
       mipmap_image, image_format,

@@ -1,0 +1,33 @@
+table {
+    border-top: 1px #000 solid;
+    border-left: 1px #000 solid;
+    border-collapse: collapse;
+}
+
+td, th {
+    border-bottom: 1px #000 solid;
+    border-right: 1px #000 solid;
+    border-collapse: collapse;
+    font-family: monospace;
+    width:  40px;
+    height: 32px;
+    white-space: pre;
+    font-size: 8px;
+    overflow: hidden;
+}
+
+.empty {
+    background-color: #444;
+}
+
+.oob {
+    opacity: 0.5;
+}
+
+.warp {
+    color: #FFF;
+}
+
+/* .link {
+    border-style: dotted;
+} */

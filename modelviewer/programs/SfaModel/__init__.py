@@ -99,10 +99,10 @@ class SfaModelViewer(SfaProgram, EventHandler):
         self._initT        = self._translate.copy()
         self._initR        = self._rotate.copy()
         self.dlists        = []
-        #self.menu          = MainMenu(self)
+        self.menu          = MainMenu(self)
         #self.menu          = BoneMenu(self)
         #self.menu          = HitboxMenu(self)
-        self.menu          = AttachPointMenu(self)
+        #self.menu          = AttachPointMenu(self)
         self._menuStack    = []
 
         # enable our local logger to print on the screen

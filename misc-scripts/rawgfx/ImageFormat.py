@@ -47,7 +47,7 @@ class ImageFormat:
     @classmethod
     def fromData(cls, data):
         pixels = []
-        for pixel in split(data, cls.bytes):
+        for pixel in split(data, cls.bits*8):
             pixels.append(cls._toPixel(pixel))
         return b''.join(pixels)
 
@@ -60,7 +60,7 @@ class ImageFormat:
 
 class RGBA8888(ImageFormat):
     name  = "RGBA 8888"
-    bytes = 4
+    bits  = 32
 
     @classmethod
     def _toPixel(cls, data):
@@ -68,7 +68,7 @@ class RGBA8888(ImageFormat):
 
 class ARGB8888(ImageFormat):
     name  = "ARGB 8888"
-    bytes = 4
+    bits  = 32
 
     @classmethod
     def _toPixel(cls, data):
@@ -76,7 +76,7 @@ class ARGB8888(ImageFormat):
 
 class BGRA8888(ImageFormat):
     name  = "BGRA 8888"
-    bytes = 4
+    bits  = 32
 
     @classmethod
     def _toPixel(cls, data):
@@ -84,7 +84,7 @@ class BGRA8888(ImageFormat):
 
 class RGB888(ImageFormat):
     name  = "RGB 888"
-    bytes = 3
+    bits  = 24
 
     @classmethod
     def _toPixel(cls, data):
@@ -92,7 +92,7 @@ class RGB888(ImageFormat):
 
 class BGR888(ImageFormat):
     name  = "BGR 888"
-    bytes = 3
+    bits  = 24
 
     @classmethod
     def _toPixel(cls, data):
@@ -100,7 +100,7 @@ class BGR888(ImageFormat):
 
 class RGBA5551BE(ImageFormat):
     name  = "RGBA 5551 BE"
-    bytes = 2
+    bits  = 16
 
     @classmethod
     def _toPixel(cls, data):
@@ -113,7 +113,7 @@ class RGBA5551BE(ImageFormat):
 
 class RGBA5551LE(ImageFormat):
     name  = "RGBA 5551 LE"
-    bytes = 2
+    bits  = 16
 
     @classmethod
     def _toPixel(cls, data):
@@ -126,7 +126,7 @@ class RGBA5551LE(ImageFormat):
 
 class RGB565BE(ImageFormat):
     name  = "RGB 565 BE"
-    bytes = 2
+    bits  = 16
 
     @classmethod
     def _toPixel(cls, data):
@@ -139,7 +139,7 @@ class RGB565BE(ImageFormat):
 
 class RGB565LE(ImageFormat):
     name  = "RGB 565 LE"
-    bytes = 2
+    bits  = 16
 
     @classmethod
     def _toPixel(cls, data):
@@ -150,9 +150,37 @@ class RGB565LE(ImageFormat):
             int(( val        & 0x1F) * (255/31)),
         ])
 
+class I4(ImageFormat):
+    name  = "I4"
+    bits  = 4
+
+    @classmethod
+    def _toPixel(cls, data):
+        b0 = (data[0] & 0xF) << 4
+        b1 = data[0] & 0xF0
+        return bytes([b0, b0, b0, b1, b1, b1])
+
+class IA4(ImageFormat):
+    name  = "IA4"
+    bits  = 4
+
+    @classmethod
+    def _toPixel(cls, data):
+        b0 = (data[0] & 0xF) << 4
+        #b1 = data[0] & 0xF0
+        return bytes([b0, b0, b0 ])
+
 class I8(ImageFormat):
     name  = "I8"
-    bytes = 1
+    bits  = 8
+
+    @classmethod
+    def _toPixel(cls, data):
+        return bytes([data[0], data[0], data[0] ])
+
+class IA8(ImageFormat):
+    name  = "IA8"
+    bits  = 16
 
     @classmethod
     def _toPixel(cls, data):
@@ -163,5 +191,5 @@ imageFormats = (
     RGB888, BGR888,
     RGBA5551BE, RGBA5551LE,
     RGB565BE, RGB565LE,
-    I8,
+    I4, IA4, I8, IA8,
 )
