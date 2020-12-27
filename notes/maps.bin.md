@@ -17,6 +17,10 @@ MAPS.tab first few entries:
 000000F0  00 00 2C 90  00 00 2C E0  00 00 2D 30  00 00 2D 50  
 ends at 0xCD0 = 820 entries
 
+there are 0x4A maps with directories and 0x74 total
+820 doesn't divide into either of those
+map cell scale = 640.0
+
 first entry 0 - 38: seems to be shipbattle or frontend
 00 0C 00 07  00 06 00 05  06 28 00 00  00 00 00 00  
 00 00 00 00  00 00 00 00  00 00 00 00  00 1D 00 00  
@@ -217,6 +221,13 @@ highest valid object ID is 0x5C4
 WM_xxx is mostly 0x376 to 0x3BC
 
 I wonder if these "offsets" are converted from when the game used a cartridge
+they're stored to the save file along with some coordinates at offset 0x168
+for chapter 2 this is: 0x00046fd8  12373.7  211  176.534
+apparently there are 63 such entries in the save
+when processing a romlist entry, if one of these saved entries has the same ID, then the saved coords overwrite the entry's.
+so this mechanism allows to save the coords of up to 63 unique objects.
+and the "offset" allows to assign a globally unique ID to an object instance, so that its position can persist forever.
+
 supposedly this is a GameObjectDef
 0x00  short	      type
 0x02  u8          allocatedSize

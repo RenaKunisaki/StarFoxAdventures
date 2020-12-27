@@ -1,0 +1,358 @@
+interface Joint {
+    parent: number;
+    boneNum: number;
+    translation: vec3;
+    bindTranslation: vec3;
+}
+
+interface CoarseBlend {
+    joint0: number;
+    influence0: number;
+    joint1: number;
+    influence1: number;
+}
+
+export enum ModelVersion {
+    Beta,
+    BetaMap, // Demo swapcircle
+    Demo, // Most demo files
+    Final,
+}
+
+interface DisplayListInfo {
+    offset: number;
+    size: number;
+    specialBitAddress: number; // Command bit address for fur/grass or water
+    // TODO: Also includes bounding box
+}
+
+if (this.modelVersion === ModelVersion.Beta) {
+            fields = {
+                isBeta: true,
+                isMapBlock: false,
+                alwaysUseTex1: true,
+                shaderFields: BETA_MODEL_SHADER_FIELDS,
+                hasNormals: true,
+                hasBones: true,
+                texOffset: 0x1c,
+                posOffset: 0x24,
+                nrmOffset: 0x28, // ???
+                clrOffset: 0x2c,
+                texcoordOffset: 0x30,
+                shaderOffset: 0x34,
+                jointOffset: 0x38,
+                listOffsets: 0x6c,
+                listSizes: 0x70,
+                posCount: 0x9e,
+                nrmCount: 0xa0,
+                clrCount: 0xa2,
+                texcoordCount: 0xa4,
+                texCount: 0xaa,
+                jointCount: 0xab,
+                posFineSkinningConfig: 0x64,
+                posFineSkinningPieces: 0x80,
+                posFineSkinningWeights: 0x84,
+                nrmFineSkinningConfig: 0xac, // ???
+                // weightCount: 0xad,
+                shaderCount: 0xae,
+                texMtxCount: 0xaf,
+                dlOffsets: 0x88,
+                dlSizes: 0x8c,
+                dlInfoCount: 0xac,
+                numListBits: 6,
+                bitsOffsets: [0x90],
+                bitsByteCounts: [0x94],
+                oldVat: true,
+                hasYTranslate: false,
+            };
+        } else if (this.modelVersion === ModelVersion.BetaMap) {
+            fields = {
+                isBeta: true,
+                isMapBlock: true,
+                alwaysUseTex1: true,
+                shaderFields: BETA_MODEL_SHADER_FIELDS,
+                hasNormals: false,
+                hasBones: false,
+                texOffset: 0x58,
+                posOffset: 0x5c,
+                clrOffset: 0x60,
+                texcoordOffset: 0x64,
+                shaderOffset: 0x68,
+                listOffsets: 0x6c,
+                listSizes: 0x70,
+                posCount: 0x9e,
+                clrCount: 0xa2,
+                texcoordCount: 0xa4,
+                texCount: 0x98,
+                shaderCount: 0x99, // ???
+                texMtxCount: 0xaf,
+                dlOffsets: 0x6c,
+                dlSizes: 0x70,
+                dlInfoCount: 0x99, // ???
+                numListBits: 6,
+                bitsOffsets: [0x7c],
+                bitsByteCounts: [0x94], // ???
+                oldVat: true,
+                hasYTranslate: false,
+            };
+        } else if (this.modelVersion === ModelVersion.Demo) {
+            const isMapModel = false; // TODO: detect
+            if (isMapModel) {
+                // TODO: verify for correctness
+                fields = {
+                    isMapBlock: true,
+                    texOffset: 0x54,
+                    texCount: 0xa0,
+                    posOffset: 0x58,
+                    posCount: 0x90,
+                    hasNormals: false,
+                    nrmOffset: 0,
+                    nrmCount: 0,
+                    clrOffset: 0x5c,
+                    clrCount: 0x94,
+                    texcoordOffset: 0x60,
+                    texcoordCount: 0x96,
+                    hasBones: false,
+                    jointOffset: 0,
+                    jointCount: 0,
+                    shaderOffset: 0x64,
+                    shaderCount: 0xa0, // Polygon attributes and material information
+                    shaderFields: SFADEMO_MAP_SHADER_FIELDS,
+                    dlInfoOffset: 0x68,
+                    dlInfoCount: 0x9f,
+                    dlInfoSize: 0x34,
+                    // FIXME: Yet another format occurs in sfademo/frontend!
+                    // numListBits: 6, // 6 is needed for mod12; 8 is needed for early crfort?!
+                    numListBits: 8, // ??? should be 6 according to decompilation of demo????
+                    bitsOffsets: [0x74], // Whoa...
+                    // FIXME: There are three bitstreams, probably for opaque and transparent objects
+                    bitsByteCounts: [0x84],
+                    oldVat: true,
+                    hasYTranslate: false,
+                };
+            } else {
+                // TODO: verify for correctness
+                fields = {
+                    isMapBlock: false,
+                    alwaysUseTex1: true,
+                    texOffset: 0x20,
+                    texCount: 0xf2,
+                    posOffset: 0x28,
+                    posCount: 0xe4,
+                    hasNormals: true,
+                    nrmOffset: 0x2c,
+                    nrmCount: 0xe6,
+                    clrOffset: 0x30,
+                    clrCount: 0xe8,
+                    texcoordOffset: 0x34,
+                    texcoordCount: 0xea,
+                    hasBones: true,
+                    jointOffset: 0x3c,
+                    jointCount: 0xf3,
+                    weightOffset: 0x54,
+                    weightCount: 0xf4,
+                    posFineSkinningConfig: 0x88,
+                    posFineSkinningPieces: 0xa4,
+                    posFineSkinningWeights: 0xa8,
+                    nrmFineSkinningConfig: 0xac,
+                    shaderOffset: 0x38,
+                    shaderCount: 0xf8, // Polygon attributes and material information
+                    shaderFields: SFADEMO_MODEL_SHADER_FIELDS,
+                    dlInfoOffset: 0xd0,
+                    dlInfoCount: 0xf5,
+                    dlInfoSize: 0x1c,
+                    // FIXME: Yet another format occurs in sfademo/frontend!
+                    // numListBits: 6, // 6 is needed for mod12; 8 is needed for early crfort?!
+                    numListBits: 8, // ??? should be 6 according to decompilation of demo????
+                    bitsOffsets: [0xd4], // Whoa...
+                    // FIXME: There are three bitstreams, probably for opaque and transparent objects
+                    bitsByteCounts: [0xd8],
+                    oldVat: true,
+                    hasYTranslate: false,
+                };
+            }
+        } else if (this.modelVersion === ModelVersion.Final) {
+            // FIXME: This field is NOT a model type and doesn't reliably indicate
+            // the type of model.
+            const modelType = blockDv.getUint16(4);
+            switch (modelType) {
+            case 0:
+                // Used in character and object models
+                fields = {
+                    isMapBlock: false,
+                    alwaysUseTex1: true,
+                    texOffset: 0x20,
+                    texCount: 0xf2,
+                    posOffset: 0x28,
+                    posCount: 0xe4,
+                    hasNormals: true,
+                    nrmOffset: 0x2c,
+                    nrmCount: 0xe6,
+                    clrOffset: 0x30,
+                    clrCount: 0xe8,
+                    texcoordOffset: 0x34,
+                    texcoordCount: 0xea,
+                    hasBones: true,
+                    jointOffset: 0x3c,
+                    jointCount: 0xf3,
+                    weightOffset: 0x54,
+                    weightCount: 0xf4,
+                    posFineSkinningConfig: 0x88,
+                    posFineSkinningPieces: 0xa4,
+                    posFineSkinningWeights: 0xa8,
+                    nrmFineSkinningConfig: 0xac,
+                    shaderOffset: 0x38,
+                    shaderCount: 0xf8,
+                    shaderFields: SFA_SHADER_FIELDS,
+                    dlInfoOffset: 0xd0,
+                    dlInfoCount: 0xf5,
+                    dlInfoSize: 0x1c,
+                    numListBits: 8,
+                    bitsOffsets: [0xd4],
+                    bitsByteCounts: [0xd8],
+                    oldVat: false,
+                    hasYTranslate: false,
+                };
+                break;
+            case 8:
+            case 264:
+                // Used in map blocks
+                fields = {
+                    isMapBlock: true,
+                    alwaysUseTex1: true,
+                    texOffset: 0x54,
+                    texCount: 0xa0,
+                    posOffset: 0x58,
+                    posCount: 0x90,
+                    hasNormals: false,
+                    nrmOffset: 0,
+                    nrmCount: 0,
+                    clrOffset: 0x5c,
+                    clrCount: 0x94,
+                    texcoordOffset: 0x60,
+                    texcoordCount: 0x96,
+                    hasBones: false,
+                    jointOffset: 0,
+                    jointCount: 0,
+                    shaderOffset: 0x64,
+                    shaderCount: 0xa2,
+                    shaderFields: SFA_SHADER_FIELDS,
+                    dlInfoOffset: 0x68,
+                    dlInfoCount: 0xa1, // TODO
+                    dlInfoSize: 0x1c,
+                    numListBits: 8,
+                    bitsOffsets: [0x78, 0x7c, 0x80],
+                    bitsByteCounts: [0x84, 0x86, 0x88],
+                    oldVat: false,
+                    hasYTranslate: true,
+                };
+                break;
+            default:
+                throw Error(`Model type ${modelType} not implemented`);
+            }
+        } else {
+            throw Error(`Unhandled model version ${modelVersion}`);
+}
+
+AncientBlockRenderer: (for demo?)
+    texOffset: 0x58,
+    posOffset: 0x5c,
+    clrOffset: 0x60,
+    texcoordOffset: 0x64,
+    shaderOffset: 0x68,
+    listOffsets: 0x6c,
+    listSizes: 0x70,
+    bitstreamOffset: 0x7c, // Whoa...
+    texCount: 0xa0,
+    posCount: 0x90,
+    clrCount: 0x94,
+    texcoordCount: 0x96,
+    shaderCount: 0x9a, // Polygon attributes and material information
+    shaderSize: 0x3c,
+    listCount: 0x99,
+    numListBits: 6,
+    numLayersOffset: 0x3b,
+    // FIXME: There are three bitstreams, probably for opaque and transparent objects
+    bitstreamByteCount: 0x86,
+    hasYTranslate: false,
+    oldShaders: true,
+
+
+interface ShaderLayer {
+    texId: number | null;
+    tevMode: number;
+    enableTexChainStuff: number;
+    scrollingTexMtx: number | undefined;
+}
+
+export interface Shader {
+    layers: ShaderLayer[],
+    flags: number;
+    attrFlags: number;
+    hasAuxTex0: boolean;
+    hasAuxTex1: boolean; // It is not known what these are for, but they are important for the vertex descriptor.
+                         // It is possibly related to projected lighting.
+    hasAuxTex2: boolean;
+    auxTex2Num: number;
+    furRegionsTexId: number | null; // Only used in character models, not blocks (??)
+}
+
+interface ShaderFields {
+    isBeta?: boolean;
+    size: number;
+    numLayers: number;
+    layers: number;
+}
+
+export const SFA_SHADER_FIELDS: ShaderFields = {
+    size: 0x44,
+    numLayers: 0x41,
+    layers: 0x24,
+};
+
+export const SFADEMO_MODEL_SHADER_FIELDS: ShaderFields = {
+    size: 0x44,
+    numLayers: 0x41,
+    layers: 0x24, // ???
+};
+
+export const SFADEMO_MAP_SHADER_FIELDS: ShaderFields = {
+    size: 0x40,
+    numLayers: 0x3b,
+    layers: 0x24, // ???
+};
+
+export const BETA_MODEL_SHADER_FIELDS: ShaderFields = {
+    isBeta: true,
+    size: 0x38,
+    numLayers: 0x36,
+    layers: 0x20,
+};
+
+export enum ShaderFlags {
+    DevGeometry = 0x2,
+    Fog = 0x4,
+    CullBackface = 0x8,
+    ReflectSkyscape = 0x20, // ???
+    Caustic = 0x40,
+    Lava = 0x80,
+    Reflective = 0x100, // Occurs on Krazoa Palace reflective floors
+    AlphaCompare = 0x400,
+    ShortFur = 0x4000, // 4 layers
+    MediumFur = 0x8000, // 8 layers
+    LongFur = 0x10000, // 16 layers
+    StreamingVideo = 0x20000, // Occurs on video panels in Great Fox. Used to display preview video.
+    IndoorOutdoorBlend = 0x40000, // Occurs near cave entrances and windows. Requires special handling for lighting.
+    Water = 0x80000000,
+}
+
+export enum ShaderAttrFlags {
+    NRM = 0x1,
+    CLR = 0x2,
+}
+
+shader.attrFlags = data.getUint8(0x34);
+        shader.flags = 0; // TODO: where is this field?
+        shader.hasAuxTex0 = data.getUint32(0x8) === 1;
+        shader.hasAuxTex1 = data.getUint32(0x14) === 1;
+shader.hasAuxTex2 = !!(data.getUint8(0x37) & 0x40); // !!(data.getUint8(0x37) & 0x80);

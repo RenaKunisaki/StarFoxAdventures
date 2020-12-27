@@ -178,3 +178,58 @@ TEXPRE.bin is only 0x330 bytes, so these aren't there...
 
 for our save file Krystal materials are at:
 0x80f4e7c0, 0x80f4e804, 0x80f4e848, 0x80f4e88c, 0x80f4e8d0, 0x80f4e914
+
+
+------------------------------------------------------------------------
+
+let's try to understand the data for Krystal texture (0x724) in animtest/TEX1.bin (offset 0x46860 len 0x19a00)
+size is 512x256
+
+the entry in TEX1.tab and the following entries:
+00001C90  84 02 34 30  81 02 61 E0  81 02 F1 B0  01 00 00 00  
+00001CA0  81 02 FB 10  81 02 FE A0  81 02 FF E0  01 00 00 00  
+
+the beginning of the texture data:
+00000000  00 00 00 14  00 00 15 B4  00 00 2C 94  00 00 43 F4  
+00000010  00 00 5B 54  5A 4C 42 00  00 00 00 01  00 00 2B 00  
+00000020  00 00 15 75  58 85 ED 59  5D 6C 1B 57  76 26 ED 2C  
+
+0000: offset of ZLB header
+0004: decimal 1556, 11412, 17396, 23380
+
+the high byte of the TAB entry & 0x3F is the length
+it's 4, so there's 4 ints between the ZLB offset and the actual ZLB header
+the upper 2 bits are probably like in other tables, telling whether to use one slot or the other
+
+in fact, at each one of these offsets is a ZLB header
+except 5B54, that has 12 0x00 bytes beforehand
+that one is also much larger
+I assume these are mipmaps
+all are 11008 bytes except the last which is 87488
+512x256 = 131072
+this size isn't even a power of two, so definitely a funny format
+
+the files have an 0x60-byte header which is probably a Texture struct
+they do give the size at 0x0A, 0x0C
+the smaller ones are listed as 64x64
+0x16 is apparently format, it's 0x0E here, which is apparently http://wiki.tockdom.com/wiki/Image_Formats#CMPR
+
+ but we should be able to just patch in a new texture file which specifies a format like RGB565 (0x04); we don't need alpha anyway
+
+we may not need to, as this appears to be BC1 which Gimp can export (but byteswapped), but swizzle is still an issue, and I'm not sure how that works with BC1
+
+anyway I got the swizzle working with RGB565, but for some reason the lighting is all fucked up. mipmaps?
+how can they bey 64x64 anyway? that's not the same aspect ratio.
+maybe they're something else?
+
+well it looks like the byte at 0x19 is how many mipmaps (including the base, so it's 5 here, and changing it to 1 fixes the issue)
+
+other fields that aren't zero:
+0x0F = 1 - no effect if changed to 0
+0x10 = 1
+0x17 = 1
+0x18 = 1
+0x1A = 1
+0x1D = 6 - no effect if changed to 1
+
+726 = eyes

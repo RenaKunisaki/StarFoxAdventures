@@ -1,0 +1,58 @@
+0333	0255	0	0	0	70 Would you like to save up to this point?
+0334	0255	0	0	0	70 Save
+0335	0255	0	0	0	70 Never mind.
+0336	0255	0	0	0	70 The game was saved.
+0337	0255	0	0	0	70 The game may not have been saved.
+0338	0255	0	0	0	70 Unable to save.
+03E3	0255	0	0	0	70	
+    ABCDEFGHIJKLMNOPQRSTUVWXYZ
+    abcdefghijklmnopqrstuvwxyz0123456789
+    ()!&$-+:;',.\xC2\xA9/\@%><
+001F	0010	0	0	0	Arwing <COLOR 006600CC 00FF00FF>Good flying, Fox!
+0020	0010	0	0	0	Arwing <COLOR 006600CC 00FF00FF>You have a new high score!
+0030	0010	0	0	0	Arwing <COLOR 006600CC 00FF00FF>Well done!
+0032	0010	0	0	0	Arwing <COLOR 006600FF 003300FF>Good job, Fox!
+003A	0010	0	0	0	Arwing <COLOR 006600FF 003300FF>Be careful, Fox!
+003B	0010	0	0	0	Arwing <COLOR 006600FF 003300FF>Danger ahead!
+0044	0010	0	0	0	Arwing <COLOR 00CC00CC 00FF00FF>Look out, Fox!
+0045	0010	0	0	0	Arwing <COLOR 00CC00CC 00FF00FF>Enemy approaching.
+0046	0010	0	0	0	Arwing <COLOR 00CC00CC 00FF00FF>Shoot the big asteroids!
+0047	0010	0	0	0	Arwing <COLOR 00CC00CC 00FF00FF>Use the bomb!
+
+277C	0131	0	0	0	CloudDungeon, CRFort
+    KRYSTAL'S STAFF
+    Weapon of magic power
+2814	0131	0	0	0	CloudDungeon, SwapHol
+    KRYSTAL'S STAFF
+    Weapon of magical power
+0437	0133	0	0	0	CloudRace <SCALE 0x1B3>CloudRunner Diamond Mines
+
+281E	0131	0	0	0	CRFort, DarkIceMines, DarkIceMines2, WallCity
+    ITEM BOX
+    Use the Staff to get the item from within
+
+035D	0023	0	0	0	FrontEnd SCREEN SIZE
+0365	0034	0	0	0	FrontEnd
+    Full
+    Wide
+    Cinema
+03AE	0086	0	0	0	FrontEnd A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 1 2 3 4 5 6 7 8 9 0 . ! Del End A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 1 2 3 4 5 6 7 8 9 0 . ! Del End
+03E4	0026	0	0	0	FrontEnd Cheat
+0501	0255	0	0	0	FrontEnd Xmas Mode
+0504	0255	0	0	0	FrontEnd New Video
+0505	0255	0	0	0	FrontEnd Crazy Sounds
+2715	0131	0	0	0	IceMountain Press A to Replay Race
+01FF	0255	0	0	0	LightFoot, SwapHol
+    Krazoa
+    Warp
+    Shop
+    OK
+    Cancel
+    Change
+0516	0255	0	0	0	Link 0123456789?
+03F5	0133	0	0	0	MMShrine <SCALE 0x1B3>Test of Fear
+042F	0133	0	0	0	MMShrine <SCALE 0x1B3>Test of Fear
+0439	0133	0	0	0	MMShrine <SCALE 0x1B3>Test of Fear
+2732	0131	0	0	0	SwapHol	APPLE
+0528	0124	3	0	0	WallCity This is a SILVER REDEYE TOOTH.
+0529	0124	3	0	0	WallCity This is a GOLD REDEYE TOOTH.

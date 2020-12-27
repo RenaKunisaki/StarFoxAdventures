@@ -1,0 +1,152 @@
+81330d40 TrigPnt
+813316a0 TrigCyl
+
+TrigPnt seq 810A0508:
+004b ;obj type
+14 ;entry length
+00
+10041b11
+c5e5a3a9 c43bb07b c539d1bd ;pos
+00046fa0 ;unqiue ID
+this is the romlist entry
+so seq points to the romlist
+
+051A TrigPnt     0361 8968
+00 4B 14 00
+10 04 1B 11
++331.54  -750.76  +226.89
+00046FA0
+
+seq data:
+05270013 ;flags; command: load map assets for swapholbo
+00000000 ;end? but what's all this other shit then
+00000000
+00000000
+00000000
+00000000
+00000000
+00000000
+0000E264
+64000000
+00000000
+FFFF0000
+FFFFFFFF
+FFFFFFFF
+
+what are the flags?
+and what determines when these scripts are executed?
+probably depends on the object
+eg TrigPnt would have some param meaning "activate when player is within X distance of this"
+TrigPln would be whenever you intersect the plane
+TrigCyl = cylinder, TrigBits = ?, TrigArea = ?
+
+I think these aren't actually flags.
+first object in hollow.romlist is TrigCyl that activates when you walk up to the WarpStone (you need to walk right into him). You can tell when it triggers from the "LEVELUNLOCKED" message. changing flags from 0A to 02 or 08, it won't trigger.
+FF = it triggers every frame when we get close
+or it may be that one flag must be enabled for the other to be checked
+looks like they relate to the "trigger" param passed
+
+obj->anim points to a byte with more flags
+
+looks like max 8 commands per object?
+
+commands:
+00: end?
+01 xx: something with player
+04 ssss: play sound effect ID ssss
+05: nop
+06 xx yy: camActFn_80102aa0(xx, yy, 0)
+08 cc: subcommand
+    ...
+0A xxxx: trigger environmental effect #xxxx
+    0000: remove fog
+    0001: snow
+    0004: fade everything to red
+    0005: remove fog
+    0007: rain
+    0008: remove fog
+0B xx yy: ObjSeqVar_8039a45c[xx] = yy (0 <= xx <= 0x54)
+    0000: immediately trigger WarpStone as if talking to him
+    0001: nobody brings me gifts anymore
+    0002: my son will not even speak to me. (random NPC?)
+0C xxxx: recurse
+    looks for an object of type 0x54, 0x230, 0x4B..0x50
+    where s16 at offset 0x38 of its romlist == xxxx
+    recurses calling the script interpreter again, with that object in place of this one, other params the same
+    repeats for all matching objects
+    objext 0x54 = Tumbleweed1, 0x230 = Andross... suspect these aren't object IDs.
+0D xxxx: get Lactions xxxx (and do nothing with it? just immediately free it)
+10 xx: set player model index to xx
+11 xxxx: set GameBit 0x4E3 to xxxx
+    if this bit is < 0xFF, Tricky wants to talk to you
+12 xxxx: change GameBit:
+    xxxx & 0x3FFF: which bit
+    xxxx >> 14: what to do
+        0: set to 0
+        1: set to max
+        2: invert
+        3: do nothing
+13 xxxx: set   map obj->mapId bit xxxx
+14 xxxx: clear map obj->mapId bit xxxx
+15 xxxx: get entry xxxx from TABLES.BIN, which is a loaded texture ID
+    if that texture ID isn't loaded, crash(0x32, 3, 0, texId, 0, 0, 0, 0)
+16 xxxx: get entry xxxx from TABLES.BIN; free the corresponding texture ID
+18 xxxx: set map obj->mapId state to xxxx
+1A xx yy: set   map yy bit xx
+1B xx yy: clear map yy bit xx
+1C xx yy: subcommand xx
+    00: mainSetBits(0x3AB, countLeadingZeros(yy) >> 5)
+    01: mainSetBits(0x3AC, countLeadingZeros(yy) >> 5)
+    02: mainSetBits(0x3AF, countLeadingZeros(yy) >> 5)
+    else: something with envfxact and player object and bit 0x3B0
+1D xx: set bits 0966, 0967 (no fireflies), 0968 to !xx
+    - setting to 1 prevents using lantern, feeding tricky
+1E xx yy: set map yy state to xx
+1F xx yy: save current character position
+    xx: unused
+    yy: flags for SaveGame:setData
+        01: backup/restore
+        02: set flag 0x22 after save
+        04: set flag 0x22 before save
+20 xx: change map layer (xx: 0=next, else=prev)
+21 xxxx: toggle bit in GameBit
+    xxxx & 0x1FFF: which GameBit
+    xxxx >> 13: bit index
+    GameBit[which] ^= (1 << bitIdx)
+22 xxxx: toggle MapBit xxxx
+23 xx: subcommand xx
+    00: save player position
+    01: free savegame
+    02: backup savegame and load map
+    03: save player position with one less health
+26 xx: do something with Tricky and GameBit 0D00
+    01: delete Tricky (he respawns immediately)
+    03: clear bit 0D00
+    04: set bit 0D00
+27 xxxx: load map xxxx assets
+28 xxxx: unload map xxxx assets
+2A xx yy: lock level xx bucket yy
+2B xx yy: unlock level xx bucket yy
+2C xxxx: obj2->anim->field_0x00 = 0.1 * xxxx
+2D xxxx: show GameText xxxx
+2E: restructForMovie(0)
+2F xx yy: do something with game timer (xx:unused, yy:time in seconds?)
+
+every command is padded to 4 bytes
+
+many objects have 0024 but that's not a valid command? maybe only some objects have a sequence at 0x18
+
+this seems to be only one type of sequence
+for some objects, such as the ThornTails, field 0x18 seems to be just an index into some script set?
+
+there do seem to be different functions interpreting the scripts differently
+the one that handles these is 0x801993b0 "objInterpretSeq0"
+
+for StaffLeverO the last parameter is the GameBit it toggles (high word; low word unused?)
+we can even change it (by following the object's sequence ptr) and it'll actually affect eg Tricky foods
+
+there must also be some flags that tell when an object should load or not. if we warp to a map at the "wrong time", nothing is there. eg Krazoa Palace after the Krystal sequence, or Dragon Rock early in the game. Obvious example is the staff in swaphol, though that might be a hardcoded check in the object itself.
+    this isn't limited to warping either. if we free-move under the gate to get back into DarkIce Mines after clearing it, the game is a bit confused:
+        - you void out when you land
+        - if you're far enough past the gate, you respawn in the ice part, but all the actors are missing until you go into one of the sheds and back out
+maybe this is also where the real map geometry hides

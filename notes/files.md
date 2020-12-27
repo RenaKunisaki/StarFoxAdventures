@@ -2,6 +2,42 @@ MODELIND.bin seems to map model IDs to other IDs
 u16 per model, model ID to use; 0=don't remap?
 the code doesn't handle 0 specially so I guess 0=test cube
 
+
+Files we don't know about:
+map/ANIMCURV.bin,tab
+map/OBJSEQ2C.tab
+map/OBJSEQ.bin,tab - probably scripting
+map/VOXMAP.bin,tab
+/BITTABLE.BIN
+/CAMACTIONS.bin, CAMACTIO.bin
+/CHAPBITS.bin - almost all zeros
+/DLLS.tab - almost empty
+/ENVFXACTIONS.bin, /ENVFXACT.bin
+/FONTS.bin - used? format?
+/GAMETEXT.bin,tab - used? format?
+/HITS.bin,tab - related to map blocks?
+/LACTIONS.bin
+/MODANIM.BIN,TAB
+/MODLINES.bin,tab
+/OBJECTS.bin2 - used?
+/OBJEVENT.bin
+/OBJHITS.bin - object hitboxes?
+/PREANIM.BIN,TAB
+/SAVEGAME.bin,tab - used?
+/SCREENS.bin,tab
+/SPRITES.bin,tab
+/SPRTABLE.bin
+/TABLES.bin,tab - used?
+/TEXPRE.bin,tab - related to PREANIM?
+/TEXTABLE.bin
+/TRKBLK.tab - related to map blocks
+/WEAPONDA.bin
+
+empty files:
+/CACHEFONTSTAB.bin, /CACHEFONTSTEX.bin
+/VOXOBJ.bin,tab
+
+
 Files that are specific to each map:
 .bin          |.tab        |Description
 --------------|------------|-----------
@@ -101,3 +137,129 @@ CHAPBITS.bin (chapter bits?) is all zeros except:
 00005660  00 00 00 00  00 00 00 00  01 00 00 00  08 00 04 2D  
 00005670  08 00 04 2D  08 00 04 2D  08 00 04 2D  00 00 00 00  
 0x42D = 1069
+
+
+now that I got Dolphin to load extracted files let's try renaming some and seeing what happens.
+
+(listed in order of renaming, I didn't rename back if no change)
+CHAPBITS.bin: no change
+GAMETEXT.bin: no change, but game does try to read it
+GAMETEXT.tab: no change, but game does try to read it
+OBJECTS.bin2: no change
+BITTABLE.bin: Krystal is in a glitched pose when starting the game; some HUD elements are missing; my max scarabs is 10 instead of 100 but I still have 100
+    this is actually just the table that gives the table index and offset of each GameBit.
+CACHEFONTSTAB.bin: no change
+CACHEFONTSTEX.bin: no change
+CAMACTIO.bin: the camera starts higher up and moves down
+CAMACTIONS.bin: no change
+ENVFXACT.bin: LightFoot Village is not foggy
+ENVFXACTIONS.bin: no change
+FONTS.bin: no change, but game does try to read it
+globlama.bin: crash at title screen at 80135060
+globalmap.bin: no change
+HITS.bin: can't climb some ledges? eg the small rectangular hole at LightFoot Village
+HITS.tab: crash on loading save, at 800034ac (memcpy)
+LACTIONS.bin: <camcontrol.c>  failed to load triggered camaction actionno 0
+    actually that happens anyway when running in/out of the huts, might be related to previous changes or just normal
+MAPINFO.bin: the PDA HUD appears on the title screen
+MODANIM.BIN: crash at title screen at 800471ac (loadAndDecompressDataFile)
+MODLINES.bin: no change, but game does try to read it
+OBJEVENT.bin: no change, but game does try to read it
+PREANIM.BIN: Krystal starts in a glitched pose; crash at 8028518c when trying to move
+SAVEGAME.bin: no change, but game does try to read it
+SAVEGAME.tab: no change, but game does try to read it
+SCREENS.bin: no change
+SCREENS.tab: no change, but game does try to read it
+    makes me suspect SCREENS.bin is used somewhere...
+SPRITES.bin: no change
+SPRITES.tab: no change
+SPRTABLE.bin: no change
+TABLES.bin: no change, but game does try to read it
+TABLES.tab: no change, but game does try to read it
+    I wonder if it relates to high score tables?
+TEXPRE.bin: crash at title screen "memory usage value corrupted"
+TEXPRE.tab: crash at title screen in memcpy
+TEXTABLE.bin: crash at title screen at 80054ac0
+TRKBLK.tab: many map elements are missing or don't appear until you get close
+    - the title screen is missing all its objects
+    - on loading the save file at LightFoot Village, I spawn in the air and fall into a very incomplete map where it's possible to fall off the edge of the world
+    - interestingly you actually fall instead of softlocking like you normally do when walking out of bounds
+VOXOBJ.bin: no change
+VOXOBJ.tab: no change
+WEAPONDA.bin: the staff's swipe effect is misplaced, like it is when you hack Krystal to have it at the start of the game
+splashScreen.bin: no change
+starfox.thp: hang at title screen showing blank monitor
+    Dolphin spams warning about not finding the file, so it's possible the game isn't really hung but is just lagging too badly to respond
+    replacing it with a 0-byte file causes spam about reading out of the file, but the video still plays!? maybe it's reading into the next file which happens to be the renamed original video
+modules: no change
+musyxbin: no change
+savegame: in the debug chapter select, all chapters lead to a new game, else, no change (the game never looks at these files otherwise)
+streams: no voices play
+audio: no sound at all, but game works
+gametext: all text is blank, game can't be paused, talking to NPCs softlocks
+MODELS.bin: no change
+OBJHITS.bin: no change, but game does try to read it
+DLLS.tab: no change
+
+for some files eg GAMETEXT.bin, the game tries to read them and produces a warning that the file is missing, but it continues on fine. for others, there is no message, ie the game doesn't even read them.
+
+anyway even with those missing, I can go from the very beginning to Krazoa Palace just fine.
+
+
+let's try swapping some files
+OBJECTS.bin2 -> OBJECTS.bin: crash at title in memcpy
+    could we reconstruct the table by scanning for names?
+    or use one from the demo version?
+CAMACTIONS.bin -> CAMACTIO.bin: no change
+ENVFXACTIONS.bin -> ENVFXACT.bin: LightFoot Village is less foggy; ThornTail Hollow's sky is just a dark blue gradient even in the day
+globalmap.bin -> globalma.bin: crash at title at 80135060, after loading some files from worldmap and instantiating Krystal and CommandMenu
+GAMETEXT.bin -> gametext/FrontEnd/English.bin: no text on title screen
+warlock -> swaphol: swaphol's objects load but are all cubes; the camera does a weird spin at the beginning; the arwing is facing into the ground; you can't move
+    let's also do warlock.romlist.zlb -> hollow2.romlist.zlb: no change
+    let's do with hollow.romlist.zlb instead: GPU hang
+    let's also rename mod16 -> mod13: still hang
+    let's keep the dir as-is but rename the romlist: still hang
+SAVEGAME.bin -> savegame/save1.bin: no change
+SAVEGAME.bin -> savegame/save2.bin: you start in an empty void with 1/4 health
+savegame/save1.bin -> savegame/save2.bin: you start in the Walled City
+    apparently save1.bin doesn't actually get loaded.
+
+let's try editing some files
+MAPINFO.bin: ThornTail Hollow (param 00 06 00 00)
+    P1 -> 03: no objects load. the camera is looking from the player spawn point, inside the ground, and can't move. using free camera to move around, most of the map isn't loaded. the sky is empty.
+    P1 -> 01: no change
+    P1 -> 02: same as 03
+    P1 -> 04: crash at 802972b4 with a null ObjInstance
+    P1 -> 05: no change
+    P1 -> 06: no change
+    P1 -> 07: no change, so this isn't flags
+    P1 -> 7F: no change
+    P2 -> 00: no change
+    P2 -> 7F: no change
+    P3 -> 7F: no change
+    P -> 01 06 7F 7F: no change
+    first letter of name -> Z: no change
+    first letter lowercase: no change
+    first letter -> null: no change
+    this is strange since removing this file causes the PDA HUD to appear on the title screen
+
+let's try changing the title screen params instead from 04 06 00 00
+    P1 -> 00: the PDA HUD appears. so the crash might be related?
+    P1 -> 01: same as 00
+    P1 -> 02: no objects load
+    P1 -> 03: same as 02
+    P1 -> 05: same as 00
+    P1 -> 7F: same as 00
+    P1 -> FF: same as 00
+    P2 -> 00: no change
+    P3,4 -> AAAA: no change
+
+my guess as to P1:
+00: normal map
+01: normal submap
+02: special map, no objects (unused type)
+03: special submap (only used by an unused map)
+04: special map (title, Arwing)
+of note, shipbattle doesn't hide the PDA HUD, because you normally play as Krystal there so it won't appear anyway. with the mod, which overrides character checks, it does appear.
+
+also, should try editing some of the warp entries that lead to animtest, and changing the layer parameter or even coords

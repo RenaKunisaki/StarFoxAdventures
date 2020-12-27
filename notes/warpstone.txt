@@ -1,0 +1,28 @@
+Bit# Act Map
+0ABA   1 Cape Claw
+0ABD   4 Ocean Force Point
+0ABE   5 LightFoot Village
+0ABF   6 Moon Mountain Pass
+0AC0   7 Volcano Force Point
+0AC1   8 Ice Mountain
+
+action 1: switch(mapAct)
+	0 => same as 1
+	1 => newicemount
+		- set bit 01ED to 1
+	2 => warlock
+	3 => hollow
+	else => same as 3
+	- load and lock the selected map
+action 2: switch(mapAct)
+	0 => same as 1
+	1 => newicemount
+	2 => warlock
+		- set its act and objgroups depending on which spirits you have
+	3 => hollow
+	else => same as 3
+	- warp to the selected map
+	- load UI DLL 1
+action 3: switch(mapAct)
+	< 3 => unload hollow
+	3 => unload warlock

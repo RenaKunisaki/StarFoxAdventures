@@ -1,0 +1,405 @@
+Krystal animation 0 (standing idle)
+from PREANIM.BIN 0x760 - 0xD20, size 0x5C0
+00 16 ;flags, 0010=repeat
+00 EA ;0000=move around center a bit during whole anim
+00 00 24 13 ;length
+41 00
+
+but what points to this?
+ModelFileHeader.animIdxs
+    high byte of anim ID is index into animIdxs
+    low byte is added to the value at that index
+    result is looked up in MODANIM.TAB or .BIN?
+    see animation.md
+
+0123 4567 89  AB  CDEF  hex
+0000 0000 00  01  0000  0010 ;X rotation
+0000 0000 00  00  1010  000A ;X stretch/offset
+1111 1110 00  11  0111  FE37 ;Y rotation
+1111 1111 10  10  0111  FFA7 ;Y offset
+1111 1100 01  01  1000  FC58 ;Z rotation
+0000 0000 00  00  0111  0007 ;Z offset
+CDEF is some kind of offset
+AB are flags
+
+
+FF66 ;X rotation
+0008 ;Y rotation
+
+FDE8 FF66 0008
+0009 0021 FCAA
+33A3 0000 F687
+0000 EF07 FF04
+FD05 0000 0000
+0FC7 0000 11E9
+0000 0000 0000
+0000 0044 F649
+CC62 0000 0EE2
+0000 ECE5 FD2A
+0289 0000 0000
+DCAA 0000 E128
+0000 0000 0000
+0000 FF07 FACA
+FFE4 FEE7 FD29
+FFE6 05C7 0000
+0010 FFA4 0000
+0000 0000 0000
+0000 0000 FFE1
+0000 0000 FEAA
+FA66 0266 F18A
+0024 FFE3 FFA9
+FF67 FDA8 0000
+0000 0000 FD48
+04E7 FE06 FCE9
+FFE4 FFE4 FB09
+0007 01E8 0000
+0000 0000 20C3
+F68B F64B 0C40
+FA6A FB4A 02AA
+F68B FBAA 0809
+F1AB FBAA 024A
+F20B FB8A 01C2
+0000 0000 0000 ;this would be the 36th entry
+
+from beginning:
+00 16 00 EA flags?
+00 00 24 13 length?
+41 00
+
+pEntry:
+r14 (offset 0x0A): 220 (0xDC) bytes, 110 (0x6E) shorts, 55 (0x37) words
+    1760 (0x6E0) bits
+    animation data; eg rotations, scales
+    the game looks at the low 4 and high 12 bits separately.
+    of the higher 12, the lowest 2 are flags.
+raw                 | decoded (dec, scale flag, xlate flag, hex)
+0010 000A FE37 FFA7 |   0 S- 0     0 -- A    -8 ST 7    -2 -T 7
+FC58 0007 FF66 0008 | -15 S- 8     0 -- 7    -3 -T 6     0 -- 8
+FDE8 FF66 0008 0009 |  -9 -T 8    -3 -T 6     0 -- 8     0 -- 9
+0021 FCAA 33A3 0000 |   0 -T 1   -14 -T A   206 -T 3     0 -- 0
+F687 0000 EF07 FF04 | -38 -- 7     0 -- 0   -68 -- 7    -4 -- 4
+FD05 0000 0000 0FC7 | -12 -- 5     0 -- 0     0 -- 0    63 -- 7
+0000 11E9 0000 0000 |   0 -- 0    71 -T 9     0 -- 0     0 -- 0
+0000 0000 0044 F649 |   0 -- 0     0 -- 0     1 -- 4   -39 -- 9
+CC62 0000 0EE2 0000 |-207 -T 2     0 -- 0    59 -T 2     0 -- 0
+ECE5 FD2A 0289 0000 | -77 -T 5   -12 -T A    10 -- 9     0 -- 0
+0000 DCAA 0000 E128 |   0 -- 0  -142 -T A     0 -- 0  -124 -T 8
+0000 0000 0000 0000 |   0 -- 0     0 -- 0     0 -- 0     0 -- 0
+FF07 FACA FFE4 FEE7 |  -4 -- 7   -21 -- A    -1 -T 4    -5 -T 7
+FD29 FFE6 05C7 0000 | -12 -T 9    -1 -T 6    23 -- 7     0 -- 0
+0010 FFA4 0000 0000 |   0 S- 0    -2 -T 4     0 -- 0     0 -- 0
+0000 0000 0000 0000 |   0 -- 0     0 -- 0     0 -- 0     0 -- 0
+FFE1 0000 0000 FEAA |  -1 -T 1     0 -- 0     0 -- 0    -6 -T A
+FA66 0266 F18A 0024 | -23 -T 6     9 -T 6   -58 -- A     0 -T 4
+FFE3 FFA9 FF67 FDA8 |  -1 -T 3    -2 -T 9    -3 -T 7   -10 -T 8
+0000 0000 0000 FD48 |   0 -- 0     0 -- 0     0 -- 0   -11 -- 8
+04E7 FE06 FCE9 FFE4 |  19 -T 7    -8 -- 6   -13 -T 9    -1 -T 4
+FFE4 FB09 0007 01E8 |  -1 -T 4   -20 -- 9     0 -- 7     7 -T 8
+0000 0000 0000 20C3 |   0 -- 0     0 -- 0     0 -- 0   131 -- 3
+F68B F64B 0C40 FA6A | -38 -- B   -39 -- B    49 -- 0   -23 -T A
+FB4A 02AA F68B FBAA | -19 -- A    10 -T A   -38 -- B   -18 -T A
+0809 F1AB FBAA 024A |  32 -- 9   -58 -T B   -18 -T A     9 -- A
+F20B FB8A 01C2 0000 | -56 -- B   -18 -- A     7 -- 2     0 -- 0
+0000 0000           |   0 -- 0     0 -- 0
+
+flag 0: scale is present (else 0)
+flag 1: translate is present (else 0)
+
+r12 (offset 0xE6): 570 (0x23A) bytes, 285 (0x11D) shorts, 142.5 (0x8E) words
+    4560 (0x11D0) bits
+    must be what defines how to interpret the data?
+00000000
+0xEA:
+00386FF0 0D400445 00000A37 64EFCD01  00BB7AA8 9620A3AA E80A8448 6A1D1FA0
+08E27EB7 40A18019 85010978 9C0B06EE  9D2C612F 2E6434DC D3A8AE73 5D112CEA
+C0043662 E911282C 1CA0A099 A95CD4AA  1C0D42A2 9EB7981A B85688A4 3C512F8B
+A36922E4 714D43C1 2A068288 87BB080C  EB5587EB 71B6406F A285E191 8CA192E7
+1FC00EF2 4ED61AF0 9BB3C282 190753B7  873A1A41 B694DF8E 10A594C6 3C3036C3
+B3A741A4 C74D5B67 047A0A0C 0C97D805  1BE72DD2 69B34594 BBE5A842 F6992335
+BD38C01F 2C45BA2C A9432AA5 2428774B  9C645526 C8DE8B01 85478303 03BC231E
+57A3A972 27B769A2 E9C9B58F 183087CD  8830E352 0660F3CC A903667A 246E9B62
+88C13BC0 32644B99 4061F291 8806881B  4588526A 30C84685 12810161 11819C17
+0B696BAA 7AAB3109 A5AC104C 96277468  7C1647E0 FA1C5693 33CD2EE5 0ADD8794
+E01AFD2E C0475C52 75562AA1 F8AAE8D8  0F428051 72364812 85060400 3040603C
+0D00751B AB734F2B 67A82E97 40DDB9D5  6841A35F E01E13C8 F112E53D A0AA1E57
+831AEC99 0CC05C53 C0516C1B 39786D2A  C8494301 51F133C8 2E88D78F C3906020
+1388007A BFADF3F3 19A5B0B1 1EC164CB  D5683E28 7AE015F4 370DD1DB 3C59C877
+0D67937D FED7406F 4C1A3080 53C8F94F  ACB8B145 8952692D C87E9096 2049E120
+A133860C 7867B114 9682C1BB B325816A  D7D56856 2796E0C5 C4248A20 E32F1226
+678F48CB 8EFA9BC0 7E861E16 90BC607A  F20EB935 491463DD 2940FA9A 51319182
+41C32307 217223B1 94F98041 BCB4AB02  2FE5D568 3AB0
+
+decompressed:
+0000 | 0010 ffec 0008  0008 ffcc 0010
+000C | 0000 0000 0000  0000 0000 0000
+0018 | 0003 000c 0006  0000 fff2 0000
+0024 | 0000 0000 0000  0000 0000 0000
+0030 | 0000 0000 0000  0000 0000 0000
+003C | 0000 0000
+0040 | fffc fffd fffb  0000 fffd ffff
+005C | 0000 0000
+
+first value seems to have come directly from input (coincidence?)
+- not coincidence. changing the input causes the same change in output.
+but changing to 9999 produces 9994 and changes all following data.
+9990 produces 9990 and doesn't change.
+0011 produces:
+    0010 ffac ffc4  0008 ffcc 0010  rotation
+    0000 0000 0000  0000 0000 0000  scale
+    0007 fffa 000d  0000 fff2 0000  translation
+    0000 0000 0000  0000 0000 0000
+    0000 0000 0000  0000 0000 0000
+    0000 0000
+    ff98 0005 fe1b  0000 fffd ffff  rotation
+    change mask:
+    ---- XXXX XXXX  ---- ---- ----  rotation
+    ---- ---- ----  ---- ---- ----  scale
+    XXXX XXXX XXXX  ---- ---- ----  translation
+    ---- ---- ----  ---- ---- ----
+    ---- ----
+    XXXX XXXX XXXX  ---- ---- ----  rotation
+    basically every nonzero value in the "head" column changed except the first. they don't appear to be offset.
+would really help if I had some idea what the low bits mean...
+result = highBits
+byteIdx = word from compData (renamed timeData)
+if lowBits != 0:
+    they're added to "offs", and if that's > 32...
+        (offs - lowBits) / 8 is added to both input offsets
+        a value is read from each offset and left shifted by (lowBits & 7)
+        offs = ((offs - lowBits) & 7) + lowBits;
+        byteIdx = next compData
+        this is just fetching the next word of the bitstream.
+    uVar5   = byteIdx >> (32 - lowBits);
+    dTime   = (data >> (32 - lowBits)) - uVar5;
+    dTime   = (((dTime * 262144) | (dTime / 16384)) / 262144) * time;
+    xer_ca  = dTime < 0 && (dTime & 0x3fff) != 0;
+    result += (uVar5 + (dTime / 16384)) * 4;
+    the values from compData and rawData are shifted left by lowBits
+output result
+so the low bits have to do with time.
+if they're not 0, they're a number of bits.
+    read that many bits from compData
+    the value is a time scale.
+
+in other words, r14 points to the animation values, and r12 to the bit-packed time data.
+after the entries is some more simply compressed data. it's just a repeating sequence pointed to by param6:
+u16 offset; if 0x1000, end.
+u16 ???
+u16 value
+u16 ???
+each value is added to the value at the given offset in the output data.
+
+
+r12: first byte: 00 - changing causes a difference in output at offset 0x18 (bone 0 xlate X)
+    00: 0003 (   3)
+    70: 016D ( 365)
+    7E: 019A ( 410)
+    7F: 019E ( 414)
+    FF: 033C ( 828) (019E << 1)
+    this must be some kind of scale
+    0x33C / 3 = 0x114 (276)
+second byte: 38 - changing causes difference at 0x02 (bone 0 rotate Y)
+    00: FE80 (-384)
+    37: FFE4 ( -28)
+    38: FFEC ( -20)
+    FF: 0018 (  24)
+third byte: 6F - difference at 0x1A (bone 0 xlate Y)
+    00: FFB2 ( -78)
+    6E: 000B (  11)
+    6F: 000C (  12)
+    FF: 0019 (  25)
+fourth byte: F0 - difference at 0x04 (bone 0 rotate Z)
+    00: FFEC ( -20)
+    F0: 0008 (   8)
+    F1: 000C (  12)
+fifth byte: 0D - difference at 0x1C (bone 0 xlate Z)
+    0B: 0005 (   5)
+    0C: 0006 (   6)
+    0D: 0006 (   6)
+    FF: 0068 ( 104)
+sixth byte: 40 - difference at 0x40 (bone 1 rotate X and Y)
+    40: FFFCFFFD (-4,  -3)
+    FF: 004802D5 (72, 725)
+seems like a pattern: xlate X, rotate Y, xlate Y, rotate Z, xlate Z
+(but where's rotate X?)
+6th seems to break this pattern though, and where's scale?
+I guess rotate X for the first is just the initial input.
+
+so, first short is copied directly (always?), except low bits affect something.
+input is like: [Xrot, Xtrn, Yrot, Ytrn, Zrot, Ztrn] per bone (16 bits each)
+
+the 4 bytes before don't seem to do anything
+
+ANIMCURV.bin: 0x4638:
+53 45 51 41 SEQA
+02 34 00 37 size=0x234, nActions=55 (0x37)
+00 00 00 00
+FF 00 01 C7
+03 00 00 00 anim ?
+02 00 03 5A play "item get" anim
+0B 01 00 01
+    00 0A 03 C6
+0B 00 00 01
+    00 31 00 02
+0D 01 80 00 eyes: open
+04 02 16 16
+04 0B 31 09
+06 00 E3 CF play sound ????
+0B 00 00 01
+    00 00 09 C6
+0D 0C 74 41 do nothing 441
+04 30 37 13
+04 08 26 08
+04 0B 09 1C
+04 04 1B 1B
+0D 1D 80 04 eyes: wide
+04 13 63 07
+04 1D 37 16
+0D 02 80 00 eyes: open
+0D 02 80 01 eyes: half closed - this is the blink sequence
+0D 02 80 03 eyes: 3/4 closed
+0D 01 80 02 eyes: closed
+0D 02 80 03 eyes: 3/4 closed
+0D 01 80 01 eyes: half closed
+0D 2A 80 00 eyes: open
+0D 02 80 00 eyes: open
+02 09 03 49 play anim 0349
+04 0A 11 02
+04 0C 15 13
+04 06 17 07
+0B 08 00 01
+    00 1A 00 02
+04 10 0F 11
+02 01 03 5B play anim 035B
+0B 00 00 01
+    00 00 00 09
+0B 73 00 01
+    00 01 06 88
+0B 01 00 01
+    00 00 00 0A
+0B 01 00 01
+    00 01 00 09
+02 15 03 4A play anim 034A
+0B 06 00 01
+    00 01 00 02
+04 00 16 20
+04 03 1B 00
+0D 10 80 00 eyes: open
+02 01 05 31 play anim 0531
+0B 00 00 01
+    00 00 00 06
+but what's all this crap?
+80 00 00 00  00 00 00 BF head tilt - change 80 to C4
+40 96 DA EE  00 00 00 E6 head rotation
+00 00 00 00  00 00 01 06
+00 00 00 00  00 01 00 C0
+C0 7E 50 B8  E4 01 00 E6 this has to do with head rotation
+C1 96 23 41  00 01 00 FB
+C1 96 23 41  00 01 01 9B
+00 00 00 00  00 01 01 C0
+00 00 00 00  00 02 00 BF
+C1 11 9A BB  00 02 00 E6
+00 00 00 00  00 02 01 06
+41 27 8A 7B  02 09 00 E5
+42 28 DE 3A  00 09 01 13
+41 93 45 42  00 09 01 23
+41 93 45 42  02 09 01 98
+42 51 0E 6F  10 09 01 A8
+41 41 45 3F  E2 0A 00 C0
+00 00 00 00  02 0A 01 15
+40 E2 FB 6A  00 0A 01 A9
+00 00 00 00  00 0F 00 61
+C1 F2 99 14  00 0F 00 66
+00 00 00 00  00 0F 00 70
+C3 4C 70 A6  20 10 00 00
+C3 1E C6 0A  00 10 00 13
+C3 4B 6F 38  D8 10 00 4C
+C3 7F 43 21  00 10 00 65
+C3 5B 81 F3  14 10 00 82
+C2 EA 36 29  00 10 00 B0
+C3 0F F1 16  00 10 00 FB
+40 94 8B 78  00 10 01 07
+C1 56 F5 96  00 10 01 22
+C1 56 F5 76  00 10 01 9C
+00 00 00 00  00 10 01 C4
+41 01 92 FB  00 11 00 00
+3F 38 11 46  00 11 00 24
+3F 7F 5E A4  00 11 00 51
+C1 C2 C7 76  00 11 00 6C
+C1 03 30 BA  20 11 00 7C
+C0 AA 30 90  00 11 00 CE
+C0 C0 E3 2A  E0 11 01 0C
+C1 20 00 00  00 11 01 21
+C1 20 00 00  00 11 01 9B
+00 00 00 00  00 11 01 BC
+after 55 actions, looks like a series of (float, byte, 3byte) - 43 of those
+or they could be doubles
+possibly all head rotation - something must refer to these?
+
+0x4874:
+53 45 51 41 SEQA
+01 1C 00 09 size=0x011C, nActions=9
+00 00 00 00
+FF 00 01 C7
+03 00 00 00 anim ?
+01 00 00 00
+00 00 01 C1
+0B 06 00 01
+    00 00 06 86
+0B 00 00 01
+    00 00 00 06
+43 16 0E A0  00 07 00 00
+43 16 0E A0  00 07 00 50
+43 13 A9 7F  F0 07 00 A1
+43 12 F6 E7  02 07 00 E5
+42 F7 8B 67  10 07 00 E6
+42 FE 7D AA  00 07 01 23
+41 8D A2 C6  00 08 00 00
+41 91 E6 07  0C 08 00 50
+41 CF E7 D1  18 08 00 A1
+41 E2 24 94  02 08 00 E5
+C2 39 0D DD  EC 08 00 E6
+C2 7E DC AC  00 08 01 23
+C1 EB 10 F3  20 0B 00 00
+C1 C1 78 AB  04 0B 00 50
+C1 C0 A1 2D  00 0B 00 A1
+C1 C0 61 DE  02 0B 00 E5
+C1 A9 88 BC  5C 0B 00 E6
+C1 67 AA 5D  00 0B 01 23
+41 70 E5 9D  20 0C 00 00
+41 60 40 01  F0 0C 00 50
+40 EA 75 E6  DC 0C 00 A1
+40 A1 CB 3B  02 0C 00 E5
+42 2E FB A2  20 0C 00 E6
+42 67 CC 35  00 0C 01 23
+41 5C 05 68  D8 0D 00 00
+41 2C 1C 30  E0 0D 00 50
+41 26 92 46  02 0D 00 E5
+41 A4 E0 B8  BC 0D 00 E6
+41 28 B6 A0  00 0D 01 23
+42 1B FA 34  10 0E 01 23
+BC 98 5F 07  E0 0F 00 00
+
+0x4998:
+53 45 51 41 SEQA
+00 88 00 06 size=0x88, nActions=6
+00 00 00 00
+FF 00 01 C7
+03 00 00 00 anim ?
+00 00 01 C7
+0B 00 00 01
+    00 00 00 06
+43 7F 00 00  00 03 01 AF
+3F 19 99 9A  F4 05 01 1A
+43 8A 91 97  00 07 00 E6
+43 34 00 00  E5 07 01 23
+C3 34 00 00  EC 07 01 96
+C3 80 34 92  00 07 01 C7
+C1 2F 9B E9  E0 0B 00 E6
+C1 3E E7 54  E0 0B 00 EE
+C1 41 57 92  10 0B 00 FA
+C1 3B 88 B4  00 0B 01 22
+C1 EB 9E D6  22 0C 00 E5
+41 8D 96 4A  20 0C 00 E6
+42 1B 51 92  00 0C 01 22
+40 03 CB 95  00 0D 01

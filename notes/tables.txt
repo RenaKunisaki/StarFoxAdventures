@@ -1,0 +1,23 @@
+ANIM.BIN      ANIM.TAB
+    u32 offset, high byte sometimes 10
+    length = next - this
+ANIMCURV.bin  ANIMCURV.tab
+    u32 offset, high byte sometimes 80
+    length = next - this
+mod16.tab      mod16.zlb.bin
+    u32 offset, high byte sometimes 10
+    first several entries are 0
+    maybe each entry = one map grid cell?
+MODELIND.bin
+    s16 ID, remaps model IDs
+MODELS.bin    MODELS.tab
+    u32 offset, high byte sometimes 10, unused entries are 0
+OBJSEQ.bin    OBJSEQ.tab
+    s16 ID?
+OBJSEQ2C.tab
+    s16 ID?
+TEX0.bin  TEX0.tab  TEX1.bin  TEX1.tab
+VOXMAP.bin  VOXMAP.tab
+    u32 offset, high byte sometimes 80
+    length = next - this
+    first several entries are 0

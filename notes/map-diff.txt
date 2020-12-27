@@ -1,0 +1,3 @@
+animcurv/0247.bin
+ ../dump/maps/crfort/animcurv/0247.bin
+ ../dump/maps/linka/animcurv/0247.bin

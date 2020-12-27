@@ -1,0 +1,449 @@
+FFFF: 0000 DummyObject , 0002 Sabre       , 0003 Krystal     , 0005 TrickyBadge , 0006 TrickyBadge , 0008 ModelsWithT , 000B TrickyExcla , 000C TrickyQuest , 000D TrickyFood  , 0011 BackPack    , 0012 groundquake , 0015 staffEnd    , 0017 SCweaponT1  , 0019 SCweaponT2  , 001A SCweaponT3  , 001B SCweaponT4  , 001C LFweaponT1  , 001D LFweaponT2  , 001E BGSweapon   , 003F KooshyHill  , 0048 KaldachomSh , 00AE CFCloudCall , 00E7 CFPuzzleSwi , 011A WCTrex      , 015F DIMplacehol , 022E robotscorpi , 022F firebaddie  , 025E MMP_telesco , 02BC KP_red_orb  , 02BD KP_red_gree , 02BE KP_red_blue , 02BF KP_red_yell , 02C0 KP_red_purp , 0312 CameraColli , 042D DR_EarthSad , 045C DRPerch     , 04A4 PerchObject , 04D2 xyzpoint    , 04D4 WalkCamera  , 04D6 DigHole     , 04D7 DigTunnel   , 04D8 GroundQuake , 04DB LockIcon    , 0543 ARWStaticGu , 0555 SKYScapeDef , 0556 SKYScapeSto , 0557 SKYScapeSto , 0558 SKYScapeSpa , 0559 SKYRingDefa , 055A SKYRingStor , 055B SKYMountain , 055C SKYmountain , 055D SKYmountain , 055E SKYmountain , 055F SKYSun      , 0560 SKYMoon     , 05AB Sea         , 05B3 CommandMenu , 05B4 CommandMenu , 05B5 CommandMenu , 05B6 CommandMenu , 05B7 FrontEndLog , 05C2 Footstep    
+00C6: 0001 AnimDummy   , 0007 AnimTrickyB , 0009 AnimTricky  , 000A AnimKyte    , 0013 staffAnim   , 0016 AnimStandar , 0018 animSCweapo , 003B WBAnim      , 0069 AnimSnowCla , 006A AnimSharpcl , 006B AnimSharpcl , 006C AnimSharpcl , 006D AnimSharpcl , 0074 DIMSpellsto , 0078 AnimDrakor  , 0093 KT_AnimSpel , 0097 AnimKytesMu , 0098 AnimGuardCl , 0099 steggy      , 009A Nutter      , 009C Krazoa      , 009D AnimGuardCl , 00AD CFAnimCloud , 00BA CFPrisonCag , 00BE AnimCFGuard , 00C1 AnimSpell   , 00C8 CFAnimSnowB , 00CC CFPowerDoor , 00CD CFPowerDoor , 00CE CFPowerDoor , 00D6 AnimSpaceCr , 00DB CFPowerCrys , 00DC CFPowerCrys , 00DD CFPowerCrys , 00DE CFSmallPowe , 00DF CFSmallPowe , 00E0 CFSmallPowe , 00E4 CFAnimCloud , 00E5 CFAnimBaby  , 00EE CF_RockPiec , 00F6 AnimCFTreas , 00F9 CFAnimPower , 00FC CFPowerRoom , 00FD AnimRobotPa , 0101 CFMainDoorB , 0103 CFBrokenPil , 0104 CFBrokenPil , 0113 AnimSpellst , 0114 AnimSpellst , 0119 AnimKingEar , 012C WCAnimSilve , 012D WCAnimGoldT , 012E WCAnimSunSt , 012F WCAnimMoonS , 0137 WCAnimGener , 014A DIMafterbos , 0150 DIMBridgeCo , 016D DIMAlpineRo , 0171 DIMicefloor , 0172 DIMicefloor , 0173 DIMicefloor , 0174 DIMicefloor , 0175 DIMicefloor , 017E DIMTruthHor , 01B6 Blacksquare , 01B7 SpaceShip   , 01C8 IMSpaceTrac , 01EA CCOceanDoor , 01FD CCAnimCanno , 0200 CCAnimgoldb , 021D WORLDcomm   , 021E communicato , 021F commCube    , 0220 commCubeFro , 0221 commRobHead , 0222 commPepperH , 0223 commPeppyHe , 0224 commSlippyH , 0225 commMemoryC , 0226 commQuitObj , 023A AnimARWArwi , 023B AnimWhiteSp , 023C HazeSphere2 , 023D AnimWhitePl , 023E AnimConcuss , 023F WORLDanimpl , 0240 WORLDanimcl , 0241 WORLDanimdr , 0242 WORLDanimwa , 0243 WORLDanimda , 0244 WORLDanimcl , 0245 AnimFalco   , 0246 Animpeppy   , 0247 GF_PepperHe , 0248 GF_planet   , 024B Animrob     , 024C AnimPilotse , 024E AnimPlanet  , 0250 Animspanner , 0253 GF_DoorRigh , 0254 AnimSpaceCr , 0264 MMP_asteroi , 0267 MMP_Krazoa  , 0275 NW_AnimGeys , 0277 NW_AnimBoul , 027A NW_alpinero , 027F AnimGoldRoo , 0282 NW_guardian , 0283 NW_animmamm , 0298 SH_AnimMap  , 02A7 SH_krystalH , 02AF SH_thorntai , 02B2 SH_whitemus , 02B7 SH_AnimBoul , 02B8 AnimSwapGif , 02B9 SHAnimBaby  , 02C1 KP_AnimKraz , 02C2 KP_RedKrazo , 02CE AnimKrystal , 02CF ScalesBelt  , 02D7 SC_animligh , 02D8 SC_animchie , 02D9 SC_animbaby , 02DB SC_animmusc , 02ED MMP_Key     , 0322 VFP_mocklaz , 0324 VFP_corepla , 033A VFP_Door2B  , 0352 DFP_transla , 035E DFP_BigDoor , 0369 DFPSplstneA , 036B VFPSplstneA , 0380 WM_Cloudrun , 0384 WM_BossDrak , 0385 WM_Krazoa1  , 0386 WM_Krazoa2  , 0387 WM_thorntai , 0388 WM_thorntai , 0389 WM_Spellboo , 038A WM_BossDrak , 03A6 WM_Door2    , 03A7 WM_Door3    , 03A8 WM_Door4    , 03AA WM_PlanDoor , 03AB WM_PlanDoor , 03AC WM_PlanDoor , 03B1 WM_Animcolr , 03B4 WM_Animspir , 03E6 Rarelogo    , 03E7 N64logo     , 03F7 DFSH_Spirit , 03F9 DFSH_Door2  , 03FA DFSH_Door3  , 03FB DFSH_Door4  , 0402 AnimShadowH , 0403 AnimShadowC , 040F ECSH_Door2  , 0410 ECSH_Door3  , 0411 ECSH_Door4  , 041D DBSH_PushCl , 0422 Animscaless , 0426 DBAnimThief , 0428 DB_AnimEgg  , 0430 DR_AnimEart , 0435 AnimHightop , 0437 GM_Token    , 0438 DR_LiftLeve , 043B DR_ShieldIn , 0449 DR_AnimColl , 045B DR_CloudDoo , 0461 DR_HighDoor , 0463 DR_James2Bo , 0479 DR_LandSqua , 0487 AnimFox     , 0488 AnimFoxLink , 0489 SB_Cloudrun , 0499 PortalDoorA , 04AB Arwingsteps , 04C7 AnimCamera  , 04C8 Override    , 04CA DepthOfFiel , 04CB VariableObj , 04CC ExplodingWa , 04CD hologrambas , 04CE hologramhaz , 04CF hazesphere  , 04D0 RipplePlain , 04DA SidekickBal , 04DD animbubble  , 04E0 BlueMushroo , 04E2 EnergyEggAn , 04E5 AppleAnim   , 04E8 MagicDustSm , 04EA MagicDustMi , 04EC MagicDustLa , 04EE MagicDustHu , 04F4 RedScarabAn , 04F5 GoldScarabA , 050B BombPlantSp , 0511 animMoonSee , 0529 ARWArwingFo , 0534 ARWBlockerD , 0535 ARWBlockerD , 053E ARWAnimSmal , 053F ARWAnimBigA , 054B ARWDarkIceP , 054C ARWDragonRo , 054D ARWCloudRun , 054E ARWWalledCi , 054F ARWDinoPlan , 0550 ARWAnimBomb , 0583 AnimFish    , 05BA beanAnim    , 05C3 WarpCigar   , 05C4 WarpGasCyli
+00C4: 0004 Tricky
+00E2: 000E sword       , 000F staff
+00E5: 0010 fox_shield  , 0014 omni_shield
+00E3: 001F projball    , 0020 AnimProjBal
+029B: 0021 rapidFireLa , 0235 ANDAsteroid , 0236 ANDSuckAste , 0237 AndrossRing , 0525 ARWArwingLa , 0526 ARWArwingLa
+00E4: 0022 FlameThrowe , 0023 FlameBall   , 0085 BossDarkorF
+00D4: 0024 SkeetlaWall
+00CC: 0025 ChukChuk
+00D5: 0026 Kaldachom
+00D6: 0027 KaldachomMe
+00D0: 0028 Grimble
+00D1: 0029 TumbleWeedB , 002A TumbleWeedB , 002B TumbleWeedB , 002C TumbleWeedB
+00C9: 002D GuardClaw   , 002E GCRobotPatr , 002F Vambat      , 0030 Firebat     , 0031 HagabonMK2  , 0032 Mikaladon   , 0033 SpittingEba , 0034 MutatedEba  , 0035 snowworm    , 0036 snowworm_ba , 0037 Whirlpool   , 0038 Rachnop     , 0039 PinPon      , 003A WB          , 003C Weevil      , 003D BattleDroid , 003E Kooshy      , 0040 HoodedZyck  , 0041 FireCrawler , 0042 RedEye      , 0043 ShadowHunte , 0044 SwampStride , 005F sharpclawSn , 0060 sharpclawGr , 0061 sharpclawSo , 0062 sharpclawCo , 0063 sharpclawAs , 0064 sharpclawSh , 0067 BossGeneral
+00DF: 0045 Hagabon
+00E0: 0046 SwarmBaddie
+00E1: 0047 WispBaddie
+012E: 0049 LaserTurret , 0075 DIMSpellsto , 0080 InfoTablet  , 009E CFrunnersta , 009F CFrunnersta , 00A0 CFLightPill , 00A1 CFLightWall , 00A3 CFDungeonLi , 00A4 CFGCrubble1 , 00A5 CFGCrubble2 , 00A6 CFGCrubble3 , 00A7 CFGCrubble4 , 00A8 CFGCpillbre , 00A9 CFGCsmallbl , 00AA SkyDome     , 0125 WCSunDoor   , 0126 WCMoonDoor  , 0184 DIM2Torch   , 01F6 CCdarkness  , 021A WORLDshield , 0227 GFRONT_Asse , 0228 LINKH_Asset , 0229 LINKC_Asset , 022A LINKE_Asset , 022B LINKJ_Asset , 022C LINKF_Asset , 0239 AndrossSpir , 024D GF_Pilotsea , 0251 GF_JukeBox  , 025F MMP_defenDo , 0260 MMP_defenDo , 026A NWCellLock  , 02A3 SH_BeaconTw , 02C4 KP_console_ , 02C5 KP_console_ , 02C6 KP_console_ , 02C7 KP_console_ , 0314 VFP_Warding , 0336 VFP_Maindoo , 0338 VFP_Maindoo , 036A DFPSplstne  , 036C VFPSplstne  , 037E WM_Explosiv , 0423 DBprotectZo , 042B KillerSpike , 043C DR_Tower    , 043E DR_TestWall , 0443 DR_IonCanno , 046F DR_TrackDoo , 0482 DR_CloudCal , 0483 DieSeqObjec , 0524 ARWArwingTa , 054A ARWStarFiel , 0566 DirectionSi , 0567 FirePole    , 0581 DragonFly
+00D7: 004A KaldachomSp , 004B FireCrawler
+00D8: 004C PinPonSpike
+00DB: 004D MikaBomb
+00DC: 004E MikaBombSha
+00CD: 004F IceBall     , 0050 IceBallSmal , 0051 ChukaChuck
+00D9: 0052 Pollen
+00DA: 0053 PollenFragm , 0451 DRHomingMis
+00D2: 0054 Tumbleweed1 , 0055 Tumbleweed2 , 0056 Tumbleweed3 , 0057 Tumbleweed4 , 0058 Tumbleweed1 , 0059 Tumbleweed2 , 005A Tumbleweed3
+0150: 005B GCRobotLigh
+0240: 005C GCRobotBlas
+017C: 005D GCRobotPatr
+00DD: 005E GCbaddieShi
+00CF: 0065 CannonClaw  , 0066 CannonClawO
+00DE: 0068 baddieInter
+01E0: 006E DIM_Boss
+01E1: 006F DIM_BossGut
+01E2: 0070 DIM_BossTon
+01E3: 0071 DIM_BossGut
+013E: 0072 DIMBossIceS , 01A2 DIM2Explode
+01E5: 0073 DIM_BossSpi
+01E6: 0076 DIMbosscrac
+01E7: 0077 DIMbossfire , 025A MMP_CraterF , 0590 CraterFlame
+024D: 0079 BossDrakor
+0262: 007A DrakorMissi , 0444 DRbullet
+0271: 007B DrakorHover , 0442 DR_PushCart
+0241: 007C DrakorEnerg
+0105: 007D DrakorCrate , 04F8 LargeBasket , 04F9 LargeCrate  , 04FA LargeCrateL
+025E: 007E DrakorSpell , 0115 CRSpellston
+011A: 007F DRDebrisGir , 0081 DRDebrisPip , 0082 DRDebrisPip , 01D6 LINKSnowTre , 01D8 LINKSnowLog , 01D9 LINKSnowTre , 028B nw_testobj  , 02EE SC_DummyTri , 02EF SC_DummySqu , 02F0 SC_DummyCir , 02F2 SC_throne   , 056B AlienTreePa , 0589 SnowBush    , 058D SnowLog     , 058F SulphurCrys , 0591 CobwebCorne , 0592 CobwebCeili , 0593 CobwebEdge  , 0596 GrassWeedCl , 0597 GrassSupaCh , 0598 FernBush    , 0599 FernCurly   , 059B WaterLillyF
+024E: 0083 BossDrakorD , 057F ThornBush
+02B5: 0084 Timer       , 030F CNTstopwatc
+0273: 0086 BossDrakorF , 0464 FirePipe    , 0466 FireHole    , 0467 FlameMuzzle , 0468 IceHole     , 0469 SteamHoleNo , 046A SteamHoleFi , 046B SteamHoleDe
+0112: 0087 BossDrakor_ , 008B KT_RexSeque , 00C4 CFGoldenPer , 00F1 LINKIseqobj , 00F2 CFseqobject , 00F3 CFRaceSeqob , 00F4 CAMERAseqob , 011D WCSeqObject , 011E WCTempleBlo , 0158 DIMBridge   , 0162 DIMSeqObjec , 0185 DIM2SeqObje , 0188 DIM2Mammoth , 01A0 DIM2CellLoc , 01B2 DIM2StonePi , 01B9 IMSeqObject , 01D0 LINKE_stone , 01DF linkB_Stone , 022D ANDSeqObjec , 024A GF_sequence , 025D MMP_seqobje , 02AC SH_seqobjec , 02BB KP_sequence , 02D1 SC_sequence , 032D VFPSeqObj   , 0340 VFP_Bobbing , 0341 VFP_Bobbing , 03C0 SPSeqObj    , 03F0 FrontSeq    , 0420 NWSH_Seqobj , 0445 DR_Seqobj   , 0446 FireHoleCon , 0447 DR_SeqobjBo , 046E DR_TrackDoo , 04A5 KPLandingPa , 04A6 CF_BobbingC , 04A7 CFLandingPa , 04A8 LandingPad_ , 04A9 WC_LandingP , 04AA SH_NT_Landi , 0510 MSSeqObject , 0549 ARWSeqObjec , 05BC DFsequences
+024C: 0088 BossDrakor_
+024F: 0089 KT_RexLevel
+0250: 008A KT_Rex
+0110: 008C KT_RexDoorP , 008D KT_RexDoorT , 00B5 CFPrisonDoo , 00B6 CFWinPrison , 00D5 CF_MovDeckD , 00E6 CFTreasureD , 00FB CFExplosive , 0100 CFMainDoorA , 0102 CFBrokenPil , 011F WCTempleDoo , 0120 WCTempleDoo , 0121 WCTempleDoo , 0123 WCSunTemple , 0124 WCMoonTempl , 0127 WCSlabDoor  , 0135 WCBossDoor  , 0136 WCGeneralDo , 0144 WCSunInside , 0145 WCMoonInsid , 0147 WCTempleTop , 0164 DIM_Portcul , 0167 DIMWoodDoor , 018E DIM2IcePlat , 018F DIM2IcePlat , 0190 DIM2TrapDoo , 0192 DIM2TrapDoo , 0198 DIM2CellDoo , 019A DIM2CellDoo , 01A1 DIM2PuzzleD , 01B1 DIM2IceGrat , 01C2 IMPrisonGat , 01CA IMFence     , 01D4 LINK_Portcu , 01E7 CCwaterShut , 01EB CCOceanDoor , 01EE CCskullDoor , 01EF CCclawOnlyD , 01F0 CCprisonDoo , 01F9 CCclawdoor  , 0252 GF_DoorLeft , 0258 MMP_MagicCa , 026C NW_Portcull , 0294 SH_MagicCav , 0295 SH_QueensDo , 0296 SH_Portcull , 02CC KP_SectionD , 02CD KP_FinDoor  , 02DD SC_Shrine_d , 02DE SC_mounddoo , 02DF SC_settelme , 02E0 BossTRexPor , 02E1 SC_capeclaw , 02E3 SC_stepping , 02E4 SC_hutdoor  , 0337 VFP_Doorloc , 0343 OFPclawOnly , 034D DFP_Bridge  , 0372 DFP_RoundDo , 03A5 WM_Door1    , 03B6 WMFinalDoor , 03C1 SPDoor      , 0409 EC_Shrine_d , 042E DR_EarthDoo , 0439 DR_Shield   , 045A DR_CloudDoo , 0460 DR_HighDoor , 0462 DR_James1Bo , 0470 DR_DrakorDo , 049E MCProjDoor
+0251: 008E KT_RexFloor
+0252: 008F KT_Lazerwal
+0253: 0090 KT_Lazerlig
+0128: 0091 KT_Torch    , 009B Trex1       , 013D WCApertures , 013E WCAperturem , 0152 DIMBridgeCo , 0153 DIMBridgeCo , 0154 DIMBridgeCo , 0155 DIMBridgeCo , 0156 DIMBridgeCo , 0165 DIMHutDoor  , 0166 DIMDoorBrid , 0189 DIM2Mammoth , 0191 DIM2TrapDoo , 0193 DIM2TrapDoo , 0199 DIM2CellDoo , 019B DIM2CellDoo
+0254: 0092 KT_Fallingr
+01F5: 0094 generalscal , 0095 CF_generals , 026B NW_GeneralS , 02FA SB_FireBall
+0266: 0096 KytesMum
+01FE: 00A2 CFPressureS , 0365 DFP_PuzzleP , 03A4 WM_Pressure , 040B ECSH_Pressu
+0164: 00AB CFLevelCont
+00ED: 00AC CFCloudCalP , 00B3 CFPickKryst , 00D7 CFPowerCrys , 00D8 CFPowerCrys , 00D9 CFPowerCrys , 00F8 CFPowerRoom , 00FA CFExplosive , 0116 CF_ChestSpe , 0130 WCSunStone  , 0131 WCMoonStone , 0133 WCGoldTrexT , 0134 WCSilverTre , 0151 DIMBridgeCo , 015E DIMShackleK , 016B DIMAlpineRo , 016C DIMAlpineRo , 017D DIMTruthHor , 018A DIM2CellKey , 019D DIM2SilverK , 019E DIM2GoldKey , 01F3 CCfireCryst , 01FE CCgoldbar   , 026D NW_SmallSca , 0278 NW_trickyba , 0279 NW_alpinero , 029E SH_MediumSc , 029F SH_LargeSca , 02A0 SH_MMPkey   , 02A1 SH_NWkey    , 02E5 SC_block_tr , 02E6 SC_block_sq , 02E7 SC_block_ci , 02F6 SB_Key      , 02F8 SB_Spellsto , 0377 WM_MediumSc , 038F WM_consoles , 03E3 GM_TokenPic , 04C1 PadlockKey  , 04C2 GuardPass   , 04C3 Spellstone  , 04E1 EnergyEgg   , 04E3 Apple       , 04E4 MoonSeedCol , 05BF WM_PureMagi
+0145: 00AF CloudPrison
+0146: 00B0 CloudShipCo
+0152: 00B1 CF_ObjCreat
+014E: 00B2 CFPrisonGua
+0111: 00B4 CFPowerLock , 00C6 CFDoubleSwi , 011C WCTeethBowl , 014F DIMLever    , 015C DIMSnowHorn , 0179 DIMUseObjec , 017A DIMUseObjec , 0186 DIM2UseObje , 019F DIM2CellKey , 0261 MMP_padlock , 02E8 SC_blockpla , 031E VFP_PitSwit , 0320 VFP_PodiumP , 0334 VFP_LiftSwi , 0361 DFP_PitSwit , 0362 DFP_ForceSw , 037D WM_padlock  , 0432 DRearthwalk
+014F: 00B7 CFPrisonUnc
+0153: 00B8 CFPerch
+0154: 00B9 CFPrisonCag , 00C5 CFCageSwitc
+0148: 00BB CFGuardian
+015A: 00BC CFbrokenGra , 00BF CFbrokenWal , 00EB CFExplodeWa , 00ED CFExplodeFl , 0181 DIM2_WallEx , 01CE LINKE_Explo , 01E8 CCExploding , 026E NW_IcePriso , 029A SH_BombWall , 029C SH_BombWall , 044C DRSmallExpl , 048B ExplodeWall , 048C ExplodePlan
+0166: 00BD CFbrokenGra , 00C0 CFbrokenWal , 00EC CFWallPieac , 00EF CFExplodePi , 0182 DIM2_WallEx , 01CF LINKE_Explo , 01E9 CCExploding , 026F NW_IcePriso , 029B SH_BombWall , 029D SH_BombWall , 044A DRExplodePi , 044B ExplodePlan , 044D DRSmallExpl
+0149: 00C2 CFWindLift  , 00C3 CFTreasWind
+015F: 00C7 CFAttractor , 0429 DBAttractor
+0165: 00C9 CFRemovalSh
+0162: 00CA CFMagicWall
+00F4: 00CB CFPowerDoor , 0325 VFP_SmallRo , 0330 VFP_RoundDo , 0339 VFP_Door2   , 034F DFP_SmallBr , 0350 DFP_ToLinkD , 035A DFP_PerchBa , 035D DFP_BigDoor , 035F DFP_SmallDo , 0360 DFP_SmallDo , 0373 DFP_SmallTu , 03A9 WM_PlanDoor , 03B0 WM_WarpDoor , 03F8 DFSH_Door1  , 040E ECSH_Door1
+015D: 00CF CFSlideDoor , 00D0 CFMainSlide
+012A: 00D1 CFCrate     , 01E1 LinkF_liftg , 01E2 LinkF_cog   , 025B MMP_Organic , 0315 VFP_newball , 0316 VFP_liftgra , 031C VFP_PowerBo , 032B VFP_Spellst , 033F VFP_locksym , 0346 DFPSpSG     , 0347 DFP_WaterHi , 0348 DFP_FireHit , 0349 DFP_InnerRi , 034A DFP_OuterRi , 034B DFP_PlacePl , 034C DFP_Water   , 0351 DFP_PowerBo , 0356 DFP_blockwa , 0364 DFP_dish    , 0370 DFPSpDB     , 0376 WM_dummyfox , 0378 WM_krazoast , 0379 WM_krazoast , 038C WM_rock     , 038D WM_fallenco , 038E WM_largeroc , 0392 WM_Walkway1 , 0393 WM_Walkway2 , 0394 WM_NoPassVi , 0395 WM_NoPassHo , 0396 WM_MoonSeed , 0398 WM_Column_l , 039B WM_Planet   , 039C WM_PlanetMo , 03F3 DFSHcol     , 0400 scalessword , 040D ECSHcol     , 05B9 EnergyGem1
+0293: 00D2 CFSunTemple , 0132 WCInvUseObj , 0140 WCSunTemple , 0141 WCSunTemple
+0151: 00D3 CFScalesGal
+0131: 00D4 CF_DoorLigh , 047B DR_LightPol
+014A: 00DA CFPowerBase
+014B: 00E1 CFMainCryst
+014C: 00E2 CFCloudBaby , 00E3 CFAmbientCl , 02BA SHCloudBaby
+014D: 00E8 LaserBeam
+0159: 00E9 CFBlastedRo , 00EA CFBlastedWa , 00F0 CFBlastedTu , 0448 DRBlastedWa
+0113: 00F5 CAMERAnewse , 01DB LINKJseqobj , 01DE LINKB_seqob , 01E0 LINKC_seqob , 01F5 CCBridge    , 01F7 CCseqobj    , 0270 NWSteppingS , 0273 NW_seqobjec , 02A5 SH_newseqob , 02A6 SH_BottomSe
+0161: 00F7 CFTreasRobo
+015B: 00FE CFForceFiel
+015C: 00FF CFForceFiel
+0277: 0105 CFWindLiftL
+02A9: 0106 CF_WallTorc , 0551 LGTPointLig
+01F4: 0107 CF_Lamp     , 030B SB_Lamp
+025D: 0108 CRCloudRace
+025F: 0109 CRFuelTank
+025C: 010A CRSnowClaw  , 010B CRSnowClaw2 , 010C CRSnowClaw3 , 01C0 IMSnowClaw  , 01C1 IMSnowClaw2
+0255: 010D CRSnowBike  , 0110 CRSnowClawB , 0111 CRSnowClawB , 0112 CRSnowClawB , 01BD IMSnowBike  , 01BE IMSnowClawB , 01BF IMSnowClawB
+0260: 010E CRDropBomb  , 0465 ProximityMi
+016A: 010F CRrockfall  , 01BB IMIcicle
+028A: 0117 WCKingEarth , 0118 WCEarthWalk , 03A2 WM_deaddino
+028C: 011B WCBouncyCra
+028D: 0122 WCLevelCont
+028F: 0128 WCPressureS
+00FB: 0129 WCTemplePre , 01D2 LINK_SnowPr , 01D3 LINK_UnderW , 0201 CC_Pressure , 02B5 SH_Pressure , 02DC SC_Pressure , 031F VFP_PuzzleP , 0514 GroundQuake
+028E: 012A WCBeacon
+0292: 012B WCTrexStatu
+0294: 0138 WCMoonTempl , 0139 WCSunTemple
+0290: 013A WCPushBlock
+00EF: 013B WCPushBlock , 0170 DIMPushBloc , 01AF DIM2IceBloc , 01FC CCboulder   , 0276 NW_boulder  , 02B6 SH_boulder  , 031B VFP_Block2  , 0390 WM_5pushcra , 043D DR_Platform , 04B4 CFDungeonBl , 0505 MetalPushBl
+0291: 013C WCTile
+0295: 013F WCApertureS
+0296: 0142 WCTempleDia
+0297: 0143 WCTempleBri
+0298: 0146 WCFloorTile
+02A0: 0148 WCSunRing   , 0149 WCMoonRing  , 0238 ANDSilverRi , 0530 ARWGoldRing , 0531 ARWSilverRi
+016B: 014B DIMMagicLig , 01C3 IMMagicLigh , 01C4 IMMagicLigh
+01BE: 014C DIMLavaBall , 014D DIMLavaDebr
+01BF: 014E DIMLavaBall
+01C8: 0157 DIMBridgeCo
+01C1: 0159 DIMSnowBall
+01C2: 015A DIMSnowBall
+0256: 015B DIMSnowHorn
+01CA: 015D DIMExplosio
+01C0: 0160 DIMLogFire  , 0161 DIMLogFireR
+01C3: 0163 DIMGate     , 019C DIM2BossDoo
+01CB: 0168 DIMWoodDoor
+01C5: 0169 DIMBarrier  , 0194 DIM2CannonT
+01C9: 016A DIMDismount
+01F6: 016E DIMFlag     , 02F7 SB_Wheel    , 0305 SB_Sail     , 030C SB_ShipFlag
+01C4: 016F DIMIceWall
+01C6: 0176 DIMCannon   , 0177 DIMCannonBa
+01C7: 0178 DIMLavaSmas
+01CC: 017B DIMMagicBri
+01D1: 017C DIMTruthHor
+01CD: 017F DIM_LevelCo
+01D0: 0180 DIM_tricky
+017D: 0183 DIM2_barrel , 025C MMP_barrel
+01D5: 0187 DIM2Conveyo
+01DC: 018B DIM2IceFloe , 018C DIM2IceFloe , 018D DIM2IceFloe
+01D7: 0195 DIM2SnowBal
+01D8: 0196 DIM2PathGen
+01D9: 0197 DIM2PrisonM
+00C7: 01A3 DIM2RoofRub , 01A4 DIM2RoofRub , 01A5 DIM2RoofRub , 01A6 DIM2RoofRub , 01A7 DIM2RoofRub , 01A8 DIM2RoofRub , 01A9 DIM2RoofRub , 01AA DIM2RoofRub , 01AB DIM2RoofRub , 01AC DIM2RoofRub , 01AD DIM2RoofRub , 01AE DIM2RoofRub , 01EC CCfireCryst , 024F AnimGreatfo , 04F3 GreenScarab
+01DD: 01B0 DIM2Icicle
+01DE: 01B3 DIM2LavaCon
+0184: 01B4 DIMAnimShar , 0269 MMPAnimShar
+01E4: 01B5 MAGICMaker
+0169: 01B8 IMIceMounta
+0114: 01BA IMMultiSeq
+016D: 01BC IMIcePillar
+016E: 01C5 IMAnimSpace
+016F: 01C6 IMSpaceThru
+0170: 01C7 IMSpaceRing
+0171: 01C9 IMSpaceRing
+0173: 01CB LINK_levcon
+0121: 01CC LINKF_InfoT , 01CD LinkG_InfoT , 0256 MMPass_Info , 0257 DIM_InfoTex , 028C NW_InfoText , 028D NW_InfoText , 0291 SH_InfoPoin , 0299 SH_FireWeed , 0313 VFP_InfoTex
+01A7: 01D1 LINK_BlueMu , 02B0 SH_whitemus , 04DF BlueMushroo
+011C: 01D5 LINKStaffLe , 05AC StaffAction , 05AD StaffBoostP , 05AE StaffBoulde , 05AF StaffBoulde , 05B0 StaffBoulde , 05B1 StaffLeverO , 05B2 StaffLeverT
+0206: 01D7 LINKPoleFla , 03B9 WM_WallTorc , 05A3 HangingLigh , 05A4 PoleLight   , 05A5 PoleFlame   , 05A6 LightSource
+02AD: 01DA LINKSnowGra , 028F SH_YellowWh , 0290 SH_BlueWhit , 0292 SH_RedYello , 0293 SH_BlueFlow , 037F WM_drape    , 03F5 DFSH_Spirit , 0568 BlueFernFlo , 0569 WhiteFernFl , 056A YellowFernF , 056C AlienSpore  , 056D BlueFlowerP , 056E BlueWhiteFl , 056F RedYellowFl , 0570 YellowWhite , 0571 BullRush    , 0572 BullRushClu , 0573 LongGrassCl , 0574 DragonRockG , 0575 AlienGrassC , 0576 AlienGrassC , 0584 SnowGrass   , 0586 SnowBullrus , 0594 HangingPlan , 0595 HangingPlan , 059A WaterLillyL
+021F: 01DC VFP_Platfor , 0327 VFPLavaBloc , 0331 VFP_Platfor , 0332 VFP_Platfor
+0172: 01DD LINKB_levco
+0122: 01E3 CCTestInfot
+018B: 01E4 CClevcontro
+0272: 01E5 CC_HighTop  , 0434 DR_HighTop
+00E7: 01E6 CCeyeVines  , 0508 BurnableVin
+018A: 01ED CCpedstal
+0174: 01F1 CCriverflow
+0189: 01F2 CCSharpclaw
+0188: 01F4 CClightfoot
+0187: 01F8 CCqueen
+0185: 01FA CCgasvent
+0186: 01FB CCgasventCo
+0269: 01FF CCFoundGold , 0453 DR_ExplodeD , 048D ExplodePlan
+01D2: 0202 WORLDplanet
+01D3: 0203 WORLDcloudr , 0204 WORLDdragro , 0205 WORLDwalled , 0206 WORLDdarkic , 0207 WORLDcloudl , 0208 WORLDpath1  , 0209 WORLDpath2  , 020A WORLDpath3  , 020B WORLDpath4  , 020C WORLDpath5  , 020D WORLDpath6  , 020E WORLDpath7  , 020F WORLDpath8  , 0210 WORLDarwing , 0211 WORLDgreatf , 0212 WORLDsun    , 0213 WORLDsunray , 0214 WORLDpepper , 0215 WORLDsunfla , 0217 WORLDComet  , 0218 WORLDastGen , 0219 WORLDhalo   , 021B WORLDhalobr , 021C WORLDarrow
+01D4: 0216 WORLDAstero
+02BC: 0230 Andross
+02BD: 0231 Androssleft , 0232 Androssrigh
+02BE: 0233 AndrossBrai
+02BF: 0234 AndrossLigh
+02BB: 0249 GF_LevelCon
+017E: 0255 MMP_levelco
+00F0: 0259 MMP_WarpPoi , 02D2 SC_warppoin , 0397 WM_WarpPoin , 04B2 WarpPoint   , 04B3 RestartPoin
+0180: 0262 MMP_asteroi
+0181: 0263 MMP_trenchF
+0183: 0265 MMP_gyserve
+0182: 0266 MMP_moonroc
+010F: 0268 MMP_Bridge
+012F: 0271 NWCallOFEld , 0504 BarrelPad
+01A5: 0272 NW_levcontr
+01A0: 0274 NW_geyser
+019F: 027B NW_treebrid , 027C NW_treebrid
+01A1: 027D NW_mammothh , 027E NW_mammothb , 0280 NW_mammothw , 0281 NW_mammothg
+01A2: 0284 NW_tricky
+01A3: 0285 NW_animice1 , 0286 NW_animice2 , 0287 NW_animice3
+01A4: 0288 NW_ice1     , 0289 NW_ice2     , 028A NW_ice3
+02AE: 028E WaterFlowWe
+02AF: 0297 SH_FernTree , 0577 FernTree    , 0578 smallfern   , 0579 tallpalmtre , 057A JungleTree  , 0585 RootPlant   , 0588 SnowTree1   , 058A SnowTree2   , 058B SnowTree3   , 058C SnowTree4   , 058E SnowFruitTr
+01B4: 02A2 SH_EmptyTum
+01B3: 02A4 SH_Beacon
+01AE: 02A8 SH_LevelCon
+01B1: 02A9 SH_staff
+01B2: 02AA SH_staffHaz
+01A6: 02AB SH_tricky
+01AC: 02AD SH_queenear
+01AD: 02AE SH_thorntai
+01A8: 02B1 SH_killermu
+01AF: 02B3 SH_swaplift
+01B0: 02B4 SH_swapston
+012C: 02C3 KP_Transpor , 04B1 Transporter
+0239: 02C8 KP_textbloc , 02C9 KP_textbloc , 02CA KP_textbloc , 02CB KP_textbloc , 0371 DFP_Textblo
+01B6: 02D0 SC_levelcon
+01B5: 02D3 SC_chieflig , 02D4 SC_lightfoo , 02D5 SC_babyligh , 02D6 SC_blTarget , 02DA SC_muscleli
+01BD: 02E2 SC_paypoint , 03E2 SPWell
+01B8: 02E9 SC_totempol
+01BA: 02EA SC_totempuz
+01BB: 02EB SC_totembon
+01B7: 02EC SC_MusicTre , 02F3 SC_BirchTre
+01BC: 02F1 SC_totemstr
+01B9: 02F4 SC_Cloudrun
+01E8: 02F5 SB_Galleon
+0259: 02F9 SB_Cloudrun
+01E9: 02FB SB_Propelle , 02FC SB_Propelle
+01EA: 02FD SB_ShipHead
+01EB: 02FE SB_ShipMast
+01EC: 02FF SB_ShipGun
+01F7: 0300 SB_ShipGunB
+01EE: 0301 SB_CannonBa
+01ED: 0302 SB_FireBall
+01F3: 0303 SB_MiniFire
+01EF: 0304 SB_CloudBal
+01F0: 0306 SB_KyteCage
+01F1: 0307 SB_SeqDoor  , 0308 SB_SeqDoor2 , 0309 SB_DeckDoor
+01F2: 030A SB_CageKyte
+00F8: 030D LevelName
+02B4: 030E CNTcounter
+02B6: 0310 CNThitObjec , 0311 CNTColideOb , 043A DR_TowerSwi
+0227: 0317 VFP_lavasta
+0226: 0318 VFP_lavapoo
+0225: 0319 VFP_flamepo
+0228: 031A VFPSpPl     , 034E VFP_SpellPl
+021C: 031D VFP_Ladders , 0335 VFP_Ladders
+0223: 0321 VFP_corepla , 0323 VFP_corepla
+0222: 0326 VFPDragHead
+021D: 0328 VFPLift1    , 0329 VFPLift2    , 032A VFPLift3
+0221: 032C VFP_seqpoin , 03F1 DFSH_seqpoi , 03FC MMSH_seqpoi , 0404 ECSH_seqpoi , 0412 GPSH_seqpoi , 041C DBSH_seqpoi
+0220: 032E VFP_DoorSwi , 032F VFP_LiftInd
+021E: 0333 VFP_Block1
+021A: 033B VFP_statueb
+0218: 033C VFP_MiniFir
+0216: 033D VFP_LevelCo
+0217: 033E VFP_ObjCrea
+0238: 0342 LINKA_levco
+023C: 0344 DFP_PowerSl
+023B: 0345 DFP_Lightni
+023A: 0353 DFP_Platfor
+0237: 0354 DFPSpPl
+0236: 0355 DFP_LaserBe
+0235: 0357 DFP_TargetB , 0358 DFP_TargetB
+0234: 0359 DFP_PerchSw
+0233: 035B DFP_Statue1
+0232: 035C DFP_RotateP
+0231: 0363 DFP_ForceAw
+022F: 0366 DFP_floorba
+0230: 0367 DFP_wallbar
+022B: 0368 DFP_Torch
+022D: 036D DFP_seqpoin
+022E: 036E DFP_DoorSwi , 036F DFPSpDA
+0229: 0374 DFP_LevelCo
+022A: 0375 DFP_ObjCrea
+0215: 037A WM_newcryst , 037B WM_newcryst , 037C WM_newcryst
+0214: 0381 WM_TransTop
+0210: 0382 WM_PlanetsS , 0383 WM_Planets
+020E: 038B WM_sun      , 039A WM_Crystal
+0211: 0391 WM_WallCraw , 044E DR_BigSkeet , 044F DR_SmallSke
+020F: 0399 WM_SpiritSe
+0213: 039D WM_VConsole
+01FA: 039E WM_seqobjec
+01F8: 039F WM_Galleon
+01F9: 03A0 WM_ObjCreat
+020A: 03A1 WM_GeneralS
+01FC: 03A3 WM_LaserBea , 040A ECSH_LaserB
+0116: 03AD WM_Column   , 03AE WM_Column_T , 0416 GPSHpickobj , 0417 GPSHpickobj , 0418 GPSHpickobj , 0419 GPSHpickobj , 041A GPSHpickobj , 041B GPSHpickobj
+01FD: 03AF WM_LaserTar
+0201: 03B2 WM_colrise
+020C: 03B3 WM_spiritpl
+020D: 03B5 WM_seqpoint
+0204: 03B7 WM_Torch
+0205: 03B8 WM_Vein
+0207: 03BA WM_Worm
+0208: 03BB WM_Wallpowe
+0209: 03BC WM_LevelCon
+0289: 03BD SPitembeam
+0288: 03BE SPDrape
+0287: 03BF SPScarab
+0285: 03C2 SPShop
+0286: 03C3 SPShopKeepe
+0284: 03C4 SPFruitSmal , 03C5 SPEggSmall  , 03C6 SPFruitLarg , 03C7 SPEggLarge  , 03C8 SPBombSpore , 03C9 SPMoonSeed  , 03CA SPLantern   , 03CB SPBlueArtef , 03CC SPBlueMushr , 03CD SPSwapGift  , 03CE SPPda       , 03CF SPBinocular , 03D0 SPFireFly   , 03D1 SPFuelCell  , 03D2 SPSidekickB , 03D3 SPDusterHol , 03D4 SPStaffHitB , 03D5 SPMapTTH    , 03D6 SPMapMMP    , 03D7 SPMapLF     , 03D8 SPMapCRF    , 03D9 SPMapDIM    , 03DA SPMapWC     , 03DB SPMapDR     , 03DC SPMapKP     , 03DD SPMapOFP    , 03DE SPMapSW     , 03DF SPMapVFP    , 03E0 SPMapCC     , 03E1 SPReplayDis
+0142: 03E4 FElevContro
+0143: 03E5 FEseqobject
+02C0: 03E8 FrontFox    , 03E9 FrontPeppy  , 03EA FrontSlippy , 03EB FrontRob    , 03EC FrontFalco  , 03ED FrontPilots , 03EE FrontPilots , 03EF FrontPlanet
+017B: 03F2 DFSH_LaserB
+0178: 03F4 DFSH_Shrine
+0179: 03F6 DFSH_ObjCre
+018C: 03FD MMSH_Shrine
+018D: 03FE MMSH_Scales
+017A: 03FF SpiritPrize , 0406 SpiritPrize , 0407 ECSH_Spirit
+018E: 0401 MMSH_WaterS
+018F: 0405 ECSH_Shrine
+0190: 0408 ECSH_Cup
+0191: 040C ECSH_Creato
+0192: 0413 GPSH_Shrine
+0193: 0414 GPSH_ObjCre
+0194: 0415 GPSH_Scene
+0195: 041E DBSH_Shrine
+0196: 041F DBSH_Symbol
+0198: 0421 NWSH_levcon
+0243: 0424 DBHoleContr
+0242: 0425 DBstealerwo
+023F: 0427 DB_egg
+023D: 042A DBPointMum
+00F9: 042C DRProjectil , 0500 ProjectileS
+0283: 042F DR_BarrelGr
+0257: 0431 DR_EarthWar
+0258: 0433 DR_CloudRun
+0263: 0436 GM_MazeWell
+0261: 043F DR_LaserCan
+026F: 0440 DR_Generato , 0441 DR_WallGene
+0265: 0450 DR_Creator
+026D: 0452 DR_Vines
+026A: 0454 DR_Geezer
+026B: 0455 DR_Chimmey
+0268: 0456 DR_CageCont
+026C: 0457 DR_CageWith , 0458 DR_CageNoRo , 0459 DR_CageRope
+026E: 045D DR_Shackle  , 045E DR_BigShack
+0270: 045F DR_Rock
+0274: 046C DR_pulley
+0275: 046D DR_cradle
+0278: 0471 DRCollapseP , 0472 DRPlatformC , 0473 DRPlatformC
+0279: 0474 DR_EnergyDi
+027A: 0475 DR_Collapse
+027B: 0476 DR_CaveIn   , 0477 DR_CaveInFl
+027C: 0478 DR_LightBea
+027E: 047A DRMusicCont
+027F: 047C DR_LightHal , 047D DR_LightPol , 047E DR_LightLam , 047F DR_LightLam
+0280: 0480 DR_CloudPer
+0281: 0481 DR_EarthCal
+010E: 0484 DieDuster   , 0485 DieFox      , 0486 DieKrystal
+0129: 048A CampFire
+010A: 048E Fall_Ladder
+0133: 048F sfxPlayer
+00FA: 0490 InvisibleHi
+0125: 0491 curve
+00E8: 0492 checkpoint4
+00E9: 0493 setuppoint
+0108: 0494 EndObject
+00EA: 0495 sideload
+00EB: 0496 siderepel   , 0497 siderepelWi
+010D: 0498 PortalSpell
+010B: 049A FireFlyLant
+010C: 049B LanternFire
+011F: 049C MagicCaveTo
+011E: 049D MagicCaveBo
+02B7: 049F MCUpgrade
+02B8: 04A0 MCUpgradeMa
+02B9: 04A1 MCStaffEffe
+02BA: 04A2 MCLightning
+0141: 04A3 Lightning
+011B: 04AC Landed_Arwi , 04AD Landed_Arwi
+0135: 04AE texscroll
+0134: 04AF texscroll2
+012D: 04B0 LFXEmitter
+00F1: 04B5 InvHit
+00F2: 04B6 iceblast
+00F3: 04B7 flameblast
+0136: 04B8 WaveAnimato
+013F: 04B9 TexFrameAni
+0137: 04BA AlphaAnimat
+0138: 04BB GroundAnima
+0139: 04BC HitAnimator
+013A: 04BD VisAnimator
+013B: 04BE WallAnimato
+013C: 04BF XYZAnimator
+013D: 04C0 ExplodeAnim
+0100: 04C4 TrickyWarp
+0101: 04C5 TrickyGuard
+0120: 04C6 TrickyGuard
+00C8: 04C9 DepthOfFiel
+00EE: 04D1 EffectBox
+025A: 04D3 StaticCamer
+00F6: 04D5 Area
+00F5: 04D9 SidekickBal
+0119: 04DC coldWaterCo
+0118: 04DE Duster
+0117: 04E6 AppleOnTree
+00FF: 04E7 MagicDustSm , 04E9 MagicDustMi , 04EB MagicDustLa , 04ED MagicDustHu
+0106: 04EF GreenScarab , 04F0 RedScarab   , 04F1 GoldScarab  , 04F2 RainScarab  , 05B8 Blue_bean
+020B: 04F6 FireFly
+0104: 04F7 SmallBasket , 04FB ReinforcedC
+011D: 04FC TreasureChe , 04FD MapTreasure
+00FE: 04FE MagicPlant
+0102: 04FF StayPoint
+0158: 0501 GunPowderBa , 0502 MetalBarrel
+0282: 0503 BarrelGener
+0167: 0506 SpiritDoorL
+0157: 0507 SpiritDoorS
+01A9: 0509 BombPlant
+01AA: 050A BombPlantSp
+01AB: 050C BombPlantin
+0168: 050D HoloPoint
+017F: 050E MSBush      , 050F MSVine
+025B: 0512 MSPlantingS
+00EC: 0513 InfoPoint
+0123: 0515 fuelCell
+00E6: 0516 ReStartMark
+0124: 0517 deathGas    , 0518 deathGasNoF
+0140: 0519 fogControl
+0126: 051A TrigPnt     , 051B TrigCyl     , 051C TrigPln     , 051D TrigArea    , 051E TrigTime    , 051F TrigButt    , 0520 TriggSetp   , 0521 TrigBits    , 0522 TrigCrve
+029A: 0523 ARWArwing
+029C: 0527 ARWArwingBo
+029D: 0528 ARWArwingBo , 0538 ARWArwingGu , 0539 ARWArwingGu , 053A ARWArwingRo
+029F: 052A ARWBombColl , 052B ARWLaserCol , 052C ARWContaine , 052D ARWSporeCol , 052E ARWDinoEggC , 052F ARWMoonSeed
+02A8: 0532 ARWBlocker  , 0533 ARWBlockerS
+02A1: 0536 ARWLevelCon
+02A2: 0537 ARWSpeedStr
+02A6: 053B ARWSquadron , 053C ARWBigAster , 053D ARWSmallAst , 0544 ARWMobileGu , 0545 ARWGroundGu , 0546 ARWShipFly  , 0547 ARWShipTwin , 0548 ARWShipAnge
+02A5: 0540 ARWGenerato
+02A7: 0541 ARWProximit , 0542 ARWTimedMin
+02AA: 0552 LGTDirectio
+02AB: 0553 LGTProjecte
+02AC: 0554 LGTControlL
+02B3: 0561 SkyVortS    , 0562 SkyVortC    , 0563 WndLiftS    , 0564 WndLiftC    , 0565 DIM_PitVort
+02B0: 057B BrokenPipe  , 057C MetalRafter , 057D BoulderOne  , 057E RedBoulder  , 0580 Cactus      , 0587 SnowBoulder
+0103: 0582 CurveFish
+02B1: 059C CmbSrc      , 059D CmbSrcTPole , 059E CmbSrcTWall , 059F ThusterSour
+02B2: 05A0 DustMoteSou , 05A1 TailLightSo , 05A2 FireWorkSou
+012B: 05A7 FXEmit
+0130: 05A8 AreaFXEmit  , 05AA TAreaFXEmit
+0132: 05A9 WaterFallSp
+0175: 05BB DFropenode
+0176: 05BD DFSH_Door1S
+0177: 05BE DFSH_Door2S , 05C0 DFSH_Door3S , 05C1 DFSH_Door4S

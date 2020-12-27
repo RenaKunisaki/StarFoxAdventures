@@ -1,0 +1,50 @@
+3F0 - usually 00
+	80=stopping
+    40=quick turnaround
+    20=swimming
+	10=rolling
+    08=in air?
+    04=falling, or landing
+	02=shielding
+    01=was on ledge?
+	81=stopping quickly?
+	09=jumping
+	05=slightly hard landing, or very hard
+	11=rolling holding L
+3F1 - usually 01
+    10=holding L
+    08=not moved
+    01=on ground
+	39=holding L, have not moved
+	31=holding L, have moved
+	09=not moved since holding L
+	00=not on ground
+	30=holding L, swimming
+	11=rolling holding L
+3F2 - usually 00
+    20=in cutscene?
+    10=starting to move
+	08=was on ledge?
+    08=fall damage related, or on fire (taking damage?)
+	04=fall damage
+	44=talking to NPC
+	0D=quick turnaround
+	48=feeding Tricky
+	28=talking to "pay to enter Cape Claw" thing, or warping
+	20=riding bike in cutscene, or on warpstone
+3F3
+    08=is Fox
+3F4 - usually 40
+    80=IsDisguised
+    40=HaveStaff
+    20=StaffInHand
+    08=StaffOnBack
+	48=swimming or have been in water, or have recently swung staff or held object
+	58=falling and flailing
+3F5
+3F6 - usually 00
+	20=shielding in combat
+3F7 - usually 00
+	01=falling
+	02=falling farther
+	03=falling and flailing (does not reset when landing)

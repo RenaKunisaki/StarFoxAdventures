@@ -1,0 +1,870 @@
+OBJECTS.bin
+000A30 12 4b 72 79 73 74 61 6c  00 00 00 00 00 00 04 e8 "Krystal"
+033D70 01 46 72 6f 6e 74 46 6f  78 00 00 00 00 00 01 d1 "FrontFox"
+in RAM (after the logo screens):
+814DAEB0 Krystal
+8150E1F0 FrontFox
+81500E54 AnimKrystal
+81515AB0 AnimFox
+
+814DAEB0 read at 8004BAB4? that can't be right
+I think that's just where it is when DMA completes.
+swapping their names/IDs in RAM doesn't seem to do anything.
+
+OBJECTS.tab appears to be a list of offsets of each object in OBJECTS.bin.
+so wouldn't be super difficult to iterate them.
+also maybe swapping them would do something.
+also what is OBJECTS.bin2? looks like a separate object list.
+
+00000000  00 00 00 00  3f 80 00 00  00 00 00 9c  00 00 00 a0  |....?...........| <-- float, float, int, int size?
+00000010  00 00 00 a0  00 00 00 00  00 00 00 00  00 00 00 00  |................|
+00000020  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 a0  |................|
+00000030  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  |................|
+00000040  00 00 00 00  00 00 00 24  00 00 00 00  00 00 00 00  |.......$........|
+00000050  ff ff 00 00  00 01 00 07  00 00 00 00  00 ff 00 00  |................|
+00000060  00 00 0a 00  00 01 00 00  ff fb 00 0a  ff fb 00 0a  |................|
+00000070  00 00 00 00  00 00 00 00  ff ff ff ff  ff ff ff ff  |................|
+00000080  ff ff ff ff  00 00 00 00  00 00 00 00  02 00 00 00  |................|
+00000090  01 44 75 6d  6d 79 4f 62  6a 65 63 74  00 00 00 00  |.DummyObject....|  <-- u8 type, char name[], u16 ???
+
+000000a0  00 00 00 00  3f 80 00 00  00 00 00 9c  00 00 00 a0  |....?...........|
+000000b0  00 00 00 a0  00 00 00 00  00 00 00 00  00 00 00 00  |................|
+000000c0  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 a0  |................|
+000000d0  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  |................|
+000000e0  00 00 00 00  00 00 00 21  00 00 00 00  00 00 00 00  |.......!........|
+000000f0  00 c6 00 10  00 01 00 07  00 00 00 00  00 ff 00 00  |................|
+00000100  00 00 0a 00  00 01 00 00  ff fb 00 0a  ff fb 00 0a  |................|
+00000110  00 00 00 00  00 00 00 00  ff ff ff ff  ff ff ff ff  |................|
+00000120  ff ff ff ff  00 00 00 00  00 00 00 00  02 00 00 00  |................|
+00000130  01 41 6e 69  6d 44 75 6d  6d 79 00 00  00 00 00 00  |.AnimDummy......|
+
+00000140  42 0c 00 00  3f 80 00 00  00 00 00 9c  00 00 05 f0  |B...?...........| <-- first float is used
+00000150  00 00 05 fc  00 00 00 00  00 00 00 00  00 00 08 28  |...............(|
+00000160  00 00 00 e0  00 00 00 a8  00 00 04 b0  00 00 06 40  |...............@|
+00000170  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  |................|
+00000180  00 00 00 00  00 20 00 24  00 02 ff ff  00 00 02 05  |..... .$........|
+00000190  ff ff 00 01  00 03 02 0b  14 06 0b 00  00 ff 14 20  |............... |
+000001a0  00 01 08 0a  14 12 00 01  ff fb 00 25  ff fb 00 25  |...........%...%|
+000001b0  7f 7f 00 00  00 00 02 08  ff ff ff ff  ff ff ff ff  |................|
+000001c0  ff ff ff ff  00 64 00 c8  3f 80 00 00  04 00 02 08  |.....d..?.......|
+000001d0  12 53 61 62  72 65 00 00  00 00 00 00  00 00 04 e8  |.Sabre..........|
+
+000001e0  00 00 00 01  00 00 04 e9  00 04 02 80  00 40 00 96  |.............@..| <-- presumably actual object def...
+000001f0  00 00 00 4c  00 99 00 50  00 4c 00 9a  00 a0 00 4c  |...L...P.L.....L|
+00000200  00 9b 00 f0  00 4c 00 9c  01 40 00 4c  00 9d 01 90  |.....L...@.L....|
+00000210  00 4c 00 9e  01 e0 00 4c  00 a1 02 30  00 4c ff ff  |.L.....L...0.L..|
+00000220  00 00 00 00  00 02 00 01  00 08 00 04  00 02 02 c8  |................|
+00000230  00 04 00 03  03 c0 00 04  00 05 04 50  00 02 00 07  |...........P....|
+00000240  04 e0 00 04  00 0c 01 80  00 02 00 0e  01 d8 00 04  |................|
+00000250  00 16 03 00  00 04 00 1c  03 a0 00 04  00 1d 03 b0  |................|
+00000260  00 04 00 1e  03 c8 00 04  00 1f 03 d0  00 04 00 20  |............... |
+00000270  03 d8 00 04  00 21 03 e0  00 02 00 23  03 e8 00 04  |.....!.....#....|
+00000280  00 24 03 f0  00 04 00 25  03 f8 00 04  00 26 04 00  |.$.....%.....&..|
+00000290  00 04 00 27  04 08 00 04  00 28 04 10  00 04 00 29  |...'.....(.....)|
+000002a0  04 18 00 04  00 2a 04 20  00 04 00 2b  04 28 00 04  |.....*. ...+.(..|
+000002b0  00 2c 04 30  00 04 00 2d  04 38 00 02  00 2e 04 40  |.,.0...-.8.....@|
+000002c0  00 02 00 31  04 48 00 08  00 32 04 58  00 08 00 33  |...1.H...2.X...3|
+000002d0  04 60 00 0a  00 34 04 70  00 0a 00 35  04 80 00 02  |.`...4.p...5....|
+...
+000009a0  42 0c 00 00  3f 80 00 00  00 00 00 9c  00 00 05 f0  |B...?...........| <-- this looks more like the previous ones.
+000009b0  00 00 05 fc  00 00 00 00  00 00 00 00  00 00 08 28  |...............(|
+000009c0  00 00 01 70  00 00 00 a8  00 00 04 bc  00 00 06 40  |...p...........@|
+000009d0  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  |................|
+000009e0  00 00 00 00  00 20 00 24  00 02 ff ff  00 00 02 05  |..... .$........|
+000009f0  ff ff 00 01  00 03 02 0b  13 06 0b 00  00 ff 14 20  |............... |
+00000a00  00 01 08 0a  14 12 00 01  ff fb 00 25  ff fb 00 25  |...........%...%|
+00000a10  7f 7f 00 00  00 00 02 08  ff ff ff ff  ff ff ff ff  |................|
+00000a20  ff ff ff ff  00 64 01 2c  3f 80 00 00  04 00 02 08  |.....d.,?.......|
+00000a30  12 4b 72 79  73 74 61 6c  00 00 00 00  00 00 04 e8  |.Krystal........|
+
+field9C = number of somethings? or texture ID?
+
+offset tp size name        fd9C   fd00   fd04 strt end    fd88
+000000 01 00A0 DummyObject 0000    0.0    1.0 009C 00A0    0.0
+0000A0 01 00A0 AnimDummy   0000    0.0    1.0 009C 00A0    0.0
+
+Krystal:
+0009A0 12 0860 Krystal     04E8   35.0    1.0 009C 05F0    1.0
+00B320 01 0100 CFPickKryst 0086   20.0    1.0 009C 00A0    1.0
+00D700 01 00C0 CFMainCryst 0310    0.0    1.0 009C 00A4    0.0
+01A640 01 00A0 CCfireCryst 01DC    0.0    0.8 009C 00A0    0.0
+01AB80 01 0100 CCfireCryst 01DC    0.0    0.8 009C 00A0    0.0
+024880 01 0100 SH_krystalH 00F5    0.0    1.0 009C 00F4    0.0
+026940 01 00E0 AnimKrystal 04E8    0.0    1.0 009C 00A0    0.0
+02EA40 01 00A0 WM_newcryst 0267    0.0    1.0 009C 00A0    0.0
+02EAE0 01 00E0 WM_newcryst 0266    0.0   10.0 009C 00A0    0.0
+02EBC0 01 00A0 WM_newcryst 0268    0.0   11.0 009C 00A0    0.0
+030000 01 00C0 WM_Crystal  025D    0.0    1.0 009C 00A0    0.0
+03B4E0 01 00C0 DieKrystal  04E8   35.0    1.0 009C 00A0    1.0
+
+Fox:
+001D40 01 00A0 fox_shield  0084    0.0    6.0 009C 00A0    0.0
+02E760 01 00A0 WM_dummyfox 0001    0.0    1.0 009C 00A0    0.0
+033CE0 01 00E0 FrontFox    01D1    0.0    1.0 009C 00A8    0.0
+03B420 01 00C0 DieFox      0001   35.0    1.0 009C 00A0    1.0
+03B5A0 01 00C0 AnimFox     0001   35.0    1.0 009C 00A0    1.0
+03B660 01 00C0 AnimFoxLink 0001   35.0    1.0 009C 00A0    1.0
+
+Type 0x12:
+000140 12 0860 Sabre       04E8   35.0    1.0 009C 05F0    1.0
+0009A0 12 0860 Krystal     04E8   35.0    1.0 009C 05F0    1.0
+001200 12 02E0 Tricky      0003   16.5    1.0 009C 01A4    1.0
+002DC0 12 0100 Grimble     002B    0.0    1.0 009C 00D0    0.0
+0031C0 12 01C0 GuardClaw   001D   50.0    4.0 009C 0100    1.0
+0035C0 12 00A0 HagabonMK2  002E    0.0    1.0 009C 00A0    0.0
+003B60 12 00E0 Rachnop     0023    0.0    2.0 009C 00A8    0.0
+004220 12 01A0 FireCrawler 003F   45.0    1.5 009C 0118    1.0
+0043C0 12 01A0 RedEye      003E  115.0    1.2 009C 0188    1.0
+004560 12 00E0 ShadowHunte 0040   45.0    1.0 009C 00A0    1.0
+0058C0 12 0340 sharpclawSn 0016   40.0    1.0 009C 0284    1.0
+005C00 12 03C0 sharpclawGr 0017   40.0    1.0 009C 02F8    1.0
+005FC0 12 0320 sharpclawSo 0018   40.0    1.1 009C 026C    1.0
+0062E0 12 0340 sharpclawCo 001A   40.0    1.4 009C 0274    1.0
+006620 12 0320 sharpclawAs 0019   40.0    1.2 009C 026C    1.0
+006940 12 0320 sharpclawSh 0017    0.0    1.0 009C 0258    0.0
+006C60 12 0160 CannonClaw  0016   40.0    1.0 009C 00A0    1.0
+006DC0 12 0160 CannonClawO 0017   40.0    1.0 009C 00A0    1.0
+006F20 12 0360 BossGeneral 004F   80.0    0.9 009C 00A8    1.0
+00B1E0 12 0140 CFPrisonGua 0017   40.0    1.0 009C 00A0    1.0
+00C5E0 12 0120 CFRemovalSh 0017   40.0    1.0 009C 00A0    1.0
+019FC0 12 0220 CC_HighTop  0094  300.0    4.0 009C 00A0    1.0
+0369C0 12 01C0 DBstealerwo 0022   50.0    1.0 009C 0118    1.0
+037480 12 02A0 DR_EarthWar 000D   60.0    1.0 009C 0124    1.0
+037960 12 0240 DR_HighTop  0094  300.0    4.0 009C 00C0    1.0
+040C80 12 0100 MagicPlant  02C3   15.0    1.0 009C 00A4    1.0
+- no type 0x12 for Fox?
+  - he's Sabre apparently.
+
+
+803dcba0 ptr to OBJINDEX.bin
+0x1F is fireball, or maybe it's 0x14B
+entry 0x014B has 0x001F so that's the one
+0x81507096
+we can spawn the bike (010D or 01BD) and ride it but the camera goes insane.
+or the Arwing (0523) but it just sits there (and removes the HUD)
+changing entry 0 (Fox) to Arwing just crashes
+Tricky is 0x24 but if we change that, it keeps trying to spawn him every frame and crashes
+
+803428fc is pointer to Tricky instance.
+if we set it to null, another Tricky spawns
+and another and another and another and crash
+what we can do is:
+1) change the ID to spawn something else
+2) set a breakpoint at the start of trickySpawn() (80171bac)
+3) once it spawns (watch the log), put a BLR there to stop the flood
+
+if we change him to a bike we softlock when getting on.
+change to Krystal, she spawns, but changing pPlayer to that instance = crash
+maybe because it's considered a sub-object of the player so that causes a loop?
+but spawning Krystal using the fireball spell and changing pPlayer also crashes.
+
+007D 16B0 0072 01BD IMSnowBike  09 FE 10 E1 03 00 +1426.72 +6489.00  -190.14 00003CA2 6A000079 0001FFFF 00000000
+007E 16D4 016D 01C0 IMSnowClaw  0E FC 10 E1 03 00 +1453.98 +6456.80  -278.92 00003CA4 FFFFFFFF FFFF0000 00000000 00000002 000E0000 000000FF FFFF0000 00010000
+007F 170C 0072 01BD IMSnowBike  09 FD 10 E1 03 00 +1468.55 +6489.00  -227.87 0004BB32 6A000079 0001FFFF 00000000
+
+04AC Landed_Arwing
+at 0xC6C in OBJINDEX.bin - change this back to 04AC
+if we change it to 01BD the bike works but the camera still goes insane no matter which object is focused, even if we change the model
+same with 010D
+could be animation, or it's just manually setting camera position
+changing FOV doesn't help. killing updateCameraPos does, but of course the camera won't move.
+mainly the problem seems to be that the camera can't decide if it wants to be up in the air or down near the ground.
+
+if we replace the Arwing with a Transporter, it's invisible but does give the option to warp. but instead of warping it just shows a text ("thanks to you peace has returned...").
+
+007F 170C 0072 01BD IMSnowBike  09 FD 10 E1 03 00 +1468.55 +6489.00  -227.87 0004BB32 6A000079 0001FFFF 00000000
+0359 8768 0636 04AC Landed_Arwi 0A 00 10 04 0A FF +2037.06  -740.80  -142.50 00043775 00000000 0956FFFF FF00FFFF 00000000
+I replaced Arwing's entry with SnowBike's (except the ID, and left the length since there's just one extra useless entry)
+that got me no object and "SEQUENCE: COULD NOT FIND OBJECT 1590"
+1590 = 0x636
+let's change FD back to 00... no change. also I checked, the bike seems to be not there at all.
+E1 to 04... nada
+03 to 0A... nothing
+00 to FF... it shows up! and the camera is fine!
+this byte (and maybe the previous) might be some flags? defining when the object shows up.
+let's change the 0A back to 03... it's gone again
+this doesn't seem to be a GameBit; changing bits 03FF/0AFF and reloading the map doesn't make it show up.
+04 to E1... no effect.
+the bike seems to have some janky hitboxes. it can get into some places like the circle of rocks or the entrance to the Queen's cave, then can't get back out.
+it seems like, once it hits something, the hitbox breaks, and it will start hitting invisible walls everywhere.
+
+
+for shiggles I replaced the Arwing with Fox
+he shows up (as Krystal because model swaps) but has a NULL state pointer
+so what if we copy the actual player's state pointer to him?
+nothing happens, but if we set him as the player object we immediately get a crash in playerCollectMagic!?
+he also has a sequence pointer set where the player doesn't
+if we clear it, we get a crash when time is unfrozen, in mapPlaceObjects
+there are a couple other differences (map ID), but I don't have time to mess with them.
+
+if I change Slot and Map it no longer crashes, but I'm still controlling the original Krystal object.
+in fact now that's happening even without changing Slot or Map!?
+
+803428f8 pPlayer
+80E34840 sabre
+
+Krystal: 80A07A40
+    flag:         0002 00 08
+    slot:         3C map: 00 FF
+    seq   (0x4C): 00000000 FFFF
+    event (0x60): 80A08438
+    model (0x7C): 80A07B4C (0) 04E8
+    state (0xB8): 80A07B58
+    ID    (0x44): 0001
+    defNo (0x46): 001F
+Sabre: 80E34840
+    flag:         0002 00 08
+    slot:         50 map: 00 07
+    seq   (0x4C): 810985E8 FFFF
+    event (0x60): 00000000
+    model (0x7C): 80E3494C (0) 04E8
+    state (0xB8): 80A07B58
+    ID    (0x44): 0001
+    defNo (0x46): 0636
+we just need defNo = 0x1F and we control both
+but only the Player one will roll
+and if we use the staff it crashes (probably because the other instance doesn't have a staff)
+first person uses the original, even if not in focus
+the new one vibrates if not at same Y pos
+when one swims, the other may not do the animation, or may do it out of water
+crawling into a hole crashes
+talking to NPCs crashes
+if one climbs down to the shop it crashes as soon as they're in climbing pose
+defNo 0000 = instant crash, even though that's Fox...
+we can actually swap models and it will only affect the original, so we can have both of them running around, but it uses Fox's voice
+the new one can't collect a fuel cell and actually gets warped on top of it as if it were solid
+hit detection is weird. if one tries to go through a door but the other is against a wall, they both get blocked. they keep teleporting to eachothers' heights.
+we can feed Tricky and the other will just stand there.
+if we select Fire Blaster from the C menu Fox can actually use it, and Krystal will do the animation without holding any staff. but then pressing B will crash because Krystal tries to put away a nonexistent staff.
+the fireball comes from the end of the staff of whichever player has the camera focus (even if they don't really have a staff). there's no friendly fire.
+then Fox can run around holding the staff but trying to use it = crash
+he can put it away by swimming
+Tricky always follows the original. the PDA reacts based on camera distance to the object.
+it can also crash randomly while running around with the staff.
+equipping Ice Blast or Fire Blast to Y makes it not work. Fox just does the animation and immediately stops without actually using the spell.
+
+picking up an object crashes (probably one tries to pick up nothing)
+the new player is unaffected by poison mushroom gas
+
+the crash for defNo=0 might be because the save file has Fox in another map?
+
+zeroing Krystal's event pointer (while playing as her) seems to have no effect
+same with copying Sabre's sequence pointer to her
+
+so, why is the defNo wrong? I guess OBJINDEX.BIN doesn't actually affect that. need to edit the romlist instead.
+warlock doesn't have Krystal or Sabre in the list, I guess because the game just spawns those in at load time.
+changing the Arwing to Fox just has nothing show up.
+in the log, I don't even see Sabre being loaded. same with Krystal.
+even AnimKrystal and FrontFox won't spawn
+having DieKrystal just crashes on load
+even Tricky's ball won't spawn this way
+again a lot of this probably has to do with the parameters
+but no way to know what they should be for the player objects
+CRSnowBike crashes
+
+
+8001ffb4 mainGetBit
+80292dc0 randomGetNext
+0401ffb4 48272E0C makes mainGetBit return random
+    - Tricky model doesn't load
+    - NPCs/objects become invisible
+    - The ground has a grainy texture
+    - The sky is missing
+    - The camera gets locked in place when entering the shop
+    - Connected maps don't load
+    - You occasionally respawn under the ground in the dome cave
+    - The HUD vanishes after a while
+    - The WarpStone "nobody brings me gifts" text appears
+I wonder if you synced calls to the various bit set functions between two games, if you could keep their states in sync well enough for something similar to OoT co-op
+
+let's see what's looking at bits 0x95 and 0x96
+0x95:
+    8018a7e8 on map load
+    80192210 every frame
+    80189928 every frame
+0x96:
+    8013906c when entering WarpStone area
+    8020372c every frame near WarpStone
+forcing them to return the opposite doesn't seem to do anything
+
+the warpstone one, there are additional checks for the object's own properties, maybe they aren't passing
+80203734 some branches we might need to kill
+80203740
+80203750
+80203770
+8001ffd8 the return for 0x96
+
+obj is DBstealerwo
+with ID 4658a which has its own function, loadMapRomList4658A
+49054 is the one that shows debug messages
+loadMapRomList4658A is referenced by DLL 0x243
+it's set as a callback for obj->fptr_0xbc in FUN_80204018
+
+hollow	824	0539	0425	DBstealerwo	0E	00	10	14	07	7F	2,195.04	-645.74	2,525.12	0004658A	FFFF0096 FFFF0000 00000000 00020000 007F000C 0000FF1E FFFF0100 00000000 06BB09EF 10F4076E 451184D6 C4082C61 450D8FDE
+
+dfshrine	75	0011	0060	sharpclawGr	0E	00	10	04	01	7F	538.68	42.00	-1,193.62	00049054	0BB800F6 FFFF0000 00000000 00000001 00FFA300 0000FF32 FFFF0600 00010000 00110E00 1004017F 441FD600 42280000 C4983800
+
+2195.04 -645.74 2525.12
+
+DBstealerwo, DBAnimThief are both model 0x22
+so this probably has to do with the dino eggs being stolen
+yeah model 0x22 is the egg snatcher
+who knows why they have this flag assigned
+
+01D1 is model for FrontFox
+we can edit OBJECTS.bin to use Krystal but the animations go wacky
+
+also, what's caused texscroll to break? deleting TABLES.bin/tab.
+
+player states:
+0000 world map, arwing
+0001 standing, idle anim, floating in water, talking to NPC
+0002 walking, running, sliding, rolling, shielding, swimming
+0007 throwing
+000C hanging from/climbing ledge
+000E climbing onto ladder
+000F climbing ladder
+0010 sliding down ladder
+0012 climbing onto wall
+0013 climbing wall
+0014 climbing up from wall
+0015 climbing down from wall
+0016 getting onto bike
+0018 riding bike (animation 0xC9)
+0026 attacking with staff
+002A getting into position to aim staff
+002B leaving aiming stance
+002C aiming staff to shoot fireball
+0032 staff booster
+0033 lifting rock with staff
+0036 super quake
+
+ID 0x0025, objdef 0x00EC: transporter
+
+GameTexts relating to cheats:
+0x366 Display Credits
+0x367 Xmas Mode
+0x368 GFX Mode
+0x369 Falco
+0x36A New Video
+0x36B Crazy Sounds
+0x36C Dinosaur
+0x36D Normal
+0x36E Sepia
+these are amidst the credits...
+
+0x142 - 0x147 is definitely text for a language option in the options menu
+0x162 "PRESS"
+0x163 "GAME SELECT"
+0x164 "PREVIOUSLY ON"
+0x19B "Cheat"
+0x19D "Play full game"
+
+
+80295cd4 is another playerIsFox()
+no idea what difference it makes
+it is called every frame but forcing 0 or 1 doesn't seem to change anything
+
+model 0x480 = Landed_Arwing
+
+to identify what DLLs do, we should be able to effectively disable them by changing their entry in the pointer table (at 802c6300) to 80311378 (DLL 4, which has 43 functions all of which do nothing).
+this might lead to problems with functions that return a value though?
+actually this doesn't work because the game doesn't read the pointers from this table when the DLL is already loaded.
+I think it just uses 80338818 instead (entry 4 = 80311390)
+but yeah changing these just leads to pretty much instant crashes
+
+unused teleport anim:
+283398d2 00000004 ; 16 bits if equal (buttonsJustPressed)
+48000000 803428f8 ; load PO = pPlayer
+58010000 000000b8 ; PO = player->animState
+80000000 00000001 ; gr0 = 1
+94010000 000008ca ; write 8bit gr0 at PO
+e2000001 80000000 ; endif
+
+remove useless C menu items: (set these to 0096)
+8031b1c0 water spellstone 1
+8031b1d0 spellstone ?
+8031b1e0 spellstone ?
+8031b1f0 spellstone ?
+8031b360 fire spellstone 1
+8031b370 spellstone ?
+8031b380 fire spellstone 2
+8031b390 water spellstone 2
+8031b3e0 fuel cells
+8031b440 give scarabs
+8031b450 cheat token 0
+8031b460 cheat token 3
+8031b470 cheat token 2
+8031b480 cheat token 6
+8031b490 cheat token 4
+8031b4a0 cheat token 7
+8031b4b0 cheat token 1
+8031b4c0 cheat token 5
+8031b530 Open Portal spell
+8031b540 Staff Booster spell
+    - if we remove spellstones here, we need to edit the things we place them into to use an A button prompt instead.
+    - and same for cheat tokens and portals
+    - we could also change the entries to have "hide" bits that are cleared when near the place the items are needed
+    - maybe when the C icon shows up? (camera->target)
+
+
+some transporter romlist entries:
+newicemount:
+004D 0E00 00EC 04B1 Transporter 09 00 04 04 3F 10 +1663.79 +6397.00  +534.05 00049C33 CE020F00 00001EFF FFFF0000
+kraztest:
+003F 09C8 00EC 04B1 Transporter 09 FE 04 E2 32 32 -1025.97 -2536.00  -257.08 00045753 004B7200 00002F01 FFFF0000
+0049 0B7C 00EC 04B1 Transporter 09 FD 08 E4 32 32 +1665.95 -2536.01  -256.80 000463C0 004C7100 00002F01 FFFF0000
+0063 0F68 00EC 04B1 Transporter 09 FD 01 E4 1F 9B  +638.86 -2543.00  +333.46 0004670D 00714B00 00001E01 FFFF0000
+0079 147C 00EC 04B1 Transporter 09 FE 01 F4 1F 10  +334.08 -2543.00  +640.35 00049267 40724C00 00001E01 FFFF0000
+00B4 1D7C 00EC 04B1 Transporter 09 00 04 02 32 32  +319.12 -2718.03  -961.40 0004B667 7F696800 00001E01 FFFF0000
+
+none of these params appear to be warp indices
+
+warps 5D, 5E are two Transporter objects in the old KP map.
+you can't use them, presumably because you're out of bounds...
+what if we used the code to move OoB?
+then you just fall, because there's nothing here to stand on.
+the world map says we're in the walled city
+
+looks like the Transporter objects just check for specific unique IDs
+0x20 in seq is a GameBit; here they're all FFFF, but some might not be
+0x1A is a warp index, but maybe not every instance uses it
+
+the "transporter" object isn't the pad, it's the sparkles above it.
+
+looks like for a lock, 0x1E in romlist is which GameBit is the key the player needs to use on it, and 0x1C is the bit telling if we have used the key.
+for fuel cells, the second word in SeqData is a GameBit for whether it's collected.
+
+what determines if an object can have the icon over it? maybe we can make an "activate this object" debug function.
+
+it looks like rather than having each usable item have a "use" function, the game checks when you're:
+1) in a place where you could use the item
+2) have it equipped to Y and have pressed Y, or
+3) have it selected in the C menu and have pressed A
+so there just isn't a "use" function for some items.
+but there are many usable items which don't call getYButtonItem?
+they call isItemBeingUsed or UI:isItemSelected instead
+
+also, what determines an object's initial rotation?
+looks like it might be up to the object. transporter uses byte 0x18
+
+to bypass "not same memory card":
+0407EF5C 3B200000
+0407F15C 3B200000
+but need to check for possible side effects.
+
+showing debug objects:
+0402D820 5480003C
+0402D824 901E0044
+0402D828 60000000
+0402D82C 60000000
+
+should make a script that reads in a save state (or somehow reads directly from Dolphin), checks the CPU regs for pointers, then scans the heap to see where they were allocated/with what tag, and maybe checks if they're certain types of struct. eg if they have a pointer at 0x50 and a string there at 0x91, they're an ObjInstance.
+could even walk back through stack frames.
+
+pCamera->field_0x139 = 1 should force centering behind player
+lolnope, it just fucks with map loading
+
+
+looks like the game does contain some DIRn files
+one is at 0x079900 in warlock/TEX1.bin
+looks like the game just ignores these
+not sure if it means those entries aren't used, or just aren't compressed
+looks like the header is the same as ZLB but compressed size is ignored, and in practice is same as raw size. version is 0
+actually the header has an additional 4 words, which seem to be always 0, 0x01000000, 0x01000000, 0x01000000
+
+types of files to extract: *=implemented in extractor
+per map:
+    *ANIM.BIN, TAB - normal table file, some start with 10, no unused entries?
+    *ANIMCURV.BIN, TAB - normal table, next offset used for size
+    *modXX.zlb.bin, modXX.tab - normal table?
+    MODELIND.bin - 2 bytes per model ID
+    *MODELS.bin, tab - normal table, some start with 10
+    OBJSEQ2C.tab - 2 bytes per entry
+    OBJSEQ.bin, tab - 2 bytes per entry
+      implies sequences are fixed length?
+    *TEX0.bin, tab - normal table, counts in high byte
+    *TEX1.bin, tab
+    *VOXMAP.bin, tab - normal, next offset gives size
+global:
+    AMAP.BIN, TAB
+    BITTABLE.BIN
+    CAMACTIO.bin
+    ENVFXACT.bin
+    globalma.bin
+    HITS.bin, tab
+    MAPINFO.bin
+    MAPS.bin, tab
+    MODANIM.BIN, TAB
+    MODLINES.bin, tab
+    OBJECTS.bin, tab
+    OBJEVENT.bin
+    OBJHITS.bin
+    OBJINDEX.bin
+    PREANIM.BIN, TAB
+    TABLES.bin, tab
+    TEXPRE.bin, tab
+    TEXTABLE.bin
+    TRKBLK.tab
+    WARPTAB.bin
+    WEAPONDA.bin
+    openingXX.bnr
+    starfox.thp
+    audio/
+    card/
+    gametext/
+    streams/
+
+
+as far as differences in copies of the same asset between maps, it looks like the only one is:
+animcurv/0247.bin
+ ../dump/maps/crfort/animcurv/0247.bin
+ ../dump/maps/linka/animcurv/0247.bin
+(other maps that are identical to one of these not listed)
+so there are two versions, and it's possible (but unlikely) that more than one map uses each version.
+we should also have the script tell if an asset appears in only one map, or if any ID is missing in all maps.
+
+for the startup message
+80115d04 -> 28000001
+then at 80115d40, patch in a reference to a different string
+or edit gametext files?
+
+force Japanese:
+04242f20 38600001
+04242f24 4e800020
+this will make it say the memory card is corrupted, because it's not Japanese. the middle option is continue without saving.
+
+force other languages:
+043dc9e4 0000000x
+x: 0=English, 1=French, 2=German, 3=Italian, 4=Japanese, 5=Spanish
+using Japanese here works without the JP-specific changes like the blue logo and requiring JP memory card
+
+
+043e3350 42666666 Nuclear Fireballs (makes them huge - only visual change)
+0231b57c 00000002 replace Call Tricky with Decoy
+
+
+retroben Today at 7:04 PM
+For v1.00;
+
+Always Have Cutscene Fur Effects
+040414E4 48000028
+04041518 48000020
+040415D0 4800003C
+04041640 60000000
+0404164C 60000000
+
+Increase LoD Range
+423428F8 00544330
+Makes lighting stronger in good and bad ways while preventing loss of fur effects so easily such as when at a large distance in a semi-cutscene moment in which the effect isn't being used normally.
+
+
+retroben Today at 8:40 PM
+The fur effect has a LoD distance for whatever reason..
+Also,I just found the after-image Fox model for when you warp!!!
+
+Krystal Replaces Fox After-Image In Warp Animation
+05519E3C 000004E8
+The internal name is called "AnimFoxLink" .
+
+
+retroben Today at 1:16 AM
+Ice Mountain Bike Tricky
+054F68BC 00000003
+054F68C4 40000000
+Somehow looks great with the adjusted Y axis for correct looking visual representation.
+
+
+all Transporter objects:
+type=00EC obj=04B1 name=Transporter size=9
+romlist     Idx  Offs MapStates------X Fl 06 07      X        Y        Z   UniqueID 18 19 1A 1B 1C1D 1E1F 2021 2223
+dbshrine    005E 1028 123456789ABCD--- 01 FF FF +2560.00  -204.02 -1072.93 0004CDE6 7F 26 42 00 0000 4D01 FFFF 0000
+dfptop      0075 11E4 123456789ABCD--- 01 1F 31  +318.27 -1533.02 -1571.86 0004B666 00 68 69 00 0000 1E01 0D6C 0000
+dfptop      0095 1700 123456789ABCD--- 01 FF FF  +797.74 -1601.00  +251.51 0004CB6A 7F 73 72 00 0100 1E01 FFFF 0000
+dfshrine    0006 00FC 123456789ABCD--- 20 FF FF +1919.91  -204.01  +207.05 00000C5D 80 24 40 00 0000 4D01 FFFF 0000
+ecshrine    0004 0088 123456789ABCD--- 01 FF FF +1920.05  -204.00  +205.94 00000C5D 7F 44 28 00 0000 4DFF FFFF 0000
+gpshrine    0015 02F4 123456789ABCD--- 20 FF FF +2559.77  -204.03 -1074.45 00048018 7F 2A 46 00 0000 4D01 FFFF 0000
+kraztest    003F 09C8 1--------------- 04 32 32 -1025.97 -2536.00  -257.08 00045753 00 4B 72 00 0000 2F01 FFFF 0000
+kraztest    0049 0B7C -2-------------- 08 32 32 +1665.95 -2536.01  -256.80 000463C0 00 4C 71 00 0000 2F01 FFFF 0000
+kraztest    0063 0F68 -2-------------- 01 1F 9B  +638.86 -2543.00  +333.46 0004670D 00 71 4B 00 0000 1E01 FFFF 0000
+kraztest    0079 147C 1--------------- 01 1F 10  +334.08 -2543.00  +640.35 00049267 40 72 4C 00 0000 1E01 FFFF 0000
+kraztest    00B4 1D7C 123456789ABCDE-- 04 32 32  +319.12 -2718.03  -961.40 0004B667 7F 69 68 00 0000 1E01 FFFF 0000
+mazecave    0040 0A38 123456789ABCD--- 04 20 10 +3529.21    +2.00 +2560.05 0004BBFB 3B FF 0F 00 0000 1EFF FFFF 0000
+mazecave    0041 0A5C 123456789ABCD--- 04 20 10 +2739.78    +2.00 +2722.27 0004BBFC 1E FF 0F 00 0000 1EFF FFFF 0000
+mazecave    0042 0A80 123456789ABCD--- 04 20 10 +2590.50    +2.00 +2448.65 0004BBFD 80 FF 0F 00 0000 1EFF FFFF 0000
+mazecave    0043 0AA4 123456789ABCD--- 04 20 10 +3795.42    -0.73 +2928.01 0004BBFE 00 FF 0F 00 0000 1EFF FFFF 0000
+mmshrine    001A 03E0 123456789ABCD--- 01 FF FF +2560.04  -204.02 -1074.30 00049030 7F 2B 47 00 0000 4DFF FFFF 0000
+moonpass    02A7 682C 123456789ABCD--- 10 08 FE -1599.86   +52.99 -4159.99 00002BA7 82 40 24 00 0000 1E01 FFFF 0000
+newicemount 004D 0E00 123456789ABCD--- 04 3F 10 +1663.79 +6397.00  +534.05 00049C33 CE 02 0F 00 0000 1EFF FFFF 0000
+nwshrine    0006 00F4 123456789ABCD--- 01 FF FF  +639.94   +57.95  -447.78 00049EEB 00 25 41 00 0000 1EFF FFFF 0000
+snowmines2  0047 0EEC 123456789ABCD--- 04 FF FF  -403.71 -2637.02 -1626.96 00047064 00 FF 5C 00 0100 0FFF FFFF 0000
+snowmines3  0025 05C0 123456789ABCD--- 01 FF FF  -140.96 -2957.00  +288.95 0004C986 00 5C 37 00 0100 7FFF FFFF 0000
+swapcircle  0018 05F4 123456789ABCD--- 04 32 32 +2238.95 -1217.00 +3519.08 00046A40 00 47 2B 00 0000 1CFF FFFF 0000
+temple      003F 0BA8 12-------------- 04 2A 23 +1279.75  +293.00 +1919.91 00045DD6 00 7A 7B 00 0000 1E01 FFFF 0000
+temple      0054 0EB4 123456789ABCD--- 01 1F 10 +1920.97  +198.00  +304.40 0004827E 7F 7B 7C 00 0100 1E01 FFFF 0000
+temple      018B 3F18 123456789ABCD--- 04 20 10 +3779.61   +57.37  +959.56 0004CB84 C0 7C 7B 00 0100 1E01 FFFF 0000
+wallcity    0028 09E0 -2-------------- 04 3C 05  +959.40  -474.00 -4799.80 0004800C 80 46 2A 00 0000 1E01 FFFF 0000
+warlock     0017 0404 123456789ABCD--- 08 64 32  +224.35  -289.00 +3593.05 000025BD 00 05 0F 00 0000 1DFF 08A1 0000
+warlock     0020 0568 1--------------- 04 78 78  -191.98   -84.00 +1495.12 00043F83 C0 28 44 00 0000 1EFF FFFF 0000
+warlock     016F 42DC -23456789ABCD--- 10 05 27  +960.23  -246.02 +5864.17 00048506 00 20 0F 00 0000 2101 0F43 0000
+warlock     01CA 51F0 -23456789ABCD--- 10 09 1F +2274.08   -84.02 +2880.27 0004977D 00 22 0F 00 0000 1E01 0F44 0000
+warlock     01DA 5454 123456789ABCD--- 10 0A 64 +2321.71 +1278.00 +2239.03 0004A533 00 41 25 00 0000 1EFF FFFF 0000
+wastes      021A 4FD8 123456789ABCD--- 10 03 00 +2240.08  -522.02 +3519.72 000497F4 00 42 26 00 0000 4DFF FFFF 0000
+wgshrine    0026 0864 -2-45---9ABCD--- 20 FF FF  +487.60   +56.34  +487.84 00000C5D 00 27 43 00 0000 4DFF 0000 0000
+- three have C5D as the "unique" ID (all in unused maps?)
+- byte 18 is the object's (or player's?) initial rotation
+- 20-21 are GameBit
+- wgshrine is set to bit 0
+- none of these are 00B4, 08A2 (the "used unknown item" bits)
+
+the unused krazoapalace map uses different ones:
+Idx  Offs Type Obj  ObjName     Sz MapStates------X Fl 06 07      X        Y        Z   UniqueID SeqData
+0021 0618 059A 02C3 KP_Transpor 09 123456789ABCD--- 01 00 00 +4013.80   +23.00  +640.00 00042CDF 005E5D00 000000FF FFFF0000
+0022 063C 059A 02C3 KP_Transpor 09 123456789ABCD--- 01 00 00 -1919.01  +973.00  +957.73 00042CE0 005D5E00 000000FF FFFF0000
+- first param appears to be warp IDs
+that romlist actually has several objects, but none of them want to load, even when forcing objShouldNotLoad to return 0 - only the warps
+- I think that only applies when moving around?
+- but also patching mapInstantiateObjects to always load makes no difference...
+- nor does setting the map state to 0
+- I renamed objShouldNotLoad to objShouldUnload.
+
+040559c8 60000000 shows loading messages for all objects
+- reveals that most objects here are being skipped because "no block" or "outside of map"
+- if we bypass that, they do load, but their models and textures are missing and we can't interact with them since we're out of bounds
+
+object load flags:
+01 isLevelObject load if map flags allow
+02 isManualLoad  always load
+04 ?             only load if near player
+08 ?
+10 ?             load for a different map ID
+20 isBlockObject load regardless of position
+40 ?
+80 ?
+
+field 06 is a boundary size
+if object is within (field06 << 3) units of player, load it
+field 07 might be the object "slot" whatever that is
+
+change main.dol:0x240320 from 83A300F0 to 83A30028
+will read systemMemorySize instead of simulatedMemSize
+but it doesn't do any good besides 05:34:958 Core/HW/MMIO.cpp:196 E[MI]: Trying to write 16 bits to an invalid MMIO (addr=0c004028, val=00000002)
+Dolphin doesn't change the arenaHi @ 80000034
+but that seems to be set from dvdBI2Addr @ 800000f4
+and I don't think we can fix that other than patching Dolphin
+so let's just undo that change
+
+but it looks like Dolphin doesn't set that at all, so maybe it's the apploader
+
+
+looks like save data starts at 0x2A90 in the gci file
+there is something at 2A80 but it may not be part of the actual SaveGame
+and 14A50 in the full memcard image
+
+I think that "something" is SaveGameSettings
+
+for fixing the eye anims we can look at the item pickup fn
+stream 0xD7 is tth/pickup so if we breakpoint on the stream play function we should be able to find what triggers that and work back from there
+- it's objRunSeq with obj = Sabre, seqNo = 0
+- that's defined in the object's file, at 0x1C
+- Sabre is at 0x140, offset is 0x828 -> 0x968
+there we find:
+023E 03AA 032E 0318  031C 032A 031D 023F
+009F 0017 03AC 040E  0472 0479 03A3 047E
+04DF 0471 0476 0478
+entry 0 is 0x23E, which is multiplied by 2 to look up in OBJSEQ.tab -> 0x47C
+data is 063A 063D = 3 x 8-byte entries at 0x31d0 in OBJSEQ.bin:
+00000000 0001 FFFF
+00000000 8010 FFFE
+00000000 C010 0443
+
+0x0	0x4	undefined4	undefined4
+0x4	0x2	undefined2	undefined2	flags
+0x6	0x2	ObjDefEnum	ObjDefEnum	objDef
+objDef can be -1, -2 for some special meanings
+
+param3 is flags saying which parts of the sequence to execute?
+if(param3 & 1 << i) execute part i
+
+.set OBJSEQ_BIN,0x3b
+0x8035f3e8 + (0x3B*4) = 0x8035f4d4 -> 0x814d6820 + 0x31D0 -> 0x814d99f0
+here param3 = 0xFFFFFFFF
+
+let's mess with the bytes and buying Tricky's ball:
+0x00: [00000000]
+    12345678: could not find object 0
+    00000001: could not find object 0
+    01000000: could not find object 0
+    00010000: could not find object 0
+    FFFF0000: could not find object 0
+    0000FFFF: could not find object 0
+    FFFFFFFF: no effect
+    0004A524: no effect
+        I might have accidentally overwrote the next byte
+0x04: [0001]
+    0000: no effect
+    AAAA: different camera angle
+    5555: different angle again, A button icon appears over objects
+    8010: no effect
+0x06: [FFFF]
+    0443: usual camera, but the game doesn't put us in cutscene mode. we're free to walk around. the ball doesn't animate. the game crashes after a few seconds.
+    FFFE: we can walk around, but the game doesn't crash. the ball does animate, then the scene ends.
+    0000: another player character spawns and can run around! repeats every time! the clones can run around, leave the shop, and climb walls. they actually respond independently to the controller, so, one climbing doesn't make them all climb. they have trouble getting off the wall but I was able to coax them up. the HUD is hidden and it doesn't let you try to pick up objects or talk. they have Fox's voice and their tails point in odd directions. enemy mushrooms don't react. they can attack magic plants (well, the one with the staff can) but walk right through the gem.
+        - probably most of this is because we're still in cutscene mode.
+        - I can even free-move through the gate and head toward LightFoot Village and the map is slow to load, but they're still there afterward. Objects continue to load in around them as well.
+        - I could go all the way to the village, but it wouldn't load, even when the camera was out of bounds. they didn't despawn. some objects were missing from the link area, but it didn't seem to be out of memory.
+        - if any of them enter the magic cave, we get warped there, the others vanish, and things return to normal.
+    0001: same as FFFE
+    000F: crash
+    0002: some error messages, otherwise same as FFFE, plus a camera anim object appears
+        8017cb4c->8017cb0c| newseqobj -1: Need Bit -1, Used Bit -23584
+        8017c964->8017c950| newseqobj -1: about to prempt the sequence - objs 256
+    0007: same as FFFE
+    FFFD: same as FFFE plus a cube appears
+    001F: same as 0000 except the clone is actually Krystal, not Sabre. the HUD is back and we can interact with things.
+        - the two can actually attack eachother and do damage
+        - only the real player character can interact with objects (A button) and enemies
+        - if both try to climb up a ledge, funny things can happen
+            - the same ledge: the animations bug out a bit
+            - different-sized ledges: the game softlocks (fixable with free move)
+        - at some point Krystal's model got glitched (wrong/disabled depth testing)
+        - if one goes into the well, the other can fall out of bounds because the map layer changes
+        - going toward SnowHorn Wastes the map refused to load even with both going into the loading area and getting softlocked out of bounds
+    this is an objdef ID, the specified object will spawn at the player
+
+0x08 [00000000]
+    00000001: no effect
+    AAAAAAAA: no effect
+    0004A524: no effect
+0x0C [8010]:
+    0000: no effect
+    AAAA: different angle
+    C010: no effect
+0x0E [FFFE]:
+    FFFF: weird camera/animation glitches that lift you into the air
+    FFFD: cube appears, different camera angle, otherwise normal
+    0000: clone player again, but they fall through the ground.
+
+0x10 [00000000]:
+    AAAAAAAA: could not find object 1793
+        - entire scene is skipped
+        - 1793 = 0x701, the ID of SPsidekickball
+    AAAA0000: same as AAAAAAAA
+    0000AAAA: same as AAAAAAAA
+    0004A524: the viewfinder takes the place of the ball, and remains in that spot afterward
+0x14 [C010]:
+    0000: the ball doesn't show up
+    8010: same as 0000
+    4010: some animation glitches
+    C000: other animation glitches
+0x16 [0443]:
+    0000: Krystal takes the place of the ball
+    045D: the shopkeeper takes the place of the ball
+    FFFF: same as 0000
+    FFFE: a camera takes the place of the ball
+        - I guess -1 means use the object executing the seq, -2 means use the "target"?
+    001F: same as 0000
+    0099: could not find object 153 - entire scene is skipped (153=0x99)
+
+so each "line" contains an object defno to affect in some way
+but I don't see how these three commands control this
+though if we disable objRunSeq, the entire scene is skipped
+
+we can infer what each line does:
+UniqueID flag objd
+00000000 0001 FFFF set up camera
+00000000 8010 FFFE set up player?
+00000000 C010 0443 set up ball
+but I'm really not sure... what is 0443? apparently "VariableObj"
+
+three objects are spawned during the scene: (none are 0443 though)
+00100006 override - controls player
+    - deleting makes us able to walk around during the scene
+0010001E animcamera - camera
+    - deleting makes it the normal camera instead
+00100006 override - controls ball
+    - deleting removes the ball
+so I guess override is an object that just changes params of another object
+
+so I assume the three lines relate to the three objects. one is setting up the player override, one is the camera, one is the ball override.
+no idea how this gets set up though
+
+objRunSeq is called from 802b2b38 which is a function called from playerObjUpdate
+that function seems to be specifically for handling the "item get" anim
+or maybe not since it can also call the hurt sound effects and death animation
+but it doesn't seem to be involved with taking damage or dying
+(maybe there's some macros being used here)
+also if we disable playerDie we're immortal and will actually regain 1 HP when dead
+
+looks like if objDef is -2, it uses AnimCamera
+and -1 uses Override
+flags:
+    1000: set a flag on player
+    4000: use override instead of objDef
+        - in this case there's a special handler if objDef == VariableObj
+        - the item get anim has this set
+        - I guess this means to use an object previously set by some other script
+    8000: sets bytes 0x20, 0x21 of obj def struct
+    most flags are copied to various parts of the AnimState
+
+the first word is a UniqueID
+
+0400bea8 38600026 Scream Fox Adventures
+
+0403b43c 2C03xxxx blink frequency, default=03DE, max=03E7
+04039784 38607FFF eyes will roll forever
+042b097c 2C007FFF eyes always closed
+
+04051348 4e800020 crazy textures
+
+checks for player is disguised:
+- water spellstone 1 (unknown purpose)
+- dll_CFPrisonUnc.func2
+- rendering transparent polys (maybe to disable fur effect?)
+- one of Tricky's many functions (maybe because he says COOOOL! when you activate it)
+- pushable objects (2 checks) (do you push at a different speed?)
+- something to do with holding objects
+  - some boxes you can only lift when disguised, eg in clouddungeon - related?
+- something with talking to NPCs
+- death gas (CF power chamber)
+- guard robots (shoots at you if not disguised)
+- CF level control (something to do with putting the staff away)
+- the LightFoot and SharpClaw in Cape Claw
+  - disguise changes behaviour of one of the enemies attacking him? but he doesn't respond.
+
+fireproof: (still take damage from touching fire, but don't get set on fire)
+48000000 803428F8 ; load PO = pPlayer
+DE000000 80008180 ; check PO
+58010000 000000B8 ; PO = player->animState
+DE000000 80008180 ; check PO
+80000000 00000000 ; gr0 = 0
+94210000 0000079C ; write 32bit gr0 at PO
+E2000002 80000000 ; endif
+
+
+the typo'd constant is accessed the first time we get a Grubtub Fungus, after getting Tricky. After he explains how to feed him, you can press A to speak to him, and the bug is then.
+Call trace:
+80080abc
+80080970
+80145770
+80084e20
+80087628
+8016c134
+8002ca60
+8002e678
+800209ac
+80020c58
+80021368
+80003274
+seems like this is only involved in Tricky's tail movements. if you change it, his tail doesn't twitch awkwardly anymore.
+his animation in that scene is awkward both with and without changing... changing to 1.0, -32767, 512, something huge, also don't seem to make a difference.
+
+for object "checkpoint4" the seqdata looks like:
+s32 prev, s32 unk, s32 next, s32 unk ; object unique IDs
+s32 unk ; maybe two s16
+s32 unk ; usually 00C0EA16
+s32 unk ; usually 40000000
+s32 unk ; usually 0
+s32 unk ; usually 0
+s32 unk ;
+these objects are present in: cloudrace, newicemount, newicemount2, newicemount3, snowmines

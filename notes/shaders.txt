@@ -1,0 +1,803 @@
+Shader 0:
+    unk00: 255
+    rgb: 0,0,0
+    unk07: 255
+    auxTex0: 1
+    alpha: 255
+    unk0D: 0,0,0
+    unk10: 255,255,255,255
+    auxTex1: 1
+    texture18: 0
+    unk1C: -1
+    layer:
+        Layer 0:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+        Layer 1:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+    auxTex2: -1
+    furTexture: 1
+    flags: 520
+    attrFlags: 5
+    nLayers: 1
+    _pad42: 0,0
+Shader 1:
+    unk00: 255
+    rgb: 0,0,0
+    unk07: 255
+    auxTex0: 1
+    alpha: 255
+    unk0D: 0,0,0
+    unk10: 255,255,255,255
+    auxTex1: 1
+    texture18: 2
+    unk1C: -1
+    layer:
+        Layer 0:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+        Layer 1:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+    auxTex2: -1
+    furTexture: -1
+    flags: 8
+    attrFlags: 5
+    nLayers: 1
+    _pad42: 0,0
+Shader 2:
+    unk00: 255
+    rgb: 0,0,0
+    unk07: 255
+    auxTex0: 1
+    alpha: 255
+    unk0D: 0,0,0
+    unk10: 255,255,255,255
+    auxTex1: 1
+    texture18: 3
+    unk1C: -1
+    layer:
+        Layer 0:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+        Layer 1:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+    auxTex2: -1
+    furTexture: -1
+    flags: 8
+    attrFlags: 5
+    nLayers: 1
+    _pad42: 0,0
+Shader 3:
+    unk00: 255
+    rgb: 0,0,0
+    unk07: 255
+    auxTex0: 1
+    alpha: 255
+    unk0D: 0,0,0
+    unk10: 255,255,255,255
+    auxTex1: 1
+    texture18: 4
+    unk1C: -1 <-- negative (is this reading correctly?)
+    layer:
+        Layer 0: <-- (yes but this isn't.)
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+        Layer 1:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+    auxTex2: -1
+    furTexture: -1
+    flags: 8
+    attrFlags: 5
+    nLayers: 2    <-- only one with 2 layers
+    _pad42: 0,0
+Shader 4:
+    unk00: 255
+    rgb: 0,0,0
+    unk07: 255
+    auxTex0: 1
+    alpha: 255
+    unk0D: 0,0,0
+    unk10: 255,255,255,255
+    auxTex1: 1
+    texture18: 0  <-- resets - 1, 2, 3, 4, 0, 0
+    unk1C: 1
+    layer:
+        Layer 0:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+        Layer 1:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+    auxTex2: -1
+    furTexture: -1
+    flags: 8
+    attrFlags: 5
+    nLayers: 1
+    _pad42: 0,0
+Shader 5:
+    unk00: 255
+    rgb: 0,0,0
+    unk07: 255
+    auxTex0: 1
+    alpha: 255
+    unk0D: 0,0,0
+    unk10: 255,255,255,255
+    auxTex1: 1
+    texture18: 0
+    unk1C: -1
+    layer:
+        Layer 0:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+        Layer 1:
+            texture: 255
+            tevMode: 0
+            enableTexChainStuff: 0
+            scrollingTexMtx: 0
+    auxTex2: -1
+    furTexture: -1
+    flags: 8
+    attrFlags: 5
+    nLayers: 1
+    _pad42: 0,0
+
+Raw data:
+          00 01 02 03  04 05 06 07  08 09 0A 0B  0C 0D 0E 0F
+#0:  00 | 00 00 00 FF  00 00 00 FF  00 00 00 01  FF 00 00 00
+     10 | FF FF FF FF  00 00 00 01  00 00 00 00  FF FF FF FF
+     20 | 05 00 00 00  00 00 00 00  80 00 00 00  00 00 00 00
+     30 | 00 00 00 00  FF FF FF FF  00 00 00 01  00 00 02 08  05 01 00 00
+#1:  00 | 00 00 00 FF  00 00 00 FF  00 00 00 01  FF 00 00 00
+     10 | FF FF FF FF  00 00 00 01  00 00 00 02  FF FF FF FF
+     20 | 03 00 00 00  00 00 00 02  80 00 00 00  00 00 00 00
+     30 | 00 00 00 00  FF FF FF FF  FF FF FF FF  00 00 00 08  05 01 00 00
+#2:  00 | 00 00 00 FF  00 00 00 FF  00 00 00 01  FF 00 00 00
+     10 | FF FF FF FF  00 00 00 01  00 00 00 03  FF FF FF FF
+     20 | 03 00 00 00  00 00 00 03  80 00 00 00  00 00 00 00
+     30 | 00 00 00 00  FF FF FF FF  FF FF FF FF  00 00 00 08  05 01 00 00
+#3:  00 | 00 00 00 FF  00 00 00 FF  00 00 00 01  FF 00 00 00
+     10 | FF FF FF FF  00 00 00 01  00 00 00 04  FF FF FF FF
+     20 | 05 00 00 00  00 00 00 04  81 05 00 00  00 00 00 05
+     30 | 80 01 00 00  FF FF FF FF  FF FF FF FF  00 00 00 08  05 02 00 00
+#4:  00 | 00 00 00 FF  00 00 00 FF  00 00 00 01  FF 00 00 00
+     10 | FF FF FF FF  00 00 00 01  00 00 00 00  00 00 00 01
+     20 | 04 00 15 00  00 00 00 00  80 00 00 00  00 00 00 00
+     30 | 00 00 00 00  FF FF FF FF  FF FF FF FF  00 00 00 08  05 01 00 00
+#5:  00 | 00 00 00 FF  00 00 00 FF  00 00 00 01  FF 00 00 00
+     10 | FF FF FF FF  00 00 00 01  00 00 00 00  FF FF FF FF
+     20 | 05 00 00 00  00 00 00 00  80 00 00 00  00 00 00 00
+     30 | 00 00 00 00  FF FF FF FF  FF FF FF FF  00 00 00 08  05 01 00 00
+
+
+Model header:
+H   |0002|flags                 |0x0000
+I   |000c|fileSize              |0x00021de0
+I   |0018|unk18                 |0x00000000
+I   |001c|extraAmapSize         |0x00000000
+I   |0020|textures              |0x0001aa88
+B   |0024|flags24               |0x05
+B   |0025|unk25                 |0x00
+I   |0028|vtxs                  |0x0001ad40
+I   |002c|normals               |0x0001e140
+I   |0030|colors                |0x00000000
+I   |0034|texCoords             |0x0001fcc0
+I   |0038|shaders               |0x0001aaa0
+I   |003c|bones                 |0x000215c0
+I   |0040|boneQuats             |0x000219b0
+I[3]|0044|unk44                 |0xffc00000, 0xffc00000, 0xffc00000
+I   |0050|unk50                 |0x00000000
+I   |0054|vtxGroups             |0x0001ac38
+I   |0058|hitboxes              |0x00021bf0
+I   |0064|pAltIndBuf            |0x00000000
+I   |0068|pAnimBuf              |0x00000000
+I   |006c|pModelIndBuf          |0x00000000
+h[8]|0070|animIdxs              |0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000
+I   |0080|amapTabEntry          |0x00000000
+I   |0084|posFineSkinningConfig |0x00000000
+I   |00a4|posFineSkinningPieces |0x00000000
+I   |00a8|posFineSkinningWeights|0x00000000
+I   |00ac|nrmFineSkinningWeights|0x00000000
+I   |00d0|dlists                |0x000028b4
+I   |00d4|renderInstrs          |0x0001a920
+H   |00d8|nRenderInstrs         |0x0168
+I   |00dc|offsDC                |0x000000fc
+H   |00e0|unkE0                 |0x0024
+H   |00e2|flagsE2               |0x0404
+H   |00e4|nVtxs                 |0x08a9
+H   |00e6|nNormals              |0x0925
+H   |00e8|nColors               |0x0000
+H   |00ea|nTexCoords            |0x0640
+H   |00ec|nAnimations           |0x0000
+B   |00f2|nTextures             |0x06
+B   |00f3|nBones                |0x24
+B   |00f4|nVtxGroups            |0x3b
+B   |00f5|nDlists               |0x1f
+B   |00f6|unkF6                 |0x1f
+B   |00f7|nHitBoxes             |0x14
+B   |00f8|nShaders              |0x06
+B   |00f9|nPtrsDC               |0x2f
+B   |00fa|nTexMtxs              |0x01
+B   |00fb|unkFB                 |0x00
+
+Shaders:            |0 Fur   |1 HairF |2 HairB |3 Eyes  |4 Metal |5 Clothes
+I   |0000|unk00     |......FF|......FF|......FF|......FF|......FF|......FF
+I   |0004|unk04     |......FF|......FF|......FF|......FF|......FF|......FF
+I   |0008|auxTex0   |.......1|.......1|.......1|.......1|.......1|.......1 always 1?
+B   |000c|alpha     |FF      |FF      |FF      |FF      |FF      |FF
+B[3]|000d|unk0D     |......  |......  |......  |......  |......  |......
+B[4]|0010|unk10     |FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF
+i   |0014|auxTex1   |.......1|.......1|.......1|.......1|.......1|.......1 always 1?
+i   |0018|texture18 |........|.......2|.......3|.......4|........|........ which texture (for ???)
+i   |001c|unk1C     |FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF|.......1|FFFFFFFF
+I   |0020|unk20     |.5......|.3......|.3......|.5......|.4..15..|.5......
+I   |0024|unk24     |........|.......2|.......3|.......4|........|........ which texture - layer 0
+I   |0028|unk28     |8.......|8.......|8.......|81.5....|8.......|8.......
+I   |002c|unk2C     |........|........|........|.......5|........|........ layer 1
+I   |0030|unk30     |........|........|........|8..1....|........|........
+i   |0034|auxTex2   |FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF layer 2?
+i   |0038|furTexture|.......1|FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF|FFFFFFFF
+I   |003c|flags     |.....2.8|.......8|.......8|.......8|.......8|.......8
+B   |0040|attrFlags |.5      |.5      |.5      |.5      |.5      |.5
+B   |0041|nLayers   |.1      |.1      |.1      |.2      |.1      |.1
+B[2]|0042|_pad42    |....    |....    |....    |....    |....    |....
+replacing 0 with . for visibility
+eye textures are idx 0 (eyelid) and 4 (eyeball)
+
+0x3C flags: 8=CullBackface, 200=FuzzRelated, makes sense.
+0x40 flags: 1=UseNormals 2=UseColors 4=?
+I don't think there is a layer 2 because that would imply the fur shader only
+uses layers 0 and 2 while only having one layer.
+
+let's try changing the shader params (at 80e23480)
+## in ROM    in RAM   effect
+00 000000FF 000000FF nothing?
+04 000000FF 000000FF nothing?
+08 00000001 00000001 nothing?
+0C FF000000 FF000000 nothing?
+10 FFFFFFFF FFFFFFFF nothing?
+14 00000001 00000001 nothing?
+18 00000000 00000106 affects reflection?
+1C FFFFFFFF 00000000 nothing?
+20 05000000 05000000 nothing?
+24 00000000 00000106 texture ID, does affect render
+28 80000000 80000000 nothing?
+2C 00000000 00000000 nothing?
+30 00000000 00000000 nothing?
+34 FFFFFFFF 00000000 vertexsplosion if changed
+38 00000001 00000107 affects fur
+3C 00000208 00000208 affects lighting
+40 05010000 05010000 breaks everything, can crash Dolphin
+
+changing 34 causes errors:
+Unknown Opcode(0x06 @ 0x7f373260a9ed, preprocessing = no)
+Unknown Opcode(0x24 @ 0x7f373260a9ee, preprocessing = no)
+Unknown Opcode(0x06 @ 0x7f373260a9ef, preprocessing = no)
+Unknown Opcode(0x65 @ 0x7f373260a9f1, preprocessing = no)
+Unknown Opcode(0xec @ 0x7f373260a9f3, preprocessing = no)
+Unknown Opcode(0x02 @ 0x7f373260a9f4, preprocessing = no)
+Unknown Opcode(0x23 @ 0x7f373260a9f5, preprocessing = no) ...
+so it has some effect on CP regs. could try to find those bytes...
+
+changing 0x24 for the eye shader changes the eyeball texture.
+changing 0x28 this blanks the eyes
+    80: O.O (disables eyelid texture?)
+    82: no effect
+    81: blank eyes (disables eyeball texture?)
+0x2C is the texture ID for the eyeballs
+    but in ROM it's 5 while the eyeball texture is 4
+    unless those are just wrong
+0x3C affects the eye rendering
+    12345678: invisible (see right through the head)
+    11111111: pink
+    00100008: also pink
+    00101008: same
+    00101108: slightly lighter pink
+    00101708: invisible
+    00101408: invisible
+    00101208: deep pink
+    00200008: normal
+    00300000: pink (so this byte is a flagset)
+    0030ff08: invisible
+    0000ff08: invisible
+    00001208: normal
+would not be surprised if some of these values just get copied directly into CP/XF
+
+shader 0 differs in flags
+shader 3 differs in unk28, unk2C, nLayers
+shader 4 differs in unk1C, unk20
+unk24 == texture18
+
+What      |Shader|TexId|Tex Idx
+Fur       |     0| 725 | 1
+Hair Front|     1| 729 | 5
+Hair Back |     2| 72A | 6
+Hair Side?|     ?| 726 | 2
+Eyelid    |     3| 724 | 0
+Eyeball   |    3?| 728 | 4
+Metal     |     4| 725 | 1
+Fabric    |     5| 725 | 1
+Unused    |     -| 727 | 3
+these indices are wrong?
+0:fur, 1:fur map, 2:hair front, 3:hair sides/back? 4:eyelid, 5:eyeball
+
+order: 'PNMTXIDX', 'T0MIDX', 'T1MIDX', 'T2MIDX', 'T3MIDX', 'T4MIDX',
+    'T5MIDX', 'T6MIDX', 'T7MIDX', 'POS', 'NRM', 'COL0', 'COL1',
+    'TEX0', 'TEX1', 'TEX2', 'TEX3', 'TEX4', 'TEX5', 'TEX6',
+    'TEX7'
+
+this.gx.cp.setReg(0x56,
+    (1 <<  0) | //PNMTXIDX - direct
+    (1 <<  1) | //T0MIDX   - direct
+    (3 <<  9) | //POS      - i16
+    (3 << 11) | //NRM      - i16
+    (1 << 13) | //COL0     - direct
+    (1 << 15)   //COL1     - direct
+Dlist 24 fails to parse - 11 bytes per vertex
+looks like: 16 (or 2x 8), 8, 16, 16, 16, 16
+first is always 001E, or 30
+second is always 0
+first byte seems related to position
+second byte does nothing? and third
+next seems like also position? it all seems to do not much of anything.
+
+9E 00 06
+    00 1E  00  03 59  00 B5  00 BB  00 BC
+    00 1E  00  03 58  01 32  00 BD  00 BE
+    00 1E  00  02 C1  01 38  01 4F  01 50
+    00 1E  00  02 C6  01 33  01 43  01 44
+    00 1E  00  02 C0  01 39  01 51  01 52
+    00 1E  00  03 08  01 3A  01 53  01 54
+9E 00 0A
+    00 1E 00 04 7F 04 9F 05 2E 05 2F
+    00 1E 00 04 9E 05 0A 05 51 05 52
+    00 1E 00 04 7E 05 04 05 2C 05 2D
+    00 1E 00 04 DA 05 06 05 47 05 48
+    00 1E 00 04 DF 05 05 05 45 05 46
+    00 1E 00 04 D7 05 07 05 4B 05 4C
+    00 1E 00 04 82 04 A2 05 57 05 58
+    00 1E 00 04 C2 05 09 05 4F 05 50
+    00 1E 00 04 85 04 A5 05 59 05 5A
+    00 1E 00 03 DD 04 92 05 25 05 26
+9E 00 07
+    00 1E 00 03 DE 04 93 05 27 05 28
+    00 1E 00 03 DD 04 92 05 25 05 26
+    00 1E 00 04 70 04 91 05 23 05 24
+    00 1E 00 04 C2 05 09 05 4F 05 50
+    00 1E 00 04 D9 05 08 05 4D 05 4E
+    00 1E 00 04 D7 05 07 05 4B 05 4C
+    00 1E 00 04 DA 05 06 05 47 05 48
+9E 00 05
+    00 1E 00 03 58 01 32 00 BD 00 BE
+    00 1E 00 03 5A 00 B4 00 B9 00 BA
+    00 1E 00 02 C5 01 34 01 45 01 46
+    00 1E 00 03 56 00 B7 01 47 01 48
+    00 1E 00 03 55 00 B8 01 57 01 58
+9E 00 04
+    00 1E 00 04 7E 05 04 05 2C 05 2D
+    00 1E 00 04 DF 05 05 05 45 05 46
+    00 1E 00 04 7D 04 9E 05 2A 05 2B
+    00 1E 00 04 83 04 A3 05 49 05 4A
+9E 00 07
+    00 1E 00 03 73 00 A5 00 A6 00 A7
+    00 1E 00 03 08 01 3A 01 53 01 54
+    00 1E 00 02 C3 01 36 01 4B 01 4C
+    00 1E 00 02 C6 01 33 01 43 01 44
+    00 1E 00 02 C4 01 35 01 49 01 4A
+    00 1E 00 02 C5 01 34 01 45 01 46
+    00 1E 00 03 55 00 B8 01 57 01 58
+9E 00 04
+    00 1E 00 04 9C 05 0C 05 55 05 56
+    00 1E 00 04 DA 05 06 05 47 05 48
+    00 1E 00 04 9D 05 0B 05 53 05 54
+    00 1E 00 04 9E 05 0A 05 51 05 52
+9E 00 07
+    00 1E 00 03 72 00 A6 00 A8 00 A9
+    00 1E 00 03 73 00 A5 00 A6 00 A7
+    00 1E 00 03 74 00 A4 00 A4 00 A5
+    00 1E 00 02 C3 01 36 01 4B 01 4C
+    00 1E 00 02 C2 01 37 01 4D 01 4E
+    00 1E 00 02 C4 01 35 01 49 01 4A
+    00 1E 00 03 55 00 B8 01 57 01 58
+9E 00 04
+    00 1E 00 03 72 00 A6 00 A8 00 A9
+    00 1E 00 02 C2 01 37 01 4D 01 4E
+    00 1E 00 03 53 00 BA 01 55 01 56
+    00 1E 00 03 55 00 B8 01 57 01 58
+9E 00 04
+    00 1E 00 04 9C 05 0C 05 55 05 56
+    00 1E 00 03 DE 04 93 05 27 05 28
+    00 1E 00 04 D9 05 08 05 4D 05 4E
+    00 1E 00 04 70 04 91 05 23 05 24
+96 00 12
+    00 1E 00 03 58 00 B5 00 BD 00 BE
+    00 1E 00 03 59 00 B5 00 BB 00 BC
+    00 1E 00 03 5A 00 B4 00 B9 00 BA
+    00 1E 00 02 C5 01 34 01 45 01 46
+    00 1E 00 02 C6 01 33 01 43 01 44
+    00 1E 00 03 58 01 32 00 BD 00 BE
+    00 1E 00 04 83 04 A3 05 49 05 4A
+    00 1E 00 04 DF 05 05 05 45 05 46
+    00 1E 00 04 82 04 A2 05 57 05 58
+    00 1E 00 03 74 00 A4 00 A4 00 A5
+    00 1E 00 02 C2 01 37 01 4D 01 4E
+    00 1E 00 03 72 00 A6 00 A8 00 A9
+    00 1E 00 04 D9 05 08 05 4D 05 4E
+    00 1E 00 04 DA 05 06 05 47 05 48
+    00 1E 00 04 9C 05 0C 05 55 05 56
+    00 1E 00 04 7F 04 9F 05 2E 05 2F
+    00 1E 00 04 7E 04 78 05 2C 05 2D
+    00 1E 00 04 7D 04 9E 05 2A 05 2B
+    00 00 00 00 00 00 00 00 00 00 00 this is probably padding.
+    00 00 00 00 00 00 00 00 00 00 00
+    00 00 00 00 00
+
+
+DlistPtr 0
+    I   |0000|offset        |0x00002f80
+    H   |0004|size          |0x14c0
+    h[6]|0006|bbox          |0x-380, 0x-87b, 0x-23a, 0x03b1, 0x1948, 0x032f
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0011
+    I   |0018|unk18         |0x07000000
+DlistPtr 1
+    I   |0000|offset        |0x00004440
+    H   |0004|size          |0x0ee0
+    h[6]|0006|bbox          |0x-4aa, 0x-860, 0x-1dc, 0x04aa, 0x0b8f, 0x0331
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0075
+    I   |0018|unk18         |0x07000000
+DlistPtr 2
+    I   |0000|offset        |0x00005320
+    H   |0004|size          |0x0bc0
+    h[6]|0006|bbox          |0x-123, 0x-187, 0x-10c, 0x0f34, 0x1a36, 0x04a3
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x00d9
+    I   |0018|unk18         |0x07000000
+DlistPtr 3
+    I   |0000|offset        |0x00005ee0
+    H   |0004|size          |0x23e0
+    h[6]|0006|bbox          |0x-f2e, 0x-87c, 0x-57a, 0x0425, 0x1a36, 0x02af
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x013d
+    I   |0018|unk18         |0x07000000
+DlistPtr 4
+    I   |0000|offset        |0x000082c0
+    H   |0004|size          |0x05a0
+    h[6]|0006|bbox          |0x-30c, 0x-7ae, 0x-2b3, 0x0380, 0x1a32, 0x0201
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x01a1
+    I   |0018|unk18         |0x07000000
+DlistPtr 5
+    I   |0000|offset        |0x00008860
+    H   |0004|size          |0x0700
+    h[6]|0006|bbox          |0x-e01, 0x-105, 0x-22f, 0x036e, 0x1d08, 0x02af
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0205
+    I   |0018|unk18         |0x07000000
+DlistPtr 6
+    I   |0000|offset        |0x00008f60
+    H   |0004|size          |0x0440
+    h[6]|0006|bbox          |0x-340, 0x-6ac, 0x-1f3, 0x037f, 0x14f4, 0x04a3
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0269
+    I   |0018|unk18         |0x07000000
+DlistPtr 7
+    I   |0000|offset        |0x000093a0
+    H   |0004|size          |0x01c0
+    h[6]|0006|bbox          |0x-173, 0x-7ae, 0x-10c, 0x0efe, 0x19f3, 0x0331
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x02cd
+    I   |0018|unk18         |0x07000000
+DlistPtr 8
+    I   |0000|offset        |0x00009560
+    H   |0004|size          |0x05a0
+    h[6]|0006|bbox          |0x-74b, 0x-404, 0x-161, 0x0747, 0x1ad2, 0x0305
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0331
+    I   |0018|unk18         |0x07000000
+DlistPtr 9
+    I   |0000|offset        |0x00009b00
+    H   |0004|size          |0x0a80
+    h[6]|0006|bbox          |0x-74b, 0x-107, 0x-56b, 0x03c9, 0x1d79, 0x02af
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0395
+    I   |0018|unk18         |0x07000000
+DlistPtr 10
+    I   |0000|offset        |0x0000a580
+    H   |0004|size          |0x07e0
+    h[6]|0006|bbox          |0x-3b6, 0x-451, 0x-4a3, 0x01fc, 0x1d79, 0x01ea
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x03f9
+    I   |0018|unk18         |0x07000000
+DlistPtr 11
+    I   |0000|offset        |0x0000ad60
+    H   |0004|size          |0x0660
+    h[6]|0006|bbox          |0x-32a, 0x0-bc, 0x-278, 0x0d5d, 0x197e, 0x0235
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x045d
+    I   |0018|unk18         |0x07000000
+DlistPtr 12
+    I   |0000|offset        |0x0000b3c0
+    H   |0004|size          |0x02c0
+    h[6]|0006|bbox          |0x-2a4, 0x-49a, 0x-2a9, 0x02cb, 0x179d, 0x0321
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x04c1
+    I   |0018|unk18         |0x07000000
+DlistPtr 13
+    I   |0000|offset        |0x0000b680
+    H   |0004|size          |0x0300
+    h[6]|0006|bbox          |0x-3b1, 0x-5df, 0x-29c, 0x0117, 0x179d, 0x0320
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0525
+    I   |0018|unk18         |0x07000000
+DlistPtr 14
+    I   |0000|offset        |0x0000b980
+    H   |0004|size          |0x0420
+    h[6]|0006|bbox          |0x-2d6, 0x-5df, 0x0-c8, 0x0221, 0x1589, 0x0efc
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0589
+    I   |0018|unk18         |0x07000000
+DlistPtr 15
+    I   |0000|offset        |0x0000bda0
+    H   |0004|size          |0x0260
+    h[6]|0006|bbox          |0x-1a3, 0x-845, 0x-375, 0x0298, 0x1d61, 0x0260
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x05ed
+    I   |0018|unk18         |0x07000000
+DlistPtr 16
+    I   |0000|offset        |0x0000c000
+    H   |0004|size          |0x02a0
+    h[6]|0006|bbox          |0x-278, 0x-860, 0x-465, 0x0420, 0x1da6, 0x019e
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0651
+    I   |0018|unk18         |0x07000000
+DlistPtr 17
+    I   |0000|offset        |0x0000c2a0
+    H   |0004|size          |0x00e0
+    h[6]|0006|bbox          |0x-ecc, 0x-355, 0x0-62, 0x03d8, 0x19eb, 0x030b
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x06b5
+    I   |0018|unk18         |0x07000000
+DlistPtr 18
+    I   |0000|offset        |0x0000c380
+    H   |0004|size          |0x03c0
+    h[6]|0006|bbox          |0x-179, 0x0-f0, 0x-104, 0x0d5d, 0x1b17, 0x08f2
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x0719
+    I   |0018|unk18         |0x07000000
+DlistPtr 19
+    I   |0000|offset        |0x0000c740
+    H   |0004|size          |0x0100
+    h[6]|0006|bbox          |0x-29f, 0x-1eb, 0x0041, 0x0742, 0x1b17, 0x0262
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x077d
+    I   |0018|unk18         |0x07000000
+DlistPtr 20
+    I   |0000|offset        |0x0000c840
+    H   |0004|size          |0x00c0
+    h[6]|0006|bbox          |0x-ecc, 0x0-e7, 0x0-8e, 0x0d50, 0x19f3, 0x008c
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x07d9
+    I   |0018|unk18         |0x07000000
+DlistPtr 21
+    I   |0000|offset        |0x0000c900
+    H   |0004|size          |0x0020
+    h[6]|0006|bbox          |0x-278, 0x-19a, 0x0-cc, 0x-13c, 0x0237, 0x004e
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x00
+    H   |0014|specialBitAddr|0x0000
+    H   |0016|unk16         |0x082d
+    I   |0018|unk18         |0x07000000
+DlistPtr 22
+    I   |0000|offset        |0x0000c920
+    H   |0004|size          |0x0900
+    h[6]|0006|bbox          |0x-3c9, 0x01b8, 0x-45a, 0x03d5, 0x070d, 0x0032
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x01
+    H   |0014|specialBitAddr|0x0859
+    H   |0016|unk16         |0x086a
+    I   |0018|unk18         |0x07000000
+DlistPtr 23
+    I   |0000|offset        |0x0000d220
+    H   |0004|size          |0x08e0
+    h[6]|0006|bbox          |0x-475, 0x-124, 0x-1ec, 0x0485, 0x070d, 0x034c
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x02
+    H   |0014|specialBitAddr|0x0886
+    H   |0016|unk16         |0x0897
+    I   |0018|unk18         |0x07000000
+DlistPtr 24
+    I   |0000|offset        |0x0000db00
+    H   |0004|size          |0x0380
+    h[6]|0006|bbox          |0x-276, 0x01f1, 0x-399, 0x0276, 0x036a, 0x-281
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x03
+    H   |0014|specialBitAddr|0x08bb
+    H   |0016|unk16         |0x08cc
+    I   |0018|unk18         |0x07000000
+DlistPtr 25
+    I   |0000|offset        |0x0000de80
+    H   |0004|size          |0x2700
+    h[6]|0006|bbox          |0x-4bb, 0x-87c, 0x-20b, 0x04bb, 0x1c3d, 0x0370
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x04
+    H   |0014|specialBitAddr|0x08e8
+    H   |0016|unk16         |0x08f9
+    I   |0018|unk18         |0x07000000
+DlistPtr 26
+    I   |0000|offset        |0x00010580
+    H   |0004|size          |0x08a0
+    h[6]|0006|bbox          |0x-333, 0x-87b, 0x-28e, 0x0333, 0x12e4, 0x0311
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x05
+    H   |0014|specialBitAddr|0x0955
+    H   |0016|unk16         |0x0966
+    I   |0018|unk18         |0x07000000
+DlistPtr 27
+    I   |0000|offset        |0x00010e20
+    H   |0004|size          |0x0360
+    h[6]|0006|bbox          |0x-32f, 0x-87c, 0x-251, 0x0333, 0x12e3, 0x0328
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x05
+    H   |0014|specialBitAddr|0x0955
+    H   |0016|unk16         |0x09ca
+    I   |0018|unk18         |0x07000000
+DlistPtr 28
+    I   |0000|offset        |0x00011180
+    H   |0004|size          |0x0520
+    h[6]|0006|bbox          |0x-2c4, 0x-45c, 0x-269, 0x02c4, 0x12e3, 0x0354
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x05
+    H   |0014|specialBitAddr|0x0955
+    H   |0016|unk16         |0x0a2e
+    I   |0018|unk18         |0x07000000
+DlistPtr 29
+    I   |0000|offset        |0x000116a0
+    H   |0004|size          |0x0780
+    h[6]|0006|bbox          |0x-2f4, 0x-16c, 0x-31a, 0x030b, 0x19e3, 0x08f2
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x05
+    H   |0014|specialBitAddr|0x0955
+    H   |0016|unk16         |0x0a92
+    I   |0018|unk18         |0x07000000
+DlistPtr 30
+    I   |0000|offset        |0x00011e20
+    H   |0004|size          |0x00c0
+    h[6]|0006|bbox          |0x-1b3, 0x-29a, 0x-24f, 0x01ae, 0x12da, 0x0354
+    B   |0012|unk12         |0x00
+    B   |0013|shaderId      |0x05
+    H   |0014|specialBitAddr|0x0955
+    H   |0016|unk16         |0x0aee
+    I   |0018|unk18         |0x07000000
+
+    Texture header 0x724
+    H|000a|width  |0x0040
+    H|000c|height |0x0040
+    B|000f|unk0F  |0x01
+    B|0010|unk10  |0x04
+    B|0016|format |0x05
+    B|0017|unk17  |0x01
+    B|0018|unk18  |0x01
+    B|0019|nFrames|0x05
+    B|001a|unk1A  |0x01
+    B|001d|unk1D  |0x04
+    B|005f|unk5F  |0x00
+
+Model 007E (staffAnim) somehow ends up using VAT 4 (unless that's just from bad dlist parsing?)
+                                 Krystal   | staffAnim
+H   |0002|flags                 |0x0000    |0x0000
+I   |000c|fileSize              |0x00021de0|0x00001a80
+I   |0018|unk18                 |0x00000000|0x00000000
+I   |001c|extraAmapSize         |0x00000000|0x00000000
+I   |0020|textures              |0x0001aa88|0x00000eb0
+B   |0024|flags24               |0x05      |0x05
+B   |0025|unk25                 |0x00      |0x00
+I   |0028|vtxs                  |0x0001ad40|0x00000f40
+I   |002c|normals               |0x0001e140|0x00001340
+I   |0030|colors                |0x00000000|0x00000000
+I   |0034|texCoords             |0x0001fcc0|0x00001620
+I   |0038|shaders               |0x0001aaa0|0x00000eb8
+I   |003c|bones                 |0x000215c0|0x00001920
+I   |0040|boneQuats             |0x000219b0|0x00000000
+I[3]|0044|unk44                 |0xffc00000|0x00000000 * (all 3 the same in both)
+I   |0050|unk50                 |0x00000000|0x00000000
+I   |0054|vtxGroups             |0x0001ac38|0x00000000
+I   |0058|hitboxes              |0x00021bf0|0x00001a1c
+I   |0064|pAltIndBuf            |0x00000000|0x00000000
+I   |0068|pAnimBuf              |0x00000000|0x00000000
+I   |006c|pModelIndBuf          |0x00000000|0x00000000
+h[8]|0070|animIdxs              |all 0     |all 0
+I   |0080|amapTabEntry          |0x00000000|0x00000000
+I   |0084|posFineSkinningConfig |0x00000000|0x00000000
+I   |00a4|posFineSkinningPieces |0x00000000|0x00000000
+I   |00a8|posFineSkinningWeights|0x00000000|0x00000000
+I   |00ac|nrmFineSkinningWeights|0x00000000|0x00000000
+I   |00d0|dlists                |0x000028b4|0x000000fc
+I   |00d4|renderInstrs          |0x0001a920|0x00000ea0
+H   |00d8|nRenderInstrs         |0x0168    |0x0010
+I   |00dc|offsDC                |0x000000fc|0x00000000 * I think this is animations
+H   |00e0|unkE0                 |0x0024    |0x0015     * an offset? can't be
+H   |00e2|flagsE2               |0x0404    |0x0404
+H   |00e4|nVtxs                 |0x08a9    |0x00a7
+H   |00e6|nNormals              |0x0925    |0x00ec
+H   |00e8|nColors               |0x0000    |0x0000
+H   |00ea|nTexCoords            |0x0640    |0x00c0
+H   |00ec|nAnimations           |0x0000    |0x0000
+B   |00f2|nTextures             |0x06      |0x02
+B   |00f3|nBones                |0x24      |0x09
+B   |00f4|nVtxGroups            |0x3b      |0x00
+B   |00f5|nDlists               |0x1f      |0x02
+B   |00f6|unkF6                 |0x1f      |0x00       * count at E0?
+B   |00f7|nHitBoxes             |0x14      |0x04
+B   |00f8|nShaders              |0x06      |0x02
+B   |00f9|nPtrsDC               |0x2f      |0x00       * # animations?
+B   |00fa|nTexMtxs              |0x01      |0x01
+B   |00fb|unkFB                 |0x00      |0x00

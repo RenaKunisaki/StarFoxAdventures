@@ -1,0 +1,176 @@
+dd if=../discroot/animtest/TEX1.bin of=krystaltex1.bin bs=1 skip=288864 count=104960
+
+orig:
+000014 size 15a0
+0015B4
+002C94
+0043F4
+005B60
+017B00
+018DC0
+0194E0
+019760
+
+table offsets
+these are the file offset / 2
+table     new       x2
+023430 => 000000 => 000000 eyes
+0261E0 => 002DB0 => 005B60 fur and clothes
+02F1B0 => 00BD80 => 017B00 ?
+02FB10 => 00C6E0 => 018DC0 eyes again?
+02FEA0 => 00CA70 => 0194E0 hair front
+02FFE0 => 00CBB0 => 019760 hair back
+
+so, the table entry starts with N where:
+if N == 1 then there's just a ZLB header here
+else there's N+1 offsets
+
+I wonder if I mixed up the fur and eye textures and that's why the mipmaps were 64x64? maybe those are really just different eye textures, not mipmaps?
+
+our new texture won't have those offsets, so first entry is 0
+size is 125611 (0x1eaab) which we pad to 125612 (0x1eaac)
+so copy the original from 0x5B60 (or one before, to get a padding byte) = 23391
+our new offsets are:
+offs   /2
+000000 000000
+01EAAC 00F556
+030A4C 018526
+031D0C 018E86
+03242C 019216
+0326AC 019356
+which of course does not work
+with additional padding to align to 16 bytes it also doesn't fucking work
+
+01EAB0 00F558
+030A50 018528
+031D10 018E88
+032430 019218
+0326B0 019358
+
+well it was checking for 0x14 at the beginning of the file
+if we remove that then it will go ahead and crash instead with some insane huge bogus size
+
+I think I got it working now but replaced the eye texture???
+fuck
+
+so let's try all that shit again
+we want to copy the first 0x5B60 (23392) bytes, that's the eye textures and the offsets before them
+then inject our texture and pad it
+then copy from 0x17B00 onward which is 97024
+our texture ends at 149008 (0x24610)
+so what was at 017B00 is now at 024610
+meaning add 0xCB10 to the offsets after that
+
+new offsets
+offs   /2
+000000 000000 eyes
+005B60 002db0 fur and clothes
+024610 012308 ?
+0258d0 012c68 eyes again?
+025ff0 012ff8 hair front
+026270 013138 hair back
+
+finally it fucking works
+
+next we can patch the model
+fortunately there's only one in the archive
+and we can be more precise than with the gecko codes since space isn't a concern
+
+
+==================== MODEL HACK =======================
+list 25
+    poly  42 all offset 0BCA 0BD3 0BDC 0BE5 0BEE
+    poly  46 all offset 0D35 0D3E 0D47 0D50 0D59
+    poly  47 all offset 0D65 0D6E 0D77 0D80
+    poly  48 all offset 0D8C 0D95 0D9E 0DA7
+    poly  49 all offset 0DB3 0DBC 0DC5 0DCE
+    poly  50 all offset 0DDA 0DE3 0DEC 0DF5 0DFE
+    poly 163     offset 2325 232E 2337
+list 26
+    poly   2 all
+    poly   4 all
+    poly   8 all
+    poly   9 all
+    poly  10 all
+    poly  11 all
+    poly  13 all
+    poly  14 all
+    poly  15 all
+    poly  18 all
+    poly  20 all
+    poly  21 all
+    poly  29 all
+    poly  30 all
+    poly  31 all
+    poly  32 all
+    poly  33 all
+    poly  34 all
+    poly  35 all
+    poly  37?
+list 27
+    poly   1 all
+    poly   2 all
+    poly   3 all
+    poly   6 all
+    poly   9 all
+    poly  10 offset 0330 0339 0342
+list 28
+    poly   0 all
+    poly   1 all
+    poly   2 all
+    poly   3 all
+    poly   6 all
+    poly   7 all
+    poly  13 all
+    poly  14?
+    poly  15 all
+    poly  19 all
+    poly  20 all
+    poly  21 all
+    poly  23 all
+
+offset, length
+.short +0x28B4, 0x0030 # list 25 poly 42
+.short +0x28B4, 0x00A5 # list 25 poly 47-50
+.short +0x28B4, 0x006F # list 26 poly 2
+.short +0x28B4, 0x0078 # list 26 poly 4
+.short +0x28B4, 0x0108 # list 26 poly 8-11
+.short +0x28B4, 0x00AE # list 26 poly 13-16
+.short +0x28B4, 0x0027 # list 26 poly 18
+.short +0x28B4, 0x0060 # list 26 poly 20-21
+.short +0x28B4, 0x026A # list 26 poly 29-35
+.short +0x28B4, 0x0105 # list 27 poly 1-3
+.short +0x28B4, 0x0042 # list 27 poly 6
+.short +0x28B4, 0x00BD # list 27 poly 9-10
+.short +0x28B4, 0x012C # list 28 poly 0-3
+.short +0x28B4, 0x0060 # list 28 poly 6-7
+.short +0x28B4, 0x00a2 # list 28 poly 13-15
+.short +0x28B4, 0x00a2 # list 28 poly 19-21
+.short +0x28B4, 0x0025 # list 28 poly 23
+
+need to go over these more closely to patch some holes...
+
+move up vtxs: (@ 0x01AD40)
+vidx ypos
+07FB 105A
+0049 FCAB
+0002 FCC2
+000B FD42
+
+list 25 poly 45 offs 0D35 0D3E 0D47 0D50 0D59
+list 26 poly 7 offs 036C
+    poly  8 offs 039C
+    poly  9 offs 03CC
+    poly 12 offs 044A
+    poly 21 offs 0636
+    poly 22 offs 065D
+    poly 23 offs 068D
+    poly 24 offs 06B4
+    poly 25 offs 06E4
+    poly 26 offs 070B
+    poly 27 offs 073B
+    poly 29 vtxs 079E-0801
+        0876-0888
+
+there does appear to be a breast bone
+should look into changing its animation as well as making the cloth behaviour more realistic
