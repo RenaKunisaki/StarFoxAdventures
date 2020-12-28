@@ -1,4 +1,4 @@
-import Seekable from '/js/Seekable.js';
+import Seekable from '/r/js/Seekable.js';
 
 export default class SfaBitStream extends Seekable {
     /** Variant of BitStream that reads in the order SFA does.

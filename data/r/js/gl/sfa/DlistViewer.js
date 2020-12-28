@@ -1,4 +1,4 @@
-import {E, clearElement} from '/js/Element.js';
+import {E, clearElement} from '/r/js/Element.js';
 import HexViewer from '../HexViewer.js';
 
 export default class DlistViewer {

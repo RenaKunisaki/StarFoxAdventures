@@ -1,5 +1,5 @@
-import {get} from '/js/Util.js';
-import {E} from '/js/Element.js';
+import {get} from '/r/js/Util.js';
+import {E} from '/r/js/Element.js';
 //import Program from './Program.js';
 import GX from './gx/GX.js';
 import Model from './sfa/model/Model.js';
@@ -36,7 +36,7 @@ export default class Context {
             throw new Error("Invalid or missing canvas");
         }
         this.canvas = canvas;
-        this.gl = canvas.getContext("webgl");
+        this.gl = canvas.getContext("webgl2");
         const gl = this.gl;
 
         if(this.gl === null) {
@@ -253,6 +253,10 @@ export default class Context {
         const id = data[3] + (data[2] << 8) + (data[1] << 16) + (data[0] << 24);
         const vtx = this.gx.vtxLog[id];
         const picker = document.getElementById('glPicker');
+        if(!picker) {
+            console.error("Can't find element ID 'glPicker'");
+            return;
+        }
         picker.innerText = '';
 
         if(vtx) {

@@ -1,4 +1,4 @@
-import {E} from '/js/Element.js';
+import {E} from '/r/js/Element.js';
 
 export default class ViewControl {
     /** UI widget to control the viewport.
@@ -80,6 +80,36 @@ export default class ViewControl {
         this.txtRotY  .addEventListener('input', e => this._onRotChange(e));
         this.txtRotZ  .addEventListener('input', e => this._onRotChange(e));
         this.txtFov   .addEventListener('input', e => this._onFovChange(e));
+    }
+
+    set(params) {
+        /** Manually change parameters.
+         */
+        if(params.pos) {
+            if(params.pos.x != undefined) this.txtPosX.value = params.pos.x;
+            if(params.pos.y != undefined) this.txtPosY.value = params.pos.y;
+            if(params.pos.z != undefined) this.txtPosZ.value = params.pos.z;
+        }
+        if(params.rot) {
+            if(params.rot.x != undefined) this.txtRotX.value = params.rot.x;
+            if(params.rot.y != undefined) this.txtRotY.value = params.rot.y;
+            if(params.rot.z != undefined) this.txtRotZ.value = params.rot.z;
+        }
+        if(params.scale) {
+            if(params.scale.x != undefined) this.txtScaleX.value = params.scale.x;
+            if(params.scale.y != undefined) this.txtScaleY.value = params.scale.y;
+            if(params.scale.z != undefined) this.txtScaleZ.value = params.scale.z;
+        }
+        this.context.view.pos.x = this.txtPosX.value;
+        this.context.view.pos.y = this.txtPosY.value;
+        this.context.view.pos.z = this.txtPosZ.value;
+        this.context.view.rotation.x = this.txtRotX.value;
+        this.context.view.rotation.y = this.txtRotY.value;
+        this.context.view.rotation.z = this.txtRotZ.value;
+        this.context.view.scale.x = this.txtScaleX.value;
+        this.context.view.scale.y = this.txtScaleY.value;
+        this.context.view.scale.z = this.txtScaleZ.value;
+        this.context.redraw();
     }
 
     _onPosChange(event) {

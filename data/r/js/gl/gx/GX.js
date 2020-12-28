@@ -4,7 +4,7 @@ import XF from './XF.js';
 import DlistParser from './DlistParser.js';
 import Program from '../Program.js';
 import Texture from '../Texture.js';
-import {get} from '/js/Util.js';
+import {get} from '/r/js/Util.js';
 
 export default class GX {
     /** GameCube GPU simulator.
@@ -147,8 +147,8 @@ export default class GX {
 
         //get shader code and create program
         this.program = new Program(this.context, {
-            [gl.VERTEX_SHADER]:   (await get('/js/gl/gx/vertex.glsl'))  .responseText,
-            [gl.FRAGMENT_SHADER]: (await get('/js/gl/gx/fragment.glsl')).responseText,
+            [gl.VERTEX_SHADER]:   (await get('/r/js/gl/gx/vertex.glsl'))  .responseText,
+            [gl.FRAGMENT_SHADER]: (await get('/r/js/gl/gx/fragment.glsl')).responseText,
         });
 
         //get program info

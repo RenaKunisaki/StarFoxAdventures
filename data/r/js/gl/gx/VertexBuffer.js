@@ -1,4 +1,4 @@
-import {validNumber, validVector, validMatrix} from '/js/Util.js';
+import {validNumber, validVector, validMatrix} from '/r/js/Util.js';
 
 export default class VertexBuffer {
     /** Vertex data buffer used by GX.

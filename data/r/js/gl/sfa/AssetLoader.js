@@ -1,4 +1,4 @@
-import {get} from '/js/Util.js';
+import {get} from '/r/js/Util.js';
 import ModelLoader from './model/ModelLoader.js';
 import TextureLoader from './model/TextureLoader.js';
 

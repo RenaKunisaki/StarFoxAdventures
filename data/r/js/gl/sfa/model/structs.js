@@ -1,4 +1,4 @@
-import Struct from '/js/Struct.js';
+import Struct from '/r/js/Struct.js';
 /** Define structures used in SFA models.
  */
 

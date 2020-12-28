@@ -1,4 +1,4 @@
-import {get, validNumber} from '/js/Util.js';
+import {get, validNumber} from '/r/js/Util.js';
 
 export default class Decompressor {
     /** Decompresses data from SFA files.

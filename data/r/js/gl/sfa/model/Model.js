@@ -1,6 +1,6 @@
-import {get, validNumber, hexdump} from '/js/Util.js';
-import SfaBitStream from '/js/gl/sfa/SfaBitStream.js';
-import Texture from '/js/gl/Texture.js';
+import {get, validNumber, hexdump} from '/r/js/Util.js';
+import SfaBitStream from '/r/js/gl/sfa/SfaBitStream.js';
+import Texture from '/r/js/gl/Texture.js';
 //import TextureLoader from './TextureLoader.js';
 import AssetLoader from '../AssetLoader.js';
 import {ModelHeader, Bone, DisplayListPtr, Shader, ShaderLayer, ModelVtxGroup} from './structs.js';

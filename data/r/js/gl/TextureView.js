@@ -1,4 +1,4 @@
-import {E, clearElement} from '/js/Element.js';
+import {E, clearElement} from '/r/js/Element.js';
 
 const formatNames = {
     0x0: 'I4',

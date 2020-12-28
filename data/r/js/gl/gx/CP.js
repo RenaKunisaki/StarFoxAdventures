@@ -1,4 +1,4 @@
-import {validNumber} from '/js/Util.js';
+import {validNumber} from '/r/js/Util.js';
 
 export default class CP {
     /** Command Processor subsystem for GX.

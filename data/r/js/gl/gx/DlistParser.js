@@ -1,5 +1,5 @@
 import DataBuffer from './DataBuffer.js';
-import {hexdump} from '/js/Util.js';
+import {hexdump} from '/r/js/Util.js';
 
 const DrawOpNames = ['Quads', 'Quads2', 'Tris', 'TriStrip',
     'TriFan', 'Lines', 'LineStrip', 'Points'];

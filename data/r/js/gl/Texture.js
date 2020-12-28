@@ -1,4 +1,4 @@
-import {get, isPowerOf2} from '/js/Util.js';
+import {get, isPowerOf2} from '/r/js/Util.js';
 
 export default class Texture {
     /** A texture that can be bound to GL.

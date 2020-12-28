@@ -1,4 +1,4 @@
-import {get, validNumber} from '/js/Util.js';
+import {get, validNumber} from '/r/js/Util.js';
 import {TextureHeader} from './structs.js';
 import SfaTexture from '../SfaTexture.js';
 

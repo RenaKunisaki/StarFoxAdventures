@@ -1,4 +1,4 @@
-import {E} from '/js/Element.js';
+import {E} from '/r/js/Element.js';
 
 export default class LightControl {
     /** UI widget to control the lighting.
@@ -44,8 +44,8 @@ export default class LightControl {
                     E.th(null,'Y'),
                     E.th(null,'Z'),
                 ),
-                E.tr(
-                    E.th(null,'Dirctn'),
+                E.tr( //directional light direction vector
+                    E.th(null,'DirVec'),
                     E.td(this.txtVecX),
                     E.td(this.txtVecY),
                     E.td(this.txtVecZ),
@@ -55,13 +55,13 @@ export default class LightControl {
                     E.th(null,'G'),
                     E.th(null,'B'),
                 ),
-                E.tr(
-                    E.th(null,'Dirctn'),
+                E.tr( //directional light color
+                    E.th(null,'DirClr'),
                     E.td(this.txtDirR),
                     E.td(this.txtDirG),
                     E.td(this.txtDirB),
                 ),
-                E.tr(
+                E.tr( //ambient light color
                     E.th(null,'Ambnt'),
                     E.td(this.txtAmbR),
                     E.td(this.txtAmbG),
@@ -80,6 +80,27 @@ export default class LightControl {
         this.txtAmbR.addEventListener('input', e => this._onChange(e));
         this.txtAmbG.addEventListener('input', e => this._onChange(e));
         this.txtAmbB.addEventListener('input', e => this._onChange(e));
+    }
+
+    set(params) {
+        /** Manually change parameters.
+         */
+        if(params.vec) {
+            if(params.vec.x != undefined) this.txtVecX.value = params.vec.x;
+            if(params.vec.y != undefined) this.txtVecY.value = params.vec.y;
+            if(params.vec.z != undefined) this.txtVecZ.value = params.vec.z;
+        }
+        if(params.dirColor) {
+            if(params.dirColor.r != undefined) this.txtDirR.value = params.dirColor.r;
+            if(params.dirColor.g != undefined) this.txtDirG.value = params.dirColor.g;
+            if(params.dirColor.b != undefined) this.txtDirB.value = params.dirColor.b;
+        }
+        if(params.ambColor) {
+            if(params.ambColor.r != undefined) this.txtAmbR.value = params.ambColor.r;
+            if(params.ambColor.g != undefined) this.txtAmbG.value = params.ambColor.g;
+            if(params.ambColor.b != undefined) this.txtAmbB.value = params.ambColor.b;
+        }
+        this._onChange(null);
     }
 
     _onChange(event) {

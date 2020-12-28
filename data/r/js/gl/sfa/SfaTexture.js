@@ -1,4 +1,4 @@
-import Texture from '/js/gl/Texture.js';
+import Texture from '/r/js/gl/Texture.js';
 
 export default class SfaTexture extends Texture {
     /** A Texture loaded from SFA.

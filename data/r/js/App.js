@@ -6,8 +6,9 @@ import ObjInfo from './ObjInfo.js';
 import ObjList from './ObjList.js';
 import GameTextList from './GameTextList.js';
 import GameBitList from './GameBitList.js';
-import MapList from './MapList.js';
 import MapInfo from './MapInfo.js';
+import MapList from './MapList.js';
+import MapView from './MapView.js';
 
 export default class App {
     /** The application.
@@ -34,15 +35,16 @@ export default class App {
             gamebits: GameBitList,
             map:      MapInfo,
             maps:     MapList,
+            mapview:  MapView,
         };
         const p = this.params.get('p');
         const cls = (p == null) ? Index : pages[p];
 
         if(cls) {
             this.page = new cls(this);
+            document.body.append(this.page.element)
             await this.page.run();
             document.title = `${this.page.getTitle()} - SFA`
-            document.body.append(this.page.element)
         }
         else document.body.append("Page not found");
         document.getElementById('loading').remove();

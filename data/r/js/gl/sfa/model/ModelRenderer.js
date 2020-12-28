@@ -1,5 +1,5 @@
-import VertexBuffer from '/js/gl/gx/VertexBuffer.js';
-import {hexdump} from '/js/Util.js';
+import VertexBuffer from '/r/js/gl/gx/VertexBuffer.js';
+import {hexdump} from '/r/js/Util.js';
 
 export default class ModelRenderer {
     /** Renders an SFA Model.

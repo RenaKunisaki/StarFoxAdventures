@@ -1,4 +1,4 @@
-import {E} from '/js/Element.js';
+import {E} from '/r/js/Element.js';
 
 export default class Picker {
     /** UI widget for displaying info about picked item.
