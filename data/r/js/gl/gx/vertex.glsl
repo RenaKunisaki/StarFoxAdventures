@@ -21,6 +21,7 @@ varying highp vec4 vId;       //ID for picker
 void main() {
     //position gets fed through matrices
     gl_Position = matProjection * matModelView * vec4(vtxPos.xyz, 1);
+    //gl_PointSize = 4.0;
 
     //color gets normalized
     vColor = vec4(vtxColor.r/255.0, vtxColor.g/255.0,

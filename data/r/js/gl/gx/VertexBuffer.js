@@ -94,6 +94,10 @@ export default class VertexBuffer {
         this.vtxCount++;
     }
 
+    addVtxs(...vtx) {
+        for(let v of vtx) this.addVtx(v);
+    }
+
     build() {
         /** Push the data into the GL buffers.
          *  Returns a dict of buffer name => GL buffer object.

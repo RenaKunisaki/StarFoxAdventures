@@ -1,11 +1,12 @@
 import {E} from './Element.js';
 import Table from './Table.js';
-import {hex, toHexString, hexStringToData, makeList, makeCollapsibleList, makeDescriptionAndNotes} from './Util.js';
+import {get, hex, toHexString, hexStringToData, makeList, makeCollapsibleList, makeDescriptionAndNotes} from './Util.js';
 
 import Context from './gl/Context.js';
 import ViewControl from './gl/ViewControl.js';
 import LightControl from './gl/LightControl.js';
 import VertexBuffer from './gl/gx/VertexBuffer.js';
+import ModFile from './ModFile.js';
 
 class Renderer {
     constructor(view) {
@@ -29,9 +30,84 @@ class Renderer {
         this.vtxBuf = new VertexBuffer(gx);
         gx.program.use();
         gx._setShaderMtxs();
+        gl.enable(gl.BLEND);
+        //draw cube at origin
         //this._drawCube({
         //    x:0, y:0, z:0, size:10, fill:true,
         //})
+        this._drawGrid();
+        this._drawBlocks();
+        //this._drawObjects();
+        //this.vtxBuf.bind();
+        //gx.program.use();
+        //gx._setShaderMtxs();
+        //gl.drawArrays(gl.LINE_LOOP, 0, 16*this.view.romlist.items.length);
+    }
+
+    renderPickBuffer() {
+        //this._renderer.render();
+    }
+
+    _drawGrid() { //draw planes for map grid
+        console.log("Draw map grid...");
+        const gl = this.ctx.gl;
+        const gx = this.ctx.gx;
+        let count = 0;
+        let first = this.vtxBuf.vtxCount;
+        const map = this.view.map;
+        for(let z=0; z<map.height; z++) {
+            for(let x=0; x<map.width; x++) {
+                let block = map.getBlockByPos(x, z);
+                if(block) {
+                    let mod  = block.mod;
+                    let sub  = block.sub;
+                    let unk1 = block.unk1;
+                    let unk2 = block.unk2;
+                    let col  = [
+                        (block.mod & 0x1F) << 5,
+                        (block.sub & 0x3F) << 2,
+                        block.unk1,
+                        0x7F];
+                    let bx   = x * 640, bz = z * 640;
+                    let v    = [ //XXX this is very wasteful. use indexed rendering.
+                        {POS:[bx+ 10, 0, bz+ 10], COL0:col},
+                        {POS:[bx+620, 0, bz+ 10], COL0:col},
+                        {POS:[bx+620, 0, bz+620], COL0:col},
+                        {POS:[bx+ 10, 0, bz+620], COL0:col},
+                    ];
+                    this.vtxBuf.addVtxs(v[0], v[1], v[2], v[0], v[2], v[3]);
+                    count += 6;
+                }
+            }
+        }
+        this.vtxBuf.bind();
+        gl.drawArrays(gl.TRIANGLES, first, count);
+    }
+
+    _drawBlocks() { //draw actual map geometry
+        console.log("Draw blocks...");
+        const map = this.view.map;
+        const gl = this.ctx.gl;
+        const color = [0, 0, 0, 255];
+        let first = this.vtxBuf.vtxCount;
+        let count = 0;
+        for(let y=0; y<map.height; y++) {
+            for(let x=0; x<map.width; x++) {
+                const block = this.view.blocks[(y*map.width)+x];
+                if(!block) continue;
+
+                for(let vtx of block.vtxs) {
+                    this.vtxBuf.addVtx({POS:vtx, COL0:color});
+                    count++;
+                }
+            }
+        }
+        this.vtxBuf.bind();
+        gl.drawArrays(gl.POINTS, first, count);
+    }
+
+    _drawObjects() { //draw cubes at objects
+        console.log("Draw objects...");
         for(let item of this.view.romlist.items) {
             this._drawCube({
                 x: item.objDef.x,
@@ -46,14 +122,6 @@ class Renderer {
                 size:10, fill:true,
             })
         }
-        //this.vtxBuf.bind();
-        //gx.program.use();
-        //gx._setShaderMtxs();
-        //gl.drawArrays(gl.LINE_LOOP, 0, 16*this.view.romlist.items.length);
-    }
-
-    renderPickBuffer() {
-        //this._renderer.render();
     }
 
     _drawCube(cube) {
@@ -139,6 +207,8 @@ export default class MapView {
         this.map = this.app.game.maps[this.app.params.get('id')];
         await this.map.readMapsBin();
 
+        await this._loadBlocks();
+
         this.ctx = new Context('#glCanvas');
         await this.ctx.loadPrograms();
 
@@ -165,5 +235,39 @@ export default class MapView {
 
         this.ctx.redraw();
         this.ctx.gx.printStats();
+    }
+
+    async _loadBlocks() {
+        const trkBlk = new DataView((await get({ //XXX per-version path
+            path:         `/disc/TRKBLK.tab`,
+            mimeType:     'application/octet-stream',
+            responseType: 'arraybuffer',
+        })).response);
+
+        const dir   = this.map.dirName;
+        const mods  = {};
+        this.blocks = [];
+        for(let y=0; y<this.map.height; y++) {
+            for(let x=0; x<this.map.width; x++) {
+                let block = this.map.getBlockByPos(x, y);
+                if(!block) {
+                    this.blocks.push(null);
+                    continue;
+                }
+
+                let modId = block.mod;
+                if(modId >= 4) modId++; //dunno why the game does this
+                if(!mods[modId]){
+                    mods[modId] = await (new ModFile(this.app.game)).load(
+                        `${dir}/mod${modId}.zlb.bin`,
+                        `${dir}/mod${modId}.tab`);
+                    //console.log("mod load", modId, mods[modId]);
+                }
+                const offs = trkBlk.getInt16(this.map.dirId * 2);
+                const blk = mods[modId].blocks[block.sub+offs];
+                //console.log("block %d.%d + %d", block.mod, block.sub, offs, blk);
+                this.blocks.push(blk);
+            }
+        }
     }
 }

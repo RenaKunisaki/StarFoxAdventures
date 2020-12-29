@@ -12,6 +12,8 @@ export default class ViewControl {
     _createUi() {
         /** Create the UI widgets.
          */
+        this.chkEnableTex = E.input(null, {type:'checkbox', id:'chkEnableTex'});
+        this.lblEnableTex = E.label(null, {'for':'chkEnableTex'}, "Textures");
         this.txtPosX   = E.input('x-coord coord float',  {type:'number', step:1});
         this.txtPosY   = E.input('y-coord coord float',  {type:'number', step:1});
         this.txtPosZ   = E.input('z-coord coord float',  {type:'number', step:1});
@@ -22,6 +24,8 @@ export default class ViewControl {
         this.txtRotY   = E.input('y-rotate angle float', {type:'number', step:15});
         this.txtRotZ   = E.input('z-rotate angle float', {type:'number', step:15});
         this.txtFov    = E.input('fov angle float',      {type:'number', step:5});
+        this.txtZNear  = E.input('coord float',          {type:'number', step:5});
+        this.txtZFar   = E.input('coord float',          {type:'number', step:5});
 
         this.btnReset = E.button('reset', "Reset");
         this.btnReset.addEventListener('click', e => this._reset());
@@ -55,6 +59,13 @@ export default class ViewControl {
                 E.tr(
                     E.th(null, "FOV"),
                     E.td(this.txtFov),
+                    E.td(this.chkEnableTex, this.lblEnableTex, {colspan:2}),
+                ),
+                E.tr(
+                    E.th(null, "Near"),
+                    E.td(null, this.txtZNear),
+                    E.th(null, "Far"),
+                    E.td(null, this.txtZFar),
                 ),
             ),
         );
@@ -68,18 +79,23 @@ export default class ViewControl {
         this.txtRotY  .setAttribute('value', this.context.view.rotation.y);
         this.txtRotZ  .setAttribute('value', this.context.view.rotation.z);
         this.txtFov   .setAttribute('value', this.context.fov);
+        this.txtZNear .setAttribute('value', this.context.zNear);
+        this.txtZFar  .setAttribute('value', this.context.zFar);
         //input event fires for *every* change.
         //change event only fires when committing, eg pressing Enter.
-        this.txtPosX  .addEventListener('input', e => this._onPosChange(e));
-        this.txtPosY  .addEventListener('input', e => this._onPosChange(e));
-        this.txtPosZ  .addEventListener('input', e => this._onPosChange(e));
-        this.txtScaleX.addEventListener('input', e => this._onScaleChange(e));
-        this.txtScaleY.addEventListener('input', e => this._onScaleChange(e));
-        this.txtScaleZ.addEventListener('input', e => this._onScaleChange(e));
-        this.txtRotX  .addEventListener('input', e => this._onRotChange(e));
-        this.txtRotY  .addEventListener('input', e => this._onRotChange(e));
-        this.txtRotZ  .addEventListener('input', e => this._onRotChange(e));
-        this.txtFov   .addEventListener('input', e => this._onFovChange(e));
+        this.txtPosX  .addEventListener('input', e => this._onChange(e));
+        this.txtPosY  .addEventListener('input', e => this._onChange(e));
+        this.txtPosZ  .addEventListener('input', e => this._onChange(e));
+        this.txtScaleX.addEventListener('input', e => this._onChange(e));
+        this.txtScaleY.addEventListener('input', e => this._onChange(e));
+        this.txtScaleZ.addEventListener('input', e => this._onChange(e));
+        this.txtRotX  .addEventListener('input', e => this._onChange(e));
+        this.txtRotY  .addEventListener('input', e => this._onChange(e));
+        this.txtRotZ  .addEventListener('input', e => this._onChange(e));
+        this.txtFov   .addEventListener('input', e => this._onChange(e));
+        this.txtZNear .addEventListener('input', e => this._onChange(e));
+        this.txtZFar  .addEventListener('input', e => this._onChange(e));
+        this.chkEnableTex.addEventListener('change', e => this._onChange(e));
     }
 
     set(params) {
@@ -100,46 +116,25 @@ export default class ViewControl {
             if(params.scale.y != undefined) this.txtScaleY.value = params.scale.y;
             if(params.scale.z != undefined) this.txtScaleZ.value = params.scale.z;
         }
-        this.context.view.pos.x = this.txtPosX.value;
-        this.context.view.pos.y = this.txtPosY.value;
-        this.context.view.pos.z = this.txtPosZ.value;
-        this.context.view.rotation.x = this.txtRotX.value;
-        this.context.view.rotation.y = this.txtRotY.value;
-        this.context.view.rotation.z = this.txtRotZ.value;
-        this.context.view.scale.x = this.txtScaleX.value;
-        this.context.view.scale.y = this.txtScaleY.value;
-        this.context.view.scale.z = this.txtScaleZ.value;
-        this.context.redraw();
+        if(params.zNear != undefined) this.txtZNear.value = params.zNear;
+        if(params.zFar  != undefined) this.txtZFar .value = params.zFar;
+        this._onChange(null);
     }
 
-    _onPosChange(event) {
-        /** Called when the value of X, Y or Z coord input changes.
-         */
+    _onChange(event) {
         this.context.view.pos.x = this.txtPosX.value;
         this.context.view.pos.y = this.txtPosY.value;
         this.context.view.pos.z = this.txtPosZ.value;
-        this.context.redraw();
-    }
-    _onScaleChange(event) {
-        /** Called when the value of X, Y or Z scale input changes.
-         */
-        this.context.view.scale.x = this.txtScaleX.value;
-        this.context.view.scale.y = this.txtScaleY.value;
-        this.context.view.scale.z = this.txtScaleZ.value;
-        this.context.redraw();
-    }
-    _onRotChange(event) {
-        /** Called when the value of X, Y or Z rotation input changes.
-         */
         this.context.view.rotation.x = this.txtRotX.value;
         this.context.view.rotation.y = this.txtRotY.value;
         this.context.view.rotation.z = this.txtRotZ.value;
-        this.context.redraw();
-    }
-    _onFovChange(event) {
-        /** Called when the value of FOV input changes.
-         */
-        this.context.fov = this.txtFov.value;
+        this.context.view.scale.x = this.txtScaleX.value;
+        this.context.view.scale.y = this.txtScaleY.value;
+        this.context.view.scale.z = this.txtScaleZ.value;
+        this.context.zNear = parseFloat(this.txtZNear.value);
+        this.context.zFar =  parseFloat(this.txtZFar.value);
+        this.context.fov =   parseFloat(this.txtFov.value);
+        this.context.enableTextures = this.chkEnableTex.checked;
         this.context.redraw();
     }
 
@@ -154,15 +149,8 @@ export default class ViewControl {
         this.txtRotY.value = 0;
         this.txtRotZ.value = 0;
         this.txtFov.value = 60;
-        this.context.view.pos.x = this.txtPosX.value;
-        this.context.view.pos.y = this.txtPosY.value;
-        this.context.view.pos.z = this.txtPosZ.value;
-        this.context.view.scale.x = this.txtScaleX.value;
-        this.context.view.scale.y = this.txtScaleY.value;
-        this.context.view.scale.z = this.txtScaleZ.value;
-        this.context.view.rotation.x = this.txtRotX.value;
-        this.context.view.rotation.y = this.txtRotY.value;
-        this.context.view.rotation.z = this.txtRotZ.value;
-        this.context.redraw();
+        this.txtZNear.value = 0.1;
+        this.txtZFar.value = 10000;
+        this._onChange(null);
     }
 }

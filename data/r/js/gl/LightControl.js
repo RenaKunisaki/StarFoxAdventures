@@ -12,6 +12,8 @@ export default class LightControl {
     _createUi() {
         /** Create the UI widgets.
          */
+        this.chkEnable = E.input(null, {type:'checkbox', id:'chkEnableLights'});
+        this.lblEnable = E.label(null, {'for':'chkEnableLights'}, "Enable");
         this.txtVecX = E.input('x-coord coord float', {type:'number', step:0.01});
         this.txtVecY = E.input('y-coord coord float', {type:'number', step:0.01});
         this.txtVecZ = E.input('z-coord coord float', {type:'number', step:0.01});
@@ -39,6 +41,7 @@ export default class LightControl {
         this.element = E.details('gl-view-control',
             E.summary(null, "Lights"),
             E.table(
+                E.tr(E.th(null, this.chkEnable, this.lblEnable, {colspan:4})),
                 E.tr(E.th(this.btnReset),
                     E.th(null,'X'),
                     E.th(null,'Y'),
@@ -80,6 +83,7 @@ export default class LightControl {
         this.txtAmbR.addEventListener('input', e => this._onChange(e));
         this.txtAmbG.addEventListener('input', e => this._onChange(e));
         this.txtAmbB.addEventListener('input', e => this._onChange(e));
+        this.chkEnable.addEventListener('change', e => this._onChange(e));
     }
 
     set(params) {
@@ -116,6 +120,8 @@ export default class LightControl {
         L.ambient    .color [0] = this.txtAmbR.value;
         L.ambient    .color [1] = this.txtAmbG.value;
         L.ambient    .color [2] = this.txtAmbB.value;
+        L.enabled = this.chkEnable.checked;
+        console.log("lights:", L.enabled);
         this.context.redraw();
     }
 

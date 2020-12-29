@@ -1,3 +1,4 @@
+
 import {get} from '/r/js/Util.js';
 import {E} from '/r/js/Element.js';
 //import Program from './Program.js';
@@ -28,7 +29,9 @@ export default class Context {
             ambient: {
                 color:  [64, 64, 64],
             },
+            enabled: false,
         }
+        this.enableTextures = false;
 
         //Get the canvas and set up GL on it.
         if(typeof canvas == "string") canvas = document.querySelector(canvas);
@@ -72,6 +75,12 @@ export default class Context {
         this._setupDepthTexture();
 
         this.gx = new GX(this);
+
+        const lose = this.gl.getExtension('WEBGL_lose_context');
+        window.addEventListener('beforeunload', (event) => {
+            //unload to free some resources
+            lose.loseContext();
+        });
     }
 
     async loadPrograms() {
@@ -169,6 +178,7 @@ export default class Context {
         mat4.perspective(this.matProjection, //destination matrix
             this.fov * RADIANS, //to radians
             aspect, this.zNear, this.zFar);
+        console.log("FOV=", this.fov, "Z=", this.zNear, this.zFar);
 
         //set up modelview matrix
         //it can help to think of this as moving the "drawing position"
@@ -195,6 +205,10 @@ export default class Context {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
+        gl.uniform1i(this.gx.programInfo.uniforms.useLights,
+            this.lights.enabled ? 1 : 0);
+        gl.uniform1i(this.gx.programInfo.uniforms.useTexture,
+            this.enableTextures ? 1 : 0);
         this.renderer.render();
         //this.gx.drawBoundCube();
 
