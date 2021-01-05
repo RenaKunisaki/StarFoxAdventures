@@ -44,6 +44,18 @@ Double Speed:
 Bypass Ice Mountain Reset:
 041a46d8 38000000
 
+802acd14 another reset to title screen, in a force-field object not in the final game
+
+set arbitrary GameBits:
+replace the debug "warp to world map" function:
+800223e8 38600060  li        r3,0x60
+800223ec 38800001  li        r4,0x1
+800223f0 480334FD  bl        warpToMap ->0x800558EC
+
+040223E8 3860xxxx ; bit
+040223EC 3880xxxx ; value
+040223F0 4BFFF7FD
+
 map dir idxs:
 0x00 animtest
 0x01 animtest
@@ -196,6 +208,141 @@ LUT:
  48|linkh        |linkh         |linkh (LightFoot/CapeClaw)
  49|linkj        |linkj         |linkj (CapeClaw/OceanForce)
  4A|linki        |linki         |linki (CloudRun/Race)
+
+warps:
+01 empty
+02 Ice Mountain, warp pad
+03 ThornTail Hollow, egg cave
+04 empty
+05 empty (map 45)
+06 Krazoa Palace, Krystal landing area
+07 empty
+08 empty
+09 empty
+0A empty
+0B empty
+0C glitchy CR dungeon (maps 24,18)
+0D empty
+0E empty
+0F ThornTail Hollow, at WarpStone
+10 Moon Mountain Pass, magic cave entrance
+11 empty
+12 Title Screen
+13 Walled City, front of pyramid
+14 empty
+15 Walled City, magic cave entrance
+16 empty
+17 empty
+18 empty
+19 empty
+1A Ice Mountain, in midair (where Tricky appears from ship?)
+1B empty
+1C empty
+1D Boss Galdon
+1E Boss Galdon interior
+1F empty
+20 Krazoa Palace, WarpStone warp
+21 empty
+22 Krazoa Palace, interior warp
+23 empty
+24 Test of Combat, warp pad
+25 Scales Boss, warp pad
+26 Test of Strength?
+27 empty (map 5)
+28 Krazoa Palace, warp pad leading to first test
+29 empty
+2A empty (maps 42,20)
+2B Test of Fear
+2C empty
+2D empty
+2E empty
+2F empty
+30 empty
+31 empty
+32 Andross
+33 Game Maze Well
+34 empty
+35 empty
+36 Boss Galdon
+37 DarkIce Mines glitched victory scene
+38 empty
+39 empty
+3A empty
+3B empty
+3C CloudRunner Fortress on an invisible platform out of bounds
+3D empty (map 45)
+3E empty
+3F empty
+40 Moon Mountain Pass, shrine warp pad
+41 Krazoa Palace, final boss warp pad
+42 SnowHorn Wastes, shrine warp pad
+43 empty
+44 Test of Observation
+45 empty
+46 Walled City, top warp pad
+47 LightFoot Village, shrine warp pad
+48 Volcano Force Point, magic cave entrance
+49 empty
+4A empty
+4B empty
+4C empty
+4D empty
+4F empty
+50 LightFoot Village, tie-up pole
+51 Volcano Force Point, scene of placing spellstone, "TRACK ERROR: Global texanim overflow" and Dolphin crashes
+52 empty
+53 a flickering "turn off gamecube" BSOD
+54 Boss Drakor (bugged)
+55 LightFoot Village out of bounds by token well
+56 empty
+57 Magic Cave
+58 empty
+59 empty
+5A T-Rex Boss
+5B Walled City, boss room entrance
+5C Boss Galdon, near the boss
+5D empty (map 5)
+5E empty (map 5)
+5F ThornTail Hollow, bottom magic cave entrance, message "You must go to the WarpStone"
+60 World Map
+61 empty
+62 empty
+63 CloudRunner Fortress, Arwing landing pad
+64 empty
+65 empty
+66 ThornTail Hollow, first magic cave entrance
+67 SnowHorn Wastes, magic cave entrance
+68 empty
+69 empty
+6A empty
+6B a very strange Ocean Force Point
+6C ThornTail Hollow, Arwing landing pad
+6D T-Rex Boss
+6E Arwing to ? (5 rings)
+6F Arwing to Planet
+70 empty
+71 mysterious SpellStone room not in final game
+72 SpellStone room
+73 OFP outside, same rumbling sound as previous two
+74 Arwing to ? (3 rings)
+75 Arwing to Walled City (bugged)
+76 Arwing to ? (7 rings)
+77 DarkIce Mines, Arwing landing pad
+78 Walled City, Arwing landing pad
+79 Dragon Rock, Arwing landing pad, weird animation then kicks you back to World Map
+7A some dungeon, Dolphin crashes again
+7B SpellStone room, animation of placing stone, some corrupt textures, then hang
+7C Volcano Force Point, exit warp, very glitchy textures
+7D empty
+7E WarpStone warp
+7F Great Fox, first scene
+
+OFP warps:
+1) 6B -> 68  OFP -> nowhere
+2) FF -> 72  ??? -> SpellStone room
+3) FF -> 71  ??? -> SpellStone room
+4) 71 -> FF  SpellStone room -> ??? (why are these in OFP?)
+5) 72 -> FF  SpellStone room -> ???
 
 Map act bit table:
 mapActBitIdx[1]            XREF[3,1  gplayNewGame:800e7018(R),
