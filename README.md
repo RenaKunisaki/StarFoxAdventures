@@ -40,3 +40,6 @@ Symbol map automatically exported from Ghidra. Symbol names made up by me for th
 
 ### makeRelease.sh
 Script to build Amethyst patch.
+
+### SFA.gpr, SFA.rep
+Ghidra project files.
