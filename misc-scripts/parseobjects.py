@@ -10,9 +10,9 @@ import xml.etree.ElementTree as ET
 #print("----|----|-----------|--------------------|----|--|-----------")
 #print("enum ObjDef {")
 
-USE_PROTO = True
+USE_PROTO = False
 
-tree = ET.parse('../dump/objects.xml')
+tree = ET.parse('data/U0/objects.xml')
 objects = tree.getroot()
 
 basePath = sys.argv[1]
@@ -40,6 +40,7 @@ with open(os.path.join(basePath, 'OBJECTS.tab'), 'rb') as tabFile:
 
             try:
                 if USE_PROTO:
+                    nSeq = 0
                     binFile.seek(offs + 0x50)
                     dllId = struct.unpack('>H', binFile.read(2))[0] # grumble
 
@@ -58,6 +59,11 @@ with open(os.path.join(basePath, 'OBJECTS.tab'), 'rb') as tabFile:
                     binFile.seek(offs + 0x58)
                     name = binFile.read(15)
                 else:
+                    binFile.seek(offs + 0x1C)
+                    pSeq = struct.unpack('>I', binFile.read(4))[0] # grumble
+                    binFile.seek(offs + 0x5E)
+                    nSeq = struct.unpack('>B', binFile.read(1))[0] # grumble
+
                     binFile.seek(offs + 0x50)
                     dllId = struct.unpack('>H', binFile.read(2))[0] # grumble
 
@@ -100,6 +106,11 @@ with open(os.path.join(basePath, 'OBJECTS.tab'), 'rb') as tabFile:
                 obj = ET.SubElement(objects, 'object', {
                     'id': '0x%04X' % idx
                 })
+
+            # remove existing children before re-adding
+            for child in list(obj.findall('./model')): obj.remove(child)
+            for child in list(obj.findall('./seq')): obj.remove(child)
+
             obj.set('def', '0x%04X' % objDef)
             obj.set('name', name)
             if nPlayerObjs > 0: obj.set('nPlayerObjs', str(nPlayerObjs))
@@ -110,6 +121,13 @@ with open(os.path.join(basePath, 'OBJECTS.tab'), 'rb') as tabFile:
                 eModel.set('id', '0x%04X' % mdl)
                 if i < 4 and texts[i] != 0xFFFF:
                     eModel.set('text', '0x%04X' % texts[i])
+
+            #obj.set('nSeq', '%d' % nSeq)
+            #obj.set('pSeq', '0x%04X' % pSeq)
+            for i in range(nSeq):
+                binFile.seek(offs + pSeq + (i*2))
+                iSeq = struct.unpack('>H', binFile.read(2))[0] # grumble
+                ET.SubElement(obj, 'seq', {'id':'0x%04X' % iSeq})
             idx += 1
 
 #for id, objs in dllObjs.items():

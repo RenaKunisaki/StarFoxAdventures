@@ -25,20 +25,10 @@ with open(sys.argv[1]+'/MAPS.bin', 'rb') as mapsBin:
             print("  FACEFEED")
             continue
         nCols, nRows, originX, originY = struct.unpack('>4h', d)
-        printf("  %5d x %5d @ %5d, %5d", nRows, nCols, originX, originY)
+        printf("  %5d x %5d @ %5d, %5d\n", nRows, nCols, originX, originY)
 
-        mapsBin.seek(tab[1])
-        d = mapsBin.read(nCols*nRows*4)
-        d = struct.unpack('>%dI' % (nRows*nCols), d)
-        for y in range(nRows):
-            printf("\n  ")
-            for x in range(nCols):
-                bk  = d[(y*nCols)+x]
-                mod = bk >> 23
-                sub = (bk >> 17) & 0x3F
-                unk = bk & 0x1FF
-                if unk != 0x7F: unk = '%04X' % unk
-                else: unk = '----'
-                if mod == 0xFF: printf("---.-- %s│", unk)
-                else: printf("%3d.%2d %s│", mod, sub, unk)
-        printf("\n")
+        mapsBin.seek(tab[6])
+        d = mapsBin.read(32)
+        d = struct.unpack('>8I', d)
+        printf("%08X %08X %08X %08X\n", d[0], d[1], d[2], d[3])
+        printf("%08X %08X %08X %08X\n", d[4], d[5], d[6], d[7])
