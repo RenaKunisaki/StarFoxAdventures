@@ -442,35 +442,31 @@ mainLoop: # called from main loop. r3 = mainLoop
 .else
     andi.   r0,  r19,  DEBUG_TEXT_SEQ_STATE
     beq     .noSeq
-    LOADWH  r9,  curSeqNo
-    LOADBL2 r4,  curSeqNo, r9
-    cmpwi   r4,  0
-    beq     .noSeq
 
-    LOADBL2 r5,  seqPos,    r9
-    LOADWL2 r6,  seqLength, r9
-    LOADWL2 r7,  curSeqObj, r9
-    addi    r3,  r14, .fmt_seqState - mainLoop
+    LOADWH  r9,  0x803dd124
+    LOADBL2 r4,  0x803dd0bc, r9 # numBgCmds
+    LOADWL2 r5,  0x803dd0c0, r9 # seq len
+    LOADBL2 r6,  0x803dd113, r9 # ?
+    LOADWL2 r7,  0x803dd06c, r9 # global1 and 2
+    LOADBL2 r8,  0x803dd080, r9 # global3
+    addi    r3,  r14, .fmt_seqState2 - mainLoop
+    mflr    r20
     CALL    debugPrintf
+    mtlr    r20
 
-    # are we doing this right? looks like all floats...
-    LOADW   r16, pPlayer
-    cmpwi   r16, 0
-    beq     .noSeq
-    lwz     r3,  0xB8(r16)
-    lbz     r4,  0x57(r3)
-    lwz     r5,  0x58(r3)
-    lwz     r6,  0x5C(r3)
-    lwz     r7,  0x60(r3)
-    lwz     r8,  0x64(r3)
-    lwz     r9,  0x68(r3)
-    lwz     r10, 0x6C(r3)
-    addi    r3,  r14, .fmt_seq2 - mainLoop
-    CALL    debugPrintf
-.endif
+    LOAD    r17, 0x8039a5bc
+    li      r18, 0
+.nextSeq:
+    lwzx    r5,  r17, r18
+    cmpwi   r5,  0
+    bnel    printSeqInfo
+
+    addi    r18, r18, 8
+    cmpwi   r18, 10*8
+    blt     .nextSeq
+.endif # REDIRECT_TO_CONSOLE
 
 .noSeq:
-
     # display target (that the heart, A icon, etc is over)
     LOADW r17, pCamera
     cmpwi r17, 0
@@ -508,7 +504,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 .if REDIRECT_TO_CONSOLE # print a footer message
     addi    r3,  r14, (.fmt_end - mainLoop)@l
     CALL    debugPrintf
-.endif
+.endif # REDIRECT_TO_CONSOLE
 
     lwz  r14, SP_R14_SAVE(r1)
     lwz  r15, SP_R15_SAVE(r1)
@@ -532,8 +528,42 @@ mainLoop: # called from main loop. r3 = mainLoop
     mflr    r29
     CALL    0x8007681c  # draw scaled texture
     mtlr    r29
-.endif
+.endif # REDIRECT_TO_CONSOLE
     blr
+
+
+.if REDIRECT_TO_CONSOLE
+.else
+printSeqInfo: # r5: ObjInstance*, r18: seqIdx * 8
+    srwi    r4,  r18, 3
+
+    LOADWH  r3,  0x8039a45c
+    ori     r6,  r3,  0x8039a45c@l # objSeqBool
+    lbzx    r6,  r3,  r4
+
+    ori     r7,  r3,  0x8039a4b4@l # objSeqVar1
+    lbzx    r7,  r3,  r4
+
+    ori     r8,  r3,  0x8039a50c@l
+    lbzx    r8,  r3,  r4
+
+    ori     r9,  r3,  0x8039a60c@l
+    lbzx    r9,  r3,  r4
+
+    #ori     r10, r3,  0x8039a564@l
+    #lbzx    r10, r3,  r4
+
+    ori     r3,  r3,  0x8039a058@l
+    lfsx    f1,  r3,  r18
+    MAGIC_FLOAT_INCANTATION
+
+    addi    r3,  r14, .fmt_seqState - mainLoop
+    mflr    r20
+    CALL    debugPrintf
+    mtlr    r20
+    blr
+.endif # REDIRECT_TO_CONSOLE
+
 
 #.timeDeltaScale: .float 6.25 # 100 / 16
 .timeDeltaScale: .float 12.0 # 200 / 16.666666...
@@ -554,8 +584,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
 .fmt_nearObj:      .string ">> T:%08X %04X %X %s ID:%06X"
 .fmt_textState:    .string ">> X:%04X %08X"
-.fmt_seqState:     .string ">> Q:%02X pos %X/%X obj %08X"
-.fmt_seq2:         .string ">> 57:%02X 58:%08X 5C:%08X 60:%08X 64:%08X 68:%08X"
+.fmt_seqState:     .string ">> Q:%08X %02X"
 .fmt_start:        .string ">> START"
 .fmt_end:          .string ">> END"
 
@@ -570,8 +599,8 @@ mainLoop: # called from main loop. r3 = mainLoop
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
-.fmt_seqState:     .string "SEQ \x84%02X\x83 pos \x84%X/%X\x83 obj \x84%08X\x83\n"
-.fmt_seq2:         .string "57:\x84%02X\x83 58:\x84%08X\x83 5C:\x84%08X\x83 60:\x84%08X\x83 64:\x84%08X\x83 68:\x84%08X\x83\n"
+.fmt_seqState:     .string "SEQ #\x84%02X\x83 Obj:\x84%08X %02X %02X %02X %02X %f\x83\n"
+.fmt_seqState2:    .string "NSEQ=%d %02X %02X G %08X %02X\n"
 .endif
 
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"

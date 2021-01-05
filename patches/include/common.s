@@ -148,6 +148,7 @@
     lfd \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
 .endm
 
+# reg = val
 .macro LOAD reg, val
     lis \reg, \val@h
     ori \reg, \reg, \val@l
