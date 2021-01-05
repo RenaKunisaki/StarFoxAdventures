@@ -48,13 +48,25 @@ class ZlibView(aiohttp.web.View):
 
                 if useHeader == '1':
                     sig = file.read(4)
-                    if sig != b'ZLB\0':
-                        return await self.request.app.sendError(400, self.request,
-                            "Not ZLB (0x%02X%02X%02X%02X)" % sig)
-                    ver, decLen, compLen = struct.unpack('>3I', file.read(12))
-                    if ver != 1:
-                        return await self.request.app.sendError(400, self.request,
-                            "Unsupported version 0x%X" % ver)
+                    log.debug("Header @ 0x%X: %s", offs, sig.hex())
+                    if sig == b'\xFA\xCE\xFE\xED':
+                        decLen, zlbOffs, compLen = struct.unpack('>3I', file.read(12))
+                        file.read(zlbOffs * 4) # skip
+
+                    elif sig == b'DIR\0':
+                        ver, decLen, compLen = struct.unpack('>3I', file.read(12))
+                        data = file.read(compLen)
+                        return await self.request.app.sendData(data, self.request,
+                            content_type="application/octet-stream")
+
+                    elif sig == b'ZLB\0':
+                        ver, decLen, compLen = struct.unpack('>3I', file.read(12))
+                        if ver != 1:
+                            return await self.request.app.sendError(400, self.request,
+                                "Unsupported version 0x%X" % ver)
+
+                    else: return await self.request.app.sendError(400, self.request,
+                        "Not ZLB (0x%02X%02X%02X%02X)" % (sig[0], sig[1], sig[2], sig[3]))
 
                     data = file.read(compLen)
                 else:
@@ -113,18 +125,22 @@ class TextureView(aiohttp.web.View):
                 try:
                     zlbHeader = file.read(16)
                     sig, ver, compLen, rawLen = struct.unpack_from('>4I', zlbHeader)
-                    if sig != 0x5A4C4200:
-                        log.error("Not ZLB: 0x%08X @ 0x%06X in %s",
-                            sig, offset, path)
-                        return await self.request.app.sendError(500, self.request, "Not ZLB")
-
-                    data = zlib.decompress(file.read(compLen))
+                    if sig in (0x44495200, 0x4449526E): # 'DIR\0', 'DIRn'
+                        data = file.read(compLen)
+                    else:
+                        if sig != 0x5A4C4200: # 'ZLB\0'
+                            log.error("Not ZLB: 0x%08X @ 0x%06X in %s",
+                                sig, offset, path)
+                            return await self.request.app.sendError(500, self.request, "Not ZLB")
+                        data = zlib.decompress(file.read(compLen))
                     width, height = struct.unpack_from('>HH', data, 0x0A)
                     nFrames = struct.unpack_from('>B', data, 0x19)[0] # grumble
                     fmtId = struct.unpack_from('>B', data, 0x16)[0] # grumble
                     format = ImageFormat(fmtId)
                     bpp = BITS_PER_PIXEL[format]
                     dataLen = width * height * bpp // 8
+                    log.debug("Texture %s: size=%dx%d frames=%d fmt=0x%02X",
+                        path, width, height, nFrames, fmtId)
                     image = decode_image(data[0x60:],
                         None, # palette_data
                         format, # image_format
@@ -137,7 +153,10 @@ class TextureView(aiohttp.web.View):
                     image.save(data, 'PNG')
 
                 except Exception as ex:
-                    return await self.request.app.sendError(400, self.request, str(ex))
+                    #return await self.request.app.sendError(400, self.request, str(ex))
+                    log.error("Texture decode fail: %r", ex)
+                    return await self.request.app.sendFile('blank.png', self.request,
+                        content_type="image/png")
 
                 self._metadata[tid] = {
                     'format':       hex(fmtId),
@@ -153,7 +172,10 @@ class TextureView(aiohttp.web.View):
         except FileNotFoundError as ex:
             return await self.request.app.sendError(404, self.request, str(ex))
         except Exception as ex:
-            return await self.request.app.sendError(500, self.request, str(ex))
+            #return await self.request.app.sendError(500, self.request, str(ex))
+            log.error("Texture decode fail: %r", ex)
+            return await self.request.app.sendFile('blank.png', self.request,
+                content_type="image/png")
 
 
 class WebServer(web.Application):

@@ -1,5 +1,5 @@
 import {get, validNumber} from '/r/js/Util.js';
-import {TextureHeader} from './structs.js';
+import {TextureHeader} from '../structs.js';
 import SfaTexture from '../SfaTexture.js';
 
 const ImageFormat = {
@@ -40,8 +40,8 @@ export default class TextureLoader {
             mimeType:     'application/octet-stream',
             responseType: 'arraybuffer',
         })).response);
-
         //and read the header
+
         const frameOffsets = [];
         const offStrs = []; //debug
         for(let i=0; i<nFrames; i++) {
@@ -58,6 +58,7 @@ export default class TextureLoader {
         //return this._buildTexture(data);
 
         if(group == 0) id |= 0x8000;
+        console.log("Load texture PNG, zlbOffs=",zlbOffs,"binFile=",binFile, binName,"ID",id);
         const res  = await this._getPng(zlbOffs, binFile, binName, id);
         const info = JSON.parse((await get({path:`/texture/?get=info&id=${id}`})).responseText);
         res.id           = id;

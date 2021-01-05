@@ -78,6 +78,7 @@ export default class Texture {
 
         //we do this instead of using an async method because we need to wait
         //for the onload callback which isn't async
+        console.log("Download texture:", url);
         return new Promise((resolve, reject) => {
             this.image.onload = e => {
                 this.width  = this.image.width;

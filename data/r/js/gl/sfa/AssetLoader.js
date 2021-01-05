@@ -5,15 +5,17 @@ import TextureLoader from './model/TextureLoader.js';
 export default class AssetLoader {
     /** Locates assets in SFA disc and loads them.
      */
-    constructor(gx) {
+    constructor(gx, version) {
         this.gx        = gx;
+        this.version   = version;
         this.assetList = null;
+        this.cache     = {};
     }
 
     async _getAssetList() {
         if(!this.assetList) {
             const xhr = await get({
-                path: 'assets.xml',
+                path: `/${this.version}/assets.xml`,
                 mimeType: 'text/xml; charset=utf-8',
             });
             this.assetList = xhr.responseXML;
@@ -41,7 +43,8 @@ export default class AssetLoader {
         //download it.
         console.log("Download model 0x%s from map:", hid, map.getAttribute('dir'));
         const TL = new ModelLoader(this.gx);
-        const path = '/disc/' + map.getAttribute('dir') + '/MODELS.bin';
+        const dir = map.getAttribute('dir');
+        const path = `${this.version}/disc/${dir}/MODELS.bin`;
         const entry = parseInt(map.getAttribute('entry')) & 0x00FFFFFF;
         return await TL.loadFromModelsBin(path, entry)
     }
@@ -52,6 +55,8 @@ export default class AssetLoader {
          *    and range 0x8000-0xFFFF specify TEX0, as they do in the game code.
          *  Returns the texture, or null if it's not found.
          */
+        const key = `tex${id}`;
+        if(this.cache[key]) return this.cache[key];
         const assetList = await this._getAssetList();
         const isTex0 = ((id & 0x8000) == 0) ? '1' : '0';
         const hid = (id & 0x7FFF).toString(16).padStart(4, '0').toUpperCase();
@@ -68,6 +73,8 @@ export default class AssetLoader {
         //download it.
         console.log("Download texture 0x%s from map:", hid, map.getAttribute('dir'));
         const TL = new TextureLoader(this.gx);
-        return await TL.loadFromMap(map.getAttribute('dir'), id)
+        const r = await TL.loadFromMap(map.getAttribute('dir'), id)
+        this.cache[key] = r;
+        return r;
     }
 }

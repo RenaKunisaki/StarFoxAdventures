@@ -5,7 +5,7 @@ import GameBit    from './GameBit.js';
 import GameMap    from './GameMap.js';
 import Model      from './Model.js';
 import RomList    from './RomList.js';
-import {get,int}  from './Util.js';
+import {get,getBin,getXml,int,float,hex} from './Util.js';
 
 export default class Game {
     /** Represents the SFA game itself.
@@ -36,47 +36,94 @@ export default class Game {
     async downloadInfo() {
         /** Download data files.
          */
-        this.dlls     = await this._downloadFile('dlls',     Dll,        'dll');
-        this.texts    = await this._downloadFile('gametext', GameText,   'text');
-        this.models   = await this._downloadFile('models',   Model,      'model');
-        this.objects  = await this._downloadFile('objects',  GameObject, 'object');
-        this.bits     = await this._downloadFile('gamebits', GameBit,    'bit');
-        this.maps     = await this._downloadFile('maps',     GameMap,    'map');
-        this.objIndex = await this._getObjIndex();
+        this.dlls      = await this._downloadFile('dlls',     Dll,        'dll');
+        this.texts     = await this._downloadFile('gametext', GameText,   'text');
+        this.models    = await this._downloadFile('models',   Model,      'model');
+        this.objects   = await this._downloadFile('objects',  GameObject, 'object');
+        this.bits      = await this._downloadFile('gamebits', GameBit,    'bit');
+        this.maps      = await this._downloadFile('maps',     GameMap,    'map');
+        this.objIndex  = await this._getObjIndex();
+        this.sequences = await this._getSeqData();
+        this._objUniqueIds = null;
 
         this.mapsByDir = {};
-        for(let [id, map] of Object.entries(this.maps)) {
-            this.mapsByDir[map.dirId] = map;
-            this.mapsByDir[map.dirName] = map;
+        if(this.maps) {
+            for(let [id, map] of Object.entries(this.maps)) {
+                this.mapsByDir[map.dirId] = map;
+                this.mapsByDir[map.dirName] = map;
+            }
         }
+    }
+
+    getObjectById(id) {
+        /** Get an object def by its defNo.
+         *  @param id the defNo ID. Can be negative to avoid remapping by
+         *  OBJINDEX.bin, as in the game code.
+         *  @return the objDef.
+         */
+        if(id < 0) id = -id;
+        else id = this.objIndex[id];
+        return this.objects[id];
+    }
+
+    async getObjectByUniqueId(id) {
+        /** Get an object by its unique ID.
+         */
+        if(!this._objUniqueIds) {
+            console.log("Downloading object ID list...");
+            const data = await getXml(`${this.version}/objids.xml`);
+            this._objUniqueIds = {};
+            for(let elem of data.getElementsByTagName('obj')) {
+                let obj = {
+                    id:      int(  elem.getAttribute('id')),
+                    romlist:       elem.getAttribute('romlist'),
+                    idx:     int(  elem.getAttribute('idx')),
+                    offset:  int(  elem.getAttribute('offset')),
+                    type:    int(  elem.getAttribute('type')),
+                    real:    int(  elem.getAttribute('real')),
+                    name:          elem.getAttribute('name'),
+                    acts:    int(  elem.getAttribute('acts')),
+                    bound:   int(  elem.getAttribute('bound')),
+                    slot:    int(  elem.getAttribute('slot')),
+                    flags:   int(  elem.getAttribute('flags')),
+                    x:       float(elem.getAttribute('x')),
+                    y:       float(elem.getAttribute('y')),
+                    z:       float(elem.getAttribute('z')),
+                }
+                //if(this._objUniqueIds[obj.id]) {
+                //    console.warn(`Unique ID 0x${hex(obj.id, 8)} is not unique:`,
+                //        obj, this._objUniqueIds[obj.id]);
+                //}
+                this._objUniqueIds[obj.id] = obj;
+            }
+        }
+        return this._objUniqueIds[id];
     }
 
     async _downloadFile(name, cls, tag) {
         /** Download an XML file and construct a class instance from
          *  each instance of the given tag.
          */
-        const data = (await get({
-            path:     `${this.version}/${name}.xml`,
-            mimeType: 'text/xml; charset=utf-8',
-        })).responseXML;
-
-        const res = {};
-        for(let elem of data.getElementsByTagName(tag)) {
-            let inst = new cls(this, elem);
-            res[inst.id] = inst;
+        try {
+            const data = await getXml(`${this.version}/${name}.xml`);
+            const res = {};
+            for(let elem of data.getElementsByTagName(tag)) {
+                let inst = new cls(this, elem);
+                res[inst.id] = inst;
+            }
+            return res;
         }
-        return res;
+        catch(ex) {
+            console.error("Error downloading", name, ex);
+            return null;
+        }
+
     }
 
     async _getObjIndex() {
         /** Download and parse OBJINDEX.bin.
          */
-        const objIndex = (await get({
-            path:         '/disc/OBJINDEX.bin',
-            mimeType:     'application/octet-stream',
-            responseType: 'arraybuffer',
-        })).response;
-
+        const objIndex   = await getBin(`${this.version}/disc/OBJINDEX.bin`);
         const objIdxView = new DataView(objIndex);
         const result = [];
         for(let i=0; i<objIndex.byteLength; i += 2) {
@@ -85,15 +132,53 @@ export default class Game {
         return result;
     }
 
-    async getRomList(name) {
-        /** Download a romlist file.
+    async _getSeqData() {
+        /** Download and parse OBJSEQ.bin.
          */
-        //XXX need different disc path per version
-        const data = (await get({
-            path:         `/zlb/disc/${name}.romlist.zlb?offset=0&header=1`,
-            mimeType:     'application/octet-stream',
-            responseType: 'arraybuffer',
-        })).response;
+        const seqTab = await getBin(`${this.version}/disc/OBJSEQ.tab`);
+        const seqBin = await getBin(`${this.version}/disc/OBJSEQ.bin`);
+
+        const vTab = new DataView(seqTab);
+        const vBin = new DataView(seqBin);
+        const result = [];
+        for(let i=0; i<vTab.byteLength; i += 2) {
+            const offs = vTab.getUint16(i) * 8;
+            const next = vTab.getUint16(i+2) * 8;
+            if(next == 0xFFFF * 8) break;
+            const seq  = [];
+            for(let j=offs; j<next; j += 8) {
+                seq.push({
+                    objId: vBin.getUint32(j),
+                    flags: vBin.getUint16(j+4),
+                    defNo: vBin.getUint16(j+6),
+                });
+            }
+            result.push(seq);
+        }
+        return result;
+    }
+
+    async getRomList(id, name) {
+        /** Download a romlist file by ID or name.
+         */
+        let data;
+        if(this.version == 'K') { //romlists are in MAPS.bin
+            const tab  = new DataView(await getBin(`${this.version}/disc/MAPS.tab`));
+            //const bin  = new DataView(await getBin(`${this.version}/disc/MAPS.bin`));
+            const offs = tab.getUint32((id*7*4)+(6*4));
+            data = await getBin(
+                `/zlb/${this.version}/disc/MAPS.bin?offset=${offs}&header=1`);
+        }
+        else {
+            if(name == null || name == undefined) {
+                name = this.app.game.maps[id].romlistName;
+            }
+            if(name == null || name == undefined) {
+                throw new Error("Romlist not found");
+            }
+            data = await getBin(
+                `/zlb/${this.version}/disc/${name}.romlist.zlb?offset=0&header=1`);
+        }
         return new RomList(this, data);
     }
 
@@ -103,10 +188,7 @@ export default class Game {
          *  Amethyst mod replaces the tags with the address that called the
          *  allocator, giving more precise information.
          */
-        const data = (await get({
-            path:    `${this.version}/alloctags.xml`,
-            mimeType:'text/xml; charset=utf-8',
-        })).responseXML;
+        const data = await getXml(`${this.version}/alloctags.xml`);
         this.allocTags = {};
         for(let tag of data.getElementsByTagName('tag')) {
             this.allocTags[int(tag.getAttribute('id'))] = tag.getAttribute('name');
@@ -119,10 +201,7 @@ export default class Game {
          *  It defines static pointers often used as function parameters,
          *  which wouldn't appear in a heap scan.
          */
-        const data = (await get({
-            path:    `${this.version}/staticaddrs.xml`,
-            mimeType:'text/xml; charset=utf-8',
-        })).responseXML;
+        const data = await getXml(`${this.version}/staticaddrs.xml`);
         this.staticAddrs = {};
         for(let tag of data.getElementsByTagName('var')) {
             this.allocTags[int(tag.getAttribute('addr'))] = {
@@ -135,11 +214,7 @@ export default class Game {
     async getFuncParamRecords() {
         /** Download the function parameter records.
          */
-        const data = (await get({
-            path:     `${this.version}/params.xml`,
-            mimeType: 'text/xml; charset=utf-8',
-        })).responseXML;
-
+        const data = await getXml(`${this.version}/params.xml`);
         await this._getAllocTags();
         await this._getStaticAddrs();
 

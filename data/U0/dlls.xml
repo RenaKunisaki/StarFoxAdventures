@@ -569,6 +569,9 @@
         <return type="void"/>
       </function>
     </functions>
+    <objparams>
+      <param offset="0x29" type="s8" name="rotation" />
+    </objparams>
   </dll>
   <dll address="0x80311378" dolOffs="0x30E378" id="0x0004" interface="common" name="Dummy04" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed; loaded at title screen</description>
@@ -3282,7 +3285,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319DA8" dolOffs="0x316DA8" id="0x004D" interface="camera" name="CameraModeNpcSpeak" unk08="0x00000000" unk0E="0x0000">
-    <description>Camera mode for speaking to NPCs, feeding Tricky</description>
+    <description>Camera mode for speaking to NPCs, feeding Tricky; param is ptr to vec3f to point at</description>
     <functions>
       <function address="0x8010E518" idx="0x0" name="initialise" stub="1">
         <return type="void"/>
@@ -4925,6 +4928,23 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams>
+      <param offset="0x18" type="s16" name="curveNo">
+        <description>if &lt; 0, don't translate by OBJSEQ2C.tab; value is index into ANIMCURV.tab</description>
+      </param>
+      <param offset="0x1A" type="GameBit16" />
+      <param offset="0x1C" type="s16" name="obj">
+        <description>0:none, 1:player, 2:Tricky, else objDefNo + 4</description>
+      </param>
+      <param offset="0x1F" type="byte" name="seqIdx" />
+      <param offset="0x22" type="byte" />
+      <param offset="0x24" type="byte" name="posOffs">
+        <description>converted to float and divided under 1</description>
+      </param>
+      <param offset="0x4C" type="pointer">
+        <description>probably set at runtime</description>
+      </param>
+    </objparams>
   </dll>
   <dll address="0x80320830" dolOffs="0x31D830" id="0x00C7" interface="object" name="DIM2RoofRub" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -9412,8 +9432,22 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
     <objparams>
-      <param offset="0x18" type="GameBit" />
-      <param offset="0x1A" type="GameBit" />
+      <param offset="0x18" type="GameBit" name="usedBit" />
+      <param offset="0x1A" type="GameBit" name="needBit" />
+      <param offset="0x1C" type="s8" name="rotation" />
+      <param offset="0x1D" type="u8" name="flags">
+        <description>
+          01: clear needBit before preempt
+          02: clear needBit after  seq
+          04: clear needBit before seq
+          08: set   usedBit before preempt
+          10: set   usedBit after  seq
+          20: set   usedBit before seq
+        </description>
+      </param>
+      <param offset="0x1E" type="u8" name="seqIdx" />
+      <param offset="0x20" type="s16" />
+      <param offset="0x22" type="u16" name="objs" />
     </objparams>
   </dll>
   <dll address="0x803213F0" dolOffs="0x31E3F0" id="0x0114" interface="object" name="IMMultiSeq" unk08="0x00000000" unk0E="0x0000">
@@ -10902,7 +10936,9 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x20"/>
+    <objparams length="0x20">
+      <param offset="0x1C" type="float" />
+    </objparams>
   </dll>
   <dll address="0x80322090" dolOffs="0x31F090" id="0x012F" interface="object" name="BarrelPad" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -12542,6 +12578,9 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x8019E804" idx="0xA"/>
       <function address="0x8019E6C8" idx="0xB"/>
     </functions>
+    <objparams>
+      <param offset="0x1E" type="GameBit" />
+    </objparams>
   </dll>
   <dll address="0x803DBE50" dolOffs="0x3334B0" id="0x014D" name="Dummy14D" unk08="0x42480000" unk0E="0x0000">
     <description>All functions stubbed</description>
@@ -17269,6 +17308,7 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x18" type="u16">
         <description>Index into a script set?</description>
       </param>
+      <param offset="0x1A" type="byte" />
     </objparams>
   </dll>
   <dll address="0x8032771C" dolOffs="0x32471C" id="0x01AE" interface="object" name="SH_LevelControl" unk08="0x00000000" unk0E="0x0000">
@@ -26924,7 +26964,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x8032A428" dolOffs="0x327428" id="0x025E" interface="object" name="FireSpellStone" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x8032A428" dolOffs="0x327428" id="0x025E" interface="object" name="SpellStone" unk08="0x00000000" unk0E="0x0000">
     <description/>
     <functions>
       <function address="0x80210E88" idx="0x0" name="initialise" stub="1">
@@ -26984,10 +27024,25 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x80210C48" idx="0x9" name="getExtraSize" return="1" stub="1">
         <return type="int"/>
       </function>
-      <function address="0x80210C0C" idx="0xA"/>
-      <function address="0x80210BF0" idx="0xB"/>
+      <function address="0x80210C0C" idx="0xA" name="setState">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *" />
+          <param name="state" reg="r4" type="int" />
+        </params>
+        <return type="uint" />
+      </function>
+      <function address="0x80210BF0" idx="0xB" name="getState">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *" />
+        </params>
+        <return type="uint" />
+      </function>
     </functions>
-    <objparams length="0x24"/>
+    <objparams length="0x24">
+      <param offset="0x19" type="byte" />
+      <param offset="0x1E" type="GameBit" />
+      <param offset="0x20" type="GameBit" />
+    </objparams>
   </dll>
   <dll address="0x8032A468" dolOffs="0x327468" id="0x025F" interface="object" name="CRFuelTank" unk08="0x00000000" unk0E="0x0000">
     <description/>

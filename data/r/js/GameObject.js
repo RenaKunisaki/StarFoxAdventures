@@ -20,6 +20,7 @@ export default class GameObject {
         this.params      = [];
         this.spawns      = [];
         this.dll         = game.dlls[this.dllId];
+        this.sequences   = [];
         this.paramLength = null;
 
         for(let eMap of eObj.getElementsByTagName('map')) {
@@ -52,9 +53,12 @@ export default class GameObject {
         let example = eObj.getElementsByTagName('exampleParams');
         if(example && example[0]) this.exampleParams = example[0].textContent;
 
-
         for(let eSpawn of eObj.getElementsByTagName('spawn')) {
             this.spawns.push(eSpawn.textContent);
+        }
+
+        for(let eSeq of eObj.getElementsByTagName('seq')) {
+            this.sequences.push(int(eSeq.getAttribute('id')));
         }
 
         getDescriptionAndNotes(this, eObj);

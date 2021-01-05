@@ -8,8 +8,11 @@ export default class ObjInfo {
     constructor(app) {
         this.app = app;
         this.element = E.div('objinfo');
-        const id = this.app.params.get('id');
+        const id = int(this.app.params.get('id'));
         this.obj = this.app.game.objects[id];
+        if(!this.obj) {
+            alert("Object not found");
+        }
     }
 
     getTitle() { return `${this.obj.name} - Object Info` }
@@ -19,17 +22,21 @@ export default class ObjInfo {
         this.element.append(this.makeParamsTable());
         this.element.append(this.makeModelsTable());
         this.element.append(this.makeMapsTable());
+        this.element.append(await this.makeSeqTable());
     }
 
     makeSummaryTable() {
-        const obj = this.obj;
+        const obj     = this.obj;
+        const dllId   = obj.dllId;
+        const dll     = this.app.game.dlls[dllId];
+        const dllName = dll ? dll.name : '-';
         return E.div('box object-summary',
             E.h2('header', "Summary"),
             E.table(
                 E.tr(E.th(null, "Name"),          E.td('str', obj.name)),
                 E.tr(E.th(null, "ID"),            E.td('hex', hex(obj.id, 4))),
                 E.tr(E.th(null, "DefNo"),         E.td('hex', hex(obj.defNo, 4))),
-                E.tr(E.th(null, "DLL"),           E.td('hex', hex(obj.dllId, 4))),
+                E.tr(E.th(null, "DLL"),           E.td('str', `${hex(dllId,4)} ${dllName}`)),
                 E.tr(E.th(null, "# Player Objs"), E.td('hex', hex(obj.nPlayerObjs, 4))),
                 E.tr(E.th(null, "Type"),          E.td('str', obj.type)),
                 E.tr(E.th(null, "Spawns"),        E.td('str', makeList(obj.spawns))),
@@ -124,5 +131,64 @@ export default class ObjInfo {
             ));
         }
         return E.div('box object-maps', E.h2(null, "Maps"), tbl);
+    }
+
+    async makeSeqTable() {
+        const v = this.app.game.version;
+        const obj = this.obj;
+        const tbl = E.table('seq-list',
+            E.tr(
+                E.th(null, "ID"),
+                E.th(null, "ObjID"),
+                E.th(null, "Flags"),
+                E.th(null, "Object", {colspan:2}),
+            ),
+        );
+        for(let seq of obj.sequences) {
+            let data = this.app.game.sequences[seq];
+            if(data) {
+                for(let i=0; i<data.length; i++) {
+                    const item = data[i];
+                    let sobj = item.objId ? null : this.app.game.getObjectById(item.defNo);
+                    let objName = '';
+                    if(!item.objId) {
+                        if(item.defNo == 0xFFFF) objName = "[Override]";
+                        else if(item.defNo == 0xFFFE) objName = "[AnimCamera]";
+                        else if(sobj) objName = E.a('objlink', sobj.name,
+                            {href:`?v=${v}&p=obj&id=${sobj.id}`});
+                    }
+                    else {
+                        sobj = await this.app.game.getObjectByUniqueId(item.objId);
+                        if(sobj) {
+                            objName = E.span(null,
+                                E.a('objlink', sobj.name,
+                                {href:`?v=${v}&p=obj&id=${sobj.id}`}),
+                                " in ",
+                                E.a('maplink', sobj.romlist,
+                                {href:`?v=${v}&p=map&romlist=${sobj.romlist}`}),
+                            );
+                        }
+                        else objName = '[not found]';
+                    }
+                    const tr = E.tr();
+                    if(!i) tr.append(E.th(null, hex(seq,4), {rowspan:data.length}));
+                    tr.append(
+                        E.td('hex', hex(item.objId, 8)),
+                        E.td('hex', hex(item.flags, 4)),
+                        E.td('hex', hex(item.defNo, 4)),
+                        E.td('str', objName),
+                    );
+                    tbl.append(tr);
+                }
+            }
+            else {
+                tbl.append(E.tr(
+                    E.td('hex', hex(seq,4)),
+                    E.td('str', "INVALID SEQ", {colspan:4}),
+                ));
+            }
+
+        }
+        return E.div('box object-seqs', E.h2(null, "Sequences"), tbl);
     }
 }

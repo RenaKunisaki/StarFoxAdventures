@@ -33,6 +33,20 @@ export function get(params) {
     });
 }
 
+export async function getBin(path) {
+    return (await get({
+        path:         path,
+        mimeType:     'application/octet-stream',
+        responseType: 'arraybuffer',
+    })).response;
+}
+export async function getXml(path) {
+    return (await get({
+        path:     path,
+        mimeType: 'text/xml; charset=utf-8',
+    })).responseXML;
+}
+
 export function hex(n, size=1) {
     /** Convert number `n` to hex, padded to given `size`.
      *  Result is uppercase without prefix, eg "0000BABE".
@@ -46,6 +60,12 @@ export function int(n, dflt=null) {
      */
     if(n == null || n == undefined) return dflt;
     return parseInt(n);
+}
+export function float(n, dflt=null) {
+    /** Convert string `n` to float, returning `dflt` for null/undefined.
+     */
+    if(n == null || n == undefined) return dflt;
+    return parseFloat(n);
 }
 
 export function round(n, dec=2) {

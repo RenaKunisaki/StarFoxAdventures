@@ -16,20 +16,16 @@ export default class MapInfo {
     }
 
     async run() {
+        const id = this.app.params.get('id');
         this.romlistName = this.app.params.get('romlist');
-        if(this.romlistName == null) {
-            const id = this.app.params.get('id');
-            this.romlistName = this.app.game.maps[id].romlistName;
-        }
         this._makeRomListTable();
 
-        this.romList = await this.app.game.getRomList(this.romlistName);
+        this.romList = await this.app.game.getRomList(id, this.romlistName);
         for(let item of this.romList.items) {
             this.tblRomList.add(this._makeRomListRow(item));
         }
 
-        const id = this.app.params.get('id');
-        if(id != undefined && id != null && id != 'null') {
+        if(id != undefined && id != null && id != 'null' && this.app.game.maps) {
             this.map = this.app.game.maps[id];
             await this.map.readMapsBin();
             this._buildInfo();
@@ -219,15 +215,18 @@ export default class MapInfo {
                     val  = view.getInt32(offs).toString();
                     break;
 
-                case 'u32': case 'uint32_t': case 'uint': case 'ObjId': case 'undefined4': case 'unk32':
+                case 'u32': case 'uint32_t': case 'uint': case 'ObjId': case 'ObjectId':
+                case 'undefined4': case 'unk32':
                     size = 4;
                     val  = hex(view.getUint32(offs), 4);
                     break;
 
-                case 'float':
+                case 'float': {
                     size = 4;
-                    val = view.getFloat32(offs);
+                    const h = view.getUint32(offs);
+                    val = `${view.getFloat32(offs)} (0x${hex(h,8)})`;
                     break;
+                }
 
                 case 'GameBit':
                 case 'GameBit16': {
@@ -237,7 +236,24 @@ export default class MapInfo {
                     break;
                 }
 
-                case'MapDirIdx8': {
+                case 'GameTextId16': case 'GameTextId': {
+                    size = 2;
+                    const id   = view.getUint16(offs);
+                    const text = this.app.game.texts[id];
+                    if(text) val = `[0x${hex(id,4)}] ${text.phrases[0]}`;
+                    else val = `[NOT FOUND: 0x${hex(id,4)}]`;
+                    break;
+                }
+                case 'GameTextId32': {
+                    size = 4;
+                    const id   = view.getUint32(offs);
+                    const text = this.app.game.texts[id];
+                    if(text) val = `[0x${hex(id,4)}] ${text.phrases[0]}`;
+                    else val = `[NOT FOUND: 0x${hex(id,4)}]`;
+                    break;
+                }
+
+                case 'MapDirIdx8': {
                     size = 1;
                     const id = view.getUint8(offs);
                     const map = this.app.game.mapsByDir[id];
@@ -246,14 +262,35 @@ export default class MapInfo {
                     break;
                 }
 
-                case'WarpEnum8': { //XXX warptab
+                case 'vec3f': case 'Vec3f': {
+                    size = 12;
+                    const x = view.getFloat32(offs);
+                    const y = view.getFloat32(offs+4);
+                    const z = view.getFloat32(offs+8);
+                    val = `${x}, ${y}, ${z}`;
+                    break;
+                }
+
+                case 'vec3s': case 'Vec3s': {
+                    size = 6;
+                    const x = view.getInt16(offs);
+                    const y = view.getInt16(offs+2);
+                    const z = view.getInt16(offs+4);
+                    val = `${x}, ${y}, ${z}`;
+                    break;
+                }
+
+                case 'WarpEnum8': { //XXX warptab
                     size = 1;
                     const id = view.getUint8(offs);
                     val = hex(id, 2);
                     break;
                 }
 
-                default: val = '?';
+                default: {
+                    console.warn("Unrecognized param type", param);
+                    val = '?';
+                }
             }
             result.append(E.tr(
                 E.td('hex', hex(param.offset, 4)),
@@ -263,12 +300,17 @@ export default class MapInfo {
             ));
             prevOffs = offs + size;
         }
-        if(obj.paramLength != null && obj.paramLength - 0x18 > prevOffs) {
+
+        let pLen = entry.objDef.size * 4;
+        if(obj.paramLength != null && obj.paramLength != pLen) {
+            console.warn(`Object paramLength=0x${hex(obj.paramLength)} but romlist entry is 0x${hex(pLen)}`);
+        }
+        if(pLen - 0x18 > prevOffs) {
             result.append(E.tr(
                 E.td('hex', hex(prevOffs+0x18, 4)),
                 E.td('str', ''),
                 E.td('str', ''),
-                E.td('hex', toHexString(data.slice(prevOffs, obj.paramLength - 0x18))),
+                E.td('hex', toHexString(data.slice(prevOffs, pLen - 0x18))),
             ));
         }
         return result;

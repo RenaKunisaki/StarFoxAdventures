@@ -8,7 +8,7 @@ import GameTextList from './GameTextList.js';
 import GameBitList from './GameBitList.js';
 import MapInfo from './MapInfo.js';
 import MapList from './MapList.js';
-import MapView from './MapView.js';
+import MapView from './gl/sfa/map/MapView.js';
 
 export default class App {
     /** The application.

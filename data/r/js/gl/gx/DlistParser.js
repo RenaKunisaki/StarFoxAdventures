@@ -29,8 +29,11 @@ export default class DlistParser {
          *  data: Dict of data sources for attribute array indices.
          */
         for(let [field, src] of Object.entries(data)) {
-            if(field == '_debug') this.data[field] = src;
-            else this.data[field] = new DataBuffer(src);
+            if(src) {
+                if(field == '_debug') this.data[field] = src;
+                else this.data[field] = new DataBuffer(src);
+            }
+            else console.error("Field", field, "is", src);
         }
         this.curList = list;
         this.data.dlist = new DataBuffer(list);

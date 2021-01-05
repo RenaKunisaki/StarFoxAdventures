@@ -3,7 +3,8 @@ import SfaBitStream from '/r/js/gl/sfa/SfaBitStream.js';
 import Texture from '/r/js/gl/Texture.js';
 //import TextureLoader from './TextureLoader.js';
 import AssetLoader from '../AssetLoader.js';
-import {ModelHeader, Bone, DisplayListPtr, Shader, ShaderLayer, ModelVtxGroup} from './structs.js';
+import {ModelHeader, Bone, ModelVtxGroup} from './structs.js';
+import {Shader, ShaderLayer, TextureHeader, DisplayListPtr} from '../structs.js';
 
 export default class Model {
     /** A character/object model file from Star Fox Adventures.

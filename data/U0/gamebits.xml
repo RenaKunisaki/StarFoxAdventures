@@ -605,7 +605,7 @@
     <description>set at some random point</description>
   </bit>
   <bit id="0x0167" table="2" hint="0x00" hasHint="0" max="1" name="SH_StaffTutorialBaddie1Dead"/>
-  <bit id="0x0168" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0168" table="2" hint="0x00" hasHint="0" max="1" name="SH_ThornTailRelated0168"/>
   <bit id="0x0169" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x016A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x016B" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -864,7 +864,7 @@
   <bit id="0x01F8" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01F9" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01FA" table="2" hint="0x2D" hasHint="1" max="1" name="CrossedBlizzard"/>
-  <bit id="0x01FB" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x01FB" table="2" hint="0x00" hasHint="0" max="1" name="SnowBikeRelated01FB"/>
   <bit id="0x01FC" table="2" hint="0x47" hasHint="1" max="1" name="WM_FoundKrystal">
     <description>Reached top of Krazoa Palace</description>
   </bit>
@@ -1226,10 +1226,10 @@
   <bit id="0x02F9" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02FA" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02FB" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02FC" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02FD" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02FE" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02FF" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x02FC" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated02FC"/>
+  <bit id="0x02FD" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated02FD"/>
+  <bit id="0x02FE" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated02FE"/>
+  <bit id="0x02FF" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated02FF"/>
   <bit id="0x0300" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0301" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0302" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -1786,7 +1786,7 @@
   <bit id="0x0497" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0498" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0499" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x049A" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x049A" table="1" hint="0x00" hasHint="0" max="1" name="SpellStoneRelated049A"/>
   <bit id="0x049B" table="1" hint="0x57" hasHint="1" max="1" name="CF_DiscoveredGoldMine"/>
   <bit id="0x049C" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x049D" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -3388,7 +3388,7 @@
   <bit id="0x094C" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x094D" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x094E" table="2" hint="0x00" hasHint="0" max="1" name="CF_HaveStaff"/>
-  <bit id="0x094F" table="2" hint="0x00" hasHint="0" max="1" name="CFRelated094F"/>
+  <bit id="0x094F" table="2" hint="0x00" hasHint="0" max="1" name="CF_NotRecoveredStaff"/>
   <bit id="0x0950" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0951" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0952" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -4066,30 +4066,30 @@
   <bit id="0x0B27" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B28" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B29" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B2A" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B2B" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B2C" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B2D" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B2E" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B2F" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B30" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B31" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B32" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0B2A" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B2A"/>
+  <bit id="0x0B2B" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B2B"/>
+  <bit id="0x0B2C" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B2C"/>
+  <bit id="0x0B2D" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B2D"/>
+  <bit id="0x0B2E" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B2E"/>
+  <bit id="0x0B2F" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B2F"/>
+  <bit id="0x0B30" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B30"/>
+  <bit id="0x0B31" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B31"/>
+  <bit id="0x0B32" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B32"/>
   <bit id="0x0B33" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B34" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B35" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B36" table="3" hint="0x00" hasHint="0" max="1">
     <objref map="linkb" obj="LGTDirectio" objId="0x0004B7CE" param="0x1E"/>
   </bit>
-  <bit id="0x0B37" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B38" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B39" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B3A" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B3B" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B3C" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B3D" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B3E" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B3F" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0B37" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B37"/>
+  <bit id="0x0B38" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B38"/>
+  <bit id="0x0B39" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B39"/>
+  <bit id="0x0B3A" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B3A"/>
+  <bit id="0x0B3B" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B3B"/>
+  <bit id="0x0B3C" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B3C"/>
+  <bit id="0x0B3D" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B3D"/>
+  <bit id="0x0B3E" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B3E"/>
+  <bit id="0x0B3F" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B3F"/>
   <bit id="0x0B40" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B41" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B42" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -4139,7 +4139,7 @@
   <bit id="0x0B69" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B6A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B6B" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0B6C" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0B6C" table="1" hint="0x00" hasHint="0" max="1" name="CFRelated0B6C"/>
   <bit id="0x0B6D" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B6E" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0B6F" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -4680,8 +4680,10 @@
   <bit id="0x0CD4" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="hollow2" obj="HitAnimator" objId="0x0004B04B" param="target"/>
   </bit>
-  <bit id="0x0CD5" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0CD6" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0CD5" table="2" hint="0x00" hasHint="0" max="1" name="SH_ThornTailRelated0CD5">
+    <description>probably "talked to guy who tells you to get a lantern"</description>
+  </bit>
+  <bit id="0x0CD6" table="2" hint="0x00" hasHint="0" max="1" name="SH_ThornTailRelated0CD6"/>
   <bit id="0x0CD7" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0CD8" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0CD9" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -4924,7 +4926,7 @@
   <bit id="0x0D70" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D71" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D72" table="1" hint="0x00" hasHint="0" max="1" name="VFPRelated0D72"/>
-  <bit id="0x0D73" table="2" hint="0x00" hasHint="0" max="1" name="CRFortRelated0D73">
+  <bit id="0x0D73" table="2" hint="0x00" hasHint="0" max="1" name="CFRelated0D73">
     <description>Cleared when Arwing flies to CR Fort</description>
   </bit>
   <bit id="0x0D74" table="0" hint="0x00" hasHint="0" max="1"/>

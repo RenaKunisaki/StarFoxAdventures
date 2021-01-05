@@ -85,7 +85,7 @@ export default class GameMap {
         if(!mapsBin) {
             mapsBin = (await get({
                 //XXX need different disc path per version
-                path:         '/disc/MAPS.bin',
+                path:         `${this.game.version}/disc/MAPS.bin`,
                 mimeType:     'application/octet-stream',
                 responseType: 'arraybuffer',
             })).response;
