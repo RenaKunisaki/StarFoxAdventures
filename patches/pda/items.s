@@ -16,6 +16,8 @@
 .set MENU_PAGE_DEBUG_CAMERA,   0x0B
 .set MENU_PAGE_DEBUG_ENV,      0x0C
 .set MENU_PAGE_DEBUG_GAMETEXT, 0x0D
+.set MENU_PAGE_DEBUG_AUDIO,    0x0E
+.set MENU_PAGE_DEBUG_SEQ,      0x0F
 
 menuPages:
     .int itemDrawFuncs_gameSettings    - mainLoop
@@ -46,6 +48,10 @@ menuPages:
     .int itemAdjustFuncs_debugEnv      - mainLoop
     .int itemDrawFuncs_debugGameText   - mainLoop
     .int itemAdjustFuncs_debugGameText - mainLoop
+    .int itemDrawFuncs_debugAudio      - mainLoop
+    .int itemAdjustFuncs_debugAudio    - mainLoop
+    .int itemDrawFuncs_debugSeq        - mainLoop
+    .int itemAdjustFuncs_debugSeq      - mainLoop
     .int 0
 
 menuPageStructure:
@@ -120,6 +126,16 @@ menuPageStructure:
     .byte 0
     # Debug GameText
     .byte MENU_PAGE_DEBUG_ENV    # previous
+    .byte MENU_PAGE_DEBUG_AUDIO  # next
+    .byte MENU_PAGE_DEBUG        # parent
+    .byte 0
+    # Debug Audio
+    .byte MENU_PAGE_DEBUG_GAMETEXT # previous
+    .byte MENU_PAGE_DEBUG_SEQ    # next
+    .byte MENU_PAGE_DEBUG        # parent
+    .byte 0
+    # Debug Seq
+    .byte MENU_PAGE_DEBUG_AUDIO  # previous
     .byte MENU_PAGE_DEBUG_TEXT   # next
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
@@ -222,6 +238,8 @@ itemDrawFuncs_debug:
     .int drawItem_debugRender   - mainLoop
     .int drawItem_debugEnv      - mainLoop
     .int drawItem_debugGameText - mainLoop
+    .int drawItem_debugAudio    - mainLoop
+    .int drawItem_debugSeq      - mainLoop
     .int drawItem_frameAdvance  - mainLoop
     .int drawItem_debugMisc     - mainLoop
     .int 0
@@ -234,6 +252,8 @@ itemAdjustFuncs_debug:
     .int adjItem_debugRender   - mainLoop
     .int adjItem_debugEnv      - mainLoop
     .int adjItem_debugGameText - mainLoop
+    .int adjItem_debugAudio    - mainLoop
+    .int adjItem_debugSeq      - mainLoop
     .int adjItem_frameAdvance  - mainLoop
     .int adjItem_debugMisc     - mainLoop
 
@@ -372,7 +392,43 @@ itemDrawFuncs_debugGameText:
 
 itemAdjustFuncs_debugGameText:
     .int adjItem_textTest    - mainLoop
-    .int adjItem_gameTextBox - mainLoop
+
+itemDrawFuncs_debugAudio:
+    .int s_Audio              - mainLoop # title
+    .int drawItem_dbgAudioCmd - mainLoop
+    .int 0
+
+itemAdjustFuncs_debugAudio:
+    .int adjItem_dbgAudioCmd - mainLoop
+
+
+itemDrawFuncs_debugSeq:
+    .int s_ObjSeq             - mainLoop # title
+    .int drawItem_playSeq     - mainLoop
+    .int drawItem_stopSeq     - mainLoop
+    .int drawItem_editSeq     - mainLoop
+    .int drawItem_seqGlobal1  - mainLoop
+    .int drawItem_seqGlobal2  - mainLoop
+    .int drawItem_seqGlobal3  - mainLoop
+    .int drawItem_seqBool     - mainLoop
+    .int drawItem_seqVar1     - mainLoop
+    .int drawItem_seqVar2     - mainLoop
+    .int drawItem_seqVar3     - mainLoop
+    .int drawItem_seqFlags    - mainLoop
+    .int 0
+
+itemAdjustFuncs_debugSeq:
+    .int adjItem_playSeq       - mainLoop
+    .int adjItem_stopSeq       - mainLoop
+    .int adjItem_editSeq       - mainLoop
+    .int adjItem_seqGlobal1    - mainLoop
+    .int adjItem_seqGlobal2    - mainLoop
+    .int adjItem_seqGlobal3    - mainLoop
+    .int adjItem_seqBool       - mainLoop
+    .int adjItem_seqVar1       - mainLoop
+    .int adjItem_seqVar2       - mainLoop
+    .int adjItem_seqVar3       - mainLoop
+    .int adjItem_seqFlags      - mainLoop
 
 pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Game Settings
@@ -389,6 +445,8 @@ pageInputFuncs:
     .int inputFuncDummy       - mainLoop # Debug Camera
     .int inputFuncDummy       - mainLoop # Debug Environment
     .int inputFuncDummy       - mainLoop # Debug GameText
+    .int inputFuncDebugAudio  - mainLoop # Debug Audio
+    .int inputFuncDummy       - mainLoop # Debug Seq
 
 
 inputFuncDummy: blr

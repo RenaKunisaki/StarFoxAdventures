@@ -59,6 +59,7 @@ soundTestId:    .short 0
 textTestId:     .short 0
 textTestBox:    .short 0x82
 textureDebugId: .short 0
+debugSeqId:     .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
 spawnMenuNumParams:   .byte 0
@@ -72,6 +73,8 @@ spawnMenuBound:       .byte 100
 spawnMenuUnk7:        .byte 0x96
 spawnMenuMapId:       .byte 0xFF
 spawnMenuObjNo:       .byte 0xFF
+dbgAudioCmd:      .byte 0
+dbgAudioParam:    .byte 0
 hudFullScreen:    .byte 1
 menuVisible:      .byte 0
 menuSelItem:      .byte 0
@@ -88,6 +91,7 @@ menuWasHudHidden: .byte 0
 menuWasPdaOn:     .byte 0 # for hiding map in objects list
 menuMapSize:      .byte 0
 textureDebugMip:  .byte 0
+debugSeqIdx:      .byte 0
 
 # string pool
 # general
@@ -237,6 +241,20 @@ s_timeOfDayNA:     .string "Time: N/A"
 s_GameText:        .string "GameText"
 s_TextTest:        .string "Text: %04X"
 s_TextBox:         .string "Window: %04X"
+
+# Debug Audio menu
+s_Audio:           .string "Audio"
+s_DbgAudioCmd:     .string "Command: %02X %d [Z]"
+
+# Debug Sequence menu
+s_ObjSeq:         .string "ObjSeq"
+s_PlaySeq:        .string "Play Seq %04X"
+s_StopSeq:        .string "Stop Seq"
+s_EditSeq:        .string "Edit Seq %02X"
+s_GlobalN:        .string "Global %d: %04X"
+s_SeqBool:        .string "Bool: %d"
+s_SeqVar:         .string "Var %d: %02X"
+s_SeqFlags:       .string "Flags: %02X"
 
 # Objects menu
 fmt_objListEntry:  .string "%04X %08X "

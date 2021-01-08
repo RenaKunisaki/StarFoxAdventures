@@ -81,6 +81,8 @@ entry: # called as soon as our patch is loaded.
 .include "pda/debugcamera.s"
 .include "pda/debugenv.s"
 .include "pda/debuggametext.s"
+.include "pda/debugaudio.s"
+.include "pda/debugseq.s"
 .include "pda/bigmap.s"
 .include "pda/mapalpha.s"
 .include "pda/volume.s"

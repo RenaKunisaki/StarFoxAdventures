@@ -454,16 +454,24 @@ mainLoop: # called from main loop. r3 = mainLoop
     CALL    debugPrintf
     mtlr    r20
 
-    LOAD    r17, 0x8039a5bc
+    LOAD    r17, 0x80396918 # SeqObjInstance[27][16]
+    li      r19, 0
+.nextSeq2:
     li      r18, 0
 .nextSeq:
-    lwzx    r5,  r17, r18
-    cmpwi   r5,  0
+    mulli   r3,  r18, 8
+    mulli   r4,  r19, 8*16
+    add     r3,  r3,  r4
+    lwzx    r6,  r17, r3
+    cmpwi   r6,  0
     bnel    printSeqInfo
 
-    addi    r18, r18, 8
-    cmpwi   r18, 10*8
+    addi    r18, r18, 1
+    cmpwi   r18, 16
     blt     .nextSeq
+    addi    r19, r19, 1
+    cmpwi   r19, 28
+    blt     .nextSeq2
 .endif # REDIRECT_TO_CONSOLE
 
 .noSeq:
@@ -534,28 +542,12 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 .if REDIRECT_TO_CONSOLE
 .else
-printSeqInfo: # r5: ObjInstance*, r18: seqIdx * 8
-    srwi    r4,  r18, 3
+printSeqInfo: # r6: ObjInstance*, r18: idx, r19: seqIdx
+    mr      r4,  r18
+    mr      r5,  r19
 
-    LOADWH  r3,  0x8039a45c
-    ori     r6,  r3,  0x8039a45c@l # objSeqBool
-    lbzx    r6,  r3,  r4
-
-    ori     r7,  r3,  0x8039a4b4@l # objSeqVar1
-    lbzx    r7,  r3,  r4
-
-    ori     r8,  r3,  0x8039a50c@l
-    lbzx    r8,  r3,  r4
-
-    ori     r9,  r3,  0x8039a60c@l
-    lbzx    r9,  r3,  r4
-
-    #ori     r10, r3,  0x8039a564@l
-    #lbzx    r10, r3,  r4
-
-    ori     r3,  r3,  0x8039a058@l
-    lfsx    f1,  r3,  r18
-    MAGIC_FLOAT_INCANTATION
+    addi    r3,  r3,  4
+    lwzx    r7,  r17, r3
 
     addi    r3,  r14, .fmt_seqState - mainLoop
     mflr    r20
@@ -599,7 +591,7 @@ printSeqInfo: # r5: ObjInstance*, r18: seqIdx * 8
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
-.fmt_seqState:     .string "SEQ #\x84%02X\x83 Obj:\x84%08X %02X %02X %02X %02X %f\x83\n"
+.fmt_seqState:     .string "SEQ #\x84%02X %02X\x83 Obj:\x84%08X %08X\x83\n"
 .fmt_seqState2:    .string "NSEQ=%d %02X %02X G %08X %02X\n"
 .endif
 

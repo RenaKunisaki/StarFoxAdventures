@@ -145,6 +145,11 @@
 .set motionBlurIntensity,    0x803db62c #float, 32=high, 256=unnoticeable
 .set msecsThisFrame,         0x803dccc0 #float
 .set numLoadedObjs,          0x803dcb84 #int
+.set objSeqBool,             0x8039a45c #bool[0x54]
+.set objSeqFlags,            0x80399e50 #u8[0x54]
+.set objSeqVar1,             0x8039a4b4 #u8[0x54]
+.set objSeqVar2,             0x8039a50c #u8[0x54]
+.set objSeqVar3,             0x8039a564 #u8[0x54]
 .set oneOverTimeDelta,       0x803db418 #float
 .set pauseDisabled,          0x803dd789 #bool
 .set pBackpack,              0x803de448 #ObjInstance*
@@ -164,6 +169,9 @@
 .set saveData,               0x803a31c4 #SaveData
 .set seqLength,              0x803dd0c0 #s32
 .set seqPos,                 0x803dd0bc #s8
+.set seqGlobal1,             0x803dd06c #s16
+.set seqGlobal2,             0x803dd06e #s16
+.set seqGlobal3,             0x803dd080 #u8
 .set shouldCloseCMenu,       0x803dd7b4 #bool
 .set shouldOpenCMenu,        0x803dd7d5 #u8
 .set soundMode,              0x803db1e8 #u8 (Stereo, Surround, Mono, Headphones)
