@@ -466,6 +466,19 @@ objMenu_drawCurObject:
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
+    # message queue
+    addi    r4,  r14, fmt_objListMsgQueue - mainLoop
+    lwz     r5,  0xDC(r18)
+    li      r6,  0
+    li      r7,  0
+    cmpwi   r5,  0
+    beq     .objMenu_drawCurObject_noQueue
+    lwz     r6,  0x00(r5)
+    lwz     r7,  0x04(r5)
+.objMenu_drawCurObject_noQueue:
+    bl      menuPrintf
+    addi    r20, r20, LINE_HEIGHT
+
     # parent, children
     li      r15, 0
 .objMenu_drawCurObject_nextChild:

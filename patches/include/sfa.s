@@ -129,6 +129,7 @@
 .set dllRefCount,            0x8033931c #s16 per DLL
 .set enableDebugText,        0x803dda28 #bool
 .set enableRumble,           0x803dc909 #bool
+.set frameCount,             0x803dcad0 #u32
 .set fovY,                   0x803dc8a4 #float
 .set heaps,                  0x80340698 #Heap[4]
 .set heatEffectIntensity,    0x803dcdfc #int, but only up to 255
@@ -168,7 +169,7 @@
 .set rumbleTimer,            0x803dc90c #float
 .set saveData,               0x803a31c4 #SaveData
 .set seqLength,              0x803dd0c0 #s32
-.set seqPos,                 0x803dd0bc #s8
+.set seqNumBgCmds,           0x803dd0bc #s8
 .set seqGlobal1,             0x803dd06c #s16
 .set seqGlobal2,             0x803dd06e #s16
 .set seqGlobal3,             0x803dd080 #u8
