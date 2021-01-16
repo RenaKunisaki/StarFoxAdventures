@@ -65,7 +65,7 @@ with open(os.path.join(basePath, 'OBJECTS.tab'), 'rb') as tabFile:
                     nSeq = struct.unpack('>B', binFile.read(1))[0] # grumble
 
                     binFile.seek(offs + 0x50)
-                    dllId = struct.unpack('>H', binFile.read(2))[0] # grumble
+                    dllId, objId = struct.unpack('>Hh', binFile.read(4))
 
                     binFile.seek(offs + 0x55)
                     nModels, nPlayerObjs = struct.unpack('>BB', binFile.read(2))
@@ -111,7 +111,8 @@ with open(os.path.join(basePath, 'OBJECTS.tab'), 'rb') as tabFile:
             for child in list(obj.findall('./model')): obj.remove(child)
             for child in list(obj.findall('./seq')): obj.remove(child)
 
-            obj.set('def', '0x%04X' % objDef)
+            obj.set('def',   '0x%04X' % objDef)
+            obj.set('clsId', '0x%04X' % objId)
             obj.set('name', name)
             if nPlayerObjs > 0: obj.set('nPlayerObjs', str(nPlayerObjs))
             if dllId != 0xFFFF: obj.set('dll', '0x%04X' % dllId)

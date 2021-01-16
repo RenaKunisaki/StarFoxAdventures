@@ -159,7 +159,7 @@ CURVE_ATTRS = {
 }
 EVENTS = {
     0x12: "A Pressed",
-    0x12: "B Pressed",
+    0x13: "B Pressed",
     0x1A: "Talking to NPC",
 }
 

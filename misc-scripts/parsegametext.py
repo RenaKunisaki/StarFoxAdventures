@@ -65,6 +65,8 @@ def readTexts(file):
         offs = base + offsets[i]
         offsEnd = base + offsets[i+1]
         file.seek(offs)
+        # seems like the seq files have a different format,
+        # which includes the text length in bytes just before this offset.
         s = []
         while file.tell() < offsEnd-1:
             b = file.read(1)
@@ -72,7 +74,13 @@ def readTexts(file):
             b = b[0]
             if b == 0xEE:
                 c = file.read(4)
-                b = '<EE %02X%02X%02X%02X>' % (c[0], c[1], c[2], c[3])
+                if c[0] == 0x80 and c[1] == 0x98:
+                    c2 = file.read(4)
+                    b = '<EE %02X%02X%02X%02X %02X%02X%02X%02X>' % (
+                        c[0], c[1], c[2], c[3], c2[0], c2[1], c2[2], c2[3])
+                elif c[0] == 0x80 and c[1] == 0x80:
+                    b = '<SEQ %02X%02X>' % (c[2], c[3])
+                else: b = '<EE %02X%02X%02X%02X>' % (c[0], c[1], c[2], c[3])
             if b == 0xEF: # control code
                 c = file.read(1)[0]
                 if c == 0xA3:
@@ -160,23 +168,36 @@ def printXml(allTexts):
     print(ET.tostring(eTexts, encoding='unicode'))
 
 
+def mergeTexts(allTexts, texts, dir):
+    # this is ugly and assumes the text/params don't vary between dirs...
+    for id, text in texts.items():
+        if id not in allTexts:
+            if 'dirs' not in text: text['dirs'] = []
+            text['dirs'].append(dir)
+            allTexts[id] = text
+        else:
+            if 'dirs' not in allTexts[id]: allTexts[id]['dirs'] = []
+            allTexts[id]['dirs'].append(dir)
+
+
 def readAllTexts(path, lang="English"):
     allTexts = {}
-    for dir in os.listdir(os.path.join(path, 'gametext')):
+    textDir  = os.path.join(path, 'gametext')
+    for dir in os.listdir(textDir):
         try:
-            texts, unk, chars = readGameTextFile(os.path.join(path, 'gametext', dir, lang+'.bin'))
+            texts, unk, chars = readGameTextFile(
+                os.path.join(textDir, dir, lang+'.bin'))
         except FileNotFoundError:
             continue
+        mergeTexts(allTexts, texts, dir)
 
-        # this is ugly and assumes the text/params don't vary between dirs...
-        for id, text in texts.items():
-            if id not in allTexts:
-                if 'dirs' not in text: text['dirs'] = []
-                text['dirs'].append(dir)
-                allTexts[id] = text
-            else:
-                if 'dirs' not in allTexts[id]: allTexts[id]['dirs'] = []
-                allTexts[id]['dirs'].append(dir)
+    seqDir = os.path.join(path, 'gametext', 'Sequences')
+    for file in os.listdir(seqDir):
+        if(file.endswith('_%s.bin' % lang)):
+            texts, unk, chars = readGameTextFile(os.path.join(seqDir, file))
+            idx, name = file.split('_', maxsplit=2)
+            mergeTexts(allTexts, texts, 'Seq%04X' % int(idx))
+
 
     #printJson(allTexts)
     #printHeader(allTexts)
