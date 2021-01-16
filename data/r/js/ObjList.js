@@ -21,6 +21,7 @@ export default class ObjList {
 
     _makeTable() {
         const v = this.app.game.version;
+        const cats = this.app.game.objCats;
         this.tbl = new Table({
             columns: [
                 {
@@ -49,10 +50,24 @@ export default class ObjList {
                             href: `?v=${v}&p=dll&id=${dll.id}`,
                         }, `${hex(dll.id,4)} ${dll.name}`);
                     },
+                    compareFunc: (a, b) => (a.dll ? a.dll.id : -1) - (b.dll ? b.dll.id : -1),
                 }, {
                     displayName: "NP",
                     name: 'nPlayerObjs',
                     type: 'int',
+                }, {
+                    displayName: "NS",
+                    name: 'nSeqs',
+                    type: 'int',
+                }, {
+                    displayName: "Category",
+                    name: 'cat',
+                    type: 'hex',
+                    format: (desc, col, row) => {
+                        const cat = cats[row.cat];
+                        const name = cat ? cat.name : '-';
+                        return `${hex(row.cat,4)} ${name}`;
+                    },
                 }, {
                     displayName: "Description",
                     name: 'description',
@@ -78,8 +93,10 @@ export default class ObjList {
             id:          obj.id,
             name:        obj.name,
             defNo:       obj.defNo,
+            cat:         obj.category,
             dll:         obj.dll,
             nPlayerObjs: obj.nPlayerObjs,
+            nSeqs:       obj.sequences.length,
             type:        obj.type,
             description: obj.description,
             notes:       obj.notes,
@@ -129,70 +146,6 @@ export default class ObjList {
             items.push(`${hex(id,4)} ${desc}`);
         }
         return makeCollapsibleList(items);
-    }
-
-    _OLD_makeModelsTable(obj) {
-        /** Make models sub-table for object.
-         */
-        const tModels = E.table('models');
-        for(const mod of obj.getElementsByTagName('model')) {
-            const mid = mod.getAttribute('id').substr(2);
-
-            //get models.xml data
-            let infoText = '', isMissing = false, modelType = 'unknown';
-            const modInfo = modelInfo.getElementById('0x'+mid);
-            if(modInfo) {
-                modelType = modInfo.getAttribute('type');
-                try { infoText = modInfo.getElementsByTagName('description')[0].textContent; }
-                catch(ex) {}
-            }
-
-            //check if present in any map
-            if(!assetList.evaluate(
-                `//assets/models/model[@idx="0x${mid}"]/map`, assetList,
-                null, XPathResult.ANY_UNORDERED_NODE_TYPE, null).singleNodeValue) {
-                isMissing = true;
-            }
-
-            //get in-game text
-            let gameText = null;
-            let textId = mod.getAttribute('text');
-            if(textId != null) {
-                let id   = parseInt(textId) + 10000;
-                let sid  = '0x' + id.toString(16).padStart(4, '0');
-                gameText = gameTexts.getElementById(sid);
-                if(gameText) {
-                    let phrases = [];
-                    for(let elem of gameText.getElementsByTagName('phrase')) {
-                        phrases.push(elem.textContent);
-                    }
-                    gameText = phrases.join('\n');
-                }
-                else gameText = '<'+sid.substr(2)+'>';
-            }
-
-            //build row
-            const trModel = E.tr('model model-type-'+modelType);
-
-            //build link/ID cell
-            trModel.append(
-                E.td('id hex', E.a(isMissing ? 'missing-model' : '', {
-                    href:'/modelview.html#'+mid,
-                    title: infoText,
-                }, mid)),
-            );
-
-            //build text cell
-            if(gameText != null) {
-                const tdText = E.td('gametext str', gameText);
-                if(textId != null) tdText.setAttribute('title', "Text ID: "+textId);
-                trModel.append(tdText);
-            }
-            else trModel.append(E.td('str', infoText));
-
-            tModels.append(trModel);
-        }
-        return E.td('models', tModels);
     }
 
     _makeMapsTable(obj) {

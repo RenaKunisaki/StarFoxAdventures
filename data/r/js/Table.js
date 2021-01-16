@@ -55,7 +55,9 @@ export default class Table {
                     key = (row) => {
                         let v = row[k];
                         if(v == undefined) v = dflt;
-                        return parseInt(v);
+                        v = parseInt(v);
+                        if(isNaN(v)) v = 0;
+                        return v;
                     }
                     sort = (a,b) => key(a) - key(b);
                     break;

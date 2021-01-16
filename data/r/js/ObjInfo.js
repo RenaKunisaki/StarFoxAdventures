@@ -1,6 +1,7 @@
 import {E} from './Element.js';
 import Table from './Table.js';
-import {get, hex, int, makeList, makeCollapsibleList, makeDescriptionAndNotes} from './Util.js';
+import {get, getXml, hex, int, makeList, makeCollapsibleList, getDescriptionAndNotes, makeDescriptionAndNotes} from './Util.js';
+import SeqTextLut from './SeqTextLut.js';
 
 export default class ObjInfo {
     /** A page showing details of a GameObject.
@@ -134,16 +135,22 @@ export default class ObjInfo {
     }
 
     async makeSeqTable() {
-        const v = this.app.game.version;
+        const v   = this.app.game.version;
+        const seqsXml = await getXml(`${v}/objseqs.xml`);
         const obj = this.obj;
         const tbl = E.table('seq-list',
             E.tr(
+                E.th(null, "#"),
                 E.th(null, "ID"),
+                E.th(null, "Name"),
+                E.th(null, "Description"),
+                E.th(null, "Text"),
                 E.th(null, "ObjID"),
                 E.th(null, "Flags"),
                 E.th(null, "Object", {colspan:2}),
             ),
         );
+        let iSeq=0;
         for(let seq of obj.sequences) {
             let data = this.app.game.sequences[seq];
             if(data) {
@@ -171,7 +178,46 @@ export default class ObjInfo {
                         else objName = '[not found]';
                     }
                     const tr = E.tr();
-                    if(!i) tr.append(E.th(null, hex(seq,4), {rowspan:data.length}));
+                    if(!i) { //make seq info cells
+                        let dir = Object.keys(obj.maps)[0];
+                        if(!dir) dir = 5; //animtest
+                        dir = this.app.game.maps[dir].dirName;
+                        tr.append(
+                            E.th(null, hex(iSeq,2), {rowspan:data.length}),
+                            E.th(null, E.a('seqlink', hex(seq,4), {
+                                href: `?v=${v}&p=seq&dir=${dir}&id=0x${hex(seq,4)}&obj=0x${hex(obj.defNo)}`
+                            }), {rowspan:data.length}),
+                        );
+                        const eSeq = seqsXml.getElementById(`0x${hex(seq,4)}`);
+                        if(eSeq) {
+                            let name = eSeq.getAttribute('name');
+                            if(!name) name = '';
+                            tr.append(E.td('seqname', name, {rowspan:data.length}));
+                            tr.append(E.td('seqdesc',
+                                makeDescriptionAndNotes(getDescriptionAndNotes({}, eSeq)),
+                                {rowspan:data.length}));
+                        }
+                        else {
+                            tr.append(E.td('seqname', '', {rowspan:data.length}));
+                            tr.append(E.td('seqdesc', '', {rowspan:data.length})); //desc
+                        }
+                        const textLut = SeqTextLut[seq];
+                        if(textLut) {
+                            let text;
+                            if(textLut.text == 0x29) { //game does this, no idea why
+                                 text = this.app.game.texts[textLut.seq];
+                            }
+                            else text = this.app.game.texts[textLut.text];
+                            let str = '';
+                            for(let p of text.phrases) {
+                                let ib = p.lastIndexOf('>');
+                                str += p.substr(ib+1) + ' ';
+                                if(str.length > 50) break;
+                            }
+                            tr.append(E.td('seqtext', str, {rowspan:data.length}));
+                        }
+                        else tr.append(E.td('seqtext', '-', {rowspan:data.length}));
+                    }
                     tr.append(
                         E.td('hex', hex(item.objId, 8)),
                         E.td('hex', hex(item.flags, 4)),
@@ -183,11 +229,12 @@ export default class ObjInfo {
             }
             else {
                 tbl.append(E.tr(
+                    E.td('hex', hex(iSeq, 2)),
                     E.td('hex', hex(seq,4)),
                     E.td('str', "INVALID SEQ", {colspan:4}),
                 ));
             }
-
+            iSeq++;
         }
         return E.div('box object-seqs', E.h2(null, "Sequences"), tbl);
     }

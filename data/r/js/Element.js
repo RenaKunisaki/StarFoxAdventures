@@ -1,5 +1,9 @@
 export function createElement(name, ...args) {
-    const elem = document.createElement(name);
+    let elem;
+    if(name instanceof Array) { //holy shit this is stupid
+        elem = document.createElementNS(name[0], name[1]);
+    }
+    else elem = document.createElement(name);
     let haveClass = false;
     while(args.length > 0) {
         const arg = args.shift();

@@ -102,6 +102,8 @@ table .controls {
     display: inline-block;
     margin-right: 0.5em;
     margin-bottom: 0.5em;
+    vertical-align: top;
+    border: 1px #888 solid;
 }
 
 /* ******************************** object list ******************************** */
@@ -137,6 +139,68 @@ td.dll .name { padding-left: 0.5em }
     font-family: monospace;
 }
 
+.seqname, .seqdesc {
+    font-family: monospace;
+}
+
+/* ******************************** Seq info ******************************** */
+
+.curve-view, .curve-info {
+    border: 1px #888 solid;
+}
+
+.curve-view .notice {
+    font-size: 2em;
+    text-align: center;
+    margin: 0.5em;
+    color: #888;
+}
+
+.curve-view-main {
+    position: relative;
+    width: calc(48vw + 10em + 2px);
+}
+
+.curve-view-main svg {
+    width: 48vw;
+    height: 35vh;
+    border: 1px #888 solid;
+    display: block;
+}
+
+.curve-view-main svg .axis-label {
+    fill: #FFF;
+    font: normal 4px monospace; /* not actually 4px because lol */
+}
+
+.curve-view-main .legend {
+    list-style-type: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 9.5em;
+    height: 10em;
+    margin: 4px;
+    overflow: auto;
+}
+
+.curve-view-main .legend .color {
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    position: relative;
+    top: 3px;
+}
+
+.curve-view-main .legend .label {
+    font-family: monospace;
+}
+
+/* .seq-curve-points {
+    position: absolute;
+    top: 0.5em;
+    right: 0.5em;
+} */
 
 /* ******************************** DLL info ******************************** */
 

@@ -1167,6 +1167,124 @@
       <function address="0x800D85A4" idx="0x18"/>
       <function address="0x800D8BB0" idx="0x19" stub="1"/>
     </functions>
+    <objcmds>
+      <cmd id="0x01" name="SendMsg7000B">
+        <description>related to using items (possibly wait for trigger?)
+              * send message 0x7000B to playerState-&gt;targetObj_0x684
+              * clear playerState-&gt;targetObj_0x684</description>
+      </cmd>
+      <cmd id="0x02" name="StopRiding">
+        <description>If riding an object, dismount it and enable AnimTimer curve</description>
+      </cmd>
+      <cmd id="0x03" name="RideObject">
+        <description>Start riding an object</description>
+      </cmd>
+      <cmd id="0x04" name="ClimbOntoObj">
+        <description>Climb onto the ridden object</description>
+      </cmd>
+      <cmd id="0x05"/>
+      <cmd id="0x06" name="SetState17">
+        <description>set player state to 0x17 (unknown, probably related to riding)</description>
+      </cmd>
+      <cmd id="0x07" name="SetState3E">
+        <description>set player state to 0x3E (does nothing)</description>
+      </cmd>
+      <cmd id="0x08" name="SetIdle">
+        <description>set player state to 0x01 (idle)</description>
+      </cmd>
+      <cmd id="0x09"/>
+      <cmd id="0x0A" name="PullOutStaff"/>
+      <cmd id="0x0B">
+        <description>related to riding objects, trigger a camera action</description>
+      </cmd>
+      <cmd id="0x0C"/>
+      <cmd id="0x0D" name="StartSeq">
+        <description>start a sequence
+              * sets player's parent object as VariableObj and Override (no idea when the player would have a parent object - maybe when riding?)
+              * sets a vector relating to the parent
+              * executes sequence (current seq + 1?) on player</description>
+      </cmd>
+      <cmd id="0x0E"/>
+      <cmd id="0x0F" name="HitDetect">
+        <description>something with hit detection</description>
+      </cmd>
+      <cmd id="0x10" name="HitDetectNear">
+        <description>do hit detection with an object within 400 units of the player</description>
+      </cmd>
+      <cmd id="0x11"/>
+      <cmd id="0x12" name="SetFlag360_00008000">
+        <description>set player state flags_360 | 0x00008000</description>
+      </cmd>
+      <cmd id="0x13" name="LoadUiDll16">
+        <description>load UI DLL 0x16</description>
+      </cmd>
+      <cmd id="0x14" name="SetFlag360_00040000">
+        <description>set player state flags_360 | 0x00040000</description>
+      </cmd>
+      <cmd id="0x15" name="ClrFlag360_00040000">
+        <description>clear player state flags_360 | 0x00040000</description>
+      </cmd>
+      <cmd id="0x16" name="SetFlag360_00020000">
+        <description>set player state flags_360 | 0x00020000</description>
+      </cmd>
+      <cmd id="0x17" name="JumpOrThrowCmd17">
+        <description>make player jump or throw or something</description>
+      </cmd>
+      <cmd id="0x18" name="PutAwayStaff"/>
+      <cmd id="0x19" name="GotoRestartPoint"/>
+      <cmd id="0x1A" name="ShowNpcDialogue"/>
+      <cmd id="0x1B"/>
+      <cmd id="0x1C" name="ToggleStaff"/>
+      <cmd id="0x1D" name="SetIdleAndThrow"/>
+      <cmd id="0x1E" name="SetState1A"/>
+      <cmd id="0x1F"/>
+      <cmd id="0x20">
+        <description>opposite of 0x1F</description>
+      </cmd>
+      <cmd id="0x21" name="TailModeFlicking"/>
+      <cmd id="0x22" name="TailModeNormal"/>
+      <cmd id="0x23"/>
+      <cmd id="0x24"/>
+      <cmd id="0x25" name="ToggleFlag8D8_1">
+        <description>toggle bit player state_8D8 | 1</description>
+      </cmd>
+      <cmd id="0x26" name="ToggleFlag8D8_2">
+        <description>toggle bit player state_8D8 | 2</description>
+      </cmd>
+      <cmd id="0x27" name="SetHudFlag">
+        <description>do something to the HUD</description>
+      </cmd>
+      <cmd id="0x28">
+        <description>do something with the map cell of an object</description>
+      </cmd>
+      <cmd id="0x29" name="ClrHudFlag">
+        <description>do something to the HUD (opposite of 0x27)</description>
+      </cmd>
+      <cmd id="0x2A" name="WarlockEnvfxAct">
+        <description>do something with envfxact depending if warlock act number is 7 or not</description>
+      </cmd>
+      <cmd id="0x2B" name="ClrShadowFlag4">
+        <description>clear flag 4 of object's shadow</description>
+      </cmd>
+      <cmd id="0x2C" name="SetShadowFlag4">
+        <description>set flag 4 of object's shadow</description>
+      </cmd>
+      <cmd id="0x2D" name="SpiritVisionOn">
+        <description>enable spirit vision filter</description>
+      </cmd>
+      <cmd id="0x2E" name="SpiritVisionOff">
+        <description>disable spirit vision filter</description>
+      </cmd>
+      <cmd id="0x2F"/>
+      <cmd id="0x30"/>
+      <cmd id="0x31" name="Zoom50">
+        <description>set viewfinder zoom to 50</description>
+      </cmd>
+      <cmd id="0x32" name="ZoomReset">
+        <description>reset viewfinder zoom</description>
+      </cmd>
+    </objcmds>
+
   </dll>
   <dll address="0x803114B0" dolOffs="0x30E4B0" id="0x0010" interface="UI" name="UIController" unk08="0x00000000" unk0E="0x0000">
     <description>calls the other UI DLLs</description>
@@ -2719,7 +2837,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x8031CDB8" dolOffs="0x319DB8" id="0x0041" interface="UI" name="Warpstone" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x8031CDB8" dolOffs="0x319DB8" id="0x0041" interface="UI" name="WarpstoneUI" unk08="0x00000000" unk0E="0x0000">
     <functions>
       <function address="0x80134834" idx="0x0" name="initialise">
         <return type="void"/>
@@ -4875,6 +4993,15 @@ seemingly only used to track magic plants' growth</description>
       </function>
       <function address="0x801457DC" idx="0x13"/>
     </functions>
+    <objcmds>
+      <cmd id="0x01" name="ToggleSpewingFire" />
+      <cmd id="0x02" name="LoadBadge" />
+      <cmd id="0x03" name="SetEnergy">
+        <description>XXX to what?</description>
+      </cmd>
+      <cmd id="0x2B" name="ClrShadowFlag4" />
+      <cmd id="0x2C" name="SetShadowFlag4" />
+    </objcmds>
   </dll>
   <dll address="0x80320700" dolOffs="0x31D700" id="0x00C5" name="DummyC5" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
@@ -4937,6 +5064,8 @@ seemingly only used to track magic plants' growth</description>
         <description>0:none, 1:player, 2:Tricky, else objDefNo + 4</description>
       </param>
       <param offset="0x1F" type="byte" name="seqIdx" />
+      <param offset="0x20" type="byte" />
+      <param offset="0x21" type="byte" />
       <param offset="0x22" type="byte" />
       <param offset="0x24" type="byte" name="posOffs">
         <description>converted to float and divided under 1</description>
@@ -5026,6 +5155,12 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objcmds>
+      <cmd id="0x00" name="BlurFilterOff" />
+      <cmd id="0x01" />
+      <cmd id="0x02" />
+      <cmd id="0x03" />
+    </objcmds>
   </dll>
   <dll address="0x8031DC30" dolOffs="0x31AC30" id="0x00C9" interface="object" name="Baddie" unk08="0x00000000" unk0E="0x0000">
     <description>Various enemies</description>
@@ -5088,6 +5223,14 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x8014D154" idx="0x9" name="EnemygetExtraSize" return="880" stub="1">
         <return type="int"/>
       </function>
+      <objcmds>
+        <cmd id="0x01" name="AttackTricky" />
+        <cmd id="0x02" name="WeaponCmd02" />
+        <cmd id="0x03" name="CameraCmd02" />
+        <cmd id="0x04" name="AttackPlayer" />
+        <cmd id="0x06" />
+        <cmd id="0x07" />
+      </objcmds>
     </functions>
     <objparams length="0x38">
       <param offset="0x18" type="GameBit"/>
@@ -9446,7 +9589,9 @@ seemingly only used to track magic plants' growth</description>
         </description>
       </param>
       <param offset="0x1E" type="u8" name="seqIdx" />
-      <param offset="0x20" type="s16" />
+      <param offset="0x20" type="s16">
+        <description>passed to ObjSeq_preempt</description>
+      </param>
       <param offset="0x22" type="u16" name="objs" />
     </objparams>
   </dll>
@@ -17411,7 +17556,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x80327560" dolOffs="0x324560" id="0x01B0" interface="object" name="WarpStone2" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x80327560" dolOffs="0x324560" id="0x01B0" interface="object" name="WarpStone" unk08="0x00000000" unk0E="0x0000">
     <description/>
     <functions>
       <function address="0x801D7BA4" idx="0x0" name="initialise" stub="1">
@@ -17472,6 +17617,31 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objcmds>
+      <cmd id="0x03" name="setField08"/>
+      <cmd id="0x04" name="clrField08"/>
+      <cmd id="0x06" name="warpToLinkA"/>
+      <cmd id="0x07" name="warpToLinkA_07">
+        <description>Set bit 0884</description>
+      </cmd>
+      <cmd id="0x09" name="setpuCmd09">
+        <description>Set Ice Mountain to act 1, LightFoot Village to act 2</description>
+      </cmd>
+      <cmd id="0x0A" name="toggleField09"/>
+      <cmd id="0x0C" name="warpToMazeCave"/>
+      <cmd id="0x0D" name="textCmd0D"/>
+      <cmd id="0x0E" name="dll16cmd0E"/>
+      <cmd id="0x0F" name="dll16cmd0F"/>
+      <cmd id="0x10" name="dll16cmd10"/>
+      <cmd id="0x11" name="dll16cmd11"/>
+      <cmd id="0x12" name="setObjGroupCmd12"/>
+      <cmd id="0x14" name="unlockAllLevels"/>
+      <cmd id="0x15" name="unloadLinkA"/>
+      <cmd id="0x16" name="unloadLinkA_16">
+        <description>Same as 0x15</description>
+      </cmd>
+      <cmd id="0x17" name="playWarpSound"/>
+    </objcmds>
   </dll>
   <dll address="0x803277E0" dolOffs="0x3247E0" id="0x01B1" interface="object" name="SH_staff" unk08="0x00000000" unk0E="0x0000">
     <description>staff pickup in hollow</description>
@@ -22747,6 +22917,14 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams>
+      <param offset="0x18" type="byte" name="rotation" />
+      <param offset="0x19" type="byte" name="action" />
+      <param offset="0x1A" type="s16" name="trigDist" />
+      <param offset="0x1C" type="s16" name="seqIdx" />
+      <param offset="0x1E" type="GameBit16" name="seqStarted" />
+      <param offset="0x20" type="GameBit16" />
+    </objparams>
   </dll>
   <dll address="0x80328D28" dolOffs="0x325D28" id="0x020E" interface="object" name="WM_sun" unk08="0x00000000" unk0E="0x0000">
     <description/>

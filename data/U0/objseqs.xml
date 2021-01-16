@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<sequences>
+  <seq id="0x0005">
+    <description>makes player swim</description>
+  </seq>
+  <seq id="0x000A" name="Tricky_ImStuffed" />
+  <seq id="0x000C" name="SH_GiveMoonPassKey" />
+  <seq id="0x000E">
+    <description>spawns a baby CloudRunner flying away</description>
+  </seq>
+  <seq id="0x0017" name="Player_0017">
+    <description>Kneel, speak, stand, walk forward, very close camera</description>
+  </seq>
+  <seq id="0x001A" name="SH_BloopAttack" />
+  <seq id="0x001C" name="SH_GetLargeScarabBag" />
+  <seq id="0x001D" name="SH_StartStaffTutorial" />
+  <seq id="0x001E" name="SH_WarpStone_Got3Stones" />
+  <seq id="0x001F" name="SH_GateKeeperOpenPortal" />
+  <seq id="0x0020" name="SH_DoneStaffTutorial" />
+  <seq id="0x0023" name="SH_WallCityNotReturned" />
+  <seq id="0x002C" name="Tricky_LostYouInBlizzard" />
+  <seq id="0x002D" name="Tricky_FirstDinoInSpace" />
+  <seq id="0x002E" name="Tricky_GonnaBeSpaceman" />
+  <seq id="0x0041" name="CF_ScalesAttackQueen" />
+  <seq id="0x0055" name="ExplainStaffBoostPad" />
+  <seq id="0x0061" name="Transporter_WarpOut" />
+  <seq id="0x0061" name="Transporter_WarpIn" /> <!-- XXX wrong ID -->
+  <seq id="0x0069" name="SB_OpeningScene" />
+  <seq id="0x006D" name="SB_YourAdventureBegins" />
+  <seq id="0x0071" name="ExplainBombSporePlant" />
+  <seq id="0x0072" name="SH_StealingMyEggs" />
+  <seq id="0x0080" name="SH_GetMedScarabBag" />
+  <seq id="0x0083" name="SB_MeetScales" />
+  <seq id="0x0093" name="SB_FadeToLandingScene" />
+  <seq id="0x009F" name="Player_TalkToNpc" />
+  <seq id="0x00D1" name="Tricky_ThatsMyMa" />
+  <seq id="0x00E3" name="SH_SavedEggs" />
+  <seq id="0x00E4" name="SH_TrickyDadIsGateKeeper" />
+  <seq id="0x00EC" name="SB_TalkToKyte" />
+  <seq id="0x0111" name="ECSH_TalkToSpirit1" />
+  <seq id="0x0112" name="ECSH_WinTest1" />
+  <seq id="0x0113" name="ECSH_FailTest1" />
+  <seq id="0x0117" name="Item_GotCheatToken" />
+  <seq id="0x012C" name="ECSH_DoTest1Hide" />
+  <seq id="0x012D" name="ECSH_StartTest1" />
+  <seq id="0x017C" name="CF_FirstLanding" />
+  <seq id="0x0180" name="WM_ReleaseSpirit1" />
+  <seq id="0x01D7" name="CF_GiveFlute" />
+  <seq id="0x01DB" name="CF_GiveDisguise" />
+  <seq id="0x01FA" name="SH_PepperFirstLanding" />
+  <seq id="0x01FC" name="SH_MeetQueen" />
+  <seq id="0x023E" name="Fox_GotItem" />
+  <seq id="0x023F" name="Player_UseDinoHorn" />
+  <seq id="0x02D8" name="CF_WakeUpInDungeon" />
+  <seq id="0x0318" name="Player_0318">
+    <description>tilt and scratch head, zoom out, crash</description>
+  </seq>
+  <seq id="0x031C" name="Player_031C">
+    <description>Odd zoom into head, pan around, fighting stance</description>
+  </seq>
+  <seq id="0x031D" name="Player_AcceptItem" />
+  <seq id="0x032A" name="Player_OpenChest" />
+  <seq id="0x032E" name="Player_GiveItem" />
+  <seq id="0x03A3" name="Player_InstantCrash" />
+  <seq id="0x03AA" name="Player_FireflyLantern_03AA" />
+  <seq id="0x03AC" name="Player_FireFlyLantern_03AC" />
+  <seq id="0x040E" name="Player_BizarreNeckBreakingWarp" />
+  <seq id="0x0457" name="SB_ExplainHowToTalk" />
+  <seq id="0x046C" name="CF_RescuedQueen" />
+  <seq id="0x0471" name="Player_Transform_0471">
+    <description>Unused, resembles kiosk SharpClaw Disguise anim</description>
+  </seq>
+  <seq id="0x0472" name="Player_UseCommunicator" />
+  <seq id="0x0476" name="Player_Transform_0476">
+    <description>Like 0471 but shorter</description>
+  </seq>
+  <seq id="0x0477" name="CF_GotSpellStone" />
+  <seq id="0x0478" name="Player_Transform_0478">
+    <description>Like 0471 but longer</description>
+  </seq>
+  <seq id="0x0479" name="Player_UseCloudRunnerFlute" />
+  <seq id="0x047A" name="CF_RescueDino" />
+  <seq id="0x047E" name="Player_047E">
+    <description>stays motionless for several seconds</description>
+  </seq>
+  <seq id="0x0490" name="WM_KrystalLand" />
+  <seq id="0x0492" name="WM_DinoAfterTest1" />
+  <seq id="0x0493" name="WM_DinoOpenDoorTest1" />
+  <seq id="0x044B" name="WM_TransporterExplanation" />
+  <seq id="0x04CB" name="SB_NeedExploreBelowDeck" />
+  <seq id="0x04DF" name="Player_FallAndGetUp">
+    <description>Unused, intended for CR fort</description>
+  </seq>
+  <seq id="0x04E8" name="WM_FoxFirstWarpIn" />
+  <seq id="0x0558" name="Krystal_GotItem" />
+  <seq id="0x0571" name="SH_NPC_SharpClawPutOutBeacons" />
+</sequences>

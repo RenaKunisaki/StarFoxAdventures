@@ -13,6 +13,7 @@ export default class GameObject {
         this.defNo       = int(eObj.getAttribute('def'));
         this.dllId       = int(eObj.getAttribute('dll'));
         this.nPlayerObjs = int(eObj.getAttribute('nPlayerObjs'));
+        this.category    = int(eObj.getAttribute('cat'));
         this.type        = eObj.getAttribute('type');
         this.maps        = {};
         this.models      = [];

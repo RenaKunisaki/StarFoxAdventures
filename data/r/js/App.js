@@ -9,6 +9,7 @@ import GameBitList from './GameBitList.js';
 import MapInfo from './MapInfo.js';
 import MapList from './MapList.js';
 import MapView from './gl/sfa/map/MapView.js';
+import SeqInfo from './SeqInfo.js';
 
 export default class App {
     /** The application.
@@ -36,6 +37,7 @@ export default class App {
             map:      MapInfo,
             maps:     MapList,
             mapview:  MapView,
+            seq:      SeqInfo,
         };
         const p = this.params.get('p');
         const cls = (p == null) ? Index : pages[p];

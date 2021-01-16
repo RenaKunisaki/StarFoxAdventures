@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<warptab>
+  <warp id="0x00" x="744.47" y="1309.00" z="-16341.25" layer="0" rot="0" name="CF_Dungeon" />
+  <warp id="0x01" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x02" x="3583.79" y="6397.00" z="4374.05" layer="0" rot="290" name="IM_WarpPad" />
+  <warp id="0x03" x="-5517.87" y="-636.25" z="-800.18" layer="0" rot="0" name="SH_EggCave" />
+  <warp id="0x04" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x05" x="11104.35" y="-289.00" z="3593.05" layer="0" rot="0" name="Empty05" />
+  <warp id="0x06" x="12264.56" y="211.00" z="451.46" layer="0" rot="0" name="KP_KrystalLandingSpot" />
+  <warp id="0x07" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x08" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x09" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x0A" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x0B" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x0C" x="744.47" y="1309.00" z="-16341.25" layer="0" rot="0" name="CF_Dungeon0C">
+    <note>same as 0x00</note>
+  </warp>
+  <warp id="0x0D" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x0E" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x0F" x="-5222.53" y="-634.53" z="-1733.20" layer="0" rot="331" name="SH_WarpStonePlatform" />
+  <warp id="0x10" x="-12406.05" y="-255.00" z="-892.95" layer="0" rot="0" name="MMP_MagicCaveEntrance" />
+  <warp id="0x11" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x12" x="-18780.69" y="31.71" z="28498.75" layer="0" rot="0" name="TitleScreen" />
+  <warp id="0x13" x="-16321.92" y="-778.00" z="-13280.20" layer="0" rot="0" name="WC_FrontOfPyramid" />
+  <warp id="0x14" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x15" x="-16321.63" y="-844.00" z="-15650.99" layer="0" rot="0" name="WC_MagicCaveEntrance" />
+  <warp id="0x16" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x17" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x18" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x19" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x1A" x="3339.32" y="6545.63" z="4197.86" layer="0" rot="0" name="IM_AfterReRace" />
+  <warp id="0x1B" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x1C" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x1D" x="-9273.60" y="-2958.66" z="20698.02" layer="-2" rot="0" name="BossGaldon" />
+  <warp id="0x1E" x="-7950.00" y="-2959.70" z="20201.84" layer="-2" rot="0" name="BossGaldon1E">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x1F" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x20" x="11840.23" y="-246.02" z="5864.17" layer="0" rot="0" name="WM_WarpStoneEntrance" />
+  <warp id="0x21" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x22" x="13154.08" y="-84.02" z="2880.27" layer="0" rot="0" name="WM_InteriorWarp1" />
+  <warp id="0x23" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x24" x="14079.91" y="-204.01" z="-17072.95" layer="0" rot="180" name="dfshrine">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x25" x="7039.94" y="57.95" z="-13887.78" layer="0" rot="0" name="nwshrine">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x26" x="17920.00" y="-204.02" z="-10672.93" layer="0" rot="179" name="dbshrine">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x27" x="13927.60" y="56.34" z="-4632.16" layer="0" rot="0" name="Empty27" />
+  <warp id="0x28" x="10688.02" y="-84.00" z="1495.12" layer="0" rot="271" name="WM_InteriorWarp2" />
+  <warp id="0x29" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x2A" x="17919.77" y="-204.03" z="-14514.45" layer="0" rot="179" name="WC_2A">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x2B" x="10240.04" y="-204.02" z="-18354.30" layer="0" rot="179" name="mmshrine">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x2C" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x2D" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x2E" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x2F" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x30" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x31" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x32" x="-11682.48" y="-956.37" z="-16806.23" layer="2" rot="0" name="Andross" />
+  <warp id="0x33" x="8269.23" y="134.00" z="31105.61" layer="0" rot="83" name="MazeCave" />
+  <warp id="0x34" x="-5840.06" y="-569.00" z="-1711.77" layer="0" rot="0" name="SH_BombSporeCave" />
+  <warp id="0x35" x="2053.46" y="-1638.77" z="-2064.91" layer="0" rot="0" name="CC_MagicCaveEntrance" />
+  <warp id="0x36" x="-9260.67" y="-2959.83" z="20803.75" layer="-2" rot="0" name="BossGaldon36">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x37" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x38" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x39" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x3A" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x3B" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x3C" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x3D" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x3E" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x3F" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x40" x="-11839.86" y="52.99" z="-4799.99" layer="0" rot="183" name="MMP_EndWarp" />
+  <warp id="0x41" x="13201.71" y="1278.00" z="2239.03" layer="0" rot="0" name="WM_FinalBossWarp" />
+  <warp id="0x42" x="-4159.92" y="-522.02" z="4159.72" layer="0" rot="0" name="NW_ShrineWarp" />
+  <warp id="0x43" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x44" x="13440.05" y="-204.00" z="-13234.06" layer="0" rot="179" name="ecshrine">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x45" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x46" x="-16320.60" y="-474.00" z="-13759.80" layer="0" rot="180" name="WC_PyramidTop" />
+  <warp id="0x47" x="-1601.05" y="-1217.00" z="-960.92" layer="0" rot="0" name="LV_ShrineWarp" />
+  <warp id="0x48" x="-18713.44" y="389.00" z="-307.88" layer="0" rot="0" name="Volcano" />
+  <warp id="0x49" x="-170.03" y="1284.00" z="-14400.68" layer="0" rot="88" name="CF_BikeRace" />
+  <warp id="0x4A" x="463.57" y="1845.00" z="-16899.71" layer="0" rot="180" name="CF_4A" />
+  <warp id="0x4B" x="1534.03" y="-2536.00" z="-8577.08" layer="-1" rot="0" name="desert">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x4C" x="4225.95" y="-2536.01" z="-8576.80" layer="-1" rot="0" name="desert">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x4D" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x4E" x="12637.58" y="1278.70" z="2597.78" layer="0" rot="0" name="WM_ArwingLandingPad" />
+  <warp id="0x4F" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x50" x="-1299.30" y="-817.00" z="-1932.53" layer="0" rot="0" name="LV_Plateau" />
+  <warp id="0x51" x="-18626.93" y="-60.00" z="513.72" layer="0" rot="0" name="VolcanoSpellStoneSeal" />
+  <warp id="0x52" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x53" x="-12767.98" y="-2364.00" z="12376.13" layer="-1" rot="0" name="dragrockbot">
+    <note>crashes and fucks up Dolphin</note>
+  </warp>
+  <warp id="0x54" x="7608.21" y="-281.00" z="25924.80" layer="1" rot="0" name="BossDrakor" />
+  <warp id="0x55" x="-3401.70" y="-1029.90" z="-1769.50" layer="0" rot="0" name="LV_CheatWell">
+    <note>out of bounds near cheat token well</note>
+  </warp>
+  <warp id="0x56" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x57" x="10146.28" y="120.00" z="-14819.20" layer="0" rot="45" name="magiccave">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x58" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x59" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x5A" x="-10133.06" y="0.00" z="-12942.76" layer="0" rot="0" name="bosstrex">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x5B" x="-16322.49" y="-1210.00" z="-13518.57" layer="0" rot="0" name="WC_BossExit" />
+  <warp id="0x5C" x="-9100.96" y="-2957.00" z="20768.95" layer="-2" rot="0" name="BossGaldon5C">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x5D" x="13440.99" y="973.00" z="30397.73" layer="0" rot="0" name="OldKP1" />
+  <warp id="0x5E" x="19373.80" y="23.00" z="30080.00" layer="0" rot="0" name="OldKP2" />
+  <warp id="0x5F" x="-6661.47" y="-1092.00" z="-2257.07" layer="-1" rot="189" name="swapholbot">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x60" x="9467.04" y="24.71" z="-9098.43" layer="0" rot="0" name="WorldMap" />
+  <warp id="0x61" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x62" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x63" x="4125.24" y="1470.00" z="-18232.93" layer="0" rot="0" name="CF_LandingPad" />
+  <warp id="0x64" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x65" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x66" x="-6710.58" y="-716.00" z="-956.86" layer="0" rot="0" name="SH_MagicCaveEntrance" />
+  <warp id="0x67" x="-2634.34" y="-131.00" z="2167.80" layer="0" rot="0" name="NW_MagicCaveEntrance" />
+  <warp id="0x68" x="2878.27" y="-1533.02" z="-9251.86" layer="0" rot="0" name="OFP_TopWarp" />
+  <warp id="0x69" x="2879.12" y="-2718.03" z="-9281.40" layer="-1" rot="179" name="desert">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x6A" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x6B" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x6C" x="-5541.41" y="-775.00" z="-3385.49" layer="0" rot="0" name="SH_LandingPad" />
+  <warp id="0x6D" x="-10109.05" y="15.81" z="-12860.19" layer="0" rot="0" name="bosstrex">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x6E" x="6676.22" y="270.01" z="-16653.10" layer="2" rot="0" name="ArwingToCloudRunner" />
+  <warp id="0x6F" x="-17231.65" y="274.55" z="-16641.20" layer="2" rot="0" name="ArwingToPlanet" />
+  <warp id="0x70" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x71" x="3198.86" y="-2543.00" z="-7986.54" layer="-1" rot="0" name="desert">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x72" x="2894.08" y="-2543.00" z="-7679.65" layer="-1" rot="90" name="desert">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x73" x="3357.74" y="-1601.00" z="-7428.49" layer="0" rot="179" name="OFP_Main" />
+  <warp id="0x74" x="-4843.78" y="270.01" z="-16653.10" layer="2" rot="0" name="ArwingToMines" />
+  <warp id="0x75" x="14356.22" y="270.01" z="-16653.10" layer="2" rot="0" name="ArwingToDragRock" />
+  <warp id="0x76" x="10516.22" y="270.01" z="-16653.10" layer="2" rot="0" name="ArwingToCity" />
+  <warp id="0x77" x="-7343.81" y="-1557.00" z="8830.43" layer="0" rot="0" name="DIM_LandingPad" />
+  <warp id="0x78" x="-16802.63" y="-799.00" z="-11984.50" layer="0" rot="0" name="WC_LandingPad" />
+  <warp id="0x79" x="-13753.41" y="-1715.00" z="11227.98" layer="0" rot="0" name="DR_LandingPad" />
+  <warp id="0x7A" x="-18560.25" y="293.00" z="639.91" layer="0" rot="0" name="VolcanoCentralWarp" />
+  <warp id="0x7B" x="-17919.03" y="198.00" z="-975.60" layer="0" rot="179" name="VolcanoSpellStonePillar" />
+  <warp id="0x7C" x="-16060.39" y="57.37" z="-320.44" layer="0" rot="271" name="VolcanoForcePoint" />
+  <warp id="0x7D" x="0.00" y="0.00" z="0.00" layer="0" rot="0" />
+  <warp id="0x7E" x="-6068.69" y="170.75" z="20816.42" layer="0" rot="0" name="LinkA">
+    <note>crashes</note>
+  </warp>
+  <warp id="0x7F" x="-860.69" y="31.71" z="24658.75" layer="0" rot="0" name="GreatFox" />
+</warptab>

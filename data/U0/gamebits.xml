@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <gamebits>
+  <!-- bytes 0x50-0x5C of tempGameBits are idxs of task texts -->
   <bit id="0x0000" table="0" hint="0x00" hasHint="0" max="1" name="CantCallTricky">
     <objref map="wgshrine" obj="Transporter" objId="0x00000C5D" param="enabled"/>
   </bit>
@@ -142,9 +143,9 @@
   </bit>
   <bit id="0x0052" table="2" hint="0x00" hasHint="0" max="1" name="CF_HaveGreenCrystal"/>
   <bit id="0x0053" table="2" hint="0x00" hasHint="0" max="1" name="CF_HaveBlueCrystal"/>
-  <bit id="0x0054" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0055" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0056" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0054" table="2" hint="0x00" hasHint="0" max="1" name="CF_CrystalRelated0054"/>
+  <bit id="0x0055" table="2" hint="0x00" hasHint="0" max="1" name="CF_CrystalRelated0055" />
+  <bit id="0x0056" table="2" hint="0x00" hasHint="0" max="1" name="CF_CrystalRelated0056" />
   <bit id="0x0057" table="2" hint="0x54" hasHint="1" max="1" name="CF_PowerOn">
     <objref map="clouddungeon" obj="StaffLeverT" objId="0x000477A7" param="enabled"/>
     <objref map="fortress" obj="HitAnimator" objId="0x0004397B" param="target"/>
@@ -1036,7 +1037,7 @@
   <bit id="0x026F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0270" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0271" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0272" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x0272" table="2" hint="0x00" hasHint="0" max="1" name="PushableRelated0272">
     <objref map="snowmines2" obj="HitAnimator" objId="0x0004656F" param="target"/>
     <objref map="snowmines2" obj="HitAnimator" objId="0x0004CD63" param="target"/>
   </bit>
@@ -1880,7 +1881,7 @@
   <bit id="0x04DD" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04DE" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04DF" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x04E0" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x04E0" table="1" hint="0x00" hasHint="0" max="1" name="CFPowerRelated04E0" />
   <bit id="0x04E1" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="linkf" obj="fuelCell" objId="0x0004BC92" param="Collected"/>
   </bit>
@@ -3308,7 +3309,7 @@
   <bit id="0x0912" table="2" hint="0x00" hasHint="0" max="1" name="DidSeeWarpPad">
     <description>if not, explains what it is when touching one</description>
   </bit>
-  <bit id="0x0913" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0913" table="2" hint="0x00" hasHint="0" max="1" name="PushableRelated0913"/>
   <bit id="0x0914" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0915" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0916" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -3651,7 +3652,7 @@
   <bit id="0x0A17" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0A18" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0A19" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0A1A" table="0" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0A1A" table="0" hint="0x00" hasHint="0" max="1" name="PushableRelated0A1A"/>
   <bit id="0x0A1B" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0A1C" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0A1D" table="1" hint="0x00" hasHint="0" max="1"/>

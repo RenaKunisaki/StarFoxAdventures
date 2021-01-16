@@ -1,11 +1,13 @@
-import {Dll}      from './Dll.js';
-import GameObject from './GameObject.js';
-import GameText   from './GameText.js';
-import GameBit    from './GameBit.js';
-import GameMap    from './GameMap.js';
-import Model      from './Model.js';
-import RomList    from './RomList.js';
-import {get,getBin,getXml,int,float,hex} from './Util.js';
+import {Dll}       from './Dll.js';
+import AnimCurve   from './AnimCurve.js';
+import GameObject  from './GameObject.js';
+import ObjCategory from './ObjCategory.js';
+import GameText    from './GameText.js';
+import GameBit     from './GameBit.js';
+import GameMap     from './GameMap.js';
+import Model       from './Model.js';
+import RomList     from './RomList.js';
+import {get,getBin,getXml,int,float,hex,getDescriptionAndNotes} from './Util.js';
 
 export default class Game {
     /** Represents the SFA game itself.
@@ -40,10 +42,12 @@ export default class Game {
         this.texts     = await this._downloadFile('gametext', GameText,   'text');
         this.models    = await this._downloadFile('models',   Model,      'model');
         this.objects   = await this._downloadFile('objects',  GameObject, 'object');
+        this.objCats   = await this._downloadFile('objcats',  ObjCategory,'cat');
         this.bits      = await this._downloadFile('gamebits', GameBit,    'bit');
         this.maps      = await this._downloadFile('maps',     GameMap,    'map');
         this.objIndex  = await this._getObjIndex();
         this.sequences = await this._getSeqData();
+        this.warps     = await this._getWarps();
         this._objUniqueIds = null;
 
         this.mapsByDir = {};
@@ -134,6 +138,7 @@ export default class Game {
 
     async _getSeqData() {
         /** Download and parse OBJSEQ.bin.
+         *  XXX this is obsolete, only used for objinfo, should be changed there
          */
         const seqTab = await getBin(`${this.version}/disc/OBJSEQ.tab`);
         const seqBin = await getBin(`${this.version}/disc/OBJSEQ.bin`);
@@ -158,6 +163,94 @@ export default class Game {
         return result;
     }
 
+    async _getWarps() {
+        /** Download and parse warptab.xml.
+         */
+        const warpsXml = await getXml(`${this.version}/warptab.xml`);
+        const warps = {};
+        for(let elem of warpsXml.getElementsByTagName('warp')) {
+            const warp = {
+                id:    int(elem.getAttribute('id')),
+                x:   float(elem.getAttribute('x')),
+                y:   float(elem.getAttribute('y')),
+                z:   float(elem.getAttribute('z')),
+                layer: int(elem.getAttribute('layer')),
+                angle: int(elem.getAttribute('rot')),
+                name:      elem.getAttribute('name'),
+            };
+            getDescriptionAndNotes(warp, elem);
+            if(warp.x != 0 || warp.y != 0 || warp.z != 0) warps[warp.id] = warp;
+        }
+        return warps;
+    }
+
+    async getSequence(dir, id) {
+        /** Get sequence data from a directory.
+         */
+        const V = this.version;
+        const [animCurvTabData, animCurvBinData,
+            objSeq2CTabData, seqsXml] = await Promise.all([
+                getBin(`${V}/disc/${dir}/ANIMCURV.tab`),
+                getBin(`${V}/disc/${dir}/ANIMCURV.bin`),
+                //getBin(`${V}/disc/${dir}/OBJSEQ.tab`),
+                //getBin(`${V}/disc/${dir}/OBJSEQ.bin`),
+                getBin(`${V}/disc/${dir}/OBJSEQ2C.tab`),
+                getXml(`${V}/objseqs.xml`),
+            ]);
+        const animCurvTab = new DataView(animCurvTabData);
+        const animCurvBin = new DataView(animCurvBinData);
+        const objSeq2CTab = new DataView(objSeq2CTabData);
+
+        //read OBJSEQ2C - same logic as game
+        const origId = Math.abs(id);
+        if(id >= 0) id = objSeq2CTab.getUint16(id*2);
+        else id = -id;
+        console.log(`Seq ID 0x${hex(origId,4)} => 0x${hex(id,4)} in ${dir}`);
+
+        //read curves
+        let curve = null;
+        let offs = animCurvTab.getUint32(id*4);
+        let next = animCurvTab.getUint32((id+1)*4);
+        console.log(`Seq offs=0x${hex(offs,8)} next=0x${hex(next,8)}`);
+        if(offs != 0xFFFFFFFF && next != 0xFFFFFFFF && offs & 0x80000000) {
+            const len = (next & 0xFFFFFF) - (offs & 0xFFFFFF);
+            curve = new AnimCurve(this, animCurvBin, offs & 0xFFFFFF, len);
+            curve.id  = origId;
+            curve.idx = id;
+            const eSeq = seqsXml.getElementById(`0x${hex(origId,4)}`);
+            if(eSeq) {
+                curve.name = eSeq.getAttribute('name');
+                getDescriptionAndNotes(curve, eSeq);
+            }
+        }
+
+        //read objseqs
+        /* console.log("Reading OBJSEQ...");
+        const objSeqs = {};
+        offs = objSeqTab.getUint16(0);
+        for(let iSeq=1; iSeq<objSeqTab.byteLength/2; iSeq++) {
+            let next = objSeqTab.getUint16(iSeq*2);
+            if(offs == 0xFFFF || next == 0xFFFF) break;
+            const objs = [];
+            for(let iObj=0; iObj<(next-offs); iObj++) {
+                const offsObj = offs * 8;
+                objs.push({
+                    uniqueId: objSeqBin.getInt32(offsObj),
+                    flags:    objSeqBin.getUint16(offsObj+4),
+                    defNo:    objSeqBin.getUint16(offsObj+6),
+                });
+            }
+            objSeqs[iSeq-1] = objs;
+        } */
+
+        /* return {
+            curves:   curves,
+            objSeqs:  objSeqs,
+            objSeq2C: objSeq2C,
+        }; */
+        return curve;
+    }
+
     async getRomList(id, name) {
         /** Download a romlist file by ID or name.
          */
@@ -171,7 +264,7 @@ export default class Game {
         }
         else {
             if(name == null || name == undefined) {
-                name = this.app.game.maps[id].romlistName;
+                name = this.maps[id].romlistName;
             }
             if(name == null || name == undefined) {
                 throw new Error("Romlist not found");

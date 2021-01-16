@@ -87,6 +87,7 @@ export function getDescriptionAndNotes(self, elem) {
         }
     }
     self.description = desc.join('\n');
+    return self;
 }
 
 export function makeDescriptionAndNotes(obj) {

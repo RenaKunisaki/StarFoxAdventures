@@ -4103,7 +4103,7 @@
   </text>
   <text id="0x0498" window="10" alignH="0" alignV="0" language="0">
     <dir name="Arwing"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;You did it, Fox.  The Force Field is down.</phrase>
   </text>
   <text id="0x0499" window="124" alignH="0" alignV="0" language="0">
     <dir name="Arwing"/>
@@ -8057,6 +8057,7 @@
   </text>
   <text id="0x0073" window="124" alignH="3" alignV="0" language="0">
     <dir name="NWastes"/>
+    <dir name="Seq0073"/>
     <phrase>I'm sorry, lad, but you're on your own now.</phrase>
   </text>
   <text id="0x007B" window="124" alignH="3" alignV="0" language="0">
@@ -8185,6 +8186,7 @@
   </text>
   <text id="0x02FC" window="124" alignH="0" alignV="0" language="0">
     <dir name="NWastes"/>
+    <dir name="Seq02FC"/>
     <phrase>&lt;FONT 0005&gt;c&lt;FONT 0004&gt;The water looks very cold, Fox!</phrase>
     <phrase/>
     <phrase>&lt;FONT 0005&gt;c&lt;FONT 0004&gt;You'd better get out quick if you fall in!</phrase>
@@ -8209,6 +8211,7 @@
   </text>
   <text id="0x0297" window="124" alignH="3" alignV="0" language="0">
     <dir name="ShipBattle"/>
+    <dir name="Seq0297"/>
     <phrase>Your adventure begins!</phrase>
     <phrase/>
     <phrase>Use &lt;FONT 0002&gt;J&lt;FONT 0004&gt; to move Krystal around the Galleon.</phrase>
@@ -8221,6 +8224,7 @@
   </text>
   <text id="0x0298" window="124" alignH="3" alignV="0" language="0">
     <dir name="ShipBattle"/>
+    <dir name="Seq0298"/>
     <phrase>When the &lt;FONT 0002&gt;A&lt;FONT 0004&gt; appears, check the &lt;FONT 0002&gt;A&lt;FONT 0004&gt; display .</phrase>
     <phrase/>
     <phrase>This will tell you what &lt;FONT 0002&gt;A&lt;FONT 0004&gt; can do at that time.</phrase>
@@ -8253,6 +8257,7 @@
   </text>
   <text id="0x04B1" window="2" alignH="0" alignV="1" language="0">
     <dir name="ShipBattle"/>
+    <dir name="Seq04B1"/>
     <phrase/>
     <phrase/>
     <phrase/>
@@ -8271,58 +8276,60 @@
   <text id="0x02E5" window="10" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;You pay this much.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x02E6" window="10" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;OK, I'll sell it to you.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x02E8" window="10" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;No!  That's too low.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x02EA" window="10" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;I don't need business from cheapskates!  Get out!</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x02ED" window="10" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;How about playing a little game?</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x02EE" window="10" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Choose how many Scarabs you wish to gamble.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x02EF" window="10" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;I will then throw them into this cave.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x02F0" window="10" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Are you ready?</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x03F6" window="133" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
     <dir name="SwapHol"/>
+    <dir name="Seq03F6"/>
     <phrase>&lt;SCALE 0x1B3&gt;ThornTail Hollow</phrase>
   </text>
   <text id="0x0433" window="133" alignH="0" alignV="0" language="0">
     <dir name="Shop"/>
+    <dir name="Seq0433"/>
     <phrase>&lt;SCALE 0x1B3&gt;ThornTail Store</phrase>
   </text>
   <text id="0x045F" window="124" alignH="3" alignV="0" language="0">
@@ -8728,23 +8735,23 @@
   </text>
   <text id="0x0025" window="10" alignH="0" alignV="0" language="0">
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00AA 005500FF&gt;Are you ready to go to Krazoa Palace?</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x002A" window="10" alignH="0" alignV="0" language="0">
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00AA 005500FF&gt;You cannot go to Krazoa Palace until you have a Spirit!</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x002B" window="10" alignH="0" alignV="0" language="0">
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00AA 005500FF&gt;Are you ready to warp?</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
   </text>
   <text id="0x002C" window="10" alignH="0" alignV="0" language="0">
     <dir name="SwapHol"/>
-    <phrase>&lt;EE 80980000&gt;</phrase>
-    <phrase>&lt;EE 80980000&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00AA 005500FF&gt;As I said earlier, this will take you to one of my WarpStones.</phrase>
+    <phrase>&lt;EE 80980000 00050000&gt; </phrase>
   </text>
   <text id="0x006C" window="124" alignH="3" alignV="0" language="0">
     <dir name="SwapHol"/>
@@ -9330,6 +9337,7 @@
   </text>
   <text id="0x2815" window="131" alignH="0" alignV="0" language="0">
     <dir name="SwapHol"/>
+    <dir name="Seq2815"/>
     <phrase>FIRE WEEDS</phrase>
   </text>
   <text id="0x282B" window="131" alignH="0" alignV="0" language="0">
@@ -9733,10 +9741,12 @@
   </text>
   <text id="0x042C" window="133" alignH="0" alignV="0" language="0">
     <dir name="Warlock"/>
+    <dir name="Seq042C"/>
     <phrase>&lt;SCALE 0x1B3&gt;Krazoa Palace</phrase>
   </text>
   <text id="0x0476" window="133" alignH="3" alignV="0" language="0">
     <dir name="Warlock"/>
+    <dir name="Seq0476"/>
     <phrase>Meanwhile in a lost corner</phrase>
     <phrase>of the Lylat System...</phrase>
   </text>
@@ -9869,5 +9879,1611 @@
     <phrase>What are you doing, Fox?  You're just wasting time!</phrase>
     <phrase/>
     <phrase>Get on with the mission.  There's a bonus waiting for us.</phrase>
+  </text>
+  <text id="0x000B" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq000B"/>
+    <phrase>&lt;SEQ 004B&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0002001A&gt;&lt;COLOR 000000FF 005500FF&gt;To find the SpellStone...</phrase>
+    <phrase>...you must first activate the Wind Lifts.</phrase>
+    <phrase>&lt;EE 80980000 00080001&gt;&lt;COLOR 000000FF 005500FF&gt;This is the key to the Power Chamber.</phrase>
+    <phrase>&lt;EE 80980000 000A0019&gt;&lt;COLOR 000000FF 005500FF&gt;The power supply to the whole city is down.</phrase>
+    <phrase>These Wind Lifts will only work if you restart the generator.</phrase>
+    <phrase>&lt;EE 80980000 00110019&gt; </phrase>
+  </text>
+  <text id="0x000C" window="10" alignH="3" alignV="0" language="0">
+    <dir name="Seq000C"/>
+    <phrase>&lt;SEQ 0285&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;The power supply to the whole fortress is down.</phrase>
+    <phrase>&lt;EE 80980000 00020000&gt;These Wind Lifts will only work if you restart the generator.</phrase>
+    <phrase>&lt;EE 80980000 00050000&gt; </phrase>
+  </text>
+  <text id="0x0092" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0092"/>
+    <phrase>&lt;SEQ 04C3&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 000D0007&gt;&lt;COLOR 006600FF 003300FF&gt;That should be it, Rob.  All fixed.</phrase>
+    <phrase>&lt;EE 80980000 00100007&gt; </phrase>
+    <phrase>&lt;EE 80980000 00140001&gt;&lt;COLOR 00FF0066 006600FF&gt;Affirmative.  I'll get back to work.</phrase>
+    <phrase>&lt;EE 80980000 00170001&gt; </phrase>
+    <phrase>&lt;EE 80980000 001B0003&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;Hey, Fox!  Isn't this music getting on your nerves?</phrase>
+    <phrase>I'm trying to work on my maps.</phrase>
+    <phrase>&lt;EE 80980000 00220003&gt; </phrase>
+    <phrase>&lt;EE 80980000 00250005&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, old-timer.  Turn it down, Slippy!</phrase>
+    <phrase>&lt;EE 80980000 00280005&gt; </phrase>
+    <phrase>&lt;EE 80980000 002E0001&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Slippy!  It's General Pepper!</phrase>
+    <phrase>&lt;EE 80980000 00310003&gt;&lt;COLOR 006600CC 00FF00FF&gt;General Pepper here.</phrase>
+    <phrase>I have a new mission for you, Fox.</phrase>
+    <phrase>You are approaching Dinosaur Planet...</phrase>
+    <phrase>...an ancient world on the edge of the Lylat system.</phrase>
+    <phrase>&lt;EE 80980001 00000007&gt;&lt;COLOR 006600CC 00FF00FF&gt;As you will see, chunks of the planet...</phrase>
+    <phrase>...have been torn from its surface.</phrase>
+    <phrase>It's your job to get them back!</phrase>
+    <phrase>If Dinosaur Planet explodes, it could...</phrase>
+    <phrase>...affect the entire Lylat system.</phrase>
+    <phrase>The only lead we have is that you must locate...</phrase>
+    <phrase>...the Queen of the EarthWalker dinosaur tribe.</phrase>
+    <phrase>Maybe she can help you further.</phrase>
+    <phrase>&lt;EE 80980001 0015000C&gt;By the way, your fee has been approved.</phrase>
+    <phrase>If you are successful, then the money...</phrase>
+    <phrase>...will be forwarded to you immediately.</phrase>
+    <phrase>Pepper out.</phrase>
+    <phrase>&lt;EE 80980001 001F001B&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;You heard the General.  Let's do it!</phrase>
+    <phrase>&lt;EE 80980001 0022001B&gt; </phrase>
+    <phrase>&lt;EE 80980001 00280011&gt;Yeah!</phrase>
+  </text>
+  <text id="0x000E" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq000E"/>
+    <phrase>&lt;SEQ 04EA&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0007001A&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;We did it, Fox!</phrase>
+    <phrase>&lt;EE 80980000 0009001B&gt;&lt;COLOR 006600FF 003300FF&gt;Dinosaur Planet is saved!</phrase>
+    <phrase>&lt;EE 80980000 000B0004&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;Andross is defeated once again!</phrase>
+    <phrase>&lt;EE 80980000 000E000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;You all did a great job.</phrase>
+    <phrase>&lt;EE 80980000 00100006&gt;&lt;COLOR 006600CC 00FF00FF&gt;General Pepper here.  Good work, Star Fox team.</phrase>
+    <phrase>I received a message from the King and Queen EarthWalker...</phrase>
+    <phrase>...thanking you for saving their world.</phrase>
+    <phrase>Oh, and Tricky says Hi!</phrase>
+    <phrase>&lt;EE 80980000 001D0000&gt;&lt;COLOR 006600CC 00FF00FF&gt;I was, however, very surprised...</phrase>
+    <phrase>...to hear that Andross was still alive.</phrase>
+    <phrase>&lt;EE 80980000 0021000A&gt;&lt;COLOR 006600FF 003300FF&gt;Not as much as we were!</phrase>
+    <phrase>&lt;EE 80980000 00230016&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;It seems that Andross discovered...</phrase>
+    <phrase>...the ancient power of the Krazoa.</phrase>
+    <phrase>&lt;EE 80980000 0027000F&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;And by trapping Krystal...</phrase>
+    <phrase>...who had the ability to channel this power...</phrase>
+    <phrase>&lt;EE 80980000 002B0000&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;...he was able to use this energy to revive himself.</phrase>
+    <phrase>&lt;EE 80980000 002E0010&gt;&lt;COLOR 006600CC 00FF00FF&gt;At least this time we'll see the last of him.</phrase>
+    <phrase>I'm transferring your fee as we speak.  Pepper out.</phrase>
+    <phrase>&lt;EE 80980000 00360019&gt;&lt;COLOR 006600FF 003300FF&gt;Woo hoo hoo!  Yeah!</phrase>
+    <phrase>&lt;EE 80980000 00370019&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;We can finally repair this ship.</phrase>
+    <phrase>&lt;EE 80980000 00390014&gt;&lt;COLOR 00FF0066 006600FF&gt;And I really need some oil.</phrase>
+    <phrase>These joints are not what they used to be.</phrase>
+    <phrase>&lt;EE 80980001 00040014&gt;&lt;COLOR 00FF0066 00FF00FF&gt;And I can't wait to get back with the Star Fox team!</phrase>
+    <phrase>&lt;EE 80980001 00080011&gt;&lt;COLOR 00FF0066 00FF00FF&gt;Hey, guys, you don't mind if I hang with you again, do you?</phrase>
+    <phrase>&lt;EE 80980001 000C0008&gt; </phrase>
+    <phrase>&lt;EE 80980001 000F0008&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Sure, Falco, it's great to have you back.</phrase>
+    <phrase>&lt;EE 80980001 00120019&gt; </phrase>
+    <phrase>&lt;EE 80980001 00130019&gt;&lt;COLOR 006600FF 003300FF&gt;The Star Fox team is back together again!</phrase>
+    <phrase>&lt;EE 80980001 00160000&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;Oh, Fox!  I almost forgot...</phrase>
+    <phrase>...I received this message from Krystal.</phrase>
+    <phrase>&lt;EE 80980001 001C0000&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Hi, Fox, I really appreciate what you did for me.</phrase>
+    <phrase>I'm just so sorry we didn't get much of a chance to talk.</phrase>
+    <phrase>I'm left with just one more thing to do.</phrase>
+    <phrase>&lt;EE 80980001 002A0000&gt; </phrase>
+    <phrase>&lt;EE 80980001 002B0003&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;And that's to say thank you.</phrase>
+    <phrase>&lt;EE 80980001 002F0015&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Well uh, OK.  I mean, sure, no problem!</phrase>
+    <phrase>&lt;EE 80980001 00340016&gt;&lt;COLOR 006600FF 003300FF&gt;(laugh) You're not shy, are you, Fox?</phrase>
+    <phrase>&lt;EE 80980001 00370018&gt;&lt;COLOR 00FF0066 006600FF&gt;My sensors indicate Fox's temperature rising.</phrase>
+    <phrase>Are you OK, Fox?</phrase>
+    <phrase>&lt;EE 80980002 00010014&gt;(Laugh)</phrase>
+    <phrase>&lt;EE 80980002 0004000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I'm gonna be just fine.</phrase>
+    <phrase>&lt;EE 80980002 00070000&gt; </phrase>
+  </text>
+  <text id="0x00A6" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00A6"/>
+    <phrase>&lt;SEQ 00E4&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF0055 000000FF&gt;It's so nice to see you both, but I have some bad news.</phrase>
+    <phrase>Son, your father has been taken prisoner...</phrase>
+    <phrase>...within the Walled City.</phrase>
+    <phrase>&lt;EE 80980000 000B0000&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Is he OK?  Fox, Fox, we've got to help him!  Quick!</phrase>
+    <phrase>&lt;EE 80980000 000F0014&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;He's right, Queen.</phrase>
+    <phrase>Point us in the direction of the GateKeeper and we'll rescue him.</phrase>
+    <phrase>&lt;EE 80980000 00140007&gt;&lt;COLOR 00FF0055 000000FF&gt;I wish it were that simple.</phrase>
+    <phrase>You see, Tricky's father IS the GateKeeper.</phrase>
+    <phrase>&lt;EE 80980000 001E0013&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Dad's a GateKeeper?</phrase>
+    <phrase>&lt;EE 80980000 00200015&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;That's all we need.</phrase>
+    <phrase>&lt;EE 80980000 00220011&gt;&lt;COLOR 00FF0055 000000FF&gt;Yes, and a wise one at that.</phrase>
+    <phrase>When Scales came to our land...</phrase>
+    <phrase>...your father knew that the SharpClaw...</phrase>
+    <phrase>...would come for him, and so he hid his...</phrase>
+    <phrase>...GateKeeper powers behind this sacred seal.</phrase>
+    <phrase>&lt;EE 80980000 00300012&gt;&lt;COLOR 00FF0055 000000FF&gt;I'm sorry, but I cannot break the seal.</phrase>
+    <phrase>&lt;COLOR 00FF0055 000000FF&gt;Maybe you might have some idea?</phrase>
+    <phrase>&lt;EE 80980000 00350012&gt; </phrase>
+  </text>
+  <text id="0x00A7" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00A7"/>
+    <phrase>&lt;SEQ 001C&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;&lt;COLOR 00FF00FF 000000FF&gt;Once again you come to the aid of our tribe...</phrase>
+    <phrase>...you are a true hero, Fox.</phrase>
+    <phrase>&lt;EE 80980000 0006001A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Look, fella.</phrase>
+    <phrase>I'm not paid enough to keep getting you guys out of trouble.</phrase>
+    <phrase>&lt;EE 80980000 000A000F&gt;&lt;COLOR 00FF00FF 000000FF&gt;But, I've got this for you...</phrase>
+    <phrase>&lt;EE 80980000 000E000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Yeah, well.  Thanks!</phrase>
+    <phrase>&lt;EE 80980000 00120000&gt; </phrase>
+  </text>
+  <text id="0x0010" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0010"/>
+    <phrase>&lt;SEQ 0041&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0005000F&gt;&lt;COLOR 005500FF 005500FF&gt;I know it was the fox that set you free.</phrase>
+    <phrase>Now where is he?</phrase>
+    <phrase>&lt;EE 80980000 000B0004&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I do not know what you're talking about.</phrase>
+    <phrase>&lt;EE 80980000 000F000D&gt;&lt;COLOR 005500FF 005500FF&gt;(angry roar)</phrase>
+    <phrase>&lt;EE 80980000 00110018&gt;&lt;COLOR 005500FF 005500FF&gt;You will tell me.  Where can I find the fox?</phrase>
+    <phrase>&lt;EE 80980000 0018001C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;He will find you.</phrase>
+    <phrase>&lt;EE 80980000 001B0000&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;And he will destroy you.</phrase>
+    <phrase>&lt;EE 80980000 001E0000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0025001C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Stop!  It's over, Scales.  Leave the Queen alone!</phrase>
+    <phrase>&lt;EE 80980000 002C0004&gt;&lt;COLOR 005500FF 005500FF&gt;Enough!  Take her away.</phrase>
+    <phrase>&lt;EE 80980000 002F0016&gt;&lt;COLOR 005500FF 005500FF&gt;The famous Fox McCloud.</phrase>
+    <phrase>How nice of you to pay us a visit.</phrase>
+    <phrase>Why don't I show you some of our hospitality.</phrase>
+    <phrase>&lt;EE 80980000 00390016&gt; </phrase>
+  </text>
+  <text id="0x00AA" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00AA"/>
+    <phrase>&lt;SEQ 00FE&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;&lt;COLOR 00FF00AA 005500FF&gt;Can you help me get free?</phrase>
+    <phrase>&lt;EE 80980000 00040000&gt; </phrase>
+  </text>
+  <text id="0x00AB" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00AB"/>
+    <phrase>&lt;SEQ 0105&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00080014&gt;&lt;COLOR 00FF00AA 005500FF&gt;Thank you for releasing me.</phrase>
+    <phrase>If you're heading down into the mine...</phrase>
+    <phrase>...then please look out for Belina Te...</phrase>
+    <phrase>...the GateKeeper's daughter.</phrase>
+    <phrase>&lt;EE 80980000 0011000B&gt;&lt;COLOR 00FF00AA 005500FF&gt;She didn't mean to get us into this mess...</phrase>
+    <phrase>...by telling Scales about the SpellStone.</phrase>
+    <phrase>&lt;EE 80980000 00160007&gt;&lt;COLOR 00FF00AA 005500FF&gt;She did what she thought was right.</phrase>
+    <phrase>Please help her.</phrase>
+    <phrase>&lt;EE 80980000 001A0007&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, lady.  I'll keep a lookout for her.</phrase>
+    <phrase>&lt;EE 80980000 001D0009&gt;&lt;COLOR 00FF00AA 005500FF&gt;This might be of use to you.  I found it while I was working.</phrase>
+    <phrase>It looked important, so I hid it from the SharpClaw.</phrase>
+    <phrase>&lt;EE 80980000 00250000&gt; </phrase>
+  </text>
+  <text id="0x00AD" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00AD"/>
+    <phrase>&lt;SEQ 00FF&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010014&gt;&lt;COLOR 00FF00AA 005500FF&gt;I am forever in your debt.</phrase>
+    <phrase>I see your little friend has yet to learn his Flame Command.</phrase>
+    <phrase>&lt;EE 80980000 0010000E&gt;&lt;COLOR 00FF00AA 005500FF&gt;Go on, youngster, give it a go.</phrase>
+    <phrase>&lt;EE 80980000 0018000D&gt;&lt;COLOR 00FF00AA 005500FF&gt;If I wasn't so exhausted, I could help...</phrase>
+    <phrase>...you through the main gates.  I need some food.</phrase>
+    <phrase>&lt;EE 80980000 001F000D&gt; </phrase>
+  </text>
+  <text id="0x00AE" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00AE"/>
+    <phrase>&lt;SEQ 0121&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000004&gt;&lt;COLOR 00FF00AA 005500FF&gt;I need some food but in these parts...</phrase>
+    <phrase>&lt;COLOR 00FF00AA 005500FF&gt;...the Alpine Root only seems to grow in sheltered areas.</phrase>
+    <phrase>&lt;EE 80980000 00070000&gt; </phrase>
+  </text>
+  <text id="0x00AF" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00AF"/>
+    <phrase>&lt;SEQ 056A&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000008&gt;Tricky!  Trickyyyy!</phrase>
+    <phrase>&lt;EE 80980000 00030002&gt;&lt;COLOR 00FF00AA 005500FF&gt;Your friend will turn up.  They usually do.</phrase>
+    <phrase>&lt;COLOR 00FF00AA 005500FF&gt;Maybe I can help until he does?</phrase>
+    <phrase>&lt;EE 80980000 000A0002&gt; </phrase>
+  </text>
+  <text id="0x00B1" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00B1"/>
+    <phrase>&lt;SEQ 00FA&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00050002&gt;&lt;COLOR 00FF00AA 005500FF&gt;Aaah, that's better.  But I need more.</phrase>
+    <phrase>&lt;EE 80980000 00090002&gt; </phrase>
+  </text>
+  <text id="0x00B2" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00B2"/>
+    <phrase>&lt;SEQ 00FB&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000017&gt;&lt;COLOR 00FF00AA 005500FF&gt;I'm so hungry, I need food.</phrase>
+    <phrase>&lt;EE 80980000 00040017&gt; </phrase>
+  </text>
+  <text id="0x00B3" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00B3"/>
+    <phrase>&lt;SEQ 00FC&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 000B001A&gt;&lt;COLOR 00FF00AA 005500FF&gt;Aaah, I...I feel much better now.</phrase>
+    <phrase>&lt;EE 80980000 00180010&gt;&lt;COLOR 00FF00AA 005500FF&gt;Get on my back.  Let's smash those gates!</phrase>
+    <phrase>&lt;EE 80980000 001B0010&gt; </phrase>
+  </text>
+  <text id="0x0011" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0011"/>
+    <phrase>&lt;SEQ 047A&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010002&gt;&lt;COLOR 000000FF 005500FF&gt;You have done well, Fox.</phrase>
+    <phrase>My name is Gradabug, CloudRunner's chief engineer.</phrase>
+    <phrase>&lt;EE 80980000 00070001&gt; </phrase>
+    <phrase>&lt;EE 80980000 0008000D&gt;&lt;COLOR 000000FF 005500FF&gt;The Queen has been imprisoned within her own...</phrase>
+    <phrase>...royal chamber as an example to the rest of the tribe.</phrase>
+    <phrase>&lt;EE 80980000 000E0010&gt;&lt;COLOR 000000FF 005500FF&gt;Only she can help you find the SpellStone.</phrase>
+    <phrase>&lt;EE 80980000 0011001B&gt;&lt;COLOR 000000FF 005500FF&gt;The Wind Lifts will lead you to the sky dock.</phrase>
+    <phrase>&lt;EE 80980000 00140000&gt; </phrase>
+  </text>
+  <text id="0x00B8" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00B8"/>
+    <phrase>&lt;SEQ 01AA&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000013&gt;&lt;COLOR 00FF00AA 005500FF&gt;(whimper)</phrase>
+    <phrase>&lt;EE 80980000 00080001&gt;(whimper)</phrase>
+    <phrase>&lt;EE 80980000 0011000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Hey there, little fella.</phrase>
+    <phrase>&lt;EE 80980000 00140000&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;I don't like this, Fox.</phrase>
+    <phrase>&lt;EE 80980000 00170003&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Fox, look out!  It's a trap!</phrase>
+    <phrase>&lt;EE 80980000 00190000&gt; </phrase>
+  </text>
+  <text id="0x00B9" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00B9"/>
+    <phrase>&lt;SEQ 01AB&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00060000&gt;&lt;COLOR 00FF00AA 005500FF&gt;That's the one.</phrase>
+    <phrase>That's the steenking beast that took my treasure.</phrase>
+    <phrase>&lt;EE 80980000 000A0011&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Whoa...what happened?  Untie me right now!</phrase>
+    <phrase>&lt;EE 80980000 00100003&gt;&lt;COLOR 00FF00AA 005500FF&gt;I am Chief LightFoot, and we don't like thieves!</phrase>
+    <phrase>&lt;EE 80980000 0015000F&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Thief!  What are you talking about?</phrase>
+    <phrase>&lt;EE 80980000 001A0004&gt;&lt;COLOR 00FF00AA 005500FF&gt;You take our treasure and give it to the steenking SharpClaw.</phrase>
+    <phrase>Yeah, tell him, Chief!  Keel the steenking pig!</phrase>
+    <phrase>&lt;EE 80980000 00240017&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I didn't take your treasure.  You gave it to me!</phrase>
+    <phrase>&lt;EE 80980000 00280004&gt;&lt;COLOR 00FF00AA 005500FF&gt;Let me show you what we do to thieves.</phrase>
+    <phrase>&lt;EE 80980000 002C0013&gt;&lt;COLOR 00DB00AE 002600FF&gt;(CloudRunner Cry)</phrase>
+    <phrase>&lt;EE 80980000 002D0000&gt;&lt;COLOR 00DB00AE 002600FF&gt;Use the Flame Command at the right time...</phrase>
+    <phrase>...and I'll help you get out of here.</phrase>
+    <phrase>&lt;EE 80980000 00310000&gt; </phrase>
+  </text>
+  <text id="0x0013" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0013"/>
+    <phrase>&lt;SEQ 046C&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000F&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Thank you, Fox!  As promised, here is your reward.</phrase>
+    <phrase>&lt;EE 80980000 00080016&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Scales has hidden the SpellStone inside the treasure rooms.</phrase>
+    <phrase>Find it, Fox, and return it to the Force Point Temple.</phrase>
+    <phrase>&lt;EE 80980000 00110001&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Our planet is in your hands.</phrase>
+    <phrase>&lt;EE 80980000 00130001&gt; </phrase>
+  </text>
+  <text id="0x4E21" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E21"/>
+    <phrase>&lt;SEQ 0464&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;If you find all four of my children, you will be greatly rewarded.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Please hurry!</phrase>
+    <phrase>&lt;EE 80980000 00050000&gt; </phrase>
+  </text>
+  <text id="0x4E22" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E22"/>
+    <phrase>&lt;SEQ 0481&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;Stranger, get me out of this cage and I'll help you.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x4E23" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E23"/>
+    <phrase>&lt;SEQ 0483&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;Get me out of this infernal cage!</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x4E24" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E24"/>
+    <phrase>&lt;SEQ 053D&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000D&gt;Thank you, stranger.</phrase>
+    <phrase>Climb onto my back if you need my help.</phrase>
+    <phrase>&lt;EE 80980000 0005000D&gt; </phrase>
+  </text>
+  <text id="0x4E25" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E25"/>
+    <phrase>&lt;SEQ 02D8&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00020000&gt;My Staff!</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x4E26" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E26"/>
+    <phrase>&lt;SEQ 04FB&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000002&gt;When I heard the SharpClaw were coming to Cape Claw...</phrase>
+    <phrase>I hid my precious gold deep below the sands.</phrase>
+    <phrase>&lt;EE 80980000 00090013&gt;My memory's not what it used to be, though.</phrase>
+    <phrase>And now I've forgotten where I buried them.</phrase>
+    <phrase>&lt;EE 80980000 000F0013&gt;With the help of your little friend...</phrase>
+    <phrase>...you should be able to find them.</phrase>
+    <phrase>&lt;EE 80980000 00140018&gt;Return all four gold bars...</phrase>
+    <phrase>...and I will help you on your quest.</phrase>
+    <phrase>&lt;EE 80980000 001B0018&gt; </phrase>
+  </text>
+  <text id="0x4E27" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E27"/>
+    <phrase>&lt;SEQ 04FE&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;The SharpClaw have captured a CloudRunner.</phrase>
+    <phrase>&lt;EE 80980000 0003000A&gt; </phrase>
+  </text>
+  <text id="0x4E28" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E28"/>
+    <phrase>&lt;SEQ 0505&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;With the help of your little friend...</phrase>
+    <phrase>...you should be able to find them.</phrase>
+    <phrase>&lt;EE 80980000 0004000A&gt; </phrase>
+  </text>
+  <text id="0x4E29" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E29"/>
+    <phrase>&lt;SEQ 0503&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000002&gt;They say there are secret chambers...</phrase>
+    <phrase>...behind the face of the ancients.</phrase>
+    <phrase>&lt;EE 80980000 00060002&gt; </phrase>
+  </text>
+  <text id="0x4E2A" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E2A"/>
+    <phrase>&lt;SEQ 0052&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000001&gt;OK, Tricky.  You stay here.  I'll go search down there.</phrase>
+    <phrase>&lt;EE 80980000 00030016&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;But I need to help my mom!</phrase>
+    <phrase>&lt;EE 80980000 00050019&gt;And you will be by staying out there.</phrase>
+    <phrase>&lt;EE 80980000 0008000E&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;OK, Fox, but hurry up, my mom looked real bad.</phrase>
+    <phrase>&lt;EE 80980000 000C000E&gt; </phrase>
+    <phrase/>
+  </text>
+  <text id="0x4E2B" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E2B"/>
+    <phrase>&lt;SEQ 004F&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000008&gt;&lt;COLOR 00FF00FF 000000FF&gt;Fifty years alone I've been.</phrase>
+    <phrase>&lt;COLOR 00FF00FF 000000FF&gt;Thinking of entering the lower sanctum...</phrase>
+    <phrase>&lt;COLOR 00FF00FF 000000FF&gt;...without a lantern to light your way?</phrase>
+    <phrase>&lt;COLOR 00FF00FF 000000FF&gt;You must be as mad as me!</phrase>
+    <phrase>&lt;EE 80980000 000A000D&gt;&lt;COLOR 00FF00FF 000000FF&gt;Go and see the ShopKeeper.  He should be able to help.</phrase>
+    <phrase>&lt;EE 80980000 000E0006&gt;&lt;COLOR 00FF00FF 000000FF&gt;At the right price!  (Mad Laughter)</phrase>
+    <phrase>&lt;EE 80980000 00100006&gt; </phrase>
+  </text>
+  <text id="0x4E2C" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E2C"/>
+    <phrase>&lt;SEQ 0050&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000008&gt;&lt;COLOR 00FF00FF 000000FF&gt;Ahhh, a lantern to light your way...</phrase>
+    <phrase>&lt;COLOR 00FF00FF 000000FF&gt;...good...yes, very good...good, good...excellent...</phrase>
+    <phrase>&lt;EE 80980000 00050000&gt; </phrase>
+  </text>
+  <text id="0x4E2D" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E2D"/>
+    <phrase>&lt;SEQ 011B&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000006&gt;&lt;COLOR 00FF00AA 005500FF&gt;The SharpClaw have imprisoned me in this infernal cave.</phrase>
+    <phrase>&lt;EE 80980000 00040016&gt;&lt;COLOR 00FF00AA 005500FF&gt;If you can bring me Frost Weeds...</phrase>
+    <phrase>...I'll be strong enough to get myself out.</phrase>
+    <phrase>&lt;EE 80980000 00090018&gt;&lt;COLOR 00FF00AA 005500FF&gt;Perhaps the young prince can help you.  Hurry, boy!</phrase>
+    <phrase>&lt;EE 80980000 000D0018&gt; </phrase>
+  </text>
+  <text id="0x4E2E" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E2E"/>
+    <phrase>&lt;SEQ 0571&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000019&gt;&lt;COLOR 00FF00FF 000000FF&gt;You got to help us!</phrase>
+    <phrase>Those 'orrible SharpClaw put out our lovely beacons...</phrase>
+    <phrase>...and it gets too dark at night.</phrase>
+    <phrase>&lt;EE 80980000 00070004&gt;We be scared of the dark (Cry).</phrase>
+    <phrase>&lt;EE 80980000 000A000C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, OK, stop crying.  I'll see what I can do.</phrase>
+    <phrase>&lt;EE 80980000 000D0019&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;Don't forget about the SpellStone, Fox.</phrase>
+    <phrase>You have to return it to the Force Point Temple.</phrase>
+    <phrase>&lt;EE 80980000 00120019&gt; </phrase>
+  </text>
+  <text id="0x4E2F" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E2F"/>
+    <phrase>&lt;SEQ 0074&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00040009&gt;You have failed the test.</phrase>
+    <phrase>&lt;EE 80980000 00070010&gt;(Laugh)</phrase>
+    <phrase>&lt;EE 80980000 00080010&gt; </phrase>
+  </text>
+  <text id="0x4E30" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E30"/>
+    <phrase>&lt;SEQ 007B&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00070000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00090003&gt;Well done, Fox.  You have completed the Tracking Test.</phrase>
+    <phrase>Very good.</phrase>
+    <phrase>&lt;EE 80980000 000F0009&gt;(Laugh)</phrase>
+    <phrase>&lt;EE 80980000 00100009&gt; </phrase>
+  </text>
+  <text id="0x4E31" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E31"/>
+    <phrase>&lt;SEQ 0383&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00030018&gt;(Cheers)</phrase>
+    <phrase>&lt;EE 80980000 00080009&gt;Well done, Fox!</phrase>
+    <phrase>You have beaten our strongest LightFoot.</phrase>
+    <phrase>&lt;EE 80980000 000C0009&gt; </phrase>
+  </text>
+  <text id="0x4E32" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E32"/>
+    <phrase>&lt;SEQ 0384&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00030019&gt;(Growl)</phrase>
+    <phrase>&lt;EE 80980000 00080014&gt;Pathetic!</phrase>
+    <phrase>&lt;EE 80980000 000A0014&gt; </phrase>
+  </text>
+  <text id="0x4E34" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E34"/>
+    <phrase>&lt;SEQ 0515&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0006000D&gt;&lt;COLOR 00FF0055 000000FF&gt;I've been looking forward to this day...</phrase>
+    <phrase>...To see you again, Fox McCloud!</phrase>
+    <phrase>&lt;EE 80980000 000D0011&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Andross!</phrase>
+    <phrase>&lt;EE 80980000 000F0015&gt;&lt;COLOR 00FF0055 000000FF&gt;And now, to destroy the Lylat System!</phrase>
+    <phrase>&lt;EE 80980000 0015000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I've got to stop him!</phrase>
+    <phrase>&lt;EE 80980000 0017000E&gt; </phrase>
+  </text>
+  <text id="0x4E35" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E35"/>
+    <phrase>&lt;SEQ 0549&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00020005&gt;&lt;COLOR 00FF0066 00FF00FF&gt;Hey, McCloud!</phrase>
+    <phrase>Different time, different planet...</phrase>
+    <phrase>...and you still need Falco's help.</phrase>
+    <phrase>It's good to see ya, buddy.</phrase>
+    <phrase>&lt;EE 80980000 000A0005&gt; </phrase>
+  </text>
+  <text id="0x4E36" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E36"/>
+    <phrase>&lt;SEQ 0148&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000002&gt;&lt;COLOR 005500FF 005500FF&gt;I've been waiting for you, Fox McCloud.</phrase>
+    <phrase>&lt;EE 80980000 0006001A&gt;&lt;COLOR 005500FF 005500FF&gt;You may have returned the SpellStones.</phrase>
+    <phrase>But the war is not over yet.</phrase>
+    <phrase>&lt;EE 80980000 000C0012&gt;&lt;COLOR 005500FF 005500FF&gt;Now you must face me!</phrase>
+    <phrase>&lt;EE 80980000 000E0012&gt; </phrase>
+  </text>
+  <text id="0x4E37" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E37"/>
+    <phrase>&lt;SEQ 014A&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF0055 000000FF&gt;Stop!</phrase>
+    <phrase>&lt;EE 80980000 0001000F&gt;&lt;COLOR 00FF0055 000000FF&gt;Scales!  You are no longer any use to me!</phrase>
+    <phrase>&lt;EE 80980000 0007000A&gt;&lt;COLOR 005500FF 005500FF&gt;Who are you!</phrase>
+    <phrase>I demand you show yourself!</phrase>
+    <phrase>&lt;EE 80980000 000C0005&gt;&lt;COLOR 00FF0055 000000FF&gt;I am the one you brought to Krazoa Palace.</phrase>
+    <phrase>The EarthWalkers could see me...</phrase>
+    <phrase>...but you could not.</phrase>
+    <phrase>&lt;EE 80980000 0013001D&gt;&lt;COLOR 005500FF 005500FF&gt;...I...don't understand?</phrase>
+    <phrase>&lt;EE 80980000 00150017&gt;&lt;COLOR 00FF0055 000000FF&gt;No...I didn't think you would.</phrase>
+    <phrase>Your desire for power overwhelmed you.</phrase>
+    <phrase>And blinded you to the truth inside.</phrase>
+    <phrase>&lt;EE 80980000 001F000A&gt;&lt;COLOR 00FF0055 000000FF&gt;Now give, Fox, what he's looking for.</phrase>
+    <phrase>Give him the final Krazoa Spirit!</phrase>
+    <phrase>&lt;EE 80980000 00250007&gt;&lt;COLOR 005500FF 005500FF&gt;You will regret this...</phrase>
+    <phrase>&lt;EE 80980000 00280007&gt; </phrase>
+    <phrase>&lt;EE 80980000 00300009&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;It was in him all this time.</phrase>
+    <phrase>But that voice...I recognize it from somewhere?</phrase>
+    <phrase>&lt;EE 80980000 00350009&gt; </phrase>
+  </text>
+  <text id="0x4E38" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E38"/>
+    <phrase>&lt;SEQ 033A&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000F&gt;&lt;COLOR 00FF00AA 005500FF&gt;That's what I was looking for.</phrase>
+    <phrase>&lt;EE 80980000 00090009&gt;&lt;COLOR 00FF00AA 005500FF&gt;It's up to you guys now.</phrase>
+    <phrase>You'll figure it out.</phrase>
+    <phrase>&lt;EE 80980000 000C0009&gt; </phrase>
+  </text>
+  <text id="0x4E3D" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E3D"/>
+    <phrase>&lt;SEQ 001D&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00050000&gt;It's time to use my Staff in combat.</phrase>
+    <phrase>&lt;EE 80980000 00080000&gt; </phrase>
+  </text>
+  <text id="0x4E40" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E40"/>
+    <phrase>&lt;SEQ 0020&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0004000F&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;This message will only play if my Staff feels...</phrase>
+    <phrase>...that you are ready to become its master.</phrase>
+    <phrase>&lt;EE 80980000 000B0007&gt;Before the Staff becomes your own...</phrase>
+    <phrase>...you must learn to see and feel its call through your hands.</phrase>
+    <phrase>&lt;EE 80980000 00100011&gt;Follow its call and discover what lies beneath.</phrase>
+    <phrase>&lt;EE 80980000 00120000&gt; </phrase>
+  </text>
+  <text id="0x4E41" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E41"/>
+    <phrase>&lt;SEQ 0388&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010002&gt;&lt;COLOR 00DB00AE 002600FF&gt;The SpellStone you seek is hidden below the great tower.</phrase>
+    <phrase>To get inside, you will have to destroy...</phrase>
+    <phrase>...the four spires that protect it.</phrase>
+    <phrase>&lt;EE 80980000 00090000&gt;&lt;COLOR 00DB00AE 002600FF&gt;I will fly you in close.</phrase>
+    <phrase>But you will have to protect me from their fire.</phrase>
+    <phrase>&lt;EE 80980000 000C0000&gt; </phrase>
+    <phrase/>
+  </text>
+  <text id="0x4E42" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E42"/>
+    <phrase>&lt;SEQ 0395&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00DB00AE 002600FF&gt;It's all up to you now.</phrase>
+    <phrase>The SpellStone is inside.</phrase>
+    <phrase>But Scales has it guarded by a terrible creature.</phrase>
+    <phrase>&lt;EE 80980000 0007000F&gt;&lt;COLOR 00DB00AE 002600FF&gt;You must be careful, Fox!</phrase>
+    <phrase>&lt;EE 80980000 0009000F&gt; </phrase>
+  </text>
+  <text id="0x4E43" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E43"/>
+    <phrase>&lt;SEQ 015C&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0001001D&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;He's got the SpellStone!</phrase>
+    <phrase>&lt;EE 80980000 0004001D&gt; </phrase>
+  </text>
+  <text id="0x4E44" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E44"/>
+    <phrase>&lt;SEQ 058B&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Hey, Fox!</phrase>
+    <phrase>Shouldn't we take a look around?</phrase>
+    <phrase>There may be a Krazoa Spirit here.</phrase>
+    <phrase>&lt;EE 80980000 00050000&gt; </phrase>
+  </text>
+  <text id="0x4E45" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E45"/>
+    <phrase>&lt;SEQ 0283&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 000000FF 005500FF&gt;This might help.</phrase>
+    <phrase>&lt;EE 80980000 00020000&gt; </phrase>
+  </text>
+  <text id="0x4E46" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E46"/>
+    <phrase>&lt;SEQ 02AA&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00040000&gt;Don't let us down, Fox.  I know you can do it.</phrase>
+    <phrase>&lt;EE 80980000 00070000&gt; </phrase>
+  </text>
+  <text id="0x4E84" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E84"/>
+    <phrase>&lt;SEQ 0064&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000010&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;- Dino Talk -</phrase>
+    <phrase>&lt;EE 80980000 0001001A&gt;&lt;COLOR 005500AA 00AA00FF&gt;(Laughs)...  (Grunts)</phrase>
+    <phrase>&lt;EE 80980000 0006000F&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Hey, scaleface!  Pick on someone your own size!</phrase>
+    <phrase>&lt;EE 80980000 0009001A&gt;&lt;COLOR 005500AA 00AA00FF&gt;- Dino Talk -</phrase>
+    <phrase>&lt;EE 80980000 000C0000&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I am Fox McCloud, lead pilot of the Star Fox team.</phrase>
+    <phrase>I've come to take the prince back to his...home.</phrase>
+    <phrase>&lt;EE 80980000 00140006&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Hey, wait!</phrase>
+    <phrase>&lt;EE 80980000 00160001&gt; </phrase>
+  </text>
+  <text id="0x4E89" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E89"/>
+    <phrase>&lt;SEQ 0069&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00160003&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;I received a garbled distress signal.</phrase>
+    <phrase>It said something about a mountain hidden in a storm.</phrase>
+    <phrase>&lt;EE 80980000 001F000F&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Whoever they are, they sound in great danger!</phrase>
+    <phrase>&lt;EE 80980000 0023000F&gt; </phrase>
+    <phrase>&lt;EE 80980000 00270015&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;My Staff!</phrase>
+    <phrase>&lt;EE 80980000 00290015&gt; </phrase>
+  </text>
+  <text id="0x4E8B" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E8B"/>
+    <phrase>&lt;SEQ 0083&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 000D0012&gt;&lt;COLOR 005500FF 005500FF&gt;General Scales.</phrase>
+    <phrase>Ruler, tyrant and dictator of Dinosaur Planet.</phrase>
+    <phrase>What brings you to my world?</phrase>
+    <phrase>&lt;EE 80980000 0019000F&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;I'm not here to fight you.</phrase>
+    <phrase>I'm only here because of a distress call.</phrase>
+    <phrase>&lt;EE 80980000 001F0019&gt;&lt;COLOR 005500FF 005500FF&gt;A distress call?  This whole planet is in distress.</phrase>
+    <phrase>&lt;EE 80980000 0028000E&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;The CloudRunner told me about you, the evil General.</phrase>
+    <phrase>&lt;EE 80980000 002D0004&gt;&lt;COLOR 005500FF 005500FF&gt;My girl, I am not evil.</phrase>
+    <phrase>I rule over the many dinosaur tribes.</phrase>
+    <phrase>&lt;EE 80980000 00370014&gt;&lt;COLOR 005500FF 005500FF&gt;You see, I must control this planet with fear.</phrase>
+    <phrase>Otherwise, the tribes always try to fight against me.</phrase>
+    <phrase>&lt;EE 80980001 00070015&gt;&lt;COLOR 005500FF 005500FF&gt;You dare to challenge me?</phrase>
+    <phrase>&lt;EE 80980001 000E0004&gt;&lt;COLOR 005500FF 005500FF&gt;No one can defeat General Scales!</phrase>
+    <phrase>&lt;EE 80980001 001B0014&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Bad luck, General.  Maybe next time!</phrase>
+    <phrase>&lt;EE 80980001 0020000E&gt;&lt;COLOR 005500FF 005500FF&gt;This is not over!</phrase>
+    <phrase>&lt;EE 80980001 00230013&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Let's find the source of the distress signal.</phrase>
+    <phrase>&lt;EE 80980001 00270002&gt; </phrase>
+  </text>
+  <text id="0x4E8C" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4E8C"/>
+    <phrase>&lt;SEQ 0490&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0001000A&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;I wonder if this is where the distress signal is coming from?</phrase>
+    <phrase>&lt;EE 80980000 00090010&gt;&lt;COLOR 00DB00AE 002600FF&gt;This is Krazoa Palace.</phrase>
+    <phrase>&lt;EE 80980000 000C0011&gt;&lt;COLOR 00DB00AE 002600FF&gt;If you go inside, be very careful.</phrase>
+    <phrase>This is the dinosaurs' most sacred place.</phrase>
+    <phrase>&lt;EE 80980000 00150001&gt; </phrase>
+  </text>
+  <text id="0x4EAB" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4EAB"/>
+    <phrase>&lt;SEQ 008B&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000003&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Tricky, are you crazy?</phrase>
+    <phrase>Just leave the SharpClaw to me.</phrase>
+    <phrase>&lt;EE 80980000 0003000C&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;OK, OK, I'm sorry.</phrase>
+    <phrase>&lt;EE 80980000 00060001&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Hey, Fox.  If ever you need me to come back...</phrase>
+    <phrase>...you just use my HEEL Command...</phrase>
+    <phrase>...and I'll be right with you.  OK?</phrase>
+    <phrase>&lt;EE 80980000 000D0001&gt; </phrase>
+  </text>
+  <text id="0x4EAC" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4EAC"/>
+    <phrase>&lt;SEQ 0598&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;You lose again, Fox McCloud!</phrase>
+    <phrase>&lt;EE 80980000 0002000A&gt; </phrase>
+  </text>
+  <text id="0x4EB6" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4EB6"/>
+    <phrase>&lt;SEQ 059A&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000014&gt;&lt;COLOR 00FF0055 005500FF&gt;Fox, on behalf of Dinosaur Planet...</phrase>
+    <phrase>...I thank you for returning the...</phrase>
+    <phrase>...SpellStones to their rightful place.</phrase>
+    <phrase>&lt;EE 80980000 00070011&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;For what good it did!</phrase>
+    <phrase>If you didn't notice, you're still stuck up here...</phrase>
+    <phrase>...on this floating rock!</phrase>
+    <phrase>&lt;EE 80980000 000E0005&gt;&lt;COLOR 00FF0055 005500FF&gt;By removing the SpellStones...</phrase>
+    <phrase>...Scales caused our planet to tear apart.</phrase>
+    <phrase>&lt;EE 80980000 00130016&gt;&lt;COLOR 00FF0055 005500FF&gt;Returning the stones has stopped the flow of magic energy.</phrase>
+    <phrase>&lt;EE 80980000 00170014&gt;&lt;COLOR 00FF0055 005500FF&gt;But only by the power of the Krazoa Spirits...</phrase>
+    <phrase>...will the floating lands return.</phrase>
+    <phrase>&lt;EE 80980000 001D000D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Seems like we both have our reasons...</phrase>
+    <phrase>...for finding the last of the Spirits.</phrase>
+    <phrase>&lt;EE 80980000 0021000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;The Queen said I could find one here in the city.</phrase>
+    <phrase>So where is it?</phrase>
+    <phrase>&lt;EE 80980000 00270000&gt;&lt;COLOR 00FF0055 005500FF&gt;The Spirit will be revealed once both...</phrase>
+    <phrase>...the Sun and Moon Stones are returned to the temple.</phrase>
+    <phrase>&lt;EE 80980000 002D0000&gt; </phrase>
+  </text>
+  <text id="0x4EE9" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4EE9"/>
+    <phrase>&lt;SEQ 00C9&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Feel free to look around.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x4EEA" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4EEA"/>
+    <phrase>&lt;SEQ 00CA&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;There are many surprises within my Store.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x4EEB" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4EEB"/>
+    <phrase>&lt;SEQ 00CB&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0002001D&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Welcome to my Store.</phrase>
+    <phrase>Feel free to look at the many...</phrase>
+    <phrase>...wonderful items within these walls.</phrase>
+    <phrase>&lt;EE 80980000 000A0017&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;I have food, special goods and many maps.</phrase>
+    <phrase>&lt;EE 80980000 0010000E&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;And if you like to play games, then enter...</phrase>
+    <phrase>...the Scarab Room!  Yessss.</phrase>
+    <phrase>Oh, and that's the exit.</phrase>
+    <phrase>&lt;EE 80980000 001B000D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK.  Thanks.</phrase>
+    <phrase>&lt;EE 80980000 001E0002&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Now, if you find something that you like...</phrase>
+    <phrase>...then choose that item and we'll discuss a price.</phrase>
+    <phrase>Is that clear?</phrase>
+    <phrase>&lt;EE 80980000 00280015&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Well...</phrase>
+    <phrase>&lt;EE 80980000 00290019&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Good!  Now hurry and choose something or get out!</phrase>
+    <phrase>&lt;EE 80980000 002C0000&gt; </phrase>
+  </text>
+  <text id="0x4EF2" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4EF2"/>
+    <phrase>&lt;SEQ 00D2&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000002&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I'm here, guys.  Mission accomplished.</phrase>
+    <phrase>Contact General Pepper so we can get paid.</phrase>
+    <phrase>&lt;EE 80980000 00050013&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;She is gonna be OK...isn't she, Fox?</phrase>
+    <phrase>&lt;EE 80980000 00090013&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;Are you sure you've finished down there?</phrase>
+    <phrase>The planet's not back together yet.</phrase>
+    <phrase>&lt;EE 80980000 000F000C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;The Queen needs my help.  Fox out.</phrase>
+    <phrase>&lt;EE 80980000 0012000C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Is there anything we can do for her?</phrase>
+    <phrase>&lt;EE 80980000 00140017&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;We need to find White GrubTub.</phrase>
+    <phrase>My mom gives them to me when I'm not feeling well.</phrase>
+    <phrase>&lt;EE 80980000 001B0012&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;It looks like she'll need a lot.</phrase>
+    <phrase>Let's take a look around, see what we can find.</phrase>
+    <phrase>&lt;EE 80980000 00200000&gt; </phrase>
+  </text>
+  <text id="0x4EF5" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4EF5"/>
+    <phrase>&lt;SEQ 00D5&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00030009&gt;&lt;COLOR 00FF0055 000000FF&gt;Thank you, Fox.</phrase>
+    <phrase>&lt;EE 80980000 00050014&gt;&lt;COLOR 00FF0055 000000FF&gt;Thank you for saving my son and for saving me.</phrase>
+    <phrase>&lt;EE 80980000 00090019&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, OK, enough of the thanks.</phrase>
+    <phrase>Now, I need some help from you.</phrase>
+    <phrase>Can you just tell me what's going on?</phrase>
+    <phrase>&lt;EE 80980000 00100015&gt;&lt;COLOR 00FF0055 000000FF&gt;This is all the work of General Scales.</phrase>
+    <phrase>He is the ruler of the SharpClaw Tribe, a nasty bunch...</phrase>
+    <phrase>...of pirates who have always wanted to rule Dinosaur Planet.</phrase>
+    <phrase>&lt;EE 80980000 001A001D&gt;&lt;COLOR 00FF0055 000000FF&gt;We have always been able to stop his attacks...</phrase>
+    <phrase>...but this time he's somehow become stronger...</phrase>
+    <phrase>...and defeated our army at the Krazoa Palace.</phrase>
+    <phrase>&lt;EE 80980000 0023001C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Right, a bad guy.</phrase>
+    <phrase>But how did the planet get in such a mess?</phrase>
+    <phrase>&lt;EE 80980000 00280014&gt;&lt;COLOR 00FF0055 000000FF&gt;Within Krazoa Palace he broke the seals...</phrase>
+    <phrase>...of the Force Point Temples.</phrase>
+    <phrase>&lt;EE 80980000 002D0006&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I'm listening.</phrase>
+    <phrase>&lt;EE 80980000 002E000C&gt;&lt;COLOR 00FF0055 000000FF&gt;This planet is rich with a magical force.</phrase>
+    <phrase>A force so strong that it is continually pushing our world apart.</phrase>
+    <phrase>&lt;EE 80980000 00360005&gt;&lt;COLOR 00FF0055 000000FF&gt;To stop this, four SpellStones were placed...</phrase>
+    <phrase>...inside the Force Point Temples.</phrase>
+    <phrase>&lt;EE 80980000 003B000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, that's a bit weird but I understand.</phrase>
+    <phrase>&lt;EE 80980000 003D0000&gt; </phrase>
+  </text>
+  <text id="0x4F0A" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4F0A"/>
+    <phrase>&lt;SEQ 00EA&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0016000B&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;(Dino Talk)</phrase>
+    <phrase>&lt;EE 80980000 001B0017&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;What!</phrase>
+    <phrase>&lt;EE 80980000 001D001A&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;(Dino Talk)</phrase>
+    <phrase>&lt;EE 80980000 00220018&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I...I can't understand you!</phrase>
+    <phrase>&lt;EE 80980000 0026000C&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;(Dino Talk)...hot spring or you'd be frozen by now (laugh).</phrase>
+    <phrase>&lt;EE 80980000 002B001A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Why, you little...!</phrase>
+    <phrase>&lt;EE 80980000 002C001D&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Hey, I wouldn't if I were you.</phrase>
+    <phrase>My dad's a King EarthWalker and he'll bash you up!</phrase>
+    <phrase>&lt;EE 80980000 00320017&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I don't think he'll be doing any bashing.  He's been captured.</phrase>
+    <phrase>That's why I've been sent to rescue you.</phrase>
+    <phrase>&lt;EE 80980000 00380006&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;He's been captured?</phrase>
+    <phrase>&lt;EE 80980000 0039001D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;That's right.  It was your mother that sent me to find you.</phrase>
+    <phrase>&lt;EE 80980001 00010009&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Is she...OK?</phrase>
+    <phrase>&lt;EE 80980001 00050017&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;She'll be just fine, but we need to get you home.</phrase>
+    <phrase>&lt;EE 80980001 00080001&gt; </phrase>
+  </text>
+  <text id="0x4F35" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4F35"/>
+    <phrase>&lt;SEQ 0115&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Hurry and choose something or get out!</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x4F38" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4F38"/>
+    <phrase>&lt;SEQ 0118&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Put that down!  You don't have enough Scarabs!</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x4F3E" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq4F3E"/>
+    <phrase>&lt;SEQ 011E&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00050006&gt;&lt;COLOR 00FF00AA 005500FF&gt;Aaah, the young prince!  Who is this with you?</phrase>
+    <phrase>&lt;EE 80980000 00090011&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;This is my friend, Fox McCloud.</phrase>
+    <phrase>My mother sent us to find you.</phrase>
+    <phrase>&lt;EE 80980000 000E0000&gt;&lt;COLOR 00FF00AA 005500FF&gt;Well I am Garunda Te...</phrase>
+    <phrase>&lt;EE 80980000 0010000C&gt;&lt;COLOR 00FF00AA 005500FF&gt;...SpellStone GateKeeper of DarkIce Mines.</phrase>
+    <phrase>&lt;EE 80980000 00140015&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;We're looking for a SpellStone.</phrase>
+    <phrase>&lt;EE 80980000 00170015&gt;&lt;COLOR 00FF00AA 005500FF&gt;A SpellStone...hmmmm...</phrase>
+    <phrase>&lt;EE 80980000 001B000A&gt;&lt;COLOR 00FF00AA 005500FF&gt;It is my duty as a GateKeeper to guard the land...</phrase>
+    <phrase>...from which a SpellStone is forged.</phrase>
+    <phrase>&lt;EE 80980000 00210015&gt;&lt;COLOR 00FF00AA 005500FF&gt;General Scales took the SpellStone and...</phrase>
+    <phrase>...discovered that I was a GateKeeper.</phrase>
+    <phrase>&lt;EE 80980000 00270009&gt;&lt;COLOR 00FF00AA 005500FF&gt;He gave me an ultimatum.</phrase>
+    <phrase>&lt;EE 80980000 0029000C&gt;&lt;COLOR 00FF00AA 005500FF&gt;Allow him to take the SpellStone back into the sacred land...</phrase>
+    <phrase>&lt;EE 80980000 002D0010&gt;&lt;COLOR 00FF00AA 005500FF&gt;...or he would destroy my tribe.</phrase>
+    <phrase>&lt;EE 80980000 00300010&gt;&lt;COLOR 00FF00AA 005500FF&gt;I could not risk the safety of the entire planet...</phrase>
+    <phrase>...so I refused to help.</phrase>
+    <phrase>&lt;EE 80980000 0036001B&gt;&lt;COLOR 00FF00AA 005500FF&gt;My daughter did not think this way.</phrase>
+    <phrase>&lt;EE 80980000 00390019&gt;&lt;COLOR 00FF00AA 005500FF&gt;And so to save the tribe she opened the gateway herself.</phrase>
+    <phrase>&lt;EE 80980001 00020004&gt;&lt;COLOR 00FF00AA 005500FF&gt;Scales did not destroy my tribe.</phrase>
+    <phrase>&lt;EE 80980001 00050009&gt;&lt;COLOR 00FF00AA 005500FF&gt;He enslaved them instead.</phrase>
+    <phrase>&lt;EE 80980001 0009000C&gt;&lt;COLOR 00FF00AA 005500FF&gt;My daughter dishonored me.</phrase>
+    <phrase>&lt;EE 80980001 000C0017&gt;&lt;COLOR 00FF00AA 005500FF&gt;You must search for the SpellStone within DarkIce Mines...</phrase>
+    <phrase>&lt;EE 80980001 0011000B&gt;&lt;COLOR 00FF00AA 005500FF&gt;...and return it to the Volcano Force Point Temple.</phrase>
+    <phrase>&lt;EE 80980001 00150004&gt;&lt;COLOR 00FF00AA 005500FF&gt;Only then will the SpellStone's power be returned.</phrase>
+    <phrase>&lt;EE 80980001 0019000C&gt;&lt;COLOR 00FF00AA 005500FF&gt;I will open the gateway.</phrase>
+    <phrase>&lt;EE 80980001 001B0000&gt; </phrase>
+  </text>
+  <text id="0x00CA" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00CA"/>
+    <phrase>&lt;SEQ 016E&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0001000A&gt;&lt;COLOR 00FF00AA 005500FF&gt;Who are you?</phrase>
+    <phrase>&lt;EE 80980000 0002000D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I am Fox, and this is the...</phrase>
+    <phrase>...crown prince of the EarthWalkers.</phrase>
+    <phrase>We have been sent by the SnowHorn GateKeeper...</phrase>
+    <phrase>...to find the SpellStone.</phrase>
+    <phrase>Do you know where it's hidden?</phrase>
+    <phrase>&lt;EE 80980000 000B0018&gt;&lt;COLOR 00FF00AA 005500FF&gt;I am Belina Te.  The GateKeeper is my father.</phrase>
+    <phrase>Did he send you to rescue me?</phrase>
+    <phrase>&lt;EE 80980000 00120004&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I'm sorry, Belina, but he feels you have...</phrase>
+    <phrase>...betrayed the beliefs of the GateKeepers.</phrase>
+    <phrase>We were only sent to find the SpellStone.</phrase>
+    <phrase>&lt;EE 80980000 00190013&gt;&lt;COLOR 00FF00AA 005500FF&gt;The old fool!  I had to save the tribe.</phrase>
+    <phrase>If it wasn't for my father being a GateKeeper...</phrase>
+    <phrase>...none of this would have happened in the first place!</phrase>
+    <phrase>&lt;EE 80980000 00220013&gt; </phrase>
+    <phrase>&lt;EE 80980001 00040001&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Belina!  Are you there?</phrase>
+    <phrase>&lt;EE 80980001 00060017&gt;&lt;COLOR 00FF00AA 005500FF&gt;Listen carefully.</phrase>
+    <phrase>Find a way to the bottom of the mine.  I'll meet you there.</phrase>
+    <phrase>&lt;EE 80980001 000C0017&gt; </phrase>
+  </text>
+  <text id="0x00CB" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00CB"/>
+    <phrase>&lt;SEQ 01A4&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000008&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Belina!</phrase>
+    <phrase>&lt;COLOR 00FF00AA 005500FF&gt;You made it!</phrase>
+    <phrase>&lt;EE 80980000 00020001&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;It hasn't been easy.  Now, where is that SpellStone?</phrase>
+    <phrase>&lt;EE 80980000 00060004&gt;&lt;COLOR 00FF00AA 005500FF&gt;My father didn't say exactly where it was.</phrase>
+    <phrase>But he knew that General Scales had hidden it somewhere close.</phrase>
+    <phrase>&lt;EE 80980000 000C000C&gt;&lt;COLOR 00FF00AA 005500FF&gt;Look carefully.  I'm sure you and your little friend can find it before they do.</phrase>
+    <phrase>&lt;EE 80980000 0011000F&gt;&lt;COLOR 00FF00AA 005500FF&gt;Time is short.  You must find the SpellStone.</phrase>
+    <phrase>&lt;EE 80980000 0014000F&gt; </phrase>
+  </text>
+  <text id="0x501A" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq501A"/>
+    <phrase>&lt;SEQ 01FA&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00030009&gt;&lt;COLOR 006600CC 00FF00FF&gt;Great flying, Fox.</phrase>
+    <phrase>For a moment, I thought you weren't going to make it.</phrase>
+    <phrase>&lt;EE 80980000 00090011&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Very funny, sir.</phrase>
+    <phrase>&lt;EE 80980000 000B000A&gt;&lt;COLOR 006600CC 00FF00FF&gt;I know.  Now, on to business.</phrase>
+    <phrase>By pressing &lt;FONT 0002&gt;S&lt;FONT 0004&gt; , you will open your communicator.</phrase>
+    <phrase>&lt;EE 80980000 00120012&gt;&lt;COLOR 006600CC 00FF00FF&gt;Choose who you wish to speak to...</phrase>
+    <phrase>...and then press &lt;FONT 0002&gt;A&lt;FONT 0004&gt; to contact one of us.</phrase>
+    <phrase>Each team member will give you different information.</phrase>
+    <phrase>It's not been tested in action...</phrase>
+    <phrase>...so give it a try as soon as I've finished.</phrase>
+    <phrase>&lt;EE 80980000 00200005&gt;&lt;COLOR 006600CC 00FF00FF&gt;And don't forget, you're looking for the Queen EarthWalker.</phrase>
+    <phrase>Try talking to those ThornTail guys.</phrase>
+    <phrase>&lt;EE 80980000 0027001B&gt;&lt;COLOR 006600CC 00FF00FF&gt;Slippy is preparing a translator device...</phrase>
+    <phrase>...but until it's ready, he'll translate for you.</phrase>
+    <phrase>&lt;EE 80980000 002D001A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, General, but what about a weapon?</phrase>
+    <phrase>Why couldn't I bring my blaster?</phrase>
+    <phrase>&lt;EE 80980000 0032000D&gt;&lt;COLOR 006600CC 00FF00FF&gt;It's always the same with you, Fox...</phrase>
+    <phrase>...shoot first, ask questions later.</phrase>
+    <phrase>This mission is about saving the planet, not blowing it up!</phrase>
+    <phrase>It requires a different tactic.  Try using your head.  Ha Ha!</phrase>
+    <phrase>&lt;EE 80980001 0004000F&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Yeah, yeah.  Very funny, sir.  Fox out.</phrase>
+    <phrase>&lt;EE 80980001 00080001&gt; </phrase>
+  </text>
+  <text id="0x501C" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq501C"/>
+    <phrase>&lt;SEQ 01FC&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000002&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Is anybody there?</phrase>
+    <phrase>&lt;EE 80980000 0003000D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Are you OK?  My name is Fox McCloud.</phrase>
+    <phrase>And you must be the Queen EarthWalker.</phrase>
+    <phrase>&lt;EE 80980000 0008001C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;- Dino Talk -</phrase>
+    <phrase>&lt;EE 80980000 000D0000&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;- Dino Talk -</phrase>
+    <phrase>- Dino Talk -</phrase>
+    <phrase>&lt;EE 80980000 0013001B&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;- Dino Talk -</phrase>
+    <phrase>&lt;EE 80980000 0017000C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Did you get that, Slippy?</phrase>
+    <phrase>&lt;EE 80980000 00180019&gt;&lt;COLOR 006600FF 003300FF&gt;You've got to go to the Ice Mountain...</phrase>
+    <phrase>...and rescue her son, the Prince Tricky.</phrase>
+    <phrase>&lt;EE 80980000 0021000C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Nice name.  OK, lady, I'll bring your son back to you.</phrase>
+    <phrase>&lt;EE 80980000 00250018&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Ah, can you give me some directions?</phrase>
+    <phrase>&lt;EE 80980000 00280018&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;- Dino Call -</phrase>
+    <phrase>&lt;EE 80980000 0032000D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;- Dino Talk -</phrase>
+    <phrase>- Dino Talk -</phrase>
+    <phrase>&lt;EE 80980000 003B000A&gt;&lt;COLOR 006600FF 003300FF&gt;You've got to talk to that big stone guy.</phrase>
+    <phrase>She called him a WarpStone.</phrase>
+    <phrase>&lt;EE 80980001 00040010&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;That's all I need to know.</phrase>
+    <phrase>I'll be back soon, Queen.  Don't you worry.</phrase>
+    <phrase>&lt;EE 80980001 000A0010&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Haven't you finished that translator yet?</phrase>
+    <phrase>&lt;EE 80980001 000C0016&gt;&lt;COLOR 006600FF 003300FF&gt;It's nearly ready, Fox.  I just need a bit more time.</phrase>
+    <phrase>Slippy out.</phrase>
+    <phrase>&lt;EE 80980001 00130000&gt; </phrase>
+  </text>
+  <text id="0x5078" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq5078"/>
+    <phrase>&lt;SEQ 0080&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF00AA 005500FF&gt;Right there, Fox.</phrase>
+    <phrase>Time for you to head down to the Seaside.</phrase>
+    <phrase>Check the signposts for directions.</phrase>
+    <phrase>&lt;EE 80980000 00080007&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, big fella.</phrase>
+    <phrase>Good to see you doing your job and helping out.</phrase>
+    <phrase>&lt;EE 80980000 000C0006&gt;&lt;COLOR 00FF00AA 005500FF&gt;You cheeky little blighta!  (Laugh)</phrase>
+    <phrase>&lt;EE 80980000 000F0019&gt;&lt;COLOR 00FF00AA 005500FF&gt;Now, I've been keeping this back for you.</phrase>
+    <phrase>Ready for you when you needed it.</phrase>
+    <phrase>&lt;EE 80980000 00150019&gt; </phrase>
+  </text>
+  <text id="0x509B" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq509B"/>
+    <phrase>&lt;SEQ 0271&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00030016&gt;Chomp!  Burp!  That's better!</phrase>
+    <phrase>Tell you what, young 'un, I'll help you out.</phrase>
+    <phrase>&lt;EE 80980000 000D000E&gt;Here you are, my boy, this is a SCARAB BAG.</phrase>
+    <phrase>&lt;EE 80980000 00130005&gt;By collecting Scarabs, you'll be able...</phrase>
+    <phrase>...to buy many useful items.</phrase>
+    <phrase>&lt;EE 80980000 001A0001&gt; </phrase>
+  </text>
+  <text id="0x50B5" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq50B5"/>
+    <phrase>&lt;SEQ 0493&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0001000B&gt;&lt;COLOR 00FF00AA 005500FF&gt;The Krazoa...  Need your help...  They are dying...</phrase>
+    <phrase>&lt;EE 80980000 000A0004&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Was it you that sent the distress signal?</phrase>
+    <phrase>&lt;EE 80980000 000D0011&gt;&lt;COLOR 00FF00AA 005500FF&gt;When we were attacked, I signaled for help.</phrase>
+    <phrase>We were massacred.</phrase>
+    <phrase>&lt;EE 80980000 0018000F&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;But what were you doing here?</phrase>
+    <phrase>&lt;EE 80980000 001C0019&gt;&lt;COLOR 00FF00AA 005500FF&gt;The King EarthWalker sent us to protect this sacred palace...</phrase>
+    <phrase>...home of the Krazoa.  The Krazoa are Peace Spirits...</phrase>
+    <phrase>...powerful beings that bring life to a planet.</phrase>
+    <phrase>Without the Spirits, our planet is dead.</phrase>
+    <phrase>&lt;EE 80980000 00380017&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Is there something I can do?</phrase>
+    <phrase>&lt;EE 80980001 00010008&gt;&lt;COLOR 00FF00AA 005500FF&gt;My girl, only the pure of heart can take the tests.</phrase>
+    <phrase>&lt;EE 80980001 000C001A&gt;Enter the Krazoa Shrine.</phrase>
+    <phrase>&lt;EE 80980001 00110009&gt;Once inside, complete the Spirit's test and await your reward.</phrase>
+    <phrase>If you succeed, then return to me...  (cough)</phrase>
+    <phrase>I'm not going anywhere...  (cough)</phrase>
+    <phrase>&lt;EE 80980001 00250001&gt; </phrase>
+  </text>
+  <text id="0x50D7" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq50D7"/>
+    <phrase>&lt;SEQ 006D&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00100015&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Thanks for helping me.  I can take it from here.</phrase>
+    <phrase>&lt;EE 80980000 00160001&gt; </phrase>
+  </text>
+  <text id="0x50D8" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq50D8"/>
+    <phrase>&lt;SEQ 0180&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0025000D&gt;It's you...  Aaaaahhhh!!!</phrase>
+    <phrase>&lt;EE 80980000 00280001&gt; </phrase>
+  </text>
+  <text id="0x50DC" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq50DC"/>
+    <phrase>&lt;SEQ 059C&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF00AA 005500FF&gt;You have done well to find me, but there are others.</phrase>
+    <phrase>&lt;EE 80980000 0004000F&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Yeah, I know.  Your ThornTail friend told me all about it.</phrase>
+    <phrase>&lt;EE 80980000 00080016&gt;&lt;COLOR 00FF00AA 005500FF&gt;I am pleased to hear of his safety...</phrase>
+    <phrase>...but the HighTop is not so fortunate.</phrase>
+    <phrase>Together we can free him.</phrase>
+    <phrase>&lt;EE 80980000 00100006&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Oh...I'm not paid enough for this.  OK, OK, what do we do?</phrase>
+    <phrase>&lt;EE 80980000 00160002&gt;&lt;COLOR 00FF00AA 005500FF&gt;The HighTop will be an easy target for the patrolling robots.</phrase>
+    <phrase>With their shields they are unstoppable.</phrase>
+    <phrase>&lt;EE 80980000 001D0017&gt;&lt;COLOR 00FF00AA 005500FF&gt;However, each has a shield generator...</phrase>
+    <phrase>...hidden somewhere nearby.</phrase>
+    <phrase>&lt;EE 80980000 00230005&gt;&lt;COLOR 00FF00AA 005500FF&gt;If we can destroy these...</phrase>
+    <phrase>...the robots will be defenseless.</phrase>
+    <phrase>&lt;EE 80980000 00270017&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;So what do you expect me to use, this?</phrase>
+    <phrase>&lt;EE 80980000 002A0019&gt;&lt;COLOR 00FF00AA 005500FF&gt;Of course not, this.</phrase>
+    <phrase>&lt;EE 80980000 002E0016&gt;&lt;COLOR 00FF00AA 005500FF&gt;Now get on my back.  Let's do some damage!</phrase>
+    <phrase>&lt;EE 80980000 00320016&gt; </phrase>
+  </text>
+  <text id="0x517F" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq517F"/>
+    <phrase>&lt;SEQ 035F&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00AA 005500FF&gt;Aaaah.  A lovely sweetie!  Hmmmm...</phrase>
+    <phrase>&lt;EE 80980000 000A0016&gt;&lt;COLOR 00FF00AA 005500FF&gt;Who dares bother the mighty WarpStone?</phrase>
+    <phrase>&lt;EE 80980000 0011001A&gt;&lt;COLOR 00FF00AA 005500FF&gt;A thousand years I've been left alone to rest.</phrase>
+    <phrase>What do you want?</phrase>
+    <phrase>&lt;EE 80980000 00190002&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Errh...  Well...  Can you help us?</phrase>
+    <phrase>&lt;EE 80980000 001C0005&gt;&lt;COLOR 00FF00AA 005500FF&gt;(LAUGH)  Help you?  No!</phrase>
+    <phrase>&lt;EE 80980000 00230014&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;But you're a WarpStone. You're supposed to help!</phrase>
+    <phrase>&lt;EE 80980000 00280018&gt;&lt;COLOR 00FF00AA 005500FF&gt;Right, let's see if I can remember...</phrase>
+    <phrase>...what I'm supposed to do.</phrase>
+    <phrase>&lt;EE 80980000 002F000A&gt;&lt;COLOR 00FF00AA 005500FF&gt;OK.  Now if you push left on the &lt;FONT 0002&gt;J&lt;FONT 0004&gt; .</phrase>
+    <phrase>&lt;EE 80980000 0033000F&gt;&lt;COLOR 00FF00AA 005500FF&gt;Then I'll send you to one of those WarpStone thingies.</phrase>
+    <phrase>We'll get back to that in a minute.</phrase>
+    <phrase>&lt;EE 80980000 003A0010&gt;&lt;COLOR 00FF00AA 005500FF&gt;And if you push forward on the &lt;FONT 0002&gt;J&lt;FONT 0004&gt; .</phrase>
+    <phrase>&lt;EE 80980001 0001001A&gt;&lt;COLOR 00FF00AA 005500FF&gt;Then you can enter the Maze.</phrase>
+    <phrase>&lt;EE 80980001 00050011&gt;&lt;COLOR 00FF00AA 005500FF&gt;Now, this one's a bit special.</phrase>
+    <phrase>When you have collected a Krazoa Spirit...</phrase>
+    <phrase>...then push right on the &lt;FONT 0002&gt;J&lt;FONT 0004&gt; .</phrase>
+    <phrase>&lt;EE 80980001 0010000C&gt;&lt;COLOR 00FF00AA 005500FF&gt;And I'll send you to Krazoa Palace.</phrase>
+    <phrase>&lt;EE 80980001 0014000E&gt;&lt;COLOR 00FF00AA 005500FF&gt;Now, you know what I do...</phrase>
+    <phrase>...so hurry up and make your choice!</phrase>
+    <phrase>If not, then press &lt;FONT 0002&gt;B&lt;FONT 0004&gt; so I can get back to sleep!</phrase>
+    <phrase>&lt;EE 80980001 001E000E&gt; </phrase>
+  </text>
+  <text id="0x529F" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq529F"/>
+    <phrase>&lt;SEQ 047F&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0004000A&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;If you are receiving this message, then I am in great danger.</phrase>
+    <phrase>The Staff you hold in your hands is a powerful weapon.</phrase>
+    <phrase>You must learn to use it wisely.</phrase>
+    <phrase>It will give you guidance when its powers can be used.</phrase>
+    <phrase>My Staff's main use is in combat...</phrase>
+    <phrase>...and in time your skills may grow.</phrase>
+    <phrase>Try different actions to unleash its powerful attacks.</phrase>
+    <phrase>You can also use it to explore the world around you.</phrase>
+    <phrase>Try lifting rocks or knocking items out of the trees.</phrase>
+    <phrase>I'm sure that you will find it very useful.</phrase>
+    <phrase>Take care of my Staff and it will take care of you.</phrase>
+    <phrase>&lt;EE 80980000 002C0001&gt; </phrase>
+  </text>
+  <text id="0x52B2" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq52B2"/>
+    <phrase>&lt;SEQ 0492&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010002&gt;&lt;COLOR 00FF00AA 005500FF&gt;The Shrines keep the Spirits safe from harm...</phrase>
+    <phrase>&lt;EE 80980000 00090010&gt;&lt;COLOR 00FF00AA 005500FF&gt;...but their powers are useless.</phrase>
+    <phrase>&lt;EE 80980000 000E000E&gt;&lt;COLOR 00FF00AA 005500FF&gt;Only when the Spirit has been released...</phrase>
+    <phrase>&lt;EE 80980000 0013001A&gt;&lt;COLOR 00FF00AA 005500FF&gt;...back into the palace...</phrase>
+    <phrase>...can it be used to stop this war.</phrase>
+    <phrase>&lt;EE 80980000 00190000&gt; </phrase>
+  </text>
+  <text id="0x52BD" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq52BD"/>
+    <phrase>&lt;SEQ 049D&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF0055 000000FF&gt;With the seals broken, Scales entered the temples...</phrase>
+    <phrase>...and removed the SpellStones.</phrase>
+    <phrase>With nothing to hold back the magic force...</phrase>
+    <phrase>...the planet was torn apart!</phrase>
+    <phrase>&lt;EE 80980000 000B0017&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;At last, it all makes sense!</phrase>
+    <phrase>So, the bad guy takes the SpellStones...</phrase>
+    <phrase>...your planet falls apart...</phrase>
+    <phrase>...and I've got to FIND the SpellStones...</phrase>
+    <phrase>...and bring them back to the Force Point Temples!</phrase>
+    <phrase>&lt;EE 80980000 00170015&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;See, Mom.  I told you he was good.</phrase>
+    <phrase>Star Fox... Yeah!</phrase>
+    <phrase>&lt;EE 80980000 001D0007&gt;&lt;COLOR 00FF0055 000000FF&gt;My son will remain with you.</phrase>
+    <phrase>For only a dinosaur of noble birth...</phrase>
+    <phrase>...can breathe life into the SpellStones.</phrase>
+    <phrase>&lt;EE 80980000 00260019&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;What!  Uh, that's OK, but don't you think he's a bit young?</phrase>
+    <phrase>I mean, it's going to be very dangerous...</phrase>
+    <phrase>...loads of bad guys, fighting, death!</phrase>
+    <phrase>&lt;EE 80980000 00310013&gt;&lt;COLOR 00FF0055 000000FF&gt;He knows the planet well...</phrase>
+    <phrase>...and I'm sure he's showed you his Sidekick skills.</phrase>
+    <phrase>&lt;EE 80980000 0036000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Oh yeah, I forget about those.</phrase>
+    <phrase>&lt;EE 80980000 00390007&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;C'mon, Fox, we'll make a great team!</phrase>
+    <phrase>&lt;EE 80980001 0000000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, but if you mess up just once...</phrase>
+    <phrase>...I'll send you straight back to Mommy!</phrase>
+    <phrase>&lt;EE 80980001 00050000&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;OK, yeah, yeah!</phrase>
+    <phrase>&lt;EE 80980001 00060012&gt;&lt;COLOR 00FF0055 000000FF&gt;Good.  Now, our spies have indicated...</phrase>
+    <phrase>...that Scales was last seen in DarkIce Mines.</phrase>
+    <phrase>&lt;EE 80980001 000D0017&gt;&lt;COLOR 00FF0055 000000FF&gt;I know the GateKeeper, Garunda Te...</phrase>
+    <phrase>...a silly fellow, but he can guide you to the SpellStone.</phrase>
+    <phrase>Go back to the SnowHorn Wastes and find him.</phrase>
+    <phrase>&lt;EE 80980001 00170014&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Got it!</phrase>
+    <phrase>&lt;EE 80980001 00190007&gt;&lt;COLOR 00FF0055 000000FF&gt;And Fox, I think you'll need this.</phrase>
+    <phrase>The SharpClaw dropped it when they attacked me.</phrase>
+    <phrase>Maybe it'll come in use somewhere?</phrase>
+    <phrase>&lt;EE 80980001 0021000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, enough already.  Can I just get on with it!</phrase>
+    <phrase>&lt;EE 80980001 0023000E&gt; </phrase>
+  </text>
+  <text id="0x5368" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq5368"/>
+    <phrase>&lt;SEQ 0548&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;Nobody ever brings me gifts anymore!</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x0015" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0015"/>
+    <phrase>&lt;SEQ 01D7&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00020010&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Are you alright?</phrase>
+    <phrase>&lt;EE 80980000 00050008&gt;&lt;COLOR 00DB00AE 002600FF&gt;My children... When I was captured they became scared...</phrase>
+    <phrase>...and are now hiding around the fortress.</phrase>
+    <phrase>&lt;EE 80980000 000D0002&gt;&lt;COLOR 00DB00AE 002600FF&gt;(Cough)</phrase>
+    <phrase>&lt;EE 80980000 000E0010&gt;&lt;COLOR 00DB00AE 002600FF&gt;Please take this.  Use it when you hear them.</phrase>
+    <phrase>Its call will guide them back to me.</phrase>
+    <phrase>&lt;EE 80980000 00160007&gt;&lt;COLOR 00DB00AE 002600FF&gt;If the SharpClaw find them...</phrase>
+    <phrase>...I fear they will leave the fortress forever.</phrase>
+    <phrase>&lt;EE 80980000 001B0007&gt; </phrase>
+  </text>
+  <text id="0x0016" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0016"/>
+    <phrase>&lt;SEQ 0477&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00060017&gt;&lt;COLOR 000000FF 005500FF&gt;Well done, Fox.  You now have the second SpellStone.</phrase>
+    <phrase>&lt;EE 80980000 000A0011&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;And with Scales gone...</phrase>
+    <phrase>...my tribe can now start to rebuild their lives.</phrase>
+    <phrase>I am forever grateful.</phrase>
+    <phrase>&lt;EE 80980000 00180004&gt;&lt;COLOR 000000FF 005500FF&gt;Don't forget, as soon as you get back to the surface...</phrase>
+    <phrase>...you need to find the Ocean Force Point Temple.</phrase>
+    <phrase>&lt;EE 80980000 001E0004&gt; </phrase>
+  </text>
+  <text id="0x00E6" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00E6"/>
+    <phrase>&lt;SEQ 007A&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0001001C&gt;&lt;COLOR 008C0061 003700FF&gt;Not you again!</phrase>
+    <phrase>We know you didn' take our treasure, so jus' go away!</phrase>
+    <phrase>&lt;EE 80980000 000C0000&gt;&lt;COLOR 008C0061 003700FF&gt;So...you lookin' for Krazoa Spirits, eh?</phrase>
+    <phrase>&lt;EE 80980000 0011001C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Yes, I am.</phrase>
+    <phrase>&lt;EE 80980000 00130011&gt;&lt;COLOR 008C0061 003700FF&gt;So maybe I help you, eh?</phrase>
+    <phrase>&lt;EE 80980000 00170009&gt;&lt;COLOR 008C0061 003700FF&gt;You see, we keep a secret from the SharpClaw.</phrase>
+    <phrase>Under our village is a mighty chamber.</phrase>
+    <phrase>&lt;EE 80980000 00200000&gt;&lt;COLOR 008C0061 003700FF&gt;Some say it was built by the Krazoa.</phrase>
+    <phrase>Do you wanna see for yourself, maybe?</phrase>
+    <phrase>&lt;EE 80980000 00250015&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Duh...Stupid question...Of course we wanna see that!</phrase>
+    <phrase>&lt;EE 80980000 002A0004&gt;&lt;COLOR 008C0061 003700FF&gt;Not so fast.</phrase>
+    <phrase>Only if you complete the LightFoot Tests can you enter.</phrase>
+    <phrase>&lt;EE 80980000 002F001B&gt;&lt;COLOR 00FF00AA 005500FF&gt;(Laughter)</phrase>
+    <phrase>&lt;EE 80980000 00360006&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Well...er...</phrase>
+    <phrase>&lt;EE 80980000 00370012&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;They're laughing at you, Fox!  You gotta do it now.</phrase>
+    <phrase>&lt;EE 80980000 003B001B&gt;&lt;COLOR 008C0061 003700FF&gt;But before you decide, take a look at this.</phrase>
+    <phrase>&lt;EE 80980001 00030000&gt; </phrase>
+  </text>
+  <text id="0x00F0" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq00F0"/>
+    <phrase>&lt;SEQ 0324&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0001001A&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Look Out!</phrase>
+    <phrase>&lt;EE 80980000 0003001A&gt; </phrase>
+    <phrase>&lt;EE 80980000 0009000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Are you OK?</phrase>
+    <phrase>&lt;EE 80980000 000A000D&gt;&lt;COLOR 00DB00AE 002600FF&gt;I'm fine.  Thanks for helping me out.</phrase>
+    <phrase>Hey, aren't you a friend of Krystal?</phrase>
+    <phrase>&lt;EE 80980000 00100019&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;How do you know Krystal?</phrase>
+    <phrase>&lt;EE 80980000 0012000F&gt;&lt;COLOR 00DB00AE 002600FF&gt;I helped her get onto General Scales' Galleon...</phrase>
+    <phrase>...but after I left, I was captured by the SharpClaw...</phrase>
+    <phrase>...and I've been stuck here ever since.</phrase>
+    <phrase>&lt;EE 80980000 001B000D&gt;&lt;COLOR 00DB00AE 002600FF&gt;Why don't you climb aboard.  I need to stretch my wings.</phrase>
+    <phrase>&lt;EE 80980000 001E000D&gt; </phrase>
+  </text>
+  <text id="0x0031" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0031"/>
+    <phrase>&lt;SEQ 0205&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00020004&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Scales!</phrase>
+    <phrase>&lt;EE 80980000 000A0004&gt;&lt;COLOR 005500FF 005500FF&gt;Get the SpellStone out of here!</phrase>
+    <phrase>&lt;EE 80980000 000C0004&gt; </phrase>
+  </text>
+  <text id="0x0004" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0004"/>
+    <phrase>&lt;SEQ 00D1&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00030000&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;That's my ma!</phrase>
+    <phrase>&lt;EE 80980000 00050000&gt; </phrase>
+  </text>
+  <text id="0x01F8" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq01F8"/>
+    <phrase>&lt;SEQ 0338&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;  </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF00AA 005500FF&gt;I guess we're ready to go.</phrase>
+    <phrase>&lt;EE 80980000 0002000C&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Go where?</phrase>
+    <phrase>&lt;EE 80980000 0003001C&gt;&lt;COLOR 00FF00AA 005500FF&gt;We're crossing the plain...</phrase>
+    <phrase>...and you're going to have to protect me.</phrase>
+    <phrase>&lt;EE 80980000 000E000C&gt;&lt;COLOR 00FF00AA 005500FF&gt;Are you ready?  Let's go!</phrase>
+    <phrase>&lt;EE 80980000 0010000C&gt; </phrase>
+  </text>
+  <text id="0x01FE" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq01FE"/>
+    <phrase>&lt;SEQ 035A&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Fox, you did it!  You got the last SpellStone!</phrase>
+    <phrase>&lt;EE 80980000 00030015&gt;&lt;COLOR 00DB00AE 002600FF&gt;Not bad!  Not bad at all!</phrase>
+    <phrase>&lt;EE 80980000 00060006&gt;&lt;COLOR 00FF00AA 005500FF&gt;Get that SpellStone back to the Ocean Force Point...</phrase>
+    <phrase>...and we can all be on our way home.</phrase>
+    <phrase>&lt;EE 80980000 000C0007&gt;&lt;COLOR 00FF00AA 005500FF&gt;There's an old friend we would all like to see.</phrase>
+    <phrase>&lt;EE 80980000 000F001A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, guys.  I'm outta here.  See ya later!</phrase>
+    <phrase>&lt;EE 80980000 00130000&gt;&lt;COLOR 00DB00AE 002600FF&gt;Thanks again, Fox.</phrase>
+    <phrase>&lt;EE 80980000 0014001C&gt;&lt;COLOR 00FF00AA 005500FF&gt;Good luck, my friend.</phrase>
+    <phrase>&lt;EE 80980000 0016001C&gt; </phrase>
+  </text>
+  <text id="0x0203" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0203"/>
+    <phrase>&lt;SEQ 049C&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0014000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Yeah!</phrase>
+    <phrase>&lt;EE 80980000 00150010&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;We did it, Fox!</phrase>
+    <phrase>&lt;EE 80980000 00170012&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Guys, guys!  Are you seeing this.  Mission complete...</phrase>
+    <phrase>&lt;EE 80980000 001C000D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;What's going on.  We've placed all the SpellStones!</phrase>
+    <phrase>&lt;EE 80980000 00200011&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;There must be more to it, Fox.</phrase>
+    <phrase>Since you left Walled City...</phrase>
+    <phrase>...I've been studying your mission.</phrase>
+    <phrase>And I've noticed there's something hidden...</phrase>
+    <phrase>...at the top of that huge temple.</phrase>
+    <phrase>It looks like a Krazoa Shrine entrance.</phrase>
+    <phrase>&lt;EE 80980000 002D0014&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Oh yeah.  I coulda told you that!</phrase>
+    <phrase>&lt;EE 80980000 0030000F&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Oh c'mon.  Let's get back to the Hollow.</phrase>
+    <phrase>&lt;EE 80980000 0032000F&gt; </phrase>
+  </text>
+  <text id="0x0205" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0205"/>
+    <phrase>&lt;SEQ 053E&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000019&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Dad, Dad, you're OK!</phrase>
+    <phrase>&lt;EE 80980000 0002000A&gt;&lt;COLOR 00FF0055 005500FF&gt;Tricky, my son, you don't have to worry about me.</phrase>
+    <phrase>I am the King...(Laugh)</phrase>
+    <phrase>&lt;EE 80980000 00090019&gt;&lt;COLOR 00FF0055 005500FF&gt;Aah, the famous Star Fox, hero of Dinosaur Planet!</phrase>
+    <phrase>&lt;EE 80980000 000F0004&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Uuh yeah... That's me...</phrase>
+    <phrase>&lt;EE 80980000 0012000B&gt;&lt;COLOR 00FF0055 005500FF&gt;And before you ask...</phrase>
+    <phrase>...No, I haven't got the SpellStone.</phrase>
+    <phrase>But I do know where you could look.</phrase>
+    <phrase>&lt;EE 80980000 0019000F&gt;&lt;COLOR 00FF0055 005500FF&gt;To enter the lair of the RedEye King...</phrase>
+    <phrase>...you must first find the two sacred teeth.</phrase>
+    <phrase>&lt;EE 80980000 001F001A&gt;&lt;COLOR 00FF0055 005500FF&gt;Not an easy task, as they are protected...</phrase>
+    <phrase>...by the very life force of the RedEye Tribe.</phrase>
+    <phrase>&lt;EE 80980000 0026001C&gt;&lt;COLOR 00FF0055 005500FF&gt;Locate the Magic Cave.  The answer lies within.</phrase>
+    <phrase>&lt;EE 80980000 002A001C&gt; </phrase>
+  </text>
+  <text id="0x020A" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq020A"/>
+    <phrase>&lt;SEQ 0510&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000005&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Have you got it?</phrase>
+    <phrase>&lt;EE 80980000 0002000C&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Dad, look what we've got!</phrase>
+    <phrase>&lt;EE 80980000 00040018&gt;&lt;COLOR 00FF0055 005500FF&gt;Well done!  You have both made me very proud.</phrase>
+    <phrase>&lt;EE 80980000 0008001D&gt;&lt;COLOR 00FF0055 005500FF&gt;Do not worry, son.</phrase>
+    <phrase>I will stay within the city until it is returned to the planet.</phrase>
+    <phrase>I will see you again soon.</phrase>
+    <phrase>&lt;EE 80980000 00100012&gt;&lt;COLOR 00FF0055 005500FF&gt;Now let's waste no more time.</phrase>
+    <phrase>You have a SpellStone to take to the Volcano.</phrase>
+    <phrase>&lt;EE 80980000 00150012&gt; </phrase>
+  </text>
+  <text id="0x020B" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq020B"/>
+    <phrase>&lt;SEQ 0544&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0002000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;This is it, Tricky.  It's time to say good-bye.</phrase>
+    <phrase>&lt;EE 80980000 0008001D&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;I know you're right, Fox.  It's just...</phrase>
+    <phrase>&lt;EE 80980000 000B0018&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Yeah, I know...I'm gonna miss you too.</phrase>
+    <phrase>&lt;EE 80980000 00100001&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Without your help this mission would have failed.</phrase>
+    <phrase>So I've got something for you.</phrase>
+    <phrase>&lt;EE 80980000 00190001&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Prince Tricky. EarthWalker.</phrase>
+    <phrase>You are now an honorary member of the Star Fox team.</phrase>
+    <phrase>&lt;EE 80980000 00200000&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Dad, did you hear that!?  Me, a member of Star Fox!</phrase>
+    <phrase>&lt;EE 80980000 0026000B&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Do I get my own spaceship!?</phrase>
+    <phrase>&lt;EE 80980000 00280007&gt;(Laugh)</phrase>
+    <phrase>&lt;EE 80980000 002B000B&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I'll come and visit you soon.</phrase>
+    <phrase>&lt;EE 80980000 002E000E&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Just don't make it too long, OK?</phrase>
+    <phrase>&lt;EE 80980000 0030000E&gt; </phrase>
+  </text>
+  <text id="0x0037" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0037"/>
+    <phrase>&lt;SEQ 01B0&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000001&gt;&lt;COLOR 00FF00AA 005500FF&gt;Aaagh!  Make the bird stop!  Make it stop and I'll untie you!</phrase>
+    <phrase>&lt;EE 80980000 000D0013&gt;&lt;COLOR 00DB00AE 002600FF&gt;Thanks for helping our Queen, Fox.</phrase>
+    <phrase>I'm glad I can return the favor.</phrase>
+    <phrase>&lt;EE 80980000 00110013&gt; </phrase>
+  </text>
+  <text id="0x0038" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0038"/>
+    <phrase>&lt;SEQ 0075&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;Activate all four totem poles before time runs out.  GO!</phrase>
+    <phrase>&lt;EE 80980000 00050000&gt; </phrase>
+  </text>
+  <text id="0x003C" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq003C"/>
+    <phrase>&lt;SEQ 02E5&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010005&gt;(Laugh) Let's see how strong you are.</phrase>
+    <phrase>&lt;EE 80980000 00050005&gt; </phrase>
+  </text>
+  <text id="0x0265" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0265"/>
+    <phrase>&lt;SEQ 0462&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Fox, the floor of this cage seems unstable.</phrase>
+    <phrase>&lt;EE 80980000 00040000&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;See if you can find a way of breaking it.</phrase>
+    <phrase>&lt;EE 80980000 00070000&gt; </phrase>
+  </text>
+  <text id="0x003D" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq003D"/>
+    <phrase>&lt;SEQ 0078&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010011&gt;&lt;COLOR 00FF00AA 005500FF&gt;Well done, Fox.  You are now honorary member of tribe!</phrase>
+    <phrase>&lt;EE 80980000 00090011&gt; </phrase>
+  </text>
+  <text id="0x003F" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq003F"/>
+    <phrase>&lt;SEQ 0499&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;&lt;COLOR 00CC00CC 00FF00FF&gt;Hi, Fox.  I've been studying the ancient records...</phrase>
+    <phrase>...of this planet, and you might be interested to hear this.</phrase>
+    <phrase>This temple has been built on a Force Point.</phrase>
+    <phrase>A point where pure magic energy is forced up...</phrase>
+    <phrase>...from within the core of the planet.</phrase>
+    <phrase>This energy is so powerful...</phrase>
+    <phrase>...that it continually attempts to break the planet apart!</phrase>
+    <phrase>To stop this, the ancient Krazoa placed...</phrase>
+    <phrase>...two SpellStones inside the temple to absorb the energy.</phrase>
+    <phrase>When General Scales removed the stones...</phrase>
+    <phrase>...the planet began to fall apart!</phrase>
+    <phrase>By returning the SpellStones back to the temple...</phrase>
+    <phrase>...you will bring the planet together once more.  Peppy out.</phrase>
+    <phrase>&lt;EE 80980000 002F0000&gt; </phrase>
+  </text>
+  <text id="0x0288" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0288"/>
+    <phrase>&lt;SEQ 0532&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0002000F&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;You must forgive your father.</phrase>
+    <phrase>You must work together to lead the SnowHorn Tribe...</phrase>
+    <phrase>...against Scales instead of fighting each other.</phrase>
+    <phrase>&lt;EE 80980000 000A0006&gt;&lt;COLOR 00FF00AA 005500FF&gt;I will, Fox.  Because of you...</phrase>
+    <phrase>...my people shall no longer live as slaves!</phrase>
+    <phrase>&lt;EE 80980000 0011000D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, we'll see you soon.</phrase>
+    <phrase>We gotta take this SpellStone back to the planet!</phrase>
+    <phrase>&lt;EE 80980000 00140000&gt; </phrase>
+  </text>
+  <text id="0x0289" window="10" alignH="3" alignV="0" language="0">
+    <dir name="Seq0289"/>
+    <phrase>&lt;SEQ 008E&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;Grab the Staff, but don't wake the SharpClaw.</phrase>
+    <phrase>&lt;EE 80980000 00040000&gt; </phrase>
+  </text>
+  <text id="0x028A" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq028A"/>
+    <phrase>&lt;SEQ 0282&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;Hurry, there's no time to waste.  Let's get out of here.</phrase>
+    <phrase>&lt;EE 80980000 00040000&gt; </phrase>
+  </text>
+  <text id="0x028C" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq028C"/>
+    <phrase>&lt;SEQ 01DB&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0003001D&gt;Hi, Fox, I've been studying the mission.</phrase>
+    <phrase>And I think this will help you.</phrase>
+    <phrase>&lt;EE 80980000 00090013&gt; </phrase>
+  </text>
+  <text id="0x028E" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq028E"/>
+    <phrase>&lt;SEQ 0045&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;(Snoring)... (Snoring)...</phrase>
+    <phrase>&lt;EE 80980000 00030014&gt;You take over.  Keep eye on prisoner.</phrase>
+    <phrase>Me go for break.</phrase>
+    <phrase>&lt;EE 80980000 00090014&gt; </phrase>
+  </text>
+  <text id="0x0042" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0042"/>
+    <phrase>&lt;SEQ 001E&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF00AA 005500FF&gt;Fox, my boy.  Three SpellStones down and only one to go.</phrase>
+    <phrase>You seem to be getting the hang of this.</phrase>
+    <phrase>&lt;EE 80980000 00080019&gt;&lt;COLOR 00FF00AA 005500FF&gt;Now then, it's time for you and Tricky to go to Dragon Rock.</phrase>
+    <phrase>Your toughest challenge yet.</phrase>
+    <phrase>&lt;EE 80980000 00110009&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;That's easy for you to say, but where do I find the GateKeeper?</phrase>
+    <phrase>&lt;EE 80980000 0017000F&gt;&lt;COLOR 00FF00AA 005500FF&gt;He is closer than you realize.</phrase>
+    <phrase>&lt;EE 80980000 001C0015&gt;&lt;COLOR 00FF00AA 005500FF&gt;He who has no voice has plenty to say.</phrase>
+    <phrase>&lt;EE 80980000 00200015&gt; </phrase>
+  </text>
+  <text id="0x02A0" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02A0"/>
+    <phrase>&lt;SEQ 00E3&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00020019&gt;&lt;COLOR 00FF00FF 000000FF&gt;You have saved my eggs from those evil creatures.</phrase>
+    <phrase>Please let me repay you.</phrase>
+    <phrase>&lt;EE 80980000 000B0000&gt;I believe, inside there is something that you seek.</phrase>
+    <phrase>&lt;EE 80980000 000F0000&gt; </phrase>
+  </text>
+  <text id="0x0043" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0043"/>
+    <phrase>&lt;SEQ 000C&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000017&gt;&lt;COLOR 00FF00FF 000000FF&gt;The beacons mean so much to my tribe.</phrase>
+    <phrase>Please take this.  I believe it will help you on your quest.</phrase>
+    <phrase>&lt;EE 80980000 00080000&gt; </phrase>
+  </text>
+  <text id="0x02B4" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02B4"/>
+    <phrase>&lt;SEQ 001F&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000004&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I should have guessed there was something odd about you.</phrase>
+    <phrase>The WarpStone said I should find you.</phrase>
+    <phrase>&lt;EE 80980000 00050002&gt;&lt;COLOR 00FF00FF 000000FF&gt;Hmm...  I haven't spoken since something terrible happened.</phrase>
+    <phrase>Something that I am ashamed to admit.</phrase>
+    <phrase>I, too, attempted to save our planet, but... I failed.</phrase>
+    <phrase>&lt;EE 80980000 0014001C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Tell me what happened?</phrase>
+    <phrase>&lt;EE 80980000 00170007&gt;&lt;COLOR 00FF00FF 000000FF&gt;I led a group of dinosaurs against General Scales.</phrase>
+    <phrase>He learned of our plan before we could act and launched...</phrase>
+    <phrase>...a full-scale offensive against us.</phrase>
+    <phrase>We never stood a chance.</phrase>
+    <phrase>He imprisoned three of my closest friends on Dragon Rock...</phrase>
+    <phrase>...and it is also where he has taken the SpellStone.</phrase>
+    <phrase>&lt;EE 80980000 002F000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;So how did you survive?</phrase>
+    <phrase>If Scales let you go, it could only be because...</phrase>
+    <phrase>&lt;EE 80980000 00340014&gt;&lt;COLOR 00FF00FF 000000FF&gt;I am the GateKeeper.</phrase>
+    <phrase>&lt;EE 80980001 000E0000&gt;&lt;COLOR 00FF00FF 000000FF&gt;The gateway to Dragon Rock is now open.</phrase>
+    <phrase>Please help my friends.  They are on your side.</phrase>
+    <phrase>&lt;EE 80980001 00150000&gt; </phrase>
+  </text>
+  <text id="0x02B9" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02B9"/>
+    <phrase>&lt;SEQ 04E8&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;So this is Krazoa Palace.</phrase>
+    <phrase>&lt;EE 80980000 0002001A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, Tricky.  Let's find out where we can release this Spirit.</phrase>
+    <phrase>Tricky?</phrase>
+    <phrase>&lt;EE 80980000 00080015&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Tricky!</phrase>
+    <phrase>&lt;EE 80980000 000A0004&gt;&lt;COLOR 00FF00AA 005500FF&gt;Sorry, I forget to tell you.  I cannot warp dinosaurs!</phrase>
+    <phrase>&lt;EE 80980000 0011001C&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;That's a shame.</phrase>
+    <phrase>&lt;EE 80980000 00130005&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;I can still hear you, Fox!</phrase>
+    <phrase>&lt;EE 80980000 00160000&gt; </phrase>
+  </text>
+  <text id="0x02BA" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02BA"/>
+    <phrase>&lt;SEQ 04E9&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00040002&gt;Wow...  She's beautiful!</phrase>
+    <phrase>&lt;EE 80980000 000D0017&gt;Whoa!  A Krazoa Spirit!  But how do I get mine in there?</phrase>
+    <phrase>&lt;EE 80980000 00260007&gt;What am I doing?</phrase>
+    <phrase>&lt;EE 80980000 00280000&gt;Peppy here.  What are you doing, Fox?</phrase>
+    <phrase>Release the Spirit and get out of there.  Peppy out.</phrase>
+    <phrase>&lt;EE 80980000 00300000&gt;OK, OK... I'm going!</phrase>
+    <phrase>&lt;EE 80980000 00330000&gt; </phrase>
+  </text>
+  <text id="0x0006" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0006"/>
+    <phrase>&lt;SEQ 04F7&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0005001A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;What's going on?  You said this would save her!</phrase>
+    <phrase>&lt;EE 80980000 00090000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0014000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Nooo!</phrase>
+    <phrase>&lt;EE 80980000 00160000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0027000A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Wake up!  Wake up!</phrase>
+    <phrase>&lt;EE 80980000 0029000A&gt; </phrase>
+    <phrase>&lt;EE 80980001 00030018&gt;&lt;COLOR 00FF0055 000000FF&gt;I am reborn!  The mighty Krazoa God! (laugh)</phrase>
+    <phrase>Kneel, all those that stand before me! (laugh)</phrase>
+    <phrase>&lt;EE 80980001 00120014&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;We will never kneel to you!</phrase>
+    <phrase>&lt;EE 80980001 0016000E&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Give me that!</phrase>
+    <phrase>&lt;EE 80980001 0017000E&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Hey!  W...wait...</phrase>
+    <phrase>&lt;EE 80980001 00190019&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Well, thanks for nothing!</phrase>
+    <phrase>If it wasn't for me, you wouldn't be standing here at all.</phrase>
+    <phrase>&lt;EE 80980001 001F0003&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;My Staff... You're back!</phrase>
+    <phrase>&lt;EE 80980001 00210000&gt; </phrase>
+  </text>
+  <text id="0x0048" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0048"/>
+    <phrase>&lt;SEQ 0027&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0000000A&gt;&lt;COLOR 00FF00AA 005500FF&gt;I don't believe it!</phrase>
+    <phrase>This item was stolen from me many years ago.</phrase>
+    <phrase>&lt;EE 80980000 0006000F&gt;I believe it was around the same time...</phrase>
+    <phrase>...that a strange floating dinosaur visited the Wastes.</phrase>
+    <phrase>&lt;EE 80980000 000E0018&gt;&lt;COLOR 00FF00AA 005500FF&gt;In return, I will give you the chance to prove yourself.</phrase>
+    <phrase>&lt;EE 80980000 00160004&gt;&lt;COLOR 00FF00AA 005500FF&gt;The call of the SnowHorn will begin your challenge.</phrase>
+    <phrase>&lt;EE 80980000 001A0004&gt; </phrase>
+  </text>
+  <text id="0x02F1" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02F1"/>
+    <phrase>&lt;SEQ 0127&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;I don't believe you did it!  You win fair and square.</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x02F2" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02F2"/>
+    <phrase>&lt;SEQ 0128&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Not so good this time.  I'll keep what you didn't collect.</phrase>
+    <phrase>&lt;EE 80980000 00040000&gt; </phrase>
+  </text>
+  <text id="0x02F3" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02F3"/>
+    <phrase>&lt;SEQ 0487&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000010&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Help me...Please help me...I'm dying.</phrase>
+    <phrase>&lt;EE 80980000 00090007&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Can you hear that?</phrase>
+    <phrase>&lt;EE 80980000 000A0014&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;I need Krazoa Spirits or I will not survive...</phrase>
+    <phrase>Help me...</phrase>
+    <phrase>&lt;EE 80980000 0012001A&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;A Krazoa!</phrase>
+    <phrase>&lt;EE 80980000 00150019&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Do you wish to accept our test?</phrase>
+    <phrase>&lt;EE 80980000 00190012&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;What is it talking about?  What test?</phrase>
+    <phrase>&lt;EE 80980000 001C0011&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;Please...please.</phrase>
+    <phrase>&lt;EE 80980000 0021000A&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;I was released when she completed my test.</phrase>
+    <phrase>But she is now in great danger and, for her to survive...</phrase>
+    <phrase>...you must continue what she started...</phrase>
+    <phrase>...and collect the remaining Krazoa Spirits.</phrase>
+    <phrase>For only the pure of heart can enter our shrines.</phrase>
+    <phrase>&lt;EE 80980000 00370017&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I can't just stop now to save this stranger.</phrase>
+    <phrase>The planet is falling apart!</phrase>
+    <phrase>&lt;EE 80980001 00000004&gt;&lt;COLOR 00AA00AA 00FF00FF&gt;(Choke) Stop...please don't hurt me.</phrase>
+    <phrase>&lt;EE 80980001 00070000&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;She sounds like she's in big trouble, Fox.</phrase>
+    <phrase>&lt;EE 80980001 000A0000&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Find the remaining five Krazoa Shrines.</phrase>
+    <phrase>Complete the test within each...</phrase>
+    <phrase>...and bring the Spirits to Krazoa Palace.</phrase>
+    <phrase>&lt;EE 80980001 00150010&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;The WarpStone can get you there!</phrase>
+    <phrase>&lt;EE 80980001 00170017&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;When all Spirits are returned, she will be saved.</phrase>
+    <phrase>She is depending on you for her life.</phrase>
+    <phrase>&lt;EE 80980001 00230011&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Defeat the creature to collect a MoonSeed.</phrase>
+    <phrase>&lt;EE 80980001 0029000C&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;I guess we'd better help her!</phrase>
+    <phrase>&lt;EE 80980001 002A000C&gt; </phrase>
+  </text>
+  <text id="0x02F4" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02F4"/>
+    <phrase>&lt;SEQ 03C4&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010000&gt;What the...!</phrase>
+    <phrase>Look out!</phrase>
+    <phrase>&lt;EE 80980000 00030000&gt; </phrase>
+  </text>
+  <text id="0x02F5" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq02F5"/>
+    <phrase>&lt;SEQ 03C8&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 0005000A&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;You have proven yourself to be pure of heart.</phrase>
+    <phrase>&lt;EE 80980000 000A001C&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Bring the Spirit to Krazoa Palace.</phrase>
+    <phrase>I will guide you further when you get there.</phrase>
+    <phrase>&lt;EE 80980000 00130014&gt;&lt;COLOR 00FF00FF 00AA00FF&gt;Come to Krazoa Palace.</phrase>
+    <phrase>&lt;EE 80980000 00180014&gt; </phrase>
+  </text>
+  <text id="0x004B" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq004B"/>
+    <phrase>&lt;SEQ 00A7&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00010016&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Whhoaaah!  A CloudRunner!</phrase>
+    <phrase>&lt;EE 80980000 00040013&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Shoo, shoo!  Go away, CloudRunner, get away!</phrase>
+    <phrase>&lt;EE 80980000 0007001A&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Have you two met?</phrase>
+    <phrase>&lt;EE 80980000 000A0003&gt;&lt;COLOR 000000FF 005500FF&gt;He is an EarthWalker.  I am a CloudRunner.</phrase>
+    <phrase>Our tribes do not see eye to eye.</phrase>
+    <phrase>&lt;EE 80980000 00110006&gt;&lt;COLOR 000000FF 005500FF&gt;His father has probably been saying bad things about me.</phrase>
+    <phrase>&lt;EE 80980000 00150009&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Who locked you in there?</phrase>
+    <phrase>&lt;EE 80980000 00170000&gt;&lt;COLOR 000000FF 005500FF&gt;General Scales.  Who else?</phrase>
+    <phrase>You see, I am the Queen of the CloudRunner Tribe...</phrase>
+    <phrase>...and also its GateKeeper.</phrase>
+    <phrase>&lt;EE 80980000 001E0008&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;That guy needs to be taught a lesson.</phrase>
+    <phrase>Where is he now?</phrase>
+    <phrase>&lt;EE 80980000 00220017&gt;&lt;COLOR 000000FF 005500FF&gt;He used my powers to open a path to CloudRunner Fortress.</phrase>
+    <phrase>I must return there to help my tribe.</phrase>
+    <phrase>&lt;EE 80980000 0029001D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;I'm gonna need that SpellStone.</phrase>
+    <phrase>Looks like you've got yourself company, lady.</phrase>
+    <phrase>&lt;EE 80980000 002F000D&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Peppy, I'm returning to the Arwing.</phrase>
+    <phrase>Can you make sure it's ready for takeoff?</phrase>
+    <phrase>&lt;EE 80980000 0033001C&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Wait a minute.  There's no way I'm going up to her fortress.</phrase>
+    <phrase>&lt;EE 80980000 003A0000&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;OK, you can sit this one out.</phrase>
+    <phrase>We'll head back to ThornTail Hollow and you can...</phrase>
+    <phrase>...wait there for me to return.</phrase>
+    <phrase>&lt;EE 80980001 00050017&gt;&lt;COLOR 000000FF 005500FF&gt;I'll meet you at the fortress.  Good luck!</phrase>
+    <phrase>&lt;EE 80980001 00090000&gt; </phrase>
+  </text>
+  <text id="0x0056" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0056"/>
+    <phrase>&lt;SEQ 00AD&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000009&gt;&lt;COLOR 00FF00AA 005500FF&gt;Hey!  You stay away, you steenking fur ball...</phrase>
+    <phrase>...or me smash you good!</phrase>
+    <phrase>&lt;EE 80980000 00040017&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;What!  But I just saved you!</phrase>
+    <phrase>&lt;EE 80980000 00070008&gt;&lt;COLOR 00FF00AA 005500FF&gt;Me trust no one.</phrase>
+    <phrase>SharpClaw say I steal their things but they steenking liars!</phrase>
+    <phrase>&lt;EE 80980000 000F000D&gt;&lt;COLOR 00FF00AA 005500FF&gt;Aaaahh!</phrase>
+    <phrase>&lt;EE 80980000 00120000&gt; </phrase>
+    <phrase>&lt;EE 80980000 001D0007&gt;&lt;COLOR 00FF00AA 005500FF&gt;Me get out of this place!  Adios!</phrase>
+    <phrase>&lt;EE 80980000 00200000&gt; </phrase>
+  </text>
+  <text id="0x005A" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq005A"/>
+    <phrase>&lt;SEQ 020F&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00060010&gt;(Snoring)</phrase>
+    <phrase>&lt;EE 80980000 000C0019&gt; </phrase>
+    <phrase>&lt;EE 80980000 000D0017&gt;Wake up!  Somebody coming.</phrase>
+    <phrase>&lt;EE 80980000 000F0017&gt; </phrase>
+  </text>
+  <text id="0x005F" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq005F"/>
+    <phrase>&lt;SEQ 0023&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00000013&gt;&lt;COLOR 00FF0055 000000FF&gt;Fox, something is not right.</phrase>
+    <phrase>The Walled City has not yet returned to the planet.</phrase>
+    <phrase>My husband is still stuck up there.</phrase>
+    <phrase>You did return all of the SpellStones?</phrase>
+    <phrase>&lt;EE 80980000 000B0016&gt;&lt;COLOR 00FF00FF 00FF00FF&gt;Of course...but wait...  The Spirits!</phrase>
+    <phrase>They must have something to do with it.</phrase>
+    <phrase>&lt;EE 80980000 00110004&gt;&lt;COLOR 00FF0055 000000FF&gt;You're right.  Without ALL the Spirits...</phrase>
+    <phrase>...the magic cannot be channeled back into the planet.</phrase>
+    <phrase>&lt;EE 80980000 0016000A&gt;&lt;COLOR 00AB00FD 00FD00FF&gt;Your boss said to return to the Walled City.</phrase>
+    <phrase>There must be a shrine we've yet to find.</phrase>
+    <phrase>&lt;EE 80980000 001B000A&gt; </phrase>
+  </text>
+  <text id="0x0009" window="10" alignH="0" alignV="0" language="0">
+    <dir name="Seq0009"/>
+    <phrase>&lt;SEQ 017C&gt;</phrase>
+    <phrase>&lt;EE 80980000 00000000&gt; </phrase>
+    <phrase>&lt;EE 80980000 00100005&gt;&lt;COLOR 00DB00AE 002600FF&gt;This is CloudRunner Fortress.</phrase>
+    <phrase>I'll fly ahead and check if it's safe.</phrase>
+    <phrase>Meet me inside.</phrase>
+    <phrase>&lt;EE 80980000 00170000&gt; </phrase>
   </text>
 </gametext>

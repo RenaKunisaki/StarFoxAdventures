@@ -1,4 +1,4 @@
-import {getDescriptionAndNotes} from './Util.js';
+import {getDescriptionAndNotes, int} from './Util.js';
 
 export class ObjectParam {
     /** A parameter for a GameObject.
@@ -90,12 +90,27 @@ export class Dll {
 
         getDescriptionAndNotes(this, eDll);
 
+        //get object params
         this.objParams = [];
         let eParams = eDll.getElementsByTagName('objparams')[0];
         if(eParams) {
             this.objParamLength = parseInt(eParams.getAttribute('length'));
             for(let eParam of eParams.getElementsByTagName('param')) {
                 this.objParams.push(new ObjectParam(eParam));
+            }
+        }
+
+        //get object commands
+        this.objCmds = {};
+        let eCmds = eDll.getElementsByTagName('objcmds')[0];
+        if(eCmds) {
+            for(let eCmd of eCmds.getElementsByTagName('cmd')) {
+                const cmd = {
+                    id: int(eCmd.getAttribute('id')),
+                    name: eCmd.getAttribute('name'),
+                };
+                getDescriptionAndNotes(cmd, eCmd);
+                this.objCmds[cmd.id] = cmd;
             }
         }
     }
