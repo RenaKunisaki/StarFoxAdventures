@@ -441,40 +441,36 @@ mainLoop: # called from main loop. r3 = mainLoop
 .if REDIRECT_TO_CONSOLE
 .else
     andi.   r0,  r19,  DEBUG_TEXT_SEQ_STATE
-    beq     .noSeq
+    beq     .noPrintSeqInfo
 
     LOADWH  r9,  0x803dd124
-    LOADBL2 r4,  0x803dd0bc, r9 # numBgCmds
-    LOADWL2 r5,  0x803dd0c0, r9 # seq len
-    LOADBL2 r6,  0x803dd113, r9 # ?
-    LOADWL2 r7,  0x803dd06c, r9 # global1 and 2
-    LOADBL2 r8,  0x803dd080, r9 # global3
+    LOADWL2 r4,  0x803dd06c, r9 # global1 and 2
+    LOADBL2 r5,  0x803dd080, r9 # global3
     addi    r3,  r14, .fmt_seqState2 - mainLoop
     mflr    r20
     CALL    debugPrintf
     mtlr    r20
 
-    LOAD    r17, 0x80396918 # SeqObjInstance[27][16]
+    # apparently only way to get correct seq info is to iterate all objs...
+    LOADW   r17, loadedObjects
+    lwz     r18, -4(r17) # numLoadedObjs
+    slwi    r18, r18, 2
     li      r19, 0
-.nextSeq2:
-    li      r18, 0
 .nextSeq:
-    mulli   r3,  r18, 8
-    mulli   r4,  r19, 8*16
-    add     r3,  r3,  r4
-    lwzx    r6,  r17, r3
+    lwzx    r6,  r19, r17 # get obj*
     cmpwi   r6,  0
+    beq     .printSeq_noObj
+    lha     r4,  0xB4(r6) # curSeq
+    cmpwi   r4,  -1
     bnel    printSeqInfo
 
-    addi    r18, r18, 1
-    cmpwi   r18, 16
+.printSeq_noObj:
+    addi    r19, r19, 4
+    cmpw    r19, r18
     blt     .nextSeq
-    addi    r19, r19, 1
-    cmpwi   r19, 28
-    blt     .nextSeq2
 .endif # REDIRECT_TO_CONSOLE
 
-.noSeq:
+.noPrintSeqInfo:
     # display target (that the heart, A icon, etc is over)
     LOADW r17, pCamera
     cmpwi r17, 0
@@ -542,19 +538,29 @@ mainLoop: # called from main loop. r3 = mainLoop
 
 .if REDIRECT_TO_CONSOLE
 .else
-printSeqInfo: # r6: ObjInstance*, r18: idx, r19: seqIdx
-    mr      r4,  r18
-    mr      r5,  r19
-
-    addi    r3,  r3,  4
-    lwzx    r7,  r17, r3
-
+printSeqInfo: # r6: ObjInstance*, r19: obj idx
+    lwz     r3,  0x4C(r6) # get ObjDef*
+    li      r4,  -1
+    cmpwi   r3,  0
+    beq     .printSeqInfo_noDef
+    lbz     r4,  0x1F(r3)
+.printSeqInfo_noDef:
+    mr      r7,  r6
+    LOAD    r5,  curSeqIdArray
+    slwi    r0,  r4,  1
+    lhax    r6,  r5,  r0
+    subi    r6,  r6,  1
+    lhz     r5,  0xB4(r7)
+    lwz     r8,  0x50(r7) # ObjectFileStruct
+    addi    r8,  r8,  0x91 # name
     addi    r3,  r14, .fmt_seqState - mainLoop
     mflr    r20
     CALL    debugPrintf
     mtlr    r20
     blr
 .endif # REDIRECT_TO_CONSOLE
+#           r4   r5                r6      r7
+#"SEQ #\x84%02X[%02X]\x83 Obj:\x84%08X\x83 %s\n"
 
 
 #.timeDeltaScale: .float 6.25 # 100 / 16
@@ -576,7 +582,8 @@ printSeqInfo: # r6: ObjInstance*, r18: idx, r19: seqIdx
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
 .fmt_nearObj:      .string ">> T:%08X %04X %X %s ID:%06X"
 .fmt_textState:    .string ">> X:%04X %08X"
-.fmt_seqState:     .string ">> Q:%08X %02X"
+.fmt_seqState:     .string ">> Q:%02X %08X %s"
+.fmt_seqState2:    .string ">> G:%08X %02X"
 .fmt_start:        .string ">> START"
 .fmt_end:          .string ">> END"
 
@@ -591,8 +598,8 @@ printSeqInfo: # r6: ObjInstance*, r18: idx, r19: seqIdx
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
-.fmt_seqState:     .string "SEQ #\x84%02X %02X\x83 Obj:\x84%08X %08X\x83\n"
-.fmt_seqState2:    .string "NSEQ=%d %02X %02X G %08X %02X\n"
+.fmt_seqState:     .string "SEQ #\x84%02X[%02X] %04X\x83 Obj:\x84%08X\x83 %s\n"
+.fmt_seqState2:    .string "SEQG %08X %02X\n"
 .endif
 
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"

@@ -14,6 +14,79 @@
 .set f25,25; .set f26,26; .set f27,27; .set f28,28; .set f29,29
 .set f30,30; .set f31,31; .set f0,0; .set f2,2; .set f3,3
 
+# I/O regs
+.set IO_BASE,0xCC000000
+
+.set IRQ_IO_BASE,0x3000
+.set INTSR,    0x00 # interrupt cause
+.set INTMR,    0x04 # interrupt mask
+.set CPU_RESET,0x24 # write to reboot
+.set HW_TYPE,  0x2C # console type in bits 28-31
+
+# memory protection - high 16bits=pageLo, low 16bits=pageHi
+# the page address can be calculated as (physical_address >> 10)
+.set MEMPROT_IO_BASE,0x4000
+.set MEMPROT0,      0x00
+.set MEMPROT1,      0x04
+.set MEMPROT2,      0x08
+.set MEMPROT3,      0x0C
+.set MEMPROT_TYPE,  0x10 # 2bits per channel: 01=break on write 10=on read
+.set MEMPROT_IMASK, 0x1C # interrput mask
+.set MEMPROT_ICAUSE,0x1E # interrput cause
+.set MEMPROT_UNK20, 0x20 # interrput handler should clear
+.set MEMPROT_ADDRLO,0x22 # low half of address that triggered break
+.set MEMPROT_ADDRHI,0x24 # high half of address that triggered break
+
+# DVD interface
+.set DVD_IO_BASE,0x6000
+.set DVD_DISR,     0x00 # status
+.set DVD_DICVR,    0x04 # cover status
+.set DVD_DICMDBUF0,0x08 # command
+.set DVD_DICMDBUF1,0x0C # offset in 32bit words
+.set DVD_DICMDBUF2,0x10 # src length
+.set DVD_DIMAR,    0x14 # DMA buffer addr (must be 32byte aligned)
+.set DVD_DILENGTH, 0x18 # DMA length (must be multiple of 32 bytes)
+.set DVD_DICR,     0x1C # control
+.set DVD_DIIMMBUF, 0x20 # immediate data buffer
+.set DVD_DICFG,    0x24 # config
+
+# serial interface
+.set SI_IO_BASE,0x6400
+.set SIC0OUTBUF,0x00 # channel 0 output buffer
+.set SIC0INBUFH,0x04 # channel 0 input buffer hi (buttons 1)
+.set SIC0INBUFL,0x08 # channel 0 input buffer lo (buttons 2)
+.set SIC1OUTBUF,0x0C # channel 1 output buffer
+.set SIC1INBUFH,0x10 # channel 1 input buffer hi (buttons 1)
+.set SIC1INBUFL,0x14 # channel 1 input buffer lo (buttons 2)
+.set SIC2OUTBUF,0x18 # channel 2 output buffer
+.set SIC2INBUFH,0x1C # channel 2 input buffer hi (buttons 1)
+.set SIC2INBUFL,0x20 # channel 2 input buffer lo (buttons 2)
+.set SIC3OUTBUF,0x24 # channel 3 output buffer
+.set SIC3INBUFH,0x28 # channel 3 input buffer hi (buttons 1)
+.set SIC3INBUFL,0x2C # channel 3 input buffer lo (buttons 2)
+.set SIPOLL,    0x30 # poll
+.set SICOMCSR,  0x34 # comm ctrl status
+.set SISR,      0x38 # status
+.set SIEXILK,   0x3C # bit31=disable EXI 32MHz mode
+
+# external interface (memory card, BBA, etc)
+.set EXI_IO_BASE,0x6800
+.set EXI0CSR,   0x00 # channel 0 status/param
+.set EXI0MAR,   0x04 # channel 0 DMA start addr (must be 32byte aligned)
+.set EXI0LENGTH,0x08 # channel 0 DMA length (must be 32byte aligned)
+.set EXI0CR,    0x0C # channel 0 control
+.set EXI0DATA,  0x10 # channel 0 data
+.set EXI1CSR,   0x14 # channel 1 status/param
+.set EXI1MAR,   0x18 # channel 1 DMA start addr (must be 32byte aligned)
+.set EXI1LENGTH,0x1C # channel 1 DMA length (must be 32byte aligned)
+.set EXI1CR,    0x20 # channel 1 control
+.set EXI1DATA,  0x24 # channel 1 data
+.set EXI2CSR,   0x28 # channel 2 status/param
+.set EXI2MAR,   0x2C # channel 2 DMA start addr (must be 32byte aligned)
+.set EXI2LENGTH,0x30 # channel 2 DMA length (must be 32byte aligned)
+.set EXI2CR,    0x34 # channel 2 control
+.set EXI2DATA,  0x38 # channel 2 data
+
 .set PAD_BUTTON_LEFT, 0x0001
 .set PAD_BUTTON_RIGHT,0x0002
 .set PAD_BUTTON_DOWN, 0x0004

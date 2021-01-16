@@ -116,6 +116,7 @@
 .set curMapId,               0x803dcec8 #int
 .set curMapLayer,            0x803dcde1 #s8
 .set curSaveSlot,            0x803db890 #s8
+.set curSeqIdArray,          0x8039a3b0 #s16[25] seqId+1
 .set curSeqNo,               0x803dd08c #u8
 .set curSeqObj,              0x803dd0b8 #ObjInstance*
 .set dataFileBuffers,        0x8035f3e8 #void*[fileIdx]

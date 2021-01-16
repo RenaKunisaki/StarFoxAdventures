@@ -369,10 +369,14 @@ itemAdjustFuncs_debugCheat:
 itemDrawFuncs_debugMisc:
     .int s_Misc                - mainLoop # title
     .int drawItem_crash        - mainLoop
+    .int drawItem_reboot       - mainLoop
+    .int drawItem_exiTest      - mainLoop
     .int 0
 
 itemAdjustFuncs_debugMisc:
     .int adjItem_crash         - mainLoop
+    .int adjItem_reboot        - mainLoop
+    .int adjItem_exiTest       - mainLoop
 
 itemDrawFuncs_debugCamera:
     .int s_Camera               - mainLoop # title

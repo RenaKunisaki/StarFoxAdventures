@@ -31,6 +31,40 @@ adjItem_playSeq: # r3 = amount to adjust by (0=A button)
     b       .adjItem_playSeq_end
 
 .adjItem_playSeq_doCall:
+    # create an Override
+    #li      r3,  0x0028 # size
+    #li      r4,  0x0006 # defNo
+    #CALL    objAlloc
+    #LOADW   r5,  pPlayer
+    #li      r6,  -1
+    #sth     r6,  0x1A(r3) # GameBit16
+    #li      r4,  1
+    #sth     r4,  0x05(r3) # mapActs2
+    #sth     r4,  0x1C(r3) # obj (player)
+    #stb     r4,  0x24(r3) # divided under 1
+    #stb     r4,  0x20(r3)
+    #stb     r4,  0x21(r3)
+    #li      r4,  2
+    #stb     r4,  0x04(r3) # loadFlags (isManualLoad)
+    #lwz     r4,  0x0C(r5)
+    #stw     r4,  0x08(r3) # pos X
+    #lwz     r4,  0x10(r5)
+    #stw     r4,  0x0C(r3) # pos Y
+    #lwz     r4,  0x14(r5)
+    #stw     r4,  0x10(r3) # pos Z
+    #li      r4,  0x0447 # override + 4
+    #sth     r4,  0x1C(r3)
+    #lbz     r4,  (debugSeqIdx - mainLoop)(r14)
+    #stb     r4,  0x1F(r3) # seq idx
+    #lhz     r4,  (debugSeqId - mainLoop)(r14)
+    #sth     r4,  0x18(r3) # seqNo
+    #li      r4,  0x05 # KeepLoaded | DontSave
+    #li      r5,  -1 # mapNo
+    ## r6 is already -1 (objNo)
+    #li      r7,  0 # matrix
+    #CALL    objInstantiateCharacter
+    #mr      r4,  r3
+
     lhz     r3,  (debugSeqId - mainLoop)(r14)
     LOADW   r4,  pPlayer
     LOAD    r5,  0xFFFFFFFF
@@ -113,7 +147,7 @@ adjItem_seqGlobal2: # r3 = amount to adjust by (0=A button)
 
 drawItem_seqGlobal3:
     addi    r4,  r14, (s_GlobalN - mainLoop)
-    li      r5,  2
+    li      r5,  3
     LOADB   r6,  seqGlobal3
     blr
 
