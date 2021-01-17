@@ -27,21 +27,7 @@
 
   <interface name="UI">
     <description>DLLs used for UI</description>
-    <function idx="0" name="initialise">
-      <return type="void"/>
-      <params>
-        <param reg="r3" type="undefined4" name="param">
-          <description>Parameter passed to dll_load</description>
-        </param>
-      </params>
-    </function>
-    <function idx="1" name="release">
-      <params />
-      <return type="void"/>
-    </function>
-    <function idx="2">
-      <description>Unused?</description>
-    </function>
+    <extends interface="common" />
     <function idx="3" name="frameStart">
       <description>Called at beginning of frame</description>
       <params />
@@ -177,7 +163,7 @@
         <param reg="r5" />
         <param reg="r6" />
         <param reg="r7" />
-        <param reg="r8" type="bool" />
+        <param reg="r8" type="bool" name="shouldRender" />
       </params>
     </function>
     <function idx="7" name="free">

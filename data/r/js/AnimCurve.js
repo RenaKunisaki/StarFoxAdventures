@@ -89,28 +89,62 @@ export default class AnimCurve {
 
         //read curves
         this.curveOffs = offset;
-        let curve = [];
-        let prevAttr = null;
-        for(let iPoint=0; (offset-startOffs)+8 <= length; iPoint++) {
+        //let curve = [];
+        //let prevAttr = null;
+
+        //mostly copied game code
+        const curvePoints = [];
+        for(let iPoint=0; (offset-startOffs)+8 < length; iPoint++) {
             //console.log("AnimCurv read point", iPoint);
-            const point = new CurvePoint(data, offset);
+            let point = new CurvePoint(data, offset);
+            curvePoints.push({
+                y:            point.y,
+                typeAndScale: point.typeAndScale,
+                field:        point.field & 0x1F,
+                fieldHi:      point.field >> 5,
+                x:            point.x,
+                type:         point.typeAndScale & 3,
+                scale:        (point.typeAndScale >> 2) / 16,
+            });
             offset += 8;
-            if((point.field & 0x1F) != prevAttr) {
-                if(curve.length > 0) {
-                    let attrName = CurveAttrs[prevAttr];
-                    if(attrName == undefined) attrName = `attr${hex(prevAttr,2)}`;
-                    //console.log("%d points for attr", curve.length, attrName);
-                    if(this.curves[attrName]) {
-                        console.warn("Multiple curves for", attrName);
-                    }
-                    this.curves[attrName] = curve;
-                    curve = [];
-                }
-                curve.push(point);
-                //prevAttr = point.field;
-                prevAttr++;
+        }
+
+        let nPoints = curvePoints.length;
+        let iField = 0;
+        let iPoint = 0;
+        let iAttr  = 0;
+        let attrNumPoints  = {};
+        let attrFirstPoint = {};
+        let butt = 0;
+        while (iPoint < nPoints) {
+            let nPointsThisField = 0;
+            while((iPoint + nPointsThisField < nPoints
+            && (iField == curvePoints[iPoint + nPointsThisField].field))) {
+                nPointsThisField = nPointsThisField + 1;
+                butt++;
+                if(butt >= 1000) break;
             }
-            else curve.push(point);
+            attrNumPoints [iAttr] = nPointsThisField;
+            attrFirstPoint[iAttr] = iPoint;
+            iAttr++;
+            iField = iField + 1;
+            iPoint = iPoint + nPointsThisField;
+            butt++;
+            if(butt >= 1000) break;
+        }
+        if(butt >= 1000) console.error("shit's broke");
+
+        //build the curves
+        let nAttrs = iAttr;
+        for(iAttr=0; iAttr<nAttrs; iAttr++) {
+            let attrName = CurveAttrs[iAttr];
+            if(attrName == undefined) attrName = `attr${hex(iAttr,2)}`;
+            let curve = [];
+            for(iPoint=0; iPoint<attrNumPoints[iAttr]; iPoint++) {
+                curve.push(curvePoints[iPoint + attrFirstPoint[iAttr]]);
+            }
+            if(curve.length > 0) this.curves[attrName] = curve;
+            console.log(`Curve ${attrName} len ${curve.length}`);
         }
     }
 

@@ -18,40 +18,112 @@
   <seq id="0x001F" name="SH_GateKeeperOpenPortal" />
   <seq id="0x0020" name="SH_DoneStaffTutorial" />
   <seq id="0x0023" name="SH_WallCityNotReturned" />
+  <seq id="0x0027" name="NW_ReturnArtifact" />
   <seq id="0x002C" name="Tricky_LostYouInBlizzard" />
   <seq id="0x002D" name="Tricky_FirstDinoInSpace" />
   <seq id="0x002E" name="Tricky_GonnaBeSpaceman" />
   <seq id="0x0041" name="CF_ScalesAttackQueen" />
+  <seq id="0x004B" name="CF_GetPowerKey" />
+  <seq id="0x004F" name="SH_NeedLantern" />
+  <seq id="0x0050" name="SH_GotLantern" />
+  <seq id="0x0052" name="SH_TrickyStayHere" />
   <seq id="0x0055" name="ExplainStaffBoostPad" />
   <seq id="0x0061" name="Transporter_WarpOut" />
   <seq id="0x0061" name="Transporter_WarpIn" /> <!-- XXX wrong ID -->
+  <seq id="0x0064" name="IM_HeyScaleFace" />
   <seq id="0x0069" name="SB_OpeningScene" />
   <seq id="0x006D" name="SB_YourAdventureBegins" />
   <seq id="0x0071" name="ExplainBombSporePlant" />
   <seq id="0x0072" name="SH_StealingMyEggs" />
+  <seq id="0x0074" name="LV_FailedTest" />
+  <seq id="0x0075" name="LV_StartTrackingTest" />
+  <seq id="0x0078" name="LV_HonoraryMember" />
+  <seq id="0x007A" name="LV_ExplainTests" />
+  <seq id="0x007B" name="LV_WinTrackingTest" />
   <seq id="0x0080" name="SH_GetMedScarabBag" />
   <seq id="0x0083" name="SB_MeetScales" />
+  <seq id="0x008B" name="NW_TrickyCrazy" />
+  <seq id="0x008E" name="CF_GrabTheStaff" />
   <seq id="0x0093" name="SB_FadeToLandingScene" />
   <seq id="0x009F" name="Player_TalkToNpc" />
+  <seq id="0x00A0" name="NW_NPC_DidYouHearThat" />
+  <seq id="0x00A1" name="NW_NPC_FollowPathToHollow" />
+  <seq id="0x00A2" name="NW_NPC_BewareDepths" />
+  <seq id="0x00A3" name="NW_NPC_NeverHappy" />
+  <seq id="0x00A7" name="CC_TrickyShooCloudRunner" />
+  <seq id="0x00AB" name="DIM_NPC_GetSpellStone" />
+  <seq id="0x00AD" name="CC_LightFootStayAway" />
   <seq id="0x00D1" name="Tricky_ThatsMyMa" />
+  <seq id="0x00D2" name="SH_QueenNeedsShrooms" />
+  <seq id="0x00D5" name="SH_QueenSaved" />
   <seq id="0x00E3" name="SH_SavedEggs" />
   <seq id="0x00E4" name="SH_TrickyDadIsGateKeeper" />
+  <seq id="0x00EA" name="IM_HotSpring" />
   <seq id="0x00EC" name="SB_TalkToKyte" />
+  <seq id="0x00FA" name="DIM_NPC_NeedMore" />
+  <seq id="0x00FB" name="DIM_NPC_SoHungry" />
+  <seq id="0x00FC" name="DIM_NPC_LetsSmash" />
+  <seq id="0x00FE" name="DIM_NPC_HelpGetFree" />
+  <seq id="0x00FF" name="DIM_LearnFlame" />
+  <seq id="0x0105" name="DIM_RescuedMammoth" />
+  <seq id="0x010E" name="DIM_NPC_ScalesTookSpellStone" />
   <seq id="0x0111" name="ECSH_TalkToSpirit1" />
   <seq id="0x0112" name="ECSH_WinTest1" />
   <seq id="0x0113" name="ECSH_FailTest1" />
   <seq id="0x0117" name="Item_GotCheatToken" />
+  <seq id="0x011B" name="NW_BringFrostWeeds" />
+  <seq id="0x011E" name="NW_MeetGarundaTe" />
+  <seq id="0x0121" name="DIM_NPC_NeedFood" />
+  <seq id="0x0127" name="SP_WinScarabGame" />
+  <seq id="0x0128" name="SP_LoseScarabGame" />
   <seq id="0x012C" name="ECSH_DoTest1Hide" />
   <seq id="0x012D" name="ECSH_StartTest1" />
+  <seq id="0x0132" name="LINKB_TheseBlueFungus" />
+  <seq id="0x0133" name="LINKB_NowCanFeed" />
+  <seq id="0x0134" name="LINKB_LookForCrack" />
+  <seq id="0x0135" name="LINKB_TellMeStay" />
+  <seq id="0x013A" name="LINKB_TellMeFind" />
+  <seq id="0x0148" name="NWSH_MeetScales" />
+  <seq id="0x014A" name="NWSH_BeatScales" />
+  <seq id="0x015C" name="DIM_HesGotSpellStone" />
+  <seq id="0x016E" name="DIM_MeetBelinaTe" />
   <seq id="0x017C" name="CF_FirstLanding" />
   <seq id="0x0180" name="WM_ReleaseSpirit1" />
+  <seq id="0x01A3" name="DIM_NPC_FindWayIntoMine" />
+  <seq id="0x01A4" name="DIM_BelinaYouMadeIt" />
+  <seq id="0x01AA" name="LV_ItsATrap" />
+  <seq id="0x01AF" name="LV_BabiesClimbTrees" />
+  <seq id="0x01B0" name="LV_MakeBirdStop" />
+  <seq id="0x01B1" name="LV_ThanksSavingBabies" />
+  <seq id="0x01B2" name="LV_BabiesInForest" />
+  <seq id="0x01BF" name="NW_NPC_SpeakToOthers" />
+  <seq id="0x01C0" name="NW_NPC_FloatingDinoTriedSell" />
+  <seq id="0x01C1" name="NW_NPC_MinesFreeOnceMore" />
+  <seq id="0x01C8" name="NW_NPC_FightingNotAnswer" />
   <seq id="0x01D7" name="CF_GiveFlute" />
   <seq id="0x01DB" name="CF_GiveDisguise" />
   <seq id="0x01FA" name="SH_PepperFirstLanding" />
   <seq id="0x01FC" name="SH_MeetQueen" />
+  <seq id="0x0205" name="CR_GetSpellStoneOut" />
+  <seq id="0x020F" name="MMP_WakeUp" />
+  <seq id="0x023D" name="NW_NPC_WillMeetAgain" />
   <seq id="0x023E" name="Fox_GotItem" />
   <seq id="0x023F" name="Player_UseDinoHorn" />
+  <seq id="0x0247" name="NW_NPC_ByRiverGreatLoss" />
+  <seq id="0x0248" name="NW_NPC_ThruMountainsToHollow" />
+  <seq id="0x0249" name="NW_NPC_GateKeeperWillReward" />
+  <seq id="0x024A" name="NW_NPC_ItemSeemsFamiliar" />
+  <seq id="0x0261" name="NW_NPC_SharpClawCapturedLeader" />
+  <seq id="0x0270" name="NW_NPC_NotLetJustAnyoneIn" />
+  <seq id="0x0282" name="CF_LetsGetOut" />
+  <seq id="0x0283" name="CF_ThisMightHelp" />
+  <seq id="0x0285" name="CF_PowerIsDown" />
+  <seq id="0x02A6" name="CF_WinRace" />
+  <seq id="0x02AA" name="CF_LoseRace" />
+  <seq id="0x02D1" name="Tricky_FeelingTired" />
   <seq id="0x02D8" name="CF_WakeUpInDungeon" />
+  <seq id="0x02E5" name="LV_StartStrengthTest" />
+  <seq id="0x0302" name="DR_LetsDoSomeDamage" />
   <seq id="0x0318" name="Player_0318">
     <description>tilt and scratch head, zoom out, crash</description>
   </seq>
@@ -61,11 +133,25 @@
   <seq id="0x031D" name="Player_AcceptItem" />
   <seq id="0x032A" name="Player_OpenChest" />
   <seq id="0x032E" name="Player_GiveItem" />
+  <seq id="0x0331" name="DR_NPC_TriedBreakRopes" />
+  <seq id="0x0338" name="DR_RescuedHighTop" />
+  <seq id="0x033A" name="DR_WhatIWasLookingFor" />
+  <seq id="0x035A" name="DR_GotLastSpellStone" />
+  <seq id="0x035F" name="SH_WarpStoneIntro" />
+  <seq id="0x0383" name="LV_WinStrengthTest" />
+  <seq id="0x0384" name="LV_FailStrengthTest" />
+  <seq id="0x0395" name="DR_SpellStoneIsInside" />
   <seq id="0x03A3" name="Player_InstantCrash" />
   <seq id="0x03AA" name="Player_FireflyLantern_03AA" />
   <seq id="0x03AC" name="Player_FireFlyLantern_03AC" />
+  <seq id="0x03C4" name="MMP_LookOut" />
+  <seq id="0x03C8" name="MMP_BringSpiritToPalace" />
+  <seq id="0x03E9" name="NW_NPC_FateWorldShoulders" />
   <seq id="0x040E" name="Player_BizarreNeckBreakingWarp" />
+  <seq id="0x044B" name="WM_TransporterExplanation" />
   <seq id="0x0457" name="SB_ExplainHowToTalk" />
+  <seq id="0x0462" name="CF_FloorUnstable" />
+  <seq id="0x0464" name="CF_FindAllChildren" />
   <seq id="0x046C" name="CF_RescuedQueen" />
   <seq id="0x0471" name="Player_Transform_0471">
     <description>Unused, resembles kiosk SharpClaw Disguise anim</description>
@@ -83,15 +169,85 @@
   <seq id="0x047E" name="Player_047E">
     <description>stays motionless for several seconds</description>
   </seq>
+  <seq id="0x047F" name="SH_PickupStaff" />
+  <seq id="0x0481" name="CF_GetMeOut" />
+  <seq id="0x0482" name="CF_NPC_GoodLuck" />
+  <seq id="0x0483" name="CF_GetMeOut2" />
+  <seq id="0x0484" name="CF_NPC_TeachScales" />
+  <seq id="0x0487" name="MMP_KrystalHelp" />
   <seq id="0x0490" name="WM_KrystalLand" />
   <seq id="0x0492" name="WM_DinoAfterTest1" />
   <seq id="0x0493" name="WM_DinoOpenDoorTest1" />
-  <seq id="0x044B" name="WM_TransporterExplanation" />
+  <seq id="0x0499" name="VFP_PeppyExplainForcePoint" />
+  <seq id="0x049C" name="DFP_AllStonesReturned" />
+  <seq id="0x049D" name="SH_QueenExplainSpellStones" />
   <seq id="0x04CB" name="SB_NeedExploreBelowDeck" />
   <seq id="0x04DF" name="Player_FallAndGetUp">
     <description>Unused, intended for CR fort</description>
   </seq>
   <seq id="0x04E8" name="WM_FoxFirstWarpIn" />
+  <seq id="0x04E9" name="WM_FoxMeetKrystal" />
+  <seq id="0x04F7" name="WM_RescueKrystal" />
+  <seq id="0x04FB" name="CC_NPC_HidMyGold" />
+  <seq id="0x04FE" name="CC_NPC_SharpClawCapturedCloudRunner" />
+  <seq id="0x0503" name="CC_NPC_SecretChambers" />
+  <seq id="0x0505" name="CC_NPC_ShouldAbleFind" />
+  <seq id="0x0510" name="WC_GotSpellStone" />
+  <seq id="0x0515" name="AND_MeetAndross" />
+  <seq id="0x0532" name="DIM_RescueBelinaTe" />
+  <seq id="0x0536" name="LV_ThanksSavingBabies2" />
+  <seq id="0x0537" name="LV_BabiesUnderground" />
+  <seq id="0x0538" name="LV_ThanksSavingBabies3" />
+  <seq id="0x053D" name="DIM_NPC_ThanksClimbOn" />
+  <seq id="0x053E" name="WC_DadOk" />
+  <seq id="0x053F" name="WC_NPC_KingInTemple" />
+  <seq id="0x0540" name="WC_NPC_RedEyeScalesRule" />
+  <seq id="0x0541" name="WC_NPC_MostFledInFear" />
+  <seq id="0x0542" name="WC_NPC_NotReturnTilRedEye" />
+  <seq id="0x0544" name="WC_ByeTricky" />
+  <seq id="0x0548" name="SH_NobodyBringsGifts" />
+  <seq id="0x0549" name="AND_FalcoGreet" />
   <seq id="0x0558" name="Krystal_GotItem" />
+  <seq id="0x056A" name="DIM_LostTricky" />
   <seq id="0x0571" name="SH_NPC_SharpClawPutOutBeacons" />
+  <seq id="0x058B" name="LV_MaybeSpiritHere" />
+  <seq id="0x0598" name="AND_YouLose" />
+  <seq id="0x059A" name="WC_ThanksReturnStone" />
+  <seq id="0x059C" name="DR_RescuedEarthWalker" />
+  <seq id="0x059D" name="WC_NPC_IfCouldGetBeacons" />
+  <seq id="0x059E" name="WC_NPC_MustGetInside" />
+  <seq id="0x059F" name="WC_NPC_WhatBehindDoor" />
+  <seq id="0x05A0" name="WC_NPC_MostDifficultTask" />
+  <seq id="0x05A1" name="WC_NPC_LookForOthers" />
+  <seq id="0x05A2" name="WC_NPC_StaffUseless" />
+  <seq id="0x05A3" name="WC_NPC_MaybeCanDefeat" />
+  <seq id="0x05A4" name="WC_NPC_SecretOfRiver" />
+  <seq id="0x05A5" name="WC_NPC_SpellStoneBrought" />
+  <seq id="0x05A6" name="WC_NPC_TeethMustReturn" />
+  <seq id="0x05A7" name="WC_NPC_LocateMagicCave" />
+  <seq id="0x05A8" name="WC_NPC_TeethNotBeRevealed" />
+  <seq id="0x05A9" name="WC_NPC_TeethMustReturn2" />
+  <seq id="0x05AA" name="WC_NPC_MustFlyBack" />
+  <seq id="0x05AB" name="WC_NPC_YouAreGreatWarrior" />
+  <seq id="0x05AC" name="WC_NPC_PeaceWillReturn" />
+  <seq id="0x05AD" name="WC_NPC_CityMustReturn" />
+  <seq id="0x05AE" name="WC_NPC_StaffPowerful" />
+  <seq id="0x05AF" name="WC_NPC_FightTogether" />
+  <seq id="0x05B0" name="WC_NPC_NeverLiveInFear" />
+  <seq id="0x05B1" name="WC_NPC_SpiritRevealedOnceStones" />
+  <seq id="0x05B2" name="WC_NPC_FinalTestAtTop" />
+  <seq id="0x05B3" name="WC_NPC_GreatFriend" />
+  <seq id="0x05B4" name="WC_NPC_ScalesWeakening" />
+  <seq id="0x05B5" name="WC_NPC_SoonCanReturn" />
+  <seq id="0x05B6" name="WC_NPC_TrickyMadeProud" />
+  <seq id="0x05B7" name="WC_NPC_TimeOnlyEnemy" />
+  <seq id="0x05B8" name="WC_NPC_StudyBlocks" />
+  <seq id="0x05B9" name="WC_NPC_NotAlwaysClear" />
+  <seq id="0x05BA" name="WC_NPC_StudyBlocks2">
+    <note>duplicate sequence</note>
+  </seq>
+  <seq id="0x05BD" name="WC_NPC_ThruRightEyes" />
+  <seq id="0x05BE" name="WC_NPC_PassingOfDay" />
+  <seq id="0x05BF" name="WC_NPC_ThruRightEyes2" />
+  <seq id="0x05C0" name="WC_NPC_PassingOfDay2" />
 </sequences>

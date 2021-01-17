@@ -350,6 +350,8 @@ export default class SeqInfo {
                 E.th(null, "Y"),
                 E.th(null, "T", {title:"Type"}),
                 E.th(null, "S", {title:"Scale"}),
+                E.th(null, "F", {title:"Field"}),
+                E.th(null, "H", {title:"FieldHi"}),
             ),
         );
         let nPoints=0;
@@ -362,8 +364,10 @@ export default class SeqInfo {
                     E.td('number', String(i)),
                     E.td('number', String(point.x)),
                     E.td('number', point.y.toFixed(2)),
-                    E.td('number', String(point.typeAndScale & 3)),
-                    E.td('number', ((point.typeAndScale >> 2) / 16).toFixed(2)),
+                    E.td('number', String(point.type)),
+                    E.td('number', point.scale.toFixed(2)),
+                    E.td('number', hex(point.field,2)),
+                    E.td('number', hex(point.fieldHi,2)),
                 ));
                 nPoints++;
             }
@@ -397,7 +401,7 @@ export default class SeqInfo {
             let name = MainCmdNames[action.cmd];
             if(name == undefined) name = `Cmd_${hex(action.cmd,2)}`;
             const P = action.param;
-            console.log("Action %d", iAction, name, action.cmd, action.param);
+            //console.log("Action %d", iAction, name, action.cmd, action.param);
             switch(action.cmd) {
                 //AnimCurve already took care of skipping past the param data
                 //for longer commands, so we can just read as-is
@@ -445,7 +449,7 @@ export default class SeqInfo {
                 E.td('number', String(action.idx)),
                 E.td('hex',    hex(action.offset, 4)),
                 E.td('number', String(curTime)),
-                E.td('number', (curTime/60).toFixed(1)),
+                E.td('number', (curTime/60).toFixed(2)),
                 E.td('number', `${action.time} 0x${hex(action.time,2)}`),
                 E.td('hex',    rawParam),
                 E.td('str',    label),
