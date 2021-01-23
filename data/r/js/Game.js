@@ -184,37 +184,24 @@ export default class Game {
         return warps;
     }
 
-    async getSequence(dir, id) {
+    async getSequence(map, id) {
         /** Get sequence data from a directory.
          */
-        const V = this.version;
-        const [animCurvTabData, animCurvBinData,
-            objSeq2CTabData, seqsXml] = await Promise.all([
-                getBin(`${V}/disc/${dir}/ANIMCURV.tab`),
-                getBin(`${V}/disc/${dir}/ANIMCURV.bin`),
-                //getBin(`${V}/disc/${dir}/OBJSEQ.tab`),
-                //getBin(`${V}/disc/${dir}/OBJSEQ.bin`),
-                getBin(`${V}/disc/${dir}/OBJSEQ2C.tab`),
-                getXml(`${V}/objseqs.xml`),
-            ]);
-        const animCurvTab = new DataView(animCurvTabData);
-        const animCurvBin = new DataView(animCurvBinData);
-        const objSeq2CTab = new DataView(objSeq2CTabData);
-
-        //read OBJSEQ2C - same logic as game
         const origId = Math.abs(id);
-        if(id >= 0) id = objSeq2CTab.getUint16(id*2);
-        else id = -id;
-        console.log(`Seq ID 0x${hex(origId,4)} => 0x${hex(id,4)} in ${dir}`);
+        id = map.lookupSequence(id);
+        console.log(`Seq ID 0x${hex(origId,4)} => 0x${hex(id,4)} in ${map.dirName}`);
+
+        const V = this.version;
+        const seqsXml = await getXml(`${V}/objseqs.xml`);
 
         //read curves
         let curve = null;
-        let offs = animCurvTab.getUint32(id*4);
-        let next = animCurvTab.getUint32((id+1)*4);
+        let offs  = map.animCurvTab.getUint32(id*4);
+        let next  = map.animCurvTab.getUint32((id+1)*4);
         console.log(`Seq offs=0x${hex(offs,8)} next=0x${hex(next,8)}`);
         if(offs != 0xFFFFFFFF && next != 0xFFFFFFFF && offs & 0x80000000) {
             const len = (next & 0xFFFFFF) - (offs & 0xFFFFFF);
-            curve = new AnimCurve(this, animCurvBin, offs & 0xFFFFFF, len);
+            curve = new AnimCurve(this, map.animCurvBin, offs & 0xFFFFFF, len);
             curve.id  = origId;
             curve.idx = id;
             const eSeq = seqsXml.getElementById(`0x${hex(origId,4)}`);

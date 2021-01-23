@@ -7640,6 +7640,9 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams>
+      <param offset="0x1A" type="WarpEnum8" name="warpIdx" />
+    </objparams>
   </dll>
   <dll address="0x80320DF0" dolOffs="0x31DDF0" id="0x00F1" interface="object" name="InvHit" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -13639,6 +13642,11 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objcmds>
+      <cmd id="0x01" name="loadRace">
+        <description>warp to cloudrace</description>
+      </cmd>
+    </objcmds>
   </dll>
   <dll address="0x803DBEC8" dolOffs="0x333528" id="0x0165" interface="data" name="Dummy165" unk08="0xFF000000" unk0E="0x0028">
     <description>All functions stubbed</description>
@@ -22855,6 +22863,33 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams>
+      <param offset="0x18" type="s8" name="rotX" />
+      <param offset="0x19" type="byte" />
+      <param offset="0x1A" type="s16" name="rotY" />
+      <param offset="0x1C" type="s16" />
+      <param offset="0x1E" type="GameBit16" name="start">
+        <description>Starts "placing spirit" anim when this bit is set</description>
+      </param>
+      <param offset="0x20" type="GameBit16" name="enabled" />
+    </objparams>
+    <objcmds>
+      <cmd id="0x01" name="unlockAllLevels" />
+      <cmd id="0x02" name="setupNextChapter">
+        <description>Sets act number for hollow,linka and switches character depending which object this is</description>
+      </cmd>
+      <cmd id="0x03" name="warpExit">
+        <description>Warp to linka if this is one of the objects that does so</description>
+      </cmd>
+      <cmd id="0x04" name="show">
+        <description>Become visible on next frame</description>
+      </cmd>
+      <cmd id="0x05" name="startParticleFx" />
+      <cmd id="0x06" name="stopParticleFx" />
+      <cmd id="0x07" name="drawSky" />
+      <cmd id="0x08" name="spiritVisionOn" />
+      <cmd id="0x09" name="spiritVisionOff" />
+    </objcmds>
   </dll>
   <dll address="0x80328CF0" dolOffs="0x325CF0" id="0x020D" interface="object" name="WM_seqpoint" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -22925,6 +22960,14 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x1E" type="GameBit16" name="seqStarted" />
       <param offset="0x20" type="GameBit16" />
     </objparams>
+    <objcmds>
+      <cmd id="0x01" name="SetBit0143" />
+      <cmd id="0x02" name="ClrBit0143" />
+      <cmd id="0x04" name="SetSpiritReleased" />
+      <cmd id="0x05" name="HeadFire" />
+      <cmd id="0x0A" name="EnvFxCmd0A" />
+      <cmd id="0x0B" name="EnvFxCmd0B" />
+    </objcmds>
   </dll>
   <dll address="0x80328D28" dolOffs="0x325D28" id="0x020E" interface="object" name="WM_sun" unk08="0x00000000" unk0E="0x0000">
     <description/>

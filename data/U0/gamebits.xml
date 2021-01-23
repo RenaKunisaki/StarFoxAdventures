@@ -125,7 +125,7 @@
     <objref map="clouddungeon" obj="HitAnimator" objId="0x00043930" param="target"/>
     <objref map="clouddungeon" obj="StaffLeverO" objId="0x00043FB3" param="activated"/>
   </bit>
-  <bit id="0x004D" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x004D" table="2" hint="0x00" hasHint="0" max="1" name="CFPerchRelated004D">
     <objref map="clouddungeon" obj="HitAnimator" objId="0x000438BB" param="target"/>
     <objref map="clouddungeon" obj="StaffLeverO" objId="0x00043FAF" param="activated"/>
   </bit>
@@ -1253,7 +1253,9 @@
   <bit id="0x0313" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0314" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0315" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0316" table="2" hint="0x08" hasHint="1" max="1" name="ReleasedSpirit1"/>
+  <bit id="0x0316" table="2" hint="0x08" hasHint="1" max="1" name="ReleasedSpirit1">
+    <note>Setting this immediately starts the sequence.</note>
+  </bit>
   <bit id="0x0317" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0318" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0319" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2366,7 +2368,7 @@
   <bit id="0x0636" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0637" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0638" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0639" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0639" table="2" hint="0x00" hasHint="0" max="1" name="SC_totempuzzle_running"/>
   <bit id="0x063A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x063B" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x063C" table="2" hint="0x81" hasHint="1" max="1" name="PlacedSpellStone3"/>
@@ -3120,7 +3122,7 @@
   <bit id="0x0878" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0879" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x087A" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x087B" table="2" hint="0x00" hasHint="0" max="3"/>
+  <bit id="0x087B" table="2" hint="0x00" hasHint="0" max="3" name="MMPAsteroidRelated087B"/>
   <bit id="0x087C" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x087D" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x087E" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -3436,7 +3438,7 @@
   <bit id="0x096D" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x096E" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x096F" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0970" table="1" hint="0x00" hasHint="0" max="1" name="SavedWithOneLessHealth">
+  <bit id="0x0970" table="1" hint="0x00" hasHint="0" max="1" name="DoCFStandUpAnim">
     <description>triggers a falling and getting back up scene on map reload</description>
   </bit>
   <bit id="0x0971" table="0" hint="0x00" hasHint="0" max="1"/>

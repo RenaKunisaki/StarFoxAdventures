@@ -1,4 +1,4 @@
-import {get, int, hex, getDescriptionAndNotes} from './Util.js';
+import {get, getBin, getXml, int, hex, getDescriptionAndNotes} from './Util.js';
 import {FaceFeedHeader, ZlbHeader} from './Structs.js';
 
 let mapsBin = null; //MAPS.BIN content (downloaded as needed)
@@ -69,6 +69,9 @@ export default class GameMap {
         this.unk1C        = int(eMap.getAttribute('unk1C'));
         this.unk1E        = int(eMap.getAttribute('unk1E'));
         this.unused       = eMap.getAttribute('unused') == '1';
+        this.animCurvTab  = null;
+        this.animCurvBin  = null;
+        this.objSeq2CTab  = null;
         getDescriptionAndNotes(this, eMap);
 
         this.blocks = [];
@@ -138,5 +141,33 @@ export default class GameMap {
             if(block.x == x && block.y == y) return block;
         }
         return null;
+    }
+
+    async getSeqTables() {
+        if(this.animCurvTab) return;
+        const V = this.game.version;
+        const dir = this.dirName;
+        const [animCurvTabData, animCurvBinData,
+            objSeq2CTabData] = await Promise.all([
+                getBin(`${V}/disc/${dir}/ANIMCURV.tab`),
+                getBin(`${V}/disc/${dir}/ANIMCURV.bin`),
+                //getBin(`${V}/disc/${dir}/OBJSEQ.tab`),
+                //getBin(`${V}/disc/${dir}/OBJSEQ.bin`),
+                getBin(`${V}/disc/${dir}/OBJSEQ2C.tab`),
+            ]);
+        this.animCurvTab = new DataView(animCurvTabData);
+        this.animCurvBin = new DataView(animCurvBinData);
+        this.objSeq2CTab = new DataView(objSeq2CTabData);
+    }
+
+    lookupSequence(id) {
+        /** Translate sequence ID by OBJSEQ2C.tab.
+         */
+        if(id & 0x8000) { //game logic
+            return this.objSeq2CTab.getUint16(((id & 0x7FF0) >> 4)*2) + (id&0xF);
+        }
+        //XXX this is wrong, but this is how we get the text ID
+        //else return this.objSeq2CTab.getUint16(id*2);
+        else return id; //+ 1;
     }
 }

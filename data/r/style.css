@@ -36,6 +36,8 @@ tr:hover { background: #666 }
 
 td ul { padding-left: 1em }
 
+.debug { font-family: monospace; }
+
 .hex {
     font-family: monospace;
     /* text-align: right; */
@@ -104,6 +106,7 @@ table .controls {
     margin-bottom: 0.5em;
     vertical-align: top;
     border: 1px #888 solid;
+    resize: both;
 }
 
 /* ******************************** object list ******************************** */
@@ -145,15 +148,41 @@ td.dll .name { padding-left: 0.5em }
 
 /* ******************************** Seq info ******************************** */
 
-.curve-view, .curve-info {
-    border: 1px #888 solid;
+.seqinfo {
+    display: flex;
+    width: 98vw;
+    height: 98vh;
 }
 
-.curve-view .notice {
-    font-size: 2em;
-    text-align: center;
-    margin: 0.5em;
-    color: #888;
+.seqinfo .leftcol {
+    width: 21em;
+    vertical-align: top;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.seqinfo .rightcol {
+    width: calc(100vw - 22em);
+    vertical-align: top;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.seqinfo .rightcol .bottom {
+    height: 49vh;
+    display: flex;
+}
+
+.seqinfo .curve-view {
+    height: 49vh;
+    position: relative;
+}
+
+.seqinfo .curve-view-main {
+    width: 100%;
+    height: 100%;
 }
 
 .curve-view-main {
@@ -161,25 +190,20 @@ td.dll .name { padding-left: 0.5em }
     width: calc(48vw + 10em + 2px);
 }
 
-.curve-view-main svg {
-    width: 48vw;
-    height: 35vh;
-    border: 1px #888 solid;
-    display: block;
-}
-
-.curve-view-main svg .axis-label {
-    fill: #FFF;
-    font: normal 4px monospace; /* not actually 4px because lol */
+.curve-view-main .coords {
+    position: absolute;
+    top:   0;
+    right: 0;
+    font-family: monospace;
 }
 
 .curve-view-main .legend {
     list-style-type: none;
     position: absolute;
-    top: 0;
+    top: 1em;
     right: 0;
     width: 9.5em;
-    height: 10em;
+    height: 100%;
     margin: 4px;
     overflow: auto;
 }
@@ -196,11 +220,38 @@ td.dll .name { padding-left: 0.5em }
     font-family: monospace;
 }
 
-/* .seq-curve-points {
+.seqinfo .curve-view .curve-view-css-is-a-butt {
     position: absolute;
-    top: 0.5em;
-    right: 0.5em;
-} */
+    top: 0;
+    left: 0;
+    bottom: 1.5em;
+    right: 10em;
+    border-right: 1px #888 solid;
+}
+
+.seqinfo .seq-curves, .seqinfo .seq-curve-points {
+    overflow: auto;
+}
+
+.seqinfo .curve-text {
+    font-family: monospace;
+    white-space: pre;
+}
+
+.seqinfo .curve-text li span {
+    background: #400;
+}
+
+.curve-view, .curve-info {
+    border: 1px #888 solid;
+}
+
+.curve-view .notice {
+    font-size: 2em;
+    text-align: center;
+    margin: 0.5em;
+    color: #888;
+}
 
 /* ******************************** DLL info ******************************** */
 

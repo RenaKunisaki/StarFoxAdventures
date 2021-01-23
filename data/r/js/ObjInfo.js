@@ -135,10 +135,11 @@ export default class ObjInfo {
     }
 
     async makeSeqTable() {
-        const v   = this.app.game.version;
+        const game    = this.app.game;
+        const v       = game.version;
         const seqsXml = await getXml(`${v}/objseqs.xml`);
-        const obj = this.obj;
-        const tbl = E.table('seq-list',
+        const obj     = this.obj;
+        const tbl     = E.table('seq-list',
             E.tr(
                 E.th(null, "#"),
                 E.th(null, "ID"),
@@ -147,16 +148,23 @@ export default class ObjInfo {
                 E.th(null, "Text"),
                 E.th(null, "ObjID"),
                 E.th(null, "Flags"),
+                E.th(null, "Seq", {colspan:3}),
                 E.th(null, "Object", {colspan:2}),
             ),
         );
+        let map = Object.keys(obj.maps)[0];
+        if(map == undefined) map = 5; //animtest
+        map = game.maps[map];
+        await map.getSeqTables();
         let iSeq=0;
         for(let seq of obj.sequences) {
-            let data = this.app.game.sequences[seq];
+            let data = game.sequences[seq];
             if(data) {
+                let dir = map.dirName; //XXX unnecessary
+
                 for(let i=0; i<data.length; i++) {
                     const item = data[i];
-                    let sobj = item.objId ? null : this.app.game.getObjectById(item.defNo);
+                    let sobj = item.objId ? null : game.getObjectById(item.defNo);
                     let objName = '';
                     if(!item.objId) {
                         if(item.defNo == 0xFFFF) objName = "[Override]";
@@ -165,7 +173,7 @@ export default class ObjInfo {
                             {href:`?v=${v}&p=obj&id=${sobj.id}`});
                     }
                     else {
-                        sobj = await this.app.game.getObjectByUniqueId(item.objId);
+                        sobj = await game.getObjectByUniqueId(item.objId);
                         if(sobj) {
                             objName = E.span(null,
                                 E.a('objlink', sobj.name,
@@ -179,9 +187,6 @@ export default class ObjInfo {
                     }
                     const tr = E.tr();
                     if(!i) { //make seq info cells
-                        let dir = Object.keys(obj.maps)[0];
-                        if(!dir) dir = 5; //animtest
-                        dir = this.app.game.maps[dir].dirName;
                         tr.append(
                             E.th(null, hex(iSeq,2), {rowspan:data.length}),
                             E.th(null, E.a('seqlink', hex(seq,4), {
@@ -205,9 +210,9 @@ export default class ObjInfo {
                         if(textLut) {
                             let text;
                             if(textLut.text == 0x29) { //game does this, no idea why
-                                 text = this.app.game.texts[textLut.seq];
+                                 text = game.texts[textLut.seq];
                             }
-                            else text = this.app.game.texts[textLut.text];
+                            else text = game.texts[textLut.text];
                             let str = '';
                             for(let p of text.phrases) {
                                 let ib = p.lastIndexOf('>');
@@ -218,9 +223,17 @@ export default class ObjInfo {
                         }
                         else tr.append(E.td('seqtext', '-', {rowspan:data.length}));
                     }
+                    let newId  = ((seq & 0x07FF) << 4) | 0x8000 | (i & 0xF);
+                    let realId = map.lookupSequence(newId);
+                    let newSeq = game.sequences[realId];
                     tr.append(
                         E.td('hex', hex(item.objId, 8)),
                         E.td('hex', hex(item.flags, 4)),
+                        E.td('hex', hex(newId, 4)),
+                        E.td('hex', E.a('seqlink', hex(realId, 4), {
+                            href: `?v=${v}&p=seq&dir=${dir}&id=0x${hex(realId,4)}&obj=0x${hex(item.defNo)}`
+                        })),
+                        E.td('str', newSeq ? newSeq.name : '-'),
                         E.td('hex', hex(item.defNo, 4)),
                         E.td('str', objName),
                     );

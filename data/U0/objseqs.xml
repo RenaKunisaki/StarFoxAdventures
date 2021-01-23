@@ -55,6 +55,7 @@
   <seq id="0x00AD" name="CC_LightFootStayAway" />
   <seq id="0x00D1" name="Tricky_ThatsMyMa" />
   <seq id="0x00D2" name="SH_QueenNeedsShrooms" />
+  <seq id="0x00D3" name="WM_NPC_PressXToRoll" />
   <seq id="0x00D5" name="SH_QueenSaved" />
   <seq id="0x00E3" name="SH_SavedEggs" />
   <seq id="0x00E4" name="SH_TrickyDadIsGateKeeper" />
@@ -150,6 +151,7 @@
   <seq id="0x040E" name="Player_BizarreNeckBreakingWarp" />
   <seq id="0x044B" name="WM_TransporterExplanation" />
   <seq id="0x0457" name="SB_ExplainHowToTalk" />
+  <seq id="0x0458" name="WM_ExplainInventory" />
   <seq id="0x0462" name="CF_FloorUnstable" />
   <seq id="0x0464" name="CF_FindAllChildren" />
   <seq id="0x046C" name="CF_RescuedQueen" />
@@ -182,9 +184,11 @@
   <seq id="0x049C" name="DFP_AllStonesReturned" />
   <seq id="0x049D" name="SH_QueenExplainSpellStones" />
   <seq id="0x04CB" name="SB_NeedExploreBelowDeck" />
+  <seq id="0x04DE" name="ExplainLifeForceDoor" />
   <seq id="0x04DF" name="Player_FallAndGetUp">
     <description>Unused, intended for CR fort</description>
   </seq>
+  <seq id="0x04E1" name="ExplainFuelBarrelGen" />
   <seq id="0x04E8" name="WM_FoxFirstWarpIn" />
   <seq id="0x04E9" name="WM_FoxMeetKrystal" />
   <seq id="0x04F7" name="WM_RescueKrystal" />
@@ -194,6 +198,8 @@
   <seq id="0x0505" name="CC_NPC_ShouldAbleFind" />
   <seq id="0x0510" name="WC_GotSpellStone" />
   <seq id="0x0515" name="AND_MeetAndross" />
+  <seq id="0x0526" name="WM_PlaceSpirit" />
+  <seq id="0x0528" name="WM_SuckedIntoSpiritThing" />
   <seq id="0x0532" name="DIM_RescueBelinaTe" />
   <seq id="0x0536" name="LV_ThanksSavingBabies2" />
   <seq id="0x0537" name="LV_BabiesUnderground" />
@@ -205,6 +211,9 @@
   <seq id="0x0541" name="WC_NPC_MostFledInFear" />
   <seq id="0x0542" name="WC_NPC_NotReturnTilRedEye" />
   <seq id="0x0544" name="WC_ByeTricky" />
+  <seq id="0x0545" name="WM_NPC_PressZToLook" />
+  <seq id="0x0546" name="WM_NPC_PressLToStrafe" />
+  <seq id="0x0547" name="WM_NPC_ScalesAttacked" />
   <seq id="0x0548" name="SH_NobodyBringsGifts" />
   <seq id="0x0549" name="AND_FalcoGreet" />
   <seq id="0x0558" name="Krystal_GotItem" />

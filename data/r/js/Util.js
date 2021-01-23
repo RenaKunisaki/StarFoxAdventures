@@ -73,6 +73,23 @@ export function round(n, dec=2) {
     return n.toFixed(dec);
 }
 
+export function hsv2rgb(h, s, v) {
+    //from https://en.wikipedia.org/wiki/HSL_and_HSV
+    const c = v * s; //chroma
+    h = h / 60; //convert degrees
+    const x = c * (1 - Math.abs(h % 2 - 1));
+    let r=0, g=0, b=0;
+    if     (0 <= h && h <= 1) { r=c; g=x; b=0; }
+    else if(1 <= h && h <= 2) { r=x; g=c; b=0; }
+    else if(2 <= h && h <= 3) { r=0; g=c; b=x; }
+    else if(3 <= h && h <= 4) { r=0; g=x; b=c; }
+    else if(3 <= h && h <= 4) { r=0; g=x; b=c; }
+    else if(4 <= h && h <= 5) { r=x; g=0; b=c; }
+    else if(5 <= h && h <= 6) { r=c; g=0; b=x; }
+    const m = v - c
+    return [r+m, g+m, b+m];
+}
+
 
 export function getDescriptionAndNotes(self, elem) {
     /** Given an object and an XML element, set the object's
