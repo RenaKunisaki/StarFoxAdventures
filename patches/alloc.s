@@ -59,13 +59,13 @@ mainLoop:
     mulli   r8,  r8,  100
     divwu   r5,  r8,  r6 # used blocks percent
 
-    # trigger emergency free if 95% of bytes or blocks are used.
-    cmpwi   r4,  95
+    # trigger emergency free if 90% of bytes or blocks are used.
+    cmpwi   r4,  90
     bge     .emergencyFree
-    cmpwi   r5,  95
+    cmpwi   r5,  90
     bge     .emergencyFree
 
-end:
+.end:
     lwz     r9, SP_LR_SAVE(r1)
     mtlr    r9 # restore LR
     lmw     r3, SP_GPR_SAVE(r1)
