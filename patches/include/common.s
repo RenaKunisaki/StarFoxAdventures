@@ -14,6 +14,10 @@
 .set f25,25; .set f26,26; .set f27,27; .set f28,28; .set f29,29
 .set f30,30; .set f31,31; .set f0,0; .set f2,2; .set f3,3
 
+.set RAM_START,0x80000000
+.set RAM_SIZE, 0x01800000
+.set RAM_END,  RAM_START+RAM_SIZE
+
 # I/O regs
 .set IO_BASE,0xCC000000
 
@@ -86,6 +90,34 @@
 .set EXI2LENGTH,0x30 # channel 2 DMA length (must be 32byte aligned)
 .set EXI2CR,    0x34 # channel 2 control
 .set EXI2DATA,  0x38 # channel 2 data
+
+.set EXI_CSR_CONN,       (1 << 12)
+.set EXI_CSR_EXTINT,     (1 << 11)
+.set EXI_CSR_EXTINTMASK, (1 << 10)
+.set EXI_CSR_CS0,        (1 <<  9)
+.set EXI_CSR_CS1,        (1 <<  8)
+.set EXI_CSR_CS2,        (1 <<  7)
+.set EXI_CSR_1MHZ,       (0 <<  4)
+.set EXI_CSR_2MHZ,       (1 <<  4)
+.set EXI_CSR_4MHZ,       (2 <<  4)
+.set EXI_CSR_8MHZ,       (3 <<  4)
+.set EXI_CSR_16MHZ,      (4 <<  4)
+.set EXI_CSR_32MHZ,      (5 <<  4)
+.set EXI_CSR_TCINT,      (1 <<  3)
+.set EXI_CSR_TCINTMASK,  (1 <<  2)
+.set EXI_CSR_EXINT,      (1 <<  1)
+.set EXI_CSR_EXINTMASK,  (1 <<  0)
+
+.set EXI_CR_LEN_1, (0 << 4)
+.set EXI_CR_LEN_2, (1 << 4)
+.set EXI_CR_LEN_3, (2 << 4)
+.set EXI_CR_LEN_4, (3 << 4)
+.set EXI_CR_READ,  (0 << 2)
+.set EXI_CR_WRITE, (1 << 2)
+.set EXI_CR_RW,    (2 << 2) # write, then read
+.set EXI_CR_IMM,   (0 << 1)
+.set EXI_CR_DMA,   (1 << 1)
+.set EXI_CR_START, (1 << 0)
 
 .set PAD_BUTTON_LEFT, 0x0001
 .set PAD_BUTTON_RIGHT,0x0002

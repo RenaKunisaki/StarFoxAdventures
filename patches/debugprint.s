@@ -316,6 +316,12 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi    r3,  r14, (.fmt_mapCoords - mainLoop)@l
     CALL    debugPrintf
 
+    LOAD    r6,  loadedFileMapIds
+    lbz     r4,  ((BLOCKS_BIN *2)+1)(r6)
+    lbz     r5,  ((BLOCKS_BIN2*2)+1)(r6)
+    addi    r3,  r14, .fmt_mapIds - mainLoop
+    CALL    debugPrintf
+
     # %s is bugged...
 #.if REDIRECT_TO_CONSOLE
 #.else
@@ -455,9 +461,9 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADW   r17, loadedObjects
     lwz     r18, -4(r17) # numLoadedObjs
     slwi    r18, r18, 2
-    li      r19, 0
+    li      r21, 0
 .nextSeq:
-    lwzx    r6,  r19, r17 # get obj*
+    lwzx    r6,  r21, r17 # get obj*
     cmpwi   r6,  0
     beq     .printSeq_noObj
     lha     r4,  0xB4(r6) # curSeq
@@ -465,12 +471,53 @@ mainLoop: # called from main loop. r3 = mainLoop
     bnel    printSeqInfo
 
 .printSeq_noObj:
-    addi    r19, r19, 4
-    cmpw    r19, r18
+    addi    r21, r21, 4
+    cmpw    r21, r18
     blt     .nextSeq
 .endif # REDIRECT_TO_CONSOLE
 
 .noPrintSeqInfo:
+    # display heap info
+    andi.   r0,  r19, DEBUG_TEXT_HEAP_STATE
+    beq     .noPrintHeapDetails
+
+    LOAD    r15, heaps
+    li      r17, 0 # heap idx
+
+.printNextHeapDetails:
+    mulli   r3,  r17, 0x14
+    add     r18, r3,  r15   # r18 = &Heap
+    mr      r4,  r17
+    lwz     r5,  0x0C(r18) # used blocks
+    lwz     r6,  0x08(r18) # total blocks
+    lwz     r7,  0x04(r18) # used bytes
+    lwz     r8,  0x00(r18) # total bytes
+    addi    r3,  r14, .fmt_heapState - mainLoop
+    CALL    debugPrintf
+    addi    r17, r17, 1
+    cmpwi   r17, 4
+    blt     .printNextHeapDetails
+
+    # for now, show expgfx state
+    li      r17, 0 # slot idx
+    LOAD    r18, 0x8039bbc8
+    li      r4,  0 # n slots
+    li      r5,  0 # n items
+.printNextExpGfx:
+    lbzx    r6,  r18, r17
+    cmpwi   r6,  0
+    beq     .skipExpGfx
+    add     r5,  r5,  r6
+    addi    r4,  r4,  1
+.skipExpGfx:
+    addi    r17, r17, 1
+    cmpwi   r17, 80
+    blt     .printNextExpGfx
+    addi    r3,  r14, .fmt_expgfx - mainLoop
+    CALL    debugPrintf
+
+
+.noPrintHeapDetails:
     # display target (that the heart, A icon, etc is over)
     LOADW r17, pCamera
     cmpwi r17, 0
@@ -590,7 +637,8 @@ printSeqInfo: # r6: ObjInstance*, r19: obj idx
 .else
 
 .fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
-.fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X S%X %08X\x83 "
+.fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X T%X %08X\x83 "
+.fmt_mapIds:       .string "L \x84%02X%02X\x83"
 .fmt_playerState:  .string "S:\x84%02X %08X %08X\x83 A:\x84%04X %f %f\x83\n"
 .fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 M\x84%02X %02X %02X\x83 "
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
@@ -599,7 +647,9 @@ printSeqInfo: # r6: ObjInstance*, r19: obj idx
 .fmt_nearObj:      .string "Target:\x84%08X %04X %X %s \x83ID:\x84%06X\x83\n"
 .fmt_textState:    .string "TEXT %04X %08X\n"
 .fmt_seqState:     .string "SEQ #\x84%02X[%02X] %04X\x83 Obj:\x84%08X\x83 %s\n"
-.fmt_seqState2:    .string "SEQG %08X %02X\n"
+.fmt_seqState2:    .string "SG %08X %02X\n"
+.fmt_heapState:    .string "HEAP \x84%d\x83 Blk \x84%04X/%04X\x83 Byt \x84%08X/%08X\x83\n"
+.fmt_expgfx:       .string "EXPGFX \x84%2d\x83/80 \x84%4d/2000\n"
 .endif
 
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"

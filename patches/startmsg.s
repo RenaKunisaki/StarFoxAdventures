@@ -54,7 +54,7 @@ doStartup: # called from late init
 
     # turn on other debug text
     LOADW   r4,  PATCH_STATE_PTR
-    li      r3,  0xFF
+    li      r3,  DEBUG_TEXT_PLAYER_STATE
     stb     r3,  DEBUG_TEXT_FLAGS(r4)
 
 .skipDebugText:

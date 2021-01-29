@@ -15,6 +15,8 @@ patchList:
     PATCH_B   0x80080e14, onSeqStart
     PATCH_B   0x80080be4, onSeqPreempt
     PATCH_B   0x80080bcc, onSeqYield
+    PATCH_B   0x800822d4, onLoadAnimData
+    PATCH_B   0x8016c3bc, onSetupAnimObj
 .endif
 .if LOG_CURVE_ACTIONS
     PATCH_B   0x800853c0, onCurveAction
@@ -142,6 +144,62 @@ onSeqYield:
     lmw     r3,  SP_GPR_SAVE(r1)
     addi    r1,  r1,  STACK_SIZE # restore stack ptr
     JUMP    0x80080bd0, r0 # return to original code
+
+onLoadAnimData: # 800822d4 38 60 00 0E  li r3,0xe
+    # r28: realIdx
+    # r29: ObjState_AnimatedObj*
+    # r30: objDef*
+    li      r3,  0x0E # replaced
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    stmw    r3,  SP_GPR_SAVE(r1)
+    mflr    r0
+    stw     r0,  SP_LR_SAVE(r1)
+
+    bl .onLoadAnimData_getpc
+    .onLoadAnimData_getpc: mflr r14
+
+    lhz     r5,  0x00(r30) # objDefNo
+    lwz     r6,  0x14(r30) # unique ID
+    lhz     r7,  0x18(r30) # seqNo
+    mr      r8,  r28       # seqIdx
+    LOADW   r4,  frameCount
+    addi    r3,  r14, (.s_loadAnim - .onLoadAnimData_getpc)@l
+    CALL    OSReport
+
+    lwz     r3,  SP_LR_SAVE(r1)
+    mtlr    r3   # restore LR
+    lmw     r3,  SP_GPR_SAVE(r1)
+    addi    r1,  r1,  STACK_SIZE # restore stack ptr
+    JUMP    0x800822d8, r0 # return to original code
+
+onSetupAnimObj: # 0x8016c3bc 80 9E 00 F4  lwz r4,0xf4(r30)
+    # r30: ObjInstance*
+    # r31: ObjDef*
+    lwz     r4,  0xf4(r30) # replaced
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    stmw    r3,  SP_GPR_SAVE(r1)
+    mflr    r0
+    stw     r0,  SP_LR_SAVE(r1)
+
+    bl .onSetupAnimObj_getpc
+    .onSetupAnimObj_getpc: mflr r14
+
+    lhz     r5,  0x00(r31) # objDefNo
+    mr      r6,  r30 # ObjInstance*
+    lwz     r7,  0x50(r30)
+    addi    r7,  r7,  0x91 # name
+    lhz     r8,  0x18(r31) # seqNo
+    LOADW   r4,  frameCount
+    addi    r3,  r14, (.s_setupAnimObj - .onSetupAnimObj_getpc)@l
+    CALL    OSReport
+
+    lwz     r3,  SP_LR_SAVE(r1)
+    mtlr    r3   # restore LR
+    lmw     r3,  SP_GPR_SAVE(r1)
+    addi    r1,  r1,  STACK_SIZE # restore stack ptr
+    JUMP    0x8016c3c0, r0 # return to original code
+
+
 .endif # LOG_SEQ_START
 
 
@@ -402,6 +460,10 @@ onRotBug:
     .s_preempt: .string "[F%9d] SEQ PREEMPT Obj %08X(%s) %04X"
     #                    r4                  r5  r6     r7
     .s_yield: .string "[F%9d] SEQ YIELD Obj %08X(%s) t=%04X"
+    #                       r4                    r5      r6       r7    r8
+    .s_loadAnim: .string "[F%9d] LOADANIM ObjDef %04X ID %08X seq %04X (%04X)"
+    #                           r4                  r5   r6  r7       r8
+    .s_setupAnimObj: .string "[F%9d] SETUP ANIMOBJ %04X %08X[%s] seq %04X"
 .endif
 .if LOG_CURVE_ACTIONS #   r4           r5    r6   r7          r8       r9  r10
     #.s_seqCmd: .string "[F%9d] SEQCMD %02X [%02X/%02X] param %04X obj %08X(%s)"

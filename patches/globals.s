@@ -33,6 +33,7 @@
 # debug text flag bits
 .set DEBUG_TEXT_PLAYER_STATE, 0x01
 .set DEBUG_TEXT_SEQ_STATE,    0x02
+.set DEBUG_TEXT_HEAP_STATE,   0x04
 
 # extra feature flag bits
 .set EXTRA_FEATURE_RUMBLE_BLUR, 0x01
