@@ -75,3 +75,14 @@ adjItem_debugText_seqState: # r3 = amount to adjust by (0=A button)
     b       debugText_toggleItem
 
 ##########################################################################
+
+drawItem_debugText_heaps:
+    addi    r4,  r14, (s_HeapState - mainLoop)
+    li      r8,  DEBUG_TEXT_HEAP_STATE
+    b       debugText_drawItem
+
+adjItem_debugText_heaps: # r3 = amount to adjust by (0=A button)
+    li      r7,  DEBUG_TEXT_HEAP_STATE
+    b       debugText_toggleItem
+
+##########################################################################

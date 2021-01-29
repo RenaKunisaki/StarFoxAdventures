@@ -43,7 +43,6 @@ f_centerY:     .float 240
 f_mapCellScale: .float 640.0
 
 # menu state
-exiTestResult: .int 0xD06FECE5
 spawnMenuObjId: .int -1
 spawnMenuParams:
     .rept SPAWN_MENU_MAX_PARAMS
@@ -180,6 +179,7 @@ s_Master:         .string "Master: %s"
 s_Tricky:         .string "Tricky: %s"
 s_PlayerState:    .string "Player State: %s"
 s_SeqState:       .string "Seq State: %s"
+s_HeapState:      .string "Heaps: %s"
 
 # Debug Map menu
 #title_page7:      .string "Map"
@@ -225,8 +225,6 @@ s_killMe:         .string "Kill Player"
 # Debug Misc menu
 s_Misc:           .string "Misc"
 s_CrashGame:      .string "Crash Game"
-s_Reboot:         .string "Reboot"
-s_ExiTest:        .string "EXI Test: %08X"
 
 # Debug Camera menu
 s_Camera:         .string "Camera"

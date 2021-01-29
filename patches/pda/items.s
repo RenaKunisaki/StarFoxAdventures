@@ -100,17 +100,17 @@ menuPageStructure:
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
     # Debug Render
-    .byte MENU_PAGE_DEBUG_DATA  # previous
-    .byte MENU_PAGE_DEBUG_CHEAT # next
-    .byte MENU_PAGE_DEBUG       # parent
-    .byte 0
-    # Debug Cheat
-    .byte MENU_PAGE_DEBUG_RENDER # previous
-    .byte MENU_PAGE_DEBUG_MISC   # next
+    .byte MENU_PAGE_DEBUG_DATA   # previous
+    .byte MENU_PAGE_DEBUG_CAMERA # next
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
-    # Debug Misc
+    # Debug Cheat
     .byte MENU_PAGE_DEBUG_CHEAT  # previous
+    .byte MENU_PAGE_DEBUG_CHEAT  # next
+    .byte MENU_PAGE_DEBUG_DATA   # parent
+    .byte 0
+    # Debug Misc
+    .byte MENU_PAGE_DEBUG_RENDER # previous
     .byte MENU_PAGE_DEBUG_CAMERA # next
     .byte MENU_PAGE_DEBUG        # parent
     .byte 0
@@ -263,6 +263,7 @@ itemDrawFuncs_debugText:
     .int drawItem_debugText_tricky      - mainLoop
     .int drawItem_debugText_playerState - mainLoop
     .int drawItem_debugText_seqState    - mainLoop
+    .int drawItem_debugText_heaps       - mainLoop
     .int 0
 
 itemAdjustFuncs_debugText:
@@ -270,6 +271,7 @@ itemAdjustFuncs_debugText:
     .int adjItem_debugText_tricky      - mainLoop
     .int adjItem_debugText_playerState - mainLoop
     .int adjItem_debugText_seqState    - mainLoop
+    .int adjItem_debugText_heaps       - mainLoop
 
 itemDrawFuncs_debugMap:
     .int s_Map                 - mainLoop # title
@@ -369,14 +371,10 @@ itemAdjustFuncs_debugCheat:
 itemDrawFuncs_debugMisc:
     .int s_Misc                - mainLoop # title
     .int drawItem_crash        - mainLoop
-    .int drawItem_reboot       - mainLoop
-    .int drawItem_exiTest      - mainLoop
     .int 0
 
 itemAdjustFuncs_debugMisc:
     .int adjItem_crash         - mainLoop
-    .int adjItem_reboot        - mainLoop
-    .int adjItem_exiTest       - mainLoop
 
 itemDrawFuncs_debugCamera:
     .int s_Camera               - mainLoop # title

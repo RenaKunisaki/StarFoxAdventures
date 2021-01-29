@@ -3,7 +3,7 @@
 .set HEAP_MENU_XPOS,   70
 .set HEAP_MENU_YPOS,   50
 .set HEAP_MENU_WIDTH, 500
-.set HEAP_MENU_HEIGHT,410
+.set HEAP_MENU_HEIGHT,315 # too big will crash in text rendering sometimes...
 
 heapMenu:
     # subroutine: runs the Heap menu.
