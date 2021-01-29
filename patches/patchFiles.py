@@ -53,6 +53,7 @@ def buildPatch(basePath, name, dest):
 patchOrder = (
     'debugprint',
     'bsod',
+    #'exidebug',
     'debugseq',
     'krystal',
     'cmenu',

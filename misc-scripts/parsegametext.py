@@ -74,12 +74,14 @@ def readTexts(file):
             b = b[0]
             if b == 0xEE:
                 c = file.read(4)
-                if c[0] == 0x80 and c[1] == 0x98:
-                    c2 = file.read(4)
-                    b = '<EE %02X%02X%02X%02X %02X%02X%02X%02X>' % (
-                        c[0], c[1], c[2], c[3], c2[0], c2[1], c2[2], c2[3])
-                elif c[0] == 0x80 and c[1] == 0x80:
+                if c[0] == 0x80 and c[1] == 0x80:
                     b = '<SEQ %02X%02X>' % (c[2], c[3])
+                elif c[0] == 0x80 and c[1] == 0x98:
+                    c2 = file.read(4)
+                    t1 = (c2[0] << 8) | c2[1]
+                    t2 = (c2[2] << 8) | c2[3]
+                    b = '<TIME %d, %d, 0x%02X%02X>' % (
+                        t1, t2, c[2], c[3])
                 else: b = '<EE %02X%02X%02X%02X>' % (c[0], c[1], c[2], c[3])
             if b == 0xEF: # control code
                 c = file.read(1)[0]

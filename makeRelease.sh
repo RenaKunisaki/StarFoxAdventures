@@ -21,8 +21,13 @@ mkdir -p $WORK/data/sys
 
 # add any modified files here
 mkdir -p $WORK/data/files/gamefront
+#mkdir -p $WORK/data/files/warlock
+#mkdir -p $WORK/data/files/gametext/Warlock
 cp $TARGET/files/gamefront/TEX0.tab $WORK/data/files/gamefront/TEX0.tab
 cp $TARGET/files/gamefront/TEX0.bin $WORK/data/files/gamefront/TEX0.bin
+#cp $TARGET/files/warlock/OBJSEQ.bin $WORK/data/files/warlock/OBJSEQ.bin
+#cp $TARGET/files/warlock/ANIMCURV.bin $WORK/data/files/warlock/ANIMCURV.bin
+#cp $TARGET/files/gametext/Warlock/English.bin $WORK/data/files/gametext/Warlock/English.bin
 cp $TARGET/files/debug.bin $WORK/data/files/
 cp $TARGET/files/WARPTAB.bin $WORK/data/files/
 cp -r $TARGET/files/patches $WORK/data/files/
