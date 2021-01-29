@@ -152,20 +152,24 @@ end:
     b       bsodLoop
 
 .reset:
-    # this seems to fail more often than not
-    li      r3,  1
-    LOADWH  r4,  0x803dca3e
-    STOREB  r3,  0x803dca3e, r4 # shouldResetNextFrame
-    STOREB  r3,  0x803dcca6, r4 # shouldReset
     li      r3,  0
-    STOREB  r3,  0x803dc951, r4 # inhibitReset
-    li      r3,  4 # GAME_STATE_RESETNOW
-    STOREB  r3,  0x803dca3d, r4 # gameState
-    lwz     r3,  -0x57b0(r13)
-    CALL    VISetNextFrameBuffer
-    CALL    0x8024d554 # unknown
-    CALL    VIWaitForRetrace
-    JUMP    0x80021364, r0
+    lis     r4,  0x8000
+    li      r5,  0
+    JUMP    0x802448a8, r0
+    # this seems to fail more often than not
+    #li      r3,  1
+    #LOADWH  r4,  0x803dca3e
+    #STOREB  r3,  0x803dca3e, r4 # shouldResetNextFrame
+    #STOREB  r3,  0x803dcca6, r4 # shouldReset
+    #li      r3,  0
+    #STOREB  r3,  0x803dc951, r4 # inhibitReset
+    #li      r3,  4 # GAME_STATE_RESETNOW
+    #STOREB  r3,  0x803dca3d, r4 # gameState
+    #lwz     r3,  -0x57b0(r13)
+    #CALL    VISetNextFrameBuffer
+    #CALL    0x8024d554 # unknown
+    #CALL    VIWaitForRetrace
+    #JUMP    0x80021364, r0
 
 clearFrameBuffer: # expects frame buffer in r15
     # fill frame buffer
