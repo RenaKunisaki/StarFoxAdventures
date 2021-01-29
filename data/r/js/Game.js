@@ -153,9 +153,10 @@ export default class Game {
             const seq  = [];
             for(let j=offs; j<next; j += 8) {
                 seq.push({
-                    objId: vBin.getUint32(j),
-                    flags: vBin.getUint16(j+4),
-                    defNo: vBin.getUint16(j+6),
+                    offset: j,
+                    objId:  vBin.getUint32(j),
+                    flags:  vBin.getUint16(j+4),
+                    defNo:  vBin.getUint16(j+6),
                 });
             }
             result.push(seq);

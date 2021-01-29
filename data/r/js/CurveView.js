@@ -29,14 +29,15 @@ export default class CurveView {
         this._highlight    = null;
         this._cursorX      = null;
         this._cursorY      = null;
+        this.timeScale     = 60; //X units per second
 
-        //create legend
-        this.legend = E.ul('legend');
+        this.legend = E.table('legend');
         this.element.append(this.legend);
         this.eCoords = E.div('coords');
         this.element.append(this.eCoords);
         this.eDebug = E.div('debug');
         this.element.append(this.eDebug);
+        this._eCurveVal = {}; //curve name => td
 
         this._doneDrawing = false;
         let _startXM=null, _startYM=null; //mouse start
@@ -69,6 +70,7 @@ export default class CurveView {
                 this._cursorX = e.layerX;
                 this._cursorY = e.layerY;
                 this.queueDraw();
+                this._updateLegend();
             }
         });
         this.canvas.addEventListener('mouseout', e => {
@@ -76,6 +78,7 @@ export default class CurveView {
                 this._cursorX = null;
                 this._cursorY = null;
                 this.queueDraw();
+                this._updateLegend();
             }
         })
 
@@ -112,17 +115,20 @@ export default class CurveView {
         this._curvesByName[curve.name] = curve;
 
         //make legend item
-        const li = E.li(null,
-            E.div('color', {style:`background-color: ${curve.color}`}),
-            E.span('label', ' ' + curve.name),
+        const eVal = E.td('value', '');
+        this._eCurveVal[curve.name] = eVal;
+        const tr = E.tr(null,
+            E.td('color', {style:`background-color: ${curve.color}`}),
+            E.td('label', curve.name),
+            eVal,
         );
-        li.addEventListener('mouseover', e => {
+        tr.addEventListener('mouseover', e => {
             this.highlightCurve(curve.name);
         });
-        li.addEventListener('mouseout', e => {
+        tr.addEventListener('mouseout', e => {
             this.highlightCurve(null);
         });
-        this.legend.append(li);
+        this.legend.append(tr);
 
         //find range
         for(let iPoint=0; iPoint<curve.points.length; iPoint++) {
@@ -146,6 +152,26 @@ export default class CurveView {
         this.offsetX = (this.canvas.width  * this.scaleX)*0.15;
         this.offsetY = (this.canvas.height * this.scaleY)*0.90;
         this.queueDraw();
+    }
+
+    _updateLegend() {
+        const SX  = this.scaleX;
+        const OSX = this.offsetX / SX;
+        const cx  = Math.round((this._cursorX-OSX)*SX);
+
+        for(let curve of this._curves) {
+            const eVal = this._eCurveVal[curve.name];
+            const val  = curve.points[cx];
+            if(val) {
+                let p = 0;
+                const y = Math.abs(val.y);
+                if(y < 1000) p = 1;
+                if(y <  100) p = 2;
+                if(y <   10) p = 3;
+                eVal.textContent = val.y.toFixed(p);
+            }
+            else eVal.textContent = '';
+        }
     }
 
     queueDraw() {
@@ -261,7 +287,7 @@ export default class CurveView {
             this.ctx.stroke();
             const cx =  (this._cursorX-OSX)*SX;
             const cy = -(this._cursorY-OSY)*SY;
-            this.eCoords.textContent = `${cx.toFixed(xp)}, ${cy.toFixed(yp)}`;
+            this.eCoords.textContent = `${(cx/this.timeScale).toFixed(xp+1)}, ${cy.toFixed(yp)}`;
         }
 
         //draw highlight time
@@ -280,7 +306,9 @@ export default class CurveView {
 
         //draw vertical labels
         for(let x=0; x<=CW; x += xd) {
-            const str = (((x+xStart)-OSX)*SX).toFixed(xp);
+            const t = ((x+xStart)-OSX)*SX;
+            //const str = t.toFixed(xp);
+            const str = (t/this.timeScale).toFixed(xp+1);
             const textMetrics = this.ctx.measureText(str);
             this.ctx.fillText(str, (x+xStart)-(textMetrics.width/2), CH-10);
             //lol of course textMetrics doesn't contain height,

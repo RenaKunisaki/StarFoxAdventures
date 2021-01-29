@@ -19,9 +19,9 @@ const CurvePoint = Struct({
     'x':            ['h', 0x06],
 });
 const CurveAttrs = [
-    'rot9E_Z',
-    'rot9E_X',
-    'rot9E_Y',
+    'HeadRotZ',
+    'HeadRotX',
+    'HeadRotY',
     'Opacity',
     'TimeOfDay',
     'Scale',
@@ -33,10 +33,10 @@ const CurveAttrs = [
     'PosZ',
     'PosY',
     'PosX',
-    'Unk0E',
+    'FOV',
     'EyeX',
     'EyeY',
-    'Unk11_X',
+    'MouthOpen',
     'Unk12', //sound related
 ];
 
@@ -194,23 +194,28 @@ export default class AnimCurve {
                 if(Ptype > 1 && (iPoint < t + -1)) r = Pnext.y;
             }
             else {
-                a  = Pcur.x - (Pprev ? Pprev.x : 0);
+                //in the code this is - but also an XOR that I think
+                //functions as another -
+                a  = Pcur.x + (Pprev ? Pprev.x : 0);
+                //this doesn't seem correct looking at the code,
+                //but does produce more reasonable-looking results...
+                //a = (Pprev ? Pprev.x : 0) - Pcur.x;
                 t0 = Pcur.y;
                 if(Ptype == 0) {
                     r  = Pnext.y - t0;
-                    b  =  Math.abs(iPoint==0 ? r : (t0 - Pprev.y));
+                    b  =  Math.abs(iPrev<0 ? r : (t0 - Pprev.y));
                     t2 = (Math.abs(r) + b) * scale;
                 }
                 if(iPoint+1 < curve.length) {
                     t1 = Pcur.y;
                     if(Ptype == 0) {
                         b  = Math.abs((iPoint+2 == curve.length) ? r : (Pnext.y - t1));
-                        t3 = (r+b) * scale;
+                        t3 = (r+b) * -scale;
                     }
                 }
-                if(a < 0) r = t1;
+                if(a <= 0) r = t1;
                 else {
-                    r = (t - Pprev.x) / a;
+                    r = (t + Pprev.x) / a;
                     if(Ptype == 0) {
                         c =  t3 + t2 +  2 * t0 + -2 * t1;
                         d = (-2 * t2 + -3 * t0 +  3 * t1) - t3;

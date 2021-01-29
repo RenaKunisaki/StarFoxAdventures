@@ -168,21 +168,21 @@ const CurveColors = {
     PosX:       MakeCurveColor( 0), //'#C00',
     RotX:       MakeCurveColor( 1), //'#400',
     EyeX:       MakeCurveColor( 2), //'#CC0',
-    rot9E_X:    MakeCurveColor( 3), //'#800',
-    Unk11_X:    MakeCurveColor( 4), //'#AAA',
+    HeadRotX:   MakeCurveColor( 3), //'#800',
+    MouthOpen:  MakeCurveColor( 4), //'#AAA',
     PosY:       MakeCurveColor( 5), //'#0C0',
     RotY:       MakeCurveColor( 6), //'#040',
     EyeY:       MakeCurveColor( 7), //'#F0F',
-    rot9E_Y:    MakeCurveColor( 8), //'#080',
+    HeadRotY:   MakeCurveColor( 8), //'#080',
     PosZ:       MakeCurveColor( 9), //'#08C',
     RotZ:       MakeCurveColor(10), //'#048',
-    rot9E_Z:    MakeCurveColor(11), //'#08F',
+    HeadRotZ:   MakeCurveColor(11), //'#08F',
     Opacity:    MakeCurveColor(12), //'#444',
     TimeOfDay:  MakeCurveColor(13), //'#222',
     Scale:      MakeCurveColor(14), //'#880',
     AnimTimer:  MakeCurveColor(15), //'#808',
     pointSound: MakeCurveColor(16), //'#084',
-    Unk0E:      MakeCurveColor(17), //'#C0C',
+    FOV:        MakeCurveColor(17), //'#C0C',
     Unk12:      MakeCurveColor(18), //'#88F',
 };
 
@@ -365,32 +365,47 @@ export default class SeqInfo {
             let newId  = ((this.id & 0x07FF) << 4) | 0x8000 | ((i+1) & 0xF);
             let realId = this.map.lookupSequence(newId);
             let newSeq = game.sequences[realId];
-            tbl.append(E.tr(
+            let defNo  = item.defNo;
+            if(defNo == 0xFFFF) defNo = 0x06; //Override
+            if(defNo == 0xFFFE) defNo = 0x1E; //AnimCamera
+
+            tbl.append(E.tr(i == this.seqIdx ? 'current' : '',
                 //E.td('hex', hex(item.objId, 8)),
                 E.td('hex', hex(item.flags, 4)),
                 E.td('hex', E.a('seqlink', hex(realId, 4), {
-                    href: `?v=${v}&p=seq&dir=${dir}&id=0x${hex(realId,4)}&obj=0x${hex(item.defNo)}`
+                    href: `?v=${v}&p=seq&dir=${dir}&id=0x${hex(this.id,4)}&obj=0x${hex(defNo)}&idx=${i}`
                 })),
                 E.td('str', newSeq ? newSeq.name : '-'),
                 E.td('hex', hex(item.defNo, 4)),
                 E.td('str', objName),
             ));
         }
-        return E.div('box seq-obj-list', E.h2(null, `Obj List 0x${hex(this.id,4)}`), tbl);
+        return E.div('box seq-obj-list',
+            E.h2(null, `Obj List 0x${hex(this.id,4)}`),
+            E.ul(
+                E.li('note dir', `File: ${dir}/OBJSEQ.bin`),
+                E.li('note hex', `Offset: 0x${hex(data[0].offset,6)}`),
+            ),
+            tbl,
+        );
     }
 
     async makeTextTable() {
         //get the sequence list entry for this object
         const textLut = SeqTextLut[this.id];
-        const res = E.div('box curve-text', E.h2(null, "GameText"));
         if(textLut) {
-            res.append(
-                E.div('note', `seq=0x${hex(textLut.seq,4)} text=0x${hex(textLut.text,4)}`));
-            let text;
+            let text, src;
             if(textLut.text == 0x29) { //game does this, no idea why
                  text = this.app.game.texts[textLut.seq];
+                 src = `Sequences/${textLut.seq}`;
             }
-            else text = this.app.game.texts[textLut.text];
+            else {
+                text = this.app.game.texts[textLut.text];
+                src  = `ID 0x${hex(textLut.text,4)}`;
+            }
+            const res = E.div('box curve-text',
+                E.h2(null, `GameText: ${src}`),
+            );
             if(text) {
                 const ul = E.ul('gametext');
                 for(let phrase of text.phrases) {
@@ -402,9 +417,14 @@ export default class SeqInfo {
                 res.append(ul);
             }
             else res.append(E.div('error', "[text not found]"));
+            return res;
         }
-        else res.append(E.div('note', "no text"));
-        return res;
+        else {
+            return E.div('box curve-text',
+                E.h2(null, "GameText"),
+                E.div('note', "no text"),
+            );
+        }
     }
 
     async makeCurveView() {
@@ -440,6 +460,7 @@ export default class SeqInfo {
     async makeCurvePointsTable() {
         let tbl = E.table('curve-points',
             E.tr(
+                E.th(null, "Offset"),
                 E.th(null, "Attr"),
                 E.th(null, "#"),
                 E.th(null, "X"),
@@ -451,12 +472,14 @@ export default class SeqInfo {
             ),
         );
         let nPoints=0;
+        let offs = this.animCurve.curveOffs;
         for(const [attr, curve] of Object.entries(this.animCurve.curves)) {
             //tbl.append(E.tr(E.th(null, attr, {colspan:4})));
             for(let i=0; i<curve.length; i++) {
                 const point = curve[i];
-                tbl.append(this._makeRowForPoint(attr, i, point));
+                tbl.append(this._makeRowForPoint(attr, i, point, offs));
                 nPoints++;
+                offs += 8;
             }
         }
         if(!nPoints) tbl = E.div('notice', "No curves");
@@ -465,8 +488,9 @@ export default class SeqInfo {
             tbl);
     }
 
-    _makeRowForPoint(attr, i, point) {
+    _makeRowForPoint(attr, i, point, offs) {
         const tr = E.tr(
+            E.td('hex',    hex(offs,6)),
             E.td('str',    attr),
             E.td('number', String(i)),
             E.td('number', String(point.x)),

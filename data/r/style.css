@@ -73,6 +73,10 @@ td ul { padding-left: 1em }
     margin: 0;
 }
 
+h2 {
+    font-family: monospace;
+}
+
 table .controls {
     border-bottom: 1px #FFF solid;
 }
@@ -198,26 +202,22 @@ td.dll .name { padding-left: 0.5em }
 }
 
 .curve-view-main .legend {
-    list-style-type: none;
     position: absolute;
     top: 1em;
     right: 0;
-    width: 9.5em;
-    height: 100%;
+    width: 12em;
     margin: 4px;
     overflow: auto;
+    font-family: monospace;
 }
 
 .curve-view-main .legend .color {
-    display: inline-block;
     width: 1em;
-    height: 1em;
-    position: relative;
-    top: 3px;
+    height: 0.5em;
 }
 
-.curve-view-main .legend .label {
-    font-family: monospace;
+.curve-view-main .legend .value {
+    min-width: 4em;
 }
 
 .seqinfo .curve-view .curve-view-css-is-a-butt {
@@ -251,6 +251,18 @@ td.dll .name { padding-left: 0.5em }
     text-align: center;
     margin: 0.5em;
     color: #888;
+}
+
+.seqinfo .current {
+    background: #550;
+}
+
+.seq-obj-list {
+    font-family: monospace;
+}
+
+.seq-obj-list ul {
+    margin: 0.1em;
 }
 
 /* ******************************** DLL info ******************************** */
