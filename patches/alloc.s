@@ -1,19 +1,19 @@
 # alloc debug patch:
-# logs allocations and flags any that are absurd.
-# also, changes the "tag" of each allocation to the address of the
-# function that did the allocation.
-# hopefully this won't hurt anything.
+# improves allocator in various ways:
+# - emergency free if out of memory
+# - log alloc failures, and optionally all allocations
+# - change alloc tag to return address for better tracking
 .text
 .include "common.s"
 .include "globals.s"
 .set ENABLE_LOG,0
+.set ALLOC_DEBUG,0
 
 # define patches
 patchList:
     PATCH_ID        "alloc  " # must be 7 chars
     PATCH_B         0x80023D00, onAlloc
-    PATCH_B         0x80023B0C, onAllocFail
-    PATCH_MAIN_LOOP mainLoop
+    #PATCH_B         0x80023B0C, onAllocFail
     PATCH_END       PATCH_KEEP_AFTER_RUN
 
 constants:
@@ -26,54 +26,153 @@ entry: # called as soon as our patch is loaded.
     blr # nothing to do here
 
 
-mainLoop:
+onAlloc:
+    # patch into allocTagged
+    # r26: (our var) attempt count
+    # r27: (our var) which heaps to use
+    # r28: size
+    # r29: tag
+    # r30: name
+    # r31: (our var) PC reference
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
-    stmw    r3,  SP_GPR_SAVE(r1)
+    stmw    r4,  SP_GPR_SAVE(r1)
     mflr    r9
     stw     r9,  SP_LR_SAVE(r1)
-    mr      r14, r3
 
-    # check memory usage
-    LOAD    r16, 0x803406A0 # heap 0
-    li      r15, 0 # idx
-    li      r5,  0 # total bytes
-    li      r6,  0 # total blocks
-    li      r7,  0 # used bytes
-    li      r8,  0 # used blocks
-.nextHeap:
-    lwz     r9,  0x0C(r16) # total bytes
-    add     r5,  r5,  r9
-    lwz     r9,  0x00(r16) # total blocks
-    add     r6,  r6,  r9
-    lwz     r9,  0x10(r16) # used bytes
-    add     r7,  r7,  r9
-    lwz     r9,  0x04(r16) # used blocks
-    add     r8,  r8,  r9
-    addi    r16, r16, 0x14 # heap entry size
-    addi    r15, r15, 1
-    cmpwi   r15, 4
-    bne     .nextHeap
+    bl .getpc
+    .getpc:
+        mflr r31
 
-    mulli   r7,  r7,  100
-    divwu   r4,  r7,  r5 # used bytes percent
-    mulli   r8,  r8,  100
-    divwu   r5,  r8,  r6 # used blocks percent
+.if ENABLE_LOG
+    addi    r3,  r31, (.msg - .getpc)@l
+    mr      r4,  r9  # lr
+    mr      r5,  r28 # size
+    mr      r6,  r29 # tag
+    mr      r7,  r30 # name
+    CALL    OSReport
+.endif
 
-    # trigger emergency free if 90% of bytes or blocks are used.
-    cmpwi   r4,  90
-    bge     .emergencyFree
-    cmpwi   r5,  90
-    bge     .emergencyFree
+    # check size
+    srwi    r4,  r28, 16
+    andi.   r4,  r4,  0xFFFF # mask off high bits - ensure positive
+    cmpwi   r4,  0x0180
+    blt     .doAlloc_ok
 
-.end:
-    lwz     r9, SP_LR_SAVE(r1)
+    # trigger a BSOD if size is insane
+    li      r3,  0
+    stb     r3,  0x0BAD(r3)
+
+.doAlloc_ok: # size is sane
+    lwz     r29, SP_LR_SAVE(r1) # replace tag with lr (not name, because it isn't stored)
+    li      r26, 100 # attempt count
+
+.doAlloc_retry:
+    # duplicate some of the game logic regarding which heaps to try in which order.
+    li      r27, 0xF021@l # 1, 2, 0, -1, in reverse order
+
+    lwz     r0,  -0x7dac(r13) # bOnlyUseHeaps1and2
+    cmpwi   r0,  1 # game checks for 1 specifically
+    beq     .doAlloc_only1and2
+
+    lwz     r0,  -0x66d8(r13) # bOnlyUseHeap3
+    cmpwi   r0,  0 # here it checks for != 0
+    bne     .doAlloc_only3
+
+    cmpwi   r28, 0x3000 # if size >= 0x3000, use heaps 0, 1
+    bge     .doAlloc_only0and1
+
+    cmpwi   r28, 0x0400 # if size >= 0x0400, use heaps 1, 2, 0
+    bge     .tryNextHeap # r27 is already set.
+
+    # size < 0x400 - use heaps 2, 1, 0
+    li      r27,  0xF012@l # 2, 1, 0, -1, in reverse order
+    b       .tryNextHeap
+
+.doAlloc_only0and1:
+    li      r27, 0xFF10@l # 0, 1, -1, -1, in reverse order
+    b       .tryNextHeap
+
+.doAlloc_only1and2:
+    li      r27, 0xFF21@l # 1, 2, -1, -1, in reverse order
+    b       .tryNextHeap
+
+.doAlloc_only3:
+    li      r27, 0xFFF3@l # 3, -1, -1, -1, in reverse order
+
+.tryNextHeap: # try to alloc from the heaps specified by r27
+.if ALLOC_DEBUG
+    andi.   r4,  r27, 0x000F # get heap idx
+    mr      r5,  r27
+    mr      r6,  r28
+    mr      r7,  r26
+    addi    r3,  r31, s_tryHeap - .getpc
+    CALL    OSReport
+.endif # ALLOC_DEBUG
+
+    andi.   r3,  r27, 0x000F # get heap idx
+    srwi    r27, r27, 4 # next heap idx
+    cmpwi   r3,  0x000F
+    beq     .doAlloc_fail # no more heaps to try
+    mr      r4,  r28 # size
+    mr      r5,  r29 # tag
+    mr      r6,  r30 # name
+    CALL    heapAlloc
+    cmpwi   r3,  0
+    bne     .doAlloc_success
+    b       .tryNextHeap
+
+.doAlloc_giveUp:
+    # we've tried too many times... nothing more we can do,
+    # except to log the failure.
+    mr      r4,  r28 # size
+    mr      r5,  r29 # tag
+    addi    r3,  r31, s_allocFail - .getpc
+    CALL    OSReport
+
+    LOADW   r3,  PATCH_STATE_PTR
+    lbz     r4,  ALLOC_FAIL_POS(r3) # get buffer pos
+    slwi    r4,  r4,  3 # multiply by 8
+    addi    r4,  r4,  ALLOC_FAIL_LOG # to buffer start
+    mr      r5,  r29  # tag
+    mr      r6,  r28 # size
+    stwx    r5,  r4,  r3 # store tag
+    addi    r4,  r4,  4
+    stwx    r6,  r4,  r3 # store size
+
+    # increment log pointer
+    lbz     r4,  ALLOC_FAIL_POS(r3)
+    addi    r4,  r4,  1
+    andi.   r4,  r4,  (ALLOC_FAIL_MAX - 1)
+    stb     r4,  ALLOC_FAIL_POS(r3)
+
+    li      r3,  0 # return null
+
+.doAlloc_success:
+.if ALLOC_DEBUG
+    mr      r27, r3
+    mr      r4,  r3
+    addi    r3,  r31, s_allocSuccess - .getpc
+    CALL    OSReport
+    mr      r3,  r27
+.endif # ALLOC_DEBUG
+
+    lwz     r9,  SP_LR_SAVE(r1)
     mtlr    r9 # restore LR
-    lmw     r3, SP_GPR_SAVE(r1)
-    addi    r1, r1, STACK_SIZE # restore stack ptr
-    blr
+    lmw     r4,  SP_GPR_SAVE(r1)
+    #lwz     r29, SP_LR_SAVE(r1) # replace tag with lr (not name, because it isn't stored)
+    addi    r1,  r1, STACK_SIZE # restore stack ptr
+    JUMP    0x80023eb4, r31 # return to end of original function
 
-.emergencyFree:
-    addi    r3,  r14, s_emergFree - mainLoop
+.doAlloc_fail: # we didn't manage to alloc from anywhere.
+    subi    r26, r26, 1
+    cmpwi   r26, 0
+    beq     .doAlloc_giveUp
+
+emergencyFree:
+    mr      r4,  r28 # size
+    mr      r5,  r29 # tag
+    mr      r6,  r26 # retry count
+    addi    r3,  r31, s_emergFree - .getpc
     CALL    OSReport
 
 .emergencyFreeDo:
@@ -88,30 +187,15 @@ mainLoop:
     slwi    r4,  r17, 2
     lwzx    r18, r4,  r15   # r18 = ObjInstance*
 
-    lhz     r3,  0x46(r18) # defNo
-    addi    r5,  r14, (emergFreeObjDefs - mainLoop) - 2
-.emergFreeNextObjDef:
-    lhau    r6,  2(r5)
-    cmpwi   r6,  -1
-    beq     .emergFreeNotThisDef
-    cmpw    r6,  r3 # is this defNo on the list?
-    beq     .doFree
-    b       .emergFreeNextObjDef
-
-.emergFreeNotThisDef:
-    # this defNo isn't on the list, but what about the DLL?
-    lwz     r7,  0x50(r18) # ObjectFileStruct*
-    lhz     r7,  0x50(r7) # DLL ID
-    # r5 already points to emergFreeDlls - 2
-.emergFreeNextDll:
-    # reversing these checks saves an instruction but also causes us to
-    # free objects with DLL -1 which we definitely don't want
-    lhau    r6,  2(r5)
-    cmpwi   r6,  -1
+    lhz     r3,  0x44(r18) # catId
+    addi    r5,  r31, (emergFreeCats - .getpc) - 1
+.emergFreeNextCat:
+    lbzu    r6,  1(r5)
+    cmpwi   r6,  0xFF
     beq     .emergFreeNotThisObj
-    cmpw    r6,  r7
+    cmpw    r6,  r3 # is this category on the list?
     beq     .doFree
-    b       .emergFreeNextDll
+    b       .emergFreeNextCat
 
 .emergFreeNotThisObj:
     # this object doesn't match, try next one
@@ -120,13 +204,15 @@ mainLoop:
     bne     .emergFreeNextObj
 
     # we didn't free anything...
-    addi    r3,  r14, s_noFree - mainLoop
+    addi    r3,  r31, s_noFree - .getpc
     CALL    OSReport
-    b       .end
+    # let's try dumping all expgfx.
+    CALL    expgfxRemoveAll
+    b       .doAlloc_retry
 
 .doFree:
     # only free one object at a time.
-    # if we're still out of memory we'll free another one again next frame.
+    # if we're still out of memory we'll free another one again next time.
     # this avoids freeing more than is needed, and dealing with the object
     # list changing while we're iterating it.
 
@@ -144,122 +230,60 @@ mainLoop:
     mr      r4,  r18
     lha     r5,  0x46(r4)
     lhz     r6,  0x50(r17) # DLL ID
-    addi    r3,  r14, s_doFree - mainLoop
+    addi    r3,  r31, s_doFree - .getpc
     CALL    OSReport
     mr      r3,  r18
     CALL    objFree
-    b       .end
+    b       .doAlloc_retry
 
-emergFreeObjDefs:
-    .short 0x0025 # ModelsWithT
-    .short 0x0175 # TrickyExcla
-    .short 0x017B # TrickyFood
-    .short 0x017C # TrickyQuest
-    .short 0x063C # groundquake
-    .short 0x0666 # KooshyHill
-    .short 0x066A # Backpack
-    .short 0xFFFF
-emergFreeDlls:
-    #.short 0x00C6 # AnimatedObj
-    .short 0x00CC # ChukChuk
-    .short 0x00CD # IceBall
-    .short 0x00CF # CannonClaw
-    .short 0x00D0 # Grimble
-    .short 0x00D1 # Tumbleweed
-    .short 0x00D2 # Tumbleweed1
-    .short 0x00D5 # Kaldachom
-    .short 0x00D6 # KaldaChompMe
-    .short 0x00D7 # KaldachomSp
-    .short 0x00D8 # PinPonSpike
-    .short 0x00D9 # Pollen
-    .short 0x00DA # PollenFragm
-    .short 0x00DC # MikaBombSha
-    .short 0x00DF # Hagabon
-    .short 0x00E0 # SwarmBaddie
-    .short 0x00E1 # WispBaddie
-    .short 0x00E3 # Fireball
-    .short 0x011A # Decoration11A
-    .short 0x0128 # KT_Torch
-    .short 0x0262 # DrakorMissi
-    .short 0x02AD # SoftBody (flowers)
-    .short 0xFFFF
-
-
-onAlloc:
-    # patch into allocTagged
-    stwu    r1,  -STACK_SIZE(r1) # get some stack space
-    stmw    r3,  SP_GPR_SAVE(r1)
-    mflr    r9
-    stw     r9,  SP_LR_SAVE(r1)
-
-    bl .getpc
-    .getpc:
-        mflr r31
-
-.if ENABLE_LOG
-    addi r3, r31, (.msg - .getpc)@l
-    mr   r4, r9  # lr
-    mr   r5, r28 # size
-    mr   r6, r29 # tag
-    mr   r7, r30 # name
-    CALL OSReport
-.endif
-
-    # check size
-    srwi  r4, r28, 16
-    cmpwi r4, 0x0180
-    blt   .ok
-
-    # trigger a BSOD
-    li    r3, 0
-    stb   r3, 0x0BAD(r3)
-
-.ok:
-    lwz     r9,  SP_LR_SAVE(r1)
-    mtlr    r9 # restore LR
-    lmw     r3,  SP_GPR_SAVE(r1)
-    lwz     r29, SP_LR_SAVE(r1) # replace tag with lr (not name, because it isn't stored)
-    addi    r1,  r1, STACK_SIZE # restore stack ptr
-
-    li      r0,  1 # replaced
-    JUMP    0x80023d04, r31 # return to original code
-
-
-onAllocFail:
-    # replaces an OSReport call logging alloc failures
-    # r3: str, r4: name, r5: region, r6: tag, r7: size, r8: largest
-    stwu    r1,  -STACK_SIZE(r1) # get some stack space
-    stmw    r3,  SP_GPR_SAVE(r1)
-    mflr    r11
-    stw     r11, SP_LR_SAVE(r1)
-    CALL    OSReport # replaced
-
-    # also log it
-    LOADW   r3,  PATCH_STATE_PTR
-    lbz     r4,  ALLOC_FAIL_POS(r3) # get buffer pos
-    slwi    r4,  r4,  3 # multiply by 8
-    addi    r4,  r4,  ALLOC_FAIL_LOG # to buffer start
-    lwz     r5,  (SP_GPR_SAVE+(3*4))(r1) # retrieve stored r6 (tag)
-    lwz     r6,  (SP_GPR_SAVE+(4*4))(r1) # retrieve stored r7 (size)
-    stwx    r5,  r4,  r3 # store tag
-    addi    r4,  r4,  4
-    stwx    r6,  r4,  r3 # store size
-
-    # increment log pointer
-    lbz     r4,  ALLOC_FAIL_POS(r3)
-    addi    r4,  r4,  1
-    andi.   r4,  r4,  (ALLOC_FAIL_MAX - 1)
-    stb     r4,  ALLOC_FAIL_POS(r3)
-
-    # finally, do an emergency free.
-    # XXX we should ideally try to free enough to cover this allocation,
-    # instead of just a single object.
-    b       .emergencyFreeDo
 
 .if ENABLE_LOG
     .msg: .string "%08X alloc %08X %08X %s"
 .endif
 
-s_emergFree: .string "Mem: %d%% bytes/%d%% blocks used, triggering emergency free"
+s_emergFree: .string "Alloc failed, trying emergency free (size %d tag %08X retry=%d)"
 s_noFree:    .string "Failed to free anything!"
 s_doFree:    .string "Free obj 0x%08X (def 0x%04X DLL 0x%04X): %s"
+s_allocFail: .string "ALLOC FAILURE size %d tag %08X"
+.if ALLOC_DEBUG
+    s_tryHeap:      .string "Try heap %d (%04X) size %d retry=%d"
+    s_allocSuccess: .string "Alloc success, %08X"
+.endif
+
+emergFreeCats: # object category IDs
+    # ordered roughly from least to most important as well as least to
+    # most noticeable
+    .byte 0x7F # Decorative
+    .byte 0x69 # CurveFish
+    .byte 0x43 # LevelName
+    .byte 0x83 # Lightning
+    .byte 0x35 # CCriverflow
+    .byte 0x5C # sfxPlayer
+    .byte 0x08 # InfoPoint
+    .byte 0x79 # Light
+    .byte 0x7B # ProjectedLight
+    .byte 0x73 # WaterFallSpray
+    .byte 0x3C # SidekickBall
+    .byte 0x1D # Torch
+    .byte 0x32 # CampFire
+    .byte 0x3D # CFPerch
+    .byte 0x45 # DIMLavaBall
+    .byte 0x46 # DIMSnowBall
+    .byte 0x24 # Fireball
+    .byte 0x28 # Falling Rock
+    .byte 0x2A # Enemy Mushroom
+    .byte 0x1C # Baddie
+    .byte 0x38 # some doors
+    .byte 0x53 # other doors
+    .byte 0x59 # WM_Column
+    .byte 0x6A # Tree
+    .byte 0x29 # Edible Mushroom
+    .byte 0x65 # MagicPlant
+    .byte 0x06 # Collectible
+    .byte 0x63 # Exploded, Explodable
+    .byte 0x7C # ArwingLevelObj
+    .byte 0x44 # SH_thorntail
+    .byte 0x26 # Mammoth
+    .byte 0x40 # CloudRunner
+    .byte 0x80 # DeathGas
+    .byte 0xFF # end of list
