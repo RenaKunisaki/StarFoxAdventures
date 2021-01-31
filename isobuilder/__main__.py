@@ -6,6 +6,7 @@ import inspect
 import hashlib
 import tempfile
 from iso.gciso import GCISO
+from iso.binaryfile import BinaryFile
 from apptest import AppTest
 
 
@@ -13,6 +14,9 @@ def printf(fmt, *args):
     print(fmt % args, end='')
 
 class App:
+    def __init__(self):
+        self._overwrite = False # overwrite an existing target ISO file
+
     def help(self):
         """Display help text."""
         methods = [
@@ -22,7 +26,11 @@ class App:
             and not func.startswith('_')
         ]
         for name, method in sorted(methods, key = lambda it: it[0]):
-            printf("%s: %s\n", name, method.__doc__)
+            doc = method.__doc__.split('\n')
+            printf("%s: %s\n", name, doc[0])
+            for line in doc[1:]:
+                line = line.strip()
+                if line != '': print('    '+line)
 
 
     def test(self, isoPath:str, filesPath:str):
@@ -35,6 +43,14 @@ class App:
         The files are not modified during the test.
         """
         AppTest().runAllTests(isoPath, filesPath)
+
+
+    def overwrite(self):
+        """Overwrite target file instead of replacing it.
+
+        Use this option if you want to retain the padding in empty regions.
+        """
+        self._overwrite = True
 
 
     def readIso(self, path:str):
@@ -53,7 +69,8 @@ class App:
         """Build ISO from files."""
         iso = GCISO()
         iso.readDir(filesPath)
-        iso.writeToFile(outPath)
+        if self._overwrite: iso.writeToFile(BinaryFile(outPath, 'r+b'))
+        else: iso.writeToFile(outPath)
 
 
     def patchIso(self, isoPath:str, destPath:str, files:str):
@@ -69,7 +86,8 @@ class App:
         self._doReplaceIsoFiles(iso, filePath, filePath)
         iso.readSystemFilesFromDir(os.path.join(files, 'sys'))
         # XXX do we need some way to delete files?
-        iso.writeToFile(destPath)
+        if self._overwrite: iso.writeToFile(BinaryFile(destPath, 'r+b'))
+        else: iso.writeToFile(destPath)
 
 
     def _doReplaceIsoFiles(self, iso:GCISO, basePath:str, files:str, _depth=0):
