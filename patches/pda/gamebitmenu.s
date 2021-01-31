@@ -1,8 +1,8 @@
 .ascii "bitmenu " # 8 byte file ID for debug
 
-.set GAMEBIT_MENU_XPOS,  130
+.set GAMEBIT_MENU_XPOS,   30
 .set GAMEBIT_MENU_YPOS,   70
-.set GAMEBIT_MENU_WIDTH, 360
+.set GAMEBIT_MENU_WIDTH, 560
 .set GAMEBIT_MENU_HEIGHT,300
 .set MAX_GAMEBIT,0x0F58
 
@@ -61,20 +61,28 @@ gamebitMenu_Main: # draw list of bits.
     # get value
     mr      r3,  r17
     CALL    mainGetBit
-    mr      r10, r3
+    mr      r21, r3
 
+    # get text
+    addi    r3,  r14, emptyStr - mainLoop
+    andi.   r0,  r18, 0x2000 # has hint text?
+    beq     .gameBitMenu_noText
+    andi.   r3,  r18, 0xFF
+    addi    r3,  r3,  0xF4
+    CALL    gameTextGet
+    lwz     r3,  8(r3)
+    lwz     r3,  0(r3)
+    addi    r3,  r3,  16
+
+.gameBitMenu_noText:
+    mr      r8,  r3
     # make line
+    # r5:bit r6:tbl r7:val r8:text
     addi    r3,  r1, SP_STR_BUF
     addi    r4,  r14, fmt_bitListEntry - mainLoop
     mr      r5,  r17 # bit idx
     rlwinm  r6,  r18, 32-14, 0x0003 # table idx
-    rlwinm  r7,  r18, 32-16, 0xFFFF # offset
-    rlwinm  r8,  r18, 32- 8, 0x001F # size
-    addi    r8,  r8, 1
-    rlwinm  r9,  r18, 32-32, 0x00FF # unk03
-    rlwinm  r11, r18, 32-13, 0x0001 # unk13
-    slwi    r11, r11, 8
-    or      r9,  r9, r11
+    mr      r7,  r21
     CALL    sprintf
 
     addi    r3,  r1, SP_STR_BUF

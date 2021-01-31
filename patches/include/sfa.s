@@ -18,10 +18,12 @@
 .set debugPrintfxy,0x80137b80 #x, y, fmt, ...
 .set drawTexture,0x8007719c #double x,double y,Texture *texture,uint opacity,uint scale
 .set DVDReadAsyncPrio,0x80248eac
+.set expgfxRemoveAll,0x8009b254
 .set free,0x800233e8
 .set gameBitDecrement,0x8001fee8 #bitIdx
 .set gameBitIncrement,0x8001ff3c #bitIdx
 .set gameTextGet,0x80019570 # gametextStruct (GameTextId32)
+.set gameTextGetStr,0x80019444 # char* (GameTextId32)
 .set gameTextSetColor,0x80019908 # u8 r, g, b, a
 .set gameTextShowStr,0x80015dc8 # char*, int box, int x, int y
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
@@ -37,6 +39,8 @@
 .set GXSetTevAlphaIn,0x8025bff0
 .set gxSetVtxDescr,0x80256978 #(which, val)
 .set gxSetVtxDescrs,0x80256cd8 #void(u32*)
+.set heapAlloc,0x80023850 #void*(int region, uint size, AllocTag tag, char* name)
+    # don't use this, use allocTagged
 .set iCacheFlush,0x80241ae0 #(dest, size) -> dest
 .set isCheatActive,0x800e7e94
 .set isCheatUnlocked,0x800e7efc

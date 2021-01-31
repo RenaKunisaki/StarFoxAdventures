@@ -95,6 +95,7 @@ debugSeqIdx:      .byte 0
 
 # string pool
 # general
+emptyStr:         .byte 0
 s_on:             .string "On"
 s_off:            .string "Off"
 fmt_04X:          .string "%04X"
@@ -303,8 +304,8 @@ s_spawnInstrs:     .string "Start:Spawn B:Exit X:+ Y:- Z:Player Coords"
 s_spawned:         .string "Spawned obj: %08X @ %f, %f, %f"
 
 # GameBits
-fmt_bitListHeader: .string "Bit  T Offs Sz Unk: Val"
-fmt_bitListEntry:  .string "%04X %X %04X %02X %03X: %X"
+fmt_bitListHeader: .string  "Bit  T Value    Text"
+fmt_bitListEntry:  .string "%04X %X %08X %s"
 
 # Heap
 fmt_heapListHeader: .string "N Bytes    Blox UsedByts UBlk FreeByts FBlk Data"
