@@ -62,6 +62,7 @@ textureDebugId: .short 0
 debugSeqId:     .short 0
 minimapSizeOverride:  .short 0
 minimapAlphaOverride: .byte 255
+bitMenuCursorX:       .byte 7
 spawnMenuNumParams:   .byte 0
 spawnMenuCursor:      .byte 0
 spawnMenuCursorX:     .byte 0
@@ -306,6 +307,7 @@ s_spawned:         .string "Spawned obj: %08X @ %f, %f, %f"
 # GameBits
 fmt_bitListHeader: .string  "Bit  T Value    Text"
 fmt_bitListEntry:  .string "%04X %X %08X %s"
+fmt_bitListInstrs: .string "B:Exit X:+ Y:- L/R:Page"
 
 # Heap
 fmt_heapListHeader: .string "N Bytes    Blox UsedByts UBlk FreeByts FBlk Data"

@@ -1,9 +1,9 @@
 .ascii "bitmenu " # 8 byte file ID for debug
 
 .set GAMEBIT_MENU_XPOS,   30
-.set GAMEBIT_MENU_YPOS,   70
+.set GAMEBIT_MENU_YPOS,  100
 .set GAMEBIT_MENU_WIDTH, 560
-.set GAMEBIT_MENU_HEIGHT,300
+.set GAMEBIT_MENU_HEIGHT,328
 .set MAX_GAMEBIT,0x0F58
 
 gamebitMenu:
@@ -51,6 +51,13 @@ gamebitMenu_Main: # draw list of bits.
     li      r6,  GAMEBIT_MENU_YPOS + 8 # Y pos
     CALL    gameTextShowStr
 
+    # draw instructions
+    addi    r3,  r14, fmt_bitListInstrs - mainLoop
+    li      r4,  MENU_TEXTBOX_ID # box type
+    li      r5,  GAMEBIT_MENU_XPOS + 8 # X pos
+    li      r6,  GAMEBIT_MENU_YPOS + 8 + (GAMEBIT_MENU_HEIGHT-22) # Y pos
+    CALL    gameTextShowStr
+
     lhz     r17, (bitMenuIdx - mainLoop)(r14)
     li      r20, GAMEBIT_MENU_YPOS + LINE_HEIGHT + 8 # string Y pos
 
@@ -64,6 +71,8 @@ gamebitMenu_Main: # draw list of bits.
     mr      r21, r3
 
     # get text
+    # of course the actual description is only loaded on the title screen,
+    # other maps only have the hint, making this useless.
     addi    r3,  r14, emptyStr - mainLoop
     andi.   r0,  r18, 0x2000 # has hint text?
     beq     .gameBitMenu_noText
@@ -72,7 +81,7 @@ gamebitMenu_Main: # draw list of bits.
     CALL    gameTextGet
     lwz     r3,  8(r3)
     lwz     r3,  0(r3)
-    addi    r3,  r3,  16
+    #addi    r3,  r3,  16
 
 .gameBitMenu_noText:
     mr      r8,  r3
@@ -97,10 +106,20 @@ gamebitMenu_Main: # draw list of bits.
     # next line
     addi    r17, r17, 1
     cmpwi   r17, MAX_GAMEBIT # last bit?
-    bge     menuEndSub
+    bge     .gameBitMenu_drawCursor
     addi    r20, r20, LINE_HEIGHT
     cmpwi   r20, GAMEBIT_MENU_YPOS + GAMEBIT_MENU_HEIGHT - LINE_HEIGHT
     blt     .gameBitMenu_nextBit
+
+.gameBitMenu_drawCursor:
+    # draw box at cursor position
+    lbz     r3,  (bitMenuCursorX - mainLoop)(r14)
+    mulli   r3,  r3,  11
+    addi    r3,  r3,  GAMEBIT_MENU_XPOS + 2 + (11*7)
+    li      r4,  GAMEBIT_MENU_YPOS + 21
+    li      r5,  16 # width
+    li      r6,  16 # height
+    bl      menuDrawBoxOpaque
 
     b       menuEndSub
 
@@ -124,11 +143,11 @@ gamebitMenu_doInput:
     cmpwi   r5,  -0x10
     blt     .gameBitMenu_down
     cmpwi   r4,   0x10
-    bgt     .gameBitMenu_inc
+    bgt     .gameBitMenu_right
     cmpwi   r4,  -0x10
-    blt     .gameBitMenu_dec
+    blt     .gameBitMenu_left
 
-    # check C stick - same as analog but no delay
+    # check C stick - up/down/inc/dec with no delay
     cmpwi   r7,   0x10
     bgt     .gameBitMenu_up
     cmpwi   r7,  -0x10
@@ -143,6 +162,12 @@ gamebitMenu_doInput:
     bgt     .gameBitMenu_prevPage
     cmpwi   r9,   0x04
     bgt     .gameBitMenu_nextPage
+
+    # check X/Y - inc/dec
+    andi.   r10, r3,  PAD_BUTTON_X
+    bne     .gameBitMenu_incDigit
+    andi.   r10, r3,  PAD_BUTTON_Y
+    bne     .gameBitMenu_decDigit
 
     # check Z - reset to zero
     andi.   r10, r3,  PAD_BUTTON_Z
@@ -169,9 +194,23 @@ gamebitMenu_doInput:
     # don't use any delay if using C stick.
     andi.   r7,  r7,  0xF0 # deadzone
     bne     menuEndSub
+.gameBitMenu_delayMoveAndEnd:
     li      r3,  MOVE_DELAY
     stb     r3,  (menuJustMoved - mainLoop)(r14)
     b       menuEndSub
+
+.gameBitMenu_right:
+    lbz     r16, (bitMenuCursorX - mainLoop)(r14)
+    addi    r16, r16, 1
+.gameBitMenu_storeCursor:
+    andi.   r16, r16, 7
+    stb     r16, (bitMenuCursorX - mainLoop)(r14)
+    b       .gameBitMenu_delayMoveAndEnd
+
+.gameBitMenu_left:
+    lbz     r16, (bitMenuCursorX - mainLoop)(r14)
+    subi    r16, r16, 1
+    b       .gameBitMenu_storeCursor
 
 .gameBitMenu_inc:
     andi.   r6,  r6,  0xF0 # deadzone
@@ -193,9 +232,46 @@ gamebitMenu_doInput:
     CALL    gameBitDecrement
     b       menuEndSub
 
-.gameBitMenu_clear:
+.gameBitMenu_incDigit:
+    li      r18, 1
+    b       .gameBitMenu_adjustDigit
+
+.gameBitMenu_decDigit:
+    li      r18, -1
+
+.gameBitMenu_adjustDigit:
+    li      r3,  MOVE_DELAY
+    stb     r3,  (menuJustMoved - mainLoop)(r14)
+
     mr      r3,  r17
+    CALL    mainGetBit
+    mr      r4,  r3
+    # r4:  value to adjust
+    # r16: digit to adjust (0=rightmost)
+    # r18: amount to adjust by
+    lbz     r16, (bitMenuCursorX - mainLoop)(r14)
+    li      r5,  7
+    sub     r16, r5,  r16 # 7 - x
+    slwi    r16, r16, 2 # adjust hex digit
+
+    # make a mask so that we can adjust one digit at a time
+    # without affecting the others.
+    li      r5,  0xF
+    slw     r5,  r5,  r16 # mask
+    slw     r18, r18, r16 # adjust correct digit
+
+    li      r7,  -1
+    xor     r8,  r5,  r7  # invert mask
+    and     r8,  r8,  r4  # get only unchanged part
+    add     r4,  r4,  r18 # do change
+    and     r6,  r4,  r5  # get only changed part
+    or      r4,  r8,  r6
+    b       .gameBitMenu_set
+
+.gameBitMenu_clear:
     li      r4,  0
+.gameBitMenu_set:
+    mr      r3,  r17
     CALL    mainSetBits
     b       menuEndSub
 
