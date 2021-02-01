@@ -182,6 +182,7 @@ s_Tricky:         .string "Tricky: %s"
 s_PlayerState:    .string "Player State: %s"
 s_SeqState:       .string "Seq State: %s"
 s_HeapState:      .string "Heaps: %s"
+s_RestartPoint:   .string "Restart Point: %s"
 
 # Debug Map menu
 #title_page7:      .string "Map"
@@ -190,12 +191,15 @@ s_ReloadMap:      .string "Reload Map"
 s_Warp:           .string "Warp"
 s_DebugObjs:      .string "Debug Objects: %s"
 s_ObjList:        .string "Object List"
+s_SetRestartPoint:  .string "Set Restart Point"
+s_ClrRestartPoint:  .string "Clear Restart Point"
+s_GoToRestartPoint: .string "Goto Restart Point"
 
 # Debug Data menu
-#title_page8:      .string "Data"
-s_GameBits:       .string "GameBits"
-s_SaveGame:       .string "SaveGame Data"
-s_Heap:           .string "Heap"
+#title_page8:        .string "Data"
+s_GameBits:         .string "GameBits"
+s_SaveGame:         .string "SaveGame Data"
+s_Heap:             .string "Heap"
 
 # Debug Render menu
 s_Textures:       .string "Textures"

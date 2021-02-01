@@ -86,3 +86,14 @@ adjItem_debugText_heaps: # r3 = amount to adjust by (0=A button)
     b       debugText_toggleItem
 
 ##########################################################################
+
+drawItem_debugText_restartPoint:
+    addi    r4,  r14, (s_RestartPoint - mainLoop)
+    li      r8,  DEBUG_TEXT_RESTART_POINT
+    b       debugText_drawItem
+
+adjItem_debugText_restartPoint: # r3 = amount to adjust by (0=A button)
+    li      r7,  DEBUG_TEXT_RESTART_POINT
+    b       debugText_toggleItem
+
+##########################################################################

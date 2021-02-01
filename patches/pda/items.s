@@ -258,20 +258,22 @@ itemAdjustFuncs_debug:
     .int adjItem_debugMisc     - mainLoop
 
 itemDrawFuncs_debugText:
-    .int s_DebugText                    - mainLoop # title
-    .int drawItem_debugText_master      - mainLoop
-    .int drawItem_debugText_tricky      - mainLoop
-    .int drawItem_debugText_playerState - mainLoop
-    .int drawItem_debugText_seqState    - mainLoop
-    .int drawItem_debugText_heaps       - mainLoop
+    .int s_DebugText                     - mainLoop # title
+    .int drawItem_debugText_master       - mainLoop
+    .int drawItem_debugText_tricky       - mainLoop
+    .int drawItem_debugText_playerState  - mainLoop
+    .int drawItem_debugText_seqState     - mainLoop
+    .int drawItem_debugText_heaps        - mainLoop
+    .int drawItem_debugText_restartPoint - mainLoop
     .int 0
 
 itemAdjustFuncs_debugText:
-    .int adjItem_debugText_master      - mainLoop
-    .int adjItem_debugText_tricky      - mainLoop
-    .int adjItem_debugText_playerState - mainLoop
-    .int adjItem_debugText_seqState    - mainLoop
-    .int adjItem_debugText_heaps       - mainLoop
+    .int adjItem_debugText_master       - mainLoop
+    .int adjItem_debugText_tricky       - mainLoop
+    .int adjItem_debugText_playerState  - mainLoop
+    .int adjItem_debugText_seqState     - mainLoop
+    .int adjItem_debugText_heaps        - mainLoop
+    .int adjItem_debugText_restartPoint - mainLoop
 
 itemDrawFuncs_debugMap:
     .int s_Map                 - mainLoop # title
@@ -281,6 +283,9 @@ itemDrawFuncs_debugMap:
     #.int drawItem_debugObjs    - mainLoop
     .int drawItem_objList      - mainLoop
     .int drawItem_spawn        - mainLoop
+    .int drawItem_setRestartPoint  - mainLoop
+    .int drawItem_clrRestartPoint  - mainLoop
+    .int drawItem_gotoRestartPoint - mainLoop
     .int 0
 
 itemAdjustFuncs_debugMap:
@@ -290,20 +295,23 @@ itemAdjustFuncs_debugMap:
     #.int adjItem_debugObjs    - mainLoop
     .int adjItem_objList      - mainLoop
     .int adjItem_spawn        - mainLoop
+    .int adjItem_setRestartPoint  - mainLoop
+    .int adjItem_clrRestartPoint  - mainLoop
+    .int adjItem_gotoRestartPoint - mainLoop
 
 itemDrawFuncs_debugData:
-    .int s_Data                - mainLoop # title
-    .int drawItem_gameBits     - mainLoop
-    .int drawItem_debugCheat   - mainLoop
-    .int drawItem_saveGame     - mainLoop
-    .int drawItem_heap         - mainLoop
+    .int s_Data                    - mainLoop # title
+    .int drawItem_gameBits         - mainLoop
+    .int drawItem_debugCheat       - mainLoop
+    .int drawItem_saveGame         - mainLoop
+    .int drawItem_heap             - mainLoop
     .int 0
 
 itemAdjustFuncs_debugData:
-    .int adjItem_gameBits     - mainLoop
-    .int adjItem_debugCheat   - mainLoop
-    .int adjItem_saveGame     - mainLoop
-    .int adjItem_heap         - mainLoop
+    .int adjItem_gameBits         - mainLoop
+    .int adjItem_debugCheat       - mainLoop
+    .int adjItem_saveGame         - mainLoop
+    .int adjItem_heap             - mainLoop
 
 itemDrawFuncs_debugRender:
     .int s_Render              - mainLoop # title

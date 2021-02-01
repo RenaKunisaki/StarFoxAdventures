@@ -330,6 +330,45 @@ mainLoop: # called from main loop. r3 = mainLoop
 #.endif
 
 .noPlayer:
+    #.fmt_restartPoint: .string "R:\x84%6d %6d %6d %d M%02X\x83"
+    andi.   r0,  r19,  DEBUG_TEXT_RESTART_POINT
+    beq     .noPrintRestartPoint
+
+    LOADWH  r7,  pRestartPoint
+    LOADWL2 r3,  pRestartPoint, r7
+    cmpwi   r3,  0
+    bne     .printRestartPoint
+    LOADWL2 r3,  pLastSavedGame, r7
+    cmpwi   r3,  0
+    beq     .noPrintRestartPoint
+
+.printRestartPoint:
+    lbz     r4,  0x20(r3) # which character?
+    slwi    r4,  r4,  4   # character * 16
+    addi    r4,  r4,  0x684
+    add     r3,  r3,  r4  # character position
+
+    lfs     f1,  0x00(r3) # X pos
+    fctiwz  f2,  f1
+    stfd    f2,  SP_FLOAT_TMP(r1)
+    lwz     r4,  SP_FLOAT_TMP+4(r1)
+
+    lfs     f1,  0x04(r3) # Y pos
+    fctiwz  f2,  f1
+    stfd    f2,  SP_FLOAT_TMP(r1)
+    lwz     r5,  SP_FLOAT_TMP+4(r1)
+
+    lfs     f1,  0x08(r3) # Z pos
+    fctiwz  f2,  f1
+    stfd    f2,  SP_FLOAT_TMP(r1)
+    lwz     r6,  SP_FLOAT_TMP+4(r1)
+
+    lbz     r7,  0x0D(r3) # map layer
+    lbz     r8,  0x0E(r3) # map ID (always FF?)
+    addi    r3,  r14, .fmt_restartPoint - mainLoop
+    CALL    debugPrintf
+
+.noPrintRestartPoint:
     # get camera object
     LOADW r16, pCamera
     cmpwi r16, 0
@@ -641,6 +680,7 @@ printSeqInfo: # r6: ObjInstance*, r19: obj idx
 .fmt_mapIds:       .string "L \x84%02X%02X\x83"
 .fmt_playerState:  .string "S:\x84%02X %08X %08X\x83 A:\x84%04X %f %f\x83\n"
 .fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 M\x84%02X %02X %02X\x83 "
+.fmt_restartPoint: .string "\nR:\x84%6d %6d %6d %d M%02X\x83"
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
 .fmt_gameState:    .string "Obj\x84%3d\x83 Mem \x84%3d/%3d\x83\n"
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"

@@ -88,3 +88,43 @@ adjItem_spawn: # r3 = amount to adjust by (0=A button)
     b       .debug_setMenu
 
 #######################################################################
+
+drawItem_setRestartPoint:
+    addi    r4,  r14, (s_SetRestartPoint - mainLoop)
+    blr
+
+adjItem_setRestartPoint: # r3 = amount to adjust by (0=A button)
+    cmpwi   r3,  0
+    bnelr
+    LOADW   r6,  pPlayer
+    cmpwi   r6,  0
+    beqlr
+    addi    r3,  r6,  0x0C # vec3f *pos
+    lha     r4,  0x00(r6) # rot X
+    LOADB   r5,  curMapLayer
+    li      r6,  0 # bSaveWithOneLessHealth
+    JUMP    gplayRestartPoint, r0
+
+#######################################################################
+
+drawItem_clrRestartPoint:
+    addi    r4,  r14, (s_ClrRestartPoint - mainLoop)
+    blr
+
+adjItem_clrRestartPoint: # r3 = amount to adjust by (0=A button)
+    cmpwi   r3,  0
+    bnelr
+    JUMP    gplayClearRestartPoint, r0
+
+#######################################################################
+
+drawItem_gotoRestartPoint:
+    addi    r4,  r14, (s_GoToRestartPoint - mainLoop)
+    blr
+
+adjItem_gotoRestartPoint: # r3 = amount to adjust by (0=A button)
+    cmpwi   r3,  0
+    bnelr
+    JUMP    gplayGotoRestartPoint, r0
+
+#######################################################################

@@ -28,6 +28,9 @@
 .set gameTextShowStr,0x80015dc8 # char*, int box, int x, int y
 .set getButtonsHeld,0x80014ee8 # u16 (int controller)
 .set getButtonsJustPressed,0x80014e70 # u16 (int controller)
+.set gplayClearRestartPoint,0x800e9cac # void(void)
+.set gplayGotoRestartPoint,0x800e9ce0 # void(void)
+.set gplayRestartPoint,0x800e9d34 # void(vec3f *pos, s16 rot, byte layer, int bSaveWithOneLessHealth)
 .set gplaySetAct,0x800e9870 # u32 map, u32 act
 .set gplaySetObjGroupStatus,0x800e8ff8 # MapDirIdx32 map,uint group,int set
 .set gxBeginVtxs,0x8025889c #void(GXOpcode opcode,uint vat,uint nVtxs)
@@ -168,8 +171,8 @@
 .set playerId,               0x803a32c8 #0=Krystal, 1=Fox
 .set playerMapOffsetX,       0x803dcdd8 #float
 .set playerMapOffsetZ,       0x803dcddc #float
-.set timeStop,               0x803dca3c #bool
 .set pPlayer,                0x803428f8 #ObjInstance*
+.set pRestartPoint,          0x803dd49c #SaveGame*
 .set renderFlags,            0x803dcde8 #u32
 .set rumbleTimer,            0x803dc90c #float
 .set saveData,               0x803a31c4 #SaveData
@@ -182,6 +185,7 @@
 .set shouldOpenCMenu,        0x803dd7d5 #u8
 .set soundMode,              0x803db1e8 #u8 (Stereo, Surround, Mono, Headphones)
 .set timeDelta,              0x803db414 #float
+.set timeStop,               0x803dca3c #bool
 .set viewportAspect,         0x803db268 #float
 .set volumeCutScenes,        0x803db253 #s8
 .set volumeMusic,            0x803bd754 #float
