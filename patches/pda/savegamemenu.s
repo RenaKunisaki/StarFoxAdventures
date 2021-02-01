@@ -8,7 +8,7 @@
 .set SAVEGAME_INFO_WIDTH, 310
 .set SAVEGAME_INFO_HEIGHT,400
 .set MAX_SAVED_OBJECTS,    63
-.set SAVEGAME_MENU_NOPTS,   4
+.set SAVEGAME_MENU_NOPTS,   6
 
 savegameMenu:
     # subroutine: runs the SaveGame menu.
@@ -28,14 +28,18 @@ savegameMenu_itemStrs:
     .int s_savegameItem_Game    - mainLoop
     .int s_savegameItem_Krystal - mainLoop
     .int s_savegameItem_Fox     - mainLoop
+    .int s_savegameItem_K2      - mainLoop
+    .int s_savegameItem_F2      - mainLoop
     .int s_savegameItem_Objs    - mainLoop
     .int 0
 
 savegameMenu_itemFuncs:
-    .int savegameMenu_drawGameState    - mainLoop
-    .int savegameMenu_drawKrystalState - mainLoop
-    .int savegameMenu_drawFoxState     - mainLoop
-    .int savegameMenu_drawSavedObjs    - mainLoop
+    .int savegameMenu_drawGameState     - mainLoop
+    .int savegameMenu_drawKrystalState  - mainLoop
+    .int savegameMenu_drawFoxState      - mainLoop
+    .int savegameMenu_drawKrystalState2 - mainLoop
+    .int savegameMenu_drawFoxState2     - mainLoop
+    .int savegameMenu_drawSavedObjs     - mainLoop
 
 savegameMenu_Main: # draw savegame info
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
@@ -211,6 +215,17 @@ savegameMenu_drawGameState:
     b       menuEndSub
 
 
+savegameMenu_drawKrystalState2:
+    li      r3,  0
+savegameMenu_drawCharState2:
+    LOADWH  r15, pRestartPoint
+    LOADWL2 r15, pRestartPoint, r15
+    b      savegameMenu_drawCharState
+
+savegameMenu_drawFoxState2:
+    li      r3,  1
+    b      savegameMenu_drawCharState2
+
 savegameMenu_drawKrystalState:
     li     r3,  0
     b      savegameMenu_drawCharState
@@ -222,6 +237,8 @@ savegameMenu_drawCharState:
     # draw character state
     # r3:  which character
     # r15: savegame*
+    cmpwi   r15, 0
+    beq     .savegameMenu_drawCharState_noSave
     mr      r22, r3
     mulli   r3,  r3,  0x0C # size of char state
     add     r21, r15, r3
@@ -312,10 +329,15 @@ savegameMenu_drawCharState:
 .saveMenu_noMap:
     addi    r4,  r14, s_savegameMap - mainLoop
     mr      r5,  r7
+.saveMenu_printAndEnd:
     bl      menuPrintf
-
     b       menuEndSub
 
+.savegameMenu_drawCharState_noSave:
+    li      r19, SAVEGAME_INFO_XPOS + 8 # X pos
+    li      r20, SAVEGAME_INFO_YPOS + 8 # string Y pos
+    addi    r4,  r14, s_savegameEmpty - mainLoop
+    b       .saveMenu_printAndEnd
 
 savegameMenu_drawSavedObjs:
     li      r19, SAVEGAME_INFO_XPOS + 8 # X pos
