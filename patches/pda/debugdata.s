@@ -29,3 +29,13 @@ adjItem_heap: # r3 = amount to adjust by (0=A button)
     b       .debug_setMenu
 
 #######################################################################
+
+drawItem_hexedit:
+    addi    r4,  r14, (s_MemEdit - mainLoop)
+    blr
+
+adjItem_hexedit: # r3 = amount to adjust by (0=A button)
+    li      r4,  MENU_ID_HEX_EDIT
+    b       .debug_setMenu
+
+#######################################################################

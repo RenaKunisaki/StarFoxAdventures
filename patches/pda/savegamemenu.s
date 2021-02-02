@@ -211,6 +211,7 @@ savegameMenu_drawGameState:
     lbz     r5,  0x21(r15)
     lbz     r6,  0x22(r15)
     lbz     r7,  0x23(r15)
+    lhz     r8,  0x1A(r15)
     bl      menuPrintf
     b       menuEndSub
 
@@ -276,21 +277,19 @@ savegameMenu_drawCharState:
 
     addi    r4,  r14, s_savegameCoordX - mainLoop
     lfs     f1,  0x684(r21)
-    # magic incantation to make floats print correctly
-    # no idea what this does
-    creqv   4*cr1+eq,4*cr1+eq,4*cr1+eq
+    MAGIC_FLOAT_INCANTATION
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
     addi    r4,  r14, s_savegameCoordY - mainLoop
     lfs     f1,  0x688(r21)
-    creqv   4*cr1+eq,4*cr1+eq,4*cr1+eq
+    MAGIC_FLOAT_INCANTATION
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 
     addi    r4,  r14, s_savegameCoordZ - mainLoop
     lfs     f1,  0x68C(r21)
-    creqv   4*cr1+eq,4*cr1+eq,4*cr1+eq
+    MAGIC_FLOAT_INCANTATION
     bl      menuPrintf
     addi    r20, r20, LINE_HEIGHT
 

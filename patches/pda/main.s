@@ -1,4 +1,4 @@
-.ascii "main    " # 8 byte file ID for debug
+.ascii "PDA main" # 8 byte file ID for debug
 
 mainLoop: # called from main loop. r3 = mainLoop
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
@@ -103,6 +103,7 @@ menuPtrs: # menu main function pointers
     .int savegameMenu - mainLoop
     .int textureMenu  - mainLoop
     .int spawnMenu    - mainLoop
+    .int hexeditMain  - mainLoop
 
 returnToMainMenu:
     # called from other menus

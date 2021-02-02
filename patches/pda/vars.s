@@ -43,62 +43,66 @@ f_centerY:     .float 240
 f_mapCellScale: .float 640.0
 
 # menu state
+hexEditAddr:    .int 0x80000000
 spawnMenuObjId: .int -1
 spawnMenuParams:
     .rept SPAWN_MENU_MAX_PARAMS
     .int  0
     .endr
-spawnMenuXPos:  .int 0
-spawnMenuYPos:  .int 0
-spawnMenuZPos:  .int 0
-spawnMenuType:  .short 0x2CF
-heapMenuIdx:    .short 0
-bitMenuIdx:     .short 0
-streamTestId:   .short 0
-soundTestId:    .short 0
-textTestId:     .short 0
-textTestBox:    .short 0x82
-textureDebugId: .short 0
-debugSeqId:     .short 0
-minimapSizeOverride:  .short 0
-minimapAlphaOverride: .byte 255
-bitMenuCursorX:       .byte 7
-spawnMenuNumParams:   .byte 0
-spawnMenuCursor:      .byte 0
-spawnMenuCursorX:     .byte 0
-spawnMenuFlags:       .byte 5
-spawnMenuLoadFlags:   .byte 0x8
-spawnMenuMapStates1:  .byte 0
-spawnMenuMapStates2:  .byte 4
-spawnMenuBound:       .byte 100
-spawnMenuUnk7:        .byte 0x96
-spawnMenuMapId:       .byte 0xFF
-spawnMenuObjNo:       .byte 0xFF
-dbgAudioCmd:      .byte 0
-dbgAudioParam:    .byte 0
-hudFullScreen:    .byte 1
-menuVisible:      .byte 0
-menuSelItem:      .byte 0
-menuSelColor:     .byte 0
-menuJustMoved:    .byte 0 # frame counter
-menuPage:         .byte 0
-whichMenu:        .byte MENU_ID_MAIN
-musicTestId:      .byte 0
-warpMenuIdx:      .byte 0
-saveMenuIdx:      .byte 0
-saveMenuObjIdx:   .byte 0
-whichHeap:        .byte 0
-menuWasHudHidden: .byte 0
-menuWasPdaOn:     .byte 0 # for hiding map in objects list
-menuMapSize:      .byte 0
-textureDebugMip:  .byte 0
-debugSeqIdx:      .byte 0
+spawnMenuXPos:          .int 0
+spawnMenuYPos:          .int 0
+spawnMenuZPos:          .int 0
+spawnMenuType:          .short 0x2CF
+heapMenuIdx:            .short 0
+bitMenuIdx:             .short 0
+streamTestId:           .short 0
+soundTestId:            .short 0
+textTestId:             .short 0
+textTestBox:            .short 0x82
+textureDebugId:         .short 0
+debugSeqId:             .short 0
+minimapSizeOverride:    .short 0
+minimapAlphaOverride:   .byte 255
+hexEditCursorX:         .byte 0
+hexEditCursorY:         .byte 0
+bitMenuCursorX:         .byte 7
+spawnMenuNumParams:     .byte 0
+spawnMenuCursor:        .byte 0
+spawnMenuCursorX:       .byte 0
+spawnMenuFlags:         .byte 5
+spawnMenuLoadFlags:     .byte 0x8
+spawnMenuMapStates1:    .byte 0
+spawnMenuMapStates2:    .byte 4
+spawnMenuBound:         .byte 100
+spawnMenuUnk7:          .byte 0x96
+spawnMenuMapId:         .byte 0xFF
+spawnMenuObjNo:         .byte 0xFF
+dbgAudioCmd:            .byte 0
+dbgAudioParam:          .byte 0
+hudFullScreen:          .byte 1
+menuVisible:            .byte 0
+menuSelItem:            .byte 0
+menuSelColor:           .byte 0
+menuJustMoved:          .byte 0 # frame counter
+menuPage:               .byte 0
+whichMenu:              .byte MENU_ID_MAIN
+musicTestId:            .byte 0
+warpMenuIdx:            .byte 0
+saveMenuIdx:            .byte 0
+saveMenuObjIdx:         .byte 0
+whichHeap:              .byte 0
+menuWasHudHidden:       .byte 0
+menuWasPdaOn:           .byte 0 # for hiding map in objects list
+menuMapSize:            .byte 0
+textureDebugMip:        .byte 0
+debugSeqIdx:            .byte 0
 
 # string pool
 # general
 emptyStr:         .byte 0
 s_on:             .string "On"
 s_off:            .string "Off"
+fmt_02X:          .string "%02X"
 fmt_04X:          .string "%04X"
 fmt_08X:          .string "%08X"
 s_Normal:         .string "Normal"
@@ -200,6 +204,7 @@ s_GoToRestartPoint: .string "Goto Restart Point"
 s_GameBits:         .string "GameBits"
 s_SaveGame:         .string "SaveGame Data"
 s_Heap:             .string "Heap"
+s_MemEdit:          .string "Edit Memory"
 
 # Debug Render menu
 s_Textures:       .string "Textures"
@@ -331,8 +336,8 @@ s_savegameItem_F2:      .string "Fox     Respawn"
 s_savegameItem_Objs:    .string "Saved Objects"
 s_savegameHPMP:         .string "HP %02d/%02d  MP %02d/%02d"
 s_savegameLivesMoney:   .string "1up %d/%d  Money: %d"
-s_savegameUnkFlags:     #.string "Unk: %02X %02X %02X"
-s_savegameUnkChrState:  .string "Unk %02X %02X %02X"
+s_savegameUnkFlags:     .string "Unk21:%02X %02X %02X 1A:%04X"
+s_savegameUnkChrState:  .string "Unk2:%02X Unk3:%02X UnkB:%02X"
 s_savegameCoordX:       .string "X %f"
 s_savegameCoordY:       .string "Y %f"
 s_savegameCoordZ:       .string "Z %f"
@@ -343,6 +348,10 @@ s_savegameSavedObj:     .string "%08X %d %d %d"
 # Textures
 s_textureId:            .string "Tex %04X.%02X: ID %c%04X @%08X"
 s_textureInfo:          .string "Flags: %08X RefCnt: %3d Fmt: %02X; %d x %d"
+
+# Hex Edit
+s_hexEditHeader:        .string "Addr %08X"
+s_hexEditInstrs: .string "J:Move C:Fast X:+ Y:- S:FollowPtr B:Exit"
 
 # Warps
 warpNameHollowOutside: .string "ThornTail Hollow - Outside"

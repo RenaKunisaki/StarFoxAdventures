@@ -305,6 +305,7 @@ itemDrawFuncs_debugData:
     .int drawItem_debugCheat       - mainLoop
     .int drawItem_saveGame         - mainLoop
     .int drawItem_heap             - mainLoop
+    .int drawItem_hexedit          - mainLoop
     .int 0
 
 itemAdjustFuncs_debugData:
@@ -312,6 +313,7 @@ itemAdjustFuncs_debugData:
     .int adjItem_debugCheat       - mainLoop
     .int adjItem_saveGame         - mainLoop
     .int adjItem_heap             - mainLoop
+    .int adjItem_hexedit          - mainLoop
 
 itemDrawFuncs_debugRender:
     .int s_Render              - mainLoop # title
