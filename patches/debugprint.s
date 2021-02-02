@@ -63,11 +63,11 @@ constants:
     .set SP_OBJ_NAME, 0x28 # object name (12 bytes)
 
 entry: # called as soon as our patch is loaded.
-    stwu  r1, -STACK_SIZE(r1) # get some stack space
-    mflr  r4
-    stw   r4,  SP_LR_SAVE(r1)
-    stw   r14, SP_R14_SAVE(r1)
-    mr    r14, r3
+    stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    mflr    r4
+    stw     r4,  SP_LR_SAVE(r1)
+    stw     r14, SP_R14_SAVE(r1)
+    mr      r14, r3
 
     # print some info about boot environment.
     lis    r3,  0x8000
@@ -92,10 +92,10 @@ entry: # called as soon as our patch is loaded.
 #    li      r3,  1
 #    STOREB  r3,  enableDebugText, r4
 #.notZheld:
-    lwz  r14, SP_R14_SAVE(r1)
-    lwz  r3,  SP_LR_SAVE(r1)
-    mtlr r3   # restore LR
-    addi r1,  r1, STACK_SIZE # restore stack ptr
+    lwz     r14, SP_R14_SAVE(r1)
+    lwz     r3,  SP_LR_SAVE(r1)
+    mtlr    r3   # restore LR
+    addi    r1,  r1, STACK_SIZE # restore stack ptr
     blr
 
 
@@ -186,14 +186,6 @@ mainLoop: # called from main loop. r3 = mainLoop
     addi    r3,  r14, (.fmt_start - mainLoop)@l
     CALL    debugPrintf
 .endif
-
-    # don't make debug text flash with HUD text
-    # XXX why doesn't this work?
-    li      r3,  255
-    li      r4,  255
-    li      r5,  255
-    li      r6,  255
-    CALL    gameTextSetColor
 
     LOAD    r18, 0x803a89b0 # HUD textures
 
@@ -330,42 +322,67 @@ mainLoop: # called from main loop. r3 = mainLoop
 #.endif
 
 .noPlayer:
-    #.fmt_restartPoint: .string "R:\x84%6d %6d %6d %d M%02X\x83"
     andi.   r0,  r19,  DEBUG_TEXT_RESTART_POINT
     beq     .noPrintRestartPoint
 
     LOADWH  r7,  pRestartPoint
-    LOADWL2 r3,  pRestartPoint, r7
-    cmpwi   r3,  0
+    LOADWL2 r16, pRestartPoint, r7
+    cmpwi   r16, 0
     bne     .printRestartPoint
-    LOADWL2 r3,  pLastSavedGame, r7
-    cmpwi   r3,  0
+    LOADWL2 r16, pLastSavedGame, r7
+    cmpwi   r16, 0
     beq     .noPrintRestartPoint
 
 .printRestartPoint:
-    lbz     r4,  0x20(r3) # which character?
+    addi    r3,  r14, .fmt_restartPoint - mainLoop
+    lbz     r4,  (restartPointFrameCount - mainLoop)(r14)
+    slwi    r6,  r4,  2 # richer color
+    #andi.   r6,  r6,  0xFF # clamp - not needed, max is 60*4=240
+    li      r5,  255
+    sub     r5,  r5,  r6
+    ori     r5,  r5,  1 # don't store zero (will break sprintf)
+    stb     r5,  3(r3) # change text color
+    cmpwi   r4,  0
+    beq     .printRestartPoint_noDec
+    subi    r4,  r4,  1
+    stb     r4,  (restartPointFrameCount - mainLoop)(r14)
+.printRestartPoint_noDec:
+
+    lbz     r4,  0x20(r16) # which character?
     slwi    r4,  r4,  4   # character * 16
     addi    r4,  r4,  0x684
-    add     r3,  r3,  r4  # character position
+    add     r16, r16, r4  # character position
 
-    lfs     f1,  0x00(r3) # X pos
+    lfs     f1,  0x00(r16) # X pos
     fctiwz  f2,  f1
     stfd    f2,  SP_FLOAT_TMP(r1)
     lwz     r4,  SP_FLOAT_TMP+4(r1)
 
-    lfs     f1,  0x04(r3) # Y pos
+    # has X pos changed since last check?
+    # hopefully no need to check Y and Z
+    lwz     r5,  (prevRestartPointX - mainLoop)(r14)
+    stw     r4,  (prevRestartPointX - mainLoop)(r14)
+    cmpw    r4,  r5
+    beq     .printRestartPoint_noChange
+    li      r5,  60
+    stb     r5,  (restartPointFrameCount - mainLoop)(r14)
+    # color change will take effect on next frame
+
+.printRestartPoint_noChange:
+    lfs     f1,  0x04(r16) # Y pos
     fctiwz  f2,  f1
     stfd    f2,  SP_FLOAT_TMP(r1)
     lwz     r5,  SP_FLOAT_TMP+4(r1)
 
-    lfs     f1,  0x08(r3) # Z pos
+    lfs     f1,  0x08(r16) # Z pos
     fctiwz  f2,  f1
     stfd    f2,  SP_FLOAT_TMP(r1)
     lwz     r6,  SP_FLOAT_TMP+4(r1)
 
-    lbz     r7,  0x0D(r3) # map layer
-    lbz     r8,  0x0E(r3) # map ID (always FF?)
-    addi    r3,  r14, .fmt_restartPoint - mainLoop
+    lbz     r7,  0x0D(r16) # map layer
+    lbz     r8,  0x0E(r16) # map ID (always FF?)
+        # not always FF, but only set when you're on a different map?
+    #addi    r3,  r14, .fmt_restartPoint - mainLoop # already done above
     CALL    debugPrintf
 
 .noPrintRestartPoint:
@@ -657,6 +674,8 @@ printSeqInfo: # r6: ObjInstance*, r19: obj idx
 .heapBarY:       .float 466
 .heapBarHeight:  .float 3
 .floatMagic: .int 0x43300000,0x80000000
+prevRestartPointX: .int 0
+restartPointFrameCount: .byte 0 # for showing restart point changes
 
 .if REDIRECT_TO_CONSOLE
 .fmt_playerCoords: .string ">> P:%6d %6d %6d %08X"
@@ -675,12 +694,12 @@ printSeqInfo: # r6: ObjInstance*, r19: obj idx
 
 .else
 
-.fmt_playerCoords: .string "P:\x84%6d %6d %6d %08X\x83 "
+.fmt_playerCoords: .string "\x81\xFF\xFF\xFF\xFFP:\x84%6d %6d %6d %08X\x83 "
 .fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X T%X %08X\x83 "
 .fmt_mapIds:       .string "L \x84%02X%02X\x83"
 .fmt_playerState:  .string "S:\x84%02X %08X %08X\x83 A:\x84%04X %f %f\x83\n"
 .fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 M\x84%02X %02X %02X\x83 "
-.fmt_restartPoint: .string "\nR:\x84%6d %6d %6d %d M%02X\x83"
+.fmt_restartPoint: .string "\n\x81\xFF\xFF\xFF\xFFR:\x84%6d %6d %6d %d M%02X\x83\x81\xFF\xFF\xFF\xFF"
 #.fmt_gameState:    .string "Obj\x84%3d\x83 G:\x84%08X\x83 S:%X %d\n"
 .fmt_gameState:    .string "Obj\x84%3d\x83 Mem \x84%3d/%3d\x83\n"
 #.fmt_itemState:    .string "I:\x84%04X %04X %04X\x83\n"
