@@ -27,10 +27,11 @@ patchList:
     PATCH_BL   0x80020c74, hook_debugPrintDraw
 
     # patch debug print to move to the very edge of the screen.
-    PATCH_HWORD 0x8013761A, 0
-    PATCH_HWORD 0x8013762E, 0
-    PATCH_HWORD 0x8013764A, 0
-    #PATCH_HWORD 0x8013765E, 0 # this causes a glitch at bottom when fading
+    # disabled, we do this in code on devkits
+    #PATCH_HWORD 0x8013761A, 0 # min X at 320 screen width
+    #PATCH_HWORD 0x8013762E, 0 # min X at 640 screen width
+    #PATCH_HWORD 0x8013764A, 0 # min Y at 240 screen height
+    #PATCH_HWORD 0x8013765E, 0 # min Y at 480 screen height - this causes a glitch at bottom when fading
     PATCH_WORD  0x80137830, 0x38000000 # these two prevent fade glitch
     PATCH_WORD  0x80137688, 0x38000000
 
@@ -92,6 +93,21 @@ entry: # called as soon as our patch is loaded.
 #    li      r3,  1
 #    STOREB  r3,  enableDebugText, r4
 #.notZheld:
+
+    # patch debug text to move to corner of screen on emulators.
+    LOADH   r3,  0x8000002C
+    andi.   r3,  r3,  0x1000
+    beq     .notEmu
+    # technically this means devkit but for most people it's
+    # going to mean Dolphin
+    LOADWH  r3,  0x8013761A
+    li      r4,  0
+    STOREH  r4,  0x8013761A, r3 # min X at 320 screen width
+    STOREH  r4,  0x8013762E, r3 # min X at 640 screen width
+    STOREH  r4,  0x8013764A, r3 # min Y at 240 screen height
+    STOREH  r4,  0x8013765E, r3 # min Y at 480 screen height
+
+.notEmu:
     lwz     r14, SP_R14_SAVE(r1)
     lwz     r3,  SP_LR_SAVE(r1)
     mtlr    r3   # restore LR
