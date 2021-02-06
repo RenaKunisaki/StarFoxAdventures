@@ -116,7 +116,7 @@ adjItem_curMP: # r3 = amount to adjust by (0=A button)
     mr      r21, r9 # sound effect ID
     CALL    SaveGame_getCurCharacterState
     lha     r5,  0x04(r3) # get cur
-    lha     r5,  0x06(r3) # get max
+    lha     r6,  0x06(r3) # get max
     bl      debugCheatAdjustValue
     sth     r5,  0x04(r3)
     b       dbgCheatAdjEnd
