@@ -27,21 +27,33 @@ main: # called by our hook, from the patch list.
     stw     r5,  SP_LR_SAVE(r1)
     stmw    r4,  SP_GPR_SAVE(r1)
 
+    # is this enabled?
     LOADW   r3,  PATCH_STATE_PTR
     lbz     r4,  EXTRA_FEATURE_FLAGS(r3)
     andi.   r4,  r4,  EXTRA_FEATURE_RUMBLE_BLUR
     beq     .disabled
 
+    # is rumble currently active?
     LOADWH  r4,  rumbleTimer
     LOADWL2 r3,  rumbleTimer, r4
     cmpwi   r3,  0
     bne     .doOverride
 
+    # rumble timer is 0 - was it > 0 on previous frame?
+    lbz     r4,  (.wasOn - .getpc)(r5)
+    stb     r3,  (.wasOn - .getpc)(r5)
+    cmpwi   r4,  0
+    beq     .disabled
+
+    # make sure we turn blur back off
+    LOADWH  r4,  motionBlurIntensity
+    STOREW  r3,  motionBlurIntensity, r4
+
 .disabled:
     CALL    0x8000e620 # replaced function
-    b       .end
+    b       .end # restore the stack
 
-.doOverride:
+.doOverride: # apply blur
     bl      .getpc
     .getpc: mflr r5
 
@@ -58,6 +70,7 @@ main: # called by our hook, from the patch list.
     LOADWH  r4,  motionBlurIntensity
     STOREF  f1,  motionBlurIntensity, r4
     li      r3,  1 # do force
+    stb     r3,  (.wasOn - .getpc)(r5)
 
 .end:
     lwz     r5,  SP_LR_SAVE(r1)
@@ -69,3 +82,4 @@ main: # called by our hook, from the patch list.
 .scale:  .float 2.0
 .minVal: .float 48.0
 .maxVal: .float 120.0
+.wasOn:  .byte 0
