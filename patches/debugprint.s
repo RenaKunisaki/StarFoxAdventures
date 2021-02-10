@@ -32,8 +32,8 @@ patchList:
     #PATCH_HWORD 0x8013762E, 0 # min X at 640 screen width
     #PATCH_HWORD 0x8013764A, 0 # min Y at 240 screen height
     #PATCH_HWORD 0x8013765E, 0 # min Y at 480 screen height - this causes a glitch at bottom when fading
-    PATCH_WORD  0x80137830, 0x38000000 # these two prevent fade glitch
-    PATCH_WORD  0x80137688, 0x38000000
+    #PATCH_WORD  0x80137830, 0x38000000 # these two prevent fade glitch
+    #PATCH_WORD  0x80137688, 0x38000000
 
     # make fixed width more reasonable
     # we can even do 5 here, but then the letter B gets cut off
@@ -96,7 +96,7 @@ entry: # called as soon as our patch is loaded.
 
     # patch debug text to move to corner of screen on emulators.
     LOADH   r3,  0x8000002C
-    andi.   r3,  r3,  0x1000
+    andi.   r3,  r3,  0xF000
     beq     .notEmu
     # technically this means devkit but for most people it's
     # going to mean Dolphin
