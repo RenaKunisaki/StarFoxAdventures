@@ -33,6 +33,9 @@ main: # called by our hook, from the patch list.
     andi.   r4,  r4,  EXTRA_FEATURE_RUMBLE_BLUR
     beq     .disabled
 
+    bl      .getpc
+    .getpc: mflr r5
+
     # is rumble currently active?
     LOADWH  r4,  rumbleTimer
     LOADWL2 r3,  rumbleTimer, r4
@@ -54,9 +57,6 @@ main: # called by our hook, from the patch list.
     b       .end # restore the stack
 
 .doOverride: # apply blur
-    bl      .getpc
-    .getpc: mflr r5
-
     lfs     f2,  (.scale  - .getpc)(r5)
     lfs     f3,  (.maxVal - .getpc)(r5)
     lfs     f4,  (.minVal - .getpc)(r5)
