@@ -15,9 +15,10 @@ patchList:
     PATCH_END  PATCH_KEEP_AFTER_RUN
 
 constants:
-    .set STACK_SIZE, 0xC0 # how much to reserve
-    .set SP_LR_SAVE, 0xC4
-    .set SP_GPR_SAVE,0x10
+    .set STACK_SIZE, 0x100 # how much to reserve
+    .set SP_LR_SAVE, 0x104
+    .set SP_STR_BUF, 0x10
+    .set SP_GPR_SAVE,0x80
 
 entry: # called as soon as our patch is loaded.
     blr
@@ -106,6 +107,29 @@ main: # called from loading screen loop
 .doPrint:
     CALL     debugPrintfxy
 
+    # let's print some console info too
+    # unfortunately the "real" debug text system doesn't work here.
+    LOAD    r0,  1000000 # one million
+    lis     r3,  0x8000
+    lwz     r5,  0xFC(r3) # CPU speed
+    divwu   r5,  r5,  r0  # to MHz
+    lwz     r6,  0x2C(r3) # console type
+    lwz     r7,  0xF0(r3) # simulated memory size
+    srwi    r7,  r7,  10  # to KB
+    lwz     r8,  0x28(r3) # physical memory size
+    srwi    r8,  r8,  10  # to KB
+    lwz     r9,  0xF8(r3) # bus speed
+    divwu   r9,  r9,  r0  # to MHz
+    lwz     r10, 0xD0(r3) # ARAM size
+    srwi    r10, r10, 10  # to KB
+    addi    r3,  r1,  SP_STR_BUF
+    addi    r4,  r14, s_bootInfo - .getpc
+    CALL    sprintf
+    li      r3,  30
+    li      r4,  30
+    addi    r5,  r1,  SP_STR_BUF
+    CALL    debugPrintfxy
+
 .end:
     lwz      r0, SP_LR_SAVE(r1)
     mtlr     r0 # restore LR
@@ -119,3 +143,8 @@ main: # called from loading screen loop
 .msg3:
     .ascii "\t\tThis is a free fan creation.\n"
     .ascii "If you paid for this, you've been scammed.\0"
+s_bootInfo:
+    #                            r5         r6
+    .ascii "CPU: PowerPC Gekko @ %dMHz type %08X\n"
+    #            r7  r8   r9      r10
+    .ascii "RAM: %d/%dK @ %dMHz + %dK ARAM\0"
