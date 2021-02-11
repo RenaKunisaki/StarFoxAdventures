@@ -487,6 +487,14 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOADW   r16, pPlayer
     cmpwi   r16, 0
     beq     .noPlayerState
+    # make sure this is the right object
+    lhz     r3,  0x46(r16) # get defNo
+    cmpwi   r3,  0x00 # Sabre
+    beq     .playerOk
+    cmpwi   r3,  0x1F # Krystal
+    bne     .noPlayerState
+
+.playerOk:
     addi    r3,  r14, (.fmt_playerState - mainLoop)@l
     lwz     r9,  0x00B8(r16) # get animState
     cmpwi   r9,  0
