@@ -327,6 +327,10 @@ mainLoop: # called from main loop. r3 = mainLoop
     LOAD    r6,  loadedFileMapIds
     lbz     r4,  ((BLOCKS_BIN *2)+1)(r6)
     lbz     r5,  ((BLOCKS_BIN2*2)+1)(r6)
+    # buckets are int, but we really only need lowest byte.
+    LOADWH  r8,  levelLockBuckets
+    LOADBL2 r6,  levelLockBuckets+3, r8
+    LOADBL2 r7,  levelLockBuckets+7, r8
     addi    r3,  r14, .fmt_mapIds - mainLoop
     CALL    debugPrintf
 
@@ -720,7 +724,7 @@ restartPointFrameCount: .byte 0 # for showing restart point changes
 
 .fmt_playerCoords: .string "\x81\xFF\xFF\xFF\xFFP:\x84%6d %6d %6d %08X\x83 "
 .fmt_mapCoords:    .string "M:\x84%3d,%3d,%d #%02X T%X %08X\x83 "
-.fmt_mapIds:       .string "L \x84%02X%02X\x83"
+.fmt_mapIds:       .string "L \x84%02X%02X %02X%02X\x83"
 .fmt_playerState:  .string "S:\x84%02X %08X %08X\x83 A:\x84%04X %f %f\x83\n"
 .fmt_cameraCoords: .string "\nC:\x84%6d %6d %6d\x83 M\x84%02X %02X %02X\x83 "
 .fmt_restartPoint: .string "\n\x81\xFF\xFF\xFF\xFFR:\x84%6d %6d %6d %d M%02X\x83\x81\xFF\xFF\xFF\xFF"
