@@ -48,6 +48,12 @@ main: # called every frame on the "go/cancel" screen of world map.
     beq     .end
 
     # Z pressed, do warp
+    # first, unlock all level buckets, so that destination map loads correctly.
+    li      r3,  0 # map ID (not used here)
+    li      r4,  0 # bucket (not used here)
+    li      r5,  1 # bUnlockAll
+    CALL    unlockLevel
+
     # get selected map (MapDirIdx32)
     # note we map MapDirIdx32 to WarpEnum here
     LOADW   r4,  0x803ddd28
@@ -61,7 +67,7 @@ main: # called every frame on the "go/cancel" screen of world map.
     beq     .warpToWallCity
     # else must be dragon rock
 
-    # duplicate some game code...
+    # duplicate some game code... (8022c680)
     # XXX should these be done every time?
     li      r3,  0x05DB # DR_ObjGroups
     li      r4,  0

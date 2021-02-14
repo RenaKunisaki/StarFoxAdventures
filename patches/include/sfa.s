@@ -83,6 +83,7 @@
 .set storeRegs26,0x802860D8
 .set strlen,0x802918a4
 .set strncpy,0x802917a8
+.set unlockLevel,0x8004350c #MapDirIdx32(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll)
 .set vec3f_scale,0x80292c74 #void (double scale, vec3f *in, vec3f *out)
 .set VISetNextFrameBuffer,0x8024d670
 .set VIWaitForRetrace,0x8024c8f0
@@ -143,6 +144,7 @@
 .set heatEffectIntensity,    0x803dcdfc #int, but only up to 255
 .set hudHidden,              0x803dca3a #bool
 .set isJapanese,             0x803dc968 #bool
+.set levelLockBuckets,       0x803db5b0 #MapDirIdx32
 .set loadedFileMapIds,       0x8035f548 #int16[fileIdx]
 .set loadedObjects,          0x803dcb88 #ObjInstance*
 .set mapCoords,              0x803dcdc8 #int mapX, mapZ, cellX, cellZ
