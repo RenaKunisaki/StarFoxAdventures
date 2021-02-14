@@ -20,11 +20,8 @@ patchList:
     PATCH_BL 0x802A06B4, main
     # increase climb speeds
     PATCH_HWORD 0x803E8000, 0x3D4B # wall climbing (up and down)
-    PATCH_HWORD 0x803E7F84, 0x3D04 # ladder climbing (up)
-    PATCH_HWORD 0x802A26A6, 0x1A84 # ladder climbing (down)
-        # last one is changing the down speed to use the same variable
-        # as the up speed, because normally it uses a variable that's
-        # shared among many different animations.
+    PATCH_HWORD 0x802A26BA, 0x1B70 # ladder climbing (up)
+    PATCH_HWORD 0x802A26A6, 0x1B70 # ladder climbing (down)
     PATCH_END PATCH_KEEP_AFTER_RUN
 
 constants:
