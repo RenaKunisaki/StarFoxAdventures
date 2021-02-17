@@ -1,6 +1,6 @@
 .ascii "warpmenu" # 8 byte file ID for debug
 .set WARP_MENU_XPOS,   20
-.set WARP_MENU_YPOS,   56
+.set WARP_MENU_YPOS,  136
 .set WARP_MENU_WIDTH, 600
 .set WARP_MENU_HEIGHT,300
 .set MAX_WARP,         79
@@ -216,12 +216,12 @@ warpDefs:
     DEFINEWARP    233,   2196, -17591,  0, warpNameCFqueen
     DEFINEWARP   -173,   1284, -14400,  0, warpNameCRrace
     DEFINEWARP    463,   1845, -16899,  0, warpNameCRmine
-    DEFINEWARP   1534,  -2536,  -8574, -1, warpNameOFPbot
-    DEFINEWARP   4220,  -2536,  -8576, -1, warpNameOFPend
-    DEFINEWARP   3198,  -2542,  -7981, -1, warpNameOFPplat
-    DEFINEWARP   3357,  -1600,  -7428,  0, warpNameOFPentr
-    DEFINEWARP   2872,  -1533,  -9247,  0, warpNameOFPtop
-    DEFINEWARP   2877,  -2718,  -9277, -1, warpNameOFPbot2
+    DEFINEWARP   1534,  -2536,  -8574, -1, warpNameOFPbot  # bottom
+    DEFINEWARP   4220,  -2536,  -8576, -1, warpNameOFPend  # end
+    DEFINEWARP   3198,  -2542,  -7981, -1, warpNameOFPplat # SpellStone platform
+    DEFINEWARP   3357,  -1600,  -7428,  0, warpNameOFPentr # entrance (outside)
+    DEFINEWARP   2872,  -1533,  -9247,  0, warpNameOFPtop  # top warp
+    DEFINEWARP   2877,  -2718,  -9277, -1, warpNameOFPbot2 # bottom warp
     DEFINEWARP -16065,     57,   -320,  0, warpNameVFPentrance
     DEFINEWARP -18710,    389,   -307,  0, warpNameVFPcave
     DEFINEWARP -17919,    198,   -975,  0, warpNameVFPplat
