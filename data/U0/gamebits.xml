@@ -1,19 +1,17 @@
 <?xml version="1.0"?>
 <gamebits>
   <!-- bytes 0x50-0x5C of tempGameBits are idxs of task texts -->
-  <bit id="0x0000" table="0" hint="0x00" hasHint="0" max="1" name="CantCallTricky">
+  <bit id="0x0000" table="0" hint="0x00" hasHint="0" max="1">
     <objref map="wgshrine" obj="Transporter" objId="0x00000C5D" param="enabled"/>
   </bit>
-  <bit id="0x0001" table="0" hint="0x00" hasHint="0" max="1" name="HaveTrickyFind"/>
+  <bit id="0x0001" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0002" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0003" table="0" hint="0x00" hasHint="0" max="1" name="HaveTrickyStay"/>
+  <bit id="0x0003" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0004" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0005" table="1" hint="0x00" hasHint="0" max="1" name="HaveTrickysBall">
-    <description>separate from BoughtTrickysBall</description>
-  </bit>
+  <bit id="0x0005" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop1" />
   <bit id="0x0006" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0007" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0008" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0008" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop2"/>
   <bit id="0x0009" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x000A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x000B" table="2" hint="0x00" hasHint="0" max="1" name="SH_TalkedToPepper">
@@ -26,8 +24,8 @@
   <bit id="0x0010" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0011" table="2" hint="0x00" hasHint="0" max="1" name="SH_StaffTutorialRunning"/>
   <bit id="0x0012" table="0" hint="0x00" hasHint="0" max="1" name="AndrossRelated0012"/>
-  <bit id="0x0013" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0014" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0013" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop3"/>
+  <bit id="0x0014" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop4"/>
   <bit id="0x0015" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0016" table="1" hint="0x00" hasHint="0" max="1">
     <objref map="snowmines" obj="HitAnimator" objId="0x0004B0C2" param="target"/>
@@ -266,12 +264,12 @@
   <bit id="0x008F" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="hollow" obj="BombPlant" objId="0x00044B2A" param="exists"/>
   </bit>
-  <bit id="0x0090" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x0090" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related0090">
     <objref map="hollow" obj="HitAnimator" objId="0x0004BBDE" param="target"/>
   </bit>
   <bit id="0x0091" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0092" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0093" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0092" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop5"/>
+  <bit id="0x0093" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop6"/>
   <bit id="0x0094" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0095" table="0" hint="0x00" hasHint="0" max="1" name="Always1">
     <description>used for always-available shop items</description>
@@ -284,7 +282,7 @@
     <objref map="hollow" obj="SH_BombWall" objId="0x00044AA1" param="exploded"/>
   </bit>
   <bit id="0x0098" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0099" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0099" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop7"/>
   <bit id="0x009A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x009B" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x009C" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -318,13 +316,15 @@
   <bit id="0x00AB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00AC" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00AD" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00AE" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00AF" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00B0" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x00AE" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop8"/>
+  <bit id="0x00AF" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop9"/>
+  <bit id="0x00B0" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop10"/>
   <bit id="0x00B1" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00B2" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00B3" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00B4" table="2" hint="0x00" hasHint="0" max="1" name="UsedUnknownItem"/>
+  <bit id="0x00B4" table="2" hint="0x00" hasHint="0" max="1" name="UsedUnknownItem">
+    <description>Item name is "Unknown"</description>
+  </bit>
   <bit id="0x00B5" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00B6" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00B7" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -334,7 +334,7 @@
   <bit id="0x00BB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00BC" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00BD" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00BE" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x00BE" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop11"/>
   <bit id="0x00BF" table="2" hint="0x1A" hasHint="1" max="1" name="SH_ReturnedToQueen">
     <description>Talked to queen after bringing Tricky back from Ice Mountain</description>
   </bit>
@@ -346,9 +346,9 @@
   </bit>
   <bit id="0x00C2" table="2" hint="0x00" hasHint="0" max="7" name="SH_NumMushroomsFedToQueen"/>
   <bit id="0x00C3" table="2" hint="0x17" hasHint="1" max="1" name="ReturnedToHollow"/>
-  <bit id="0x00C4" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00C5" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00C6" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x00C4" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop13"/>
+  <bit id="0x00C5" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop14"/>
+  <bit id="0x00C6" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop15"/>
   <bit id="0x00C7" table="2" hint="0x00" hasHint="0" max="1" name="HaveUnknownItem">
     <description>Item name is "Unknown"</description>
   </bit>
@@ -435,7 +435,7 @@
   <bit id="0x00F2" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00F3" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00F4" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00F5" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x00F5" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop16"/>
   <bit id="0x00F6" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00F7" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00F8" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -452,7 +452,7 @@
   <bit id="0x0101" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0102" table="2" hint="0x23" hasHint="1" max="1" name="RescuedSnowHornGateKeeper"/>
   <bit id="0x0103" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0104" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0104" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop17"/>
   <bit id="0x0105" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0106" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0107" table="2" hint="0x40" hasHint="1" max="1" name="HaveGroundQuake">
@@ -473,7 +473,7 @@
     <objref map="wastes" obj="MagicCaveTo" objId="0x00043FD5" param="Visible"/>
   </bit>
   <bit id="0x0114" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0115" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0115" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop18"/>
   <bit id="0x0116" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0117" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0118" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -625,7 +625,7 @@
   <bit id="0x0174" table="2" hint="0xB2" hasHint="1" max="1" name="HaveKrazoaSpirit6"/>
   <bit id="0x0175" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0176" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0177" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0177" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related0177"/>
   <bit id="0x0178" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0179" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x017A" table="2" hint="0x00" hasHint="0" max="1">
@@ -701,7 +701,7 @@
   <bit id="0x01A0" table="2" hint="0x00" hasHint="0" max="1" name="SH_ThornTailRelated01A0">
     <description>related to ThornTail</description>
   </bit>
-  <bit id="0x01A1" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x01A1" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop12"/>
   <bit id="0x01A2" table="2" hint="0x85" hasHint="1" max="1" name="BoughtSnowHornArtifact"/>
   <bit id="0x01A3" table="2" hint="0x86" hasHint="1" max="1" name="UsedSnowHownArtifact"/>
   <bit id="0x01A4" table="2" hint="0x00" hasHint="0" max="1" name="SH_OpenedPathToMagicCave2">
@@ -972,7 +972,7 @@
     <objref map="hollow" obj="HitAnimator" objId="0x0004CE6E" param="target"/>
   </bit>
   <bit id="0x023B" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x023C" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x023C" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related023C"/>
   <bit id="0x023D" table="1" hint="0x00" hasHint="0" max="1" name="SH_ThornTailRelated023D">
     <description>related to ThornTail</description>
   </bit>
@@ -1431,7 +1431,7 @@
   <bit id="0x03A7" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03A8" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03A9" table="3" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x03AA" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x03AA" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related03AA"/>
   <bit id="0x03AB" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03AC" table="3" hint="0x00" hasHint="0" max="1" name="HudNumberRelated03AC">
     <description>related to envfx; affects HUD number rendering</description>
@@ -1666,7 +1666,10 @@
   <bit id="0x0450" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0451" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0452" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="SH_ObjGroups">
-    <description>also LinkG</description>
+    <description>also LinkG
+      0x00: bloops
+      0x06: switch to open Queen cave?
+    </description>
   </bit>
   <bit id="0x0453" table="2" hint="0x37" hasHint="1" max="1" name="MMP_UsedKey">
     <objref map="moonpass" obj="HitAnimator" objId="0x0004ABE4" param="target"/>
@@ -3564,8 +3567,8 @@
   <bit id="0x09D5" table="0" hint="0x00" hasHint="0" max="1" name="IncomingCommunication">
     <description>Slippy calling you</description>
   </bit>
-  <bit id="0x09D6" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x09D7" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x09D6" table="1" hint="0x00" hasHint="0" max="1" name="ArwingRelated09D6"/>
+  <bit id="0x09D7" table="1" hint="0x00" hasHint="0" max="1" name="ArwingLevelFailed" />
   <bit id="0x09D8" table="1" hint="0x00" hasHint="0" max="1" name="ArwingLeveDone">
     <description>set to instantly finish level (and then crash the game)</description>
   </bit>
@@ -4831,8 +4834,8 @@
   </bit>
   <bit id="0x0D33" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D34" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0D35" table="3" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0D36" table="3" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0D35" table="3" hint="0x00" hasHint="0" max="1" name="SH_Related0D35"/>
+  <bit id="0x0D36" table="3" hint="0x00" hasHint="0" max="1" name="SH_Related0D36"/>
   <bit id="0x0D37" table="1" hint="0xAF" hasHint="1" max="1" name="FlewToKrazoaPalace">
     <objref map="warlock" obj="HitAnimator" objId="0x0004C587" param="target"/>
     <objref map="warlock" obj="HitAnimator" objId="0x0004C589" param="target"/>
@@ -4841,7 +4844,7 @@
     <objref map="warlock" obj="Landed_Arwi" objId="0x00049F5A" param="Visible"/>
   </bit>
   <bit id="0x0D38" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="LINKF_ObjGroups"/>
-  <bit id="0x0D39" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0D39" table="2" hint="0x00" hasHint="0" max="1" name="SH_BloopEventDone"/>
   <bit id="0x0D3A" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D3B" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D3C" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -5157,7 +5160,7 @@
   <bit id="0x0DFC" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0DFD" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0DFE" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0DFF" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0DFF" table="2" hint="0x00" hasHint="0" max="1" name="SH_PushedSwitchInWell"/>
   <bit id="0x0E00" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E01" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E02" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -5334,7 +5337,7 @@
   </bit>
   <bit id="0x0E72" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E73" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0E74" table="0" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0E74" table="0" hint="0x00" hasHint="0" max="1" name="ArwingRelated0E74"/>
   <bit id="0x0E75" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E76" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E77" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -5354,7 +5357,7 @@
   <bit id="0x0E7F" table="3" hint="0x00" hasHint="0" max="1">
     <objref map="dragrock" obj="LGTDirectio" objId="0x0004C7FD" param="0x1E"/>
   </bit>
-  <bit id="0x0E80" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0E80" table="2" hint="0x00" hasHint="0" max="1" name="SH_EggEventRelated0E80"/>
   <bit id="0x0E81" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E82" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E83" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -5408,10 +5411,14 @@
   <bit id="0x0EA5" table="2" hint="0x00" hasHint="0" max="1" name="OFPBOT_StaffBoostEnabled">
     <objref map="kraztest" obj="StaffBoostP" objId="0x00049BF3" param="enabled"/>
   </bit>
-  <bit id="0x0EA6" table="0" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0EA6" table="0" hint="0x00" hasHint="0" max="1" name="ToldGetSnowHornArtifact"/>
   <bit id="0x0EA7" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0EA8" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0EA9" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0EA8" table="2" hint="0x00" hasHint="0" max="1" name="DidGet200ScarabBag">
+    <description>Triggers a respawn point save</description>
+  </bit>
+  <bit id="0x0EA9" table="2" hint="0x00" hasHint="0" max="1" name="DidGetMoonPassKey">
+    <description>Triggers a respawn point save</description>
+  </bit>
   <bit id="0x0EAA" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EAB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EAC" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -5423,7 +5430,7 @@
   </bit>
   <bit id="0x0EB1" table="2" hint="0x00" hasHint="0" max="1" name="HaveMagic"/>
   <bit id="0x0EB2" table="2" hint="0x00" hasHint="0" max="1" name="HaveBafomdadHolder"/>
-  <bit id="0x0EB3" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0EB3" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related0EB3"/>
   <bit id="0x0EB4" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EB5" table="2" hint="0x00" hasHint="0" max="1" name="CantUseFlute"/>
   <bit id="0x0EB6" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -5472,7 +5479,9 @@
   <bit id="0x0EDB" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EDC" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EDD" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0EDE" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0EDE" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related0EDE">
+    <description>Triggers a communication after pushing switch at bottom of well</description>
+  </bit>
   <bit id="0x0EDF" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EE0" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EE1" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -5602,7 +5611,9 @@
     <description>should be UsedCheatToken8, but that doesn't exist?</description>
   </bit>
   <bit id="0x0F3D" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0F3E" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0F3E" table="2" hint="0x00" hasHint="0" max="1" name="SH_ToldGetViewFinder">
+    <description>Set when arriving after getting 4th stone; triggers a communication if you don't have viewfinder</description>
+  </bit>
   <bit id="0x0F3F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0F40" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0F41" table="2" hint="0x00" hasHint="0" max="1"/>
