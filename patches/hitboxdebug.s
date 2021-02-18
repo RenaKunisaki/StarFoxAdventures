@@ -379,3 +379,4 @@ s_hitbox: .string "\x84%08X P %f %f %f R %f\x83\n"
 .endif # ENABLE_DRAW_HITBOX
 
 msg_noHitbox: .string "Object %08X '%s' has no hitbox!"
+.align 4

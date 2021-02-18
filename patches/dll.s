@@ -78,3 +78,4 @@ onDllUnload:
 
 .msg_load:   .string "%08X load   DLL %04X param %08X rc=%d"
 .msg_unload: .string "%08X unload DLL %04X addr  %08X rc=%d"
+.align 4

@@ -18,3 +18,4 @@
 .include "krystal/mainloop.s"
 .include "krystal/eyes.s"
 .include "krystal/data.s"
+.align 4

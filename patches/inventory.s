@@ -498,3 +498,4 @@ s_openTimer:.string "Open timer %d"
 s_cTimer:   .string "C timer %d"
 s_mash:     .string "PRESSING A NOW"
 .endif
+.align 4

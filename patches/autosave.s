@@ -130,3 +130,4 @@ onMapLoad:
     JUMP    0x800443cc, r0 # mapLoadDataFile
 
 s_saving: .string "Saving..."
+.align 4

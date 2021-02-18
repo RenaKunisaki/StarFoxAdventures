@@ -670,3 +670,4 @@ s_bitTable:   .string "BIT TABLES"
 
 # 803dcf7c pReflectionTexture1
 # 803dcfdc pReflectionTexture2
+.align 4

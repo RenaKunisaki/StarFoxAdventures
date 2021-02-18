@@ -192,3 +192,4 @@ main: # called every frame on the "go/cancel" screen of world map.
     blr
 
 s_skip: .string "Z: Skip   " # pad with spaces to center
+.align 4

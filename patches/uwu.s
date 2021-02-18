@@ -229,3 +229,4 @@ main: # called by our hook, from the patch list.
     s_time: .string "T:\x84%d%d (%d)\x83\n"
     .align 4
 .endif
+.align 4

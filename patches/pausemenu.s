@@ -21,3 +21,4 @@ patchList:
 
 entry: # called as soon as our patch is loaded.
     blr # nothing to do here
+.align 4

@@ -83,3 +83,4 @@ main: # called by our hook, from the patch list.
 .minVal: .float 48.0
 .maxVal: .float 120.0
 .wasOn:  .byte 0
+.align 4

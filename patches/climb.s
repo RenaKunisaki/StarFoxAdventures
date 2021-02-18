@@ -75,3 +75,4 @@ main: # called by our hook, from the patch list.
     addi r1, r1, STACK_SIZE # restore stack ptr
     or   r23,r3,r3 # replaced
     blr
+.align 4

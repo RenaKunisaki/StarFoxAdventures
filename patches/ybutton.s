@@ -41,3 +41,4 @@ onLoad:
     # of course there's no simple "set Y button item" function...
     # simple way would be to just save all of those, if we can find room.
     blr
+.align 4

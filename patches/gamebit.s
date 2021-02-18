@@ -87,3 +87,4 @@ main:
 
 .msg:
     .string "Bit %04X %X -> %X"
+.align 4

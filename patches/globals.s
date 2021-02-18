@@ -2,7 +2,6 @@
 # (mainly the PDA Menu) know where to find them.
 
 .set PATCH_STATE_PTR,0x8000000C # address to store pointer to our state
-.set PATCH_STATE_SIZE,0x110 # bytes
 
 # offsets within state
 # state always starts at an address aligned to 4 bytes.
@@ -23,7 +22,10 @@
 .set ALLOC_FAIL_MAX,     32 # max alloc fails to keep in log (must be power of 2)
 .set ALLOC_FAIL_POS,     0x0F # position to write next log entry
 .set ALLOC_FAIL_LOG,     0x10 # log of (caller/tag, size) of alloc fails
-# 0x24 + (32 * 8) bytes = 0x110
+# 0x10 + (32 * 8) bytes = 0x110
+.set PATCH_INFO_VERSION, 0x0110 # u8 major, u8 minor, u16 revision
+.set PATCH_INFO_BUILD_NO,0x0114
+.set PATCH_STATE_SIZE,   0x0118 # bytes - end of state struct
 
 # camera option bits
 .set CAMERA_OPTION_PAD3,    0x01 # use controller 3 to move

@@ -105,3 +105,4 @@ entry: # called as soon as our patch is loaded.
 
 # for proper memory alignment, this file must be included last.
 .include "pda/vars.s"
+.align 4

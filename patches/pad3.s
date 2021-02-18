@@ -73,7 +73,7 @@ mainLoop: # called from main loop. r3 = mainLoop
 
     # check for X: toggle free move
     LOADHL2 r3,  0x80339908, r15
-    li      r4,  0  
+    li      r4,  0
     andi.   r0,  r3,  PAD_BUTTON_X
     beq     .notX
 
@@ -100,3 +100,4 @@ mainLoop: # called from main loop. r3 = mainLoop
 oldSpeed: .float 60 # previous game speed
 wasZ: .byte 0 # Z held before?
 wasX: .byte 0
+.align 4

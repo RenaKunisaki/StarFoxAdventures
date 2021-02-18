@@ -18,6 +18,7 @@
 .set debugPrintfxy,0x80137b80 #x, y, fmt, ...
 .set drawTexture,0x8007719c #double x,double y,Texture *texture,uint opacity,uint scale
 .set DVDReadAsyncPrio,0x80248eac
+.set DVDOpen,0x80248b9c #bool(char *path, DVDFileInfo *file)
 .set expgfxRemoveAll,0x8009b254
 .set free,0x800233e8
 .set gameBitDecrement,0x8001fee8 #bitIdx
@@ -54,7 +55,7 @@
 .set mainGetBit,0x8001ffb4
 .set mainSetBits,0x800200e8 # bit, val
 .set mapCoordsToId,0x80059ac0 #int (int x, int z, int layer)
-.set memcpy,0x80003494 # clobbers: r0, r6
+.set memcpy,0x80003494 # clobbers: r0, r4, r5, r6
 .set memset,0x800033D8 # clobbers: r0, r6, r7
 .set mm_free,0x80023800 # wrapper for free()
 .set modelLoad,0x80029570 # ModelFileHeader* (

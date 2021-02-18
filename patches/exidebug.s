@@ -317,3 +317,4 @@ exiCmdBreakpoint:
 buffer: .rept 128 # minimum 116
 .byte 0
 .endr
+.align 4

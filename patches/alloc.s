@@ -287,3 +287,5 @@ emergFreeCats: # object category IDs
     .byte 0x40 # CloudRunner
     .byte 0x80 # DeathGas
     .byte 0xFF # end of list
+
+.align 4

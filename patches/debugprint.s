@@ -738,3 +738,4 @@ restartPointFrameCount: .byte 0 # for showing restart point changes
 .endif
 
 bootMsg: .string "Mem size %08X (sim %08X), ARAM %08X, monitor %08X @ %08X, arena %08X - %08X"
+.align 4

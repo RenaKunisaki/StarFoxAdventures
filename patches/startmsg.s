@@ -148,3 +148,4 @@ s_bootInfo:
     .ascii "CPU: PowerPC Gekko @ %dMHz type %08X\n"
     #            r7  r8   r9      r10
     .ascii "RAM: %d / %dK @ %dMHz + %dK ARAM\0"
+.align 4

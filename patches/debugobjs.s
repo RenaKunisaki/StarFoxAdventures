@@ -52,3 +52,4 @@ main: # called by our hook from loadCharacter()
     addi    r1, r1, STACK_SIZE # restore stack ptr
     rlwinm  r0,r4,0x0,0x1f,0x1f # replaced
     JUMP    0x8002d824, r22
+.align 4

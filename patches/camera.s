@@ -591,3 +591,4 @@ padDelay: .byte 9
 s_xpos: .string "X\t%6d\t%3d"
 s_ypos: .string "Y\t%6d\t%3d"
 s_zpos: .string "Z\t%6d\t%3d"
+.align 4

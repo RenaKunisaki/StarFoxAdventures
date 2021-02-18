@@ -321,3 +321,4 @@ mainLoop: # called from main loop. r3 = mainLoop
 .prevFlagsTarget: .short 0
 .prevFlagsPlayer: .short 0
 .prevEnable:      .byte 0
+.align 4

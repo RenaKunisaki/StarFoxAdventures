@@ -3,9 +3,12 @@
 import os
 import os.path
 import sys
+import time
 import struct
 import shutil
 import subprocess
+
+GAME_VERSION = (1, 8, 0)
 
 
 def pack(fmt, *args):
@@ -149,10 +152,33 @@ def applyDolPatch(basePath):
     patchFile.close()
 
 
+def makePatchInfoFile(path):
+    now       = time.gmtime()
+    totalSize = 0
+    nFiles    = 0
+    patchDir  = os.path.join(path, 'files', 'patches')
+    for name in os.listdir(patchDir):
+        if name not in ('patchinfo.bin', 'km1', 'km2', 'kt1', 'kt2'):
+            size = os.stat(os.path.join(patchDir, name)).st_size
+            if size & 3:
+                print(name + " size is not a multiple of 4!")
+            totalSize += size
+            nFiles += 1
+    with open(os.path.join(patchDir, 'patchinfo.bin'), 'wb') as file:
+        file.write(struct.pack('>IIIBBHI', 0x52656E61,
+            nFiles, totalSize,
+            GAME_VERSION[0], GAME_VERSION[1], GAME_VERSION[2],
+            # crude timestamp just to provide a build ID
+            now.tm_hour + (now.tm_yday * 24) + ((now.tm_year - 2000) * 366 * 24)
+        ))
+
+
 def main():
-    applyDolPatch(sys.argv[1])
-    buildPatches(sys.argv[1])
-    applyFilePatches(sys.argv[1])
+    path = sys.argv[1]
+    applyDolPatch(path)
+    buildPatches(path)
+    applyFilePatches(path)
+    makePatchInfoFile(path)
 
 if __name__ == '__main__':
     main()

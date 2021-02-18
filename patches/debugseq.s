@@ -486,3 +486,4 @@ onRotBug:
 .if LOG_ROT_BUG #         r4                               r5  r6       r7   r8
     .s_rotBug: .string "[F%9D] Using bugged constant! Obj %08X(%s) cmd %02X/%02X"
 .endif
+.align 4
