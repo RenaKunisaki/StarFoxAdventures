@@ -57,26 +57,26 @@
 # 80003ebc
 
 # patchinfo.bin format:
-# u32 magic;     //0x52656E61
-# u32 numFiles;  //number of patch files to load
-# u32 totalSize; //total size to allocate for patch files
-# u8  verMajor;  //major version number
-# u8  verMinor;  //minor version number
-# u16 verRev;    //revision number
-# u32 buildNo;   //build number
+# 0000 u32 magic;     //0x52656E61
+# 0004 u32 numFiles;  //number of patch files to load
+# 0008 u32 totalSize; //total size to allocate for patch files
+# 000C u8  verMajor;  //major version number
+# 000D u8  verMinor;  //minor version number
+# 000E u16 verRev;    //revision number
+# 0010 u32 buildNo;   //build number
 
-.set DEBUG,1
+.set DEBUG,0
 .text
 .include "common.s"
 .include "globals.s"
 
 constants:
     .set MAX_MAIN_LOOP_HOOKS,16
-    .set MAX_STARTUP_HOOKS,16
-    .set MAX_PAD_HOOKS,16
+    .set MAX_STARTUP_HOOKS,  16
+    .set MAX_PAD_HOOKS,      16
     .set MAIN_LOOP_HOOK_ADDR,0x80020D4C # bl doNothing_80014F3C
-    .set STARTUP_HOOK_ADDR,0x80021038 # bl installBsodHandlers
-    .set PAD_HOOK_ADDR,0x80014f90 # 482398D5 bl padReadControllers
+    .set STARTUP_HOOK_ADDR,  0x80021038 # bl installBsodHandlers
+    .set PAD_HOOK_ADDR,      0x80014f90 # 482398D5 bl padReadControllers
 
     .set OP_WRITE8,  0x00
     .set OP_WRITE16, 0x02
@@ -100,6 +100,7 @@ start:
 
     mr      r14, r3 # save address of this code
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
+    stmw    r3,  SP_GPR_SAVE(r1)
     mflr    r3
     stw     r3,  SP_LR_SAVE(r1)
 
@@ -110,9 +111,9 @@ start:
     .endif
 
     # set our state pointer
-    addi    r3,  r14, patchStateVars - start
+    addi    r15, r14, patchStateVars - start
     LOADWH  r4,  PATCH_STATE_PTR
-    STOREW  r3,  PATCH_STATE_PTR, r4
+    STOREW  r15, PATCH_STATE_PTR, r4
 
     # install startup hook.
     addi    r5,  r14, (startHook - start)@l # absolute destination address
@@ -147,22 +148,100 @@ start:
     li      r7,  0
     icbi    r7,  r4
 
+    # load patch info file
+    addi    r3,  r14, s_patchInfoPath - start
+    li      r4,  0 # we don't need size
+    CALL    loadFileByPath
+
+    # check magic
+    LOAD    r4,  0x52656E61
+    lwz     r5,  0x00(r3)
+    cmpw    r4,  r5
+    bnea    0xFFFFFFFFFFFFBAD0 # mismatch
+
+    # 0000 u32 magic;     //0x52656E61
+    # 0004 u32 numFiles;  //number of patch files to load
+    # 0008 u32 totalSize; //total size to allocate for patch files
+    # 000C u8  verMajor;  //major version number
+    # 000D u8  verMinor;  //minor version number
+    # 000E u16 verRev;    //revision number
+    # 0010 u32 buildNo;   //build number
+
+    # copy some of that into the state struct
+    lwz     r4,  0x0C(r3) # version
+    stw     r4,  PATCH_INFO_VERSION(r15)
+    lwz     r4,  0x10(r3) # build number
+    stw     r4,  PATCH_INFO_BUILD_NO(r15)
+
+    # copy the rest into registers
+    lwz     r16, 0x04(r3) # number of files
+    lwz     r17, 0x08(r3) # alloc size
+
+    # now we can free it
+    CALL    mm_free
+
+    # alloc space for the patch files
+    mr      r3,  r17    # size
+    li      r4,  0x6502 # arbitrary tag
+    li      r5,  0      # name
+    CALL    allocTagged
 
     # load patches
     # since we don't have DVDOpenDir or other dir functions,
     # we'll number them.
     li      r15, 0 # patch idx
+    mr      r17, r3 # buffer
 .nextPatch:
+    cmpw    r15, r16
+    bge     .done # no files left to load
+
     addi    r3,  r14, (.patchPath - start)@l + 8 # offset of "000000"
     addi    r4,  r14, (.patchFmt - start)@l # format
     mr      r5,  r15 # idx
     addi    r15, r15, 1
     CALL    sprintf # now patchPath = path to load
     addi    r3,  r14, (.patchPath - start)@l
-    li      r4,  0 # we don't need size
+    addi    r4,  r1,  SP_TMP1 # out size
     CALL    loadFileByPath
     cmpwi   r3,  0
     beq     .done # file doesn't exist
+
+.if DEBUG
+    mr      r29, r3
+    addi    r3,  r14, .s_patchSize - start
+    subi    r4,  r15, 1
+    lwz     r5,  SP_TMP1(r1) # size
+    CALL    OSReport
+    mr      r3,  r29
+.endif
+
+    # copy the file into the buffer.
+    # this is a bit inefficient but it's what the game does in a bunch
+    # of places, and it's much easier than reimplementing loadFileByPath().
+    mr      r29, r3 # save src
+    mr      r4,  r3 # src
+    lwz     r5,  SP_TMP1(r1) # size
+    mr      r3,  r17 # dest
+    CALL    memcpy # returns dest
+    mr      r3,  r29 # restore file buffer
+    CALL    mm_free  # and free it
+    mr      r3,  r17
+    # XXX this means we can't have "free patch after running" unless we were to
+    # later sutract size from r17.
+    # in that case also we'd still be using memory for that patch.
+    # also, need to ensure every patch file size is a multiple of 4.
+    # it would vastly simplify things if we did this by padding them at
+    # creation time.
+    # but do we even use this feature? at least once, for pausemenu
+    # but the code to deal with it might well take up more space than the patch.
+
+    # flush patch code
+    # r3 is already addr
+    lwz     r4,  SP_TMP1(r1) # count
+    CALL    iCacheFlush
+    mr      r3,  r17
+    lwz     r5,  SP_TMP1(r1) # size
+    add     r17, r17, r5 # next buffer space
 
     # r3 = patch file
     # interpret the patch list
@@ -199,7 +278,7 @@ start:
 
     # unsupported command...
     #b       .nextListItem
-    ba       0xDEAD0
+    ba       0xFFFFFFFFFFFFBAD4
 
 .write8: # r4 = address; r3 -> patch list entry
     lhz     r9,  4(r3) # get count
@@ -309,16 +388,17 @@ start:
     stw     r4,  SP_FLAGS_ADDR(r1)
 
     # now execute the patch
-    addi   r17, r3, 8
+    addi   r18, r3, 8
     .if DEBUG
         addi   r4,  r15, -1
         addi   r5,  r3, 8
+        lwz    r6,  0(r5)
         addi   r3,  r14, (.s_run - start)@l
         CALL   OSReport
     .endif
 
     lwz     r3,  SP_PATCH_ADDR(r1) # pass base address to patch code.
-    mtspr   CTR, r17
+    mtspr   CTR, r18
     bctrl
 
     # now handle the flags, of which there's only one.
@@ -332,16 +412,18 @@ start:
         addi   r4,  r15, -1
         CALL   OSReport
     .endif
-    lwz     r3,  SP_PATCH_ADDR(r1)
-    CALL    mm_free
+    #lwz     r3,  SP_PATCH_ADDR(r1)
+    #CALL    mm_free
 
 
 .noFree:
     b       .nextPatch
 
 .done:
+endSub:
     lwz     r3,  SP_LR_SAVE(r1)
-    mtlr    r3  # restore LR
+    mtlr    r3   # restore LR
+    lmw     r3,  SP_GPR_SAVE(r1)
     addi    r1,  r1,  STACK_SIZE # restore stack ptr
     blr
 
@@ -395,11 +477,7 @@ mainLoop: # called from main loop
     b       .callNextHook
 
 .mainLoopDone:
-    lwz     r3,  SP_LR_SAVE(r1)
-    mtlr    r3   # restore LR
-    lmw     r3,  SP_GPR_SAVE(r1)
-    addi    r1,  r1,  STACK_SIZE # restore stack ptr
-    blr
+    b       endSub
 
 
 startupHooks:
@@ -422,12 +500,13 @@ patchStateVars:
     .byte 0
     .endr
 
-.patchInfoPath: .string "patches/patchinfo.bin"
+s_patchInfoPath: .string "patches/patchinfo.bin"
 .patchPath: .string "patches/0000"
 .patchFmt:  .string "%04d"
 .if DEBUG
     .debugMsg:  .string "hello, cruel world"
-    .s_run:     .string "run patch %d @ %08X"
+    .s_patchSize: .string "loaded patch %d size %d"
+    .s_run:     .string "run patch %d @ %08X: %08X"
     .s_free:    .string "free patch %d"
     .s_makeBl:  .string "branch %08X -> %08X: %08X"
     .s_startup: .string "run startup hooks"
