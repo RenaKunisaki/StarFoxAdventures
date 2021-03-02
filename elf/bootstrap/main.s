@@ -65,6 +65,8 @@ _start:
     cmpwi   r3,  0
     blt     .done
     add     r3,  r3,  r15 # r3 = header address
+    lwz     r18, 8(r3)    # r18 = entry point offset
+    add     r18, r18, r3  # r18 = entry point address
 
     # update the global offset table.
     lwz     r4,  0(r3)     # get GOT offset
@@ -91,17 +93,14 @@ _start:
 .doneGot:
 
 .if DEBUG
-    mr      r4,  r3
+    mr      r4,  r18
     addi    r3,  r14, s_aboutToExec - _start
     CALL    OSReport
-    lwz     r3,  0(r17) # get cur offset
-    add     r3,  r3,  r15 # r3 = code address
-    addi    r3,  r3,  0x10 # skip header
 .endif
 
     # jump to code
-    mtctr   r3
-    crclr   4*cr1+eq
+    mtctr   r18
+    crclr   4*cr1+eq # not sure, but gcc does this...
     bctrl
 .if DEBUG
     addi    r3,  r14, s_doneExec - _start

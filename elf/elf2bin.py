@@ -371,8 +371,20 @@ def main():
         # write tab entry
         outTab.write(struct.pack('>I', outBin.tell()))
 
-        # write header (GOT offset, GOT size/4, 8 bytes reserved)
-        outBin.write(struct.pack('>IIII', gotOffs, gotSize, 0, 0))
+        # get entry point
+        # for some reason ld can't find the _start symbol even though it exists,
+        # so we need to look it up in the symbol table.
+        entryPoint = 0
+        symTab = elf.getSymbolTable()
+        for sym in symTab:
+            if sym['name'] == '_start':
+                entryPoint = sym['value']
+                break
+        entryPoint += 0x10 # skip header
+        printf('[*] Entry point: 0x%08X\n', entryPoint)
+
+        # write header (GOT offset, GOT size/4, entry point, 4 bytes reserved)
+        outBin.write(struct.pack('>IIII', gotOffs, gotSize, entryPoint, 0))
 
         # write code
         for phdr in elf.progHdrs:

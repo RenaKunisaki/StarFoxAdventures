@@ -94,6 +94,7 @@ u32 tabSize
 u32 tabEntry[tabSize]
 code begins here...
 that would save a heap slot only needing to load one file.
+for that matter we may not even need a table. if we just load one binary which has all the C code and deals with hooking into various functions
 
 typedef struct {
 	Elf32_Word	st_name;
