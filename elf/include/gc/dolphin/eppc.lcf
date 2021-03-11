@@ -1,0 +1,14 @@
+/* LCF file template for partial link files */
+SECTIONS
+{
+    GROUP :
+    {
+        .init   :{}
+        .text   :{}
+        .ctors  :{}
+        .dtors  :{}
+        .rodata :{}
+        .data   :{}
+        .bss    :{}
+    }
+}

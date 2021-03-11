@@ -96,6 +96,24 @@ code begins here...
 that would save a heap slot only needing to load one file.
 for that matter we may not even need a table. if we just load one binary which has all the C code and deals with hooking into various functions
 
+I'm thinking something like, the DOL patch loads a file which has a header:
+u32 actually a branch instruction to the actual code
+u32 GOT offset
+u32 GOT size / 4
+u32 entry point
+then the bootstrap code which is raw assembly converted directly to binary
+then the code extracted from an ELF file
+    - we only need one, I named it 'src', it can take care of all patching and have submodules in it (just separate source files referenced by different patches)
+the bootstrap code just looks at that offset to locate the GOT and such, does the relocation, and jumps to the entry point.
+
+right now the PATCHES.BIN only has a very simple header per ELF:
+    char[16] name (not used, only for debugging)
+    u32 GOT offset
+    u32 GOT size / 4
+    u32 entry point
+    u32 unused
+so we could just move this to the file header
+
 typedef struct {
 	Elf32_Word	st_name;
 	Elf32_Addr	st_value;

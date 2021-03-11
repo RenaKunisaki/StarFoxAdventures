@@ -1,4 +1,4 @@
-PATCHES=bootstrap hello
+PATCHES=bootstrap src
 DISCROOT ?= /home/rena/projects/sfa/files
 include $(PWD)/config.mk
 .PHONY: all clean
@@ -28,8 +28,8 @@ clean:
 # XXX make this generic, and name it boot.bin instead of debug.bin
 install: all
 	@echo "[*] Installing..."
-	cp $(BUILDDIR)/boot.bin $(DISCROOT)/debug.bin
-	./elf2bin.py $(DISCROOT) $(BUILDDIR)/*.elf
+	#cp $(BUILDDIR)/boot.bin $(DISCROOT)/debug.bin
+	./tools/elf2bin.py $(BUILDDIR) $(DISCROOT)
 
 # dolphin seems to only work with absolute paths for this
 run: install

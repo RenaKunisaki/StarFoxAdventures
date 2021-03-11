@@ -18,7 +18,15 @@ constants:
 
 _start:
     # entry point of this file.
+    b      _start2
 
+    # header, to be filled in by build script.
+offsGOT:   .int 0 # offset of GOT (-4 for lwzu)
+sizeGOT:   .int 0 # size of GOT in words
+offsEntry: .int 0 # entry point of ELF
+sizeBoot:  .int 0 # size of this bootstrap code
+
+_start2:
     mr      r14, r3 # save address of this code
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
     stmw    r3,  SP_GPR_SAVE(r1)
@@ -27,86 +35,59 @@ _start:
 
     # say something to show we're alive.
     .if DEBUG
-        addi r3, r14, s_hello - _start
-        CALL OSReport
+        addi    r3,  r14, s_hello - _start
+        CALL    OSReport
+
+        lwz     r4,  (offsGOT - _start)(r14)
+        lwz     r6,  (sizeGOT - _start)(r14)
+        add     r5,  r4,  r14 # r15 = address of GOT - 4
+        addi    r3,  r14, s_gotOffs - _start
+        CALL    OSReport
     .endif
 
-    # load PATCHES.BIN
-    addi    r3,  r14, s_patchesBin - _start
-    addi    r4,  r1,  SP_TMP1 # out size
-    CALL    loadFileByPath
-    cmpwi   r3,  0
-    beq     .done # file doesn't exist
-    mr      r15, r3
+    # get GOT offset and size
+    lwz     r15, (offsGOT  - _start)(r14)
+    lwz     r16, (sizeGOT  - _start)(r14)
+    lwz     r17, (sizeBoot - _start)(r14)
+    add     r17, r17, r14 # correct for bootstrap size
+    add     r15, r15, r14 # r15 = address of GOT - 4
 
-    # load PATCHES.TAB
-    addi    r3,  r14, s_patchesTab - _start
-    addi    r4,  r1,  SP_TMP1 # out size
-    CALL    loadFileByPath
-    cmpwi   r3,  0
-    beq     .done # file doesn't exist
-    mr      r16, r3
-
-.if DEBUG
-    addi    r3,  r14, s_loadedFiles - _start
-    mr      r4,  r15
-    mr      r5,  r16
-    CALL    OSReport
-.endif
-
-    # iterate patches.tab
-    # r14: _start
-    # r15: PATCHES.BIN
-    # r16: PATCHES.TAB
-    # r17: current offset into PATCHES.TAB
-    subi    r17, r16, 4
-.nextPatch:
-    lwzu    r3,  4(r17) # get cur offset
-    cmpwi   r3,  0
-    blt     .done
-    add     r3,  r3,  r15 # r3 = header address
-    lwz     r18, 8(r3)    # r18 = entry point offset
-    add     r18, r18, r3  # r18 = entry point address
-
-    # update the global offset table.
-    lwz     r4,  0(r3)     # get GOT offset
-    lwz     r5,  4(r3)     # get GOT size (# words)
-    add     r6,  r3,  r4   # r6 = GOT ptr
-    subi    r6,  r6,  4    # for stwu
-    addi    r3,  r3,  0x10 # skip header
 .nextGot:
-    cmpwi   r5,  0
+    cmpwi   r16, 0 # any entries left?
     beq     .doneGot
-    lwz     r7,  4(r6) # get GOT entry
+    lwz     r4,  4(r15) # get GOT entry
     # HACK: there are absolute addresses and even code in here.
     # this seems to work well enough to avoid changing those.
     # XXX figure out the correct way to do this.
     # is there anything that tells us which entries here actually
     # need to be relocated?
-    srwi    r8,  r7,  24 # get high byte
+    srwi    r8,  r4,  24 # get high byte
     cmpwi   r8,  0
-    bne     .doneGot
-    add     r7,  r7,  r3 # to absolute address
-    stwu    r7,  4(r6)
-    subi    r5,  r5,  1
+    bne     .setGot
+    add     r4,  r4,  r17 # to absolute address
+.setGot:
+    stwu    r4,  4(r15)
+    subi    r16, r16, 1
     b       .nextGot
 .doneGot:
 
 .if DEBUG
-    mr      r4,  r18
+    lwz     r4,  (offsEntry - _start)(r14)
+    add     r4,  r4,  r14
     addi    r3,  r14, s_aboutToExec - _start
     CALL    OSReport
 .endif
 
     # jump to code
-    mtctr   r18
+    lwz     r4,  (offsEntry - _start)(r14)
+    add     r4,  r4,  r14
+    mtctr   r4
     crclr   4*cr1+eq # not sure, but gcc does this...
     bctrl
 .if DEBUG
     addi    r3,  r14, s_doneExec - _start
     CALL    OSReport
 .endif
-    b       .nextPatch
 
 .done:
 endSub:
@@ -132,7 +113,7 @@ s_noMem:      .string "Out of memory"
 s_file:       .string "debug.bin" # for OSPanic
 .if DEBUG
     s_hello:        .string "hello, cruel world"
-    s_loadedFiles:  .string "Loaded PATCHES.BIN=%08X TAB=%08X"
+    s_gotOffs:      .string "GOT Offs=0x%08X (0x%08X) size=0x%04X"
     s_aboutToExec:  .string "Executing at 0x%08X"
     s_doneExec:     .string "Exec OK!"
 .endif
