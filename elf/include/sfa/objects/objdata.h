@@ -67,15 +67,18 @@ typedef struct PACKED ObjectFileStruct {
 	u32                      flags;              //0x44 ObjFileStructFlags44
 	u16                      shadowType;         //0x48 ObjFileStruct_ShadowType
 	s16                      shadowTexture;      //0x4A
+    s16                      unk4C;              //0x4C
 	u16                      hitbox_flags60;     //0x4E HitboxFlags60
 	s16                      dll_id;             //0x50 DLL_ID
 	u16                      clsId;              //0x52 ObjCatId
+    byte                     unk54;              //0x54
 	byte                     nModels;            //0x55
 	byte                     numPlayerObjs;      //0x56
 	u8                       unk57;              //0x57
 	u8                       nAttachPoints;      //0x58
 	byte                     nTextures;          //0x59
 	u8                       numVecs;            //0x5A
+    byte                     unk5B;              //0x5B
 	byte                     modLinesSize;       //0x5C
 	s8                       modLinesIdx;        //0x5D
 	u8                       numSeqs;            //0x5E
@@ -89,18 +92,20 @@ typedef struct PACKED ObjectFileStruct {
 	byte                     unk66;              //0x66
 	byte                     hitbox_fieldB5;     //0x67
 	short                    hitboxSizeX1;       //0x68
-	word                     hitboxSizeY1;       //0x6A
+	short                    hitboxSizeY1;       //0x6A
 	short                    hitboxSizeZ1;       //0x6C
 	short                    hitboxSizeZ2;       //0x6E
 	byte                     hitbox_fieldB4;     //0x70
 	u8                       flags_0x71;         //0x71
 	byte                     numFocusPoints;     //0x72
 	byte                     cullDistance;       //0x73
+    byte                     unk74;              //0x74
+    byte                     unk75;              //0x75
 	u8                       flags76;            //0x76 ObjectFileStructFlags76
 	byte                     hitboxSizeZ;        //0x77
 	s16                      map;                //0x78 MapDirIdx16
 	s16                      unk7A;              //0x7A
-	s16                      helpTexts;          //0x7C GameTextId
+	s16                      helpTexts[4];       //0x7C GameTextId
 	undefined2               unk84;              //0x84
 	undefined2               unk86;              //0x86
 	float                    lagVar88;           //0x88

@@ -34,6 +34,7 @@ LAB_80137970:
 
     # prepare params for sprintf
     lwz     r3,  (.offs_debugLogEnd - .debugPrintfHook_getpc)(r14)
+    lwz     r3,  0(r3)
     lwz     r4,  0x08(r1)             # must shift all params up one register
     lwz     r5,  0x0C(r1)
     lwz     r6,  0x10(r1)

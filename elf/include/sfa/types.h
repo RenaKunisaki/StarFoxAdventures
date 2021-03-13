@@ -1,11 +1,23 @@
+//XXX move these
 #define PACKED __attribute__((packed))
+#define WRITE8( addr, val) (*(u8*) addr) = (val)
+#define WRITE16(addr, val) (*(u16*)addr) = (val)
+#define WRITE32(addr, val) (*(u32*)addr) = (val)
+#define WRITE64(addr, val) (*(u64*)addr) = (val)
+#define WRITEFLOAT(addr, val) (*(float*)addr) = (val)
+#define WRITEDOUBLE(addr, val) (*(double*)addr) = (val)
+#define READ8( addr) (*(u8* )addr)
+#define READ16(addr) (*(u16*)addr)
+#define READ32(addr) (*(u32*)addr)
+#define READ64(addr) (*(u64*)addr)
+#define READFLOAT(addr) (*(float*)addr)
+#define READDOUBLE(addr) (*(double*)addr)
 
+//predeclare some types
 typedef struct Model Model;
 typedef struct ObjInstance ObjInstance;
 typedef struct Texture Texture;
 typedef struct TextureHeader TextureHeader;
-
-
 
 #include "math.h"
 #include "data/fileids.h"

@@ -67,6 +67,7 @@ typedef struct PACKED ObjInstance {
 	u16                 catId;              //0x44 ObjCatId
 	u16                 defNo;              //0x46 ObjDefEnum
 	short               defNo48;            //0x48
+    short               unk4A;              //0x4A
 	ObjDef             *objDef;             //0x4C
 	ObjectFileStruct   *file;               //0x50
 	HitState           *hitstate;           //0x54
