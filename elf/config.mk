@@ -21,7 +21,7 @@ MKDIR=mkdir -p
 
 GLOBALSYMS = include/$(GAME)/$(GAME)-$(VERSION).sym
 CFLAGS += -mcpu=750 -mhard-float -shared -fpic -fno-exceptions -fno-asynchronous-unwind-tables -mrelocatable -mlongcall -fno-builtin -G0 -O0 -I$(GCBASE) -Iinclude -Iinclude/gc -I$(BUILDDIR)
-ASFLAGS += -I include -mbroadway -mregnames --fatal-warnings
+ASFLAGS += -I include -mbroadway -mregnames -mrelocatable --fatal-warnings
 #LDFLAGS += -nostdlib -Wl,--strip-all -export-dynamic $(LINKSCRIPTS) -Wl,--nmagic -Wl,--no-gc-sections -Wl,--just-symbols=$(GLOBALSYMS)
 LDFLAGS += -nostdlib $(LINKSCRIPTS) -Wl,--nmagic -Wl,--just-symbols=$(GLOBALSYMS)
 

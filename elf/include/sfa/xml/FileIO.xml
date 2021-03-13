@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/SFA/FileIO" name="DataFileEnum" prefix="FILE_" type="u16">
+    <member name="AMAP_BIN" value="0x32"/>
+    <member name="TEXPRE_bin" value="0x4F"/>
+    <member name="MODELS_tab_45" value="0x45"/>
+    <member name="AUDIO_bin" value="0x1"/>
+    <member name="TRKBLK_tab" value="0x27"/>
+    <member name="GAMETEXT_bin" value="0x13"/>
+    <member name="PREANIM_bin" value="0x51"/>
+    <member name="SFX_tab" value="0x2"/>
+    <member name="BLOCKS_tab" value="0x26"/>
+    <member name="ANIMCURV_bin" value="0xD"/>
+    <member name="AUDIO_tab" value="0x0"/>
+    <member name="MAPINFO_bin" value="0x1F"/>
+    <member name="MODELS_bin_46" value="0x46"/>
+    <member name="ANIM_TAB_49" value="0x49"/>
+    <member name="ENVFXACT_bin" value="0x57"/>
+    <member name="VOXMAP_bin_54" value="0x54"/>
+    <member name="TEX1_tab_4C" value="0x4C"/>
+    <member name="PREANIM_tab" value="0x52"/>
+    <member name="TEXTABLE_bin" value="0x22"/>
+    <member name="HITS_tab" value="0x29"/>
+    <member name="ANIMCURV_tab" value="0xE"/>
+    <member name="VOXMAP_tab" value="0x1A"/>
+    <member name="TEX1_bin_4B" value="0x4B"/>
+    <member name="CACHEFON_bin_12" value="0x12"/>
+    <member name="MODANIM_TAB" value="0x2D"/>
+    <member name="OBJINDEX_bin" value="0x3F"/>
+    <member name="HITS_bin" value="0x28"/>
+    <member name="NULL" value="0x58"/>
+    <member name="FONTS_bin" value="0x10"/>
+    <member name="OBJECTS_tab" value="0x3D"/>
+    <member name="ANIMCURV_bin_55" value="0x55"/>
+    <member name="DLLS_bin" value="0x42"/>
+    <member name="ANIMCURV_tab_56" value="0x56"/>
+    <member name="ANIM_TAB" value="0x2F"/>
+    <member name="DLLSIMPO_bin" value="0x44"/>
+    <member name="OBJECTS_bin" value="0x3E"/>
+    <member name="DLLS_tab" value="0x43"/>
+    <member name="MODANIM_BIN" value="0x2E"/>
+    <member name="AMAP_TAB" value="0x31"/>
+    <member name="TABLES_bin" value="0x16"/>
+    <member name="ANIM_BIN_4A" value="0x4A"/>
+    <member name="ANIM_BIN" value="0x30"/>
+    <member name="BLOCKS_bin" value="0x25"/>
+    <member name="CACHEFON_bin" value="0x11"/>
+    <member name="MODLINES_bin" value="0x37"/>
+    <member name="SCREENS_tab" value="0x19"/>
+    <member name="MPEG_tab" value="0x8"/>
+    <member name="MUSICACT_bin" value="0xA"/>
+    <member name="TEX1_bin" value="0x20"/>
+    <member name="MUSIC_bin" value="0x7"/>
+    <member name="MODELIND_bin" value="0x2C"/>
+    <member name="SCREENS_bin" value="0x18"/>
+    <member name="TABLES_tab" value="0x17"/>
+    <member name="BLOCKS_bin_47" value="0x47"/>
+    <member name="WARPTAB_bin" value="0x1C"/>
+    <member name="WEAPONDA_bin" value="0x34"/>
+    <member name="BITTABLE_bin" value="0x33"/>
+    <member name="LACTIONS_bin" value="0xC"/>
+    <member name="OBJSEQ2C_tab" value="0xF"/>
+    <member name="TEX1_tab" value="0x21"/>
+    <member name="VOXOBJ_bin" value="0x36"/>
+    <member name="NULL_59" value="0x59"/>
+    <member name="VOXOBJ_tab" value="0x35"/>
+    <member name="CAMACTIO_bin" value="0xB"/>
+    <member name="BLOCKS_tab_48" value="0x48"/>
+    <member name="TEX0_bin_4D" value="0x4D"/>
+    <member name="MAPS_tab" value="0x1E"/>
+    <member name="TEX0_tab" value="0x24"/>
+    <member name="VOXMAP_tab_53" value="0x53"/>
+    <member name="MODELS_bin" value="0x2B"/>
+    <member name="TEX0_tab_4E" value="0x4E"/>
+    <member name="MAPS_bin" value="0x1D"/>
+    <member name="OBJEVENT_bin" value="0x40"/>
+    <member name="VOXMAP_bin" value="0x1B"/>
+    <member name="SAVEGAME_tab" value="0x3A"/>
+    <member name="SAVEGAME_bin" value="0x39"/>
+    <member name="globalma_bin" value="0x15"/>
+    <member name="AMBIENT_bin" value="0x5"/>
+    <member name="MODLINES_tab" value="0x38"/>
+    <member name="MPEG_bin" value="0x9"/>
+    <member name="OBJHITS_bin" value="0x41"/>
+    <member name="OBJSEQ_bin" value="0x3B"/>
+    <member name="GAMETEXT_tab" value="0x14"/>
+    <member name="TEXPRE_tab" value="0x50"/>
+    <member name="TEX0_bin" value="0x23"/>
+    <member name="SFX_bin" value="0x3"/>
+    <member name="MODELS_tab" value="0x2A"/>
+    <member name="OBJSEQ_tab" value="0x3C"/>
+    <member name="MUSIC_tab" value="0x6"/>
+    <member name="AMBIENT_tab" value="0x4"/>
+  </enum>
+  <enum category="/SFA/FileIO" name="DataFileLoadedFlags" prefix="FILE_LOADED_" type="u32">
+    <member name="TEX0TAB2" value="0x800"/>
+    <member name="TEX0TAB1" value="0x400"/>
+    <member name="BLOCKSTAB1" value="0x20000"/>
+    <member name="BLOCKSTAB2" value="0x80000"/>
+    <member name="VOXMAPTAB2" value="0x8000000"/>
+    <member name="TEX1TAB1" value="0x4000"/>
+    <member name="VOXMAPTAB1" value="0x2000000"/>
+    <member name="TEX1TAB2" value="0x8000"/>
+    <member name="ANIMCURV2" value="0x40000000"/>
+    <member name="ANIMCURV1" value="0x10000000"/>
+    <member name="VOXMAP1" value="0x1000000"/>
+    <member name="VOXMAP2" value="0x4000000"/>
+    <member name="ANIMCURVTAB1" value="0x20000000"/>
+    <member name="ANIMCURVTAB2" value="0x80000000"/>
+    <member name="ANIMTAB1" value="0x40"/>
+    <member name="MODELS2" value="0x2"/>
+    <member name="ANIMTAB2" value="0x80"/>
+    <member name="BLOCKS2" value="0x40000"/>
+    <member name="MODELS1" value="0x1"/>
+    <member name="BLOCKS1" value="0x10000"/>
+    <member name="TEX0_2" value="0x200"/>
+    <member name="TEX1_1" value="0x1000"/>
+    <member name="TEX1_2" value="0x2000"/>
+    <member name="TEX0_1" value="0x100"/>
+    <member name="ANIM1" value="0x10"/>
+    <member name="ANIM2" value="0x20"/>
+    <member name="MODELSTAB1" value="0x4"/>
+    <member name="MODELSTAB2" value="0x8"/>
+  </enum>
+  <struct category="/SFA/FileIO" name="DataFileStruct">
+    <field name="next" offset="0x0" type="DataFileStruct*"/>
+    <field name="data" offset="0x4" type="void*"/>
+    <field name="callback" offset="0x8" type="void*"/>
+    <field name="size" offset="0xC" type="int"/>
+  </struct>
+  <funcdef category="/SFA/FileIO" name="fileCb">
+    <return type="undefined"/>
+    <params>
+      <param reg="r3" type="DVDFileInfo*"/>
+      <param reg="r4" type="undefined1"/>
+    </params>
+  </funcdef>
+  <enum category="/SFA/FileIO" name="LoadingFlagsEnum" prefix="LoadingFlagsEnum_" type="u32">
+    <member name="LOADING_LOCKED" value="0x100000"/>
+  </enum>
+  <struct category="/SFA/FileIO" name="ZlbHeader">
+    <field count="4" name="signature" offset="0x0" type="char"/>
+    <field name="version" offset="0x4" type="u32"/>
+    <field name="decLen" offset="0x8" type="u32"/>
+    <field name="compLen" offset="0xC" type="u32"/>
+  </struct>
+</types>

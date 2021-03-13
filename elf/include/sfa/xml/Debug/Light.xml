@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/SFA/Debug/Light" name="LightAdjustFlags" prefix="LightAdjustFlags_" type="u8">
+    <member name="DEC_MODE" value="0x4"/>
+    <member name="DEC_VALUE" value="0x1"/>
+    <member name="INC_VALUE" value="0x2"/>
+    <member name="TOGGLE_FIELD_0xC" value="0x10"/>
+    <member name="INC_MODE" value="0x8"/>
+  </enum>
+  <enum category="/SFA/Debug/Light" name="LightModeEnum" prefix="LightModeEnum_" type="u8">
+    <member name="DIFFUSE_GREEN" value="0x3"/>
+    <member name="DIFFUSE_RED" value="0x2"/>
+    <member name="DIFFUSE_BLUE" value="0x4"/>
+    <member name="SPECULAR_GREEN" value="0x6"/>
+    <member name="SPECULAR_RED" value="0x5"/>
+    <member name="PITCH" value="0x1"/>
+    <member name="SPECULAR_BLUE" value="0x7"/>
+    <member name="YAW" value="0x0"/>
+  </enum>
+</types>

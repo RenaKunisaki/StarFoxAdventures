@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/SFA/Game/GameObject" name="AssetTypeEnum" prefix="ASSET_TYPE_" type="u8">
+    <member name="CHARACTER" value="0x4"/>
+    <member name="DLL" value="0x5"/>
+    <member name="DUMMY" value="0x6"/>
+    <member name="FILE" value="0x0"/>
+    <member name="TEXTURE" value="0x3"/>
+    <member name="ANIMATION" value="0x7"/>
+    <member name="FILE_WITH_ID" value="0x1"/>
+    <member name="FILE_WITH_ID_SIZE" value="0x2"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject" name="AttachPoint">
+    <field name="pos" offset="0x0" type="vec3f"/>
+    <field name="rot" offset="0xC" type="vec3s"/>
+    <field name="bone" offset="0x12" type="byte"/>
+    <field name="unk13" offset="0x13" type="byte"/>
+    <field name="unk14" offset="0x14" type="byte"/>
+    <field name="unk15" offset="0x15" type="u8"/>
+    <field name="unk16" offset="0x16" type="u8"/>
+    <field name="unk17" offset="0x17" type="u8"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject" name="BaddieFlags02DC" prefix="BaddieFlags02DC_" type="u32">
+    <member name="MoveOnZAxisWhileFrozen" value="0x40"/>
+    <member name="TargetIsTricky" value="0x200000"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject" name="ItemType" prefix="ItemType_" type="u32">
+    <member name="MidHealthPickup" value="0x2"/>
+    <member name="GenericItem" value="0xFF"/>
+    <member name="BigHealthPickup" value="0x3"/>
+    <member name="SmallHealthPickup" value="0x1"/>
+    <member name="MoonSeed" value="0x6"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject" name="ObjAnimState_60">
+    <field count="7" name="obj00" offset="0x0" type="ObjInstance*"/>
+    <field name="nObjs" offset="0x1C" type="byte"/>
+    <field name="unk1E" offset="0x1E" type="byte"/>
+    <field name="gameBitId" offset="0x20" type="short"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject" name="ObjAnimState61">
+    <field name="unk00" offset="0x0" type="ObjInstance*"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="unk14" offset="0x14" type="byte"/>
+    <field name="unk15" offset="0x15" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject" name="ObjAnimState62">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="unk0F" offset="0xF" type="char"/>
+    <field name="gameBit_0x10" offset="0x10" type="GameBit16"/>
+    <field name="unk14" offset="0x14" type="short"/>
+    <field name="unk1D" offset="0x1D" type="char"/>
+    <field name="unk1E" offset="0x1E" type="char"/>
+    <field name="unk37" offset="0x37" type="byte"/>
+    <field name="frameCountDown_0x3c" offset="0x3C" type="undefined2"/>
+    <field name="unk3E" offset="0x3E" type="char"/>
+    <field name="animTimer_0x44" offset="0x44" type="float"/>
+    <field name="unk48" offset="0x48" type="undefined2"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject" name="ObjCatId" prefix="ObjCatId_" type="u16">
+    <member name="CampFire" value="0x32"/>
+    <member name="StaticCamera" value="0x12"/>
+    <member name="collectible" value="0x6"/>
+    <member name="TrigBits" value="0x1B"/>
+    <member name="MagicCaveTop" value="0x7D"/>
+    <member name="SPShopKeeper" value="0x6F"/>
+    <member name="ShopItem" value="0x70"/>
+    <member name="AppleOnTree" value="0x5D"/>
+    <member name="CCriverflow" value="0x35"/>
+    <member name="TrigButt" value="0x19"/>
+    <member name="SH_thorntail" value="0x44"/>
+    <member name="WaterFallSpray" value="0x73"/>
+    <member name="CFPrisonUncle" value="0x3E"/>
+    <member name="MoonSeedPlantingSpot" value="0x68"/>
+    <member name="TrigPln" value="0x15"/>
+    <member name="texscroll" value="0x21"/>
+    <member name="VisAnimator" value="0x4E"/>
+    <member name="ArwingLevelObj" value="0x7C"/>
+    <member name="PressureSwitch52" value="0x52"/>
+    <member name="TriggSetp" value="0x1A"/>
+    <member name="XYZAnimator" value="0x4D"/>
+    <member name="AreaFXEmit" value="0x67"/>
+    <member name="ProjectedLight" value="0x7B"/>
+    <member name="CmbSrc" value="0x7E"/>
+    <member name="Pushable" value="0x3A"/>
+    <member name="various0030" value="0x30"/>
+    <member name="AlphaAnimator" value="0x49"/>
+    <member name="TrigTime" value="0x18"/>
+    <member name="sideload" value="0x1E"/>
+    <member name="curve" value="0x2C"/>
+    <member name="DFropenode" value="0x36"/>
+    <member name="CloudRunner" value="0x40"/>
+    <member name="MagicPlant" value="0x65"/>
+    <member name="SidekickBall" value="0x3C"/>
+    <member name="AnimatedObj" value="0x10"/>
+    <member name="fallingRock" value="0x28"/>
+    <member name="DigTunnel" value="0x42"/>
+    <member name="TrigPnt" value="0x14"/>
+    <member name="SeqObject" value="0x55"/>
+    <member name="ProjectileSwitch" value="0x51"/>
+    <member name="bombPlant" value="0x2B"/>
+    <member name="DeathGas" value="0x80"/>
+    <member name="fireball" value="0x24"/>
+    <member name="ExplodeAnimator" value="0x4F"/>
+    <member name="InfoPoint" value="0x8"/>
+    <member name="Tricky" value="0x2"/>
+    <member name="KT_Rex" value="0x6D"/>
+    <member name="torch" value="0x1D"/>
+    <member name="StaffActivated" value="0x7A"/>
+    <member name="DummyObject" value="0x0"/>
+    <member name="IceSmash" value="0x50"/>
+    <member name="InfoText" value="0x31"/>
+    <member name="Lock" value="0x54"/>
+    <member name="WaveAnimator" value="0x48"/>
+    <member name="CFPrisonCage" value="0x3F"/>
+    <member name="LFXEmitter" value="0x60"/>
+    <member name="GroundAnimator" value="0x4A"/>
+    <member name="TrigArea" value="0x17"/>
+    <member name="DIM2PathGen" value="0x47"/>
+    <member name="setuppoint" value="0x4"/>
+    <member name="HitAnimator" value="0x4B"/>
+    <member name="WalkCamera" value="0x13"/>
+    <member name="FogControl" value="0x81"/>
+    <member name="Light" value="0x79"/>
+    <member name="LevelControl" value="0x39"/>
+    <member name="Tree" value="0x6A"/>
+    <member name="baddie" value="0x1C"/>
+    <member name="Player" value="0x1"/>
+    <member name="CurveFish" value="0x69"/>
+    <member name="SeqObj2" value="0x56"/>
+    <member name="WallAnimator" value="0x4C"/>
+    <member name="DIMLavaBall" value="0x45"/>
+    <member name="FXEmit" value="0x6B"/>
+    <member name="checkpoint4" value="0x5"/>
+    <member name="mammoth" value="0x26"/>
+    <member name="playerWeapon" value="0x2D"/>
+    <member name="Area" value="0x41"/>
+    <member name="Door53" value="0x53"/>
+    <member name="LevelName" value="0x43"/>
+    <member name="EffectBox" value="0x9"/>
+    <member name="warp" value="0x25"/>
+    <member name="Cannon" value="0x71"/>
+    <member name="PressureSwitch" value="0x33"/>
+    <member name="sfxPlayer" value="0x5C"/>
+    <member name="SPShop" value="0x6E"/>
+    <member name="GuardClaw" value="0x82"/>
+    <member name="bike" value="0x2E"/>
+    <member name="TrigCyl" value="0x16"/>
+    <member name="InvHit" value="0x27"/>
+    <member name="CFPerch" value="0x3D"/>
+    <member name="siderepel" value="0x1F"/>
+    <member name="edibleMushroom" value="0x29"/>
+    <member name="TrigCrve" value="0x3B"/>
+    <member name="various0061" value="0x61"/>
+    <member name="Decorative" value="0x7F"/>
+    <member name="DIMSnowBall" value="0x46"/>
+    <member name="Explodable" value="0x63"/>
+    <member name="IMIcePillar" value="0x66"/>
+    <member name="Door38" value="0x38"/>
+    <member name="WM_Column" value="0x59"/>
+    <member name="IMMultiSeq" value="0x57"/>
+    <member name="ARWGenerator" value="0x78"/>
+    <member name="ObjCreator" value="0x37"/>
+    <member name="Lightning" value="0x83"/>
+    <member name="SkeetlaWall" value="0x72"/>
+    <member name="KT_RexFloorSwitch" value="0x6C"/>
+    <member name="enemyMushroom" value="0x2A"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject" name="object_struct_16">
+    <field name="objID" offset="0x44" type="undefined2"/>
+    <field name="defno" offset="0x46" type="undefined2"/>
+    <field name="unkDC" offset="0xDC" type="uint*"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject" name="ObjInteractType" prefix="ObjInteractType_" type="u8">
+    <member name="Activate" value="0x3"/>
+    <member name="PickUp" value="0x6"/>
+    <member name="UseStaff" value="0x9"/>
+    <member name="UseTricky" value="0x8"/>
+    <member name="Attack" value="0x1"/>
+    <member name="Talk" value="0x2"/>
+    <member name="UseItem" value="0x4"/>
+    <member name="Push" value="0x5"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject" name="ObjListItem">
+    <field name="count" offset="0x0" type="short"/>
+    <field name="length" offset="0x2" type="short"/>
+    <field name="obj" offset="0x4" type="ObjInstance*"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject" name="ObjModLine">
+    <field name="x1" offset="0x0" type="short"/>
+    <field name="x2" offset="0x2" type="short"/>
+    <field name="y1" offset="0x4" type="short"/>
+    <field name="y2" offset="0x6" type="short"/>
+    <field name="z1" offset="0x8" type="short"/>
+    <field name="z2" offset="0xA" type="short"/>
+    <field name="unk0C" offset="0xC" type="undefined1"/>
+    <field name="unk0D" offset="0xD" type="undefined1"/>
+    <field name="unk0E" offset="0xE" type="undefined1"/>
+    <field name="unk0F" offset="0xF" type="undefined1"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject" name="ObjSpawnFlags" prefix="ObjSpawnFlags_" type="u32">
+    <member name="KeepLoaded" value="0x1"/>
+    <member name="DontUseObjIndexBin" value="0x2"/>
+    <member name="DontSave" value="0x4"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject" name="ObjState_StaffActivated">
+    <field name="distX" offset="0x0" type="float"/>
+    <field name="distZ" offset="0x4" type="float"/>
+    <field name="flags_1d" offset="0x1D" type="StaffActivatedFlags1D"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject" name="StaffActivatedFlags1D" prefix="StaffActivatedFlags1D_" type="u8">
+    <member name="Enabled" value="0x40"/>
+    <member name="IsToggled" value="0x20"/>
+    <member name="PowerOn" value="0x80"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject" name="WarpStoneDestination">
+    <field name="bit" offset="0x0" type="GameBit16"/>
+    <field name="actNo" offset="0x2" type="u8"/>
+    <field name="padding" offset="0x3" type="u8"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject" name="WarpStoneState" prefix="WarpStoneState_" type="u8">
+    <member name="AreYouReadyToWarp" value="0x4"/>
+    <member name="AreYouReadyToGoKP" value="0x3"/>
+    <member name="ShowMenu" value="0x1"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject" name="wmSeqpointStruct1">
+    <field name="bit" offset="0x0" type="GameBit"/>
+    <field name="objId" offset="0x4" type="ObjUniqueId"/>
+  </struct>
+</types>

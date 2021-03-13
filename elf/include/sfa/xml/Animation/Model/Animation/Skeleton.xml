@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Animation/Model/Animation/Skeleton" name="Bone">
+    <field name="parent" offset="0x0" type="s8"/>
+    <field count="3" name="idx" offset="0x1" type="byte"/>
+    <field name="translation" offset="0x4" type="vec3f"/>
+    <field name="bindTranslation" offset="0x10" type="vec3f"/>
+  </struct>
+  <struct category="/SFA/Animation/Model/Animation/Skeleton" name="BoneStruct_59">
+    <field name="pHead" offset="0x0" type="float**"/>
+    <field name="pTail" offset="0x4" type="float**"/>
+    <field name="maybeHead" offset="0x8" type="vec3f"/>
+    <field name="maybeTail" offset="0x14" type="vec3f"/>
+    <field name="unk20" offset="0x20" type="vec3f"/>
+    <field name="unk2C" offset="0x2C" type="float*"/>
+    <field name="unk30" offset="0x30" type="float"/>
+    <field name="dist" offset="0x34" type="float*"/>
+    <field name="unk38" offset="0x38" type="float*"/>
+    <field name="oneOverField30" offset="0x3C" type="float*"/>
+    <field name="iBone" offset="0x40" type="int"/>
+    <field name="iMtx" offset="0x44" type="float*"/>
+  </struct>
+  <struct category="/SFA/Animation/Model/Animation/Skeleton" name="BoneTransformResult">
+    <field name="next" offset="0x0" type="short*"/>
+    <field name="pos" offset="0x4" type="vec3s"/>
+  </struct>
+</types>

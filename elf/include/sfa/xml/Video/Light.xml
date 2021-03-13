@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Video/Light" name="Light">
+    <field name="diffuseRed" offset="0x0" type="u8"/>
+    <field name="diffuseGreen" offset="0x1" type="u8"/>
+    <field name="diffuseBlue" offset="0x2" type="u8"/>
+    <field name="specularRed" offset="0x4" type="u8"/>
+    <field name="specularGreen" offset="0x5" type="u8"/>
+    <field name="specularBlue" offset="0x6" type="u8"/>
+    <field name="unk08" offset="0x8" type="ObjLight*"/>
+    <field name="mode" offset="0xD" type="LightModeEnum"/>
+    <field name="unk0E" offset="0xE" type="u8"/>
+  </struct>
+</types>

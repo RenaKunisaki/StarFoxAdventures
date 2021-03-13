@@ -1,0 +1,531 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/auto_structs" name="astruct">
+    <field name="unk00" offset="0x0" type="int"/>
+    <field name="unk04" offset="0x4" type="int"/>
+    <field name="unk08" offset="0x8" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_1">
+    <field name="unk00" offset="0x0" type="vec3s"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="unk14" offset="0x14" type="float"/>
+    <field name="unk40" offset="0x40" type="float"/>
+    <field name="unk44" offset="0x44" type="float"/>
+    <field name="unk48" offset="0x48" type="float"/>
+    <field name="unk4C" offset="0x4C" type="float"/>
+    <field name="unk50" offset="0x50" type="undefined2"/>
+    <field name="unk52" offset="0x52" type="undefined2"/>
+    <field name="unk54" offset="0x54" type="undefined2"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_10">
+    <field name="callback" offset="0x28" type="void*"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_11">
+    <field name="unk44" offset="0x44" type="dword"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_12">
+    <field name="unk04" offset="0x4" type="float*"/>
+    <field name="unk08" offset="0x8" type="int"/>
+    <field name="unk0C" offset="0xC" type="float*"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_13"/>
+  <struct category="/auto_structs" name="astruct_14">
+    <field name="unk00" offset="0x0" type="char*"/>
+    <field name="unk08" offset="0x8" type="undefined4"/>
+    <field name="unk0C" offset="0xC" type="undefined4"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_15">
+    <field name="obj" offset="0x0" type="ObjInstance*"/>
+    <field name="unk04" offset="0x4" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_16">
+    <field name="unk18" offset="0x18" type="float"/>
+    <field name="unk1C" offset="0x1C" type="float"/>
+    <field name="unk20" offset="0x20" type="float"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_17"/>
+  <struct category="/auto_structs" name="astruct_18"/>
+  <struct category="/auto_structs" name="astruct_19">
+    <field name="unk04" offset="0x4" type="undefined4"/>
+    <field name="unk08" offset="0x8" type="undefined4"/>
+    <field name="unk0C" offset="0xC" type="undefined4"/>
+    <field name="unk10" offset="0x10" type="undefined4"/>
+    <field name="unk14" offset="0x14" type="undefined4"/>
+    <field name="unk18" offset="0x18" type="undefined4"/>
+    <field name="unk1C" offset="0x1C" type="int"/>
+    <field name="unk20" offset="0x20" type="int"/>
+    <field name="unk24" offset="0x24" type="int"/>
+    <field name="unk28" offset="0x28" type="int"/>
+    <field name="unk34" offset="0x34" type="undefined4"/>
+    <field name="unk38" offset="0x38" type="undefined4"/>
+    <field name="unk3C" offset="0x3C" type="undefined4"/>
+    <field name="unk40" offset="0x40" type="undefined4"/>
+    <field name="unk44" offset="0x44" type="undefined2"/>
+    <field name="unk46" offset="0x46" type="undefined2"/>
+    <field name="unk48" offset="0x48" type="undefined2"/>
+    <field name="unk4A" offset="0x4A" type="undefined2"/>
+    <field name="unk58" offset="0x58" type="undefined2"/>
+    <field name="unk5A" offset="0x5A" type="undefined2"/>
+    <field name="unk5C" offset="0x5C" type="undefined2"/>
+    <field name="unk5E" offset="0x5E" type="undefined2"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_2"/>
+  <struct category="/auto_structs" name="astruct_20">
+    <field name="unk00" offset="0x0" type="undefined2"/>
+    <field name="unk02" offset="0x2" type="undefined2"/>
+    <field name="unk04" offset="0x4" type="undefined2"/>
+    <field name="unk0C" offset="0xC" type="undefined4"/>
+    <field name="unk10" offset="0x10" type="undefined4"/>
+    <field name="unk14" offset="0x14" type="undefined4"/>
+    <field name="unk4C" offset="0x4C" type="int"/>
+    <field name="unkB8" offset="0xB8" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_21">
+    <field name="flags" offset="0x2" type="ushort"/>
+    <field name="modno" offset="0x4" type="ushort"/>
+    <field name="offset" offset="0x64" type="int"/>
+    <field name="fileId" offset="0x6C" type="int"/>
+    <field name="unkEC" offset="0xEC" type="ushort"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_22">
+    <field name="unk14" offset="0x14" type="float"/>
+    <field name="unk3C" offset="0x3C" type="int"/>
+    <field name="unk48" offset="0x48" type="ushort"/>
+    <field name="unk4A" offset="0x4A" type="short"/>
+    <field name="unk5A" offset="0x5A" type="undefined2"/>
+    <field name="unk60" offset="0x60" type="char"/>
+    <field name="unk62" offset="0x62" type="char"/>
+    <field name="unk64" offset="0x64" type="short"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_23">
+    <field name="unk02" offset="0x2" type="ushort"/>
+    <field name="unk04" offset="0x4" type="short"/>
+    <field name="unk64" offset="0x64" type="int"/>
+    <field name="unk6C" offset="0x6C" type="short*"/>
+    <field name="unk80" offset="0x80" type="int"/>
+    <field name="unkEC" offset="0xEC" type="short"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_24">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk02" offset="0x2" type="short"/>
+    <field name="unk04" offset="0x4" type="short"/>
+    <field name="unk06" offset="0x6" type="short"/>
+    <field name="unk08" offset="0x8" type="short"/>
+    <field name="unk0A" offset="0xA" type="short"/>
+    <field name="unk0C" offset="0xC" type="short"/>
+    <field name="time" offset="0xE" type="short"/>
+    <field name="unk12" offset="0x12" type="char"/>
+    <field name="unk14" offset="0x14" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_25">
+    <field name="unk00" offset="0x0" type="int"/>
+    <field name="unk08" offset="0x8" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_26"/>
+  <struct category="/auto_structs" name="astruct_27">
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="float"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_28"/>
+  <struct category="/auto_structs" name="astruct_29">
+    <field name="unk10" offset="0x10" type="int"/>
+    <field name="unk54" offset="0x54" type="float"/>
+    <field name="unk60" offset="0x60" type="float"/>
+    <field name="unk328" offset="0x328" type="float"/>
+    <field name="unk32C" offset="0x32C" type="float"/>
+    <field name="unk330" offset="0x330" type="float"/>
+    <field name="unk398" offset="0x398" type="int"/>
+    <field name="unk39C" offset="0x39C" type="undefined4"/>
+    <field name="unk3A0" offset="0x3A0" type="undefined4"/>
+    <field name="unk3A8" offset="0x3A8" type="float"/>
+    <field name="unk3AC" offset="0x3AC" type="float"/>
+    <field name="unk3B0" offset="0x3B0" type="float"/>
+    <field name="unk3E4" offset="0x3E4" type="float"/>
+    <field name="unk3E8" offset="0x3E8" type="float"/>
+    <field name="Rtrig" offset="0x3EC" type="float"/>
+    <field name="Ltrig" offset="0x3F0" type="float"/>
+    <field name="buttonsPressed" offset="0x3F4" type="GamepadButton"/>
+    <field name="buttons_0x3f6" offset="0x3F6" type="GamepadButton"/>
+    <field name="buttonsHeld" offset="0x3F8" type="GamepadButton"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_3">
+    <field name="idx" offset="0x18" type="short"/>
+    <field name="seqNo" offset="0x1F" type="u8"/>
+    <field name="unk22" offset="0x22" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_30">
+    <field name="unk360" offset="0x360" type="uint"/>
+    <field name="stickX" offset="0x6D0" type="uint"/>
+    <field name="stickY" offset="0x6D4" type="uint"/>
+    <field name="unk6D8" offset="0x6D8" type="float"/>
+    <field name="unk6DC" offset="0x6DC" type="float"/>
+    <field name="buttonsHeld" offset="0x6E0" type="GamepadButton"/>
+    <field name="buttonsPressed" offset="0x6E2" type="GamepadButton"/>
+    <field name="buttonsPressedNotBusy" offset="0x6E4" type="short"/>
+    <field name="unk81A" offset="0x81A" type="short"/>
+    <field name="unk8C8" offset="0x8C8" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_31">
+    <field name="unk00" offset="0x0" type="uint"/>
+    <field name="unkBC" offset="0xBC" type="char"/>
+    <field name="unk25F" offset="0x25F" type="char"/>
+    <field name="unk28C" offset="0x28C" type="float"/>
+    <field name="unk290" offset="0x290" type="float"/>
+    <field name="unk314" offset="0x314" type="uint"/>
+    <field name="buttonsHeld" offset="0x318" type="GamepadButton32"/>
+    <field name="buttonsPressed" offset="0x31C" type="GamepadButton32"/>
+    <field name="unk330" offset="0x330" type="undefined2"/>
+    <field name="unkA88" offset="0xA88" type="undefined2"/>
+    <field name="unkA8A" offset="0xA8A" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_32">
+    <field name="unk00" offset="0x0" type="uint"/>
+    <field name="unk19C" offset="0x19C" type="short"/>
+    <field name="unk19E" offset="0x19E" type="short"/>
+    <field name="unk280" offset="0x280" type="float"/>
+    <field name="unk284" offset="0x284" type="float"/>
+    <field name="unk28C" offset="0x28C" type="float"/>
+    <field name="unk290" offset="0x290" type="float"/>
+    <field name="unk298" offset="0x298" type="float"/>
+    <field name="unk29C" offset="0x29C" type="float"/>
+    <field name="buttonsHeld" offset="0x318" type="GamepadButton32"/>
+    <field name="buttonsPressed" offset="0x31C" type="GamepadButton32"/>
+    <field name="unk330" offset="0x330" type="short"/>
+    <field name="unkFD0" offset="0xFD0" type="undefined2"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_33">
+    <field name="unk00" offset="0x0" type="uint"/>
+    <field name="unk28C" offset="0x28C" type="float"/>
+    <field name="unk290" offset="0x290" type="float"/>
+    <field name="unk314" offset="0x314" type="uint"/>
+    <field name="buttonsHeld" offset="0x318" type="GamepadButton32"/>
+    <field name="buttonsPressed" offset="0x31C" type="GamepadButton32"/>
+    <field name="unk330" offset="0x330" type="undefined2"/>
+    <field name="unkB50" offset="0xB50" type="uint"/>
+    <field name="unkBB2" offset="0xBB2" type="char"/>
+    <field name="unkBC0" offset="0xBC0" type="byte"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_34">
+    <field name="data" offset="0x0" type="void*"/>
+    <field name="data4" offset="0x4" type="void*"/>
+    <field name="size" offset="0x8" type="int"/>
+    <field name="idx" offset="0xC" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_35">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="unk7C" offset="0x7C" type="int"/>
+    <field name="unkAD" offset="0xAD" type="char"/>
+    <field name="flags_0xb0" offset="0xB0" type="ushort"/>
+    <field name="unkB8" offset="0xB8" type="char**"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_36">
+    <field name="flags_0xb0" offset="0xB0" type="ushort"/>
+    <field name="unkB8" offset="0xB8" type="int*"/>
+    <field name="fptr_0xbc" offset="0xBC" type="pointer"/>
+    <field name="loadingFlag" offset="0xF4" type="undefined4"/>
+    <field name="gameBitF33" offset="0xF8" type="uint"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_37">
+    <field name="unk1A" offset="0x1A" type="undefined2"/>
+    <field name="gameBitIdx" offset="0x1E" type="short"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_38">
+    <field name="unk820" offset="0x820" type="float"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_39">
+    <field name="offsR" offset="0x78" type="byte"/>
+    <field name="offsG" offset="0x79" type="byte"/>
+    <field name="offsB" offset="0x7A" type="byte"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_4">
+    <field name="unk00" offset="0x0" type="astruct_4*"/>
+    <field name="unk40" offset="0x40" type="char*"/>
+    <field name="unk48" offset="0x48" type="char"/>
+    <field name="unk49" offset="0x49" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_41">
+    <field name="pObj" offset="0x0" type="int"/>
+    <field name="unk04" offset="0x4" type="int"/>
+    <field name="unk20" offset="0x20" type="byte"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_42">
+    <field name="blocks" offset="0x0" type="MapBlock2*"/>
+    <field name="unk0C" offset="0xC" type="undefined4"/>
+    <field name="unk10" offset="0x10" type="undefined4"/>
+    <field name="unk14" offset="0x14" type="undefined4"/>
+    <field name="unk18" offset="0x18" type="undefined4"/>
+    <field name="unk1C" offset="0x1C" type="undefined4"/>
+    <field name="unk20" offset="0x20" type="undefined4"/>
+    <field name="unk24" offset="0x24" type="undefined4"/>
+    <field name="unk28" offset="0x28" type="undefined4"/>
+    <field name="unk2C" offset="0x2C" type="pointer"/>
+    <field name="unk30" offset="0x30" type="undefined4"/>
+    <field name="unk34" offset="0x34" type="undefined4"/>
+    <field name="unk38" offset="0x38" type="undefined4"/>
+    <field name="unk3C" offset="0x3C" type="undefined4"/>
+    <field name="unk40" offset="0x40" type="undefined4"/>
+    <field name="unk44" offset="0x44" type="undefined4"/>
+    <field name="unk48" offset="0x48" type="undefined4"/>
+    <field name="unk4C" offset="0x4C" type="undefined4"/>
+    <field name="unk50" offset="0x50" type="undefined4"/>
+    <field name="unk54" offset="0x54" type="undefined4"/>
+    <field name="unk58" offset="0x58" type="undefined4"/>
+    <field name="unk5C" offset="0x5C" type="undefined4"/>
+    <field name="unk60" offset="0x60" type="undefined4"/>
+    <field name="unk64" offset="0x64" type="undefined4"/>
+    <field name="unk68" offset="0x68" type="undefined4"/>
+    <field name="unk6C" offset="0x6C" type="undefined4"/>
+    <field name="unk70" offset="0x70" type="undefined4"/>
+    <field name="unk74" offset="0x74" type="undefined4"/>
+    <field name="unk78" offset="0x78" type="undefined4"/>
+    <field name="unk7C" offset="0x7C" type="undefined4"/>
+    <field name="unk80" offset="0x80" type="undefined4"/>
+    <field name="unk84" offset="0x84" type="undefined4"/>
+    <field name="unk88" offset="0x88" type="undefined4"/>
+    <field name="unk8C" offset="0x8C" type="undefined4"/>
+    <field name="unk90" offset="0x90" type="undefined4"/>
+    <field name="unk94" offset="0x94" type="undefined4"/>
+    <field name="unk98" offset="0x98" type="undefined4"/>
+    <field name="unk9C" offset="0x9C" type="undefined4"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_43">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk02" offset="0x2" type="short"/>
+    <field name="unk04" offset="0x4" type="short"/>
+    <field name="unk08" offset="0x8" type="short"/>
+    <field name="unk10" offset="0x10" type="short"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_44">
+    <field name="unk03" offset="0x3" type="byte"/>
+    <field name="unk04" offset="0x4" type="short"/>
+    <field name="unk0C" offset="0xC" type="short"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_45">
+    <field count="10" name="actions" offset="0x81" type="byte"/>
+    <field name="numActions" offset="0x8B" type="byte"/>
+    <field name="unkE8" offset="0xE8" type="pointer"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_46">
+    <field name="animSpeed" offset="0x2A0" type="float"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_47">
+    <field name="flags_0x0" offset="0x0" type="uint"/>
+    <field name="unk19C" offset="0x19C" type="short"/>
+    <field name="unk1B0" offset="0x1B0" type="float"/>
+    <field name="unk262" offset="0x262" type="char"/>
+    <field name="unk264" offset="0x264" type="byte"/>
+    <field name="unk274" offset="0x274" type="short"/>
+    <field name="unk278" offset="0x278" type="undefined2"/>
+    <field name="unk27A" offset="0x27A" type="char"/>
+    <field name="unk280" offset="0x280" type="float"/>
+    <field name="unk284" offset="0x284" type="float"/>
+    <field name="unk294" offset="0x294" type="undefined4"/>
+    <field name="unk298" offset="0x298" type="float"/>
+    <field name="unk2A0" offset="0x2A0" type="float"/>
+    <field name="unk2D0" offset="0x2D0" type="int"/>
+    <field name="unk308" offset="0x308" type="undefined4"/>
+    <field name="unk310" offset="0x310" type="uint"/>
+    <field name="unk314" offset="0x314" type="uint"/>
+    <field name="unk346" offset="0x346" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_48">
+    <field name="unk00" offset="0x0" type="uint"/>
+    <field name="unk04" offset="0x4" type="uint"/>
+    <field name="unk38" offset="0x38" type="uint"/>
+    <field name="unk3C" offset="0x3C" type="uint"/>
+    <field name="unk40" offset="0x40" type="uint"/>
+    <field name="unkA8" offset="0xA8" type="uint"/>
+    <field name="unk240" offset="0x240" type="int"/>
+    <field name="unk244" offset="0x244" type="int"/>
+    <field name="unk248" offset="0x248" type="int"/>
+    <field name="unk24C" offset="0x24C" type="int"/>
+    <field name="unk250" offset="0x250" type="int"/>
+    <field name="unk254" offset="0x254" type="int"/>
+    <field name="unk258" offset="0x258" type="byte"/>
+    <field name="unk25B" offset="0x25B" type="char"/>
+    <field name="unk25C" offset="0x25C" type="byte"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_49">
+    <field name="unk00" offset="0x0" type="uint"/>
+    <field name="unk04" offset="0x4" type="uint"/>
+    <field name="unkDC" offset="0xDC" type="uint"/>
+    <field name="unk25F" offset="0x25F" type="char"/>
+    <field name="unk262" offset="0x262" type="char"/>
+    <field name="unk264" offset="0x264" type="byte"/>
+    <field name="unk274" offset="0x274" type="short"/>
+    <field name="unk280" offset="0x280" type="float"/>
+    <field name="unk294" offset="0x294" type="uint"/>
+    <field name="unk298" offset="0x298" type="uint"/>
+    <field name="unk34D" offset="0x34D" type="char"/>
+    <field name="unk360" offset="0x360" type="uint"/>
+    <field name="unk3DC" offset="0x3DC" type="uint"/>
+    <field name="unk3F0" offset="0x3F0" type="byte"/>
+    <field name="unk3F2" offset="0x3F2" type="byte"/>
+    <field name="unk3F4" offset="0x3F4" type="byte"/>
+    <field name="unk404" offset="0x404" type="uint"/>
+    <field name="unk410" offset="0x410" type="float"/>
+    <field name="unk478" offset="0x478" type="u16"/>
+    <field name="unk484" offset="0x484" type="u16"/>
+    <field name="unk4C0" offset="0x4C0" type="uint"/>
+    <field name="unk7D8" offset="0x7D8" type="float"/>
+    <field name="unk7F0" offset="0x7F0" type="uint"/>
+    <field name="unk820" offset="0x820" type="uint"/>
+    <field name="unk828" offset="0x828" type="float"/>
+    <field name="unk890" offset="0x890" type="uint"/>
+    <field name="unk894" offset="0x894" type="uint"/>
+    <field name="unk8A9" offset="0x8A9" type="byte"/>
+    <field name="unk8AB" offset="0x8AB" type="char"/>
+    <field name="unk8AD" offset="0x8AD" type="byte"/>
+    <field name="unk8CD" offset="0x8CD" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_5">
+    <field name="unk04" offset="0x4" type="Texture*"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_50">
+    <field name="unk1B0" offset="0x1B0" type="float"/>
+    <field name="unk280" offset="0x280" type="float"/>
+    <field name="unk284" offset="0x284" type="float"/>
+    <field name="unk294" offset="0x294" type="float"/>
+    <field name="fallDmgRecoverTime" offset="0x2A0" type="float"/>
+    <field name="unk314" offset="0x314" type="uint"/>
+    <field name="unk346" offset="0x346" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_51">
+    <field name="unk1B0" offset="0x1B0" type="float"/>
+    <field name="unk274" offset="0x274" type="short"/>
+    <field name="unk280" offset="0x280" type="float"/>
+    <field name="unk284" offset="0x284" type="float"/>
+    <field name="unk2A0" offset="0x2A0" type="float"/>
+    <field name="unk2D0" offset="0x2D0" type="int"/>
+    <field name="fptr_0x308" offset="0x308" type="undefined4"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_52">
+    <field name="unk00" offset="0x0" type="uint"/>
+    <field name="unk04" offset="0x4" type="uint"/>
+    <field name="unk08" offset="0x8" type="uint"/>
+    <field name="unk0C" offset="0xC" type="uint"/>
+    <field name="unk10" offset="0x10" type="uint"/>
+    <field name="unk14" offset="0x14" type="uint"/>
+    <field name="unk18" offset="0x18" type="uint"/>
+    <field name="unk1C" offset="0x1C" type="uint"/>
+    <field name="unk20" offset="0x20" type="uint"/>
+    <field name="unk24" offset="0x24" type="uint"/>
+    <field name="unk28" offset="0x28" type="uint"/>
+    <field name="unk2C" offset="0x2C" type="uint"/>
+    <field name="unk30" offset="0x30" type="uint"/>
+    <field name="unk34" offset="0x34" type="uint"/>
+    <field name="unk38" offset="0x38" type="uint"/>
+    <field name="unk3C" offset="0x3C" type="uint"/>
+    <field name="unk40" offset="0x40" type="uint"/>
+    <field name="unk44" offset="0x44" type="uint"/>
+    <field name="unk48" offset="0x48" type="uint"/>
+    <field name="unk4C" offset="0x4C" type="uint"/>
+    <field name="unk50" offset="0x50" type="uint"/>
+    <field name="unk54" offset="0x54" type="uint"/>
+    <field name="unk58" offset="0x58" type="uint"/>
+    <field name="unk5C" offset="0x5C" type="uint"/>
+    <field name="unk60" offset="0x60" type="uint"/>
+    <field name="unk64" offset="0x64" type="uint"/>
+    <field name="unk68" offset="0x68" type="uint"/>
+    <field name="unk6C" offset="0x6C" type="uint"/>
+    <field name="unk70" offset="0x70" type="uint"/>
+    <field name="unk74" offset="0x74" type="uint"/>
+    <field name="unk78" offset="0x78" type="uint"/>
+    <field name="unk7C" offset="0x7C" type="uint"/>
+    <field name="lastCurveOrCheckpoint" offset="0x80" type="uint"/>
+    <field name="curveOrCheckpoint" offset="0x84" type="u32"/>
+    <field name="unk88" offset="0x88" type="uint"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_53">
+    <field name="skyPos" offset="0x8" type="short"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_54">
+    <field name="nVtxs" offset="0x2" type="ushort"/>
+    <field name="vtxOffs_0xc" offset="0xC" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_59"/>
+  <struct category="/auto_structs" name="astruct_6">
+    <field name="unk10" offset="0x10" type="byte"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_61">
+    <field name="unk0C" offset="0xC" type="short"/>
+    <field name="unk18" offset="0x18" type="short"/>
+    <field name="unk1A" offset="0x1A" type="undefined2"/>
+    <field name="unk24" offset="0x24" type="byte"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_62">
+    <field name="unk00" offset="0x0" type="undefined4"/>
+    <field name="rawSize" offset="0x4" type="int"/>
+    <field name="compSize" offset="0x8" type="int"/>
+    <field count="19" name="unk0C" offset="0xC" type="uint"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_63"/>
+  <struct category="/auto_structs" name="astruct_64">
+    <field name="unk29C" offset="0x29C" type="int"/>
+    <field name="unk2A8" offset="0x2A8" type="float"/>
+    <field name="unk324" offset="0x324" type="float"/>
+    <field name="unk328" offset="0x328" type="float"/>
+    <field name="unk32C" offset="0x32C" type="float"/>
+    <field name="timer_0x330" offset="0x330" type="float"/>
+    <field name="timer_0x334" offset="0x334" type="float"/>
+    <field name="unk338" offset="0x338" type="ushort"/>
+    <field name="unk33A" offset="0x33A" type="byte"/>
+    <field name="unk33B" offset="0x33B" type="byte"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_66">
+    <field name="map" offset="0x0" type="MapId8"/>
+    <field name="bit" offset="0x1" type="byte"/>
+    <field name="count" offset="0x2" type="byte"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_68">
+    <field name="x1" offset="0x0" type="short"/>
+    <field name="x2" offset="0x2" type="short"/>
+    <field name="y1" offset="0x4" type="short"/>
+    <field name="y2" offset="0x6" type="short"/>
+    <field name="unk08" offset="0x8" type="char"/>
+    <field name="unk09" offset="0x9" type="char"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_69">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk02" offset="0x2" type="short"/>
+    <field name="unk04" offset="0x4" type="undefined2"/>
+    <field name="unk06" offset="0x6" type="undefined2"/>
+    <field name="unk0C" offset="0xC" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_7">
+    <field name="ptr" offset="0x4" type="ushort*"/>
+    <field name="count" offset="0xC" type="int"/>
+    <field name="type" offset="0x1C" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_70">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk02" offset="0x2" type="short"/>
+    <field name="unk04" offset="0x4" type="undefined2"/>
+    <field name="unk06" offset="0x6" type="undefined2"/>
+    <field name="unk0C" offset="0xC" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_71">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk02" offset="0x2" type="short"/>
+    <field name="unk04" offset="0x4" type="undefined2"/>
+    <field name="unk06" offset="0x6" type="undefined2"/>
+    <field name="unk0C" offset="0xC" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_73">
+    <field name="rotX" offset="0x18" type="char"/>
+    <field name="unk1A" offset="0x1A" type="short"/>
+    <field name="unk1C" offset="0x1C" type="short"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_8">
+    <field name="unk274" offset="0x274" type="short"/>
+    <field name="unk360" offset="0x360" type="uint"/>
+    <field name="unk7C8" offset="0x7C8" type="float"/>
+    <field name="unk7F0" offset="0x7F0" type="int"/>
+  </struct>
+  <struct category="/auto_structs" name="astruct_9">
+    <field name="unk08" offset="0x8" type="undefined4"/>
+    <field name="unk0C" offset="0xC" type="int"/>
+  </struct>
+</types>

@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Game/GameObject/ObjFile" name="ObjectFileStruct">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="scale" offset="0x4" type="float"/>
+    <field name="pModelList" offset="0x8" type="u32*"/>
+    <field name="textures" offset="0xC" type="pointer"/>
+    <field name="unk10" offset="0x10" type="pointer"/>
+    <field name="unk14" offset="0x14" type="pointer"/>
+    <field name="offset_0x18" offset="0x18" type="ObjSeqCmd*"/>
+    <field name="pSeq" offset="0x1C" type="u16*"/>
+    <field name="pEvent" offset="0x20" type="undefined*"/>
+    <field name="pHits" offset="0x24" type="undefined*"/>
+    <field name="pWeaponDa" offset="0x28" type="undefined*"/>
+    <field name="pAttachPoints" offset="0x2C" type="AttachPoint*"/>
+    <field name="pModLines" offset="0x30" type="short*"/>
+    <field name="pIntersectPoints" offset="0x34" type="pointer"/>
+    <field name="nextIntersectPoint" offset="0x38" type="pointer"/>
+    <field name="nextIntersectLine" offset="0x3C" type="pointer"/>
+    <field name="aButtonInteraction" offset="0x40" type="AButtonInteraction*"/>
+    <field name="flags" offset="0x44" type="ObjFileStructFlags44"/>
+    <field name="shadowType" offset="0x48" type="ObjFileStruct_ShadowType"/>
+    <field name="shadowTexture" offset="0x4A" type="s16"/>
+    <field name="hitbox_flags60" offset="0x4E" type="HitboxFlags60"/>
+    <field name="dll_id" offset="0x50" type="DLL_ID"/>
+    <field name="clsId" offset="0x52" type="ObjCatId"/>
+    <field name="nModels" offset="0x55" type="byte"/>
+    <field name="numPlayerObjs" offset="0x56" type="byte"/>
+    <field name="unk57" offset="0x57" type="u8"/>
+    <field name="nAttachPoints" offset="0x58" type="u8"/>
+    <field name="nTextures" offset="0x59" type="byte"/>
+    <field name="numVecs" offset="0x5A" type="u8"/>
+    <field name="modLinesSize" offset="0x5C" type="byte"/>
+    <field name="modLinesIdx" offset="0x5D" type="s8"/>
+    <field name="numSeqs" offset="0x5E" type="u8"/>
+    <field name="flags_0x5f" offset="0x5F" type="ObjFileStructFlags5F"/>
+    <field name="hitbox_fieldB0" offset="0x60" type="byte"/>
+    <field name="hasHitbox" offset="0x61" type="byte"/>
+    <field name="hitboxSizeXY" offset="0x62" type="byte"/>
+    <field name="hitbox_field6A" offset="0x63" type="byte"/>
+    <field name="hitbox_field6B" offset="0x64" type="undefined1"/>
+    <field name="hitbox_flags62" offset="0x65" type="HitboxFlags62"/>
+    <field name="unk66" offset="0x66" type="byte"/>
+    <field name="hitbox_fieldB5" offset="0x67" type="byte"/>
+    <field name="hitboxSizeX1" offset="0x68" type="short"/>
+    <field name="hitboxSizeY1" offset="0x6A" type="word"/>
+    <field name="hitboxSizeZ1" offset="0x6C" type="short"/>
+    <field name="hitboxSizeZ2" offset="0x6E" type="short"/>
+    <field name="hitbox_fieldB4" offset="0x70" type="byte"/>
+    <field name="flags_0x71" offset="0x71" type="u8"/>
+    <field name="numFocusPoints" offset="0x72" type="byte"/>
+    <field name="cullDistance" offset="0x73" type="byte"/>
+    <field name="flags76" offset="0x76" type="ObjectFileStructFlags76"/>
+    <field name="hitboxSizeZ" offset="0x77" type="byte"/>
+    <field name="map" offset="0x78" type="MapDirIdx16"/>
+    <field name="unk7A" offset="0x7A" type="s16"/>
+    <field count="4" name="helpTexts" offset="0x7C" type="GameTextId"/>
+    <field name="unk84" offset="0x84" type="undefined2"/>
+    <field name="unk86" offset="0x86" type="undefined2"/>
+    <field name="lagVar88" offset="0x88" type="float"/>
+    <field name="nLights" offset="0x8C" type="byte"/>
+    <field name="lightIdx" offset="0x8D" type="byte"/>
+    <field name="colorIdx" offset="0x8E" type="byte"/>
+    <field name="unk8F" offset="0x8F" type="byte"/>
+    <field name="hitbox_flagsB6" offset="0x90" type="HitboxFlags62"/>
+    <field count="11" name="name" offset="0x91" type="char"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject/ObjFile" name="ObjectFileStructFlags76" prefix="ObjectFileStructFlags76_" type="u8">
+    <member name="Animated" value="0x1"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/ObjFile" name="ObjFileStructFlags44" prefix="ObjFileStructFlags44_" type="u32">
+    <member name="EnableCulling" value="0x400"/>
+    <member name="DifferentLightColor" value="0x10"/>
+    <member name="HasChildren" value="0x40"/>
+    <member name="HasEvent" value="0x400000"/>
+    <member name="DifferentCulling" value="0x80000"/>
+    <member name="DidLoadModels" value="0x800000"/>
+    <member name="HaveModels" value="0x1"/>
+    <member name="LockAnimsAndControls" value="0x40000"/>
+    <member name="KeepHitboxWhenInvisible" value="0x200000"/>
+    <member name="SeqMtxRelated" value="0x8000"/>
+    <member name="ModelRelated" value="0x20"/>
+    <member name="UseDifferentModelLoading" value="0x800"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/ObjFile" name="ObjFileStructFlags5F" prefix="ObjFileStructFlags5F_" type="u8">
+    <member name="ShadowUsesNoTexture" value="0x2"/>
+    <member name="DifferentTexturesSuperDark" value="0x80"/>
+    <member name="NoShadow_forceDepthTestWith01" value="0x10"/>
+    <member name="ShadowUsesDepthTest" value="0x4"/>
+    <member name="CrazyTranslucentEffect" value="0x1"/>
+    <member name="Visible" value="0x20"/>
+    <member name="DontFollowParentRotation" value="0x8"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/ObjFile" name="ObjFileStruct_ShadowType" prefix="ObjFileStruct_ShadowType_" type="u16">
+    <member name="Crash" value="0x3"/>
+    <member name="BigBoxShadow" value="0x1"/>
+    <member name="NoShadow" value="0x0"/>
+    <member name="GeomShadow" value="0x2"/>
+    <member name="BlueGlowingRect" value="0x4"/>
+  </enum>
+</types>

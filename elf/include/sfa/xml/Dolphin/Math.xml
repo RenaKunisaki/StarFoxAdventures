@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/Dolphin/Math" name="Mtx34">
+    <field name="m11" offset="0x0" type="float"/>
+    <field name="m12" offset="0x4" type="float"/>
+    <field name="m13" offset="0x8" type="float"/>
+    <field name="m21" offset="0xC" type="float"/>
+    <field name="m22" offset="0x10" type="float"/>
+    <field name="m23" offset="0x14" type="float"/>
+    <field name="m31" offset="0x18" type="float"/>
+    <field name="m32" offset="0x1C" type="float"/>
+    <field name="m33" offset="0x20" type="float"/>
+    <field name="m41" offset="0x24" type="float"/>
+    <field name="m42" offset="0x28" type="float"/>
+    <field name="m43" offset="0x2C" type="float"/>
+  </struct>
+  <struct category="/Dolphin/Math" name="Mtx43">
+    <field name="m11" offset="0x0" type="float"/>
+    <field name="m12" offset="0x4" type="float"/>
+    <field name="m13" offset="0x8" type="float"/>
+    <field name="m14" offset="0xC" type="float"/>
+    <field name="m21" offset="0x10" type="float"/>
+    <field name="m22" offset="0x14" type="float"/>
+    <field name="m23" offset="0x18" type="float"/>
+    <field name="m24" offset="0x1C" type="float"/>
+    <field name="m31" offset="0x20" type="float"/>
+    <field name="m32" offset="0x24" type="float"/>
+    <field name="m33" offset="0x28" type="float"/>
+    <field name="m34" offset="0x2C" type="float"/>
+  </struct>
+  <struct category="/Dolphin/Math" name="vec2s">
+    <field name="x" offset="0x0" type="short"/>
+    <field name="y" offset="0x2" type="short"/>
+  </struct>
+  <struct category="/Dolphin/Math" name="vec3f">
+    <field name="x" offset="0x0" type="float"/>
+    <field name="y" offset="0x4" type="float"/>
+    <field name="z" offset="0x8" type="float"/>
+  </struct>
+  <struct category="/Dolphin/Math" name="vec3i">
+    <field name="x" offset="0x0" type="int"/>
+    <field name="y" offset="0x4" type="int"/>
+    <field name="z" offset="0x8" type="int"/>
+  </struct>
+  <struct category="/Dolphin/Math" name="vec3s">
+    <field name="x" offset="0x0" type="short"/>
+    <field name="y" offset="0x2" type="short"/>
+    <field name="z" offset="0x4" type="short"/>
+  </struct>
+</types>

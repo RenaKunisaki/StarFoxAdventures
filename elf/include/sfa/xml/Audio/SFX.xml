@@ -1,0 +1,183 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Audio/SFX" name="SfxBinEntry">
+    <field name="id" offset="0x0" type="SoundId"/>
+    <field name="baseVolume" offset="0x2" type="u8"/>
+    <field name="volumeRand" offset="0x3" type="u8"/>
+    <field name="basePan" offset="0x4" type="u8"/>
+    <field name="panRand" offset="0x5" type="u8"/>
+    <field name="unk06" offset="0x6" type="u16"/>
+    <field name="range" offset="0x8" type="u16"/>
+    <field count="6" name="fxIds" offset="0xA" type="u16"/>
+    <field count="6" name="fxChance" offset="0x16" type="u8"/>
+    <field name="randMax" offset="0x1C" type="ushort"/>
+    <field name="unk1E" offset="0x1E" type="u8"/>
+    <field name="numIdxs" offset="0x1F" type="u8"/>
+    <field name="prevIdx" offset="0x1F" type="u8"/>
+  </struct>
+  <struct category="/SFA/Audio/SFX" name="SoundEffect">
+    <field name="id" offset="0x0" type="ushort"/>
+    <field name="unk02" offset="0x2" type="ushort"/>
+    <field name="unk04" offset="0x4" type="byte"/>
+    <field name="unk05" offset="0x5" type="byte"/>
+    <field name="unk06" offset="0x6" type="byte"/>
+    <field name="unk07" offset="0x7" type="byte"/>
+    <field name="idx" offset="0x8" type="u32"/>
+    <field name="offset" offset="0x9" type="u32"/>
+    <field name="rate" offset="0xC" type="u16"/>
+    <field name="pitch" offset="0xE" type="u16"/>
+    <field name="length" offset="0x10" type="int"/>
+    <field name="repeatStart" offset="0x14" type="u32"/>
+    <field name="repeatEnd" offset="0x18" type="u32"/>
+    <field name="variation" offset="0x1C" type="u32"/>
+  </struct>
+  <enum category="/SFA/Audio/SFX" name="SoundId" prefix="SoundId_" type="u16">
+    <member name="Warping" value="0x467"/>
+    <member name="FoxFallScream2" value="0x20F"/>
+    <member name="Tricky_Yawn" value="0x354"/>
+    <member name="FoxFallScream1" value="0x20E"/>
+    <member name="Zap" value="0x41C"/>
+    <member name="TitleScreenCloseMenu" value="0x100"/>
+    <member name="MenuOpen3EE" value="0x3EE"/>
+    <member name="Blip" value="0x405"/>
+    <member name="FoxClimbUp2" value="0x25"/>
+    <member name="FoxGrabLedge" value="0x29"/>
+    <member name="TrickyCommandGoGetIt" value="0x3FA"/>
+    <member name="TrickySpewingFire" value="0x3DC"/>
+    <member name="BombSporePickup" value="0xA7"/>
+    <member name="FoxAttack378" value="0x378"/>
+    <member name="TrickyCommandDecoy" value="0x3F7"/>
+    <member name="RecoverHealth" value="0x49"/>
+    <member name="GlassSmash" value="0x47B"/>
+    <member name="PauseMenuClose" value="0x3F2"/>
+    <member name="Tricky_GetMFox" value="0x35B"/>
+    <member name="FoxFallScream" value="0x26"/>
+    <member name="IceSpell" value="0x382"/>
+    <member name="DootF4" value="0xF4"/>
+    <member name="Whoosh28B" value="0x28B"/>
+    <member name="PutOutFlame" value="0x395"/>
+    <member name="ZipDown" value="0x400"/>
+    <member name="Drop" value="0x287"/>
+    <member name="ClimbOutOfWater" value="0x2F"/>
+    <member name="Whoosh288" value="0x288"/>
+    <member name="Tricky_Hello" value="0x35E"/>
+    <member name="Whoosh289" value="0x289"/>
+    <member name="CMenuEquip" value="0xF7"/>
+    <member name="Tricky_BadGuy" value="0x358"/>
+    <member name="MapZoom" value="0x3F0"/>
+    <member name="Pip3F1" value="0x3F1"/>
+    <member name="TrickyCommandWhistle" value="0x3FB"/>
+    <member name="Tricky_ImStuffed" value="0x364"/>
+    <member name="Tricky_Sniff" value="0x357"/>
+    <member name="Ding" value="0xFB"/>
+    <member name="TrickyCommandStay" value="0x3FC"/>
+    <member name="Splash42B" value="0x42B"/>
+    <member name="RobotHover" value="0xE8"/>
+    <member name="FoxHurt" value="0x24"/>
+    <member name="KrystalRoll2" value="0x3CE"/>
+    <member name="KrystalRoll1" value="0x3CD"/>
+    <member name="StaffTakeOut" value="0xC0"/>
+    <member name="TitleScreenChangePage" value="0x37B"/>
+    <member name="HagabonWoosh" value="0x236"/>
+    <member name="MapChangeMode" value="0x3ED"/>
+    <member name="KrystalJump" value="0x2D7"/>
+    <member name="Clang" value="0x6F"/>
+    <member name="FoxClimbUp" value="0x1D"/>
+    <member name="ElectricCrackle" value="0x9E"/>
+    <member name="TrickyFinishFlame" value="0x29D"/>
+    <member name="ZipUp" value="0x3FF"/>
+    <member name="BombPlantGrow" value="0xA1"/>
+    <member name="FoxJump" value="0x2D6"/>
+    <member name="SpellCastFailed" value="0x10A"/>
+    <member name="Tricky_WhereAreWeGoing" value="0x365"/>
+    <member name="TrickyCommandFind" value="0x3F8"/>
+    <member name="CymbalCrash" value="0x28D"/>
+    <member name="Tricky_Dumdedum" value="0x360"/>
+    <member name="CMenuOpen" value="0x408"/>
+    <member name="SomeKindOfWhoosh" value="0x374"/>
+    <member name="KrystalHurt" value="0x1F"/>
+    <member name="FuelCell" value="0x403"/>
+    <member name="TitleScreenOpenMenu" value="0xFF"/>
+    <member name="SmackC2" value="0xC2"/>
+    <member name="Drip" value="0x285"/>
+    <member name="SmackC3" value="0xC3"/>
+    <member name="BombPlantBoom" value="0xA3"/>
+    <member name="Tricky_HiFella" value="0x35F"/>
+    <member name="BallBounce" value="0x16C"/>
+    <member name="Thud17C" value="0x17C"/>
+    <member name="TitleScreenBeep" value="0x41A"/>
+    <member name="Thud17B" value="0x17B"/>
+    <member name="EvilLaugh" value="0x470"/>
+    <member name="WarningBeep" value="0x38D"/>
+    <member name="Tricky_Food" value="0x359"/>
+    <member name="Tricky_Hey" value="0x34F"/>
+    <member name="Tricky_WaitForMe" value="0x34E"/>
+    <member name="FoxLandOof" value="0x27"/>
+    <member name="Trick_Chewing" value="0x362"/>
+    <member name="Tricky_ImHungry" value="0x352"/>
+    <member name="NO_SOUND" value="0xFFFF"/>
+    <member name="FoxThrow" value="0x379"/>
+    <member name="Teleport" value="0x4A2"/>
+    <member name="MagicPickupRinging" value="0x56"/>
+    <member name="TrickyDigging" value="0x13D"/>
+    <member name="EnterFirstPersonNoGoggles" value="0x3F3"/>
+    <member name="Tricky_LookAtThis" value="0x351"/>
+    <member name="SplashBA" value="0xBA"/>
+    <member name="Tricky_Cool" value="0x356"/>
+    <member name="StaffPutAway" value="0xC1"/>
+    <member name="CannonFire" value="0x1FD"/>
+    <member name="PauseMenuOpen" value="0x3E5"/>
+    <member name="Tricky_GetOff" value="0x350"/>
+    <member name="Tricky_LetsPlay" value="0x355"/>
+    <member name="Tricky_Laugh" value="0x361"/>
+    <member name="KrystalFallScream" value="0x2D0"/>
+    <member name="MenuOpen" value="0x98"/>
+    <member name="RobotTalk" value="0xE7"/>
+    <member name="Tricky_Yeah" value="0x35C"/>
+    <member name="MenuSlide" value="0x401"/>
+    <member name="FireyExplosion" value="0x6E"/>
+    <member name="Tricky_TheresSomethingNear" value="0x35A"/>
+    <member name="TrickyCommandFlame" value="0x3F9"/>
+    <member name="TextPip" value="0x397"/>
+    <member name="MenuClose3EF" value="0x3EF"/>
+    <member name="TitleScreenSelect" value="0x418"/>
+    <member name="EnterViewFinder" value="0x3F5"/>
+    <member name="CMenuClose" value="0x37C"/>
+    <member name="KrystalLandOof" value="0x399"/>
+    <member name="Tricky_ImNotDoingIt" value="0x35D"/>
+    <member name="Woosh471" value="0x471"/>
+    <member name="Tricky_MmmmTasty" value="0x363"/>
+    <member name="Woosh472" value="0x472"/>
+    <member name="HagabonWhir" value="0x3E8"/>
+    <member name="KrystalThrow" value="0x327"/>
+    <member name="TickTickTick" value="0x28C"/>
+    <member name="StaticyRadarBeep" value="0x3D8"/>
+    <member name="RobotActivate" value="0x3F4"/>
+    <member name="FoxPant" value="0x452"/>
+    <member name="CameraTurnBehindPlayer" value="0x286"/>
+    <member name="RollInWater" value="0x427"/>
+    <member name="MenuOpenF5" value="0xF5"/>
+    <member name="Tricky_WaitUpFox" value="0x34D"/>
+    <member name="Tricky_Yawn2" value="0x353"/>
+    <member name="TitleScreenZip" value="0xFC"/>
+    <member name="GenericItemPickup" value="0x58"/>
+    <member name="KrystalGrabLedge" value="0x2CB"/>
+    <member name="Squak" value="0xFD"/>
+    <member name="FoxRoll" value="0x2E"/>
+    <member name="Burning" value="0x394"/>
+    <member name="WarpIn" value="0x420"/>
+    <member name="KrystalClimbUp" value="0x398"/>
+    <member name="ZipUp41B" value="0x41B"/>
+    <member name="PipF3" value="0xF3"/>
+    <member name="Chime" value="0x402"/>
+    <member name="ElectronicChime3EB" value="0x3EB"/>
+    <member name="RobotZap" value="0xE9"/>
+    <member name="TitleScreenCancel" value="0x419"/>
+    <member name="ElectronicChime3EC" value="0x3EC"/>
+    <member name="ToggleDisguise" value="0x69"/>
+  </enum>
+  <enum category="/SFA/Audio/SFX" name="SoundId2" prefix="SoundId2_" type="u16">
+    <member name="KrystalRoll2" value="0x265"/>
+    <member name="Stay" value="0x261"/>
+  </enum>
+</types>

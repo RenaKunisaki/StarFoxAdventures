@@ -7,7 +7,8 @@ LINKSCRIPTS := -T$(PWD)/include/gc/gc.ld \
 	-T$(PWD)/include/$(GAME)/butt.ld
 	#-T$(PWD)/include/$(GAME)/$(GAME)-$(VERSION).ld
 
-SYMFILE := $(BUILDDIR)/symbols-generated.sym
+#SYMFILE := $(BUILDDIR)/symbols-generated.sym
+SYMFILE := $(PWD)/include/$(GANE)/$(GAME)-$(VERSION).sym
 OUTPUT  := $(BUILDDIR)/$(NAME).elf
 
 CFILES := $(wildcard $(PWD)/$(NAME)/*.c)

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Audio/Musyx" name="MidiSetupEntry">
+    <field name="programNr" offset="0x0" type="undefined1"/>
+    <field name="volume" offset="0x1" type="undefined1"/>
+    <field name="panning" offset="0x2" type="undefined1"/>
+    <field name="reverb" offset="0x3" type="undefined1"/>
+    <field name="chorus" offset="0x4" type="undefined1"/>
+  </struct>
+</types>

@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/UI" name="AButtonInteraction">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk02" offset="0x2" type="short"/>
+    <field name="unk04" offset="0x4" type="short"/>
+    <field name="unk10" offset="0x10" type="byte"/>
+  </struct>
+  <enum category="/SFA/UI" name="UiDllIdx" prefix="UiDllIdx_" type="u32">
+    <member name="None0A" value="0xA"/>
+    <member name="None0B" value="0xB"/>
+    <member name="None0D" value="0xD"/>
+    <member name="DLL_32" value="0x2"/>
+    <member name="EnterSaveName" value="0x6"/>
+    <member name="OptionsMenu" value="0x7"/>
+    <member name="None11" value="0x11"/>
+    <member name="DLL_3F" value="0xE"/>
+    <member name="Credits" value="0xF"/>
+    <member name="Dummy3A" value="0xC"/>
+    <member name="n_rareware" value="0x3"/>
+    <member name="TitleMenu" value="0x4"/>
+    <member name="SaveSelect" value="0x5"/>
+    <member name="NO_DLL" value="0xFFFFFFFF"/>
+    <member name="DLL_16" value="0x1"/>
+    <member name="DLL_38" value="0x8"/>
+    <member name="None" value="0x0"/>
+    <member name="DLL_39" value="0x9"/>
+    <member name="WarpStone" value="0x10"/>
+  </enum>
+</types>

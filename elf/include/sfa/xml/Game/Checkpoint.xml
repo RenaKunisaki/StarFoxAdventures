@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Game/Checkpoint" name="CheckpointStruct28">
+    <field name="unk00" offset="0x0" type="vec3f"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="objId" offset="0x10" type="uint"/>
+    <field name="objId14" offset="0x14" type="uint"/>
+    <field name="objId18" offset="0x18" type="undefined4"/>
+    <field name="count" offset="0x1C" type="int"/>
+    <field name="unk20" offset="0x20" type="short"/>
+  </struct>
+</types>

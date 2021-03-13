@@ -13,8 +13,23 @@ BOOL gameBitHook(int bit, int val) {
     return gameBitHook_replaced(); //BOOL isSaveGameLoading()
 }
 
+
+void mainLoopHook() {
+    //replaces a bl to a do-nothing subroutine
+    static int count = 0;
+    debugPrintf("Frame %d\n", count++);
+}
+
+
 void _start(void) {
     OSReport("Patch running!");
+
+    //Install hooks
     gameBitHook_replaced = (BOOL(*)())hookBranch(0x8002010C, gameBitHook, 1);
-    OSReport("Hook installed!");
+    runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c, runLoadingScreens_hook, 1);
+    startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250, startMsg_initDoneHook, 1);
+    hookBranch(0x80020D4C, mainLoopHook, 1);
+    hookBranch(0x80137948, debugPrintfHook, 0);
+
+    OSReport("Hooks installed!");
 }

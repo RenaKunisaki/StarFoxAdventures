@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Alloc/DataStructure" name="RefCountedPtr">
+    <field name="data" offset="0x0" type="void*"/>
+    <field name="refCount" offset="0x4" type="byte"/>
+  </struct>
+  <struct category="/SFA/Alloc/DataStructure" name="Stack">
+    <field name="pData" offset="0x0" type="void*"/>
+    <field name="pEnd" offset="0x4" type="void*"/>
+    <field name="itemSize" offset="0xC" type="short"/>
+    <field name="maxItems" offset="0xE" type="short"/>
+    <field name="numItems" offset="0x10" type="undefined2"/>
+    <field name="data" offset="0x20" type="int*"/>
+  </struct>
+  <struct category="/SFA/Alloc/DataStructure" name="StackNode">
+    <field name="next" offset="0x0" type="StackNode*"/>
+  </struct>
+  <struct category="/SFA/Alloc/DataStructure" name="struct_stbfStack">
+    <field name="unk00" offset="0x0" type="pointer"/>
+    <field name="unk04" offset="0x4" type="u8"/>
+  </struct>
+</types>

@@ -212,8 +212,11 @@ def writeFuncdef(filePath, outFile, eType):
     eParams  = eType.find('params')
     if eParams is not None:
         isVararg = attr2bool(eParams, 'vararg')
-        for eParam in eParams.findall('param'):
-            params.append(getParam(eParam))
+        for i, eParam in enumerate(eParams.findall('param')):
+            param = getParam(eParam)
+            if param['name'] is None or param['name'] == '':
+                param['name'] = 'param%d' % (i+1)
+            params.append(param)
 
     # write signature
     retTyp = retVal['type']
@@ -383,7 +386,8 @@ def writeTypes(filePath, outFile, _depth=0):
             #sPath = os.path.join(sPath, 'types.h')
             sPath = os.path.join(sPath, sName + '.h')
             #print("write", sPath)
-            outFile.write('#include "%s"\n' % sPath)
+            # XXX fix this shit
+            outFile.write('#include "../%s"\n' % sPath)
             try:
                 with open(sPath, 'at') as newOutFile:
                     writeTypes(os.path.join(os.path.dirname(filePath), tPath),

@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/SFA/UI/Menu/Link" name="LinkStructFlags" prefix="LinkStructFlags_" type="u16">
+    <member name="HasTexture" value="0x4"/>
+    <member name="Colored" value="0x80"/>
+    <member name="Hidden" value="0x4000"/>
+    <member name="Bright" value="0x800"/>
+    <member name="TitleColored" value="0x100"/>
+  </enum>
+  <struct category="/SFA/UI/Menu/Link" name="LinkStruct">
+    <field name="title" offset="0x0" type="GameTextId"/>
+    <field name="window" offset="0x2" type="u16"/>
+    <field name="unk04" offset="0x4" type="undefined2"/>
+    <field name="unk06" offset="0x6" type="short"/>
+    <field name="unk08" offset="0x8" type="undefined2"/>
+    <field name="textureX" offset="0xA" type="short"/>
+    <field name="textureY" offset="0xC" type="short"/>
+    <field name="texture" offset="0x10" type="undefined4"/>
+    <field name="unk14" offset="0x14" type="ushort"/>
+    <field name="flags" offset="0x16" type="LinkStructFlags"/>
+    <field name="nUpLink" offset="0x1A" type="char"/>
+    <field name="nDownLink" offset="0x1B" type="char"/>
+    <field name="nLeftLink" offset="0x1C" type="char"/>
+    <field name="nRightLink" offset="0x1D" type="char"/>
+    <field name="someOtherLeftRightLink" offset="0x1E" type="byte"/>
+    <field count="24" name="textures" offset="0x1F" type="u8"/>
+    <field name="unk37" offset="0x37" type="byte"/>
+    <field name="count38" offset="0x38" type="byte"/>
+  </struct>
+  <struct category="/SFA/UI/Menu/Link" name="LinkTexture">
+    <field name="tex" offset="0x0" type="Texture*"/>
+    <field name="unk04" offset="0x4" type="undefined2"/>
+    <field name="width" offset="0x6" type="u8"/>
+  </struct>
+  <enum category="/SFA/UI/Menu/Link" name="LinkUpdateResult" prefix="LinkUpdateResult_" type="u32">
+    <member name="ACCEPT" value="0x1"/>
+    <member name="CANCEL" value="0x0"/>
+    <member name="NOTHING" value="0xFFFFFFFF"/>
+  </enum>
+</types>

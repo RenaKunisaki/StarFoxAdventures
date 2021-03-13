@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Game/Arwing" name="WorldMapStruct">
+    <field name="idx" offset="0x0" type="byte"/>
+    <field name="bit" offset="0x2" type="GameBit16"/>
+  </struct>
+</types>

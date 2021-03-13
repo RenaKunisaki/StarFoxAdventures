@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Game" name="WeaponDaEntry">
+    <field name="idx" offset="0x0" type="short"/>
+  </struct>
+</types>

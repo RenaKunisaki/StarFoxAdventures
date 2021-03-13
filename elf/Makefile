@@ -8,6 +8,7 @@ all: $(BUILDDIR) $(BUILDDIR)/boot.bin $(patsubst %,$(BUILDDIR)/%.elf,$(PATCHES))
 
 $(BUILDDIR):
 	@mkdir $(BUILDDIR)
+	#./tools/genSymbols.py include/sfa/ build/
 
 $(BUILDDIR)/boot.bin: $(BUILDDIR) $(BUILDDIR)/bootstrap.elf
 	@$(TOOL)objcopy -O binary $(BUILDDIR)/bootstrap.elf $(BUILDDIR)/boot.bin

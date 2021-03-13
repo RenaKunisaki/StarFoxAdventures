@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Video" name="EnvFxActEntry">
+    <field name="unk5C" offset="0x5C" type="byte"/>
+  </struct>
+  <struct category="/SFA/Video" name="FineSkinningConfig">
+    <field name="numPieces" offset="0x2" type="u16"/>
+    <field name="quantizeScale" offset="0x6" type="u8"/>
+    <field name="unk0C" offset="0xC" type="pointer"/>
+  </struct>
+  <struct category="/SFA/Video" name="FineSkinningPiece">
+    <field name="skinDataSrcOffs" offset="0x60" type="u32"/>
+    <field name="weightsSrc" offset="0x64" type="u32"/>
+    <field name="bone0" offset="0x6C" type="u8"/>
+    <field name="bone1" offset="0x6D" type="u8"/>
+    <field name="weightsBlockCount" offset="0x6F" type="u8"/>
+    <field name="nVtxs" offset="0x70" type="u16"/>
+    <field name="skinMeOffs" offset="0x72" type="u8"/>
+    <field name="skinSrcBlockCount" offset="0x73" type="u8"/>
+  </struct>
+  <enum category="/SFA/Video" name="RenderFlagsEnum" prefix="RenderFlagsEnum_" type="u32">
+    <member name="EXTRA_FUZZY" value="0x2"/>
+    <member name="NoFog" value="0x1"/>
+    <member name="ForceFuzz" value="0x8"/>
+    <member name="DrawFuzz" value="0x4"/>
+  </enum>
+</types>

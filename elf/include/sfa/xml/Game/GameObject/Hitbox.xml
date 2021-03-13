@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/SFA/Game/GameObject/Hitbox" name="HitboxFlags60" prefix="HitboxFlags60_" type="u16">
+    <member name="NeedPosUpdate" value="0x40"/>
+    <member name="LockRotZ" value="0x1000"/>
+    <member name="LockRotY" value="0x800"/>
+    <member name="Disabled" value="0x1"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/Hitbox" name="HitboxFlags62" prefix="HitboxFlags62_" type="u8">
+    <member name="UseModelField14" value="0x20"/>
+    <member name="DontUpdate" value="0x8"/>
+    <member name="ScaleBySize" value="0x1"/>
+    <member name="SizeFlag2" value="0x2"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject/Hitbox" name="HitboxMatrix">
+    <field count="4" name="mtx" offset="0x0" type="Mtx44"/>
+    <field name="mtxIdx" offset="0x10C" type="byte"/>
+    <field name="rotCnt" offset="0x10D" type="char"/>
+    <field name="unk10F" offset="0x10F" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Hitbox" name="HitsBinEntry">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk02" offset="0x2" type="short"/>
+    <field name="unk08" offset="0x8" type="short"/>
+    <field name="unk0A" offset="0xA" type="short"/>
+    <field name="unk0F" offset="0xF" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Hitbox" name="HitSphere">
+    <field name="bone" offset="0x0" type="u16"/>
+    <field name="unk02" offset="0x2" type="u16"/>
+    <field name="radius" offset="0x4" type="float"/>
+    <field name="pos" offset="0x8" type="vec3f"/>
+    <field name="unk14" offset="0x14" type="ushort"/>
+    <field name="unk16" offset="0x16" type="char"/>
+    <field name="unk17" offset="0x17" type="char"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Hitbox" name="HitSphere_conflict">
+    <field name="soundId_00" offset="0x0" type="SoundId"/>
+    <field name="soundId_02" offset="0x2" type="SoundId"/>
+    <field name="animId_04" offset="0x4" type="s16"/>
+    <field name="unk06" offset="0x6" type="s16"/>
+    <field name="unk08" offset="0x8" type="byte"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Hitbox" name="HitSpherePos">
+    <field name="radius" offset="0x0" type="float"/>
+    <field name="pos" offset="0x4" type="vec3f"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Hitbox" name="HitState">
+    <field name="curTouchedObject" offset="0x0" type="ObjInstance*"/>
+    <field name="objHitsSize" offset="0x4" type="short"/>
+    <field name="maxHitsSize" offset="0x6" type="short"/>
+    <field name="objHits" offset="0x8" type="ObjHitsEntry*"/>
+    <field name="sizeXY_0C" offset="0xC" type="float"/>
+    <field name="pos" offset="0x10" type="vec3f"/>
+    <field name="prevPos" offset="0x1C" type="vec3f"/>
+    <field name="size" offset="0x28" type="vec3f"/>
+    <field name="minSizeY" offset="0x34" type="float"/>
+    <field name="sizeY" offset="0x38" type="float"/>
+    <field name="unk3C" offset="0x3C" type="vec3f"/>
+    <field name="unk48" offset="0x48" type="undefined4"/>
+    <field name="unk4C" offset="0x4C" type="dword"/>
+    <field name="lastTouchedObject" offset="0x50" type="ObjInstance*"/>
+    <field name="lowestDist" offset="0x58" type="u16"/>
+    <field name="sizeXY" offset="0x5A" type="short"/>
+    <field name="sizeX1" offset="0x5C" type="short"/>
+    <field name="sizeX2" offset="0x5E" type="short"/>
+    <field name="flags_0x60" offset="0x60" type="HitboxFlags60"/>
+    <field name="flags_0x62" offset="0x62" type="HitboxFlags62"/>
+    <field name="sizeZ" offset="0x64" type="short"/>
+    <field name="sizeZ1" offset="0x66" type="short"/>
+    <field name="sizeZ2" offset="0x68" type="short"/>
+    <field name="unk6A" offset="0x6A" type="byte"/>
+    <field name="unk6B" offset="0x6B" type="undefined1"/>
+    <field name="damage" offset="0x6C" type="byte"/>
+    <field name="unk6D" offset="0x6D" type="byte"/>
+    <field name="unk6E" offset="0x6E" type="byte"/>
+    <field name="unk6F" offset="0x6F" type="byte"/>
+    <field name="unk70" offset="0x70" type="byte"/>
+    <field name="nHits" offset="0x71" type="byte"/>
+    <field count="3" name="sphereIdxs" offset="0x72" type="byte"/>
+    <field count="3" name="objField6C" offset="0x75" type="byte"/>
+    <field count="3" name="recordedDamage" offset="0x78" type="byte"/>
+    <field count="3" name="objs" offset="0x7C" type="ObjInstance*"/>
+    <field count="3" name="objX" offset="0x88" type="float"/>
+    <field count="3" name="objY" offset="0x94" type="float"/>
+    <field count="3" name="objZ" offset="0xA0" type="float"/>
+    <field name="typeOfPolyHit" offset="0xAC" type="PolygonType"/>
+    <field name="unkAD" offset="0xAD" type="byte"/>
+    <field name="disable" offset="0xAE" type="byte"/>
+    <field name="state" offset="0xAF" type="char"/>
+    <field name="unkB0" offset="0xB0" type="byte"/>
+    <field name="unkB2" offset="0xB2" type="short"/>
+    <field name="unkB4" offset="0xB4" type="byte"/>
+    <field name="unkB5" offset="0xB5" type="byte"/>
+    <field name="flagsB6" offset="0xB6" type="HitboxFlags62"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Hitbox" name="ObjHitsEntry">
+    <field name="animId" offset="0x0" type="short"/>
+  </struct>
+</types>

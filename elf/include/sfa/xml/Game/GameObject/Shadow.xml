@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Game/GameObject/Shadow" name="Shadow">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="texture" offset="0x4" type="pointer"/>
+    <field name="unk0C" offset="0xC" type="int"/>
+    <field name="unk10" offset="0x10" type="int*"/>
+    <field name="unk14" offset="0x14" type="vec3f"/>
+    <field name="pos" offset="0x20" type="vec3f"/>
+    <field name="unk2C" offset="0x2C" type="float"/>
+    <field name="flags" offset="0x30" type="uint"/>
+    <field name="opacityChange" offset="0x36" type="short"/>
+    <field name="color" offset="0x38" type="Color4b"/>
+    <field name="opacity" offset="0x40" type="u8"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Shadow" name="ShadowStruct">
+    <field name="obj" offset="0x0" type="ObjInstance*"/>
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="flags" offset="0x8" type="undefined1"/>
+  </struct>
+</types>

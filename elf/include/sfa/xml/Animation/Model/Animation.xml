@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Animation/Model/Animation" name="AnimBufStruct">
+    <field name="time" offset="0x4" type="float"/>
+    <field name="unk14" offset="0x14" type="float"/>
+    <field name="unk1C" offset="0x1C" type="byte*"/>
+    <field name="pCompData" offset="0x2C" type="byte*"/>
+    <field name="pAnimData" offset="0x34" type="byte*"/>
+    <field name="unk38" offset="0x38" type="undefined4"/>
+    <field name="unk44" offset="0x44" type="ushort"/>
+    <field name="unk4C" offset="0x4C" type="ushort"/>
+    <field name="unk58" offset="0x58" type="short"/>
+  </struct>
+  <struct category="/SFA/Animation/Model/Animation" name="AnimCurvPoint">
+    <field name="y" offset="0x0" type="float"/>
+    <field name="flags" offset="0x4" type="byte"/>
+    <field name="attr" offset="0x5" type="byte"/>
+    <field name="x" offset="0x6" type="short"/>
+  </struct>
+  <struct category="/SFA/Animation/Model/Animation" name="AnimHeader">
+    <field name="length" offset="0x0" type="byte"/>
+  </struct>
+  <enum category="/SFA/Animation/Model/Animation" name="AnimState" prefix="AnimState_" type="u8">
+    <member name="DoSpawnAnim" value="0x2"/>
+  </enum>
+  <enum category="/SFA/Animation/Model/Animation" name="AnimStruct28Flags" prefix="AnimStruct28Flags_" type="u8">
+    <member name="XnotEqY" value="0x4"/>
+    <member name="XcanBeNegative" value="0x20"/>
+  </enum>
+  <struct category="/SFA/Animation/Model/Animation" name="EyeAnimStruct">
+    <field name="state" offset="0x1E" type="byte"/>
+    <field name="blinkFrameCount" offset="0x1F" type="byte"/>
+    <field name="eyeMoveTimer" offset="0x20" type="byte"/>
+    <field name="eyeXrotSpeed" offset="0x22" type="short"/>
+    <field name="eyeXrotTarget" offset="0x24" type="int"/>
+    <field name="unk2B" offset="0x2B" type="byte"/>
+    <field name="unk2C" offset="0x2C" type="byte"/>
+    <field name="unk2D" offset="0x2D" type="byte"/>
+  </struct>
+  <struct category="/SFA/Animation/Model/Animation" name="ModelAnimStruct56">
+    <field name="timeScale0" offset="0x0" type="float"/>
+    <field name="timeScale1" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="start" offset="0xC" type="char"/>
+    <field name="end" offset="0xD" type="char"/>
+    <field name="flags" offset="0xE" type="byte"/>
+  </struct>
+  <struct category="/SFA/Animation/Model/Animation" name="PathCamStruct">
+    <field name="unk00" offset="0x0" type="undefined4"/>
+    <field name="controlPoint1" offset="0x4" type="undefined4"/>
+    <field name="controlPoint2" offset="0x8" type="undefined4"/>
+    <field name="unk0C" offset="0xC" type="undefined4"/>
+  </struct>
+  <struct category="/SFA/Animation/Model/Animation" name="RawAnimData">
+    <field name="rotHead" offset="0x0" type="vec3s"/>
+    <field name="rotTail" offset="0x6" type="vec3s"/>
+    <field name="scaleHead" offset="0xC" type="vec3s"/>
+    <field name="scaleTail" offset="0x12" type="vec3s"/>
+    <field name="xlateHead" offset="0x18" type="vec3s"/>
+    <field name="xlateTail" offset="0x1E" type="vec3s"/>
+  </struct>
+</types>

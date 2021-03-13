@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/SFA/Game/GameObject/Player" name="ObjSeqCmd06" prefix="ObjSeqCmd06_" type="u32">
+    <member name="PlayStream" value="0x28"/>
+    <member name="SetIsSavePoint" value="0x23"/>
+    <member name="SoundCmd0D" value="0xD"/>
+    <member name="EnableMotionBlur" value="0x2C"/>
+    <member name="CamStatic" value="0x15"/>
+    <member name="SetCamSpeed" value="0x33"/>
+    <member name="GotoRestartPoint" value="0x20"/>
+    <member name="DisableMonochromeFilter" value="0x2F"/>
+    <member name="SetFlag7F_1" value="0x9"/>
+    <member name="DisableLetterbox" value="0x1E"/>
+    <member name="ToggleLetterbox" value="0x12"/>
+    <member name="Earthquake" value="0x7"/>
+    <member name="PlayerEnvfxCmd30" value="0x30"/>
+    <member name="DisableMotionBlur" value="0x2D"/>
+    <member name="PlayerEnvfxCmd32" value="0x32"/>
+    <member name="PlayerEnvfxCmd31" value="0x31"/>
+    <member name="StopAndDisableTimer" value="0x25"/>
+    <member name="CamNormal" value="0x1A"/>
+    <member name="ClrObjGroup" value="0x1C"/>
+    <member name="StartCountupTimer" value="0xA"/>
+    <member name="SwitchModel" value="0x17"/>
+    <member name="StartCountdownTimer" value="0xB"/>
+    <member name="SavePointCmd24" value="0x24"/>
+    <member name="SetTargetMapAct" value="0x1D"/>
+    <member name="SetFlag6E_0400" value="0x21"/>
+    <member name="PullOutStaff" value="0x18"/>
+    <member name="SetTimerToCountUp" value="0xC"/>
+    <member name="ClrFlag6E_0400" value="0x22"/>
+    <member name="EnableMonochromeFilter" value="0x2E"/>
+    <member name="CamTestStrength" value="0x14"/>
+    <member name="SetObjGroup" value="0x1B"/>
+    <member name="FadeFromBlack" value="0xF"/>
+    <member name="FadeToBlack" value="0xE"/>
+    <member name="ClrRestartPoint" value="0x1F"/>
+    <member name="PlayVoice" value="0x27"/>
+    <member name="PlayerLock" value="0x26"/>
+    <member name="PutAwayStaff" value="0x19"/>
+    <member name="End" value="0x0"/>
+    <member name="GetCurve" value="0x2"/>
+    <member name="SetField7D" value="0x10"/>
+    <member name="EnableLetterbox" value="0x13"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject/Player" name="PlayerAnimStruct67">
+    <field name="unk00" offset="0x0" type="vec3f"/>
+    <field count="8" name="unk12" offset="0x12" type="byte"/>
+    <field name="count" offset="0x1B" type="byte"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject/Player" name="PlayerBuyItemEnum" prefix="PlayerBuyItemEnum_" type="u8">
+    <member name="DumbleDangPod4x" value="0x1"/>
+    <member name="FireflyLantern" value="0x15"/>
+    <member name="SnowHornArtifact" value="0x16"/>
+    <member name="PukPukEgg" value="0x2"/>
+    <member name="Viewfinder" value="0x1B"/>
+    <member name="Firefly" value="0x7"/>
+    <member name="PukPukEgg7x" value="0x3"/>
+    <member name="PDA" value="0x1A"/>
+    <member name="DumbleDangPod" value="0x0"/>
+    <member name="FuelCell" value="0x8"/>
+    <member name="BafomdadHolder" value="0x17"/>
+    <member name="TrickyFood" value="0x6"/>
+    <member name="Bomb" value="0x4"/>
+    <member name="MoonSeed" value="0x5"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/Player" name="PlayerCharacterEnum" prefix="PlayerCharacterEnum_" type="u8">
+    <member name="SharpClaw" value="0x2"/>
+    <member name="Krystal" value="0x0"/>
+    <member name="Fox" value="0x1"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/Player" name="PlayerCharacterEnum16" prefix="PlayerCharacterEnum16_" type="u16">
+    <member name="SharpClaw" value="0x2"/>
+    <member name="Krystal" value="0x0"/>
+    <member name="Fox" value="0x1"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/Player" name="PlayerCharacterEnum32" prefix="PlayerCharacterEnum32_" type="u32">
+    <member name="SharpClaw" value="0x2"/>
+    <member name="Krystal" value="0x0"/>
+    <member name="Fox" value="0x1"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject/Player" name="PlayerCharPos">
+    <field name="pos" offset="0x0" type="vec3f"/>
+    <field name="rotX" offset="0xC" type="byte"/>
+    <field name="mapLayer" offset="0xD" type="byte"/>
+    <field name="mapId" offset="0xE" type="MapDirIdx8"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Player" name="PlayerCharState">
+    <field name="curHealth" offset="0x0" type="s8"/>
+    <field name="maxHealth" offset="0x1" type="s8"/>
+    <field name="flags02" offset="0x2" type="byte"/>
+    <field name="field_03" offset="0x3" type="byte"/>
+    <field name="curMagic" offset="0x4" type="u16"/>
+    <field name="maxMagic" offset="0x6" type="u16"/>
+    <field name="money" offset="0x8" type="u8"/>
+    <field name="curBafomDads" offset="0x9" type="byte"/>
+    <field name="maxBafomDads" offset="0xA" type="byte"/>
+    <field name="field_0B" offset="0xB" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Player" name="PlayerPrevPos">
+    <field name="pos" offset="0x0" type="vec3f"/>
+    <field name="time" offset="0xC" type="int"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject/Player" name="PlayerStateEnum" prefix="PlayerStateEnum_" type="u16">
+    <member name="Activate_35" value="0x35"/>
+    <member name="Push_1D" value="0x1D"/>
+    <member name="StartAiming" value="0x2A"/>
+    <member name="ClimbLedge" value="0xC"/>
+    <member name="ClimbOntoBike" value="0x16"/>
+    <member name="StaffBooster" value="0x32"/>
+    <member name="LiftRockWithStaff" value="0x33"/>
+    <member name="Idle" value="0x1"/>
+    <member name="Moving" value="0x2"/>
+    <member name="CastFireball" value="0x2E"/>
+    <member name="CastLaser" value="0x2F"/>
+    <member name="ClimbOntoWall" value="0x12"/>
+    <member name="NoChange" value="0x0"/>
+    <member name="ClimbWall" value="0x13"/>
+    <member name="GrabWall" value="0x11"/>
+    <member name="SlideDownLadder" value="0x10"/>
+    <member name="Throwing" value="0x7"/>
+    <member name="NOP_3E" value="0x3E"/>
+    <member name="ClimbOntoLadder" value="0xE"/>
+    <member name="SuperQuake" value="0x36"/>
+    <member name="Dead" value="0x3"/>
+    <member name="Attack" value="0x26"/>
+    <member name="StopAiming" value="0x2B"/>
+    <member name="ClimbUpFromWall" value="0x14"/>
+    <member name="ClimbDownFromWall" value="0x15"/>
+    <member name="LiftActivate_08" value="0x8"/>
+    <member name="OnWindLift" value="0x41"/>
+    <member name="ClimbLadder" value="0xF"/>
+    <member name="TryCastSpell" value="0x2D"/>
+    <member name="Aiming" value="0x2C"/>
+    <member name="RideBike" value="0x18"/>
+  </enum>
+  <funcdef category="/SFA/Game/GameObject/Player" name="PlayerStateFunc">
+    <return type="int"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+      <param reg="r4" type="ObjState_Player*"/>
+      <param reg="f1" type="double"/>
+    </params>
+  </funcdef>
+  <enum category="/SFA/Game/GameObject/Player" name="SpellGameBit" prefix="SpellGameBit_" type="u16">
+    <member name="GroundQuake2" value="0xC55"/>
+    <member name="NO_SPELL" value="0xFFFF"/>
+    <member name="Disguise" value="0x40"/>
+    <member name="Fireball" value="0x2D"/>
+    <member name="GroundQuake" value="0x107"/>
+    <member name="Ice" value="0x5CE"/>
+    <member name="RapidFireLaser" value="0x958"/>
+    <member name="Unk5BD" value="0x5BD"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/Player" name="SpellIdx" prefix="SpellIdx_" type="u32">
+    <member name="IceBlast" value="0x4"/>
+    <member name="SharpClawDisguise" value="0x1"/>
+    <member name="OpenPortal" value="0x3"/>
+    <member name="GroundQuake" value="0x9"/>
+    <member name="NUM_SPELLS" value="0xC"/>
+    <member name="RapidFireLaser" value="0x8"/>
+    <member name="Deleted1D7" value="0x2"/>
+    <member name="StaffBooster" value="0x7"/>
+    <member name="Deleted000" value="0xB"/>
+    <member name="Fireball" value="0x0"/>
+    <member name="Deleted777" value="0x6"/>
+    <member name="Deleted5FC" value="0x5"/>
+    <member name="SuperQuake" value="0xA"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/Player" name="TailState" prefix="TailState_" type="u8">
+    <member name="Limp" value="0x0"/>
+    <member name="Flick" value="0x2"/>
+    <member name="HalfUp" value="0x5"/>
+    <member name="Rolling" value="0x4"/>
+    <member name="Normal" value="0x1"/>
+    <member name="Wag" value="0x3"/>
+  </enum>
+</types>

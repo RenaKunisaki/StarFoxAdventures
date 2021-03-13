@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/Dolphin/GX" name="GXOpcode" prefix="GXOP_" type="u8">
+    <member name="NOP" value="0x0" />
+    <member name="LOAD_CP_REG" value="0x8" />
+    <member name="LOAD_XF_REG" value="0x10" />
+    <member name="LOAD_INDX_A0" value="0x20" />
+    <member name="LOAD_INDX_A1" value="0x21" />
+    <member name="LOAD_INDX_A2" value="0x22" />
+    <member name="LOAD_INDX_A3" value="0x23" />
+    <member name="LOAD_INDX_A4" value="0x24" />
+    <member name="LOAD_INDX_A5" value="0x25" />
+    <member name="LOAD_INDX_A6" value="0x26" />
+    <member name="LOAD_INDX_A7" value="0x27" />
+    <member name="LOAD_INDX_B0" value="0x28" />
+    <member name="LOAD_INDX_B1" value="0x29" />
+    <member name="LOAD_INDX_B2" value="0x2a" />
+    <member name="LOAD_INDX_B3" value="0x2b" />
+    <member name="LOAD_INDX_B4" value="0x2c" />
+    <member name="LOAD_INDX_B5" value="0x2d" />
+    <member name="LOAD_INDX_B6" value="0x2e" />
+    <member name="LOAD_INDX_B7" value="0x2f" />
+    <member name="LOAD_INDX_C0" value="0x30" />
+    <member name="LOAD_INDX_C1" value="0x31" />
+    <member name="LOAD_INDX_C2" value="0x32" />
+    <member name="LOAD_INDX_C3" value="0x33" />
+    <member name="LOAD_INDX_C4" value="0x34" />
+    <member name="LOAD_INDX_C5" value="0x35" />
+    <member name="LOAD_INDX_C6" value="0x36" />
+    <member name="LOAD_INDX_C7" value="0x37" />
+    <member name="LOAD_INDX_D0" value="0x38" />
+    <member name="LOAD_INDX_D1" value="0x39" />
+    <member name="LOAD_INDX_D2" value="0x3a" />
+    <member name="LOAD_INDX_D3" value="0x3b" />
+    <member name="LOAD_INDX_D4" value="0x3c" />
+    <member name="LOAD_INDX_D5" value="0x3d" />
+    <member name="LOAD_INDX_D6" value="0x3e" />
+    <member name="LOAD_INDX_D7" value="0x3f" />
+    <member name="CALL_DL" value="0x40" />
+    <member name="INVALIDATE_VTX_CACHE" value="0x48" />
+    <member name="LOAD_BP_REG" value="0x61" />
+    <member name="DRAW_QUADS_0" value="0x80" />
+    <member name="DRAW_QUADS_1" value="0x81" />
+    <member name="DRAW_QUADS_2" value="0x82" />
+    <member name="DRAW_QUADS_3" value="0x83" />
+    <member name="DRAW_QUADS_4" value="0x84" />
+    <member name="DRAW_QUADS_5" value="0x85" />
+    <member name="DRAW_QUADS_6" value="0x86" />
+    <member name="DRAW_QUADS_7" value="0x87" />
+    <member name="DRAW_TRIANGLES_0" value="0x90" />
+    <member name="DRAW_TRIANGLES_1" value="0x91" />
+    <member name="DRAW_TRIANGLES_2" value="0x92" />
+    <member name="DRAW_TRIANGLES_3" value="0x93" />
+    <member name="DRAW_TRIANGLES_4" value="0x94" />
+    <member name="DRAW_TRIANGLES_5" value="0x95" />
+    <member name="DRAW_TRIANGLES_6" value="0x96" />
+    <member name="DRAW_TRIANGLES_7" value="0x97" />
+    <member name="DRAW_TRISTRIP_0" value="0x98" />
+    <member name="DRAW_TRISTRIP_1" value="0x99" />
+    <member name="DRAW_TRISTRIP_2" value="0x9a" />
+    <member name="DRAW_TRISTRIP_3" value="0x9b" />
+    <member name="DRAW_TRISTRIP_4" value="0x9c" />
+    <member name="DRAW_TRISTRIP_5" value="0x9d" />
+    <member name="DRAW_TRISTRIP_6" value="0x9e" />
+    <member name="DRAW_TRISTRIP_7" value="0x9f" />
+    <member name="DRAW_TRIFAN_0" value="0xa0" />
+    <member name="DRAW_TRIFAN_1" value="0xa1" />
+    <member name="DRAW_TRIFAN_2" value="0xa2" />
+    <member name="DRAW_TRIFAN_3" value="0xa3" />
+    <member name="DRAW_TRIFAN_4" value="0xa4" />
+    <member name="DRAW_TRIFAN_5" value="0xa5" />
+    <member name="DRAW_TRIFAN_6" value="0xa6" />
+    <member name="DRAW_TRIFAN_7" value="0xa7" />
+    <member name="DRAW_LINES_0" value="0xa8" />
+    <member name="DRAW_LINES_1" value="0xa9" />
+    <member name="DRAW_LINES_2" value="0xaa" />
+    <member name="DRAW_LINES_3" value="0xab" />
+    <member name="DRAW_LINES_4" value="0xac" />
+    <member name="DRAW_LINES_5" value="0xad" />
+    <member name="DRAW_LINES_6" value="0xae" />
+    <member name="DRAW_LINES_7" value="0xaf" />
+    <member name="DRAW_LINESTRIP_0" value="0xb0" />
+    <member name="DRAW_LINESTRIP_1" value="0xb1" />
+    <member name="DRAW_LINESTRIP_2" value="0xb2" />
+    <member name="DRAW_LINESTRIP_3" value="0xb3" />
+    <member name="DRAW_LINESTRIP_4" value="0xb4" />
+    <member name="DRAW_LINESTRIP_5" value="0xb5" />
+    <member name="DRAW_LINESTRIP_6" value="0xb6" />
+    <member name="DRAW_LINESTRIP_7" value="0xb7" />
+    <member name="DRAW_POINTS_0" value="0xb8" />
+    <member name="DRAW_POINTS_1" value="0xb9" />
+    <member name="DRAW_POINTS_2" value="0xba" />
+    <member name="DRAW_POINTS_3" value="0xbb" />
+    <member name="DRAW_POINTS_4" value="0xbc" />
+    <member name="DRAW_POINTS_5" value="0xbd" />
+    <member name="DRAW_POINTS_6" value="0xbe" />
+    <member name="DRAW_POINTS_7" value="0xbf" />
+  </enum>
+  <enum category="/Dolphin/GX" name="VcdHiMask" prefix="VcdHiMask_" type="u32">
+    <member name="TEX7" value="0xC000"/>
+    <member name="TEX6" value="0x3000"/>
+    <member name="TEX5" value="0xC00"/>
+    <member name="TEX4" value="0x300"/>
+    <member name="TEX3" value="0xC0"/>
+    <member name="TEX2" value="0x30"/>
+    <member name="TEX1" value="0xC"/>
+    <member name="TEX0" value="0x3"/>
+  </enum>
+  <enum category="/Dolphin/GX" name="VcdLoMask" prefix="VcdLoMask_" type="u32">
+    <member name="T1MIDX" value="0x4"/>
+    <member name="NRM0" value="0x800"/>
+    <member name="T3MIDX" value="0x10"/>
+    <member name="T6MIDX" value="0x80"/>
+    <member name="T4MIDX" value="0x20"/>
+    <member name="NRM" value="0x1800"/>
+    <member name="COL10" value="0x8000"/>
+    <member name="PMIDX" value="0x1"/>
+    <member name="NRM1" value="0x1000"/>
+    <member name="COL1" value="0x18000"/>
+    <member name="COL0" value="0x6000"/>
+    <member name="T7MIDX" value="0x100"/>
+    <member name="T0MIDX" value="0x2"/>
+    <member name="COL01" value="0x4000"/>
+    <member name="COL00" value="0x2000"/>
+    <member name="COL11" value="0x10000"/>
+    <member name="POS" value="0x600"/>
+    <member name="T2MIDX" value="0x8"/>
+    <member name="T5MIDX" value="0x40"/>
+    <member name="POS1" value="0x400"/>
+    <member name="POS0" value="0x200"/>
+  </enum>
+  <struct category="/SFA/Video" name="Color4b">
+    <field name="r" offset="0x0" type="u8"/>
+    <field name="g" offset="0x1" type="u8"/>
+    <field name="b" offset="0x2" type="u8"/>
+    <field name="a" offset="0x3" type="u8"/>
+  </struct>
+</types>

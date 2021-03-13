@@ -1,0 +1,370 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Game/Map" name="GlobalMaEntry">
+    <field name="x" offset="0x0" type="s16"/>
+    <field name="z" offset="0x2" type="s16"/>
+    <field name="layer" offset="0x4" type="s16"/>
+    <field name="map" offset="0x6" type="MapId16"/>
+    <field count="2" name="linked" offset="0x8" type="MapId16"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="IntRect">
+    <field name="x1" offset="0x0" type="int"/>
+    <field name="x2" offset="0x4" type="int"/>
+    <field name="y1" offset="0x8" type="int"/>
+    <field name="y2" offset="0xC" type="int"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="MapBlock">
+    <field name="unused" offset="0x0" type="undefined4"/>
+    <field name="flags_0x4" offset="0x4" type="ushort"/>
+    <field name="length" offset="0x8" type="int"/>
+    <field name="mtx" offset="0xC" type="Mtx43"/>
+    <field name="ptr_0x4c" offset="0x4C" type="undefined*"/>
+    <field name="ptr_0x50" offset="0x50" type="undefined*"/>
+    <field name="textures" offset="0x54" type="Texture*"/>
+    <field name="vtxs" offset="0x58" type="undefined*"/>
+    <field name="colors" offset="0x5C" type="undefined*"/>
+    <field name="texcoords" offset="0x60" type="vec2s*"/>
+    <field name="shaders" offset="0x64" type="Shader*"/>
+    <field name="dlists" offset="0x68" type="DisplayListPtr*"/>
+    <field name="hits" offset="0x70" type="HitsBinEntry*"/>
+    <field name="hitField_74" offset="0x74" type="undefined4"/>
+    <field name="renderInstrsMain" offset="0x78" type="pointer"/>
+    <field name="renderInstrsReflective" offset="0x7C" type="pointer"/>
+    <field name="renderInstrsWater" offset="0x80" type="pointer"/>
+    <field name="nRenderInstrsMain" offset="0x84" type="u16"/>
+    <field name="nRenderInstrsReflective" offset="0x86" type="u16"/>
+    <field name="nRenderInstrsWater" offset="0x88" type="u16"/>
+    <field name="min" offset="0x8A" type="short"/>
+    <field name="max" offset="0x8C" type="short"/>
+    <field name="yOffset" offset="0x8E" type="short"/>
+    <field name="nVtxs" offset="0x90" type="u16"/>
+    <field name="nColors" offset="0x94" type="u16"/>
+    <field name="nTexCoords" offset="0x96" type="u16"/>
+    <field name="nHits" offset="0x9C" type="ushort"/>
+    <field name="hitField_9e" offset="0x9E" type="undefined2"/>
+    <field name="nTextures" offset="0xA0" type="byte"/>
+    <field name="nDlists" offset="0xA1" type="byte"/>
+    <field name="nShaders" offset="0xA2" type="byte"/>
+    <field name="unkA3" offset="0xA3" type="byte"/>
+    <field count="11" name="name" offset="0xA4" type="char"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="MapBlock2">
+    <field name="nItems" offset="0x8" type="ushort"/>
+    <field name="blocks" offset="0xC" type="byte*"/>
+    <field name="block7" offset="0x10" type="byte*"/>
+    <field name="rects0" offset="0x14" type="byte*"/>
+    <field name="unk18" offset="0x18" type="u8"/>
+    <field name="unk19" offset="0x19" type="u8"/>
+    <field name="romList" offset="0x20" type="ObjDef*"/>
+    <field name="x" offset="0x24" type="float"/>
+    <field name="z" offset="0x28" type="float"/>
+    <field name="rects2" offset="0x2C" type="byte*"/>
+    <field name="rects1" offset="0x30" type="byte*"/>
+    <field name="rects3" offset="0x34" type="byte*"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="MapBlockShaderStruct72">
+    <field name="unk24" offset="0x24" type="int"/>
+    <field name="unk2A" offset="0x2A" type="byte"/>
+    <field name="unk34" offset="0x34" type="undefined4"/>
+    <field name="unk41" offset="0x41" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="MapBlockStruct">
+    <field name="Map_Blocks_816ADF00" offset="0x0" type="pointer"/>
+    <field name="unk04" offset="0x4" type="dword"/>
+    <field name="unk08" offset="0x8" type="dword"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="MapBlockStruct60">
+    <field name="mapIdx" offset="0x0" type="short"/>
+    <field name="link0" offset="0x2" type="short"/>
+    <field name="link1" offset="0x4" type="short"/>
+    <field name="blockId" offset="0x6" type="s16"/>
+    <field name="unk08" offset="0x8" type="byte"/>
+    <field name="map" offset="0x9" type="char"/>
+  </struct>
+  <enum category="/SFA/Game/Map" name="MapDirIdx" prefix="MapDir_" type="u16">
+    <member name="animtest_24" value="0x24"/>
+    <member name="NUM_MAPS" value="0x49"/>
+    <member name="animtest" value="0x0"/>
+    <member name="darkicemines" value="0x1A"/>
+    <member name="animtest_20" value="0x20"/>
+    <member name="linka" value="0x40"/>
+    <member name="animtest_21" value="0x21"/>
+    <member name="mmpass" value="0x19"/>
+    <member name="arwingdarkice" value="0x39"/>
+    <member name="linke" value="0x43"/>
+    <member name="linkd" value="0x42"/>
+    <member name="linkc" value="0x41"/>
+    <member name="linkb" value="0x36"/>
+    <member name="linki" value="0x48"/>
+    <member name="nwastes" value="0xE"/>
+    <member name="linkh" value="0x46"/>
+    <member name="linkg" value="0x45"/>
+    <member name="animtest_1F" value="0x1F"/>
+    <member name="linkf" value="0x44"/>
+    <member name="animtest_1D" value="0x1D"/>
+    <member name="dfptop" value="0x6"/>
+    <member name="animtest_1B" value="0x1B"/>
+    <member name="linkj" value="0x47"/>
+    <member name="linklevel" value="0x3E"/>
+    <member name="swapholbot" value="0x13"/>
+    <member name="arwingdragon" value="0x3C"/>
+    <member name="warlock" value="0xF"/>
+    <member name="dbay" value="0x30"/>
+    <member name="dfalls" value="0xB"/>
+    <member name="animtest_17" value="0x17"/>
+    <member name="capeclaw" value="0x2F"/>
+    <member name="NO_MAP" value="0xFFFF"/>
+    <member name="cloudrace" value="0x32"/>
+    <member name="animtest_34" value="0x34"/>
+    <member name="worldmap" value="0x2D"/>
+    <member name="animtest_31" value="0x31"/>
+    <member name="arwingcloud" value="0x3A"/>
+    <member name="greatfox" value="0x3F"/>
+    <member name="dragrockbot" value="0xA"/>
+    <member name="ecshrine" value="0x29"/>
+    <member name="mmshrine" value="0x28"/>
+    <member name="animtest_2E" value="0x2E"/>
+    <member name="arwing" value="0x3"/>
+    <member name="darkicemines2" value="0x22"/>
+    <member name="bossdrakor" value="0x33"/>
+    <member name="animtest_02" value="0x2"/>
+    <member name="animtest_01" value="0x1"/>
+    <member name="shop" value="0x10"/>
+    <member name="dbshrine" value="0x2B"/>
+    <member name="mazecave" value="0x9"/>
+    <member name="icemountain" value="0x1E"/>
+    <member name="insidegal" value="0x25"/>
+    <member name="arwingcity" value="0x3B"/>
+    <member name="bosstrex" value="0x35"/>
+    <member name="gpshrine" value="0x2A"/>
+    <member name="dfshrine" value="0x27"/>
+    <member name="swaphol" value="0xC"/>
+    <member name="volcano" value="0x7"/>
+    <member name="crfort" value="0x12"/>
+    <member name="shipbattle" value="0xD"/>
+    <member name="magiccave" value="0x26"/>
+    <member name="wallcity" value="0x14"/>
+    <member name="animtest_11" value="0x11"/>
+    <member name="lightfoot" value="0x15"/>
+    <member name="cloudtreasure" value="0x16"/>
+    <member name="clouddungeon" value="0x18"/>
+    <member name="bossgaldon" value="0x23"/>
+    <member name="gamefront" value="0x3D"/>
+    <member name="animtest_08" value="0x8"/>
+    <member name="arwingtoplanet" value="0x38"/>
+    <member name="dragrock" value="0x4"/>
+    <member name="cloudjoin" value="0x37"/>
+    <member name="desert" value="0x1C"/>
+    <member name="animtest_05" value="0x5"/>
+    <member name="nwshrine" value="0x2C"/>
+  </enum>
+  <struct category="/SFA/Game/Map" name="MapFloatRect">
+    <field name="x1" offset="0x0" type="float"/>
+    <field name="x2" offset="0x4" type="float"/>
+    <field name="y1" offset="0x8" type="float"/>
+    <field name="y2" offset="0xC" type="float"/>
+  </struct>
+  <enum category="/SFA/Game/Map" name="MapId" prefix="MAP_" type="u16">
+    <member name="cfdungeonblock" value="0x54"/>
+    <member name="wastes" value="0xA"/>
+    <member name="arwingdarkice" value="0x3B"/>
+    <member name="newicemount" value="0x17"/>
+    <member name="dfptop" value="0x32"/>
+    <member name="linklevel" value="0x40"/>
+    <member name="arwingdragon" value="0x3E"/>
+    <member name="warlock" value="0xB"/>
+    <member name="galleonship" value="0x50"/>
+    <member name="cloudrace" value="0x2B"/>
+    <member name="arwingcloud" value="0x3C"/>
+    <member name="greatfox" value="0x41"/>
+    <member name="ccbridge" value="0x56"/>
+    <member name="hollow" value="0x7"/>
+    <member name="ccshrine" value="0x29"/>
+    <member name="ecshrine" value="0x21"/>
+    <member name="wminsert" value="0x2D"/>
+    <member name="krazchamber" value="0x16"/>
+    <member name="trexboss" value="0x30"/>
+    <member name="willow" value="0x25"/>
+    <member name="hollow2" value="0x8"/>
+    <member name="krazoapalace" value="0x3"/>
+    <member name="dim2iceblock2" value="0x5E"/>
+    <member name="dim2iceblock1" value="0x5C"/>
+    <member name="vfpslide2" value="0x6A"/>
+    <member name="vfpslide1" value="0x69"/>
+    <member name="dimhornplinth" value="0x5F"/>
+    <member name="bossdrakorflatr" value="0x6E"/>
+    <member name="dbshrine" value="0x27"/>
+    <member name="dfpodium" value="0x4B"/>
+    <member name="nwboulder" value="0x58"/>
+    <member name="snowmines" value="0x13"/>
+    <member name="cloudtrap" value="0x11"/>
+    <member name="insidegal" value="0x1E"/>
+    <member name="gpshrine" value="0x22"/>
+    <member name="wctemplelift" value="0x71"/>
+    <member name="cfgalleon" value="0x51"/>
+    <member name="swapstore" value="0x33"/>
+    <member name="wallcity" value="0xD"/>
+    <member name="cloudtreasure" value="0xF"/>
+    <member name="krashrin2" value="0x14"/>
+    <member name="kraztest" value="0x15"/>
+    <member name="wcbouncycrate" value="0x6F"/>
+    <member name="wcpushblock" value="0x70"/>
+    <member name="dim2stonepillar" value="0x6D"/>
+    <member name="mikelava" value="0x31"/>
+    <member name="drliftplat" value="0x6C"/>
+    <member name="discovery" value="0x6"/>
+    <member name="imspacecraft" value="0x66"/>
+    <member name="cfcolumn" value="0x57"/>
+    <member name="gamefront" value="0x3F"/>
+    <member name="arwingtoplanet" value="0x3A"/>
+    <member name="dragrock" value="0x2"/>
+    <member name="kamdrag" value="0x35"/>
+    <member name="cloudjoin" value="0x39"/>
+    <member name="cfprisondoor" value="0x59"/>
+    <member name="animtest" value="0x1A"/>
+    <member name="linka" value="0x42"/>
+    <member name="cloudrunnermap" value="0x55"/>
+    <member name="diamondbay" value="0x23"/>
+    <member name="linke" value="0x45"/>
+    <member name="dimbossgut" value="0x67"/>
+    <member name="linkd" value="0x44"/>
+    <member name="linkc" value="0x43"/>
+    <member name="vfppushblock" value="0x74"/>
+    <member name="linkb" value="0x38"/>
+    <member name="linki" value="0x4A"/>
+    <member name="dim2icefloe" value="0x62"/>
+    <member name="linkh" value="0x48"/>
+    <member name="linkg" value="0x47"/>
+    <member name="linkf" value="0x46"/>
+    <member name="linkj" value="0x49"/>
+    <member name="duster" value="0x37"/>
+    <member name="capeclaw" value="0x1D"/>
+    <member name="cfliftplat" value="0x65"/>
+    <member name="NO_MAP_16" value="0xFFFF"/>
+    <member name="wgshrine" value="0x2A"/>
+    <member name="nwtreebridge2" value="0x5B"/>
+    <member name="cfgangplank" value="0x52"/>
+    <member name="mmshrine" value="0x20"/>
+    <member name="cfprisoncage" value="0x5A"/>
+    <member name="earthwalker" value="0x24"/>
+    <member name="fortress" value="0xC"/>
+    <member name="arwing" value="0x26"/>
+    <member name="dfcavehatch2" value="0x4E"/>
+    <member name="dfcavehatch1" value="0x4D"/>
+    <member name="drpushcart" value="0x6B"/>
+    <member name="frontend2" value="0x1"/>
+    <member name="mazecave" value="0x9"/>
+    <member name="nwshcolpush" value="0x60"/>
+    <member name="scstatue" value="0x4F"/>
+    <member name="finalboss" value="0x2C"/>
+    <member name="arwingcity" value="0x3D"/>
+    <member name="magicave" value="0x36"/>
+    <member name="dfshrine" value="0x1F"/>
+    <member name="dfcradle" value="0x4C"/>
+    <member name="dim2lift" value="0x61"/>
+    <member name="hightop" value="0x5"/>
+    <member name="dbstepstone" value="0x73"/>
+    <member name="KamColumn" value="0x72"/>
+    <member name="newicemount3" value="0x19"/>
+    <member name="newicemount2" value="0x18"/>
+    <member name="swapcircle" value="0xE"/>
+    <member name="dimpushblock" value="0x5D"/>
+    <member name="dragbot" value="0x34"/>
+    <member name="snowmines5" value="0x2F"/>
+    <member name="clouddungeon" value="0x10"/>
+    <member name="moonpass" value="0x12"/>
+    <member name="nwtreebridge" value="0x53"/>
+    <member name="dim2icefloe1" value="0x63"/>
+    <member name="dim2icefloe2" value="0x64"/>
+    <member name="temple" value="0x4"/>
+    <member name="wmcolrise" value="0x68"/>
+    <member name="snowmines2" value="0x1B"/>
+    <member name="frontend" value="0x0"/>
+    <member name="snowmines3" value="0x1C"/>
+    <member name="nwshrine" value="0x28"/>
+    <member name="snowmines4" value="0x2E"/>
+  </enum>
+  <struct category="/SFA/Game/Map" name="MapInfoEntry">
+    <field count="28" name="name" offset="0x0" type="char"/>
+    <field name="type" offset="0x1C" type="u8"/>
+    <field name="unk1D" offset="0x1D" type="u8"/>
+    <field name="unk1E" offset="0x1E" type="undefined2"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="MapRectStruct">
+    <field name="xMin" offset="0x0" type="s16"/>
+    <field name="xMax" offset="0x2" type="s16"/>
+    <field name="zMin" offset="0x4" type="s16"/>
+    <field name="zMax" offset="0x6" type="s16"/>
+    <field name="idx" offset="0x8" type="s16"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="MapsBinEntry0">
+    <field name="width" offset="0x0" type="s16"/>
+    <field name="height" offset="0x2" type="s16"/>
+    <field name="originX" offset="0x4" type="s16"/>
+    <field name="originY" offset="0x6" type="s16"/>
+    <field count="4" name="unk0C" offset="0xC" type="u32"/>
+    <field name="nBlocks" offset="0x1C" type="short"/>
+    <field name="unk1E" offset="0x1E" type="short"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="MapsTabEntry">
+    <field name="info" offset="0x0" type="MapsBinEntry0*"/>
+    <field name="blocks" offset="0x4" type="u32*"/>
+    <field count="4" name="rects" offset="0x8" type="pointer"/>
+    <field name="romList" offset="0x18" type="pointer"/>
+  </struct>
+  <enum category="/SFA/Game/Map" name="MapUnloadFlags" prefix="MapUnloadFlag_" type="u32">
+    <member name="ResetCharMapIfSame" value="0x20000000"/>
+    <member name="ResetCharMapAlways" value="0x80000000"/>
+    <member name="ResetCharMapIfDifferent" value="0x10000000"/>
+  </enum>
+  <enum category="/SFA/Game/Map" name="SceneRenderLayer" prefix="SceneRenderLayer_" type="u32">
+    <member name="Water" value="0x2"/>
+    <member name="Reflective" value="0x1"/>
+    <member name="Normal" value="0x0"/>
+  </enum>
+  <struct category="/SFA/Game/Map" name="SnowStruct3">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="unk14" offset="0x14" type="float"/>
+    <field name="unk18" offset="0x18" type="float"/>
+    <field name="unk1C" offset="0x1C" type="float"/>
+    <field name="unk28" offset="0x28" type="float"/>
+  </struct>
+  <enum category="/SFA/Game/Map" name="WarpEnum" prefix="WarpEnum_" type="u32">
+    <member name="GreatFox" value="0x7F"/>
+    <member name="KrazoaPalace" value="0x4E"/>
+    <member name="DarkIceMines" value="0x77"/>
+    <member name="OceanForcePoint" value="0x73"/>
+    <member name="LinkA" value="0x7E"/>
+    <member name="WorldMap0E" value="0xE"/>
+    <member name="WorldMap" value="0x60"/>
+    <member name="CRFortLandingPad" value="0x63"/>
+    <member name="ThornTailHollow" value="0xF"/>
+    <member name="IceMountain" value="0x2"/>
+    <member name="TitleScreen" value="0x12"/>
+    <member name="WallCityLandingPad" value="0x78"/>
+    <member name="Andross" value="0x32"/>
+    <member name="TTHLandingPad" value="0x6C"/>
+    <member name="DragonRock" value="0x79"/>
+    <member name="IceMountain1A" value="0x1A"/>
+    <member name="MazeCave" value="0x33"/>
+    <member name="VolcanoForcePoint" value="0x7C"/>
+    <member name="KrazoaPalace_AfterShipBattle" value="0x20"/>
+    <member name="KrazoaPalace_AfterShipBattle2" value="0x22"/>
+    <member name="EmptyMap" value="0x7"/>
+    <member name="LightfootVillage" value="0x50"/>
+  </enum>
+  <struct category="/SFA/Game/Map" name="WarpTabEntry">
+    <field name="coords" offset="0x0" type="vec3f"/>
+    <field name="layer" offset="0xC" type="s16"/>
+    <field name="rotX" offset="0xE" type="s16"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="WaterFxVtxStruct">
+    <field count="3" name="vtxIdx" offset="0x1" type="u8"/>
+  </struct>
+  <struct category="/SFA/Game/Map" name="WaterFxDll">
+    <field count="4" name="vtxs" offset="0x0" type="WaterFxVtxStruct"/>
+  </struct>
+</types>

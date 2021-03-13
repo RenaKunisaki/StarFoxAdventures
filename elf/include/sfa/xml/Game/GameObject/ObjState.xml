@@ -1,0 +1,775 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Game/GameObject/ObjState" name="BombPlantStateStruct">
+    <field name="animScale" offset="0x4" type="float"/>
+    <field name="flags" offset="0x8" type="byte"/>
+    <field name="unk09" offset="0x9" type="byte"/>
+    <field name="unk0A" offset="0xA" type="byte"/>
+    <field name="unk0B" offset="0xB" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjAnimStateCommon">
+    <field name="seqFlags00" offset="0x0" type="byte"/>
+    <field name="seqbit80" offset="0x80" type="GameBit16"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObJSeqCurveIdxs">
+    <field name="rot9E_Z" offset="0x0" type="short"/>
+    <field name="rot9E_X" offset="0x2" type="short"/>
+    <field name="rot9E_Y" offset="0x4" type="short"/>
+    <field name="opacity" offset="0x6" type="short"/>
+    <field name="timeOfDay" offset="0x8" type="short"/>
+    <field name="scale" offset="0xA" type="short"/>
+    <field name="rotZ" offset="0xC" type="short"/>
+    <field name="rotX" offset="0xE" type="short"/>
+    <field name="rotY" offset="0x10" type="short"/>
+    <field name="animTime" offset="0x12" type="short"/>
+    <field name="pointSound" offset="0x14" type="short"/>
+    <field name="posZ" offset="0x16" type="short"/>
+    <field name="posY" offset="0x18" type="short"/>
+    <field name="posX" offset="0x1A" type="short"/>
+    <field name="unk0E" offset="0x1C" type="short"/>
+    <field name="eyeX" offset="0x1E" type="short"/>
+    <field name="eyeY" offset="0x20" type="short"/>
+    <field name="rot9E_X2" offset="0x22" type="short"/>
+    <field name="soundAttr12" offset="0x24" type="short"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjSeqCurvePositions">
+    <field name="rot9E_Z" offset="0x0" type="short"/>
+    <field name="rot9E_X" offset="0x2" type="short"/>
+    <field name="rot9E_Y" offset="0x4" type="short"/>
+    <field name="opacity" offset="0x6" type="short"/>
+    <field name="timeOfDay" offset="0x8" type="short"/>
+    <field name="scale" offset="0xA" type="short"/>
+    <field name="rotZ" offset="0xC" type="short"/>
+    <field name="rotX" offset="0xE" type="short"/>
+    <field name="rotY" offset="0x10" type="short"/>
+    <field name="animTime" offset="0x12" type="short"/>
+    <field name="animIdx" offset="0x14" type="short"/>
+    <field name="posZ" offset="0x16" type="short"/>
+    <field name="posY" offset="0x18" type="short"/>
+    <field name="posX" offset="0x1A" type="short"/>
+    <field name="unk1C" offset="0x1C" type="short"/>
+    <field name="eyeX" offset="0x1E" type="short"/>
+    <field name="eyeY" offset="0x20" type="short"/>
+    <field name="rot9E_X2" offset="0x22" type="short"/>
+    <field name="unk24" offset="0x24" type="short"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_AppleOnTree">
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="unk14" offset="0x14" type="float"/>
+    <field name="unk18" offset="0x18" type="float"/>
+    <field name="unk1C" offset="0x1C" type="float"/>
+    <field name="unk20" offset="0x20" type="float"/>
+    <field name="unk28" offset="0x28" type="float"/>
+    <field name="unk2C" offset="0x2C" type="float"/>
+    <field name="unk30" offset="0x30" type="float"/>
+    <field name="unk34" offset="0x34" type="float"/>
+    <field name="healthValue" offset="0x38" type="ushort"/>
+    <field name="unk3C" offset="0x3C" type="float"/>
+    <field name="unk40" offset="0x40" type="float"/>
+    <field name="unk44" offset="0x44" type="float"/>
+    <field name="unk48" offset="0x48" type="short"/>
+    <field name="unk4A" offset="0x4A" type="short"/>
+    <field name="unk4C" offset="0x4C" type="short"/>
+    <field name="unk50" offset="0x50" type="float"/>
+    <field name="unk5A" offset="0x5A" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Arwing">
+    <field name="unk04" offset="0x4" type="ObjInstance*"/>
+    <field name="unk08" offset="0x8" type="ObjInstance*"/>
+    <field name="unk0C" offset="0xC" type="ObjInstance*"/>
+    <field name="obj10" offset="0x10" type="ObjInstance*"/>
+    <field name="unk14" offset="0x14" type="vec3f"/>
+    <field name="unk20" offset="0x20" type="undefined4"/>
+    <field name="unk24" offset="0x24" type="float"/>
+    <field name="unk28" offset="0x28" type="undefined4"/>
+    <field name="unk38" offset="0x38" type="float"/>
+    <field name="unk50" offset="0x50" type="float"/>
+    <field name="unk54" offset="0x54" type="undefined4"/>
+    <field name="unk58" offset="0x58" type="undefined4"/>
+    <field name="unk5C" offset="0x5C" type="float"/>
+    <field name="unk60" offset="0x60" type="undefined4"/>
+    <field name="unk64" offset="0x64" type="undefined4"/>
+    <field name="unk68" offset="0x68" type="undefined4"/>
+    <field name="unk6C" offset="0x6C" type="undefined4"/>
+    <field name="unk78" offset="0x78" type="undefined4"/>
+    <field name="unk84" offset="0x84" type="undefined4"/>
+    <field name="unk88" offset="0x88" type="undefined4"/>
+    <field name="unk8C" offset="0x8C" type="undefined4"/>
+    <field name="unk90" offset="0x90" type="undefined4"/>
+    <field name="unk94" offset="0x94" type="undefined4"/>
+    <field name="unk98" offset="0x98" type="undefined4"/>
+    <field name="timer9C" offset="0x9C" type="float"/>
+    <field name="unkA0" offset="0xA0" type="float"/>
+    <field name="unkA4" offset="0xA4" type="undefined4"/>
+    <field name="unkA8" offset="0xA8" type="float"/>
+    <field name="unkAC" offset="0xAC" type="float"/>
+    <field name="unkB0" offset="0xB0" type="float"/>
+    <field name="timerB4" offset="0xB4" type="float"/>
+    <field name="unkB8" offset="0xB8" type="float"/>
+    <field name="unkBC" offset="0xBC" type="float"/>
+    <field name="scoreRelated339" offset="0x339" type="char"/>
+    <field name="unk348" offset="0x348" type="undefined4"/>
+    <field name="unk34C" offset="0x34C" type="undefined4"/>
+    <field name="unk35C" offset="0x35C" type="undefined4"/>
+    <field name="unk360" offset="0x360" type="undefined4"/>
+    <field name="unk370" offset="0x370" type="undefined4"/>
+    <field name="unk374" offset="0x374" type="undefined4"/>
+    <field name="unk384" offset="0x384" type="undefined4"/>
+    <field name="unk388" offset="0x388" type="undefined4"/>
+    <field name="unk390" offset="0x390" type="undefined4"/>
+    <field name="unk394" offset="0x394" type="undefined4"/>
+    <field name="unk39C" offset="0x39C" type="undefined4"/>
+    <field name="unk3A4" offset="0x3A4" type="undefined4"/>
+    <field name="unk3AC" offset="0x3AC" type="undefined4"/>
+    <field name="unk3B0" offset="0x3B0" type="undefined4"/>
+    <field name="unk3B4" offset="0x3B4" type="float"/>
+    <field name="unk3B8" offset="0x3B8" type="float"/>
+    <field name="unk3BC" offset="0x3BC" type="undefined4"/>
+    <field name="unk3C4" offset="0x3C4" type="float"/>
+    <field name="unk3C8" offset="0x3C8" type="undefined4"/>
+    <field name="unk3D0" offset="0x3D0" type="undefined4"/>
+    <field name="unk3D4" offset="0x3D4" type="undefined4"/>
+    <field name="unk3E0" offset="0x3E0" type="undefined4"/>
+    <field name="unk3F4" offset="0x3F4" type="ushort"/>
+    <field name="unk3F6" offset="0x3F6" type="ushort"/>
+    <field name="unk3FA" offset="0x3FA" type="byte"/>
+    <field name="unk404" offset="0x404" type="byte"/>
+    <field name="unk40C" offset="0x40C" type="undefined2"/>
+    <field name="laserVal40E" offset="0x40E" type="undefined2"/>
+    <field name="laserVal410" offset="0x410" type="undefined4"/>
+    <field name="unk418" offset="0x418" type="ObjInstance*"/>
+    <field name="unk41C" offset="0x41C" type="ObjInstance*"/>
+    <field name="curBomb" offset="0x438" type="ObjInstance*"/>
+    <field name="unk43D" offset="0x43D" type="byte"/>
+    <field name="unk444" offset="0x444" type="undefined2"/>
+    <field name="unk446" offset="0x446" type="ushort"/>
+    <field name="unk448" offset="0x448" type="float"/>
+    <field name="nBombs" offset="0x44C" type="byte"/>
+    <field name="maxBombs" offset="0x44D" type="byte"/>
+    <field name="unk44E" offset="0x44E" type="ushort"/>
+    <field name="unk450" offset="0x450" type="ObjLight*"/>
+    <field name="unk454" offset="0x454" type="vec3s*"/>
+    <field name="unk458" offset="0x458" type="vec3s*"/>
+    <field name="unk45C" offset="0x45C" type="vec3s*"/>
+    <field name="unk460" offset="0x460" type="vec3s*"/>
+    <field name="unk464" offset="0x464" type="undefined4"/>
+    <field name="curHealth" offset="0x468" type="byte"/>
+    <field name="maxHealth" offset="0x469" type="s8"/>
+    <field name="nGoldRings" offset="0x470" type="byte"/>
+    <field name="nGoldRingsNeeded" offset="0x471" type="byte"/>
+    <field name="unk472" offset="0x472" type="byte"/>
+    <field name="unk473" offset="0x473" type="byte"/>
+    <field name="unk474" offset="0x474" type="byte"/>
+    <field name="unk475" offset="0x475" type="byte"/>
+    <field name="unk476" offset="0x476" type="byte"/>
+    <field name="flags477" offset="0x477" type="byte"/>
+    <field name="unk478" offset="0x478" type="byte"/>
+    <field name="destMapIdx" offset="0x47B" type="byte"/>
+    <field name="score" offset="0x47C" type="ushort"/>
+    <field name="levelNo" offset="0x47E" type="byte"/>
+    <field name="unk47F" offset="0x47F" type="byte"/>
+    <field name="unk480" offset="0x480" type="char"/>
+    <field name="pos484" offset="0x484" type="vec3f"/>
+    <field name="rot490" offset="0x490" type="vec3s"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_ArwingAndrossStuff">
+    <field name="type" offset="0x0" type="byte"/>
+    <field name="timer4" offset="0x4" type="float"/>
+    <field name="timer10" offset="0x10" type="float"/>
+    <field name="light" offset="0x14" type="ObjLight*"/>
+    <field name="unk18" offset="0x18" type="byte"/>
+    <field name="unk1A" offset="0x1A" type="short"/>
+    <field name="unk1C" offset="0x1C" type="short"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_ARWLevelCon">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk14" offset="0x14" type="undefined2"/>
+    <field name="unk16" offset="0x16" type="undefined2"/>
+    <field name="didInitFx" offset="0x18" type="char"/>
+    <field name="didPlayStream" offset="0x19" type="char"/>
+    <field name="isFinished" offset="0x1A" type="char"/>
+    <field name="isAndross" offset="0x1B" type="byte"/>
+    <field name="streamId" offset="0x1C" type="undefined4"/>
+    <field name="seqObjDef" offset="0x20" type="ObjDefEnum"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Baddie">
+    <field name="unk00" offset="0x0" type="void*"/>
+    <field name="unk04" offset="0x4" type="void*"/>
+    <field name="target" offset="0x29C" type="ObjInstance*"/>
+    <field name="targetAngleHi" offset="0x2A0" type="ushort"/>
+    <field name="targetAngleLo" offset="0x2A2" type="short"/>
+    <field name="targetDistXZ" offset="0x2A4" type="ushort"/>
+    <field name="targetDistY" offset="0x2A6" type="short"/>
+    <field name="unk2A8" offset="0x2A8" type="void*"/>
+    <field name="unk2AC" offset="0x2AC" type="void*"/>
+    <field name="health" offset="0x2B0" type="ushort"/>
+    <field name="unk2B2" offset="0x2B2" type="ushort"/>
+    <field name="loadedWeaponId" offset="0x2B4" type="ObjDefEnum"/>
+    <field name="weaponId" offset="0x2B6" type="ObjDefEnum"/>
+    <field name="timer02D0" offset="0x2D0" type="float"/>
+    <field name="frozenTimer" offset="0x2D4" type="float"/>
+    <field name="damage" offset="0x2D8" type="void*"/>
+    <field name="flags02DC" offset="0x2DC" type="BaddieFlags02DC"/>
+    <field name="prevFlags" offset="0x2E0" type="BaddieFlags02DC"/>
+    <field name="unk2E4" offset="0x2E4" type="int"/>
+    <field name="flags02E8" offset="0x2E8" type="void*"/>
+    <field name="unk2EC" offset="0x2EC" type="undefined2"/>
+    <field name="unk2F1" offset="0x2F1" type="byte"/>
+    <field name="unk2F2" offset="0x2F2" type="byte"/>
+    <field name="unk2F5" offset="0x2F5" type="byte"/>
+    <field name="unk2F6" offset="0x2F6" type="byte"/>
+    <field name="unk2F8" offset="0x2F8" type="undefined2"/>
+    <field name="unk2FC" offset="0x2FC" type="void*"/>
+    <field name="unk300" offset="0x300" type="void*"/>
+    <field name="unk304" offset="0x304" type="void*"/>
+    <field name="unk308" offset="0x308" type="void*"/>
+    <field name="unk30C" offset="0x30C" type="void*"/>
+    <field name="unk310" offset="0x310" type="void*"/>
+    <field name="unk314" offset="0x314" type="float"/>
+    <field name="unk318" offset="0x318" type="float"/>
+    <field name="unk31C" offset="0x31C" type="float"/>
+    <field name="unk320" offset="0x320" type="byte"/>
+    <field name="unk321" offset="0x321" type="byte"/>
+    <field name="unk322" offset="0x322" type="byte"/>
+    <field name="unk323" offset="0x323" type="byte"/>
+    <field name="unk324" offset="0x324" type="void*"/>
+    <field name="unk328" offset="0x328" type="void*"/>
+    <field name="ypos032C" offset="0x32C" type="void*"/>
+    <field name="unk330" offset="0x330" type="void*"/>
+    <field name="unk334" offset="0x334" type="void*"/>
+    <field name="unk338" offset="0x338" type="ushort"/>
+    <field name="unk33A" offset="0x33A" type="byte"/>
+    <field name="isFireBat" offset="0x33B" type="char"/>
+    <field name="unk33C" offset="0x33C" type="byte"/>
+    <field name="unk33D" offset="0x33D" type="byte"/>
+    <field name="light" offset="0x368" type="ObjLight*"/>
+    <field name="unk36C" offset="0x36C" type="ModelStruct55*"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_BombPlant">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="scale" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="state" offset="0x14" type="byte"/>
+    <field name="flags15" offset="0x15" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Carryable">
+    <field name="unk00" offset="0x0" type="short"/>
+    <field name="unk02" offset="0x2" type="short"/>
+    <field name="unk05" offset="0x5" type="char"/>
+    <field name="unk06" offset="0x6" type="char"/>
+    <field name="flags" offset="0x7" type="byte"/>
+    <field name="unk08" offset="0x8" type="byte"/>
+    <field name="unk09" offset="0x9" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_CFLevelControl">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="flags08" offset="0x8" type="uint"/>
+    <field name="flags0C" offset="0xC" type="ObjState_CFLevelControl_flags0C"/>
+    <field name="camMode" offset="0xD" type="byte"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject/ObjState" name="ObjState_CFLevelControl_flags0C" prefix="ObjState_CFLevelControl_flags0C_" type="u8">
+    <member name="Lever2Activated" value="0x20"/>
+    <member name="DidntSetupObjs" value="0x8"/>
+    <member name="Lever1Activated" value="0x10"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_CNTcounter">
+    <field name="count" offset="0x0" type="uint"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_DeathSeq">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="pos" offset="0x4" type="vec3f"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="unk14" offset="0x14" type="float"/>
+    <field name="rotX" offset="0x18" type="float"/>
+    <field name="rotY" offset="0x1C" type="float"/>
+    <field name="flags20" offset="0x20" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_dll224">
+    <field name="stoneUsed" offset="0x0" type="short"/>
+    <field name="enable" offset="0x2" type="short"/>
+    <field name="unk04" offset="0x4" type="char"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_FuelCell">
+    <field name="unk00" offset="0x0" type="undefined2"/>
+    <field name="flags5C" offset="0x5C" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_GunPowderBarrel">
+    <field name="unk00" offset="0x0" type="ObjState_Carryable"/>
+    <field name="flags" offset="0xD" type="byte"/>
+    <field name="unk10" offset="0x10" type="ObjInstance*"/>
+    <field name="unk15" offset="0x15" type="char"/>
+    <field name="unk16" offset="0x16" type="char"/>
+    <field name="unk17" offset="0x17" type="byte"/>
+    <field name="unk18" offset="0x18" type="float"/>
+    <field name="unk20" offset="0x20" type="vec3f"/>
+    <field name="unk34" offset="0x34" type="float"/>
+    <field name="unk48" offset="0x48" type="byte"/>
+    <field name="unk49" offset="0x49" type="byte"/>
+    <field name="unk4A" offset="0x4A" type="byte"/>
+    <field name="timer54" offset="0x54" type="float"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_InfoPoint">
+    <field name="text" offset="0x0" type="gametextStruct*"/>
+    <field name="phrases" offset="0x4" type="char*"/>
+    <field name="unk08" offset="0x8" type="undefined*"/>
+    <field name="unk0C" offset="0xC" type="undefined4"/>
+    <field name="unk10" offset="0x10" type="byte"/>
+    <field name="unk16" offset="0x16" type="undefined2"/>
+    <field name="unk18" offset="0x18" type="undefined4"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Laser">
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="light" offset="0x14" type="ObjLight*"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_LevelName">
+    <field name="text" offset="0x0" type="gametextStruct*"/>
+    <field name="phrases" offset="0x4" type="char*"/>
+    <field name="unk08" offset="0x8" type="undefined4"/>
+    <field name="unk0C" offset="0xC" type="byte"/>
+    <field name="bit" offset="0xE" type="ObjDefEnum"/>
+    <field name="unk10" offset="0x10" type="undefined2"/>
+    <field name="unk12" offset="0x12" type="undefined2"/>
+    <field name="unk14" offset="0x14" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_LinkA_levelcontrol">
+    <field count="10" name="actions" offset="0x81" type="byte"/>
+    <field name="nActions" offset="0x8B" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_MagicCaveTop">
+    <field name="action" offset="0x0" type="byte"/>
+    <field name="flags01" offset="0x1" type="byte"/>
+    <field name="unk02" offset="0x2" type="byte"/>
+    <field name="warpTimer04" offset="0x4" type="float"/>
+    <field name="timer08" offset="0x8" type="float"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_MagicDust">
+    <field name="unk6C" offset="0x6C" type="float"/>
+    <field name="unk25B" offset="0x25B" type="byte"/>
+    <field name="unk268" offset="0x268" type="float"/>
+    <field name="vanishTimer" offset="0x26C" type="float"/>
+    <field name="unk270" offset="0x270" type="undefined2"/>
+    <field name="unk272" offset="0x272" type="undefined2"/>
+    <field name="unk274" offset="0x274" type="SoundId"/>
+    <field name="unk276" offset="0x276" type="undefined2"/>
+    <field name="unk278" offset="0x278" type="ushort"/>
+    <field name="flags27A" offset="0x27A" type="byte"/>
+    <field name="unk27B" offset="0x27B" type="byte"/>
+    <field name="unk27C" offset="0x27C" type="byte"/>
+    <field name="unk280" offset="0x280" type="short"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_MagicPlant">
+    <field name="gem" offset="0x0" type="ObjInstance*"/>
+    <field name="growTime" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="ObjInstance*"/>
+    <field name="unk0C" offset="0xC" type="short"/>
+    <field name="step" offset="0xF" type="ObjState_MagicPlant_Step"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject/ObjState" name="ObjState_MagicPlant_Step" prefix="ObjState_MagicPlant_Step_" type="u8">
+    <member name="DropGem" value="0x4"/>
+    <member name="Dead" value="0x3"/>
+    <member name="Idle" value="0x0"/>
+    <member name="FadeOut" value="0x2"/>
+    <member name="Dying" value="0x1"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Pushable">
+    <field name="bitAC" offset="0xAC" type="GameBit16"/>
+    <field name="lastMsgF0003from" offset="0xB8" type="ObjInstance*"/>
+    <field name="unkBC" offset="0xBC" type="ObjInstance*"/>
+    <field name="unkCC" offset="0xCC" type="float"/>
+    <field name="unkD0" offset="0xD0" type="float"/>
+    <field name="unkD4" offset="0xD4" type="float"/>
+    <field name="unkD8" offset="0xD8" type="float"/>
+    <field name="unkDC" offset="0xDC" type="float"/>
+    <field name="unkE0" offset="0xE0" type="float"/>
+    <field name="unkE4" offset="0xE4" type="float"/>
+    <field name="unkE8" offset="0xE8" type="float"/>
+    <field name="unkEC" offset="0xEC" type="float"/>
+    <field name="unkF0" offset="0xF0" type="float"/>
+    <field name="unkF4" offset="0xF4" type="float"/>
+    <field name="unkF8" offset="0xF8" type="float"/>
+    <field name="flags100" offset="0x100" type="ushort"/>
+    <field name="unk114" offset="0x114" type="byte"/>
+    <field name="unk145" offset="0x145" type="char"/>
+    <field name="unk146" offset="0x146" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Ring">
+    <field name="unk00" offset="0x0" type="byte"/>
+    <field name="type" offset="0x1" type="byte"/>
+    <field name="unk02" offset="0x2" type="ushort"/>
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="flags14" offset="0x14" type="byte"/>
+    <field name="unk15" offset="0x15" type="byte"/>
+    <field name="timer18" offset="0x18" type="float"/>
+    <field name="light" offset="0x20" type="ObjLight*"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_SB_Galleon">
+    <field name="unk00" offset="0x0" type="vec3f"/>
+    <field name="unk1C" offset="0x1C" type="float"/>
+    <field name="rot" offset="0x20" type="vec3s"/>
+    <field name="frameCount26" offset="0x26" type="undefined2"/>
+    <field name="unk28" offset="0x28" type="byte"/>
+    <field name="action29" offset="0x29" type="byte"/>
+    <field name="unk2A" offset="0x2A" type="byte"/>
+    <field name="unk2B" offset="0x2B" type="byte"/>
+    <field name="pos" offset="0x2C" type="vec3f"/>
+    <field name="unk38" offset="0x38" type="float"/>
+    <field name="unk3C" offset="0x3C" type="float"/>
+    <field name="unk40" offset="0x40" type="float"/>
+    <field name="unk44" offset="0x44" type="float"/>
+    <field name="pShipHead" offset="0x4C" type="ObjInstance*"/>
+    <field name="unk50" offset="0x50" type="float"/>
+    <field name="unk58" offset="0x58" type="float"/>
+    <field name="unk5C" offset="0x5C" type="vec3f"/>
+    <field name="frameCount6C" offset="0x6C" type="short"/>
+    <field name="frameCount6E" offset="0x6E" type="undefined2"/>
+    <field name="unk70" offset="0x70" type="byte"/>
+    <field name="mapId" offset="0x72" type="short"/>
+    <field name="showIntroTextTimer" offset="0x74" type="float"/>
+    <field name="unk78" offset="0x78" type="byte"/>
+    <field name="unk79" offset="0x79" type="byte"/>
+    <field name="unk7A" offset="0x7A" type="byte"/>
+    <field name="unk7B" offset="0x7B" type="byte"/>
+    <field name="unk7C" offset="0x7C" type="byte"/>
+    <field name="unk80" offset="0x80" type="byte"/>
+    <field name="unk82" offset="0x82" type="undefined2"/>
+    <field name="unk84" offset="0x84" type="byte"/>
+    <field name="unk85" offset="0x85" type="byte"/>
+    <field name="timer88" offset="0x88" type="float"/>
+    <field name="timer8C" offset="0x8C" type="float"/>
+    <field name="timer90" offset="0x90" type="float"/>
+    <field name="timer94" offset="0x94" type="float"/>
+    <field name="unk98" offset="0x98" type="int"/>
+    <field name="songId" offset="0x9C" type="int"/>
+    <field name="unkA0" offset="0xA0" type="byte"/>
+    <field name="unkA1" offset="0xA1" type="byte"/>
+    <field name="unkA5" offset="0xA5" type="byte"/>
+    <field name="unkA6" offset="0xA6" type="byte"/>
+    <field name="unkA7" offset="0xA7" type="byte"/>
+    <field name="unkA8" offset="0xA8" type="byte"/>
+    <field name="unkA9" offset="0xA9" type="byte"/>
+    <field name="unkAA" offset="0xAA" type="byte"/>
+    <field name="unkAB" offset="0xAB" type="byte"/>
+    <field name="timerAC" offset="0xAC" type="float"/>
+    <field name="unkB0" offset="0xB0" type="undefined4"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Scarab">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="ushort"/>
+    <field name="unk14" offset="0x14" type="ushort"/>
+    <field name="unk16" offset="0x16" type="short"/>
+    <field name="unk18" offset="0x18" type="short"/>
+    <field name="unk1A" offset="0x1A" type="ushort"/>
+    <field name="unk1C" offset="0x1C" type="short"/>
+    <field name="unk1E" offset="0x1E" type="SoundId"/>
+    <field name="unk20" offset="0x20" type="short"/>
+    <field name="unk24" offset="0x24" type="char"/>
+    <field name="type" offset="0x27" type="byte"/>
+    <field name="unk28" offset="0x28" type="byte"/>
+    <field name="unk2C" offset="0x2C" type="float"/>
+    <field name="unk30" offset="0x30" type="float"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_SeqObj2">
+    <field name="flags" offset="0x0" type="ObjState_SeqObj2_flags"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject/ObjState" name="ObjState_SeqObj2_flags" prefix="ObjState_SeqObj2_flags_" type="u8">
+    <member name="Used" value="0x1"/>
+    <member name="Running" value="0x2"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_SeqPoint">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="gameBit04" offset="0x4" type="undefined2"/>
+    <field name="gameBit06" offset="0x6" type="undefined2"/>
+    <field name="seqIdx" offset="0x8" type="undefined2"/>
+    <field name="unk0D" offset="0xD" type="byte"/>
+    <field name="unk0E" offset="0xE" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_SH_thorntail">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="float"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="unk0C" offset="0xC" type="float"/>
+    <field name="unk10" offset="0x10" type="vec3f"/>
+    <field name="unk1C" offset="0x1C" type="float"/>
+    <field name="unk5BC" offset="0x5BC" type="float"/>
+    <field name="unk5F8" offset="0x5F8" type="int"/>
+    <field name="unk5FC" offset="0x5FC" type="int"/>
+    <field name="unk600" offset="0x600" type="byte"/>
+    <field name="unk601" offset="0x601" type="byte"/>
+    <field name="unk604" offset="0x604" type="int"/>
+    <field name="unk608" offset="0x608" type="int"/>
+    <field name="unk60C" offset="0x60C" type="undefined2"/>
+    <field name="unk60E" offset="0x60E" type="undefined2"/>
+    <field name="count610" offset="0x610" type="byte"/>
+    <field name="unk611" offset="0x611" type="byte"/>
+    <field name="unk614" offset="0x614" type="float"/>
+    <field name="unk618" offset="0x618" type="int"/>
+    <field name="frameCount620" offset="0x620" type="int"/>
+    <field name="animIdx" offset="0x624" type="char"/>
+    <field name="flags625" offset="0x625" type="byte"/>
+    <field name="unk627" offset="0x627" type="byte"/>
+    <field name="unk628" offset="0x628" type="float"/>
+    <field name="seqIds" offset="0x62C" type="byte*"/>
+    <field name="unk630" offset="0x630" type="float"/>
+    <field name="unk638" offset="0x638" type="float"/>
+    <field name="xRot63C" offset="0x63C" type="short"/>
+    <field name="unk63F" offset="0x63F" type="byte"/>
+    <field name="unk640" offset="0x640" type="byte"/>
+    <field name="unk7DC" offset="0x7DC" type="short"/>
+    <field name="unk7DE" offset="0x7DE" type="short"/>
+    <field name="unk8AC" offset="0x8AC" type="float"/>
+    <field name="unk8B0" offset="0x8B0" type="EyeAnimStruct"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_ShopKeeper">
+    <field name="unk35C" offset="0x35C" type="ObjState_SH_thorntail"/>
+    <field name="eyeAnim" offset="0x980" type="EyeAnimStruct"/>
+    <field name="unk9B0" offset="0x9B0" type="undefined*"/>
+    <field name="unk9B4" offset="0x9B4" type="ObjInstance*"/>
+    <field name="unk9B8" offset="0x9B8" type="float"/>
+    <field name="showMapNameTimer" offset="0x9C4" type="float"/>
+    <field name="playerMoney" offset="0x9C8" type="short"/>
+    <field name="flags9D4" offset="0x9D4" type="byte"/>
+    <field name="opacity" offset="0x9D6" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_SnowBike">
+    <field name="lastCheckpointRot" offset="0x0" type="vec3s"/>
+    <field name="lastCheckpointPos" offset="0xC" type="vec3f"/>
+    <field name="checkpoint" offset="0x28" type="CheckpointStruct28"/>
+    <field name="unk5D" offset="0x5D" type="byte"/>
+    <field name="unk60" offset="0x60" type="GameBit16*"/>
+    <field name="nextCheckpointAngle" offset="0x68" type="float"/>
+    <field name="mtx6C" offset="0x6C" type="Mtx44"/>
+    <field name="mtxAC" offset="0xAC" type="Mtx44"/>
+    <field name="mtxEC" offset="0xEC" type="Mtx44"/>
+    <field name="mtx12C" offset="0x12C" type="Mtx44"/>
+    <field name="unk3D3" offset="0x3D3" type="byte"/>
+    <field name="unk3E0" offset="0x3E0" type="float"/>
+    <field name="unk3E4" offset="0x3E4" type="float"/>
+    <field name="unk3F4" offset="0x3F4" type="float"/>
+    <field name="timer3F8" offset="0x3F8" type="float"/>
+    <field name="xRot40C" offset="0x40C" type="short"/>
+    <field name="xRot40E" offset="0x40E" type="short"/>
+    <field name="unk410" offset="0x410" type="int"/>
+    <field name="unk414" offset="0x414" type="undefined4"/>
+    <field name="unk41C" offset="0x41C" type="short"/>
+    <field name="unk41E" offset="0x41E" type="short"/>
+    <field name="unk420" offset="0x420" type="byte"/>
+    <field name="unk421" offset="0x421" type="char"/>
+    <field name="unk422" offset="0x422" type="byte"/>
+    <field name="unk424" offset="0x424" type="float"/>
+    <field name="flags428" offset="0x428" type="ObjState_SnowBike_Flags428"/>
+    <field name="unk42C" offset="0x42C" type="int"/>
+    <field name="unk430" offset="0x430" type="float"/>
+    <field name="checkpointVar434" offset="0x434" type="byte"/>
+    <field name="checkpointVar435" offset="0x435" type="byte"/>
+    <field name="timer43C" offset="0x43C" type="float"/>
+    <field name="unk440" offset="0x440" type="SoundId"/>
+    <field name="unk44A" offset="0x44A" type="GameBit16"/>
+    <field name="stickX_44c" offset="0x44C" type="short"/>
+    <field name="buttonsPressed" offset="0x450" type="uint"/>
+    <field name="buttonsPressedNotBusy" offset="0x454" type="uint"/>
+    <field name="buttonsHeld" offset="0x458" type="uint"/>
+    <field name="stickX" offset="0x45C" type="float"/>
+    <field name="stickY" offset="0x460" type="char"/>
+    <field name="unk464" offset="0x464" type="Quaternion"/>
+    <field name="unk47C" offset="0x47C" type="Quaternion"/>
+    <field name="unk494" offset="0x494" type="Quaternion"/>
+    <field name="unk4B4" offset="0x4B4" type="byte"/>
+    <field name="unk4B8" offset="0x4B8" type="float"/>
+    <field name="unk4BC" offset="0x4BC" type="float"/>
+    <field name="unk4C0" offset="0x4C0" type="float"/>
+    <field name="unk4C4" offset="0x4C4" type="float"/>
+    <field name="unk4C8" offset="0x4C8" type="byte"/>
+    <field name="unk4CC" offset="0x4CC" type="short"/>
+    <field name="flags4CE" offset="0x4CE" type="byte"/>
+    <field name="unk510" offset="0x510" type="int"/>
+    <field name="unk514" offset="0x514" type="int"/>
+    <field name="unk518" offset="0x518" type="int"/>
+    <field name="prevPos51C" offset="0x51C" type="vec3f"/>
+    <field name="unk52C" offset="0x52C" type="float"/>
+    <field name="turnMax530" offset="0x530" type="float"/>
+    <field name="turnRate534" offset="0x534" type="float"/>
+    <field name="unk538" offset="0x538" type="float"/>
+    <field name="unk53C" offset="0x53C" type="float"/>
+    <field name="unk540" offset="0x540" type="float"/>
+    <field name="unk544" offset="0x544" type="float"/>
+    <field name="turnStrength548" offset="0x548" type="float"/>
+    <field name="topSpeed54C" offset="0x54C" type="float"/>
+    <field name="turnVel558" offset="0x558" type="float"/>
+    <field name="turnMax" offset="0x56C" type="float"/>
+    <field name="turnRate" offset="0x574" type="float"/>
+    <field name="turnVel" offset="0x578" type="float"/>
+    <field name="turnStrength" offset="0x57C" type="float"/>
+    <field name="topSpeed" offset="0x580" type="float"/>
+  </struct>
+  <enum category="/SFA/Game/GameObject/ObjState" name="ObjState_SnowBike_Flags428" prefix="ObjState_SnowBike_Flags428_" type="u8">
+    <member name="Riding" value="0x2"/>
+    <member name="PhysicsRelated80" value="0x80"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_SpellStone">
+    <field name="state" offset="0x0" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Staff">
+    <field name="unk54" offset="0x54" type="float"/>
+    <field name="unk5C" offset="0x5C" type="float"/>
+    <field name="unk64" offset="0x64" type="float"/>
+    <field name="unk6C" offset="0x6C" type="float"/>
+    <field name="unk74" offset="0x74" type="float"/>
+    <field name="unk7C" offset="0x7C" type="float"/>
+    <field name="unkB0" offset="0xB0" type="short"/>
+    <field name="glowColor" offset="0xBA" type="StaffGlowColor"/>
+    <field name="glowStyle" offset="0xBB" type="undefined1"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Timer">
+    <field name="time" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="pointer"/>
+    <field name="unk08" offset="0x8" type="float"/>
+    <field name="state" offset="0xC" type="byte"/>
+    <field name="flags" offset="0xD" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_Tricky">
+    <field name="energy" offset="0x0" type="byte*"/>
+    <field name="obj_0x4" offset="0x4" type="int"/>
+    <field name="unk08" offset="0x8" type="byte"/>
+    <field name="unk09" offset="0x9" type="byte"/>
+    <field name="unk0A" offset="0xA" type="byte"/>
+    <field name="enabledCommands" offset="0xB" type="byte"/>
+    <field name="unk0D" offset="0xD" type="char"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="unk14" offset="0x14" type="float"/>
+    <field name="unk18" offset="0x18" type="float"/>
+    <field name="unk20" offset="0x20" type="byte*"/>
+    <field name="unk24" offset="0x24" type="int"/>
+    <field name="unk28" offset="0x28" type="int"/>
+    <field name="unk2C" offset="0x2C" type="byte*"/>
+    <field name="unk30" offset="0x30" type="byte*"/>
+    <field name="unk34" offset="0x34" type="byte*"/>
+    <field name="unk38" offset="0x38" type="byte*"/>
+    <field name="unk3C" offset="0x3C" type="byte*"/>
+    <field name="unk40" offset="0x40" type="byte*"/>
+    <field name="unk44" offset="0x44" type="byte*"/>
+    <field name="unk48" offset="0x48" type="byte*"/>
+    <field name="unk4C" offset="0x4C" type="byte*"/>
+    <field name="unk50" offset="0x50" type="byte*"/>
+    <field name="flags_0x54" offset="0x54" type="TrickyStateFlags54"/>
+    <field name="unk58" offset="0x58" type="byte"/>
+    <field name="unk5A" offset="0x5A" type="short"/>
+    <field name="objId_0x5c" offset="0x5C" type="int"/>
+    <field name="unk60" offset="0x60" type="float"/>
+    <field name="unk8C" offset="0x8C" type="byte*"/>
+    <field name="unk90" offset="0x90" type="byte*"/>
+    <field name="unk94" offset="0x94" type="byte*"/>
+    <field name="unkD2" offset="0xD2" type="undefined2"/>
+    <field name="unkE0" offset="0xE0" type="vec3f"/>
+    <field name="unk2AC" offset="0x2AC" type="float"/>
+    <field name="unk2B0" offset="0x2B0" type="float"/>
+    <field name="unk2B4" offset="0x2B4" type="byte*"/>
+    <field name="hits" offset="0x358" type="char"/>
+    <field name="unk37C" offset="0x37C" type="byte*"/>
+    <field name="unk380" offset="0x380" type="byte*"/>
+    <field name="unk384" offset="0x384" type="byte*"/>
+    <field count="7" name="obj_0x700" offset="0x700" type="ObjInstance*"/>
+    <field name="unk71C" offset="0x71C" type="float"/>
+    <field name="unk720" offset="0x720" type="float"/>
+    <field name="unk724" offset="0x724" type="undefined*"/>
+    <field name="unk728" offset="0x728" type="undefined*"/>
+    <field name="unk734" offset="0x734" type="byte"/>
+    <field name="unk740" offset="0x740" type="byte*"/>
+    <field name="unk748" offset="0x748" type="int"/>
+    <field name="unk74C" offset="0x74C" type="char"/>
+    <field name="unk74D" offset="0x74D" type="char"/>
+    <field name="unk74E" offset="0x74E" type="char"/>
+    <field name="numCommPresent" offset="0x798" type="byte"/>
+    <field name="unk79C" offset="0x79C" type="float"/>
+    <field name="unk7A0" offset="0x7A0" type="float"/>
+    <field name="unk7A8" offset="0x7A8" type="byte*"/>
+    <field name="unk7B0" offset="0x7B0" type="byte*"/>
+    <field name="unk7B8" offset="0x7B8" type="ObjInstance*"/>
+    <field name="unk7BC" offset="0x7BC" type="byte"/>
+    <field name="unk7C0" offset="0x7C0" type="float"/>
+    <field name="unk7C4" offset="0x7C4" type="float"/>
+    <field name="unk7C8" offset="0x7C8" type="float"/>
+    <field name="badge" offset="0x7CC" type="ObjInstance*"/>
+    <field name="unk808" offset="0x808" type="float"/>
+    <field name="unk80C" offset="0x80C" type="byte*"/>
+    <field name="unk810" offset="0x810" type="byte*"/>
+    <field name="unk814" offset="0x814" type="byte*"/>
+    <field name="unk81A" offset="0x81A" type="short"/>
+    <field name="unk827" offset="0x827" type="char"/>
+    <field name="unk828" offset="0x828" type="float"/>
+    <field name="energy82D" offset="0x82D" type="byte"/>
+    <field name="unk82E" offset="0x82E" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_VFP_flamepoint">
+    <field name="activated" offset="0x0" type="undefined2"/>
+    <field name="gameBit02" offset="0x2" type="undefined2"/>
+    <field name="unk04" offset="0x4" type="char"/>
+    <field name="flags05" offset="0x5" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_WarpStone">
+    <field name="obj00" offset="0x0" type="ObjInstance*"/>
+    <field name="particleFxTimer" offset="0x4" type="float"/>
+    <field name="hitboxIdx" offset="0x8" type="byte"/>
+    <field name="unk09" offset="0x9" type="byte"/>
+    <field name="unk0A" offset="0xA" type="byte"/>
+    <field name="bit0E" offset="0xE" type="GameBit16"/>
+    <field name="unk14" offset="0x14" type="char"/>
+    <field name="unk44" offset="0x44" type="EyeAnimStruct"/>
+    <field name="flagsD4" offset="0xD4" type="byte"/>
+    <field name="flagsD5" offset="0xD5" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_WM_LevelControl">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="undefined2"/>
+    <field name="unk06" offset="0x6" type="ushort"/>
+    <field name="unk08" offset="0x8" type="undefined2"/>
+    <field name="unk0A" offset="0xA" type="byte"/>
+    <field name="unk0B" offset="0xB" type="byte"/>
+    <field name="unk10" offset="0x10" type="int"/>
+    <field name="unk14" offset="0x14" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_WM_SeqPoint">
+    <field name="trigDist" offset="0x0" type="float"/>
+    <field name="bitSeqStarted" offset="0x4" type="GameBit16"/>
+    <field name="bitStart" offset="0x6" type="GameBit16"/>
+    <field name="seqIdx" offset="0x8" type="short"/>
+    <field name="unk0A" offset="0xA" type="undefined2"/>
+    <field name="unk0C" offset="0xC" type="byte"/>
+    <field name="seqStarted" offset="0xD" type="byte"/>
+    <field name="action" offset="0xE" type="byte"/>
+    <field name="unk0F" offset="0xF" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_WM_SpiritPlace">
+    <field name="unk00" offset="0x0" type="float"/>
+    <field name="unk04" offset="0x4" type="undefined4"/>
+    <field name="unk08" offset="0x8" type="undefined2"/>
+    <field name="unk0A" offset="0xA" type="undefined2"/>
+    <field name="bitEnabled" offset="0xC" type="GameBit16"/>
+    <field name="bitVisible" offset="0xE" type="GameBit16"/>
+    <field name="unk10" offset="0x10" type="short"/>
+    <field name="flags12" offset="0x12" type="byte"/>
+    <field name="mapAct" offset="0x13" type="byte"/>
+    <field name="showTimer" offset="0x14" type="byte"/>
+    <field name="flags15" offset="0x15" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_WORLDplanet">
+    <field name="nextCometTimer" offset="0x6" type="short"/>
+    <field name="unk08" offset="0x8" type="byte"/>
+    <field name="unk10" offset="0x10" type="byte"/>
+    <field name="unk11" offset="0x11" type="byte"/>
+    <field name="unk14" offset="0x14" type="uint"/>
+  </struct>
+</types>

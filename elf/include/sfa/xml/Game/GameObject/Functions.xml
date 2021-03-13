@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<types>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="objBeforeMoveFn">
+    <return type="void"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+    </params>
+  </funcdef>
+  <struct category="/SFA/Game/GameObject/Functions" name="ObjectFuncPtrs">
+    <field name="ptrs2" offset="0x0" type="ObjectFuncPtrs2*"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/Functions" name="ObjectFuncPtrs2">
+    <field name="unk00" offset="0x0" type="pointer"/>
+    <field name="onLoad" offset="0x4" type="objOnLoadFn*"/>
+    <field name="update" offset="0x8" type="objUpdateFn*"/>
+    <field name="hitDetect" offset="0xC" type="objBeforeMoveFn*"/>
+    <field name="render" offset="0x10" type="objRenderFn*"/>
+    <field name="onFreeObjDef" offset="0x14" type="objOnFreeDefFn*"/>
+    <field name="unk18" offset="0x18" type="pointer"/>
+    <field name="getExtraSize" offset="0x1C" type="objGetExtraSizeFn*"/>
+    <field name="setScale" offset="0x20" type="pointer"/>
+    <field name="unk24" offset="0x24" type="pointer"/>
+    <field name="modelMtxFn_0x28" offset="0x28" type="objModelMtxFn28*"/>
+    <field name="render2C" offset="0x2C" type="pointer"/>
+  </struct>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="objField108_func">
+    <return type="undefined"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+      <param reg="r4" type="Model*"/>
+      <param reg="r5" type="Mtx44*"/>
+    </params>
+  </funcdef>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="ObjFunc">
+    <return type="undefined4"/>
+    <params/>
+  </funcdef>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="objGetExtraSizeFn">
+    <return type="int"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+      <param reg="r4" type="int"/>
+    </params>
+  </funcdef>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="objModelMtxFn28">
+    <return type="void"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+      <param reg="r4" type="undefined4"/>
+      <param reg="r5" type="vec3f*"/>
+    </params>
+  </funcdef>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="objOnFreeDefFn">
+    <return type="void"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+      <param reg="r4" type="undefined4"/>
+    </params>
+  </funcdef>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="objOnLoadFn">
+    <return type="void"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+    </params>
+  </funcdef>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="objRenderFn">
+    <return type="void"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+      <param reg="r4" type="undefined4"/>
+      <param reg="r5" type="undefined4"/>
+      <param reg="r6" type="undefined4"/>
+      <param reg="r7" type="undefined4"/>
+      <param reg="r8" type="BOOL"/>
+    </params>
+  </funcdef>
+  <funcdef category="/SFA/Game/GameObject/Functions" name="objUpdateFn">
+    <return type="void"/>
+    <params>
+      <param reg="r3" type="ObjInstance*"/>
+    </params>
+  </funcdef>
+</types>

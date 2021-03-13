@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/SFA/Game/GameState" name="GameStateEnum" prefix="GameStateEnum_" type="u8">
+    <member name="GAME_STATE_INIT" value="0x0"/>
+    <member name="GAME_STATE_RESETNOW" value="0x4"/>
+    <member name="GAME_STATE_RUN" value="0x1"/>
+    <member name="GAME_STATE_RESET_DEFAULT" value="0x6"/>
+    <member name="GAME_STATE_RESETTING" value="0x5"/>
+    <member name="GAME_STATE_ABOUT_TO_RESET" value="0x3"/>
+    <member name="GAME_STATE_RESET" value="0x2"/>
+  </enum>
+</types>

@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<types>
+  <define name="MAX_FILE_ID">0x2C1</define>
+  <define name="RETAIL_MEM_SIZE">0x1800000</define>
+  <define name="SIZEOF_GXSTRUCT">0x4F8</define>
+  <define name="SIZEOF_SAVEGAME">0x6EC</define>
+  <define name="VOXMAP_MAX_SIZE">0x7800</define>
+</types>

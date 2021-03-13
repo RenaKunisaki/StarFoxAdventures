@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Vox" name="VoxMapHeader">
+    <field name="unk14" offset="0x14" type="undefined*"/>
+    <field name="unk18" offset="0x18" type="undefined*"/>
+    <field name="unk1C" offset="0x1C" type="undefined*"/>
+    <field name="unk20" offset="0x20" type="undefined*"/>
+    <field name="unk24" offset="0x24" type="undefined*"/>
+    <field name="unk28" offset="0x28" type="undefined*"/>
+  </struct>
+</types>

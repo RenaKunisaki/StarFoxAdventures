@@ -1,0 +1,131 @@
+<?xml version="1.0"?>
+<types>
+  <enum category="/SFA/Game/GameObject/ObjState" name="ObjState_AnimatedObj_Flags6E" prefix="ObjState_AnimatedObj_Flags6E_" type="u16">
+    <member name="Eyes" value="0x40"/>
+    <member name="Rot9E" value="0x8"/>
+    <member name="Position" value="0x1"/>
+    <member name="AnimTimer" value="0x4"/>
+    <member name="Scale" value="0x10"/>
+    <member name="Opacity" value="0x20"/>
+    <member name="Rotation" value="0x2"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/ObjState/AnimatedObj" name="ObjState_AnimatedObj_Flags136" prefix="ObjState_AnimatedObj_Flags136_" type="u8">
+    <member name="IsSavePoint" value="0x4"/>
+  </enum>
+  <enum category="/SFA/Game/GameObject/ObjState/Override" name="ObjState_AnimatedObj_Flags7F" prefix="ObjState_AnimatedObj_Flags7F_" type="u8">
+    <member name="DisableJoypad" value="0x2"/>
+  </enum>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_AnimatedObj_AttrCurves">
+    <field name="posOffs" offset="0x0" type="float"/>
+    <field count="6" name="curveId" offset="0x4" type="ObjUniqueId"/>
+    <field name="posOffsVec" offset="0x1C" type="vec3f"/>
+    <field name="posOffsScale" offset="0x28" type="float"/>
+    <field name="rotOffs" offset="0x2C" type="vec3s"/>
+    <field name="offsType" offset="0x32" type="byte"/>
+    <field name="seqIdx" offset="0x33" type="byte"/>
+    <field name="curveTime" offset="0x34" type="word"/>
+    <field name="curveTime5A" offset="0x36" type="short"/>
+    <field name="attrCurveMaxTime" offset="0x38" type="short"/>
+    <field name="curveTime5E" offset="0x3A" type="short"/>
+    <field name="unk3C" offset="0x3C" type="short"/>
+    <field name="nActions" offset="0x3E" type="s16"/>
+    <field name="nPoints" offset="0x40" type="short"/>
+    <field name="iAction" offset="0x42" type="short"/>
+    <field name="length" offset="0x44" type="ushort"/>
+    <field name="gameBit6A" offset="0x46" type="GameBit16"/>
+    <field name="animId" offset="0x48" type="short"/>
+    <field name="flags6E" offset="0x4A" type="ObjState_AnimatedObj_Flags6E"/>
+    <field name="flags4C" offset="0x4C" type="short"/>
+    <field name="unk50" offset="0x50" type="undefined4"/>
+    <field name="camFlag78" offset="0x54" type="char"/>
+    <field name="unk55" offset="0x55" type="byte"/>
+    <field name="bOnlyXZ" offset="0x56" type="char"/>
+    <field name="objIdx" offset="0x57" type="char"/>
+    <field name="conditionPlus1" offset="0x58" type="char"/>
+    <field name="unk59" offset="0x59" type="byte"/>
+    <field name="unk5A" offset="0x5A" type="byte"/>
+    <field name="flags7F" offset="0x5B" type="ObjState_AnimatedObj_Flags7F"/>
+    <field name="unk5C" offset="0x5C" type="GameBit16"/>
+    <field name="nCurveIds" offset="0x67" type="byte"/>
+    <field name="animTimer" offset="0x68" type="byte"/>
+    <field name="eyeState" offset="0x69" type="byte"/>
+    <field name="eyelidState" offset="0x6A" type="byte"/>
+    <field name="flags90" offset="0x6C" type="ObjState_AnimatedObj_Flags90"/>
+    <field name="pActions" offset="0x70" type="AnimCurvCommand*"/>
+    <field name="curvePoints" offset="0x74" type="AnimCurvPoint*"/>
+    <field name="attrFirstPoint" offset="0x78" type="ObJSeqCurveIdxs"/>
+    <field name="attrNumPoints" offset="0x9E" type="ObjSeqCurvePositions"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_AnimatedObj_Struct12C">
+    <field name="unk00" offset="0x0" type="byte"/>
+    <field name="unk01" offset="0x1" type="byte"/>
+    <field name="unk02" offset="0x2" type="byte"/>
+    <field name="unk03" offset="0x3" type="byte"/>
+    <field name="unk04" offset="0x4" type="byte"/>
+  </struct>
+  <struct category="/SFA/Game/GameObject/ObjState" name="ObjState_AnimatedObj">
+    <field name="obj" offset="0x0" type="ObjInstance*"/>
+    <field name="posOffsV" offset="0x4" type="vec3f"/>
+    <field name="unk10" offset="0x10" type="float"/>
+    <field name="rotOffsV" offset="0x14" type="vec3s"/>
+    <field name="rotXorZ" offset="0x1A" type="short"/>
+    <field name="unk20" offset="0x20" type="float"/>
+    <field name="posOffs" offset="0x24" type="float"/>
+    <field name="curveId0" offset="0x28" type="ObjUniqueId"/>
+    <field name="curveId1" offset="0x2C" type="pointer"/>
+    <field name="soundVar30" offset="0x30" type="short"/>
+    <field name="unk32" offset="0x32" type="short"/>
+    <field name="unk34" offset="0x34" type="short"/>
+    <field name="soundVar36" offset="0x36" type="short"/>
+    <field name="soundId38" offset="0x38" type="SoundId"/>
+    <field name="soundId" offset="0x3E" type="SoundId"/>
+    <field name="posOffsVec" offset="0x40" type="vec3f"/>
+    <field name="posOffsScale" offset="0x4C" type="float"/>
+    <field name="rotOffs" offset="0x50" type="vec3s"/>
+    <field name="offsType" offset="0x56" type="byte"/>
+    <field name="seqIdx" offset="0x57" type="byte"/>
+    <field name="curveTime" offset="0x58" type="word"/>
+    <field name="prevCurveTime" offset="0x5A" type="short"/>
+    <field name="curveLen" offset="0x5C" type="short"/>
+    <field name="curveTime5E" offset="0x5E" type="short"/>
+    <field name="var60" offset="0x60" type="short"/>
+    <field name="nActions" offset="0x62" type="s16"/>
+    <field name="nPoints" offset="0x64" type="short"/>
+    <field name="iAction" offset="0x66" type="short"/>
+    <field name="nextCmdTime" offset="0x68" type="ushort"/>
+    <field name="gameBit6A" offset="0x6A" type="GameBit16"/>
+    <field name="animId" offset="0x6C" type="short"/>
+    <field name="enabledCurves" offset="0x6E" type="ObjState_AnimatedObj_Flags6E"/>
+    <field name="enabledCurves4C" offset="0x70" type="ObjState_AnimatedObj_Flags6E"/>
+    <field name="nextTime" offset="0x74" type="undefined4"/>
+    <field name="camFlag78" offset="0x78" type="char"/>
+    <field name="bHaveObj" offset="0x79" type="byte"/>
+    <field name="bOnlyXZ" offset="0x7A" type="char"/>
+    <field name="objIdx" offset="0x7B" type="char"/>
+    <field name="pauseUntilCondPlus1" offset="0x7C" type="char"/>
+    <field name="unk7D" offset="0x7D" type="byte"/>
+    <field name="step" offset="0x7E" type="ObjState_AnimatedObj_CurStep"/>
+    <field name="flags7F" offset="0x7F" type="ObjState_AnimatedObj_Flags7F"/>
+    <field name="lastObjCmd" offset="0x80" type="byte"/>
+    <field count="10" name="objCmds" offset="0x81" type="byte"/>
+    <field name="nObjCmds" offset="0x8B" type="byte"/>
+    <field name="animTimer" offset="0x8C" type="byte"/>
+    <field name="eyeState" offset="0x8D" type="byte"/>
+    <field name="eyelidState" offset="0x8E" type="byte"/>
+    <field name="flags90" offset="0x90" type="ObjState_AnimatedObj_Flags90"/>
+    <field name="pActions" offset="0x94" type="AnimCurvCommand*"/>
+    <field name="curvePoints" offset="0x98" type="AnimCurvPoint*"/>
+    <field name="attrFirstPoint" offset="0x9C" type="ObJSeqCurveIdxs"/>
+    <field name="attrNumPoints" offset="0xC2" type="ObjSeqCurvePositions"/>
+    <field name="onFree" offset="0xE8" type="undefined*"/>
+    <field name="testEvent" offset="0xEC" type="undefined*"/>
+    <field name="unkF0" offset="0xF0" type="vec3f"/>
+    <field name="uniqueId" offset="0x10C" type="ObjUniqueId"/>
+    <field name="target" offset="0x110" type="ObjInstance*"/>
+    <field name="rot9EOffs_Y" offset="0x114" type="undefined2"/>
+    <field name="rot9EOffs_X" offset="0x116" type="undefined2"/>
+    <field count="10" name="eventPositions" offset="0x118" type="short"/>
+    <field count="10" name="eventTypes" offset="0x12C" type="ObjSeqEventType"/>
+    <field name="unk136" offset="0x136" type="ObjState_AnimatedObj_Flags136"/>
+  </struct>
+</types>

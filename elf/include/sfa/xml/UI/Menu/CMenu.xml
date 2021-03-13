@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/UI/Menu/CMenu" name="CMenuItem">
+    <field name="itemBit" offset="0x0" type="GameBit16"/>
+    <field name="hideBit" offset="0x2" type="GameBit16"/>
+    <field name="disableBit" offset="0x4" type="GameBit16"/>
+    <field name="textureId" offset="0x6" type="short"/>
+    <field name="texture2" offset="0x8" type="short"/>
+    <field name="unk0A" offset="0xA" type="short"/>
+    <field name="text" offset="0xC" type="GameTextId"/>
+    <field name="unk0E" offset="0xE" type="byte"/>
+    <field name="unk0F" offset="0xF" type="byte"/>
+  </struct>
+  <struct category="/SFA/UI/Menu/CMenu" name="CMenuPageItems">
+    <field name="items" offset="0x0" type="CMenuItem*"/>
+    <field name="selected" offset="0x4" type="undefined2"/>
+    <field name="unk08" offset="0x8" type="undefined4"/>
+  </struct>
+</types>

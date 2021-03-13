@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Audio/Music" name="MusicBinEntry">
+    <field name="id" offset="0x0" type="u16"/>
+    <field name="songId" offset="0x2" type="u16"/>
+    <field name="unk04" offset="0x4" type="u16"/>
+    <field name="unk0C" offset="0xC" type="byte"/>
+    <field name="unk0D" offset="0xD" type="byte"/>
+    <field name="flags" offset="0xF" type="byte"/>
+  </struct>
+</types>

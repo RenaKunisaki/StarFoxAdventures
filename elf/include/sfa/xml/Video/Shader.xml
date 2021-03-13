@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<types>
+  <struct category="/SFA/Video/Shader" name="ShaderLayer">
+    <field name="texture" offset="0x0" type="pointer"/>
+    <field name="tevMode" offset="0x4" type="u8"/>
+    <field name="enableTexChainStuff" offset="0x5" type="u8"/>
+    <field name="scrollingTexMtx" offset="0x6" type="u8"/>
+  </struct>
+  <struct category="/SFA/Video/Shader" name="Shader">
+    <field name="r" offset="0x4" type="byte"/>
+    <field name="g" offset="0x5" type="byte"/>
+    <field name="b" offset="0x6" type="byte"/>
+    <field name="auxTex0" offset="0x8" type="pointer"/>
+    <field name="alpha" offset="0xC" type="byte"/>
+    <field name="auxTex1" offset="0x14" type="pointer"/>
+    <field name="texture18" offset="0x18" type="pointer"/>
+    <field name="unk1C" offset="0x1C" type="int"/>
+    <field name="unk20" offset="0x20" type="pointer"/>
+    <field count="2" name="layer" offset="0x24" type="ShaderLayer"/>
+    <field name="auxTex2" offset="0x34" type="pointer"/>
+    <field name="furTexture" offset="0x38" type="pointer"/>
+    <field name="flags" offset="0x3C" type="ShaderFlags"/>
+    <field name="attrFlags" offset="0x40" type="ShaderAttrFlags"/>
+    <field name="nLayers" offset="0x41" type="u8"/>
+    <field name="unk42" offset="0x42" type="u8"/>
+    <field name="unk43" offset="0x43" type="u8"/>
+  </struct>
+  <enum category="/SFA/Video/Shader" name="ShaderAttrFlags" prefix="ShaderAttrFlags_" type="u8">
+    <member name="UseNormals" value="0x1"/>
+    <member name="UseColors" value="0x2"/>
+  </enum>
+  <struct category="/SFA/Video/Shader" name="ShaderColor">
+    <field name="flags" offset="0x0" type="u8"/>
+    <field name="maybeNumTextures" offset="0x1" type="u8"/>
+    <field name="unk02" offset="0x2" type="u8"/>
+    <field name="textureId" offset="0x3" type="u8"/>
+    <field name="color" offset="0x4" type="int"/>
+  </struct>
+  <struct category="/SFA/Video/Shader" name="ShaderDef">
+    <field name="texture" offset="0x0" type="pointer"/>
+    <field name="lighting" offset="0x4" type="pointer"/>
+    <field name="material" offset="0x8" type="pointer"/>
+  </struct>
+  <enum category="/SFA/Video/Shader" name="ShaderFlags" prefix="ShaderFlags_" type="u32">
+    <member name="Water" value="0x80000000"/>
+    <member name="DevGeometry" value="0x2"/>
+    <member name="FuzzRelated" value="0x200"/>
+    <member name="Lava" value="0x80"/>
+    <member name="MediumFur" value="0x8000"/>
+    <member name="LongFur" value="0x10000"/>
+    <member name="ShortFur" value="0x4000"/>
+    <member name="IndoorOutdoorBlend" value="0x40000"/>
+    <member name="ReflectSkyscape" value="0x20"/>
+    <member name="AlphaCompare" value="0x400"/>
+    <member name="StreamingVideo" value="0x20000"/>
+    <member name="ForceBlend" value="0x40000000"/>
+    <member name="Reflective" value="0x100"/>
+    <member name="Caustic" value="0x40"/>
+    <member name="CullBackface" value="0x8"/>
+    <member name="Fog" value="0x4"/>
+  </enum>
+</types>
