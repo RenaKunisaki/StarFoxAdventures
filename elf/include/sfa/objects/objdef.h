@@ -1495,8 +1495,9 @@ typedef struct PACKED ObjDef {
 	byte  bound;         //0x06
 	byte  unk7;          //0x07
 	vec3f pos;           //0x08
-	s16   id;            //0x14 ObjUniqueId
+	u32   id;            //0x14 ObjUniqueId
 } ObjDef;
+CASSERT(sizeof(ObjDef) == 0x18, sizeof_ObjDef);
 
 typedef struct PACKED ObjDef_Override {
 	ObjDef     unk00;       //0x00
@@ -1508,8 +1509,13 @@ typedef struct PACKED ObjDef_Override {
 	byte       unk20;       //0x20
 	byte       unk21;       //0x21
 	byte       unk22;       //0x22
+	byte       unk23;       //0x23
 	byte       camFocusIdx; //0x24
+	byte       unk25;       //0x25
+	byte       unk26;       //0x26
+	byte       unk27;       //0x27
 } ObjDef_Override;
+CASSERT(sizeof(ObjDef_Override) == 0x28, sizeof_ObjDef_Override);
 
 typedef struct PACKED ObjSeqItem {
 	u32 objId;  //0x00
@@ -1521,11 +1527,15 @@ typedef struct PACKED RomCurve {
 	ObjDef def;    //0x00
 	byte   action; //0x18
 	byte   type;   //0x19
+	byte   unk1A;  //0x1A
 	byte   unk1B;  //0x1B
 	int    idPrev; //0x1C
 	int    idNext; //0x20
+	int    unk24;  //0x24
 	float  unk28;  //0x28
 	byte   rotZ;   //0x2C
 	byte   rotY;   //0x2D
 	byte   rotX;   //0x2E
+	byte   unk2F;  //0x2F
 } RomCurve;
+CASSERT(sizeof(RomCurve) == 0x30, sizeof_RomCurve);

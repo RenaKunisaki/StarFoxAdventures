@@ -72,3 +72,4 @@ typedef struct PACKED Camera {
 	byte                unk142;               //0x142
 	byte                unk143;               //0x143
 } Camera;
+CASSERT(sizeof(Camera) == 0x144, sizeof_Camera);

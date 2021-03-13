@@ -4,6 +4,7 @@
 extern "C" {
 #endif
 
+#include "../macros.h"
 #include "../gc/gc.h"
 #include "types.h"
 #include "globals.h"

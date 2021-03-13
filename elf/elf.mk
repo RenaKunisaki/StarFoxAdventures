@@ -1,3 +1,4 @@
+# sub-makefile for individual patches
 cur_makefile := $(abspath $(lastword $(MAKEFILE_LIST)))
 PWD := $(patsubst %/,%,$(dir $(cur_makefile)))
 

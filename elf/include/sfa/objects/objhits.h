@@ -29,6 +29,7 @@ typedef struct PACKED HitSphere {
 	char         unk16;  //0x16
 	char         unk17;  //0x17
 } HitSphere;
+CASSERT(sizeof(HitSphere) == 0x18, sizeof_HitSphere);
 
 typedef struct PACKED HitState {
 	ObjInstance  *curTouchedObject;  //0x00
@@ -45,6 +46,7 @@ typedef struct PACKED HitState {
 	undefined4    unk48;             //0x48
 	dword         unk4C;             //0x4C
 	ObjInstance  *lastTouchedObject; //0x50
+    u32           unk54;             //0x54
 	u16           lowestDist;        //0x58
 	short         sizeXY;            //0x5A
 	short         sizeX1;            //0x5C
@@ -62,20 +64,29 @@ typedef struct PACKED HitState {
 	byte          unk6F;             //0x6F
 	byte          unk70;             //0x70
 	byte          nHits;             //0x71
-	byte          sphereIdxs;        //0x72
-	byte          objField6C;        //0x75
-	byte          recordedDamage;    //0x78
-	ObjInstance  *objs;              //0x7C
-	float         objX;              //0x88
+	byte          sphereIdxs[3];     //0x72
+	byte          objField6C[3];     //0x75 XXX verify
+	byte          recordedDamage[3]; //0x78
+    byte          unk7B;             //0x7B probably padding
+	ObjInstance  *objs[3];           //0x7C
+	float         objX;              //0x88 XXX is this a matrix?
+    u32           unk8C;             //0x8C
+    u32           unk90;             //0x90
 	float         objY;              //0x94
+    u32           unk98;             //0x98
+    u32           unk9C;             //0x9C
 	float         objZ;              //0xA0
+    u32           unkA4;             //0xA4
+    u32           unkA8;             //0xA8
 	u8            typeOfPolyHit;     //0xAC PolygonType
 	byte          unkAD;             //0xAD
 	byte          disable;           //0xAE
 	char          state;             //0xAF
 	byte          unkB0;             //0xB0
+	byte          unkB1;             //0xB1
 	short         unkB2;             //0xB2
 	byte          unkB4;             //0xB4
 	byte          unkB5;             //0xB5
 	u16           flagsB6;           //0xB6 HitboxFlags62
 } HitState;
+CASSERT(sizeof(HitState) == 0xB8, sizeof_HitState);

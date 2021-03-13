@@ -55,13 +55,18 @@ typedef struct PACKED TextureGpuStruct {
 	TextureGpuStruct2 *unk20;     //0x20
 	uint               dataSize;  //0x24
 } TextureGpuStruct;
+CASSERT(sizeof(TextureGpuStruct) == 0x28, sizeof_TextureGpuStruct);
 
 typedef struct PACKED TextureHeader {
 	word            *unk00;  //0x00
 	ObjInstance     *obj;    //0x04
-	byte             red;    //0x0C
+    u32              unk08;  //0x08
+	byte             red;    //0x0C much of this is wrong
+    u8               unk0D;  //0x0D
 	byte             green;  //0x0E
+    u8               unk0F;  //0x0F
 	dword            unk10;  //0x10
+    u32              unk14;  //0x14
 	byte             red2;   //0x18
 	byte             green2; //0x19
 	byte             unk1A;  //0x1A
@@ -69,6 +74,7 @@ typedef struct PACKED TextureHeader {
 	undefined       *unk1C;  //0x1C
 	TextureGpuStruct gpu;    //0x20
 } TextureHeader;
+CASSERT(sizeof(TextureHeader) == 0x48, sizeof_TextureHeader);
 
 typedef struct PACKED Texture {
 	Texture         *next;     //0x00
@@ -78,17 +84,24 @@ typedef struct PACKED Texture {
 	ushort           height;   //0x0C
 	short            refCount; //0x0E
 	short            unk10;    //0x10
+    short            unk12;    //0x12
 	ushort           unk14;    //0x14
 	u8               format;   //0x16 TextureFormat
-	Color4b          unk17;    //0x17
+	Color4b          unk17;    //0x17 XXX this can't be right
+    byte             unk1B;    //0x1B
 	byte             unk1C;    //0x1C
 	byte             unk1D;    //0x1D
+	byte             unk1E;    //0x1E
 	byte             unk1F;    //0x1F
 	TextureGpuStruct gpu;      //0x20
+	byte             unk48;    //0x48
 	byte             unk49;    //0x49
+	byte             unk4A;    //0x4A
+	byte             unk4B;    //0x4B
 	uint             size;     //0x4C
 	dword            unk50;    //0x50
 } Texture;
+CASSERT(sizeof(Texture) == 0x54, sizeof_Texture);
 
 typedef struct PACKED LoadedTexture {
 	int        id;       //0x0

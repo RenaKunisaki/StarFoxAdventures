@@ -10,6 +10,11 @@ $(BUILDDIR):
 	@mkdir $(BUILDDIR)
 	#./tools/genSymbols.py include/sfa/ build/
 
+# generate symbols.s for inclusion in assembler files.
+# this lets us reference them without the need for relocation.
+$(BUILDDIR)/symbols.s: $(GLOBALSYMS)
+	sed -n -E 's/(\S+)\s+=\s+(0x........);/.set \1, \2/p' $< > $@
+
 $(BUILDDIR)/boot.bin: $(BUILDDIR) $(BUILDDIR)/bootstrap.elf
 	@$(TOOL)objcopy -O binary $(BUILDDIR)/bootstrap.elf $(BUILDDIR)/boot.bin
 	@rm $(BUILDDIR)/bootstrap.elf
@@ -17,7 +22,7 @@ $(BUILDDIR)/boot.bin: $(BUILDDIR) $(BUILDDIR)/bootstrap.elf
 $(BUILDDIR)/%.elf: $(BUILDDIR) %/main.c
 	@$(MAKE) --eval="NAME=$*" -f elf.mk
 
-$(BUILDDIR)/%.elf: $(BUILDDIR) %/main.s
+$(BUILDDIR)/%.elf: $(BUILDDIR) $(BUILDDIR)/symbols.s %/main.s
 	@$(MAKE) --eval="NAME=$*" -f elf.mk
 
 # XXX DOL patch

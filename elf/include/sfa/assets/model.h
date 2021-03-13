@@ -88,6 +88,7 @@ typedef struct PACKED ModelFileHeader {
 	ushort              animIdxs[8];            //0x70
 	u32                 amapTab;                //0x80
 	ushort              unk84;                  //0x84
+    ushort              unk86;                  //0x86
 	void               *posFineSkinningConfig;  //0x88 FineSkinningConfig*
     u32                 unk8C;                  //0x8C
     u32                 unk90;                  //0x90
@@ -109,6 +110,7 @@ typedef struct PACKED ModelFileHeader {
 	DisplayListPtr     *dlists;                 //0xD0
 	byte               *renderInstrs;           //0xD4
 	ushort              nRenderInstrs;          //0xD8
+    ushort              unkDA;                  //0xDA
 	short             **animations;             //0xDC
 	short               cullDistance;           //0xE0
 	u16                 flagsE2;                //0xE2 ModelHeaderFlagsE2
@@ -130,6 +132,7 @@ typedef struct PACKED ModelFileHeader {
 	u8                  nTexMtxs;               //0xFA
 	u8                  unkFB;                  //0xFB
 } ModelFileHeader;
+CASSERT(sizeof(ModelFileHeader) == 0xFC, sizeof_ModelFileHeader);
 
 typedef struct PACKED ModelListEntry {
 	s32 modelId; //ModelId
@@ -148,7 +151,7 @@ typedef struct PACKED ModelsBinEntry {
 	undefined4 unk20;       //0x20
 	ZlbHeader  zlb;         //0x24
 } ModelsBinEntry;
-
+CASSERT(sizeof(ModelsBinEntry) == 0x34, sizeof_ModelsBinEntry);
 
 typedef struct PACKED Model {
 	ModelFileHeader  *header;                   //0x00
@@ -178,3 +181,4 @@ typedef struct PACKED Model {
 	Mtx44            *mtxBufs;                  //0x5C
 	byte              areBoneTransformsApplied; //0x60
 } Model;
+CASSERT(sizeof(Model) == 0x61, sizeof_Model);

@@ -1,23 +1,37 @@
-//XXX move these
-#define PACKED __attribute__((packed))
-#define WRITE8( addr, val) (*(u8*) addr) = (val)
-#define WRITE16(addr, val) (*(u16*)addr) = (val)
-#define WRITE32(addr, val) (*(u32*)addr) = (val)
-#define WRITE64(addr, val) (*(u64*)addr) = (val)
-#define WRITEFLOAT(addr, val) (*(float*)addr) = (val)
-#define WRITEDOUBLE(addr, val) (*(double*)addr) = (val)
-#define READ8( addr) (*(u8* )addr)
-#define READ16(addr) (*(u16*)addr)
-#define READ32(addr) (*(u32*)addr)
-#define READ64(addr) (*(u64*)addr)
-#define READFLOAT(addr) (*(float*)addr)
-#define READDOUBLE(addr) (*(double*)addr)
-
 //predeclare some types
 typedef struct Model Model;
 typedef struct ObjInstance ObjInstance;
 typedef struct Texture Texture;
 typedef struct TextureHeader TextureHeader;
+
+#define NUM_DLLS 0x2C2
+#define NUM_FILES 0x5A
+#define NUM_HEAPS 4
+#define OBJ_SEQ_MAX 0x54
+
+typedef s16 DataFileEnum16;
+typedef s32 DataFileEnum32;
+typedef s16 DLL_ID16;
+typedef s32 DLL_ID32;
+typedef s32 DLL_ID;
+typedef s16 GameBit16;
+typedef s32 GameBit32;
+typedef u16 GamepadButton;
+typedef u32 GamepadButton32;
+typedef s16 GameTextId;
+typedef s16 GameTextId16;
+typedef s32 GameTextId32;
+typedef s8  GameTextWindow8;
+typedef s16 GameTextWindow16;
+typedef s32 GameTextWindow32;
+typedef s8  MapDirIdx8;
+typedef s16 MapDirIdx16;
+typedef s32 MapDirIdx32;
+typedef s8  MapId8;
+typedef s16 MapId16;
+typedef s32 MapId32;
+typedef s32 ObjUniqueId;
+typedef s32 PlayerStateEnum32;
 
 #include "math.h"
 #include "data/fileids.h"
@@ -36,8 +50,10 @@ typedef struct TextureHeader TextureHeader;
 #include "objects/objinstance.h"
 #include "objects/camera.h"
 #include "assets/assets.h"
-#include "alloc.h"
-#include "audio.h"
+#include "memory/alloc.h"
+#include "audio/audio.h"
+#include "map/map.h"
 #include "game/gamebits.h"
 #include "game/cheats.h"
 #include "game/player/playerstate.h"
+#include "game/save/savegame.h"

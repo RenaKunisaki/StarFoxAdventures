@@ -1,3 +1,5 @@
+.include "../build/symbols.s"
+
 # set register names
 .set r0,0;   .set r1,1;   .set r2,2; .set r3,3;   .set r4,4
 .set r5,5;   .set r6,6;   .set r7,7;   .set r8,8;   .set r9,9
@@ -278,84 +280,3 @@
 .macro STOREF reg, addr, base
     stfs \reg, -((((\addr) & 0x8000) << 1) - ((\addr) & 0xFFFF))(\base)
 .endm
-
-# macros for patch files
-.set PATCH_KEEP_AFTER_RUN,0x00000000 # don't automatically free patch
-.set PATCH_FREE_AFTER_RUN,0x00000001 # free this patch after running it
-
-.macro PATCH_ID name
-    # insert patch ID/name into patch list.
-    # name must be exactly 7 characters.
-    .byte 0xFE
-    .ascii "\name" # we have to use quotes even when name is already quoted...
-.endm
-
-.macro PATCH_BL addr, dest
-    # insert `bl dest` at `addr`
-    .int ((\addr) & 0x1FFFFFF) | 0xC6000000
-    .int ((\dest) - patchList) | 1 # low bit set = bl
-.endm
-
-.macro PATCH_B addr, dest
-    # insert `b dest` at `addr`
-    .int ((\addr) & 0x1FFFFFF) | 0xC6000000
-    .int ((\dest) - patchList) | 0 # low bit clear = b
-.endm
-
-.macro PATCH_STARTUP dest
-    # call `dest` from game late init.
-    .int 0xC0000001
-    .int ((\dest) - patchList)
-.endm
-
-.macro PATCH_MAIN_LOOP dest
-    # call `dest` from game main loop.
-    .int 0xC0000000
-    .int ((\dest) - patchList)
-.endm
-
-.macro PATCH_PAD_HOOK dest
-    # call `dest` from controller read.
-    # r4 = pointer to new controller states.
-    .int 0xC0000002
-    .int ((\dest) - patchList)
-.endm
-
-.macro PATCH_BYTE addr, val
-    # write byte `val` to `addr`
-    .int ((\addr) & 0x01FFFFFF) | 0x00000000
-    .int (\val)
-.endm
-
-.macro PATCH_BYTES addr, count, val
-    # write byte `val` to `addr`...`addr+count` inclusive.
-    .int ((\addr) & 0x01FFFFFF) | 0x00000000
-    .int (\val) | ((\count) << 16)
-.endm
-
-.macro PATCH_HWORD addr, val
-    # write hword `val` to `addr`
-    .int ((\addr) & 0x01FFFFFF) | 0x02000000
-    .int (\val)
-.endm
-
-.macro PATCH_HWORDS addr, count, val
-    # write hword `val` to `addr`...`addr+(count*2)` inclusive.
-    .int ((\addr) & 0x01FFFFFF) | 0x02000000
-    .int (\val) | ((\count) << 16)
-.endm
-
-# there is no PATCH_WORDS because where would the count go?
-.macro PATCH_WORD addr, val
-    # write word `val` to `addr`
-    .int ((\addr) & 0x01FFFFFF) | 0x04000000
-    .int (\val)
-.endm
-
-.macro PATCH_END flags
-    # insert end-of-patch-list marker and flags
-    .int 0, flags
-.endm
-
-.include "sfa.s"
-.include "gecko.s"

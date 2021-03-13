@@ -122,6 +122,7 @@ typedef struct PACKED GameTextBox {
 	byte  flags;      //0x1C
 	byte  opacity;    //0x1E
 } GameTextBox;
+CASSERT(sizeof(GameTextBox) == 0x1F, sizeof_GameTextBox);
 
 typedef struct PACKED GameTextCharacterStruct {
 	u32 character; //0x0 UCS32
@@ -136,6 +137,7 @@ typedef struct PACKED GameTextCharacterStruct {
 	u8  font;      //0xE
 	u8  texture;   //0xF
 } GameTextCharacterStruct;
+CASSERT(sizeof(GameTextCharacterStruct) == 0x10, sizeof_GameTextCharacterStruct);
 
 typedef struct PACKED GameTextPhrase {
 	undefined4 unk00;          //0x00
@@ -145,6 +147,7 @@ typedef struct PACKED GameTextPhrase {
 	int        nPhrases;       //0x10
 	void      *unk14;          //0x14
 } GameTextPhrase;
+CASSERT(sizeof(GameTextPhrase) == 0x18, sizeof_GameTextPhrase);
 
 typedef struct PACKED gametextStruct {
 	u16    identifier; //0x00 GameTextId
@@ -155,3 +158,4 @@ typedef struct PACKED gametextStruct {
 	u8     language;   //0x07 GameLanguageEnum
 	char **phrases;    //0x08
 } gametextStruct;
+CASSERT(sizeof(gametextStruct) == 0xC, sizeof_gametextStruct);

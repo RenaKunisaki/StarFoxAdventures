@@ -20,3 +20,23 @@ typedef enum {
     ALLOC_TAG_INTERSECT_POINT       = 0xFFFF00FF,
     ALLOC_TAG_SAVEGAME              = 0xFFFFFFFF,
 } AllocTag;
+
+typedef struct { //names extracted from debug messages
+    void *loc;
+    int   size;
+    u16   unk08;
+    short idx;
+    short stack2;
+    short stack;
+    u32   col; //AllocTag
+    int   unk14;
+    int   mmUniqueIdent;
+} SfaHeapEntry;
+
+typedef struct {
+    uint          dataSize; //total size
+    u32           size;     //used size
+    u32           avail;    //total blocks
+    u32           used;     //used blocks
+    SfaHeapEntry *data;
+} SfaHeap;

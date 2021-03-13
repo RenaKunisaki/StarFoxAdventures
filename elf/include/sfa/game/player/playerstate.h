@@ -2,7 +2,7 @@ typedef enum { //type:u8
     PlayerCharacterEnum_Krystal   = 0x0,
     PlayerCharacterEnum_Fox       = 0x1,
 	PlayerCharacterEnum_SharpClaw = 0x2,
-} PlayerCharacterEnum;
+} PlayerCharEnum;
 
 typedef enum { //type:u16
 	PlayerStateEnum_Activate_35 = 0x35,
@@ -81,6 +81,7 @@ typedef struct PACKED PlayerCharPos {
 	u8    mapId; //MapDirIdx8
     u8    unk0F; //probably padding
 } PlayerCharPos;
+CASSERT(sizeof(PlayerCharPos) == 0x10, sizeof_PlayerCharPos);
 
 typedef struct PACKED PlayerCharState {
 	s8   curHealth;    //0x0
@@ -94,6 +95,7 @@ typedef struct PACKED PlayerCharState {
 	byte maxBafomDads; //0xA
 	byte field_0B;     //0xB
 } PlayerCharState;
+CASSERT(sizeof(PlayerCharState) == 0xC, sizeof_PlayerCharState);
 
 //the game records this but doesn't use it
 typedef struct PACKED PlayerPrevPos {

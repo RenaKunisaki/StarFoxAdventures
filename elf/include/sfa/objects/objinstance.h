@@ -51,6 +51,7 @@ typedef struct PACKED ObjPos {
 	float scale;
 	vec3f pos;
 } ObjPos;
+CASSERT(sizeof(ObjPos) == 0x18, sizeof_ObjPos);
 
 typedef struct PACKED ObjInstance {
 	ObjPos              pos;                //0x00
@@ -85,7 +86,7 @@ typedef struct PACKED ObjInstance {
 	vec3f               pos_0x8c;           //0x8C
 	float               animTimer;          //0x98
 	float               animVal_9c;         //0x9C
-	word                animId;             //0xA0
+	s16                 animId;             //0xA0
 	s16                 animVal_a2;         //0xA2 GameBit16
 	float               cullOffset;         //0xA4
 	float               cullDistance;       //0xA8
@@ -93,30 +94,37 @@ typedef struct PACKED ObjInstance {
 	byte                curModel;           //0xAD
 	u8                  slot;               //0xAE
 	u8                  flags_0xaf;         //0xAF ObjInstance_FlagsAF
-	u8                  flags_0xb0;         //0xB0 ObjInstance_FlagsB0
+	u16                 flags_0xb0;         //0xB0 ObjInstance_FlagsB0
 	s16                 objNo;              //0xB2
 	short               curSeq;             //0xB4
+    short               unkB6;              //0xB6
 	void               *state;              //0xB8
 	ObjSeqFn           *seqFn;              //0xBC
 	ObjInstance        *copyMtxFrom;        //0xC0
 	ObjInstance        *parent;             //0xC4
 	ObjInstance        *child[3];           //0xC8
-	byte*               unkD4;              //0xD4
-	word                unkD8;              //0xD8
+	byte               *unkD4;              //0xD4
+	u32                 unkD8;              //0xD8
 	ObjSeqMsgQueue     *seqMsgs;            //0xDC
+    byte                unkE0;              //0xE0
+    byte                unkE1;              //0xE1
+    byte                unkE2;              //0xE2
 	byte                flags_e3;           //0xE3
 	byte                unkE4;              //0xE4
 	byte                flags_0xe5;         //0xE5
 	short               unkE6;              //0xE6
 	byte                hintTextIdx;        //0xE8
+	byte                unkE9;              //0xE9
 	byte                unkEA;              //0xEA
 	u8                  nChildren;          //0xEB
 	Color4b             colorEC;            //0xEC
 	byte                unkF0;              //0xF0
 	byte                brightness;         //0xF1
 	byte                colorIdx;           //0xF2
-	undefined4          curveNoPlus1;       //0xF4
+	byte                unkF3;              //0xF3
+	int                 curveNoPlus1;       //0xF4
 	dword               flags_0xf8;         //0xF8
 	vec3f               oldVel;             //0xFC
 	void               *cbAfterUpdateBones; //0x108 objField108_func*
 } ObjInstance;
+CASSERT(sizeof(ObjInstance) == 0x10C, sizeof_ObjInstance);

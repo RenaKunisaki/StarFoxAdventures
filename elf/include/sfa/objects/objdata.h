@@ -116,3 +116,4 @@ typedef struct PACKED ObjectFileStruct {
 	u8                       hitbox_flagsB6;     //0x90 HitboxFlags62
 	char                     name[11];           //0x91
 } ObjectFileStruct;
+CASSERT(sizeof(ObjectFileStruct) == 0x9C, sizeof_ObjectFileStruct);

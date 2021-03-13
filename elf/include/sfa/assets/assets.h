@@ -12,6 +12,8 @@ typedef enum { //type:u8
 typedef struct PACKED AssetDef {
     u8         unk00;      //0x00
 	u8         type;       //0x01 AssetTypeEnum
+    u8         unk02;      //0x02
+    u8         unk03;      //0x03
 	u32        dataFileId; //0x04 DataFileEnum
 	void      *obj;        //0x08
 	int       *buffer;     //0x0C
@@ -23,3 +25,4 @@ typedef struct PACKED AssetDef {
 	undefined4 dest;       //0x24
 	undefined4 buffer2;    //0x28
 } AssetDef;
+CASSERT(sizeof(AssetDef) == 0x2C, sizeof_AssetDef);
