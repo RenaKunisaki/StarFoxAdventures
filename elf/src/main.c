@@ -16,13 +16,8 @@ BOOL gameBitHook(int bit, int val) {
 
 void mainLoopHook() {
     //replaces a bl to a do-nothing subroutine
-    static int count = 0;
-    debugPrintf("Frame %d\n", count++);
-    debugPrintf("Player=%08X: ", pPlayer);
-    if(pPlayer) {
-        debugPrintf("%s\n", pPlayer->file->name);
-    }
-    else debugPrintf("-\n");
+    mainLoopDebugPrint();
+    runMenu();
 }
 
 
@@ -37,10 +32,10 @@ void _start(void) {
 
     //debug print
     hookBranch(0x80137948, debugPrintfHook, 0);
-    WRITE32(0x801378A8, 0x480000A0); //restore debugPrintf
-    WRITE8 (0x80137317, 6); //smaller text for fixed-width mode
-    WRITE16(0x803E23B8, 0x3FA0); //smaller text
-    WRITE32(0x80137CF4, 0x3BFF000C); //smaller text for debugPrintfxy
+    WRITE32   (0x801378A8, 0x480000A0); //restore debugPrintf
+    WRITE8    (0x80137317, 6); //smaller text for fixed-width mode
+    WRITE16   (0x803E23B8, 0x3FA0); //smaller text
+    WRITE32   (0x80137CF4, 0x3BFF000C); //smaller text for debugPrintfxy
     if(consoleType & 0xF0000000) { //emulator
         //move debug print to edge of screen
         WRITE16(0x8013761A, 0); //min X at 320 screen width

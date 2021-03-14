@@ -46,11 +46,15 @@ extern float fovY;
 extern SfaHeap heaps[NUM_HEAPS];
 extern int heatEffectIntensity; //0-255
 extern bool hudHidden;
+extern Texture *hudTextures[102];
 extern int initFrameCount;
 extern bool isJapanese;
 extern MapDirIdx32 levelLockBuckets[2];
 extern s16 loadedFileMapIds[NUM_FILES];
 extern ObjInstance *loadedObjects;
+extern GameBit16 mapActBitIdx[NUM_MAPS];
+extern u8 mapActLut[NUM_MAP_DIRS];
+extern GameBit16 mapObjGroupBit[NUM_MAPS];
 extern struct {
     int mapX, mapZ, cellX, cellZ;
 } mapCoords;

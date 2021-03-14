@@ -17,7 +17,7 @@
   Revision 1.1.1.1  2005/05/12 02:41:07  yasuh-to
   Ported from dolphin source tree.
 
-    
+
     11    2002/09/02 21:41 Shiki
     Clean up.
 
@@ -176,23 +176,25 @@ static inline void OSSetGQR7( u32 type, u32 scale )
 static inline void OSInitFastCast ( void )
 {
 #ifdef __SN__
-          asm volatile ("
-        li      3, 0x0004
-        oris    3, 3, 0x0004
-        mtspr   GQR2, 3
+    //Rena: changed syntax to stop gcc complaining
+    //about missing terminating quote
+          asm volatile (
+        "li      3, 0x0004    \n"
+        "oris    3, 3, 0x0004 \n"
+        "mtspr   GQR2, 3      \n"
 
-        li      3, 0x0005
-        oris    3, 3, 0x0005
-        mtspr   GQR3, 3
+        "li      3, 0x0005    \n"
+        "oris    3, 3, 0x0005 \n"
+        "mtspr   GQR3, 3      \n"
 
-        li      3, 0x0006
-        oris    3, 3, 0x0006
-        mtspr   GQR4, 3
+        "li      3, 0x0006    \n"
+        "oris    3, 3, 0x0006 \n"
+        "mtspr   GQR4, 3      \n"
 
-        li      3, 0x0007
-        oris    3, 3, 0x0007
-        mtspr   GQR5, 3
-    " : : : "r3" );
+        "li      3, 0x0007    \n"
+        "oris    3, 3, 0x0007 \n"
+        "mtspr   GQR5, 3      \n"
+    : : : "r3" );
 #else
     asm
     {

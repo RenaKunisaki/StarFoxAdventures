@@ -390,9 +390,11 @@ def main():
     # write header (GOT offset, GOT size/4, entry point, bootstrap size)
     outBin.seek(4)
     outBin.write(struct.pack('>IIII',
-        gotOffs+outOffs-4, # -4 for lwzu
+        gotOffs+outOffs-8, # -4 for lwzu, -4 for ???
         gotSize, entryPoint+outOffs, outOffs))
     outBin.seek(outOffs)
+    printf("[*] GOT Offs=0x%08X, Size=0x%08X, bootstrap=0x%08X\n",
+        gotOffs+outOffs, gotSize, outOffs)
 
     # write code
     for phdr in elf.progHdrs:

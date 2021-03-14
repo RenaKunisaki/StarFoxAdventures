@@ -35,7 +35,7 @@ clean:
 install: all
 	@echo "[*] Installing..."
 	#cp $(BUILDDIR)/boot.bin $(DISCROOT)/debug.bin
-	./tools/elf2bin.py $(BUILDDIR) $(DISCROOT)
+	@./tools/elf2bin.py $(BUILDDIR) $(DISCROOT)
 
 # dolphin seems to only work with absolute paths for this
 run: install

@@ -7,6 +7,8 @@ typedef struct TextureHeader TextureHeader;
 #define NUM_DLLS 0x2C2
 #define NUM_FILES 0x5A
 #define NUM_HEAPS 4
+#define NUM_MAPS 120
+#define NUM_MAP_DIRS 80
 #define OBJ_SEQ_MAX 0x54
 
 typedef s16 DataFileEnum16;
@@ -34,6 +36,7 @@ typedef s32 ObjUniqueId;
 typedef s32 PlayerStateEnum32;
 
 #include "math.h"
+#include "debug/debug.h"
 #include "data/fileids.h"
 #include "data/zlb.h"
 #include "gx/gx.h"

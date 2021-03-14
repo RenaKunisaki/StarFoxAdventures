@@ -31,7 +31,7 @@ typedef struct PACKED Camera {
     u16                 unkA0;                //0xA0
 	byte                unkA2;                //0xA2
 	byte                unkA3;                //0xA3
-	ObjInstance        *focus;                //0xA4
+	ObjInstance        *focus;                //0xA4 obj camera is looking at
 	vec3f               pos_0xa8;             //0xA8
 	float               fov;                  //0xB4
 	vec3f               prevPos2;             //0xB8
@@ -54,7 +54,7 @@ typedef struct PACKED Camera {
 	float               fovFirstPerson;       //0x118
 	ObjInstance        *overrideTarget;       //0x11C
 	undefined4          unk120;               //0x120
-	ObjInstance        *target;               //0x124
+	ObjInstance        *target;               //0x124 obj player is locked onto
 	ObjInstance        *prevTarget;           //0x128
 	float               unk12C;               //0x12C
 	float               unk130;               //0x130
