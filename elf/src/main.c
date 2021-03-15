@@ -1,5 +1,8 @@
 #include "main.h"
 
+float overrideFov = 60;
+
+//XXX move this
 static BOOL (*gameBitHook_replaced)();
 BOOL gameBitHook(int bit, int val) {
     //this doesn't work because the regs are overwritten by the compiler's
@@ -9,13 +12,23 @@ BOOL gameBitHook(int bit, int val) {
     //int bit, val;
     //GET_REGISTER(29, bit);
     //GET_REGISTER(30, val);
-    OSReport("GameBit 0x%04X set to %d", bit, val);
+    //OSReport("GameBit 0x%04X set to %d", bit, val);
     return gameBitHook_replaced(); //BOOL isSaveGameLoading()
 }
 
 
 void mainLoopHook() {
     //replaces a bl to a do-nothing subroutine
+
+    //do some overrides
+    if(overrideFov != 60 && !CameraParamsViewfinder) {
+        //override if not in first person
+        fovY = overrideFov;
+        firstPersonFovY = overrideFov;
+        if(pCamera) pCamera->fov = overrideFov;
+        if(cameraMtxVar57) cameraMtxVar57->mtx1[3][0] = overrideFov;
+    }
+    minimapMainLoopHook();
     mainLoopDebugPrint();
     runMenu();
 }

@@ -1,24 +1,11 @@
 #include "main.h"
 
-#define MENU_ANIM_NUM_FRAMES 15
-#define MENU_PADDING 8
-#define MENU_WIDTH (SCREEN_WIDTH * 0.7)
-#define MENU_HEIGHT (SCREEN_HEIGHT * 0.7)
-#define MENU_XPOS ((SCREEN_WIDTH/2)  - (MENU_WIDTH  / 2))
-#define MENU_YPOS ((SCREEN_HEIGHT/2) - (MENU_HEIGHT / 2))
-#define MENU_TEXTBOX_ID 0x93 //same as game uses for HUD
-#define MENU_LINE_HEIGHT 18
-
-typedef enum {
-    MENU_NOT_OPEN,
-    MENU_OPENING,
-    MENU_OPEN,
-    MENU_CLOSING,
-} MenuState;
-
-static u8  menuState = MENU_NOT_OPEN;
-static u8  menuAnimFrame = 0;
-static u16 menuSelItem = 1;
+Menu *curMenu = NULL;
+u8  menuState = MENU_NOT_OPEN;
+u8  menuAnimFrame = 0;
+u8  menuInputDelayTimer = 0;
+u8  menuPrevTimerFlags; //for game timer
+u8  menuPrevGameFlags; //MenuGameStateFlags
 
 static void drawMenuBox() {
     //Draw the menu's box
@@ -41,39 +28,52 @@ static void drawMenuBox() {
 static void drawMenu() {
     //Draw the menu's text
     menuAnimFrame++;
+    debugPrintf("Menu flags %02X delay %d\n", menuPrevGameFlags, menuInputDelayTimer);
+    //GameTextDrawFunc prevDrawFunc = menuGameTextDrawFunc;
+    //gameTextDrawFunc = menuGameTextDrawFunc;
 
     int x = MENU_XPOS + MENU_PADDING, y = MENU_YPOS + MENU_PADDING;
 
     //Draw title
     //box type 0 is (center, y+40), no background
     gameTextSetColor(255, 255, 255, 255);
-    gameTextShowStr("Super Cool Menu", 0, x, y-40);
+    gameTextShowStr(curMenu->title, 0, x, y-40);
 
-    //Draw items
-    //LOL guess what, these don't get put in the GOT because lol!
-    //that's probably also why we had to subtract 4 from the offset,
-    //because some other shit is getting put there too, immediately
-    //before the GOT instead of in it
-    //we need to look at .data.rel.local and .fixup too
-    //can we hack the link script to put them all in one section?
-    static const char *items[] = {
-        "The First Item!",
-        "A second item",
-        "Wow, a third item",
-        "and yet more items here",
-        NULL,
-    };
-
-    for(int i=0; items[i]; i++) {
+    for(int i=0; curMenu->items[i].name; i++) {
         y += MENU_LINE_HEIGHT;
-        OSReport("Item %d: %08X", i, items[i]);
-        if(i == menuSelItem) {
+        bool selected = i == curMenu->selected;
+        if(selected) {
             u8  r = menuAnimFrame * 8, g = 255 - r;
             gameTextSetColor(r, g, 255, 255);
         }
         else gameTextSetColor(255, 255, 255, 255);
-        gameTextShowStr(items[i], MENU_TEXTBOX_ID, x, y);
+        curMenu->items[i].draw(&curMenu->items[i], x, y, selected);
     }
+    //gameTextDrawFunc = prevDrawFunc;
+}
+
+static void doMenuInputs() {
+    //Handle the controller while the menu is open
+    if(menuInputDelayTimer) { //don't react to input too quickly
+        menuInputDelayTimer--;
+        return;
+    }
+    curMenu->run(curMenu);
+}
+
+void openMainMenu() {
+    menuState = MENU_OPENING;
+    menuAnimFrame = 0;
+    curMenu = &menuMain;
+    menuInputDelayTimer = 0;
+    menuPrevGameFlags =
+        (timeStop ? MENU_FLAG_TIME_STOPPED : 0) |
+        (pauseDisabled ? MENU_FLAG_PAUSE_DISABLED : 0);
+    timeStop = 1;
+    pauseDisabled = 1;
+    //inhibit game timer
+    menuPrevTimerFlags = activeTimerFlags;
+    activeTimerFlags = 0;
 }
 
 void runMenu() {
@@ -82,11 +82,7 @@ void runMenu() {
         case MENU_NOT_OPEN:
             //Hold L+Z and press B to open the menu
             if(controllerStates[0].button & (PAD_TRIGGER_L | PAD_TRIGGER_Z)) {
-                if(buttonsJustPressed == PAD_BUTTON_B) {
-                    OSReport("Opening menu!");
-                    menuState = MENU_OPENING;
-                    menuAnimFrame = 0;
-                }
+                if(buttonsJustPressed == PAD_BUTTON_B) openMainMenu();
             }
             break;
 
@@ -102,11 +98,7 @@ void runMenu() {
         case MENU_OPEN:
             drawMenuBox();
             drawMenu();
-            if(buttonsJustPressed == PAD_BUTTON_B) {
-                OSReport("Closing menu!");
-                menuState = MENU_CLOSING;
-                menuAnimFrame = MENU_ANIM_NUM_FRAMES;
-            }
+            doMenuInputs();
             break;
 
         case MENU_CLOSING:

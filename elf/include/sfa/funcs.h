@@ -28,6 +28,7 @@ GLOBALFN void* dCacheStore(void*, uint);
 GLOBALFN void debugPrintDraw(void);
 GLOBALFN void debugPrintf(const char*, ...);
 GLOBALFN void debugPrintfxy(int x, int y, const char*, ...);
+GLOBALFN void doRumble(float time);
 GLOBALFN void drawScaledTexture(double x,double y,Texture *texture,uint opacity,uint scale,int width,int height,uint flags);
 GLOBALFN void drawTexture(double x,double y,Texture *texture,uint opacity,uint scale);
 GLOBALFN void expgfxRemoveAll(void);
@@ -71,10 +72,12 @@ GLOBALFN ModelFileHeader* modelLoad(
     int modelNum,ModelFlags_loadCharacter flags,uint *outSize);
     // if modelNum is negative, don't use MODELIND.bin
 GLOBALFN void multVectorByObjMtx(float x, float y, float z, float *outX, float *outY, float *outZ, ObjInstance*);
+GLOBALFN void musicTestPlaySong(int song);
 GLOBALFN ObjDef* objAlloc(int size, int type);
 GLOBALFN void objDisableHitbox(ObjInstance*); //only for next frame
 GLOBALFN void objFree(ObjInstance*);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
+GLOBALFN void objStopSound_(ObjInstance *obj, int id);
 GLOBALFN void OSReport(const char *fmt, ...);
 GLOBALFN s8 padGetStickX(int pad);
 GLOBALFN s8 padGetStickY(int pad);
@@ -88,8 +91,14 @@ GLOBALFN int setWidescreen(bool); //always returns 0
 GLOBALFN int shiftJisGetNextChar(char *text, char *outSize);
 GLOBALFN float sinf(float);
 GLOBALFN char* sprintf(char *dest, const char* fmt, ...);
+GLOBALFN void streamPlay(int id, void (*callback)(void));
+GLOBALFN void streamPlay_defaultCallback();
+GLOBALFN void streamStop(void);
+GLOBALFN void streamStopAll(void);
 GLOBALFN int strlen(const char*);
 GLOBALFN char* strncpy(char *dest, const char* src, int len);
+GLOBALFN void textRenderChar(s16 x1, s16 y1, s16 x2, s16 y2, double s1, double t1, double s2, double t2);
+GLOBALFN void textRenderSetup(void);
 GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);
 GLOBALFN void vec3f_scale(double scale, vec3f *in, vec3f *out);
 GLOBALFN void VISetNextFrameBuffer(void*);

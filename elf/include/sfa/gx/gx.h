@@ -39,3 +39,16 @@ typedef enum { //type:u32
 	VcdLoMask_COL11  = 0x10000,
     VcdLoMask_COL1   = 0x18000,
 } VcdLoMask;
+
+typedef enum {
+    RenderFlag_IsNotSubmap              = 0x1,
+    RenderFlag_EnableMapUpdate          = 0x2,
+    RenderFlag_Widescreen               = 0x8,
+    RenderFlag_Cloudy                   = 0x10,
+    RenderFlag_DrawLights               = 0x40,
+    RenderFlag_DrawShadows              = 0x80,
+    RenderFlag_PendingMapLoad           = 0x1000,
+    RenderFlag_ChangeMapLayer           = 0x4000,
+    RenderFlag_ChangeDrawDistance_10000 = 0x10000,
+    RenderFlag_Overcast                 = 0x40000,
+} RenderFlags;

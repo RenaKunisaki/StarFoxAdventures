@@ -75,6 +75,7 @@ SECTIONS {
     PROVIDE (_GOT_START_ = .);
     .got : {
         *(.dynamic)
+        *(.data.rel)
         *(.data.rel.*)
         *(.got*)
         *(.ctors)

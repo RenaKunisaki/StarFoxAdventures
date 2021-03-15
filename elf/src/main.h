@@ -20,6 +20,15 @@
 #define BOX_BORDER_WIDTH 5
 #define BOX_BORDER_HEIGHT 5
 
+#include "menu.h"
+
+typedef enum {
+    MINIMAP_SIZE_SMALL = 0,
+    MINIMAP_SIZE_NORMAL,
+    MINIMAP_SIZE_BIG,
+    MINIMAP_NUM_SIZES,
+} OverrideMinimapSize;
+
 //debuglog.s
 void debugPrintfHook(const char *fmt, ...);
 
@@ -32,8 +41,16 @@ void drawBox(float x, float y, int w, int h, u8 opacity);
 //hook.c
 uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 
+//main.c
+extern float overrideFov;
+
 //menu.c
 void runMenu();
+
+//minimap.c
+extern u8 overrideMinimapSize;
+extern u8 overrideMinimapAlpha;
+void minimapMainLoopHook();
 
 //startmsg.c
 extern void (*runLoadingScreens_replaced)();

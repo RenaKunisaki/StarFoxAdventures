@@ -1,3 +1,6 @@
+#define NUM_SONGS 99
+#define NUM_STREAMS 830
+
 typedef enum { //type:u32
 	AudioChannelEnum_SFX = 0x16,
 	AudioChannelEnum_Music = 0x15,
@@ -315,17 +318,20 @@ typedef enum { //type:u16
 typedef struct PACKED SfxBinEntry {
 	u16 id;         //0x00 SoundId
 	u8  baseVolume; //0x02
-	u8  volumeRand; //0x03
-	u8  basePan;    //0x04
-	u8  panRand;    //0x05 never used
+	u8  volumeRand; //0x03 volume = rand(baseVolume - volumeRand, baseVolume + volumeRand)
+	u8  basePan;    //0x04 127 = center
+	u8  panRand;    //0x05 never used, but works same as volumeRand
 	u16 unk06;      //0x06
-	u16 range;      //0x08
-	u16 fxIds[6];   //0x0A
-	u8  fxChance[6];//0x16
-	u16 randMax;    //0x1C
-	u8  unk1E;      //0x1E
-	u8  numIdxsAndPrevIdx; //0x1F XXX which bits?
+	u16 range;      //0x08 how far from source object to silence
+	u16 fxIds[6];   //0x0A actual sound to play (not same as SoundId)
+	u8  fxChance[6];//0x16 chance to pick each sound
+	u16 randMax;    //0x1C sum of fxChance
+	u8  unk1E;      //0x1E maybe queue slot? high 4bits are idx into sfxTable_803db248
+	u8  numIdxs : 4;//0x1F num items in randVals
+	u8  prevIdx : 4;//0x1F previously played idx, to avoid playing same random idx twice in a row.
 } SfxBinEntry;
+extern SfxBinEntry *pSfxBin;
+extern u32 sfxBinSize; //bytes
 
 typedef struct PACKED SoundEffect {
 	ushort id;          //0x0
@@ -342,3 +348,22 @@ typedef struct PACKED SoundEffect {
 	u32    repeatEnd;   //0x18
 	u32    variation;   //0x1C
 } SoundEffect;
+
+typedef struct PACKED SongTableEntry {
+    s16 unk00; //0x0
+    s8  unk02; //0x2
+    s8  unk03; //0x3
+    const char *name; //0x4
+    int unk08; //0x8
+    int unk0C; //0xc
+} SongTableEntry;
+extern SongTableEntry songTable[NUM_SONGS];
+
+typedef struct {
+    u16	 id;       //0x0
+    s8   unk02;    //0x2
+    s8   unk03;    //0x3
+    u16  unk04;    //0x4
+    char name[16]; //0x6
+} StreamsBinEntry;
+extern StreamsBinEntry *pStreamsBin;

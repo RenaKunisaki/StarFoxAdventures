@@ -73,3 +73,40 @@ typedef struct PACKED Camera {
 	byte                unk143;               //0x143
 } Camera;
 CASSERT(sizeof(Camera) == 0x144, sizeof_Camera);
+
+typedef struct PACKED CameraStruct57 {
+    Mtx44 mtx0;         //0x00
+    Mtx44 mtx1;         //0x40
+    vec3s rot0;         //0x80
+    vec3s rot1;         //0x86
+    float targetHeight;	//0x8c offset Y pos to point to player's head, not feet
+    float unk90;        //0x90
+    float unk94;        //0x94
+    float unk98;        //0x98
+    float unk9C;        //0x9c
+    float unkA0;        //0xa0
+    float unkA4;        //0xa4
+    float unkA8;        //0xa8
+    float unkAC;        //0xac
+    float unkB0;        //0xb0
+    float unkB4;        //0xb4
+    float unkB8;        //0xb8
+    float yPosBC;       //0xbc
+    s8    unkC0;        //0xc0
+    s8    unkC1;        //0xc1
+    s8    unkC2;        //0xc2
+    s8    unkC3;        //0xc3
+    s8    unkC4;        //0xc4
+    s8    unkC5;        //0xc5
+    s8    unkC6;        //0xc6
+    s8    unkC7;        //0xc7
+    u8    flagsC8;      //0xc8
+    s8    unkC9;        //0xc9
+    s8    unkCA;        //0xca
+    s8    unkCB;        //0xcb
+} CameraStruct57;
+CASSERT(sizeof(CameraStruct57) == 0xCC, sizeof_CameraStruct57);
+extern CameraStruct57 *cameraMtxVar57;
+
+extern void *CameraParamsViewfinder; //XXX type
+extern float firstPersonFovY;

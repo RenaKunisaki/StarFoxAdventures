@@ -1,10 +1,11 @@
 typedef enum { //type:u8
-	GameLanguageEnum_ENGLISH = 0x0,
-	GameLanguageEnum_ITALIAN = 0x3,
-	GameLanguageEnum_SPANISH = 0x5,
-	GameLanguageEnum_JAPANESE = 0x4,
-	GameLanguageEnum_GERMAN = 0x2,
-	GameLanguageEnum_FRENCH = 0x1,
+	LANG_ENGLISH  = 0x0,
+    LANG_FRENCH   = 0x1,
+    LANG_GERMAN   = 0x2,
+	LANG_ITALIAN  = 0x3,
+    LANG_JAPANESE = 0x4,
+	LANG_SPANISH  = 0x5,
+    NUM_LANGUAGES = 0x6,
 } GameLanguageEnum;
 
 typedef enum { //type:u32
@@ -93,16 +94,13 @@ typedef enum { //type:u32
 	GameTextWindow_TinyBox5A = 0x5A,
 } GameTextWindow;
 
-typedef void (*gameTextDrawFunc)(
-    s16 param1,
-    s16 param2,
-    s16 param3,
-    s16 param4,
-    double param5,
-    double param6,
-    double param7,
-    double param8
+typedef void (*GameTextDrawFunc)(
+    s16 x1, s16 y1, //upper left screen coord
+    s16 x2, s16 y2, //lower right screen coord
+    double s1, double t1, //upper left texcoord
+    double s2, double t2  //lower right texcoord
 );
+extern GameTextDrawFunc gameTextDrawFunc;
 
 typedef struct PACKED GameTextBox {
 	word  unk00;      //0x00
@@ -159,3 +157,21 @@ typedef struct PACKED gametextStruct {
 	char **phrases;    //0x08
 } gametextStruct;
 CASSERT(sizeof(gametextStruct) == 0xC, sizeof_gametextStruct);
+
+typedef struct PACKED GameTextCharset {
+    GameTextCharacterStruct *chars; //0x00
+    gametextStruct *texts;          //0x04
+    int numChars;                   //0x08
+    int numTexts;                   //0x0C
+    Texture *texture;               //0x10
+    Texture *unk14;                 //0x14
+    void *unk18;                    //0x18
+    int gameTextState;              //0x1C maybe pointer
+    int unk20;                      //0x20
+    s8  unk24;                      //0x24
+    s8  unk25;                      //0x25
+    s8  unk26;                      //0x26
+    s8  unk27;                      //0x27
+} GameTextCharset;
+CASSERT(sizeof(GameTextCharset) == 0x28, sizeof_GameTextCharset);
+extern GameTextCharset *gameTextCharsetPtrs;

@@ -21,7 +21,7 @@ extern struct {
     int len; //bytes / 2
 } controlCharLength[46];
 extern PADStatus controllerStates[4];
-extern u32 curLanguage;
+extern s32 curLanguage;
 extern s16 curGameText;
 extern u8 curMapAct;
 extern int curMapId;
@@ -99,7 +99,7 @@ extern u8 soundMode; //Stereo, Surround, Mono, Headphones
 extern float timeDelta;
 extern bool timeStop;
 extern float viewportAspect;
-extern s8 volumeCutScenes;
+extern u8 volumeCutScenes;
 extern float volumeMusic;
 extern float volumeSFX;
 extern u8 whichControllerFrame;
