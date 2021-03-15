@@ -83,7 +83,7 @@ void menuMusicTest_select(const MenuItem *self, int amount) {
 }
 
 
-static s16 sfxTestIdx = 0;
+static u16 sfxTestIdx = 0;
 void menuSfxTest_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     //sound effects don't have names
@@ -92,13 +92,14 @@ void menuSfxTest_draw(const MenuItem *self, int x, int y, bool selected) {
 }
 void menuSfxTest_select(const MenuItem *self, int amount) {
     if(amount == 0) { //A button
-        audioPlaySound(NULL, musicTestIdx);
+        audioPlaySound(NULL, sfxTestIdx);
     }
-    else {
-        int idx = musicTestIdx + amount;
-        if(idx < 0) idx = NUM_SONGS - 1;
-        if(idx >= NUM_SONGS) idx = 0;
-        musicTestIdx = idx;
+    else { //XXX what is the max SFX ID?
+        //int idx = sfxTestIdx + amount;
+        //if(idx < 0) idx = NUM_SFX - 1;
+        //if(idx >= NUM_SFX) idx = 0;
+        //sfxTestIdx = idx;
+        sfxTestIdx += amount;
         audioPlaySound(NULL, MENU_ADJUST_SOUND);
     }
 }
