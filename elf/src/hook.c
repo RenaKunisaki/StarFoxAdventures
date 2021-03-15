@@ -1,3 +1,5 @@
+/** Utility functions to hook game code.
+ */
 #include "main.h"
 
 uint32_t hookBranch(uint32_t addr, void *target, int isBl) {

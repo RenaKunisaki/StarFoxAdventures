@@ -41,6 +41,10 @@ void drawBox(float x, float y, int w, int h, u8 opacity);
 //hook.c
 uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 
+//krystal.c
+void krystalInit();
+void krystalMainLoop();
+
 //main.c
 extern float overrideFov;
 

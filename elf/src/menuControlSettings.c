@@ -1,3 +1,5 @@
+/** Control Settings submenu.
+ */
 #include "main.h"
 
 void menuRumble_draw(const MenuItem *self, int x, int y, bool selected) {

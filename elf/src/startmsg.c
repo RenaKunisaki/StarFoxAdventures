@@ -1,3 +1,5 @@
+/** Display message on-screen during startup.
+ */
 #include "main.h"
 
 void (*runLoadingScreens_replaced)();

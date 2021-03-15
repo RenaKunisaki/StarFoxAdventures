@@ -1,3 +1,5 @@
+/** Game Settings submenu.
+ */
 #include "main.h"
 
 void menuGameSpeed_draw(const MenuItem *self, int x, int y, bool selected) {

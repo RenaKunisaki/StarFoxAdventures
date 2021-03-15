@@ -1,3 +1,5 @@
+/** Video Settings submenu.
+ */
 #include "main.h"
 
 void menuWidescreen_draw(const MenuItem *self, int x, int y, bool selected) {

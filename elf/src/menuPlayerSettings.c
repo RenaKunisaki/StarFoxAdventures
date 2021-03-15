@@ -1,3 +1,5 @@
+/** Player Settings submenu.
+ */
 #include "main.h"
 
 static const char *playerNames[] = {"Auto", "Krystal", "Fox"};

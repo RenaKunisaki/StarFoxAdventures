@@ -13,7 +13,7 @@
 GLOBALFN void __restore_gpr(void);
 GLOBALFN void __save_gpr(void);
 
-GLOBALFN void* allocTagged(uint size,AllocTag tag,char *name);
+GLOBALFN void* allocTagged(uint size,AllocTag tag,const char *name);
 GLOBALFN void angleToVec2(int angle, float *outX, float *outY);
 GLOBALFN int atan2(float y, float x); //returns angle as s16 0-65535 (or -32768-32767?)
 GLOBALFN void audioPlaySound(ObjInstance *sourceObj,SoundId soundid);
@@ -77,6 +77,7 @@ GLOBALFN ObjDef* objAlloc(int size, int type);
 GLOBALFN void objDisableHitbox(ObjInstance*); //only for next frame
 GLOBALFN void objFree(ObjInstance*);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
+GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
 GLOBALFN void objStopSound_(ObjInstance *obj, int id);
 GLOBALFN void OSReport(const char *fmt, ...);
 GLOBALFN s8 padGetStickX(int pad);

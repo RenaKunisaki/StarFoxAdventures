@@ -1,3 +1,5 @@
+/** Bootstrap, runs at startup and installs other hooks.
+ */
 #include "main.h"
 
 float overrideFov = 60;
@@ -31,6 +33,7 @@ void mainLoopHook() {
     minimapMainLoopHook();
     mainLoopDebugPrint();
     runMenu();
+    krystalMainLoop();
 }
 
 
@@ -42,6 +45,7 @@ void _start(void) {
     runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c, runLoadingScreens_hook, 1);
     startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250, startMsg_initDoneHook, 1);
     hookBranch(0x80020D4C, mainLoopHook, 1);
+    krystalInit();
 
     //debug print
     hookBranch(0x80137948, debugPrintfHook, 0);

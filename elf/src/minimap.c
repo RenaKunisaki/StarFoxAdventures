@@ -1,3 +1,5 @@
+/** Change position/size/opacity of the minimap.
+ */
 #include "main.h"
 
 u8 overrideMinimapSize  = MINIMAP_SIZE_NORMAL;

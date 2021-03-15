@@ -1,3 +1,4 @@
+# Restore debugPrintf function.
 .text
 .include "common.s"
 .global debugPrintfHook

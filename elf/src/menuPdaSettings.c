@@ -1,3 +1,5 @@
+/** PDA Settings submenu.
+ */
 #include "main.h"
 
 static const char *pdaModeNames[] = {

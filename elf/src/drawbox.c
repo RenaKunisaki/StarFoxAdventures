@@ -1,3 +1,5 @@
+/** Utility function to draw a box on the screen.
+ */
 #include "main.h"
 
 void drawBox(float x, float y, int w, int h, u8 opacity) {

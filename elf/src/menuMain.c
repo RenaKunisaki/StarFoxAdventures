@@ -1,3 +1,5 @@
+/** Main in-game menu.
+ */
 #include "main.h"
 
 void mainMenu_close(const Menu *self) {

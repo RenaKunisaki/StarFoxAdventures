@@ -1,3 +1,5 @@
+/** Display some debug information on-screen.
+ */
 #include "main.h"
 
 static void printCoords() {

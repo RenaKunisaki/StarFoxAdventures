@@ -1,3 +1,5 @@
+/** Audio Settings submenu.
+ */
 #include "main.h"
 
 void menuMusicVol_draw(const MenuItem *self, int x, int y, bool selected) {

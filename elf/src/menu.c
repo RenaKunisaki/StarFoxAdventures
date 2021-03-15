@@ -1,3 +1,5 @@
+/** In-game menu engine.
+ */
 #include "main.h"
 
 Menu *curMenu = NULL;
