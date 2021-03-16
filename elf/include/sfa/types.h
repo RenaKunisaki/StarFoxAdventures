@@ -37,6 +37,7 @@ typedef s32 PlayerStateEnum32;
 
 #include "math.h"
 #include "debug/debug.h"
+#include "dll/dll.h"
 #include "data/fileids.h"
 #include "data/zlb.h"
 #include "gx/gx.h"

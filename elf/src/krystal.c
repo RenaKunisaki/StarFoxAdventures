@@ -21,11 +21,11 @@ void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
         char path[] = {'k', 'm', krystalModelNo+0x30, 0};
         krystalModel = loadFileByPath(path, &krystalModelSize);
         if(krystalModel) {
-            OSReport("Loaded %s @0x%08X size 0x%08X", path, krystalModel,
+            DPRINT("Loaded %s @0x%08X size 0x%08X", path, krystalModel,
                 krystalModelSize);
         }
         else {
-            OSReport("LOAD FAILED(%s)", path);
+            DPRINT("LOAD FAILED(%s)", path);
             return allocTagged(size, tag, name);
         }
     }
@@ -33,7 +33,7 @@ void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
     //do the original allocation, with the extra model's size added.
     void *buf = allocTagged(size+krystalModelSize, tag, name);
     if(!buf) {
-        OSReport("ALLOC FAILED for Krystal model");
+        DPRINT("ALLOC FAILED for Krystal model");
         return allocTagged(size, tag, name); //try again with original size
     }
 
@@ -106,11 +106,11 @@ void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
         char path[] = {'k', 't', krystalModelNo+0x30, 0};
         krystalTexture = loadFileByPath(path, &krystalTextureSize);
         if(krystalTexture) {
-            OSReport("Loaded %s @0x%08X size 0x%08X", path, krystalTexture,
+            DPRINT("Loaded %s @0x%08X size 0x%08X", path, krystalTexture,
                 krystalTextureSize);
         }
         else {
-            OSReport("LOAD FAILED(%s)", path);
+            DPRINT("LOAD FAILED(%s)", path);
             return allocTagged(size, tag, name);
         }
     }
@@ -118,7 +118,7 @@ void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
     //do the original allocation, with the extra texture's size added.
     void *buf = allocTagged(size+krystalTextureSize, tag, name);
     if(!buf) {
-        OSReport("ALLOC FAILED for Krystal texture");
+        DPRINT("ALLOC FAILED for Krystal texture");
         return allocTagged(size, tag, name); //try again with original size
     }
 
@@ -129,11 +129,11 @@ void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
 }
 
 void _doTexPatch(void *texBin, u32 *texTab) {
-    //OSReport("tex bin=%08X tab=%08X", texBin, texTab);
+    //DPRINT("tex bin=%08X tab=%08X", texBin, texTab);
     if(!(texBin && texTab)) return;
     if((*(u32*)(texBin + krystalTextureOffset)) == 0x1C) {
         //our texture is here
-        //OSReport("Patching TEX1.tab: %08X", offs);
+        //DPRINT("Patching TEX1.tab: %08X", offs);
         for(int i=0; i<KRYSTAL_NUM_TEXTURES; i++) {
             u32 data = textureData[(krystalModelNo*KRYSTAL_NUM_TEXTURES)+i];
             if(data & 0x80000000) {
@@ -141,15 +141,15 @@ void _doTexPatch(void *texBin, u32 *texTab) {
             }
         }
     }
-    //else OSReport("Texture not present");
+    //else DPRINT("Texture not present");
 }
 
 void krystalHook_tex1Tab() {
     //injected into mergeTableFiles() for TEX1.TAB
     //update the table to reference the Krystal textures
-    //OSReport("Install TEX1 patch 1");
+    //DPRINT("Install TEX1 patch 1");
     _doTexPatch(dataFileBuffers[FILE_TEX1_BIN],  dataFileBuffers[FILE_TEX1_TAB]);
-    //OSReport("Install TEX1 patch 2");
+    //DPRINT("Install TEX1 patch 2");
     _doTexPatch(dataFileBuffers[FILE_TEX1_BIN2], dataFileBuffers[FILE_TEX1_TAB2]);
 }
 

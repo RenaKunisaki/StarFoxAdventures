@@ -7,17 +7,17 @@ BUILDDIR ?= $(PWD)/build
 #BINDIR ?= bin
 GCBASE=$(PWD)/include/gc
 
-CC=$(TOOL)gcc
-AS=$(TOOL)as
-AR=$(TOOL)ar
-LD=$(TOOL)gcc
-NM=$(TOOL)nm
-OBJCOPY=$(TOOL)objcopy
-OBJDUMP=$(TOOL)objdump
-READELF=$(TOOL)readelf
-SIZE=$(TOOL)size
-DELETE=rm -rf
-MKDIR=mkdir -p
+CC=@$(TOOL)gcc
+AS=@$(TOOL)as
+AR=@$(TOOL)ar
+LD=@$(TOOL)gcc
+NM=@$(TOOL)nm
+OBJCOPY=@$(TOOL)objcopy
+OBJDUMP=@$(TOOL)objdump
+READELF=@$(TOOL)readelf
+SIZE=@$(TOOL)size
+DELETE=@rm -rf
+MKDIR=@mkdir -p
 
 GLOBALSYMS = include/$(GAME)/$(GAME)-$(VERSION).sym
 CFLAGS += -mcpu=750 -mhard-float -shared -fpic -fno-exceptions -fno-asynchronous-unwind-tables -mrelocatable -fno-builtin -G0 -O3 -I$(GCBASE) -Iinclude -Iinclude/gc -I$(BUILDDIR)

@@ -73,7 +73,7 @@ GLOBALFN void mm_free(void*); // wrapper for free()
 GLOBALFN ModelFileHeader* modelLoad(
     int modelNum,ModelFlags_loadCharacter flags,uint *outSize);
     // if modelNum is negative, don't use MODELIND.bin
-GLOBALFN void multVectorByObjMtx(float x, float y, float z, float *outX, float *outY, float *outZ, ObjInstance*);
+GLOBALFN float multVectorByObjMtx(float x, float y, float z, float *outX, float *outY, float *outZ, ObjInstance*);
 GLOBALFN void musicTestPlaySong(int song);
 GLOBALFN ObjDef* objAlloc(int size, int type);
 GLOBALFN void objDisableHitbox(ObjInstance*); //only for next frame
@@ -82,6 +82,8 @@ GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
 GLOBALFN void objStopSound_(ObjInstance *obj, int id);
 GLOBALFN void OSReport(const char *fmt, ...);
+GLOBALFN s8 padGetCX(int pad);
+GLOBALFN s8 padGetCY(int pad);
 GLOBALFN s8 padGetStickX(int pad);
 GLOBALFN s8 padGetStickY(int pad);
 GLOBALFN void playerDie(ObjInstance *player); //immediately kill player

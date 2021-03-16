@@ -4,7 +4,7 @@
 
 void mainMenu_close(const Menu *self) {
     //Close function for main menu
-    OSReport("Close main menu");
+    DPRINT("Close main menu");
     menuState = MENU_CLOSING;
     menuAnimFrame = MENU_ANIM_NUM_FRAMES;
     if(!(menuPrevGameFlags & MENU_FLAG_TIME_STOPPED)) timeStop = 0;

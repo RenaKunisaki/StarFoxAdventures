@@ -26,3 +26,5 @@ typedef struct PACKED AssetDef {
 	undefined4 buffer2;    //0x28
 } AssetDef;
 CASSERT(sizeof(AssetDef) == 0x2C, sizeof_AssetDef);
+
+extern bool isDvdDriveBusy;

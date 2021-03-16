@@ -36,6 +36,8 @@ void saveLoadHook() {
     u8 extraFeatureFlags = save->unused01;
     bRumbleBlur = extraFeatureFlags & 0x01;
 
+    cameraFlags = save->unusedHudSetting;
+
     overrideFov = save->unused0E;
     if(!overrideFov) overrideFov = 60;
 
@@ -52,7 +54,7 @@ void saveLoadHook() {
     furFxMode    = (save->unused0D >> 4) & 3;
     backpackMode = (save->unused0D >> 6) & 3;
     bAutoSave    = (save->unlockedCheats >> 31) & 1;
-    OSReport("Savedata loaded!");
+    DPRINT("Savedata loaded!");
 }
 
 void saveUpdateHook() {
@@ -70,6 +72,7 @@ void saveUpdateHook() {
         (furFxMode << 4) | (backpackMode << 6);
 
     save->unused01 = (bRumbleBlur ? 0x01 : 0x00);
+    save->unusedHudSetting = cameraFlags;
 
     //we also need to update these
     save->musicVolume    = volumeMusic * 127;
@@ -118,4 +121,5 @@ void saveShowMsgHook(int param) {
     //replaces a call to cardShowLoadingMsg
     //replace it with just the popup message at the bottom
     autoSaveMsgTimer = 60;
+    DPRINT("Saving!");
 }

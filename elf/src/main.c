@@ -5,6 +5,7 @@
 u8 overrideFov = 60;
 u8 furFxMode = 0; //FurFxMode
 bool bRumbleBlur = false;
+void (*origCameraUpdateFunc)(int frames) = NULL;
 
 //XXX move this
 static BOOL (*gameBitHook_replaced)();
@@ -16,7 +17,7 @@ BOOL gameBitHook(int bit, int val) {
     //int bit, val;
     //GET_REGISTER(29, bit);
     //GET_REGISTER(30, val);
-    //OSReport("GameBit 0x%04X set to %d", bit, val);
+    //DPRINT("GameBit 0x%04X set to %d", bit, val);
     return gameBitHook_replaced(); //BOOL isSaveGameLoading()
 }
 
@@ -80,7 +81,7 @@ void mainLoopHook() {
 
 
 void _start(void) {
-    OSReport("Patch running!");
+    DPRINT("Patch running!");
 
     //Install hooks
     gameBitHook_replaced = (BOOL(*)())hookBranch(0x8002010C, gameBitHook, 1);
@@ -133,5 +134,15 @@ void _start(void) {
     WRITE_NOP(0x8012B8B4);
     WRITE_NOP(0x8012BD78);
 
-    OSReport("Hooks installed!");
+    //camera
+    hookBranch(0x8010328c,        cameraUpdateHook,         1);
+    hookBranch((u32)padGetCX,     padGetCxHook,             0);
+    hookBranch((u32)padGetCY,     padGetCyHook,             0);
+    hookBranch((u32)padGetStickX, padGetStickXHook,         0);
+    hookBranch((u32)padGetStickY, padGetStickYHook,         0);
+    hookBranch(0x80133af0,        minimapButtonHeldHook,    1);
+    hookBranch(0x80133afc,        minimapButtonPressedHook, 1);
+    hookBranch(0x80108758,        viewFinderZoomHook,       1);
+
+    DPRINT("Hooks installed!");
 }

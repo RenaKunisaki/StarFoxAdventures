@@ -20,6 +20,8 @@
 #define BOX_BORDER_WIDTH 5
 #define BOX_BORDER_HEIGHT 5
 
+#define DPRINT OSReport
+
 #include "krystal.h"
 #include "menu.h"
 
@@ -38,6 +40,23 @@ typedef enum {
     NUM_FURFX_MODES,
 } FurFxMode;
 
+typedef enum {
+    CAM_FLAG_PAD3     = 0x01, //use controller 3 to move
+    CAM_FLAG_INVERT_X = 0x02, //invert X axis movement
+    CAM_FLAG_INVERT_Y = 0x04, //invert Y axis movement
+} CameraFlags;
+
+//camera.c
+extern u8 cameraFlags; //CameraFlags
+float cameraUpdateHook();
+int padGetCxHook(int pad);
+int padGetCyHook(int pad);
+int padGetStickXHook(int pad);
+int padGetStickYHook(int pad);
+u32 minimapButtonHeldHook(int pad);
+u32 minimapButtonPressedHook(int pad);
+int viewFinderZoomHook(int pad);
+
 //debuglog.s
 void debugPrintfHook(const char *fmt, ...);
 
@@ -54,6 +73,7 @@ uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 extern u8 overrideFov;
 extern u8 furFxMode;
 extern bool bRumbleBlur;
+extern void (*origCameraUpdateFunc)(int frames);
 
 //menu.c
 void runMenu();

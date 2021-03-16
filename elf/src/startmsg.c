@@ -42,9 +42,9 @@ void startMsg_initDoneHook() {
     u16 buttons = controllerStates[0].button;
     if(!(buttons & PAD_TRIGGER_Z)) {
         enableDebugText = 0;
-        //OSReport("Turning debug text off");
+        //DPRINT("Turning debug text off");
     }
-    //else OSReport("Leaving debug text on");
+    //else DPRINT("Leaving debug text on");
 
     if((buttons &
     (PAD_BUTTON_Y|PAD_BUTTON_B|PAD_BUTTON_X|PAD_BUTTON_A|PAD_BUTTON_MENU))

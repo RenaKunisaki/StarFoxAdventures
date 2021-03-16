@@ -33,21 +33,6 @@ SECTIONS {
     .rela.sbss     : { *(.rela.sbss) }
     .rela.sdata2   : { *(.rela.sdata2)   }
     .rela.sbss2    : { *(.rela.sbss2)    }
-    .text : {
-        *(.text)
-        /* .gnu.warning sections are handled specially by elf32.em.  */
-        *(.gnu.warning)
-        *(.gnu.linkonce.t*)
-    } =0
-    .init    : { *(.init) } =0
-    .fini    : { *(.fini) } =0
-    .rodata  : { *(.rodata) *(.gnu.linkonce.r*) }
-    .rodata1 : { *(.rodata1) }
-    _etext = .;
-    PROVIDE (etext = .);
-
-    .sdata2  : { *(.sdata2) }
-    .sbss2   : { *(.sbss2) }
 
     /* Adjust the address for the data segment.  We want to adjust up to
     the same address within the page on the next page up.  It would
@@ -64,14 +49,10 @@ SECTIONS {
     that no actual memory is lost; the page which is skipped can not
     be referenced).  */
 
-    . =  ALIGN(8) + 0x40000;
-    .data : {
-        *(.data)
-        *(.gnu.linkonce.d*)
-        CONSTRUCTORS
-    }
-
-    /* All offsets that may need relocation go here. */
+    /* All offsets that may need relocation go here.
+     * Put the GOT before any symbols so that no symbol will end up at
+     * offset zero, since that causes issues with relocation.
+     */
     PROVIDE (_GOT_START_ = .);
     .got : {
         *(.dynamic)
@@ -83,6 +64,29 @@ SECTIONS {
         *(.fixup)
     }
     PROVIDE (_GOT_END_ = .);
+
+    . =  ALIGN(8) + 0x40000;
+    .data : {
+        *(.data)
+        *(.gnu.linkonce.d*)
+        CONSTRUCTORS
+    }
+
+    .text : {
+        *(.text)
+        /* .gnu.warning sections are handled specially by elf32.em.  */
+        *(.gnu.warning)
+        *(.gnu.linkonce.t*)
+    } =0
+    .init    : { *(.init) } =0
+    .fini    : { *(.fini) } =0
+    .rodata  : { *(.rodata) *(.gnu.linkonce.r*) }
+    .rodata1 : { *(.rodata1) }
+    _etext = .;
+    PROVIDE (etext = .);
+
+    .sdata2  : { *(.sdata2) }
+    .sbss2   : { *(.sbss2) }
 
     /* We want the small data sections together, so single-instruction offsets
     can access them all, and initialized data all before uninitialized, so

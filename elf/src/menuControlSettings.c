@@ -27,30 +27,33 @@ void menuRumbleBlur_select(const MenuItem *self, int amount) {
 
 void menuCamCtrl_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, 69); //XXX
+    sprintf(str, self->name, (cameraFlags & CAM_FLAG_PAD3) ? 3 : 1);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuCamCtrl_select(const MenuItem *self, int amount) {
+    cameraFlags ^= CAM_FLAG_PAD3;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
 
 void menuCamInvX_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "XXX");
+    sprintf(str, self->name, (cameraFlags & CAM_FLAG_INVERT_X) ? "Invert" : "Normal");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuCamInvX_select(const MenuItem *self, int amount) {
+    cameraFlags ^= CAM_FLAG_INVERT_X;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
 
 void menuCamInvY_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "XXX");
+    sprintf(str, self->name, (cameraFlags & CAM_FLAG_INVERT_Y) ? "Invert" : "Normal");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuCamInvY_select(const MenuItem *self, int amount) {
+    cameraFlags ^= CAM_FLAG_INVERT_Y;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
