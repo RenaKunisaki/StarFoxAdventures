@@ -59,7 +59,7 @@ extern struct {
     int mapX, mapZ, cellX, cellZ;
 } mapCoords;
 extern char *mapNames;
-extern u16 minimapAlpha[2];
+extern u16 minimapAlpha;
 extern int minimapHeight;
 extern u8 minimapMode; //0=map 1=compass 2=info
 extern int minimapWidth;

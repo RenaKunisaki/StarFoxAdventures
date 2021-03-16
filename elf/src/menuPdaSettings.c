@@ -36,8 +36,8 @@ void menuPdaSize_draw(const MenuItem *self, int x, int y, bool selected) {
 }
 void menuPdaSize_select(const MenuItem *self, int amount) {
     int size = overrideMinimapSize + amount;
-    if(size < 0) size = MINIMAP_NUM_SIZES - 1;
-    if(size >= MINIMAP_NUM_SIZES) size = 0;
+    if(size < 0) size = NUM_MINIMAP_SIZES - 1;
+    if(size >= NUM_MINIMAP_SIZES) size = 0;
     overrideMinimapSize = size;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }

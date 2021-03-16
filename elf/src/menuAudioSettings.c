@@ -8,7 +8,7 @@ void menuMusicVol_draw(const MenuItem *self, int x, int y, bool selected) {
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuMusicVol_select(const MenuItem *self, int amount) {
-    volumeMusic += (amount * 0.1);
+    volumeMusic += (amount * 0.01);
     if(volumeMusic < 0) volumeMusic = 0;
     if(volumeMusic > 2) volumeMusic = 2;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
@@ -21,7 +21,7 @@ void menuSfxVol_draw(const MenuItem *self, int x, int y, bool selected) {
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuSfxVol_select(const MenuItem *self, int amount) {
-    volumeSFX += (amount * 0.1);
+    volumeSFX += (amount * 0.01);
     if(volumeSFX < 0) volumeSFX = 0;
     if(volumeSFX > 2) volumeSFX = 2;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);

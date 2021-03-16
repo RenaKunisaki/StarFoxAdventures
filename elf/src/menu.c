@@ -95,12 +95,14 @@ void runMenu() {
                 menuState = MENU_OPEN;
                 menuAnimFrame = 0;
             }
+            shouldCloseCMenu = 1;
             break;
 
         case MENU_OPEN:
             drawMenuBox();
             drawMenu();
             doMenuInputs();
+            shouldCloseCMenu = 1;
             break;
 
         case MENU_CLOSING:

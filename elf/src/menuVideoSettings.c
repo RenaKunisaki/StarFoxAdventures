@@ -15,7 +15,7 @@ void menuWidescreen_select(const MenuItem *self, int amount) {
 
 void menuParticleFx_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "XXX");
+    sprintf(str, self->name, "Not Implemented");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuParticleFx_select(const MenuItem *self, int amount) {
@@ -38,7 +38,7 @@ void menuFOV_select(const MenuItem *self, int amount) {
 
 void menuHudOnOff_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "XXX");
+    sprintf(str, self->name, "Not Implemented");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuHudOnOff_select(const MenuItem *self, int amount) {

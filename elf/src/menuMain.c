@@ -50,11 +50,11 @@ void genericMenu_run(const Menu *self) {
         curMenu->items[sel].select(&curMenu->items[sel], -1);
     }
     else if(controllerStates[0].triggerLeft > 40) { //L
-        menuInputDelayTimer = 1;
+        menuInputDelayTimer = 0;
         curMenu->items[sel].select(&curMenu->items[sel], -1);
     }
     else if(controllerStates[0].triggerRight > 40) { //R
-        menuInputDelayTimer = 1;
+        menuInputDelayTimer = 0;
         curMenu->items[sel].select(&curMenu->items[sel], 1);
     }
 }

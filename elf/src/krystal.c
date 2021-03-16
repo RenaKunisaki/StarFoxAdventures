@@ -2,12 +2,10 @@
  */
 #include "main.h"
 
-#define KRYSTAL_MODEL_ID 0x4E8
-#define KRYSTAL_TEXTURE_ID 0x724 //first texture
-#define KRYSTAL_NUM_TEXTURES 7
 
-u8 krystalModelNo = 0;
-u8 overridePlayerNo = 0; //0:Krystal 1:Fox 2:SharpClaw
+s8 krystalModelNo = 0;
+s8 overridePlayerNo = PLAYER_ID_KRYSTAL; //OverridePlayerId
+s8 backpackMode = BACKPACK_NORMAL; //BackpackMode
 static void *krystalModel         = NULL;
 static u32   krystalModelSize     = 0;
 static u32   krystalModelOffset   = 0;
@@ -191,13 +189,19 @@ void krystalDoModelOverrides() {
     if(pPlayer->catId    != 1) return; //don't apply to title screen Fox
     if(pPlayer->curModel == 2) return; //don't override SharpClaw disguise
 
+    int playerNo = overridePlayerNo;
+    if(playerNo == PLAYER_ID_AUTO) {
+        playerNo = (pPlayer->defNo == ObjDefEnum_Sabre) ?
+            PLAYER_ID_FOX : PLAYER_ID_KRYSTAL;
+    }
+
     //override player model ID
-    pPlayer->curModel = overridePlayerNo; //set model
-    *((u16*)(pPlayer->state + 0x81A)) = overridePlayerNo; //voice, backpack
+    pPlayer->curModel = playerNo; //set model
+    *((u16*)(pPlayer->state + 0x81A)) = playerNo; //voice, backpack
 
     //set some animation variables.
     float v1, v2;
-    if(overridePlayerNo == 0) { //Krystal
+    if(playerNo == PLAYER_ID_KRYSTAL) {
         v1 = 28.8; //unknown
         v2 = 33.0; //ledge grab height
     }
@@ -207,6 +211,14 @@ void krystalDoModelOverrides() {
     }
     *((float*)(pPlayer->state + 0x7DC)) = v1;
     *((float*)(pPlayer->state + 0x874)) = v2;
+
+    if(pBackpack) {
+        if(backpackMode == BACKPACK_ON
+        || (backpackMode == BACKPACK_NORMAL && playerNo == 1)) {
+            pBackpack->pos.flags &= ~ObjInstance_Flags06_Invisible;
+        }
+        else pBackpack->pos.flags |= ObjInstance_Flags06_Invisible;
+    }
 }
 
 
@@ -231,6 +243,7 @@ void krystalInit() {
     //Install hooks/patches at startup.
     WRITE32(0x802B08D8, 0x38000001); //Let Krystal use staff
     WRITE32(0x80295BE0, 0x38600001); //Let Krystal use map, PDA, etc.
+    WRITE_NOP(0x802B6414); //Disable normal backpack handling
     hookBranch(0x800453E0, krystalHook_modelsBin,  1);
     hookBranch(0x80043D7C, _krystalHook_modelsTab, 0);
     hookBranch(0x80046164, krystalHook_tex1Bin,    1);

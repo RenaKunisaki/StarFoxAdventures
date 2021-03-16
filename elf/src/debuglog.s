@@ -34,6 +34,12 @@ LAB_80137970:
     .debugPrintfHook_getpc:
         mflr r14
 
+    # don't draw if debug text is off
+    lwz     r3,  (.offsEnableDebugText - .debugPrintfHook_getpc)(r14)
+    lbz     r3,  0(r3)
+    cmpwi   r3,  0
+    beq     .debugTextDisabled
+
     # prepare params for sprintf
     LOADW   r3,  debugLogEnd
     lwz     r4,  0x08(r1) # must shift all params up one register
@@ -53,6 +59,7 @@ LAB_80137970:
     addi    r5,  r5,  1   # or else it deadlocks displaying
     STOREW  r5,  debugLogEnd, r4
 
+.debugTextDisabled:
     # restore regs
     lwz     r5,  0x68(r1)
     mtlr    r5
@@ -61,3 +68,6 @@ LAB_80137970:
     # copied code
     addi    r1,  r1,  0x80
     blr
+
+.offsEnableDebugText:
+    .int enableDebugText

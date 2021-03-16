@@ -90,6 +90,7 @@ GLOBALFN void setSoundMode(u8 mode, bool force);
 GLOBALFN void setSubtitlesEnabled(bool);
 GLOBALFN int setWidescreen(bool); //always returns 0
 GLOBALFN int shiftJisGetNextChar(char *text, char *outSize);
+GLOBALFN bool shouldForceMotionBlur(void);
 GLOBALFN float sinf(float);
 GLOBALFN char* sprintf(char *dest, const char* fmt, ...);
 GLOBALFN void streamPlay(int id, void (*callback)(void));

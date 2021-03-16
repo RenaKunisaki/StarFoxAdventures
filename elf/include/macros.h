@@ -11,6 +11,8 @@
 #define READ64(addr) (*(u64*)addr)
 #define READFLOAT(addr) (*(float*)addr)
 #define READDOUBLE(addr) (*(double*)addr)
+#define WRITE_NOP(addr) ((*(u32*)addr) = 0x60000000)
+#define WRITE_BLR(addr) ((*(u32*)addr) = 0x4E800020)
 
 //Prologue macro for naked functions
 //Saves r0 and r3-r31, then clobbers r0

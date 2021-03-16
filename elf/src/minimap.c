@@ -48,8 +48,7 @@ void minimapMainLoopHook() {
 
     //override opacity
     if(overrideMinimapAlpha != 255) {
-        minimapAlpha[0] = overrideMinimapAlpha;
-        minimapAlpha[1] = overrideMinimapAlpha;
+        minimapAlpha = overrideMinimapAlpha;
     }
     //debugPrintf("Map size=%d pos=%d,%d tex=%08X\n",
     //    minimapWidth, xpos, ypos, minimapTexture);

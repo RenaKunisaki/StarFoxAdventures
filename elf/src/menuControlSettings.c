@@ -16,17 +16,18 @@ void menuRumble_select(const MenuItem *self, int amount) {
 
 void menuRumbleBlur_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "XXX");
+    sprintf(str, self->name, bRumbleBlur ? "On" : "Off");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuRumbleBlur_select(const MenuItem *self, int amount) {
+    bRumbleBlur = !bRumbleBlur;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
 
 void menuCamCtrl_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "XXX");
+    sprintf(str, self->name, 69); //XXX
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuCamCtrl_select(const MenuItem *self, int amount) {

@@ -39,9 +39,16 @@ void startMsg_initDoneHook() {
      *  reading enabled).
      */
     startMsg_initDoneHook_replaced();
-    if(!(controllerStates[0].button & PAD_TRIGGER_Z)) {
+    u16 buttons = controllerStates[0].button;
+    if(!(buttons & PAD_TRIGGER_Z)) {
         enableDebugText = 0;
-        OSReport("Turning debug text off");
+        //OSReport("Turning debug text off");
     }
-    else OSReport("Leaving debug text on");
+    //else OSReport("Leaving debug text on");
+
+    if((buttons &
+    (PAD_BUTTON_Y|PAD_BUTTON_B|PAD_BUTTON_X|PAD_BUTTON_A|PAD_BUTTON_MENU))
+    == (PAD_BUTTON_X | PAD_BUTTON_MENU)) {
+        krystalModelNo = 1;
+    }
 }

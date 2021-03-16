@@ -20,14 +20,23 @@
 #define BOX_BORDER_WIDTH 5
 #define BOX_BORDER_HEIGHT 5
 
+#include "krystal.h"
 #include "menu.h"
 
 typedef enum {
     MINIMAP_SIZE_SMALL = 0,
     MINIMAP_SIZE_NORMAL,
     MINIMAP_SIZE_BIG,
-    MINIMAP_NUM_SIZES,
+    NUM_MINIMAP_SIZES,
 } OverrideMinimapSize;
+
+typedef enum {
+    //order same as backpack modes for consistency
+    FURFX_NORMAL = 0,
+    FURFX_NEVER,
+    FURFX_ALWAYS,
+    NUM_FURFX_MODES,
+} FurFxMode;
 
 //debuglog.s
 void debugPrintfHook(const char *fmt, ...);
@@ -41,12 +50,10 @@ void drawBox(float x, float y, int w, int h, u8 opacity);
 //hook.c
 uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 
-//krystal.c
-void krystalInit();
-void krystalMainLoop();
-
 //main.c
-extern float overrideFov;
+extern u8 overrideFov;
+extern u8 furFxMode;
+extern bool bRumbleBlur;
 
 //menu.c
 void runMenu();
@@ -55,6 +62,10 @@ void runMenu();
 extern u8 overrideMinimapSize;
 extern u8 overrideMinimapAlpha;
 void minimapMainLoopHook();
+
+//save.c
+void saveLoadHook();
+void saveUpdateHook();
 
 //startmsg.c
 extern void (*runLoadingScreens_replaced)();

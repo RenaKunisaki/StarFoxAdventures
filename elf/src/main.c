@@ -2,7 +2,9 @@
  */
 #include "main.h"
 
-float overrideFov = 60;
+u8 overrideFov = 60;
+u8 furFxMode = 0; //FurFxMode
+bool bRumbleBlur = false;
 
 //XXX move this
 static BOOL (*gameBitHook_replaced)();
@@ -19,8 +21,30 @@ BOOL gameBitHook(int bit, int val) {
 }
 
 
+bool motionBlurHook() {
+    //replaces a bl to shouldForceMotionBlur()
+    bool force = shouldForceMotionBlur();
+    if(force) return force;
+    if(!bRumbleBlur) return false;
+
+    if(rumbleTimer > 0) {
+        float rumble = (rumbleTimer + 48) * 2;
+        if(rumble > 120) rumble = 120;
+        motionBlurIntensity = rumble;
+        return true;
+    }
+    return false;
+}
+
 void mainLoopHook() {
     //replaces a bl to a do-nothing subroutine
+
+    //sanity check
+    if(furFxMode >= NUM_FURFX_MODES) furFxMode = 0;
+    if(backpackMode >= NUM_BACKPACK_MODES) backpackMode = 0;
+    if(overridePlayerNo >= NUM_PLAYER_IDS) overridePlayerNo = 0;
+    if(overrideMinimapSize >= NUM_MINIMAP_SIZES) overrideMinimapSize = 0;
+    if(overrideFov == 0) overrideFov = 60;
 
     //do some overrides
     if(overrideFov != 60 && !CameraParamsViewfinder) {
@@ -30,10 +54,28 @@ void mainLoopHook() {
         if(pCamera) pCamera->fov = overrideFov;
         if(cameraMtxVar57) cameraMtxVar57->mtx1[3][0] = overrideFov;
     }
+
+    switch(furFxMode) {
+        case FURFX_NORMAL:
+            WRITE16(0x800414E2, 0);
+            WRITE32(0x800414B4, 0x9421FFE0); //original opcode
+            iCacheFlush((void*)0x800414B4, 0x40);
+            break;
+        case FURFX_ALWAYS:
+            WRITE16(0x800414E2, 0x1312); //arbitrary constant
+            WRITE32(0x800414B4, 0x9421FFE0); //original opcode
+            iCacheFlush((void*)0x800414B4, 0x40);
+            break;
+        default: //case FURFX_NEVER:
+            WRITE_BLR(0x800414B4);
+            iCacheFlush((void*)0x800414B4, 0x40);
+    }
+
     minimapMainLoopHook();
     mainLoopDebugPrint();
     runMenu();
     krystalMainLoop();
+    saveUpdateHook();
 }
 
 
@@ -45,6 +87,9 @@ void _start(void) {
     runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c, runLoadingScreens_hook, 1);
     startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250, startMsg_initDoneHook, 1);
     hookBranch(0x80020D4C, mainLoopHook, 1);
+    hookBranch(0x800e7fb0, saveLoadHook, 1);
+    hookBranch(0x8005c45c, motionBlurHook, 1);
+
     krystalInit();
 
     //debug print
@@ -64,7 +109,7 @@ void _start(void) {
     }
 
     //debug stuff
-    WRITE32(0x80119D90, 0x60000000); //chapter select only needs Z button
+    WRITE_NOP(0x80119D90); //chapter select only needs Z button
 
     OSReport("Hooks installed!");
 }

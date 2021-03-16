@@ -275,6 +275,7 @@ setWidescreen = 0x8005cd54;
 sfxBinSize = 0x803dc834;
 shiftJisGetNextChar = 0x80015cb8;
 shouldCloseCMenu = 0x803dd7b4;
+shouldForceMotionBlur = 0x8000e620;
 shouldOpenCMenu = 0x803dd7d5;
 simMemSize = 0x800000F0;
 sinf = 0x80294098;

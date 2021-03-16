@@ -25,9 +25,9 @@ typedef struct PACKED {
     byte              unk23;            //0x23
     u8                gameBits2[0x144]; //0x24
     SaveGameObjectPos objs[63];         //0x168
-    u8                texts[5];	        //0x558 hint texts
+    u8                texts[5];	        //0x558 hint texts (+0xF4 = text ID)
     byte              completion;	    //0x55d percent = (this / 187) * 100
-    byte              numTexts;         //0x55e
+    byte              numTexts;         //0x55e number of hint texts?
     byte              unk55F;           //0x55f
     float             playTime;	        //0x560 frame count
     u8                gameBits1[116];   //0x564
@@ -58,19 +58,26 @@ typedef struct PACKED {
     s8    sfxVolume;           //0xb
     s8    cutsceneVolume;      //0xc
     u8    unused0D;            //0xd
-    short unk0E;               //0xe
+    u8    unused0E;            //0xe
+    u8    unused0F;            //0xf
     u32   unlockedCheats;      //0x10
     u32   activeCheats;        //0x14
     u32   unk18;               //0x18
-    u32   score;               //0x1c something about arwing scores stored here
-    char  name[4];             //0x20
-    u32   unk24;               //0x24
 } SaveGameSettings;
-CASSERT(sizeof(SaveGameSettings) == 0x28, sizeof_SaveGameSettings);
+CASSERT(sizeof(SaveGameSettings) == 0x1C, sizeof_SaveGameSettings);
+
+typedef struct PACKED {
+    u32 score;
+    char name[4];
+} SavedHighScore;
 
 typedef struct {
-    SaveGameSettings saveSettings[5]; //0x0
-    u8 unkC8[0x1C]; //0xC8
+    SaveGameSettings saveSettings; //0x0
+    SavedHighScore score1[5]; //XXX which score is for which level?
+    SavedHighScore score2[5]; //and why 5 entries? should only be 4?
+    SavedHighScore score3[5];
+    SavedHighScore score4[5];
+    SavedHighScore score5[5];
     SaveGame curSaveGame; //0xE4
 } SaveData;
 CASSERT(sizeof(SaveData) == 0x7d0, sizeof_SaveData);
