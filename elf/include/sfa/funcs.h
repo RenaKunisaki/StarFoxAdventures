@@ -22,6 +22,7 @@ GLOBALFN void cameraGetFocusObjDistance(float offsY, Camera *this,
     float *outX, float *outY, float *outZ, float *outXZ, //outXZ can be null
     BOOL bUseCurPos);
 GLOBALFN void ClearArena(void);
+GLOBALFN void cardShowLoadingMsg(int);
 GLOBALFN float cosf(float);
 GLOBALFN void* dCacheFlush(void*, uint);
 GLOBALFN void* dCacheStore(void*, uint);
@@ -65,6 +66,7 @@ GLOBALFN void logSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN u32 mainGetBit(GameBit bit);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
 GLOBALFN int mapCoordsToId(int x, int z, int layer);
+GLOBALFN void* mapLoadDataFile(MapDirIdx32 map, DataFileEnum file);
 GLOBALFN void* memcpy(void *dest, void *src, int len); // clobbers: r0, r4, r5, r6
 GLOBALFN void* memset(void *dest, u8 val, int len); // clobbers: r0, r6, r7
 GLOBALFN void mm_free(void*); // wrapper for free()

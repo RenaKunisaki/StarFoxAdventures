@@ -64,8 +64,11 @@ extern u8 overrideMinimapAlpha;
 void minimapMainLoopHook();
 
 //save.c
+extern bool bAutoSave;
 void saveLoadHook();
 void saveUpdateHook();
+void* saveMapLoadHook(MapDirIdx32 map, DataFileEnum file);
+void saveShowMsgHook(int param);
 
 //startmsg.c
 extern void (*runLoadingScreens_replaced)();

@@ -1,4 +1,6 @@
 #include "main.h"
+bool bAutoSave = false;
+static u8 autoSaveMsgTimer = 0;
 
 /* # offsets into saveData
 .set SAVEDATA_EXTRA_OPTIONS,  0x01 # unused
@@ -49,6 +51,7 @@ void saveLoadHook() {
     else pdaOn = true;
     furFxMode    = (save->unused0D >> 4) & 3;
     backpackMode = (save->unused0D >> 6) & 3;
+    bAutoSave    = (save->unlockedCheats >> 31) & 1;
     OSReport("Savedata loaded!");
 }
 
@@ -75,4 +78,44 @@ void saveUpdateHook() {
     save->bWidescreen    = (renderFlags & RenderFlag_Widescreen) ? 1 : 0;
     save->bRumbleEnabled = enableRumble ? 1 : 0;
     save->bSubtitlesOn   = bSubtitlesEnabled ? 1 : 0;
+    if(bAutoSave) save->unlockedCheats |= (1 << 31);
+    else save->unlockedCheats &= ~(1 << 31);
+
+    if(autoSaveMsgTimer) {
+        autoSaveMsgTimer--;
+        gameTextSetColor(0xFF, 0xFF, 0xFF, 0xFF);
+        gameTextShowStr("Saving...", 0x0A, 0, 0);
+    }
+}
+
+void doAutoSave() {
+    if(!bAutoSave) return;
+    //don't save during scripted events, or they can break.
+    switch(cameraMode) {
+        case 0x45: //bike
+        case 0x47: //test of strength:
+        case 0x4C: //cutscene
+        case 0x4D: //speaking to NPC
+            return;
+    }
+    if(curSaveSlot < 0) return; //no save slot
+    if(saveStatus != 1) return; //can't save
+    saveGame_save();
+
+    //technically the message appears after we save, but oh well
+    autoSaveMsgTimer = 60;
+}
+
+void* saveMapLoadHook(MapDirIdx32 map, DataFileEnum file) {
+    //replaces a call to mapLoadDataFile()
+    //save immediately before loading a new map, since that's when we're
+    //most likely to crash due to out of memory.
+    doAutoSave();
+    return mapLoadDataFile(map, file);
+}
+
+void saveShowMsgHook(int param) {
+    //replaces a call to cardShowLoadingMsg
+    //replace it with just the popup message at the bottom
+    autoSaveMsgTimer = 60;
 }

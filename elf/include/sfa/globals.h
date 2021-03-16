@@ -88,6 +88,7 @@ extern SaveGame *pRestartPoint;
 extern u32 renderFlags;
 extern float rumbleTimer;
 extern SaveData saveData;
+extern s8 saveStatus; //1=can save, 0=can't, -2=???
 extern s32 seqLength;
 extern s8 seqNumBgCmds;
 extern s16 seqGlobal1;

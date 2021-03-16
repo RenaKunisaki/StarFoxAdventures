@@ -92,6 +92,16 @@ void _start(void) {
 
     krystalInit();
 
+    //autosave
+    hookBranch(0x80042ec4, saveMapLoadHook, 1);
+    hookBranch(0x8007db50, saveShowMsgHook, 1);
+    //disable "not same memory card you last saved with" check,
+    //since save states trigger that.
+    //XXX look into how this check works and find a less invasive
+    //way of fixing this.
+    WRITE32(0x8007EF5C, 0x3B200000);
+    WRITE32(0x8007F15C, 0x3B200000);
+
     //debug print
     hookBranch(0x80137948, debugPrintfHook, 0);
     WRITE32   (0x801378A8, 0x480000A0); //restore debugPrintf
@@ -103,13 +113,25 @@ void _start(void) {
         WRITE16(0x8013761A, 0); //min X at 320 screen width
         WRITE16(0x8013762E, 0); //min X at 640 screen width
         WRITE16(0x8013764A, 0); //min Y at 240 screen height
-        WRITE16(0x8013765E, 0); //min Y at 480 screen height - causes a glitch at bottom when fading
+        WRITE16(0x8013765E, 0); //min Y at 480 screen height - causes a glitch at bottom when fading (or not?)
         //WRITE32(0x80137830, 0x38000000); //these two prevent fade glitch
         //WRITE32(0x80137688, 0x38000000);
     }
 
     //debug stuff
     WRITE_NOP(0x80119D90); //chapter select only needs Z button
+
+    //pause menu improvements
+    WRITE32(0x8012A97C, 0x4BFBDD55); //disable save confirmation
+    //disable some voices
+    WRITE_NOP(0x8012A904);
+    WRITE_NOP(0x8012A8C4);
+    WRITE_NOP(0x8012A95C);
+    WRITE_NOP(0x8012BA94);
+    WRITE_NOP(0x8012B8DC);
+    WRITE_NOP(0x8012B88C);
+    WRITE_NOP(0x8012B8B4);
+    WRITE_NOP(0x8012BD78);
 
     OSReport("Hooks installed!");
 }

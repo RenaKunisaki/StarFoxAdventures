@@ -17,11 +17,12 @@ void menuGameSpeed_select(const MenuItem *self, int amount) {
 
 void menuAutoSave_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "XXX");
+    sprintf(str, self->name, bAutoSave ? "On" : "Off");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuAutoSave_select(const MenuItem *self, int amount) {
-    audioPlaySound(NULL, MENU_ADJUST_SOUND); //XXX
+    bAutoSave = !bAutoSave;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
 
