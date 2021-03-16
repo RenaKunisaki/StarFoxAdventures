@@ -18,7 +18,7 @@ float cameraUpdateHook() {
 
     pCamera->pos.rotation.x += stickX * 128;
     pCamera->pos.rotation.y += stickY *  16;
-    debugPrintf("Cam mode 0x%02X\n", cameraMode);
+    //debugPrintf("Cam mode 0x%02X\n", cameraMode);
 }
 
 int padGetCxHook(int pad) {

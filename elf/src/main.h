@@ -44,6 +44,7 @@ typedef enum {
     CAM_FLAG_PAD3     = 0x01, //use controller 3 to move
     CAM_FLAG_INVERT_X = 0x02, //invert X axis movement
     CAM_FLAG_INVERT_Y = 0x04, //invert Y axis movement
+    CAM_FLAG_NO_HUD   = 0x08, //disable the HUD
 } CameraFlags;
 
 //camera.c
@@ -73,7 +74,7 @@ uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 extern u8 overrideFov;
 extern u8 furFxMode;
 extern bool bRumbleBlur;
-extern void (*origCameraUpdateFunc)(int frames);
+extern bool bDisableParticleFx;
 
 //menu.c
 void runMenu();

@@ -40,6 +40,7 @@ GLOBALFN gametextStruct* gameTextGet(GameTextId32);
 GLOBALFN char* gameTextGetStr(GameTextId32);
 GLOBALFN void gameTextSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN void gameTextShowStr(const char*, int window, int x, int y);
+GLOBALFN void GameUI_hudDraw(int,int,int);
 GLOBALFN u16 getButtonsHeld(int padNo);
 GLOBALFN u16 getButtonsJustPressed(int padNo);
 GLOBALFN void gplayClearRestartPoint(void);

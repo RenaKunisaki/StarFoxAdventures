@@ -100,6 +100,9 @@ extern u8 soundMode; //Stereo, Surround, Mono, Headphones
 extern float timeDelta;
 extern bool timeStop;
 extern float viewportAspect;
+extern float viewportAspectNotWidescreen;
+extern float viewportAspectWidescreen;
+extern float viewportAspectWidescreenShadows;
 extern u8 volumeCutScenes;
 extern float volumeMusic;
 extern float volumeSFX;

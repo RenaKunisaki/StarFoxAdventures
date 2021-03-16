@@ -83,7 +83,8 @@ void runMenu() {
     switch(menuState) {
         case MENU_NOT_OPEN:
             //Hold L+Z and press B to open the menu
-            if(controllerStates[0].button & (PAD_TRIGGER_L | PAD_TRIGGER_Z)) {
+            if((controllerStates[0].button & (PAD_TRIGGER_L | PAD_TRIGGER_Z))
+            == (PAD_TRIGGER_L | PAD_TRIGGER_Z)) {
                 if(buttonsJustPressed == PAD_BUTTON_B) openMainMenu();
             }
             break;

@@ -5,7 +5,7 @@
 u8 overrideFov = 60;
 u8 furFxMode = 0; //FurFxMode
 bool bRumbleBlur = false;
-void (*origCameraUpdateFunc)(int frames) = NULL;
+bool bDisableParticleFx = false;
 
 //XXX move this
 static BOOL (*gameBitHook_replaced)();
@@ -35,6 +35,11 @@ bool motionBlurHook() {
         return true;
     }
     return false;
+}
+
+void hudDrawHook(int p1, int p2, int p3) {
+     if(!(cameraFlags & CAM_FLAG_NO_HUD)) GameUI_hudDraw(p1, p2, p3);
+     //XXX still render C menu
 }
 
 void mainLoopHook() {
@@ -72,11 +77,29 @@ void mainLoopHook() {
             iCacheFlush((void*)0x800414B4, 0x40);
     }
 
+    WRITE32(0x800a4df4, bDisableParticleFx ? 0x4E800020 : 0x9421FED0);
+    iCacheFlush((void*)0x800a4df4, 4);
+
     minimapMainLoopHook();
     mainLoopDebugPrint();
     runMenu();
     krystalMainLoop();
     saveUpdateHook();
+
+    //correct aspect ratio
+    if(renderFlags & RenderFlag_Widescreen) {
+        viewportAspect = 16.0 / 9.6;
+        viewportAspectWidescreen = 16.0 / 9.6;
+        viewportAspectWidescreenShadows = 16.0 / 9.6;
+    }
+    else {
+        viewportAspect = 5.0 / 4.0;
+        viewportAspectNotWidescreen = 5.0 / 4.0;
+        //shadows use same address as main viewport for non-widescreen
+    }
+
+    //if(pPlayer) pPlayer->cullDistance = 1000;
+    //if(pPlayer) debugPrintf("cull %f\n", pPlayer->cullDistance);
 }
 
 
@@ -90,6 +113,7 @@ void _start(void) {
     hookBranch(0x80020D4C, mainLoopHook, 1);
     hookBranch(0x800e7fb0, saveLoadHook, 1);
     hookBranch(0x8005c45c, motionBlurHook, 1);
+    hookBranch(0x800d9e2c, hudDrawHook, 1);
 
     krystalInit();
 
@@ -143,6 +167,10 @@ void _start(void) {
     hookBranch(0x80133af0,        minimapButtonHeldHook,    1);
     hookBranch(0x80133afc,        minimapButtonPressedHook, 1);
     hookBranch(0x80108758,        viewFinderZoomHook,       1);
+
+    //viWidth fix
+    WRITE16(0x80049512, 704);
+    WRITE16(0x80049526, -32);
 
     DPRINT("Hooks installed!");
 }

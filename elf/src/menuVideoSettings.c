@@ -15,10 +15,11 @@ void menuWidescreen_select(const MenuItem *self, int amount) {
 
 void menuParticleFx_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "Not Implemented");
+    sprintf(str, self->name, bDisableParticleFx ? "Off" : "On");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuParticleFx_select(const MenuItem *self, int amount) {
+    bDisableParticleFx = !bDisableParticleFx;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
@@ -38,10 +39,11 @@ void menuFOV_select(const MenuItem *self, int amount) {
 
 void menuHudOnOff_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, "Not Implemented");
+    sprintf(str, self->name, (cameraFlags & CAM_FLAG_NO_HUD) ? "Off" : "On");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuHudOnOff_select(const MenuItem *self, int amount) {
+    cameraFlags ^= CAM_FLAG_NO_HUD;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
