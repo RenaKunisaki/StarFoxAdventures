@@ -6,36 +6,36 @@ typedef enum { //type:u8
 
 typedef enum { //type:u16
 	PlayerStateEnum_Activate_35 = 0x35,
-	PlayerStateEnum_Push_1D = 0x1D,
-	PlayerStateEnum_StartAiming = 0x2A,
-	PlayerStateEnum_ClimbLedge = 0xC,
-	PlayerStateEnum_ClimbOntoBike = 0x16,
-	PlayerStateEnum_StaffBooster = 0x32,
-	PlayerStateEnum_LiftRockWithStaff = 0x33,
-	PlayerStateEnum_Idle = 0x1,
-	PlayerStateEnum_Moving = 0x2,
+	PlayerStateEnum_Aiming = 0x2C,
+	PlayerStateEnum_Attack = 0x26,
 	PlayerStateEnum_CastFireball = 0x2E,
 	PlayerStateEnum_CastLaser = 0x2F,
-	PlayerStateEnum_ClimbOntoWall = 0x12,
-	PlayerStateEnum_NoChange = 0x0,
-	PlayerStateEnum_ClimbWall = 0x13,
-	PlayerStateEnum_GrabWall = 0x11,
-	PlayerStateEnum_SlideDownLadder = 0x10,
-	PlayerStateEnum_Throwing = 0x7,
-	PlayerStateEnum_NOP_3E = 0x3E,
-	PlayerStateEnum_ClimbOntoLadder = 0xE,
-	PlayerStateEnum_SuperQuake = 0x36,
-	PlayerStateEnum_Dead = 0x3,
-	PlayerStateEnum_Attack = 0x26,
-	PlayerStateEnum_StopAiming = 0x2B,
-	PlayerStateEnum_ClimbUpFromWall = 0x14,
 	PlayerStateEnum_ClimbDownFromWall = 0x15,
-	PlayerStateEnum_LiftActivate_08 = 0x8,
-	PlayerStateEnum_OnWindLift = 0x41,
 	PlayerStateEnum_ClimbLadder = 0xF,
-	PlayerStateEnum_TryCastSpell = 0x2D,
-	PlayerStateEnum_Aiming = 0x2C,
+	PlayerStateEnum_ClimbLedge = 0xC,
+	PlayerStateEnum_ClimbOntoBike = 0x16,
+	PlayerStateEnum_ClimbOntoLadder = 0xE,
+	PlayerStateEnum_ClimbOntoWall = 0x12,
+	PlayerStateEnum_ClimbUpFromWall = 0x14,
+	PlayerStateEnum_ClimbWall = 0x13,
+	PlayerStateEnum_Dead = 0x3,
+	PlayerStateEnum_GrabWall = 0x11,
+	PlayerStateEnum_Idle = 0x1,
+	PlayerStateEnum_LiftActivate_08 = 0x8,
+	PlayerStateEnum_LiftRockWithStaff = 0x33,
+	PlayerStateEnum_Moving = 0x2,
+	PlayerStateEnum_NOP_3E = 0x3E,
+	PlayerStateEnum_NoChange = 0x0,
+	PlayerStateEnum_OnWindLift = 0x41,
+	PlayerStateEnum_Push_1D = 0x1D,
 	PlayerStateEnum_RideBike = 0x18,
+	PlayerStateEnum_SlideDownLadder = 0x10,
+	PlayerStateEnum_StaffBooster = 0x32,
+	PlayerStateEnum_StartAiming = 0x2A,
+	PlayerStateEnum_StopAiming = 0x2B,
+	PlayerStateEnum_SuperQuake = 0x36,
+	PlayerStateEnum_Throwing = 0x7,
+	PlayerStateEnum_TryCastSpell = 0x2D,
 } PlayerStateEnum;
 
 typedef enum { //type:u16
@@ -102,3 +102,7 @@ typedef struct PACKED PlayerPrevPos {
 	vec3f pos;
 	int time;
 } PlayerPrevPos;
+
+//state is ObjState_Player*
+typedef PlayerStateEnum (*PlayerStateFunc)(double dT, ObjInstance *player, void *state);
+extern PlayerStateFunc playerStateFuncs[67];

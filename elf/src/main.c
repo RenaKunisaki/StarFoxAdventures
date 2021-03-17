@@ -22,26 +22,6 @@ BOOL gameBitHook(int bit, int val) {
 }
 
 
-bool motionBlurHook() {
-    //replaces a bl to shouldForceMotionBlur()
-    bool force = shouldForceMotionBlur();
-    if(force) return force;
-    if(!bRumbleBlur) return false;
-
-    if(rumbleTimer > 0) {
-        float rumble = (rumbleTimer + 48) * 2;
-        if(rumble > 120) rumble = 120;
-        motionBlurIntensity = rumble;
-        return true;
-    }
-    return false;
-}
-
-void hudDrawHook(int p1, int p2, int p3) {
-     if(!(cameraFlags & CAM_FLAG_NO_HUD)) GameUI_hudDraw(p1, p2, p3);
-     //XXX still render C menu
-}
-
 void mainLoopHook() {
     //replaces a bl to a do-nothing subroutine
 
@@ -103,21 +83,8 @@ void mainLoopHook() {
 }
 
 
-void _start(void) {
-    DPRINT("Patch running!");
-
-    //Install hooks
-    gameBitHook_replaced = (BOOL(*)())hookBranch(0x8002010C, gameBitHook, 1);
-    runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c, runLoadingScreens_hook, 1);
-    startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250, startMsg_initDoneHook, 1);
-    hookBranch(0x80020D4C, mainLoopHook, 1);
+static inline void _initSaveHacks() {
     hookBranch(0x800e7fb0, saveLoadHook, 1);
-    hookBranch(0x8005c45c, motionBlurHook, 1);
-    hookBranch(0x800d9e2c, hudDrawHook, 1);
-
-    krystalInit();
-
-    //autosave
     hookBranch(0x80042ec4, saveMapLoadHook, 1);
     hookBranch(0x8007db50, saveShowMsgHook, 1);
     //disable "not same memory card you last saved with" check,
@@ -126,8 +93,9 @@ void _start(void) {
     //way of fixing this.
     WRITE32(0x8007EF5C, 0x3B200000);
     WRITE32(0x8007F15C, 0x3B200000);
+}
 
-    //debug print
+static inline void _initDebugPrintHacks() {
     hookBranch(0x80137948, debugPrintfHook, 0);
     WRITE32   (0x801378A8, 0x480000A0); //restore debugPrintf
     WRITE8    (0x80137317, 6); //smaller text for fixed-width mode
@@ -142,11 +110,9 @@ void _start(void) {
         //WRITE32(0x80137830, 0x38000000); //these two prevent fade glitch
         //WRITE32(0x80137688, 0x38000000);
     }
+}
 
-    //debug stuff
-    WRITE_NOP(0x80119D90); //chapter select only needs Z button
-
-    //pause menu improvements
+static inline void _initPauseMenuHacks() {
     WRITE32(0x8012A97C, 0x4BFBDD55); //disable save confirmation
     //disable some voices
     WRITE_NOP(0x8012A904);
@@ -157,8 +123,9 @@ void _start(void) {
     WRITE_NOP(0x8012B88C);
     WRITE_NOP(0x8012B8B4);
     WRITE_NOP(0x8012BD78);
+}
 
-    //camera
+static inline void _initCameraHacks() {
     hookBranch(0x8010328c,        cameraUpdateHook,         1);
     hookBranch((u32)padGetCX,     padGetCxHook,             0);
     hookBranch((u32)padGetCY,     padGetCyHook,             0);
@@ -171,6 +138,37 @@ void _start(void) {
     //viWidth fix
     WRITE16(0x80049512, 704);
     WRITE16(0x80049526, -32);
+}
+
+static inline void _initPlayerHacks() {
+    hookBranch(0x80021078, initPlayerStatesHook, 1);
+}
+
+void _start(void) {
+    DPRINT("Patch running!");
+
+    //Install hooks
+    gameBitHook_replaced = (BOOL(*)())hookBranch(0x8002010C, gameBitHook, 1);
+    runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c, runLoadingScreens_hook, 1);
+    startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250, startMsg_initDoneHook, 1);
+    hookBranch(0x80020D4C, mainLoopHook, 1);
+    hookBranch(0x8005c45c, motionBlurHook, 1);
+    hookBranch(0x800d9e2c, hudDrawHook, 1);
+
+    krystalInit();
+    _initSaveHacks();
+    _initDebugPrintHacks();
+    _initPauseMenuHacks();
+    _initCameraHacks();
+    _initPlayerHacks();
+
+    //debug stuff
+    WRITE_NOP(0x80119D90); //chapter select only needs Z button
+
+    //increase climbing speeds
+    WRITEFLOAT(0x803E8000, 0.05); //wall climb (up and down)
+    WRITE16(0x802A26BA, 0x1B70); //ladder climb (up)
+    WRITE16(0x802A26A6, 0x1B70); //ladder climb (down)
 
     DPRINT("Hooks installed!");
 }

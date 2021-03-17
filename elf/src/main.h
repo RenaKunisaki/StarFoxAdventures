@@ -84,6 +84,11 @@ extern u8 overrideMinimapSize;
 extern u8 overrideMinimapAlpha;
 void minimapMainLoopHook();
 
+//player.c
+extern PlayerStateFunc origClimbWallFn;
+void initPlayerStatesHook(void);
+PlayerStateEnum playerStateClimbWallHook(double dT, ObjInstance *player, void *state);
+
 //save.c
 extern bool bAutoSave;
 void saveLoadHook();
@@ -96,3 +101,7 @@ extern void (*runLoadingScreens_replaced)();
 extern void (*startMsg_initDoneHook_replaced)();
 void runLoadingScreens_hook();
 void startMsg_initDoneHook();
+
+//ui.c
+bool motionBlurHook();
+void hudDrawHook(int p1, int p2, int p3);

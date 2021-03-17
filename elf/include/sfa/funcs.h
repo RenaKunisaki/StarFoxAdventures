@@ -89,6 +89,7 @@ GLOBALFN s8 padGetStickX(int pad);
 GLOBALFN s8 padGetStickY(int pad);
 GLOBALFN void playerDie(ObjInstance *player); //immediately kill player
 GLOBALFN ObjInstance* playerGetNearestObject(int idx,ObjInstance *obj,float *outDistance);
+GLOBALFN void playerInitFuncPtrs(void);
 GLOBALFN PlayerCharState* SaveGame_getCurCharacterState(void);
 GLOBALFN void saveGame_save(void);
 GLOBALFN void setSoundMode(u8 mode, bool force);
