@@ -78,8 +78,7 @@ void mainLoopHook() {
         //shadows use same address as main viewport for non-widescreen
     }
 
-    //if(pPlayer) pPlayer->cullDistance = 1000;
-    //if(pPlayer) debugPrintf("cull %f\n", pPlayer->cullDistance);
+    playerMainLoopHook();
 }
 
 
@@ -144,6 +143,21 @@ static inline void _initPlayerHacks() {
     hookBranch(0x80021078, initPlayerStatesHook, 1);
 }
 
+static inline void _initControllerHacks() {
+    //enable all four controllers, which enables at least one debug function
+    WRITE8(0x80014B87, 4);
+    WRITE8(0x80014BC7, 4);
+    WRITE8(0x80014C1B, 4);
+    WRITE8(0x80014C6F, 4);
+    WRITE8(0x80014CC3, 4);
+    WRITE8(0x80014D9F, 4);
+    WRITE8(0x80014DDB, 4);
+    WRITE8(0x80014E17, 4);
+    WRITE8(0x80014E73, 4);
+    WRITE8(0x80014EC7, 4);
+    WRITE8(0x80014EEB, 4);
+}
+
 void _start(void) {
     DPRINT("Patch running!");
 
@@ -154,6 +168,7 @@ void _start(void) {
     hookBranch(0x80020D4C, mainLoopHook, 1);
     hookBranch(0x8005c45c, motionBlurHook, 1);
     hookBranch(0x800d9e2c, hudDrawHook, 1);
+    hookBranch((u32)allocTagged, allocTaggedHook, 0);
 
     krystalInit();
     _initSaveHacks();

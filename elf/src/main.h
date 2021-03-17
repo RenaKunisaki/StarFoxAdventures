@@ -47,6 +47,15 @@ typedef enum {
     CAM_FLAG_NO_HUD   = 0x08, //disable the HUD
 } CameraFlags;
 
+typedef struct {
+    u32 size;
+    AllocTag tag;
+} AllocFailLogItem;
+#define ALLOC_FAIL_LOG_SIZE 16
+
+//alloc.c
+void* allocTaggedHook(u32 size, AllocTag tag, const char *name);
+
 //camera.c
 extern u8 cameraFlags; //CameraFlags
 float cameraUpdateHook();
@@ -88,6 +97,7 @@ void minimapMainLoopHook();
 extern PlayerStateFunc origClimbWallFn;
 void initPlayerStatesHook(void);
 PlayerStateEnum playerStateClimbWallHook(double dT, ObjInstance *player, void *state);
+void playerMainLoopHook();
 
 //save.c
 extern bool bAutoSave;

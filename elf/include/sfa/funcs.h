@@ -56,7 +56,7 @@ GLOBALFN void gxSetBlendMode(int, int, int, int);
 GLOBALFN void gxSetPeControl_ZCompLoc_(byte);
 GLOBALFN void gxSetVtxDescr(int which, int val);
 GLOBALFN void gxSetVtxDescrs(u32*);
-GLOBALFN void* heapAlloc(int region, uint size, AllocTag tag, char* name); //don't use this, use allocTagged
+GLOBALFN void* heapAlloc(int region, uint size, AllocTag tag, const char* name); //don't use this, use allocTagged
 GLOBALFN void* iCacheFlush(void* dest, uint size);
 GLOBALFN bool isCheatActive(uint);
 GLOBALFN bool isCheatUnlocked(uint);

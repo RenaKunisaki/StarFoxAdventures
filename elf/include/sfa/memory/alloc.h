@@ -40,3 +40,7 @@ typedef struct {
     u32           used;     //used blocks
     SfaHeapEntry *data;
 } SfaHeap;
+
+//these are not actually bool, they get set to -1 sometimes
+extern int bOnlyUseHeaps1and2;
+extern int bOnlyUseHeap3;

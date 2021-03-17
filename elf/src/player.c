@@ -27,3 +27,26 @@ PlayerStateEnum playerStateClimbWallHook(double dT, ObjInstance *player, void *s
     }
     return result;
 }
+
+void playerMainLoopHook() {
+    //hold Z on controller 3 to fast forward
+    static float prevSpeed = 0;
+    u16 buttons = controllerStates[2].button;
+    if(buttons & PAD_TRIGGER_Z) {
+        if(prevSpeed == 0) {
+            prevSpeed = physicsTimeScale;
+        }
+        physicsTimeScale = 180; //300% speed
+    }
+    else if(prevSpeed != 0) {
+        physicsTimeScale = prevSpeed;
+        prevSpeed = 0;
+    }
+
+    //press X on controller 3 to toggle free move
+    static u16 prevButtons = 0;
+    if((buttons & PAD_BUTTON_X) && !(prevButtons & PAD_BUTTON_X)) {
+        OSReport("Toggle free move!");
+    }
+    prevButtons = buttons;
+}
