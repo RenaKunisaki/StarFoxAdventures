@@ -50,7 +50,7 @@ void menuHudOnOff_select(const MenuItem *self, int amount) {
 
 Menu menuVideoSettings = {
     "Video Settings", 0,
-    genericMenu_run, mainSubMenu_close,
+    genericMenu_run, genericMenu_draw, mainSubMenu_close,
     "Widescreen: %s",  menuWidescreen_draw, menuWidescreen_select,
     "Particle FX: %s", menuParticleFx_draw, menuParticleFx_select,
     "FOV: %d",         menuFOV_draw,        menuFOV_select,

@@ -47,7 +47,7 @@ void menuFurFx_select(const MenuItem *self, int amount) {
 
 Menu menuPlayerSettings = {
     "Player Settings", 0,
-    genericMenu_run, mainSubMenu_close,
+    genericMenu_run, genericMenu_draw, mainSubMenu_close,
     "Player: %s",     menuPlayer_draw,   menuPlayer_select,
     "Backpack: %s",   menuBackpack_draw, menuBackpack_select,
     "Fur Effect: %s", menuFurFx_draw,    menuFurFx_select,

@@ -60,6 +60,9 @@ void mainLoopHook() {
     WRITE32(0x800a4df4, bDisableParticleFx ? 0x4E800020 : 0x9421FED0);
     iCacheFlush((void*)0x800a4df4, 4);
 
+    WRITE32(0x80148bc8, (debugTextFlags & DEBUGTEXT_TRICKY) ? 0x4BFEED80 : 0x9421FF90);
+    iCacheFlush((void*)0x80148bc8, 4);
+
     minimapMainLoopHook();
     mainLoopDebugPrint();
     runMenu();

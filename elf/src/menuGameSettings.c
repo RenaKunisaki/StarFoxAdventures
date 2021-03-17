@@ -57,7 +57,7 @@ void menuLanguage_select(const MenuItem *self, int amount) {
 
 Menu menuGameSettings = {
     "Game Settings", 0,
-    genericMenu_run, mainSubMenu_close,
+    genericMenu_run, genericMenu_draw, mainSubMenu_close,
     "Game Speed: %d%%", menuGameSpeed_draw, menuGameSpeed_select,
     "Autosave: %s",     menuAutoSave_draw,  menuAutoSave_select,
     "Subtitles: %s",    menuSubtitles_draw, menuSubtitles_select,

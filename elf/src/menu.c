@@ -9,49 +9,109 @@ u8  menuInputDelayTimer = 0;
 u8  menuPrevTimerFlags; //for game timer
 u8  menuPrevGameFlags; //MenuGameStateFlags
 
-static void drawMenuBox() {
+void drawMenuBox(int xpos, int ypos, int width, int height) {
     //Draw the menu's box
-    int cx = SCREEN_WIDTH / 2, cy = SCREEN_HEIGHT / 2;
     if(menuState == MENU_OPEN) {
-        float w = MENU_WIDTH  / 2;
-        float h = MENU_HEIGHT / 2;
-        drawBox(cx - w, cy - h, w*2, h*2, 255);
+        drawBox(xpos, ypos, width, height, 255);
     }
     else { //animate
         float anim = (float)menuAnimFrame / (float)MENU_ANIM_NUM_FRAMES;
-        float w = (MENU_WIDTH /2) * anim;
-        float h = (MENU_HEIGHT/2) * anim;
-        debugPrintf("Menu C=%d,%d S=%f, %f A=%d (%f)\n",
-            cx, cy, w, h, menuAnimFrame, anim);
-        drawBox(cx - w, cy - h, w*2, h*2, anim * 255);
+        float cx   = xpos + (width  / 2.0);
+        float cy   = ypos + (height / 2.0);
+        float w    = (width /2.0) * anim;
+        float h    = (height/2.0) * anim;
+        drawBox(cx-w, cy-h, width * anim, height * anim, anim * 255);
     }
 }
 
-static void drawMenu() {
-    //Draw the menu's text
+void genericMenu_draw(const Menu *self) {
+    //Draw function for most menus
     menuAnimFrame++;
-    debugPrintf("Menu flags %02X delay %d\n", menuPrevGameFlags, menuInputDelayTimer);
+    //debugPrintf("Menu flags %02X delay %d\n", menuPrevGameFlags, menuInputDelayTimer);
     //GameTextDrawFunc prevDrawFunc = menuGameTextDrawFunc;
     //gameTextDrawFunc = menuGameTextDrawFunc;
 
     int x = MENU_XPOS + MENU_PADDING, y = MENU_YPOS + MENU_PADDING;
 
+    drawMenuBox(MENU_XPOS, MENU_YPOS, MENU_WIDTH, MENU_HEIGHT);
+
     //Draw title
     //box type 0 is (center, y+40), no background
     gameTextSetColor(255, 255, 255, 255);
-    gameTextShowStr(curMenu->title, 0, x, y-40);
+    gameTextShowStr(self->title, 0, x, y-40);
 
-    for(int i=0; curMenu->items[i].name; i++) {
+    for(int i=0; self->items[i].name; i++) {
         y += MENU_LINE_HEIGHT;
-        bool selected = i == curMenu->selected;
+        bool selected = i == self->selected;
         if(selected) {
             u8  r = menuAnimFrame * 8, g = 255 - r;
             gameTextSetColor(r, g, 255, 255);
         }
         else gameTextSetColor(255, 255, 255, 255);
-        curMenu->items[i].draw(&curMenu->items[i], x, y, selected);
+        self->items[i].draw(&self->items[i], x, y, selected);
     }
     //gameTextDrawFunc = prevDrawFunc;
+}
+
+void genericMenu_run(const Menu *self) {
+    //Run function for most menus
+    int sel = curMenu->selected;
+    if(buttonsJustPressed == PAD_BUTTON_B) {
+        menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
+        curMenu->close(curMenu);
+    }
+    else if(buttonsJustPressed == PAD_BUTTON_A) {
+        menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+        curMenu->items[sel].select(&curMenu->items[sel], 0);
+    }
+    else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
+    ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
+        menuInputDelayTimer =
+            (controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD)
+            ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
+        if(sel == 0) {
+            while(curMenu->items[sel].name) sel++;
+        }
+        curMenu->selected = sel - 1;
+    }
+    else if(controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD
+    ||      controllerStates[0].substickY < -MENU_CSTICK_THRESHOLD) { //down
+        menuInputDelayTimer = (controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD)
+            ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
+        sel++;
+        if(!curMenu->items[sel].name) sel = 0;
+        curMenu->selected = sel;
+    }
+    else if(controllerStates[0].stickX > MENU_ANALOG_STICK_THRESHOLD
+    ||      controllerStates[0].substickX > MENU_CSTICK_THRESHOLD) { //right
+        menuInputDelayTimer = controllerStates[0].stickX > MENU_ANALOG_STICK_THRESHOLD
+            ? MENU_INPUT_DELAY_ADJUST : MENU_INPUT_DELAY_ADJUST_FAST;
+        curMenu->items[sel].select(&curMenu->items[sel], 1);
+    }
+    else if(controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD
+    ||      controllerStates[0].substickX < -MENU_CSTICK_THRESHOLD) { //left
+        menuInputDelayTimer = controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD
+            ? MENU_INPUT_DELAY_ADJUST : MENU_INPUT_DELAY_ADJUST_FAST;
+        curMenu->items[sel].select(&curMenu->items[sel], -1);
+    }
+    /* else if(controllerStates[0].triggerLeft > 40) { //L
+        menuInputDelayTimer = 0;
+        curMenu->items[sel].select(&curMenu->items[sel], -1);
+    }
+    else if(controllerStates[0].triggerRight > 40) { //R
+        menuInputDelayTimer = 0;
+        curMenu->items[sel].select(&curMenu->items[sel], 1);
+    } */
+}
+
+void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected) {
+    //Draw function for menu items that are only text
+    gameTextShowStr(self->name, MENU_TEXTBOX_ID, x, y);
+}
+
+
+static void drawMenu() {
+    curMenu->draw(curMenu);
 }
 
 static void doMenuInputs() {
@@ -91,7 +151,7 @@ void runMenu() {
 
         case MENU_OPENING:
             if(!menuAnimFrame) audioPlaySound(NULL, 0x3E5);
-            drawMenuBox();
+            drawMenuBox(MENU_XPOS, MENU_YPOS, MENU_WIDTH, MENU_HEIGHT);
             if(++menuAnimFrame == MENU_ANIM_NUM_FRAMES) {
                 menuState = MENU_OPEN;
                 menuAnimFrame = 0;
@@ -100,7 +160,6 @@ void runMenu() {
             break;
 
         case MENU_OPEN:
-            drawMenuBox();
             drawMenu();
             doMenuInputs();
             shouldCloseCMenu = 1;
@@ -108,7 +167,7 @@ void runMenu() {
 
         case MENU_CLOSING:
             //if(!menuAnimFrame) audioPlaySound(NULL, 0x3E5);
-            drawMenuBox();
+            drawMenuBox(MENU_XPOS, MENU_YPOS, MENU_WIDTH, MENU_HEIGHT);
             if(--menuAnimFrame == 0) menuState = MENU_NOT_OPEN;
             break;
     }

@@ -9,19 +9,19 @@
 
 #define SCREEN_WIDTH  640
 #define SCREEN_HEIGHT 480
-#define DRAW_SCALED_TEXTURE_FLIP_H 0x01
-#define DRAW_SCALED_TEXTURE_FLIP_V 0x02
-#define DRAW_SCALED_TEXTURE_SCALE_FACTOR 256
-#define DRAW_SCALED_TEXTURE_SCALE_ONE 256
-#define HUD_TEXTURE_BOX_CORNER   10
-#define HUD_TEXTURE_BOX_SIDE     11
-#define HUD_TEXTURE_BOX_INTERIOR 12
-#define HUD_TEXTURE_BOX_TOP      13
-#define BOX_BORDER_WIDTH 5
-#define BOX_BORDER_HEIGHT 5
 
-#define DPRINT OSReport
+#define MIN(a,b) \
+    ({ __typeof__ (a) _a = (a); \
+        __typeof__ (b) _b = (b); \
+    _a < _b ? _a : _b; })
+#define MAX(a,b) \
+    ({ __typeof__ (a) _a = (a); \
+        __typeof__ (b) _b = (b); \
+    _a > _b ? _a : _b; })
 
+#include "alloc.h"
+#include "camera.h"
+#include "debug.h"
 #include "krystal.h"
 #include "menu.h"
 
@@ -39,39 +39,6 @@ typedef enum {
     FURFX_ALWAYS,
     NUM_FURFX_MODES,
 } FurFxMode;
-
-typedef enum {
-    CAM_FLAG_PAD3     = 0x01, //use controller 3 to move
-    CAM_FLAG_INVERT_X = 0x02, //invert X axis movement
-    CAM_FLAG_INVERT_Y = 0x04, //invert Y axis movement
-    CAM_FLAG_NO_HUD   = 0x08, //disable the HUD
-} CameraFlags;
-
-typedef struct {
-    u32 size;
-    AllocTag tag;
-} AllocFailLogItem;
-#define ALLOC_FAIL_LOG_SIZE 16
-
-//alloc.c
-void* allocTaggedHook(u32 size, AllocTag tag, const char *name);
-
-//camera.c
-extern u8 cameraFlags; //CameraFlags
-float cameraUpdateHook();
-int padGetCxHook(int pad);
-int padGetCyHook(int pad);
-int padGetStickXHook(int pad);
-int padGetStickYHook(int pad);
-u32 minimapButtonHeldHook(int pad);
-u32 minimapButtonPressedHook(int pad);
-int viewFinderZoomHook(int pad);
-
-//debuglog.s
-void debugPrintfHook(const char *fmt, ...);
-
-//debugprint.c
-void mainLoopDebugPrint();
 
 //drawbox.c
 void drawBox(float x, float y, int w, int h, u8 opacity);

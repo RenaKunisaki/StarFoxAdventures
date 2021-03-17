@@ -63,11 +63,13 @@ GLOBALFN bool isCheatUnlocked(uint);
 GLOBALFN void* loadFileByPath(char *path,uint *outSize);
     // Returns pointer to allocated buffer of contents.
     // outSize: if not NULL, receives file size.
+GLOBALFN void loadMapForCurrentSaveGame(void);
 GLOBALFN void logSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN u32 mainGetBit(GameBit bit);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
 GLOBALFN int mapCoordsToId(int x, int z, int layer);
 GLOBALFN void* mapLoadDataFile(MapDirIdx32 map, DataFileEnum file);
+GLOBALFN void mapReload(void);
 GLOBALFN void* memcpy(void *dest, void *src, int len); // clobbers: r0, r4, r5, r6
 GLOBALFN void* memset(void *dest, u8 val, int len); // clobbers: r0, r6, r7
 GLOBALFN void mm_free(void*); // wrapper for free()

@@ -60,7 +60,7 @@ void menuCamInvY_select(const MenuItem *self, int amount) {
 
 Menu menuControlSettings = {
     "Control Settings", 0,
-    genericMenu_run, mainSubMenu_close,
+    genericMenu_run, genericMenu_draw, mainSubMenu_close,
     "Rumble: %s",                    menuRumble_draw,     menuRumble_select,
     "Rumble Blur: %s",               menuRumbleBlur_draw, menuRumbleBlur_select,
     "Camera Control: Controller %d", menuCamCtrl_draw,    menuCamCtrl_select,

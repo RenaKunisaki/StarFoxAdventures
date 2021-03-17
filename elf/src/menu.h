@@ -8,6 +8,27 @@
 #define MENU_LINE_HEIGHT 18
 #define MENU_ADJUST_SOUND 0xF4 //generic adjustment sound effect ID
 #define MENU_OPEN_SOUND 0xFC //submenu open sound effect ID
+#define MENU_CLOSE_SOUND 0xFC //submenu close sound effect ID
+
+#define DRAW_SCALED_TEXTURE_FLIP_H 0x01
+#define DRAW_SCALED_TEXTURE_FLIP_V 0x02
+#define DRAW_SCALED_TEXTURE_SCALE_FACTOR 256
+#define DRAW_SCALED_TEXTURE_SCALE_ONE 256
+#define HUD_TEXTURE_BOX_CORNER   10
+#define HUD_TEXTURE_BOX_SIDE     11
+#define HUD_TEXTURE_BOX_INTERIOR 12
+#define HUD_TEXTURE_BOX_TOP      13
+#define BOX_BORDER_WIDTH 5
+#define BOX_BORDER_HEIGHT 5
+
+#define MENU_INPUT_DELAY_CLOSE 8 //when closing menu
+#define MENU_INPUT_DELAY_SELECT 8 //when selecting an option
+#define MENU_INPUT_DELAY_MOVE 8 //when moving cursor to another option
+#define MENU_INPUT_DELAY_MOVE_FAST 0 //when moving cursor with C stick
+#define MENU_INPUT_DELAY_ADJUST 8 //when changing an option
+#define MENU_INPUT_DELAY_ADJUST_FAST 0 //when changing an option with C stick
+#define MENU_ANALOG_STICK_THRESHOLD 20 //how far stick has to move
+#define MENU_CSTICK_THRESHOLD 20 //how far C stick has to move
 
 typedef enum {
     MENU_NOT_OPEN,
@@ -34,15 +55,27 @@ typedef struct MenuItem {
 typedef struct Menu {
     const char *title; //menu title
     s16 selected; //current selected option
-    void (*run)(const Menu *self); //run function
+    void (*run  )(const Menu *self); //run function
+    void (*draw )(const Menu *self); //draw function
     void (*close)(const Menu *self); //close function
     MenuItem items[]; //items, ending with one with name = NULL
 } Menu;
 
-//menuMain.c
-void mainSubMenu_close(const Menu *self);
+//menu.c
+void drawMenuBox(int cx, int cy, int width, int height);
+void genericMenu_draw(const Menu *self);
 void genericMenu_run(const Menu *self);
 void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected);
+
+//menuDebug.c
+void debugSubMenu_close(const Menu *self);
+
+//menuDebugMap.c
+void debugMapSubMenu_close(const Menu *self);
+
+//menuMain.c
+void mainMenu_close(const Menu *self);
+void mainSubMenu_close(const Menu *self);
 
 extern Menu *curMenu;
 extern Menu menuMain;
@@ -52,6 +85,10 @@ extern Menu menuPlayerSettings;
 extern Menu menuVideoSettings;
 extern Menu menuAudioSettings;
 extern Menu menuPdaSettings;
+extern Menu menuDebug;
+extern Menu menuDebugText;
+extern Menu menuDebugMap;
+extern Menu menuDebugWarp;
 
 extern u8  menuState;
 extern u8  menuAnimFrame;

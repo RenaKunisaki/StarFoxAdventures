@@ -72,7 +72,7 @@ void menuPdaZoom_select(const MenuItem *self, int amount) {
 
 Menu menuPdaSettings = {
     "PDA Settings", 0,
-    genericMenu_run, mainSubMenu_close,
+    genericMenu_run, genericMenu_draw, mainSubMenu_close,
     "Mode: %s",          menuPdaMode_draw,    menuPdaMode_select,
     "Map Size: %s",      menuPdaSize_draw,    menuPdaSize_select,
     "Map Opacity: %d%%", menuPdaOpacity_draw, menuPdaOpacity_select,

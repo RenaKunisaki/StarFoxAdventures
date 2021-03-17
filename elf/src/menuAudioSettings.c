@@ -142,7 +142,7 @@ void menuStopSounds_select(const MenuItem *self, int amount) {
 
 Menu menuAudioSettings = {
     "Audio Settings", 0,
-    genericMenu_run, mainSubMenu_close,
+    genericMenu_run, genericMenu_draw, mainSubMenu_close,
     "Music Volume: %d%%",    menuMusicVol_draw,    menuMusicVol_select,
     "SFX Volume: %d%%",      menuSfxVol_draw,      menuSfxVol_select,
     "CutScene Volume: %d%%", menuSceneVol_draw,    menuSceneVol_select,

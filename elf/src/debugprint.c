@@ -2,6 +2,10 @@
  */
 #include "main.h"
 
+u32 debugTextFlags = DEBUGTEXT_PLAYER_COORDS |
+    DEBUGTEXT_CAMERA_COORDS | DEBUGTEXT_MEMORY_INFO |
+    DEBUGTEXT_INTERACT_OBJ_INFO;
+
 static void printCoords() {
     //Display player coords
     //debugPrintf doesn't support eg '%+7.2f' so we'll just convert
@@ -61,7 +65,7 @@ static void printRestartPoint() {
         char sColor[6] = {0x81, color, 0xFF, 0xFF, 0xFF, 0};
 
         //map ID is 0xFF sometimes, no idea why
-        debugPrintf("%sR:" DPRINT_FIXED "%6d %6d %6d %d M%02X" DPRINT_NOFIXED
+        debugPrintf("%sR:" DPRINT_FIXED "%6d %6d %6d %d M%02X\n" DPRINT_NOFIXED
             DPRINT_COLOR "\xFF\xFF\xFF\xFF\n", sColor,
             (int)chrPos->pos.x, (int)chrPos->pos.y, (int)chrPos->pos.z,
             chrPos->mapLayer, chrPos->mapId & 0xFF);
@@ -100,6 +104,29 @@ static void printMemory() {
         DPRINT_NOFIXED "\n", sColor, bytesPct, blocksPct);
 }
 
+static void printHeapInfo() {
+    //Display detailed heap info
+    debugPrintf(DPRINT_FIXED "Free Blocks   Free KBytes\n" DPRINT_NOFIXED);
+    for(int i=0; i<NUM_HEAPS; i++) {
+        debugPrintf(DPRINT_FIXED "%5d/%5d %6d/%6d\n" DPRINT_NOFIXED,
+            heaps[i].avail - heaps[i].used, heaps[i].avail, //blocks
+            (heaps[i].dataSize - heaps[i].size) / 1024, heaps[i].dataSize / 1024 //bytes
+        );
+    }
+
+    debugPrintf("Emerg frees: %d; alloc fails: %d\n", emergFreeCount, allocFailCount);
+    if(allocFailCount > 0) {
+        debugPrintf(DPRINT_FIXED "FailSize FailTag" DPRINT_NOFIXED "\n");
+        for(int i=0; i<MIN(allocFailCount, ALLOC_FAIL_LOG_SIZE); i++) {
+            if(i == allocFailLogIdx) debugPrintf(DPRINT_COLOR "\x00\xFF\x00\xFF");
+            else debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF");
+            debugPrintf(DPRINT_FIXED "%08X %08X" DPRINT_NOFIXED "\n",
+                allocFailLog[i].size, allocFailLog[i].tag);
+        }
+        debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF");
+    }
+}
+
 static void printTarget() {
     //Display target that player is focused on
     if(pCamera && pCamera->target) {
@@ -119,12 +146,15 @@ void mainLoopDebugPrint() {
     }
     else debugPrintf("-\n"); */
 
-    printCoords();
-    printCamera();
-    printObjCount();
-    printMemory();
-    printRestartPoint();
-    printTarget();
+    if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
+    if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
+    if(debugTextFlags & DEBUGTEXT_RESTART_POINT) printRestartPoint();
+    if(debugTextFlags & DEBUGTEXT_MEMORY_INFO) {
+        printObjCount();
+        printMemory();
+    }
+    if(debugTextFlags & DEBUGTEXT_HEAP_STATE) printHeapInfo();
+    if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
 
     debugPrintf("\n"); //for game's own messages
 }
