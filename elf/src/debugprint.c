@@ -60,22 +60,24 @@ static void printRestartPoint() {
         }
         else if(restartPointFrameCount > 0) restartPointFrameCount--;
 
-        u8 color = 255 - (restartPointFrameCount * 4);
-        if(!color) color = 1; //don't break sprintf
-        char sColor[6] = {0x81, color, 0xFF, 0xFF, 0xFF, 0};
+        u8 color = pRestartPoint ? 0xFF : 0x7F;
+        char sColor[6] = {0x81, color, color, color, 0xFF, 0};
 
         //map ID is 0xFF sometimes, no idea why
-        debugPrintf("%sR:" DPRINT_FIXED "%6d %6d %6d %d M%02X\n" DPRINT_NOFIXED
-            DPRINT_COLOR "\xFF\xFF\xFF\xFF\n", sColor,
+        debugPrintf("%sR:" DPRINT_FIXED "%6d %6d %6d %d M%02X" DPRINT_NOFIXED,
+            sColor,
             (int)chrPos->pos.x, (int)chrPos->pos.y, (int)chrPos->pos.z,
             chrPos->mapLayer, chrPos->mapId & 0xFF);
+        debugPrintf("%s\n" DPRINT_COLOR "\xFF\xFF\xFF\xFF",
+            restartPointFrameCount == 0 ? "" : " CHANGED");
     }
+    else debugPrintf(DPRINT_FIXED "R: none" DPRINT_NOFIXED "\n");
 }
 
 static void printCamera() {
     //Display camera coords
     if(pCamera) {
-        debugPrintf("C:" DPRINT_FIXED "%6d %6d %6d " DPRINT_NOFIXED,
+        debugPrintf("C:" DPRINT_FIXED "%6d %6d %6d " DPRINT_NOFIXED "\n",
             (int)pCamera->pos.pos.x, (int)pCamera->pos.pos.y, (int)pCamera->pos.pos.z);
     }
 }

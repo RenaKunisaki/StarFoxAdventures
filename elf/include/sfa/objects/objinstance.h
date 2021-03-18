@@ -45,7 +45,7 @@ typedef enum { //type:u32
 	ObjSpawnFlags_DontSave           = 0x4,
 } ObjSpawnFlags;
 
-typedef struct PACKED ObjPos {
+typedef struct ObjPos {
 	vec3s rotation;
 	u16   flags; //ObjInstance_Flags06
 	float scale;
