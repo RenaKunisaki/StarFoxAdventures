@@ -12,7 +12,7 @@ u8  menuPrevGameFlags; //MenuGameStateFlags
 void drawMenuBox(int xpos, int ypos, int width, int height) {
     //Draw the menu's box
     if(menuState == MENU_OPEN) {
-        drawBox(xpos, ypos, width, height, 255);
+        drawBox(xpos, ypos, width, height, 255, true);
     }
     else { //animate
         float anim = (float)menuAnimFrame / (float)MENU_ANIM_NUM_FRAMES;
@@ -20,7 +20,7 @@ void drawMenuBox(int xpos, int ypos, int width, int height) {
         float cy   = ypos + (height / 2.0);
         float w    = (width /2.0) * anim;
         float h    = (height/2.0) * anim;
-        drawBox(cx-w, cy-h, width * anim, height * anim, anim * 255);
+        drawBox(cx-w, cy-h, width * anim, height * anim, anim * 255, true);
     }
 }
 

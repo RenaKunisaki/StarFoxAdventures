@@ -20,6 +20,7 @@
 #define HUD_TEXTURE_BOX_TOP      13
 #define BOX_BORDER_WIDTH 5
 #define BOX_BORDER_HEIGHT 5
+#define MENU_FIXED_WIDTH 11 //pixels for fixed width mode
 
 #define MENU_INPUT_DELAY_CLOSE 8 //when closing menu
 #define MENU_INPUT_DELAY_SELECT 8 //when selecting an option
@@ -29,6 +30,7 @@
 #define MENU_INPUT_DELAY_ADJUST_FAST 0 //when changing an option with C stick
 #define MENU_ANALOG_STICK_THRESHOLD 20 //how far stick has to move
 #define MENU_CSTICK_THRESHOLD 20 //how far C stick has to move
+#define MENU_TRIGGER_THRESHOLD 20 //how far L/R have to move
 
 typedef enum {
     MENU_NOT_OPEN,
@@ -70,6 +72,9 @@ void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected);
 //menuDebug.c
 void debugSubMenu_close(const Menu *self);
 
+//menuDebugGameState.c
+void debugGameSubMenu_close(const Menu *self);
+
 //menuDebugMap.c
 void debugMapSubMenu_close(const Menu *self);
 
@@ -89,6 +94,9 @@ extern Menu menuDebug;
 extern Menu menuDebugText;
 extern Menu menuDebugMap;
 extern Menu menuDebugWarp;
+extern Menu menuDebugGameState;
+extern Menu menuDebugGameBits;
+extern Menu menuDebugCheat;
 
 extern u8  menuState;
 extern u8  menuAnimFrame;

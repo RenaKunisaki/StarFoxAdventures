@@ -1,3 +1,5 @@
+#define NUM_GAMEBITS 0x0F59
+
 typedef enum { //type:u32
 	BIT_WC_FoundKing = 0x7FC,
 	BIT_SH_GotMoonPassKey = 0x193,

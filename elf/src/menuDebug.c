@@ -20,11 +20,25 @@ void menuDebugMap_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugGame_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugGameState;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
+void menuDebugCheat_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugCheat;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
 
 Menu menuDebug = {
     "Debug", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
     "Debug Text",     genericMenuItem_draw, menuDebugText_select,
     "Map",            genericMenuItem_draw, menuDebugMap_select,
+    "Game State",     genericMenuItem_draw, menuDebugGame_select,
+    "Cheats",         genericMenuItem_draw, menuDebugCheat_select,
     NULL,
 };

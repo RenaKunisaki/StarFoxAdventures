@@ -2,6 +2,7 @@
  */
 #include "main.h"
 
+u32 debugCheats = 0; //DebugCheat
 u8 overrideFov = 60;
 u8 furFxMode = 0; //FurFxMode
 bool bRumbleBlur = false;
@@ -82,6 +83,27 @@ void mainLoopHook() {
     }
 
     playerMainLoopHook();
+
+    PlayerCharState *playerState =
+        &saveData.curSaveGame.charState[saveData.curSaveGame.character];
+    if(debugCheats & DBGCHT_INF_HP) {
+        //XXX won't work in Arwing levels
+        playerState->curHealth = playerState->maxHealth;
+    }
+    if(debugCheats & DBGCHT_INF_MP) {
+        playerState->curMagic = playerState->maxMagic;
+    }
+    if(debugCheats & DBGCHT_INF_MONEY) {
+        playerState->money = 255;
+    }
+    if(debugCheats & DBGCHT_INF_LIVES) {
+        playerState->curBafomDads = playerState->maxBafomDads;
+    }
+    if(debugCheats & DBGCHT_ENEMY_FROZEN) {
+        //patch objIsFrozen() to always return true
+        WRITE32(0x8002b048, 0x38600001);
+    }
+    else WRITE32(0x8002b048, 0x540307FE);
 }
 
 
@@ -187,6 +209,14 @@ void _start(void) {
     WRITEFLOAT(0x803E8000, 0.05); //wall climb (up and down)
     WRITE16(0x802A26BA, 0x1B70); //ladder climb (up)
     WRITE16(0x802A26A6, 0x1B70); //ladder climb (down)
+
+    //hooks for fixed-width text
+    hookBranch(0x80018414, textHook,     0);
+    hookBranch(0x800183dc, textDrawHook, 1);
+    //disable special case for spaces in text.
+    //it's not necessary anyway and interferes
+    //with our fixed width hack.
+    WRITE32(0x80017C70, 0x2816ACAB);
 
     DPRINT("Hooks installed!");
 }

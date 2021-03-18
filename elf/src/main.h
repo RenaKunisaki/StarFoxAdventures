@@ -40,13 +40,22 @@ typedef enum {
     NUM_FURFX_MODES,
 } FurFxMode;
 
+typedef enum {
+    DBGCHT_INF_HP       = (1 << 0),
+    DBGCHT_INF_MP       = (1 << 1),
+    DBGCHT_INF_MONEY    = (1 << 2),
+    DBGCHT_INF_LIVES    = (1 << 3),
+    DBGCHT_ENEMY_FROZEN = (1 << 4),
+} DebugCheat;
+
 //drawbox.c
-void drawBox(float x, float y, int w, int h, u8 opacity);
+void drawBox(float x, float y, int w, int h, u8 opacity, bool fill);
 
 //hook.c
 uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 
 //main.c
+extern u32 debugCheats;
 extern u8 overrideFov;
 extern u8 furFxMode;
 extern bool bRumbleBlur;
@@ -78,6 +87,11 @@ extern void (*runLoadingScreens_replaced)();
 extern void (*startMsg_initDoneHook_replaced)();
 void runLoadingScreens_hook();
 void startMsg_initDoneHook();
+
+//text.s
+extern u8 textForceFixedWidth;
+void textHook();
+void textDrawHook();
 
 //ui.c
 bool motionBlurHook();

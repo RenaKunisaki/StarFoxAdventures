@@ -2,16 +2,17 @@
  */
 #include "main.h"
 
-void drawBox(float x, float y, int w, int h, u8 opacity) {
+void drawBox(float x, float y, int w, int h, u8 opacity, bool fill) {
     //Draw a box on the screen.
 
     //debugPrintf("Box %f, %f, %d, %d, op %d\n", x, y, w, h, opacity);
 
-    //interior
-    drawScaledTexture(x+BOX_BORDER_WIDTH, y+BOX_BORDER_HEIGHT,
-        hudTextures[HUD_TEXTURE_BOX_INTERIOR], opacity,
-        DRAW_SCALED_TEXTURE_SCALE_ONE,
-        w-(BOX_BORDER_WIDTH*2), h-(BOX_BORDER_HEIGHT*2), 0);
+    if(fill) {
+        drawScaledTexture(x+BOX_BORDER_WIDTH, y+BOX_BORDER_HEIGHT,
+            hudTextures[HUD_TEXTURE_BOX_INTERIOR], opacity,
+            DRAW_SCALED_TEXTURE_SCALE_ONE,
+            w-(BOX_BORDER_WIDTH*2), h-(BOX_BORDER_HEIGHT*2), 0);
+    }
 
     //top
     drawScaledTexture(x+BOX_BORDER_WIDTH, y,
