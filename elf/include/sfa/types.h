@@ -10,6 +10,7 @@ typedef struct TextureHeader TextureHeader;
 #define NUM_MAPS 120
 #define NUM_MAP_DIRS 80
 #define OBJ_SEQ_MAX 0x54
+#define PLAYER_POS_LOG_SIZE 60
 
 typedef s16 DataFileEnum16;
 typedef s32 DataFileEnum32;

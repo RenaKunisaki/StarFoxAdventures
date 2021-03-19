@@ -58,6 +58,7 @@ GLOBALFN void gxSetBlendMode(int, int, int, int);
 GLOBALFN void gxSetPeControl_ZCompLoc_(byte);
 GLOBALFN void gxSetVtxDescr(int which, int val);
 GLOBALFN void gxSetVtxDescrs(u32*);
+GLOBALFN void gxWaitFn_80258330(void);
 GLOBALFN void* heapAlloc(int region, uint size, AllocTag tag, const char* name); //don't use this, use allocTagged
 GLOBALFN void* iCacheFlush(void* dest, uint size);
 GLOBALFN bool isCheatActive(uint);
@@ -91,11 +92,14 @@ GLOBALFN s8 padGetCX(int pad);
 GLOBALFN s8 padGetCY(int pad);
 GLOBALFN s8 padGetStickX(int pad);
 GLOBALFN s8 padGetStickY(int pad);
+GLOBALFN void padReadControllers(PADStatus*);
 GLOBALFN void playerDie(ObjInstance *player); //immediately kill player
 GLOBALFN ObjInstance* playerGetNearestObject(int idx,ObjInstance *obj,float *outDistance);
 GLOBALFN void playerInitFuncPtrs(void);
+GLOBALFN void reset(int, int, int);
 GLOBALFN PlayerCharState* SaveGame_getCurCharacterState(void);
 GLOBALFN void saveGame_save(void);
+GLOBALFN void setGpuErrorHandler(void*);
 GLOBALFN void setSoundMode(u8 mode, bool force);
 GLOBALFN void setSubtitlesEnabled(bool);
 GLOBALFN int setWidescreen(bool); //always returns 0
@@ -114,6 +118,9 @@ GLOBALFN void textRenderChar(s16 x1, s16 y1, s16 x2, s16 y2, double s1, double t
 GLOBALFN void textRenderSetup(void);
 GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);
 GLOBALFN void vec3f_scale(double scale, vec3f *in, vec3f *out);
+GLOBALFN void videoSetBufferSwapCb(void*);
+GLOBALFN void videoSetCallback_80256460(void*);
+GLOBALFN void viFn_8024d554(void);
 GLOBALFN void VISetNextFrameBuffer(void*);
 GLOBALFN void VIWaitForRetrace(void);
 GLOBALFN void waitNextFrame(void);

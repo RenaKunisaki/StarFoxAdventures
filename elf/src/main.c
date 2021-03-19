@@ -193,6 +193,7 @@ void _start(void) {
     //800209ac
 
     //Install hooks
+    hookBranch(0x80137df8, bsodHook, 1);
     gameBitHook_replaced = (BOOL(*)())hookBranch(0x8002010C, gameBitHook, 1);
     runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c, runLoadingScreens_hook, 1);
     startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250, startMsg_initDoneHook, 1);

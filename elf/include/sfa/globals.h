@@ -9,6 +9,8 @@ extern bool bEnableMotionBlur; //motion blur
 extern bool bEnableSpiritVision; //spirit vision filter
 extern bool bEnableViewFinderHud; //viewfinder
 extern vec3f blurFilterArea; //blur filter area
+extern OSContext *bsodCtx;
+extern u16 bsodErrorCode;
 extern int bSubtitlesEnabled;
 extern u32 buttonsJustPressed;
 extern DLL_ID cameraMode;
@@ -34,6 +36,7 @@ extern ObjInstance *curSeqObj;
 extern void *dataFileBuffers[NUM_FILES];
 extern u32 dataFileSize[NUM_FILES];
 extern char debugLogBuffer[1000];
+extern void *debugFrameBuffer[2];
 extern char *debugLogEnd;
 extern float distortionFilterAngle1; //distortion filter angle
 extern float distortionFilterAngle2; //distortion filter angle 2
@@ -79,11 +82,17 @@ extern Camera *pCamera;
 extern MapInfoEntry *pCurMapInfo;
 extern SaveGame *pCurSaveGame;
 extern bool pdaOn;
+extern void *pFrameBuffer[2];
 extern float physicsTimeScale; //default 60.0
 extern SaveGame *pLastSavedGame; //mainSetBits uses this
 extern int playerId; //0=Krystal, 1=Fox XXX verify type
 extern float playerMapOffsetX;
 extern float playerMapOffsetZ;
+extern int playerPrevPosIdx;
+extern struct {
+    vec3f pos;
+    int time;
+} playerPrevPositions[PLAYER_POS_LOG_SIZE];
 extern ObjInstance *pPlayer;
 extern SaveGame *pRestartPoint;
 extern u32 renderFlags;
@@ -98,6 +107,7 @@ extern u8 seqGlobal3;
 extern bool shouldCloseCMenu;
 extern u8 shouldOpenCMenu;
 extern u8 soundMode; //Stereo, Surround, Mono, Headphones
+extern u8 tempGameBits[128];
 extern float timeDelta;
 extern bool timeStop;
 extern float viewportAspect;

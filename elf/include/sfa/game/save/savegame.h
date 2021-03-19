@@ -23,7 +23,7 @@ typedef struct PACKED {
     u8	              flags21;          //0x21 SaveGameFlags21 80=erase me; 60=save slot
     byte              flag_0x22;        //0x22
     byte              unk23;            //0x23
-    u8                gameBits2[0x144]; //0x24
+    u8                gameBits2[324];   //0x24
     SaveGameObjectPos objs[63];         //0x168
     u8                texts[5];	        //0x558 hint texts (+0xF4 = text ID)
     byte              completion;	    //0x55d percent = (this / 187) * 100

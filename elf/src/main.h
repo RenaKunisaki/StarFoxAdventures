@@ -48,6 +48,9 @@ typedef enum {
     DBGCHT_ENEMY_FROZEN = (1 << 4),
 } DebugCheat;
 
+//bsod.c
+void bsodHook(void);
+
 //drawbox.c
 void drawBox(float x, float y, int w, int h, u8 opacity, bool fill);
 
