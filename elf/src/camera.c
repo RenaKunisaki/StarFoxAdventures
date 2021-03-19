@@ -16,8 +16,10 @@ float cameraUpdateHook() {
     if(cameraFlags & CAM_FLAG_INVERT_X) stickX = -stickX;
     if(cameraFlags & CAM_FLAG_INVERT_Y) stickY = -stickY;
 
-    pCamera->pos.rotation.x += stickX * 128;
-    pCamera->pos.rotation.y += stickY *  16;
+    if(!bFreeMove) {
+        pCamera->pos.rotation.x += stickX * 128;
+        pCamera->pos.rotation.y += stickY *  16;
+    }
     //debugPrintf("Cam mode 0x%02X\n", cameraMode);
 }
 

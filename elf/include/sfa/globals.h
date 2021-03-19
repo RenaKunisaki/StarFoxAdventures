@@ -16,6 +16,7 @@ extern bool cMenuEnabled;
 extern bool cMenuOpen;
 extern u8 cMenuState;
 extern Color4b colorFilterColor;
+extern u8 colorScale;
 extern struct {
     int chr;
     int len; //bytes / 2

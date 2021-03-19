@@ -18,6 +18,7 @@ GLOBALFN void angleToVec2(int angle, float *outX, float *outY);
 GLOBALFN int atan2(float y, float x); //returns angle as s16 0-65535 (or -32768-32767?)
 GLOBALFN void audioPlaySound(ObjInstance *sourceObj,SoundId soundid);
 GLOBALFN void buttonDisable(int pad, u32 buttons);
+GLOBALFN void cameraCheckEnterFirstPerson(void *param1, void *param2); //XXX signature
 GLOBALFN void cameraGetFocusObjDistance(float offsY, Camera *this,
     float *outX, float *outY, float *outZ, float *outXZ, //outXZ can be null
     BOOL bUseCurPos);
@@ -105,6 +106,7 @@ GLOBALFN void streamPlay(int id, void (*callback)(void));
 GLOBALFN void streamPlay_defaultCallback();
 GLOBALFN void streamStop(void);
 GLOBALFN void streamStopAll(void);
+GLOBALFN char* strcpy(char *dest, const char *src);
 GLOBALFN int strlen(const char*);
 GLOBALFN char* strncpy(char *dest, const char* src, int len);
 GLOBALFN void textRenderChar(s16 x1, s16 y1, s16 x2, s16 y2, double s1, double t1, double s2, double t2);

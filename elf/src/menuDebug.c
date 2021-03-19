@@ -8,6 +8,16 @@ void debugSubMenu_close(const Menu *self) {
     audioPlaySound(NULL, MENU_CLOSE_SOUND);
 }
 
+void menuDebugFreeMove_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, bFreeMove ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugFreeMove_select(const MenuItem *self, int amount) {
+    bFreeMove = !bFreeMove;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
 void menuDebugText_select(const MenuItem *self, int amount) {
     if(amount) return;
     curMenu = &menuDebugText;
@@ -32,13 +42,21 @@ void menuDebugCheat_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugRender_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugRender;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
 
 Menu menuDebug = {
     "Debug", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
-    "Debug Text",     genericMenuItem_draw, menuDebugText_select,
-    "Map",            genericMenuItem_draw, menuDebugMap_select,
-    "Game State",     genericMenuItem_draw, menuDebugGame_select,
-    "Cheats",         genericMenuItem_draw, menuDebugCheat_select,
+    "Free Move: %s",  menuDebugFreeMove_draw, menuDebugFreeMove_select,
+    "Debug Text",     genericMenuItem_draw,   menuDebugText_select,
+    "Map",            genericMenuItem_draw,   menuDebugMap_select,
+    "Game State",     genericMenuItem_draw,   menuDebugGame_select,
+    "Cheats",         genericMenuItem_draw,   menuDebugCheat_select,
+    "Render",         genericMenuItem_draw,   menuDebugRender_select,
     NULL,
 };

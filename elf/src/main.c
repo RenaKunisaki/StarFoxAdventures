@@ -3,6 +3,7 @@
 #include "main.h"
 
 u32 debugCheats = 0; //DebugCheat
+s16 overrideColorScale = -1;
 u8 overrideFov = 60;
 u8 furFxMode = 0; //FurFxMode
 bool bRumbleBlur = false;
@@ -68,6 +69,7 @@ void mainLoopHook() {
     mainLoopDebugPrint();
     runMenu();
     krystalMainLoop();
+    doFreeMove();
     saveUpdateHook();
 
     //correct aspect ratio
@@ -104,6 +106,8 @@ void mainLoopHook() {
         WRITE32(0x8002b048, 0x38600001);
     }
     else WRITE32(0x8002b048, 0x540307FE);
+
+    if(overrideColorScale >= 0) colorScale = overrideColorScale;
 }
 
 
@@ -194,6 +198,7 @@ void _start(void) {
     hookBranch(0x8005c45c, motionBlurHook, 1);
     hookBranch(0x800d9e2c, hudDrawHook, 1);
     hookBranch((u32)allocTagged, allocTaggedHook, 0);
+    hookBranch(0x80105df8, firstPersonHook, 1);
 
     krystalInit();
     _initSaveHacks();

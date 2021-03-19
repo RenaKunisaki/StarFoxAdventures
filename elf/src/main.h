@@ -51,11 +51,16 @@ typedef enum {
 //drawbox.c
 void drawBox(float x, float y, int w, int h, u8 opacity, bool fill);
 
+//freemove.c
+extern bool bFreeMove;
+void doFreeMove();
+
 //hook.c
 uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 
 //main.c
 extern u32 debugCheats;
+extern s16 overrideColorScale;
 extern u8 overrideFov;
 extern u8 furFxMode;
 extern bool bRumbleBlur;
@@ -74,6 +79,7 @@ extern PlayerStateFunc origClimbWallFn;
 void initPlayerStatesHook(void);
 PlayerStateEnum playerStateClimbWallHook(double dT, ObjInstance *player, void *state);
 void playerMainLoopHook();
+void firstPersonHook(void *param1, void *param2);
 
 //save.c
 extern bool bAutoSave;

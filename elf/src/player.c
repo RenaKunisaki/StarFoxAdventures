@@ -42,11 +42,9 @@ void playerMainLoopHook() {
         physicsTimeScale = prevSpeed;
         prevSpeed = 0;
     }
+}
 
-    //press X on controller 3 to toggle free move
-    static u16 prevButtons = 0;
-    if((buttons & PAD_BUTTON_X) && !(prevButtons & PAD_BUTTON_X)) {
-        OSReport("Toggle free move!");
-    }
-    prevButtons = buttons;
+void firstPersonHook(void *param1, void *param2) {
+    //replaces a call to cameraCheckEnterFirstPerson()
+    if(!bFreeMove) cameraCheckEnterFirstPerson(param1, param2);
 }
