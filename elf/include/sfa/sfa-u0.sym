@@ -123,6 +123,7 @@ buttonDisable = 0x80014b3c;
 buttonsJustPressed = 0x803398e0;
 cameraCheckEnterFirstPerson = 0x80103950;
 CameraParamsViewfinder = 0x803dd548;
+cameraUpdate = 0x801030c0;
 cardShowLoadingMsg = 0x8007e54c;
 cMenuEnabled = 0x803dd793;
 cMenuOpen = 0x803dd795;

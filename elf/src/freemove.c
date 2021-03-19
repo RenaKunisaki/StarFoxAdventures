@@ -1,11 +1,12 @@
 #include "main.h"
 
 bool bFreeMove = false;
-static bool bWasOn = false;
-static u8 freeMoveToggleDelay = 0;
 static vec3f startCoords;
 static u16 startFlags;
 static u16 startPlayerFlags;
+static bool bWasOn = false;
+static bool bWasTimeStopped;
+static u8 freeMoveToggleDelay = 0;
 
 #define FREE_MOVE_SCALE_XZ        0.07 //for X and Z axes (control stick)
 #define FREE_MOVE_SCALE_XZ_FAST   0.35 //when Z held
@@ -38,9 +39,9 @@ void doFreeMove() {
             if(pPlayer) pPlayer->flags_0xb0 = startPlayerFlags;
             ObjInstance *obj = pCamera->focus;
             if(obj) obj->flags_0xb0 = startFlags;
+            timeStop = bWasTimeStopped;
         }
         bWasOn = false;
-        timeStop = false;
         return;
     }
 
@@ -66,6 +67,7 @@ void doFreeMove() {
                 ObjInstance_FlagsB0_DontUpdate | ObjInstance_FlagsB0_DontMove) &
                 ~(ObjInstance_FlagsB0_Invisible);
         }
+        bWasTimeStopped = timeStop;
         bWasOn = true;
         DPRINT("Start obj pos: %f %f %f", startCoords.x, startCoords.y, startCoords.z);
     }
@@ -150,4 +152,8 @@ void doFreeMove() {
         void *state = pPlayer->state;
         *(u16*)(state + 0x274) = 1;
     }
+
+    //the camera doesn't update when time is stoped.
+    //we need it to still follow us, though.
+    if(timeStop) cameraUpdate(1);
 }

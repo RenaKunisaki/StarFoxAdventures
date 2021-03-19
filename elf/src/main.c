@@ -190,6 +190,8 @@ static inline void _initControllerHacks() {
 void _start(void) {
     DPRINT("Patch running!");
 
+    //800209ac
+
     //Install hooks
     gameBitHook_replaced = (BOOL(*)())hookBranch(0x8002010C, gameBitHook, 1);
     runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c, runLoadingScreens_hook, 1);

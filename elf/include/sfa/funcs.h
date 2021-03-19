@@ -22,6 +22,7 @@ GLOBALFN void cameraCheckEnterFirstPerson(void *param1, void *param2); //XXX sig
 GLOBALFN void cameraGetFocusObjDistance(float offsY, Camera *this,
     float *outX, float *outY, float *outZ, float *outXZ, //outXZ can be null
     BOOL bUseCurPos);
+GLOBALFN void cameraUpdate(int frames);
 GLOBALFN void ClearArena(void);
 GLOBALFN void cardShowLoadingMsg(int);
 GLOBALFN float cosf(float);
