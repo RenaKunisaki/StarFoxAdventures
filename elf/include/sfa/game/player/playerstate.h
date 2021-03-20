@@ -66,11 +66,11 @@ typedef enum { //type:u32
 } SpellIdx;
 
 typedef enum { //type:u8
-	TailState_Limp = 0x0,
 	TailState_Flick = 0x2,
 	TailState_HalfUp = 0x5,
-	TailState_Rolling = 0x4,
+	TailState_Limp = 0x0,
 	TailState_Normal = 0x1,
+	TailState_Rolling = 0x4,
 	TailState_Wag = 0x3,
 } TailState;
 
@@ -93,7 +93,7 @@ typedef struct PACKED PlayerCharState {
 	u8   money;        //0x8
 	byte curBafomDads; //0x9
 	byte maxBafomDads; //0xA
-	byte field_0B;     //0xB
+	byte field_0B;     //0xB probably padding
 } PlayerCharState;
 CASSERT(sizeof(PlayerCharState) == 0xC, sizeof_PlayerCharState);
 

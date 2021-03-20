@@ -59,6 +59,7 @@ void genericMenu_run(Menu *self) {
     if(buttonsJustPressed == PAD_BUTTON_B) {
         menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
         self->close(self);
+        textForceFixedWidth = 0;
     }
     else if(buttonsJustPressed == PAD_BUTTON_A) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
@@ -111,6 +112,7 @@ void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected) {
 
 
 static void drawMenu() {
+    //textForceFixedWidth = 0;
     //ensure this remains set after a warp
     timeStop = 1;
     pauseDisabled = 1;
@@ -173,6 +175,7 @@ void runMenu() {
             //if(!menuAnimFrame) audioPlaySound(NULL, 0x3E5);
             drawMenuBox(MENU_XPOS, MENU_YPOS, MENU_WIDTH, MENU_HEIGHT);
             if(--menuAnimFrame == 0) menuState = MENU_NOT_OPEN;
+            textForceFixedWidth = 0;
             break;
     }
 }

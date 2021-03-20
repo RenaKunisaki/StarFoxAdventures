@@ -80,7 +80,7 @@ void hexEdit_run(Menu *self) {
         if(self->selected == 0) { //edit address
             addr = hexEditAddr;
             u32 mask = 0xF << ((7-(cursorX & 7)) * 4);
-            int adj  = (buttonsJustPressed == PAD_BUTTON_X) ? -1 : 1;
+            int adj  = (buttonsJustPressed == PAD_BUTTON_Y) ? -1 : 1;
             adj <<= ((7-(cursorX & 7)) * 4);
             addr = (addr & ~mask) | ((addr + adj) & mask);
             hexEditAddr = addr;
@@ -88,7 +88,7 @@ void hexEdit_run(Menu *self) {
         else { //edit data
             u8  val = *(u8*)addr;
             u8  mask = (cursorX & 1) ? 0x0F : 0xF0;
-            int adj  = (buttonsJustPressed == PAD_BUTTON_X) ? -1 : 1;
+            int adj  = (buttonsJustPressed == PAD_BUTTON_Y) ? -1 : 1;
             adj <<= ((cursorX & 1) ? 0 : 4);
             val = (val & ~mask) | ((val + adj) & mask);
             *(u8*)addr = val;

@@ -14,8 +14,8 @@ typedef struct PACKED {
 
 typedef struct PACKED {
     PlayerCharState   charState[2];     //0x00
-    byte              trickyEnergy;     //0x18
-    byte              unk19;            //0x19
+    u8                trickyEnergy;     //0x18
+    u8                maxTrickyEnergy;  //0x19 HUD always shows 5 shrooms
     byte              unk1A;            //0x1a
     byte              unk1B;            //0x1b
     char              saveFileName[4];  //0x1c null terminated

@@ -9,7 +9,9 @@ void drawBox(float x, float y, int w, int h, u8 opacity, bool fill) {
 
     if(fill) {
         //XXX find a way to make this go *behind* the things drawn after it.
-        Texture *tex = getLoadedTexture(0xC38);
+        Texture *tex = getLoadedTexture(0x307);
+        //Texture *tex = getLoadedTexture(-0x8566);
+        //Texture *tex = getLoadedTexture(-0x8663); //funky
         if(!tex) tex = hudTextures[HUD_TEXTURE_BOX_INTERIOR];
         if(tex) drawScaledTexture(x+BOX_BORDER_WIDTH, y+BOX_BORDER_HEIGHT,
             tex, opacity / 2,

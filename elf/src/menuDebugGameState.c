@@ -13,9 +13,16 @@ void menuDebugGameStateBits_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugGameStatePlayer_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugEditPlayer;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
 Menu menuDebugGameState = {
     "Game State", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
     "GameBits",      genericMenuItem_draw, menuDebugGameStateBits_select,
+    "Edit Player State", genericMenuItem_draw, menuDebugGameStatePlayer_select,
     NULL,
 };

@@ -94,6 +94,7 @@ extern Menu menuControlSettings;
 extern Menu menuDebug;
 extern Menu menuDebugCheat;
 extern Menu menuDebugColor;
+extern Menu menuDebugEditPlayer;
 extern Menu menuDebugGameBits;
 extern Menu menuDebugGameState;
 extern Menu menuDebugHexEdit;

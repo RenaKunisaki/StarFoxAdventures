@@ -42,7 +42,7 @@ void bitMenu_draw(Menu *self) {
     //draw instructions
     y += MENU_LINE_HEIGHT;
     gameTextSetColor(255, 255, 255, 255);
-    gameTextShowStr("B:Exit X:- Y:+ L/R:Page", MENU_TEXTBOX_ID, x, y);
+    gameTextShowStr("B:Exit X:+ Y:- L/R:Page", MENU_TEXTBOX_ID, x, y);
 
     //draw cursor
     drawBox(BIT_MENU_XPOS + 4 + ((bitMenuCursorX + 5) * MENU_FIXED_WIDTH),
@@ -63,7 +63,7 @@ void bitMenu_run(Menu *self) {
         menuInputDelayTimer = MENU_INPUT_DELAY_ADJUST;
         u32 val = mainGetBit(self->selected);
         u32 mask = 0xF << ((7-bitMenuCursorX) * 4);
-        int adj  = (buttonsJustPressed == PAD_BUTTON_X) ? -1 : 1;
+        int adj  = (buttonsJustPressed == PAD_BUTTON_Y) ? -1 : 1;
         adj <<= ((7-bitMenuCursorX) * 4);
         val = (val & ~mask) | ((val + adj) & mask);
         mainSetBits(self->selected, val);

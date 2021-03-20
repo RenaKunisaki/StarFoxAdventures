@@ -49,6 +49,7 @@ typedef enum {
     DBGCHT_INF_MONEY    = (1 << 2),
     DBGCHT_INF_LIVES    = (1 << 3),
     DBGCHT_ENEMY_FROZEN = (1 << 4),
+    DBGCHT_INF_TRICKY   = (1 << 5),
 } DebugCheat;
 
 //bsod.c

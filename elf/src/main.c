@@ -106,6 +106,9 @@ void mainLoopHook() {
         WRITE32(0x8002b048, 0x38600001);
     }
     else WRITE32(0x8002b048, 0x540307FE);
+    if(debugCheats & DBGCHT_INF_TRICKY) {
+        saveData.curSaveGame.trickyEnergy = 20;
+    }
 
     if(overrideColorScale >= 0) colorScale = overrideColorScale;
 }

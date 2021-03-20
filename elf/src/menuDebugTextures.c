@@ -59,7 +59,7 @@ void textureMenu_draw(Menu *self) {
             pFrm = pFrm->next;
             frm--;
         }
-        if(!tex) { //passed last frame
+        if(!pFrm) { //passed last frame
             pFrm = tex;
             textureMenuFrame = 0;
         }
