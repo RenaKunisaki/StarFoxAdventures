@@ -56,6 +56,7 @@ extern bool isJapanese;
 extern MapDirIdx32 levelLockBuckets[2];
 extern s16 loadedFileMapIds[NUM_FILES];
 extern ObjInstance **loadedObjects;
+extern LoadedTexture *loadedTextures;
 extern GameBit16 mapActBitIdx[NUM_MAPS];
 extern u8 mapActLut[NUM_MAP_DIRS];
 extern GameBit16 mapObjGroupBit[NUM_MAPS];
@@ -70,6 +71,7 @@ extern int minimapWidth;
 extern float motionBlurIntensity; //32=high, 256=unnoticeable
 extern float msecsThisFrame;
 extern int numLoadedObjs;
+extern int numLoadedTextures;
 extern bool objSeqBool [OBJ_SEQ_MAX];
 extern u8   objSeqFlags[OBJ_SEQ_MAX];
 extern u8   objSeqVar1 [OBJ_SEQ_MAX];

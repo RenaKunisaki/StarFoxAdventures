@@ -8,8 +8,11 @@ void drawBox(float x, float y, int w, int h, u8 opacity, bool fill) {
     //debugPrintf("Box %f, %f, %d, %d, op %d\n", x, y, w, h, opacity);
 
     if(fill) {
-        drawScaledTexture(x+BOX_BORDER_WIDTH, y+BOX_BORDER_HEIGHT,
-            hudTextures[HUD_TEXTURE_BOX_INTERIOR], opacity,
+        //XXX find a way to make this go *behind* the things drawn after it.
+        Texture *tex = getLoadedTexture(0xC38);
+        if(!tex) tex = hudTextures[HUD_TEXTURE_BOX_INTERIOR];
+        if(tex) drawScaledTexture(x+BOX_BORDER_WIDTH, y+BOX_BORDER_HEIGHT,
+            tex, opacity / 2,
             DRAW_SCALED_TEXTURE_SCALE_ONE,
             w-(BOX_BORDER_WIDTH*2), h-(BOX_BORDER_HEIGHT*2), 0);
     }

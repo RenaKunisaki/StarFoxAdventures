@@ -98,6 +98,7 @@ extern Menu menuDebugMisc;
 extern Menu menuDebugObjList;
 extern Menu menuDebugRender;
 extern Menu menuDebugText;
+extern Menu menuDebugTextureView;
 extern Menu menuDebugWarp;
 extern Menu menuGameSettings;
 extern Menu menuMain;

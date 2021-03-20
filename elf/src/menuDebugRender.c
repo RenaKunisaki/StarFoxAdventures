@@ -72,7 +72,13 @@ void menuDebugRenderSpirit_select(const MenuItem *self, int amount) {
 void menuDebugRenderFilter_select(const MenuItem *self, int amount) {
     if(amount) return;
     curMenu = &menuDebugColor;
-    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
+void menuDebugRenderTextures_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugTextureView;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
 
@@ -85,5 +91,6 @@ Menu menuDebugRender = {
     "Monochrome: %s",    menuDebugRenderMono_draw,    menuDebugRenderMono_select,
     "Spirit Vision: %s", menuDebugRenderSpirit_draw,  menuDebugRenderSpirit_select,
     "Color Filters",     genericMenuItem_draw,        menuDebugRenderFilter_select,
+    "View Textures",     genericMenuItem_draw,        menuDebugRenderTextures_select,
     NULL,
 };

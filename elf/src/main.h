@@ -18,6 +18,9 @@
     ({ __typeof__ (a) _a = (a); \
         __typeof__ (b) _b = (b); \
     _a > _b ? _a : _b; })
+#define ABS(n) \
+    ({ __typeof__ (n) _n = (n); \
+        _n < 0 ? -_n : _n; })
 
 #include "alloc.h"
 #include "camera.h"

@@ -103,9 +103,9 @@ typedef struct PACKED Texture {
 } Texture;
 CASSERT(sizeof(Texture) == 0x54, sizeof_Texture);
 
-typedef struct PACKED LoadedTexture {
+typedef struct LoadedTexture {
 	int        id;       //0x0
 	Texture   *texture;  //0x4
-	byte       unk08;    //0x8
-	undefined4 heapSize; //0xC
+	int        unk08;    //0x8
+	int        heapSize; //0xC
 } LoadedTexture;
