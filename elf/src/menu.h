@@ -78,6 +78,9 @@ void debugGameSubMenu_close(const Menu *self);
 //menuDebugMap.c
 void debugMapSubMenu_close(const Menu *self);
 
+//menuDebugMisc.c
+void debugMiscSubMenu_close(const Menu *self);
+
 //menuDebugRender.c
 void debugRenderSubMenu_close(const Menu *self);
 
@@ -93,6 +96,7 @@ extern Menu menuDebugCheat;
 extern Menu menuDebugColor;
 extern Menu menuDebugGameBits;
 extern Menu menuDebugGameState;
+extern Menu menuDebugHexEdit;
 extern Menu menuDebugMap;
 extern Menu menuDebugMisc;
 extern Menu menuDebugObjList;
