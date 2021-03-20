@@ -57,16 +57,16 @@ typedef struct MenuItem {
 typedef struct Menu {
     const char *title; //menu title
     s16 selected; //current selected option
-    void (*run  )(const Menu *self); //run function
-    void (*draw )(const Menu *self); //draw function
+    void (*run  )(Menu *self); //run function
+    void (*draw )(Menu *self); //draw function
     void (*close)(const Menu *self); //close function
     MenuItem items[]; //items, ending with one with name = NULL
 } Menu;
 
 //menu.c
 void drawMenuBox(int cx, int cy, int width, int height);
-void genericMenu_draw(const Menu *self);
-void genericMenu_run(const Menu *self);
+void genericMenu_draw(Menu *self);
+void genericMenu_run(Menu *self);
 void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected);
 
 //menuDebug.c
@@ -95,6 +95,7 @@ extern Menu menuDebugGameBits;
 extern Menu menuDebugGameState;
 extern Menu menuDebugMap;
 extern Menu menuDebugMisc;
+extern Menu menuDebugObjList;
 extern Menu menuDebugRender;
 extern Menu menuDebugText;
 extern Menu menuDebugWarp;

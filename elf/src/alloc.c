@@ -49,7 +49,7 @@ void doEmergencyFree() {
     emergFreeCount++;
     int nObj = numLoadedObjs;
     for(int i=0; i<nObj; i++) {
-        ObjInstance *obj = &loadedObjects[i];
+        ObjInstance *obj = loadedObjects[i];
         if(obj) {
             for(int cat=0; objEmergFreeCats[cat] != 0xFF; cat++) {
                 if(obj->catId == objEmergFreeCats[cat]) {
@@ -76,7 +76,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
 
     //name is almost never set and isn't stored
     u32 lr = (u32)__builtin_return_address(0);
-    //DPRINT("alloc size=%08X tag=%08X lr=%08X", size, tag, lr);
+    //DPRINT("alloc size=%8X tag=%08X lr=%08X", size, tag, lr);
     tag = lr; //this is more useful
 
     //mostly copied game code

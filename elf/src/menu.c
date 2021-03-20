@@ -24,7 +24,7 @@ void drawMenuBox(int xpos, int ypos, int width, int height) {
     }
 }
 
-void genericMenu_draw(const Menu *self) {
+void genericMenu_draw(Menu *self) {
     //Draw function for most menus
     menuAnimFrame++;
     //debugPrintf("Menu flags %02X delay %d\n", menuPrevGameFlags, menuInputDelayTimer);
@@ -53,16 +53,16 @@ void genericMenu_draw(const Menu *self) {
     //gameTextDrawFunc = prevDrawFunc;
 }
 
-void genericMenu_run(const Menu *self) {
+void genericMenu_run(Menu *self) {
     //Run function for most menus
-    int sel = curMenu->selected;
+    int sel = self->selected;
     if(buttonsJustPressed == PAD_BUTTON_B) {
         menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
-        curMenu->close(curMenu);
+        self->close(self);
     }
     else if(buttonsJustPressed == PAD_BUTTON_A) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
-        curMenu->items[sel].select(&curMenu->items[sel], 0);
+        self->items[sel].select(&self->items[sel], 0);
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
@@ -70,29 +70,29 @@ void genericMenu_run(const Menu *self) {
             (controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD)
             ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
         if(sel == 0) {
-            while(curMenu->items[sel].name) sel++;
+            while(self->items[sel].name) sel++;
         }
-        curMenu->selected = sel - 1;
+        self->selected = sel - 1;
     }
     else if(controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY < -MENU_CSTICK_THRESHOLD) { //down
         menuInputDelayTimer = (controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD)
             ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
         sel++;
-        if(!curMenu->items[sel].name) sel = 0;
-        curMenu->selected = sel;
+        if(!self->items[sel].name) sel = 0;
+        self->selected = sel;
     }
     else if(controllerStates[0].stickX > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickX > MENU_CSTICK_THRESHOLD) { //right
         menuInputDelayTimer = controllerStates[0].stickX > MENU_ANALOG_STICK_THRESHOLD
             ? MENU_INPUT_DELAY_ADJUST : MENU_INPUT_DELAY_ADJUST_FAST;
-        curMenu->items[sel].select(&curMenu->items[sel], 1);
+        self->items[sel].select(&self->items[sel], 1);
     }
     else if(controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickX < -MENU_CSTICK_THRESHOLD) { //left
         menuInputDelayTimer = controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD
             ? MENU_INPUT_DELAY_ADJUST : MENU_INPUT_DELAY_ADJUST_FAST;
-        curMenu->items[sel].select(&curMenu->items[sel], -1);
+        self->items[sel].select(&self->items[sel], -1);
     }
     /* else if(controllerStates[0].triggerLeft > 40) { //L
         menuInputDelayTimer = 0;
@@ -111,6 +111,10 @@ void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected) {
 
 
 static void drawMenu() {
+    //ensure this remains set after a warp
+    timeStop = 1;
+    pauseDisabled = 1;
+    activeTimerFlags = 0;
     curMenu->draw(curMenu);
 }
 

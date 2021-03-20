@@ -55,7 +55,7 @@ extern int initFrameCount;
 extern bool isJapanese;
 extern MapDirIdx32 levelLockBuckets[2];
 extern s16 loadedFileMapIds[NUM_FILES];
-extern ObjInstance *loadedObjects;
+extern ObjInstance **loadedObjects;
 extern GameBit16 mapActBitIdx[NUM_MAPS];
 extern u8 mapActLut[NUM_MAP_DIRS];
 extern GameBit16 mapObjGroupBit[NUM_MAPS];

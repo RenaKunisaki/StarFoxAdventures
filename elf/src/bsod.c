@@ -42,7 +42,7 @@ static void drawPageGeneral() {
     //show map and camera info
     debugPrintfxy( 26, 107, "CM %02X ACT %02X OBJ %04X MAPS %02X %02X",
         cameraMode, curMapAct, numLoadedObjs,
-        loadedFileMapIds[FILE_MODELS_BIN]   & 0xFF,
+        loadedFileMapIds[FILE_MODELS_BIN]  & 0xFF,
         loadedFileMapIds[FILE_MODELS_BIN2] & 0xFF);
 
     //show GPRs

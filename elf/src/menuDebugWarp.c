@@ -99,7 +99,7 @@ WarpMenuItem warps[] = {
     {     0,      0,      0,  0, NULL},
 };
 
-void warpMenu_draw(const Menu *self) {
+void warpMenu_draw(Menu *self) {
     //Draw function for warp menu
     menuAnimFrame++;
 
@@ -141,7 +141,7 @@ void debugDoWarp(float x, float y, float z, int layer) {
     loadMapForCurrentSaveGame();
 }
 
-void warpMenu_run(const Menu *self) {
+void warpMenu_run(Menu *self) {
     //Run function for warp menu
     int sel = curMenu->selected;
     if(buttonsJustPressed == PAD_BUTTON_B) {

@@ -66,12 +66,12 @@ _start2:
     srwi    r8,  r4,  24 # get high byte
     cmpwi   r8,  0
     bne     .setGot
-.if DEBUG
-    addi    r3,  r14, s_doReloc - _start
-    add     r5,  r4,  r17
-    CALL    OSReport
-    lwz     r4,  4(r15) # get GOT entry
-.endif
+#.if DEBUG
+#    addi    r3,  r14, s_doReloc - _start
+#    add     r5,  r4,  r17
+#    CALL    OSReport
+#    lwz     r4,  4(r15) # get GOT entry
+#.endif
     add     r4,  r4,  r17 # to absolute address
 .setGot:
     stwu    r4,  4(r15)

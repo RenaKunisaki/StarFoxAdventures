@@ -190,8 +190,6 @@ static inline void _initControllerHacks() {
 void _start(void) {
     DPRINT("Patch running!");
 
-    //800209ac
-
     //Install hooks
     hookBranch(0x80137df8, bsodHook, 1);
     gameBitHook_replaced = (BOOL(*)())hookBranch(0x8002010C, gameBitHook, 1);
@@ -202,6 +200,9 @@ void _start(void) {
     hookBranch(0x800d9e2c, hudDrawHook, 1);
     hookBranch((u32)allocTagged, allocTaggedHook, 0);
     hookBranch(0x80105df8, firstPersonHook, 1);
+
+    //XXX what does this do besides eat a ton of RAM?
+    WRITE_NOP(0x80021250);
 
     krystalInit();
     _initSaveHacks();

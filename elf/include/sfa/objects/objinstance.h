@@ -53,7 +53,7 @@ typedef struct ObjPos {
 } ObjPos;
 CASSERT(sizeof(ObjPos) == 0x18, sizeof_ObjPos);
 
-typedef struct PACKED ObjInstance {
+typedef struct ObjInstance {
 	ObjPos              pos;                //0x00
 	vec3f               prevPos;            //0x18
 	vec3f               vel;                //0x24

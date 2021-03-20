@@ -8,7 +8,7 @@
 #define BIT_MENU_NUM_LINES ((BIT_MENU_HEIGHT / MENU_LINE_HEIGHT) - 3)
 static u8 bitMenuCursorX = 7;
 
-void bitMenu_draw(const Menu *self) {
+void bitMenu_draw(Menu *self) {
     //Draw function for GameBit menu
     menuAnimFrame++;
 
@@ -50,7 +50,7 @@ void bitMenu_draw(const Menu *self) {
         20, 24, 255, false);
 }
 
-void bitMenu_run(const Menu *self) {
+void bitMenu_run(Menu *self) {
     //Run function for GameBit menu
     textForceFixedWidth = MENU_FIXED_WIDTH;
     int sel = curMenu->selected;

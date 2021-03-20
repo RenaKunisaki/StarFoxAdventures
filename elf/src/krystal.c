@@ -19,6 +19,7 @@ void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
     if(!krystalModel) {
         //load the model
         char path[] = {'k', 'm', krystalModelNo+0x30, 0};
+        DPRINT("Loading %s", path);
         krystalModel = loadFileByPath(path, &krystalModelSize);
         if(krystalModel) {
             DPRINT("Loaded %s @0x%08X size 0x%08X", path, krystalModel,
@@ -104,6 +105,7 @@ void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
     if(!krystalTexture) {
         //load the model
         char path[] = {'k', 't', krystalModelNo+0x30, 0};
+        DPRINT("Loading %s", path);
         krystalTexture = loadFileByPath(path, &krystalTextureSize);
         if(krystalTexture) {
             DPRINT("Loaded %s @0x%08X size 0x%08X", path, krystalTexture,
@@ -162,26 +164,30 @@ __asm__(
 );
 
 
-void krystalHook_eyePatch() {
-    //correct Krystal's eye movement so they look the right direction
-    //and don't move too far (they don't have the same range as Fox)
-    if(overridePlayerNo == 0) {
-        static const float mul = -0.7;
-        __asm__("fmuls 0, 0, %0" : : "r" (mul));
-    }
-}
-
+//correct Krystal's eye movement so they look the right direction
+//and don't move too far (they don't have the same range as Fox)
 void _krystalHook_eyePatch(void);
 __asm__(
     "_krystalHook_eyePatch:  \n"
     "fmuls    0,  0,  1      \n" // replaced
-    ASM_FUNC_START(0x100)
-    "bl krystalHook_eyePatch \n"
-    ASM_FUNC_END(0x100)
+    "mflr     4              \n"
+    "bl       .krystalEyePatch_getpc\n"
+    ".krystalEyePatch_getpc: mflr 4\n"
+    //"bl krystalHook_eyePatch \n"
+    "lwz      3, (.krystalEyePatch_offs - .krystalEyePatch_getpc)(4)\n"
+    "lbzx     3,  3,  4      \n"
+    "cmpwi    3,  0          \n"
+    "beq      .krystalEyePatch_done\n"
+    "lfs      1,  (.krystalEyePatch_mult - .krystalEyePatch_getpc)(4)\n"
+    "fmuls    0,  0,  1      \n"
+    ".krystalEyePatch_done:  \n"
+    "mtlr     4              \n"
     "lis      4, 0x8008      \n"
     "ori      4,  4, 0x7054  \n"
     "mtctr    4              \n"
     "bctr                    \n"
+    ".krystalEyePatch_mult: .float -0.7\n"
+    ".krystalEyePatch_offs: .int overridePlayerNo"
 );
 
 void krystalDoModelOverrides() {
@@ -248,7 +254,7 @@ void krystalInit() {
     hookBranch(0x80043D7C, _krystalHook_modelsTab, 0);
     hookBranch(0x80046164, krystalHook_tex1Bin,    1);
     hookBranch(0x80043DB8, _krystalHook_tex1Tab,   0);
-    hookBranch(0x80087050, krystalHook_eyePatch,   0); //yarr.
+    hookBranch(0x80087050, _krystalHook_eyePatch,   0); //yarr.
     hookBranch(0x8002cb20, krystalHook_loadSave,   1);
 }
 

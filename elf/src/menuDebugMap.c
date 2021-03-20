@@ -12,6 +12,12 @@ void menuDebugMapReload_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugMapObjs_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugObjList;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
 void menuDebugMapWarp_select(const MenuItem *self, int amount) {
     if(amount) return;
     curMenu = &menuDebugWarp;
@@ -39,6 +45,7 @@ void menuDebugMapGotoRestart_select(const MenuItem *self, int amount) {
 Menu menuDebugMap = {
     "Map", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
+    "Objects",             genericMenuItem_draw, menuDebugMapObjs_select,
     "Warp",                genericMenuItem_draw, menuDebugMapWarp_select,
     "Reload Map",          genericMenuItem_draw, menuDebugMapReload_select,
     "Set Restart Point",   genericMenuItem_draw, menuDebugMapSetRestart_select,
