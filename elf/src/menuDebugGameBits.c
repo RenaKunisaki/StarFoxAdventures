@@ -8,12 +8,16 @@
 #define BIT_MENU_NUM_LINES ((BIT_MENU_HEIGHT / MENU_LINE_HEIGHT) - 3)
 static u8 bitMenuCursorX = 7;
 
+static BitTableEntry* getBitTableEntry(int bit) {
+    BitTableEntry *bitTable = (BitTableEntry*)dataFileBuffers[FILE_BITTABLE_BIN];
+    return &bitTable[bit];
+}
+
 void bitMenu_draw(Menu *self) {
     //Draw function for GameBit menu
     menuAnimFrame++;
 
     drawMenuBox(BIT_MENU_XPOS, BIT_MENU_YPOS, BIT_MENU_WIDTH, BIT_MENU_HEIGHT);
-
     int x = BIT_MENU_XPOS + MENU_PADDING, y = BIT_MENU_YPOS + MENU_PADDING;
 
     //Draw title
@@ -27,6 +31,7 @@ void bitMenu_draw(Menu *self) {
         int bitIdx = i + start;
         if(bitIdx >= NUM_GAMEBITS) break;
         y += MENU_LINE_HEIGHT;
+
         bool selected = bitIdx == self->selected;
         if(selected) {
             u8  r = menuAnimFrame * 8, g = 255 - r;
@@ -34,8 +39,29 @@ void bitMenu_draw(Menu *self) {
         }
         else gameTextSetColor(255, 255, 255, 255);
 
+        BitTableEntry *entry = getBitTableEntry(bitIdx);
+        const char *hint = NULL;
+        //this doesn't work, ghidra is being a butt so I can't find why
+        /* if(!(entry->flags & GameBitFlags_IsHintText)) {
+            int tid = -1, sid = -1;
+            ((void (*)(int,int*,int*))0x80015d70)(bitIdx, &sid, &tid);
+            if(tid == 0x29) {
+                void *r = ((void* (*)(int,int))0x8001a420)(tid,sid);
+                OSReport("bit %04X tid %08X %04X sid %08X -> %08X", bitIdx, tid,
+                    entry->text, sid, r);
+            }
+            gametextStruct *text = gameTextGet(entry->text + 0xF4);
+            //the text always has 16 bytes worth of control codes at the start.
+            //these contain nulls which won't carry through sprintf,
+            //so skip over them.
+            hint = text ? &text->phrases[0][16] : NULL;
+            //DPRINT("Bit 0x%X Text 0x%X: %08X %s", bitIdx,
+            //    entry->text + 0xF4, text, hint ? hint : "-");
+        } */
+
         char str[256];
-        sprintf(str, "%04X %08X", bitIdx, mainGetBit(bitIdx));
+        sprintf(str, "%04X %d %08X %s", bitIdx, (entry->flags >> 6) & 3,
+            mainGetBit(bitIdx), hint ? hint : "");
         gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
     }
 
@@ -54,6 +80,7 @@ void bitMenu_run(Menu *self) {
     //Run function for GameBit menu
     textForceFixedWidth = MENU_FIXED_WIDTH;
     int sel = curMenu->selected;
+
     if(buttonsJustPressed == PAD_BUTTON_B) {
         menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
         curMenu->close(curMenu);
@@ -67,6 +94,9 @@ void bitMenu_run(Menu *self) {
         adj <<= ((7-bitMenuCursorX) * 4);
         val = (val & ~mask) | ((val + adj) & mask);
         mainSetBits(self->selected, val);
+    }
+    else if(buttonsJustPressed == PAD_TRIGGER_Z) {
+
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
