@@ -88,6 +88,7 @@ GLOBALFN void objFree(ObjInstance*);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
 GLOBALFN void objStopSound_(ObjInstance *obj, int id);
+GLOBALFN u64 __OSGetSystemTime();
 GLOBALFN void OSReport(const char *fmt, ...);
 GLOBALFN s8 padGetCX(int pad);
 GLOBALFN s8 padGetCY(int pad);
@@ -104,7 +105,7 @@ GLOBALFN void setGpuErrorHandler(void*);
 GLOBALFN void setSoundMode(u8 mode, bool force);
 GLOBALFN void setSubtitlesEnabled(bool);
 GLOBALFN int setWidescreen(bool); //always returns 0
-GLOBALFN int shiftJisGetNextChar(char *text, char *outSize);
+GLOBALFN int shiftJisGetNextChar(char *text, int *outSize);
 GLOBALFN bool shouldForceMotionBlur(void);
 GLOBALFN float sinf(float);
 GLOBALFN char* sprintf(char *dest, const char* fmt, ...);

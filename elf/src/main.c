@@ -6,6 +6,7 @@ u32 debugCheats = 0; //DebugCheat
 s16 overrideColorScale = -1;
 u8 overrideFov = 60;
 u8 furFxMode = 0; //FurFxMode
+u16 dayOfYear, curYear;
 bool bRumbleBlur = false;
 bool bDisableParticleFx = false;
 
@@ -24,6 +25,25 @@ BOOL gameBitHook(int bit, int val) {
 }
 
 
+static void checkTime() {
+    u64 ticks = __OSGetSystemTime();
+    //this is necessary to make gcc not try to use soft float here.
+    u32 tHi = ticks >> 32;
+    u32 tLo = ticks & 0xFFFFFFFF;
+    float fTicks = (float)tLo + (float)(tHi * 4294967296.0f);
+
+    //note timestamp here is seconds since 2000-01-01
+    //everything says this should be / 4 but I only get anything
+    //sensible with / 2.
+    float secs = fTicks / (__OSBusClock / 2);
+    int days  = secs / 86400.0f; //non-leap days
+    curYear = secs / 31556908.8f; //approximate average
+    dayOfYear = days % 365 - (curYear / 4);
+    //bool leap = (curYear % 4) == 0;
+    //debugPrintf("Y %d D %d L %d\n", curYear, dayOfYear, leap);
+}
+
+
 void mainLoopHook() {
     //replaces a bl to a do-nothing subroutine
 
@@ -33,6 +53,8 @@ void mainLoopHook() {
     if(overridePlayerNo >= NUM_PLAYER_IDS) overridePlayerNo = 0;
     if(overrideMinimapSize >= NUM_MINIMAP_SIZES) overrideMinimapSize = 0;
     if(overrideFov == 0) overrideFov = 60;
+
+    checkTime();
 
     //do some overrides
     if(overrideFov != 60 && !CameraParamsViewfinder) {
@@ -222,13 +244,14 @@ void _start(void) {
     WRITE16(0x802A26BA, 0x1B70); //ladder climb (up)
     WRITE16(0x802A26A6, 0x1B70); //ladder climb (down)
 
+    hookBranch(0x80018414, textSizeHook, 0);
     //hooks for fixed-width text
-    hookBranch(0x80018414, textHook,     0);
     hookBranch(0x800183dc, textDrawHook, 1);
     //disable special case for spaces in text.
     //it's not necessary anyway and interferes
     //with our fixed width hack.
     WRITE32(0x80017C70, 0x2816ACAB);
+    textHookInit();
 
     DPRINT("Hooks installed!");
 }

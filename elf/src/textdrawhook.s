@@ -1,10 +1,10 @@
 .text
 .include "common.s"
-.global textHook
+.global textSizeHook
 .global textDrawHook
 .global textForceFixedWidth
 
-textHook:
+textSizeHook:
     # hook into textRenderStr and override the calculation
     # of the character width.
     # there IS a fixed-width mode, but only for debug text.
@@ -21,18 +21,18 @@ textHook:
     stmw    r3,   0x20(r1)
 
     mflr    r3
-    bl      .textHook_getpc
-    .textHook_getpc: mflr r21
+    bl      .textSizeHook_getpc
+    .textSizeHook_getpc: mflr r21
     mtlr    r3
 
     lfs     f2,  -0x6840(r13) # textScale - replaced
 
-    lbz     r3,  (textForceFixedWidth - .textHook_getpc)(r21)
+    lbz     r3,  (textForceFixedWidth - .textSizeHook_getpc)(r21)
     cmpwi   r3,  0
-    beq     .textHook_noOverride
+    beq     .textSizeHook_noOverride
 
     # convert r3 to float f0
-    lfd     f1,  (.textHook_floatMagic - .textHook_getpc)(r21)
+    lfd     f1,  (.textSizeHook_floatMagic - .textSizeHook_getpc)(r21)
     lis     r0,  0x4330
     stw     r0,  0x18(r1)
     xoris   r3,  r3,  0x8000
@@ -49,7 +49,7 @@ textHook:
     addi    r1,  r1,  0x80 # restore stack ptr
     JUMP    0x80018454, r21
 
-.textHook_noOverride:
+.textSizeHook_noOverride:
     lwz     r0,  0x84(r1)
     mtlr    r0   # restore LR
     lmw     r3,  0x20(r1)
@@ -79,5 +79,5 @@ textDrawHook:
     JUMP    0x80075e8c, r0
 
 
-.textHook_floatMagic: .int 0x43300000,0x80000000
+.textSizeHook_floatMagic: .int 0x43300000,0x80000000
 textForceFixedWidth:  .byte 0

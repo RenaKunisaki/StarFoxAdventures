@@ -262,6 +262,7 @@ objSeqVar2 = 0x8039a50c;
 objSeqVar3 = 0x8039a564;
 objStopSound_ = 0x8000b824;
 oneOverTimeDelta = 0x803db418;
+__OSGetSystemTime = 0x80246c70;
 padReadControllers = 0x8024e864;
 pBackpack = 0x803de448;
 pCamera = 0x803dd524;

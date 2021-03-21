@@ -70,6 +70,7 @@ extern u32 debugCheats;
 extern s16 overrideColorScale;
 extern u8 overrideFov;
 extern u8 furFxMode;
+extern u16 dayOfYear, curYear;
 extern bool bRumbleBlur;
 extern bool bDisableParticleFx;
 
@@ -106,8 +107,11 @@ void startMsg_initDoneHook();
 
 //text.s
 extern u8 textForceFixedWidth;
-void textHook();
+void textSizeHook();
 void textDrawHook();
+
+//texthook.c
+void textHookInit();
 
 //ui.c
 bool motionBlurHook();
