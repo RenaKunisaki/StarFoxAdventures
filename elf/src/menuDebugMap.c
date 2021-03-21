@@ -42,6 +42,11 @@ void menuDebugMapGotoRestart_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugMapEnv_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugMapEnv;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
 Menu menuDebugMap = {
     "Map", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
@@ -51,5 +56,6 @@ Menu menuDebugMap = {
     "Set Restart Point",   genericMenuItem_draw, menuDebugMapSetRestart_select,
     "Clear Restart Point", genericMenuItem_draw, menuDebugMapClearRestart_select,
     "Goto Restart Point",  genericMenuItem_draw, menuDebugMapGotoRestart_select,
+    "Environment",         genericMenuItem_draw, menuDebugMapEnv_select,
     NULL,
 };

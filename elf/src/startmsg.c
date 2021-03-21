@@ -38,13 +38,16 @@ void startMsg_initDoneHook() {
      *  value if the game loads quickly (especially in Dolphin with fast disc
      *  reading enabled).
      */
-    startMsg_initDoneHook_replaced();
+    //XXX what does this do besides eat a ton of RAM?
+    //the game seems fine without it.
+    //startMsg_initDoneHook_replaced();
+    
     u16 buttons = controllerStates[0].button;
     if(!(buttons & PAD_TRIGGER_Z)) {
         enableDebugText = 0;
-        //DPRINT("Turning debug text off");
+        DPRINT("Turning debug text off");
     }
-    //else DPRINT("Leaving debug text on");
+    else DPRINT("Leaving debug text on");
 
     if((buttons &
     (PAD_BUTTON_Y|PAD_BUTTON_B|PAD_BUTTON_X|PAD_BUTTON_A|PAD_BUTTON_MENU))

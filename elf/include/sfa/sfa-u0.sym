@@ -273,6 +273,7 @@ playerInitFuncPtrs = 0x802b6f68;
 playerStateFuncs = 0x803dafc8;
 pPlayer = 0x803428f8;
 pRestartPoint = 0x803dd49c;
+pSkyStruct = 0x803dd12c;
 padGetCX = 0x80014c18;
 padGetCY = 0x80014bc4;
 padGetStickX = 0x80014cc0;

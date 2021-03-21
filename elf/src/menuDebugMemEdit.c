@@ -98,7 +98,7 @@ void hexEdit_run(Menu *self) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
         u32 val = *(u32*)(addr & ~3);
         if(val >= 0x80000000 && val < 0x81800000) hexEditAddr = val;
-        else audioPlaySound(NULL, 0xFC);
+        else audioPlaySound(NULL, MENU_FAIL_SOUND);
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up

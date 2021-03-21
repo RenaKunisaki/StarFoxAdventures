@@ -9,6 +9,7 @@
 #define MENU_ADJUST_SOUND 0xF4 //generic adjustment sound effect ID
 #define MENU_OPEN_SOUND 0xFC //submenu open sound effect ID
 #define MENU_CLOSE_SOUND 0xFC //submenu close sound effect ID
+#define MENU_FAIL_SOUND 0xFD //"can't use this item" sound
 
 #define DRAW_SCALED_TEXTURE_FLIP_H 0x01
 #define DRAW_SCALED_TEXTURE_FLIP_V 0x02
@@ -99,6 +100,7 @@ extern Menu menuDebugGameBits;
 extern Menu menuDebugGameState;
 extern Menu menuDebugHexEdit;
 extern Menu menuDebugMap;
+extern Menu menuDebugMapEnv;
 extern Menu menuDebugMisc;
 extern Menu menuDebugObjList;
 extern Menu menuDebugRender;

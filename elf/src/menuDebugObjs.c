@@ -188,7 +188,7 @@ void objMenu_run(Menu *self) {
             //the camera position.
             cameraUpdate(1);
         }
-        else audioPlaySound(NULL, 0xFD); //"can't use that item"
+        else audioPlaySound(NULL, MENU_FAIL_SOUND);
     }
     else if(buttonsJustPressed == PAD_BUTTON_MENU) { //jump to player in list
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;

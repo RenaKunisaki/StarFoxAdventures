@@ -204,9 +204,6 @@ void _start(void) {
     hookBranch((u32)allocTagged, allocTaggedHook, 0);
     hookBranch(0x80105df8, firstPersonHook, 1);
 
-    //XXX what does this do besides eat a ton of RAM?
-    WRITE_NOP(0x80021250);
-
     krystalInit();
     _initSaveHacks();
     _initDebugPrintHacks();
