@@ -196,14 +196,17 @@ void _start(void) {
     //Install hooks
     hookBranch(0x80137df8, bsodHook, 1);
     gameBitHook_replaced = (BOOL(*)())hookBranch(0x8002010C, gameBitHook, 1);
-    runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c, runLoadingScreens_hook, 1);
-    startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250, startMsg_initDoneHook, 1);
+    runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c,
+        runLoadingScreens_hook, 1);
+    startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250,
+        startMsg_initDoneHook, 1);
     hookBranch(0x80020D4C, mainLoopHook, 1);
     hookBranch(0x8005c45c, motionBlurHook, 1);
     hookBranch(0x800d9e2c, hudDrawHook, 1);
     hookBranch((u32)allocTagged, allocTaggedHook, 0);
     hookBranch(0x80105df8, firstPersonHook, 1);
 
+    staffFxInit();
     krystalInit();
     _initSaveHacks();
     _initDebugPrintHacks();

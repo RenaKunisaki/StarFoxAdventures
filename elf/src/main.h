@@ -95,6 +95,9 @@ void saveUpdateHook();
 void* saveMapLoadHook(MapDirIdx32 map, DataFileEnum file);
 void saveShowMsgHook(int param);
 
+//stafffx.c
+void staffFxInit(void);
+
 //startmsg.c
 extern void (*runLoadingScreens_replaced)();
 extern void (*startMsg_initDoneHook_replaced)();
