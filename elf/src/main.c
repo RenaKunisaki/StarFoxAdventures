@@ -270,5 +270,27 @@ void _start(void) {
     WRITE32(0x80017C70, 0x2816ACAB);
     textHookInit();
 
+    //remove useless items from C menu
+    //WRITE16(0x8031b1c0, 0x0096); //water spellstone 1
+    //WRITE16(0x8031b1d0, 0x0096); //spellstone ?
+    //WRITE16(0x8031b1e0, 0x0096); //spellstone ?
+    //WRITE16(0x8031b1f0, 0x0096); //spellstone ?
+    //WRITE16(0x8031b360, 0x0096); //fire spellstone 1
+    //WRITE16(0x8031b370, 0x0096); //spellstone ?
+    //WRITE16(0x8031b380, 0x0096); //fire spellstone 2
+    //WRITE16(0x8031b390, 0x0096); //water spellstone 2
+    WRITE16(0x8031b3e0, 0x0096); //fuel cells
+    //WRITE16(0x8031b440, 0x0096); //give scarabs
+    //WRITE16(0x8031b450, 0x0096); //cheat token 0
+    //WRITE16(0x8031b460, 0x0096); //cheat token 3
+    //WRITE16(0x8031b470, 0x0096); //cheat token 2
+    //WRITE16(0x8031b480, 0x0096); //cheat token 6
+    //WRITE16(0x8031b490, 0x0096); //cheat token 4
+    //WRITE16(0x8031b4a0, 0x0096); //cheat token 7
+    //WRITE16(0x8031b4b0, 0x0096); //cheat token 1
+    //WRITE16(0x8031b4c0, 0x0096); //cheat token 5
+    //WRITE16(0x8031b530, 0x0096); //Open Portal spell
+    //WRITE16(0x8031b540, 0x0096); //Staff Booster spell
+
     DPRINT("Hooks installed!");
 }
