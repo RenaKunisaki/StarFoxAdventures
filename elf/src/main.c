@@ -244,6 +244,7 @@ void _start(void) {
     hookBranch((u32)allocTagged, allocTaggedHook, 0);
     hookBranch(0x80105df8, firstPersonHook, 1);
     hookBranch(0x80133A54, _pdaHook, 0);
+    hookBranch(0x8020d31c, worldMapHook, 1);
 
     staffFxInit();
     krystalInit();

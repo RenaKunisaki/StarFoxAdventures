@@ -71,7 +71,7 @@ void bitMenu_draw(Menu *self) {
     gameTextShowStr("B:Exit X:+ Y:- L/R:Page", MENU_TEXTBOX_ID, x, y);
 
     //draw cursor
-    drawBox(BIT_MENU_XPOS + 4 + ((bitMenuCursorX + 5) * MENU_FIXED_WIDTH),
+    drawBox(BIT_MENU_XPOS + 4 + ((bitMenuCursorX + 7) * MENU_FIXED_WIDTH),
         BIT_MENU_YPOS + 5 + (MENU_LINE_HEIGHT * ((self->selected - start) + 1)),
         20, 24, 255, false);
 }

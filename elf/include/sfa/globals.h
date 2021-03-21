@@ -79,6 +79,7 @@ extern u8   objSeqVar2 [OBJ_SEQ_MAX];
 extern u8   objSeqVar3 [OBJ_SEQ_MAX];
 extern float oneOverTimeDelta;
 extern bool pauseDisabled;
+extern u8 pauseMenuFrameCounter;
 extern ObjInstance *pBackpack;
 extern Camera *pCamera;
 extern MapInfoEntry *pCurMapInfo;
@@ -120,4 +121,5 @@ extern u8 volumeCutScenes;
 extern float volumeMusic;
 extern float volumeSFX;
 extern u8 whichControllerFrame;
+extern u32 worldMapSelected; //MapDirIdx32
 extern GameBit16 yButtonItem;
