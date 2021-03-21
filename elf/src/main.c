@@ -212,6 +212,22 @@ static inline void _initControllerHacks() {
     WRITE8(0x80014EEB, 4);
 }
 
+void pdaHook() {
+    openMainMenu();
+}
+
+void _pdaHook(void);
+__asm__(
+    "_pdaHook:                \n"
+    ASM_FUNC_START(0x80)
+    "bl    pdaHook            \n"
+    ASM_FUNC_END(0x80)
+    "lis    0,  0x8013        \n" //skip actual on/off code
+    "ori    0,  0,  0x3A94    \n"
+    "mtctr  0                 \n"
+    "bctr                     \n"
+);
+
 void _start(void) {
     DPRINT("Patch running!");
 
@@ -227,6 +243,7 @@ void _start(void) {
     hookBranch(0x800d9e2c, hudDrawHook, 1);
     hookBranch((u32)allocTagged, allocTaggedHook, 0);
     hookBranch(0x80105df8, firstPersonHook, 1);
+    hookBranch(0x80133A54, _pdaHook, 0);
 
     staffFxInit();
     krystalInit();

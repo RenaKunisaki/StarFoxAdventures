@@ -159,6 +159,7 @@ void runMenu() {
             if(!menuAnimFrame) audioPlaySound(NULL, 0x3E5);
             drawMenuBox(MENU_XPOS, MENU_YPOS, MENU_WIDTH, MENU_HEIGHT);
             if(++menuAnimFrame == MENU_ANIM_NUM_FRAMES) {
+                //DPRINT("Menu finished opening");
                 menuState = MENU_OPEN;
                 menuAnimFrame = 0;
             }

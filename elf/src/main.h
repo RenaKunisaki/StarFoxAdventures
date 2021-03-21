@@ -82,6 +82,9 @@ extern u8 overrideMinimapSize;
 extern u8 overrideMinimapAlpha;
 void minimapMainLoopHook();
 
+//pdahook.c
+void pdaHookInit();
+
 //player.c
 extern PlayerStateFunc origClimbWallFn;
 void initPlayerStatesHook(void);

@@ -295,8 +295,8 @@ void spawnMenu_run(Menu *self) {
         spawnObjDef.def.pos.y    = spawnCoords[1];
         spawnObjDef.def.pos.z    = spawnCoords[2];
         spawnObjDef.def.allocatedSize = spawnNumparams+5;
-        ObjInstance* obj = objInstantiateCharacter(&spawnObjDef, spawnFlags,
-            spawnMapId, spawnObjNo, NULL);
+        ObjInstance* obj = objInstantiateCharacter((ObjDef*)&spawnObjDef,
+            spawnFlags, spawnMapId, spawnObjNo, NULL);
         if(obj) {
             OSReport("Spawned obj %08X at %d, %d, %d: %s", obj,
                 spawnCoords[0], spawnCoords[1], spawnCoords[2],

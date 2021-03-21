@@ -65,6 +65,7 @@ typedef struct Menu {
 } Menu;
 
 //menu.c
+void openMainMenu();
 void drawMenuBox(int cx, int cy, int width, int height);
 void genericMenu_draw(Menu *self);
 void genericMenu_run(Menu *self);
