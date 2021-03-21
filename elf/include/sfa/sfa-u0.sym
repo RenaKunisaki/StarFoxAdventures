@@ -255,6 +255,7 @@ objDisableHitbox = 0x80035f00;
 objFree = 0x8002cbc4;
 objInstantiateCharacter = 0x8002df90;
 objLoadPlayerFromSave = 0x802b6ad4;
+objSetModel = 0x8002b884;
 objSeqBool = 0x8039a45c;
 objSeqFlags = 0x80399e50;
 objSeqVar1 = 0x8039a4b4;

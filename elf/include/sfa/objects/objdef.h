@@ -1486,7 +1486,7 @@ typedef enum { //type:u8
 	ObjDefFlags4_BlockObject  = 0x20,
 } ObjDefFlags4;
 
-typedef struct PACKED ObjDef {
+typedef struct ObjDef {
 	s16   objType;       //0x00 ObjDefEnum
 	byte  allocatedSize; //0x02
 	byte  mapActs1;      //0x03

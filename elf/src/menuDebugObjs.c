@@ -234,6 +234,6 @@ void objMenu_run(Menu *self) {
 
 Menu menuDebugObjList = {
     "Objects", 0,
-    objMenu_run, objMenu_draw, debugGameSubMenu_close,
+    objMenu_run, objMenu_draw, debugMapSubMenu_close,
     NULL,
 };

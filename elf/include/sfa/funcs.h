@@ -87,6 +87,7 @@ GLOBALFN void objDisableHitbox(ObjInstance*); //only for next frame
 GLOBALFN void objFree(ObjInstance*);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
+GLOBALFN void objSetModel(ObjInstance *obj, int modelIdx);
 GLOBALFN void objStopSound_(ObjInstance *obj, int id);
 GLOBALFN u64 __OSGetSystemTime();
 GLOBALFN void OSReport(const char *fmt, ...);

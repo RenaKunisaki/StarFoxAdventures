@@ -136,6 +136,6 @@ Menu menuDebugCheat = {
     "Infinite Lives: %s", menuDebugCheatLives_draw, menuDebugCheatLives_select,
     "Infinite Tricky Energy: %s", menuDebugCheatTricky_draw, menuDebugCheatTricky_select,
     "Frozen Baddies: %s", menuDebugCheatFrozen_draw, menuDebugCheatFrozen_select,
-    "Unlock Everyting", genericMenuItem_draw, menuDebugCheatUnlock_select,
+    "Unlock Everything", genericMenuItem_draw, menuDebugCheatUnlock_select,
     NULL,
 };

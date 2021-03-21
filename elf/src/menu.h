@@ -104,6 +104,7 @@ extern Menu menuDebugMapEnv;
 extern Menu menuDebugMisc;
 extern Menu menuDebugObjList;
 extern Menu menuDebugRender;
+extern Menu menuDebugSpawnObj;
 extern Menu menuDebugText;
 extern Menu menuDebugTextureView;
 extern Menu menuDebugWarp;
