@@ -8,7 +8,7 @@
 #define WARP_MENU_NUM_LINES ((WARP_MENU_HEIGHT / MENU_LINE_HEIGHT) - 2)
 
 typedef struct {
-    float x, y, z;
+    s16 x, y, z;
     s8 layer;
 } WarpMenuItem;
 
@@ -268,7 +268,8 @@ void warpMenu_run(Menu *self) {
     else if(buttonsJustPressed == PAD_BUTTON_A) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
         WarpMenuItem *warp = &warps[self->selected];
-        DPRINT("Warp to %f %f %f ly %d: %s", warp->x, warp->y, warp->z,
+        DPRINT("Warp to %f %f %f ly %d: %s",
+            (float)warp->x, (float)warp->y, (float)warp->z,
             warp->layer, warpNames[self->selected]);
         debugDoWarp(warp->x, warp->y, warp->z, warp->layer);
         //close all menus
