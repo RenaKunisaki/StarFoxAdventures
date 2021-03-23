@@ -143,7 +143,9 @@ void mainLoopHook() {
     }
 
     //move camera while time is stopped in debug mode
-    if(timeStop && cameraMode != CAM_MODE_NORMAL) cameraUpdate(1);
+    if(timeStop && (debugCameraMode != CAM_MODE_NORMAL) && !menuState) {
+        cameraUpdate(1);
+    }
 
     if(overrideColorScale >= 0) colorScale = overrideColorScale;
 }

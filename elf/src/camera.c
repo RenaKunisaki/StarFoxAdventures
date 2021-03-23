@@ -41,10 +41,6 @@ void cameraUpdateHook() {
     u32 bPressed4 = bHeld4 & ~prevBtn4;
     prevBtn4 = bHeld4;
 
-    //may as well do this at all times.
-    //XXX this doesn't run when time is stopped, so no way to resume...
-    //if(bPressed4 & PAD_BUTTON_START) timeStop = !timeStop;
-
     if(debugCameraMode == CAM_MODE_NORMAL) {
         origFunc(pCamera);
         _camUpdateNormal();
