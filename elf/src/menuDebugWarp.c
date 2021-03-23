@@ -99,89 +99,108 @@ WarpMenuItem warps[] = {
     {-19200,   -127,  33920,  0}, //"Unused: CloudRunner Race 2",
 };
 
+//employ some simple dictionary compression
+const char *warpDict[] = {
+    "ThornTail Hollow - ",     //0x80
+    "Krazoa Palace - ",        //0x81
+    "SnowHorn Wastes - ",      //0x82
+    "DarkIce Mines - ",        //0x83
+    "Moon Mountain Pass - ",   //0x84
+    "LightFoot Village - ",    //0x85
+    "CloudRunner Fortress - ", //0x86
+    "Ocean Force Point - ",    //0x87
+    "Volcano Force Point - ",  //0x88
+    "Walled City - ",          //0x89
+    "Dragon Rock - ",          //0x8A
+    "Test of ",                //0x8B
+    "Boss: ",                  //0x8C
+    "Arwing: to ",             //0x8D
+    "Cutscene: ",              //0x8E
+    "Unused: ",                //0x8F
+};
 const char *warpNames[] = {
-    "ThornTail Hollow - Outside",
-    "ThornTail Hollow - Egg Cave",
-    "ThornTail Hollow - Bottom",
+    "\x80" "Outside",
+    "\x80" "Egg Cave",
+    "\x80" "Bottom",
     "ThornTail Store",
-    "Krazoa Palace - Starting Area",
-    "Krazoa Palace - WarpStone Pad",
-    "Krazoa Palace - Inside",
-    "Krazoa Palace - Final Boss Warp",
-    "Krazoa Palace - Top",
+    "\x81" "Starting Area",
+    "\x81" "WarpStone Pad",
+    "\x81" "Inside",
+    "\x81" "Final Boss Warp",
+    "\x81" "Top",
     "Ice Mountain - Top",
-    "SnowHorn Wastes - Shrine Warp",
-    "SnowHorn Wastes - Water Spout",
-    "SnowHorn Wastes - Entrance",
-    "SnowHorn Wastes - Bottom",
-    "DarkIce Mines - Landing Pad",
-    "DarkIce Mines - SharpClaw Fort",
-    "DarkIce Mines - Bike Start",
-    "DarkIce Mines - Interior",
-    "DarkIce Mines - Ice Section",
-    "DarkIce Mines - Bottom",
-    "Moon Mountain Pass - Hut",
-    "Moon Mountain Pass - Top",
-    "Moon Mountain Pass - Volcano Entrance",
-    "Moon Mountain Pass - Bottom",
-    "LightFoot Village - Shrine Warp",
-    "LightFoot Village - Front",
-    "LightFoot Village - Back",
+    "\x82" "Shrine Warp",
+    "\x82" "Water Spout",
+    "\x82" "Entrance",
+    "\x82" "Bottom",
+    "\x83" "Landing Pad",
+    "\x83" "SharpClaw Fort",
+    "\x83" "Bike Start",
+    "\x83" "Interior",
+    "\x83" "Ice Section",
+    "\x83" "Bottom",
+    "\x84" "Hut",
+    "\x84" "Top",
+    "\x84" "Volcano Entrance",
+    "\x84" "Bottom",
+    "\x85" "Shrine Warp",
+    "\x85" "Front",
+    "\x85" "Back",
     "Cape Claw",
-    "CloudRunner Fortress - Dungeon",
-    "CloudRunner Fortress - Entrance",
-    "CloudRunner Fortress - Queen Cage",
+    "\x86" "Dungeon",
+    "\x86" "Entrance",
+    "\x86" "Queen Cage",
     "CloudRunner Race Start",
     "CloudRunner Mine",
-    "Ocean Force Point - Bottom",
-    "Ocean Force Point - End",
-    "Ocean Force Point - SpellStone Platform",
-    "Ocean Force Point - Entrance",
-    "Ocean Force Point - Top Warp",
-    "Ocean Force Point - Bottom Warp",
-    "Volcano Force Point - Entrance",
-    "Volcano Force Point - Cave Entrance",
-    "Volcano Force Point - SpellStone Platform",
-    "Volcano Force Point - SpellStone Platform 2",
-    "Volcano Force Point - End Warp",
-    "Walled City - Front of Pyramid",
-    "Walled City - Boss Door",
-    "Dragon Rock - Landing Pad",
-    "Dragon Rock - CloudRunner Cage",
-    "Test of Combat",
-    "Test of Strength",
-    "Test of Knowledge",
-    "Test of Fear",
-    "Test of Skill",
-    "Boss: Galdon",
-    "Boss: Galdon - Inside",
-    "Boss: Drakor",
-    "Boss: T-Rex",
-    "Boss: General Scales",
-    "Boss: Andross",
+    "\x87" "Bottom",
+    "\x87" "End",
+    "\x87" "SpellStone Platform",
+    "\x87" "Entrance",
+    "\x87" "Top Warp",
+    "\x87" "Bottom Warp",
+    "\x88" "Entrance",
+    "\x88" "Cave Entrance",
+    "\x88" "SpellStone Platform",
+    "\x88" "SpellStone Platform 2",
+    "\x88" "End Warp",
+    "\x89" "Front of Pyramid",
+    "\x89" "Boss Door",
+    "\x8A" "Landing Pad",
+    "\x8A" "CloudRunner Cage",
+    "\x8B" "Combat",
+    "\x8B" "Strength",
+    "\x8B" "Knowledge",
+    "\x8B" "Fear",
+    "\x8B" "Skill",
+    "\x8C" "Galdon",
+    "\x8C" "Galdon - Inside",
+    "\x8C" "Drakor",
+    "\x8C" "T-Rex",
+    "\x8C" "General Scales",
+    "\x8C" "Andross",
     "World Map",
-    "Arwing: to Dinosaur Planet",
-    "Arwing: to DarkIce Mines",
-    "Arwing: to CloudRunner Fortress",
-    "Arwing: to Walled City",
-    "Arwing: to Dragon Rock",
+    "\x8D" "Dinosaur Planet",
+    "\x8D" "DarkIce Mines",
+    "\x8D" "CloudRunner Fortress",
+    "\x8D" "Walled City",
+    "\x8D" "Dragon Rock",
     "Game Well Maze",
     "Magic Cave",
-    "Cutscene: Great Fox",
-    "Cutscene: Title Screen",
+    "\x8E" "Great Fox",
+    "\x8E" "Title Screen",
     "Ship Battle",
-    "Unused: AnimTest",
-    "Unused: WGShrine",
-    //"Unused: NikTest",
-    "Unused: Rolling Demo",
-    "Unused: Kamerian",
-    "Unused: Duster Cave",
-    "Unused: Diamond Bay",
-    "Unused: Discovery Falls",
-    "Unused: Willow Grove",
-    "Unused: Old Krazoa Palace",
-    //"Unused: Old Krazoa Palace",
-    "Unused: CloudRunner Race 2",
+    "\x8F" "AnimTest",
+    "\x8F" "WGShrine",
+    //"\x8F" "NikTest",
+    "\x8F" "Rolling Demo",
+    "\x8F" "Kamerian",
+    "\x8F" "Duster Cave",
+    "\x8F" "Diamond Bay",
+    "\x8F" "Discovery Falls",
+    "\x8F" "Willow Grove",
+    "\x8F" "Old Krazoa Palace",
+    //"\x8F" "Old Krazoa Palace",
+    "\x8F" "CloudRunner Race 2",
     NULL
 };
 
@@ -209,7 +228,20 @@ void warpMenu_draw(Menu *self) {
             gameTextSetColor(r, g, 255, 255);
         }
         else gameTextSetColor(255, 255, 255, 255);
-        gameTextShowStr(warpNames[warpIdx], MENU_TEXTBOX_ID, x, y);
+
+        const char *name = warpNames[warpIdx];
+        char str[256];
+        char *dst = str;
+        for(int ic=0; name[ic]; ic++) {
+            char c = name[ic];
+            if(c >= 0x80) {
+                strcpy(dst, warpDict[c - 0x80]);
+                dst += strlen(warpDict[c - 0x80]);
+            }
+            else *(dst++) = c;
+        }
+        *dst = 0;
+        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
     }
 }
 
