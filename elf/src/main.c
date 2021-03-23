@@ -20,7 +20,7 @@ BOOL gameBitHook(int bit, int val) {
     //int bit, val;
     //GET_REGISTER(29, bit);
     //GET_REGISTER(30, val);
-    DPRINT("GameBit 0x%04X set to %d", bit, val);
+    //DPRINT("GameBit 0x%04X set to %d", bit, val);
     return gameBitHook_replaced(); //BOOL isSaveGameLoading()
 }
 

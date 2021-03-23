@@ -9,6 +9,7 @@
 #define HEXEDIT_NUM_COLS 8
 static u8 cursorX = 0;
 u32 hexEditAddr = RAM_START;
+u32 hexEditPrevAddr = RAM_START;
 
 void hexEdit_draw(Menu *self) {
     //Draw function for memory editor
@@ -46,7 +47,8 @@ void hexEdit_draw(Menu *self) {
     //draw instructions
     y += MENU_LINE_HEIGHT;
     gameTextSetColor(255, 255, 255, 255);
-    gameTextShowStr("J:Move C:Fast X:+ Y:- S:FollowPtr B:Exit", MENU_TEXTBOX_ID, x, y);
+    gameTextShowStr("J:Move C:Fast X:+ Y:- S:FollowPtr Z:Back B:Exit",
+        MENU_TEXTBOX_ID, x, y);
 
     //draw cursor
     if(self->selected == 0) {
@@ -95,8 +97,15 @@ void hexEdit_run(Menu *self) {
     else if(buttonsJustPressed == PAD_BUTTON_MENU) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
         u32 val = *(u32*)(addr & ~3);
-        if(PTR_VALID(val)) hexEditAddr = val;
+        if(PTR_VALID(val)) {
+            hexEditPrevAddr = hexEditAddr;
+            hexEditAddr = val;
+        }
         else audioPlaySound(NULL, MENU_FAIL_SOUND);
+    }
+    else if(buttonsJustPressed == PAD_TRIGGER_Z) {
+        menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+        hexEditAddr = hexEditPrevAddr;
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
