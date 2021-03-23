@@ -1,14 +1,9 @@
 #include "main.h"
 
 u8 cameraFlags = 0; //CameraFlags
+s8 debugCameraMode = CAM_MODE_NORMAL; //CameraMode
 
-float cameraUpdateHook() {
-    //replaces a call to the update method of the current camera DLL.
-    //r12 is the address it was about to jump to, which depends on the mode.
-    void (*origFunc)(Camera *self);
-    GET_REGISTER(12, origFunc);
-    origFunc(pCamera);
-
+void _camUpdateNormal() {
     int pad = (cameraFlags & CAM_FLAG_PAD3) ? 2 : 0;
     s8 stickX = controllerStates[pad].substickX & 0xFC;
     s8 stickY = controllerStates[pad].substickY & 0xFC;
@@ -20,7 +15,77 @@ float cameraUpdateHook() {
         pCamera->pos.rotation.x += stickX * 128;
         pCamera->pos.rotation.y += stickY *  16;
     }
+}
+
+void _drawDebugInfo() {
+    float px=pCamera->pos.pos.x, py=pCamera->pos.pos.y, pz=pCamera->pos.pos.z;
+    s16 rx=pCamera->pos.rotation.x, ry=pCamera->pos.rotation.y,
+        rz=pCamera->pos.rotation.z;
+    debugPrintfxy(24, 400, "X\t%6d\t%3d", (int)px, (int)(rx / (65535.0 / 360.0)));
+    debugPrintfxy(24, 411, "Y\t%6d\t%3d", (int)py, (int)(ry / (65535.0 / 360.0)));
+    debugPrintfxy(24, 422, "Z\t%6d\t%3d", (int)pz, (int)(rz / (65535.0 / 360.0)));
+}
+
+void cameraUpdateHook() {
+    //replaces a call to the update method of the current camera DLL.
+    //r12 is the address it was about to jump to, which depends on the mode.
+    void (*origFunc)(Camera *self);
+    GET_REGISTER(12, origFunc);
+
     //debugPrintf("Cam mode 0x%02X\n", cameraMode);
+
+    //do this in all modes so that we don't carry over stale button states
+    //when changing modes
+    static u32 prevBtn4 = 0;
+    u32 bHeld4 = controllerStates[3].button;
+    u32 bPressed4 = bHeld4 & ~prevBtn4;
+    prevBtn4 = bHeld4;
+
+    //may as well do this at all times.
+    //XXX this doesn't run when time is stopped, so no way to resume...
+    //if(bPressed4 & PAD_BUTTON_START) timeStop = !timeStop;
+
+    if(debugCameraMode == CAM_MODE_NORMAL) {
+        origFunc(pCamera);
+        _camUpdateNormal();
+    }
+    else {
+        if(debugCameraMode == CAM_MODE_STAY || bHeld4 & PAD_BUTTON_Y) {
+            //turn to look at target
+            vec3f targetPos;
+            float targetXZ;
+            cameraGetFocusObjDistance(
+                cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0,
+                pCamera, &targetPos.x, &targetPos.y,
+                &targetPos.z, &targetXZ, false);
+            pCamera->pos.rotation.x = -0x8000 - atan2(targetPos.x, targetPos.z);
+
+            //# tilt to point to player
+            //(Y rotation value, even though it's local X-axis rotation...)
+            pCamera->pos.rotation.y = atan2(targetPos.y, targetXZ);
+        }
+
+        int scale = (bHeld4 & PAD_TRIGGER_Z) ? 2 : 1;
+        float srx = scale * 5 * (cameraFlags & CAM_FLAG_INVERT_X) ? -1 : 1;
+        float sry = scale * 5 * (cameraFlags & CAM_FLAG_INVERT_Y) ? -1 : 1;
+        float spx = scale *  0.25;
+        float spy = scale *  0.05;
+        float spz = scale * -0.25;
+
+        pCamera->pos.rotation.x += srx * controllerStates[3].substickX;
+        pCamera->pos.rotation.y += sry * controllerStates[3].substickY;
+        pCamera->pos.pos.y += spy *
+            (controllerStates[3].triggerRight - controllerStates[3].triggerLeft);
+        pCamera->pos.pos.x += spx * controllerStates[3].stickX;
+        pCamera->pos.pos.z += spz * controllerStates[3].stickY;
+        //debugPrintf(DPRINT_FIXED "S %d %d C %d %d L %d R %d\n" DPRINT_NOFIXED,
+        //    controllerStates[3].stickX,      controllerStates[3].stickY,
+        //    controllerStates[3].substickX,   controllerStates[3].substickY,
+        //    controllerStates[3].triggerLeft, controllerStates[3].triggerRight);
+
+        cameraUpdateViewMtx(pCamera);
+        _drawDebugInfo();
+    }
 }
 
 int padGetCxHook(int pad) {

@@ -25,7 +25,7 @@ BOOL gameBitHook(int bit, int val) {
 }
 
 
-static void checkTime() {
+static inline void checkTime() {
     u64 ticks = __OSGetSystemTime();
     //this is necessary to make gcc not try to use soft float here.
     u32 tHi = ticks >> 32;
@@ -44,6 +44,15 @@ static void checkTime() {
 }
 
 
+static inline void doPadMainLoop() {
+    static u32 prevBtn3 = 0;
+    u32 bHeld3 = controllerStates[2].button;
+    u32 bPressed3 = bHeld3 & ~prevBtn3;
+    prevBtn3 = bHeld3;
+
+    if(bPressed3 & PAD_BUTTON_START) timeStop = !timeStop;
+}
+
 void mainLoopHook() {
     //replaces a bl to a do-nothing subroutine
 
@@ -55,6 +64,7 @@ void mainLoopHook() {
     if(overrideFov == 0) overrideFov = 60;
 
     checkTime();
+    doPadMainLoop();
 
     //do some overrides
     if(overrideFov != 60 && !CameraParamsViewfinder) {
@@ -129,8 +139,11 @@ void mainLoopHook() {
     }
     else WRITE32(0x8002b048, 0x540307FE);
     if(debugCheats & DBGCHT_INF_TRICKY) {
-        saveData.curSaveGame.trickyEnergy = 20;
+        saveData.curSaveGame.trickyEnergy = saveData.curSaveGame.maxTrickyEnergy;
     }
+
+    //move camera while time is stopped in debug mode
+    if(timeStop && cameraMode != CAM_MODE_NORMAL) cameraUpdate(1);
 
     if(overrideColorScale >= 0) colorScale = overrideColorScale;
 }

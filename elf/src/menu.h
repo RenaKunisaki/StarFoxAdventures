@@ -94,6 +94,7 @@ extern Menu *curMenu;
 extern Menu menuAudioSettings;
 extern Menu menuControlSettings;
 extern Menu menuDebug;
+extern Menu menuDebugCamera;
 extern Menu menuDebugCheat;
 extern Menu menuDebugColor;
 extern Menu menuDebugEditPlayer;

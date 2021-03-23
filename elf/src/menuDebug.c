@@ -30,6 +30,12 @@ void menuDebugMap_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugCam_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugCamera;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
 void menuDebugGame_select(const MenuItem *self, int amount) {
     if(amount) return;
     curMenu = &menuDebugGameState;
@@ -61,6 +67,7 @@ Menu menuDebug = {
     "Free Move: %s",  menuDebugFreeMove_draw, menuDebugFreeMove_select,
     "Debug Text",     genericMenuItem_draw,   menuDebugText_select,
     "Map",            genericMenuItem_draw,   menuDebugMap_select,
+    "Camera",         genericMenuItem_draw,   menuDebugCam_select,
     "Game State",     genericMenuItem_draw,   menuDebugGame_select,
     "Cheats",         genericMenuItem_draw,   menuDebugCheat_select,
     "Render",         genericMenuItem_draw,   menuDebugRender_select,

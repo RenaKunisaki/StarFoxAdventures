@@ -28,10 +28,6 @@ void doFreeMove() {
             freeMoveToggleDelay = 60;
             bFreeMove = false;
         }
-        else if(buttonsJustPressed == PAD_BUTTON_X && bFreeMove) {
-            freeMoveToggleDelay = 30;
-            timeStop = !timeStop;
-        }
     }
 
     if(!bFreeMove) {

@@ -96,7 +96,7 @@ void doAutoSave() {
     //don't save during scripted events, or they can break.
     switch(cameraMode) {
         case 0x45: //bike
-        case 0x47: //test of strength:
+        case 0x47: //test of strength
         case 0x4C: //cutscene
         case 0x4D: //speaking to NPC
             return;

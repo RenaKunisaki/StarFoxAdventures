@@ -5,9 +5,17 @@ typedef enum {
     CAM_FLAG_NO_HUD   = 0x08, //disable the HUD
 } CameraFlags;
 
+typedef enum {
+    CAM_MODE_NORMAL = 0,
+    CAM_MODE_STAY,
+    CAM_MODE_FREE,
+    NUM_CAM_MODES,
+} CameraMode;
+
 //camera.c
 extern u8 cameraFlags; //CameraFlags
-float cameraUpdateHook();
+extern s8 debugCameraMode; //CameraMode
+void cameraUpdateHook();
 int padGetCxHook(int pad);
 int padGetCyHook(int pad);
 int padGetStickXHook(int pad);
