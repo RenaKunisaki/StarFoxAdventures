@@ -7,6 +7,7 @@
 #define BIT_MENU_HEIGHT (SCREEN_HEIGHT - (BIT_MENU_YPOS * 2))
 #define BIT_MENU_NUM_LINES ((BIT_MENU_HEIGHT / MENU_LINE_HEIGHT) - 3)
 static u8 bitMenuCursorX = 7;
+static s8 bitMenuTable = -1;
 
 static BitTableEntry* getBitTableEntry(int bit) {
     BitTableEntry *bitTable = (BitTableEntry*)dataFileBuffers[FILE_BITTABLE_BIN];
@@ -20,26 +21,34 @@ void bitMenu_draw(Menu *self) {
     drawMenuBox(BIT_MENU_XPOS, BIT_MENU_YPOS, BIT_MENU_WIDTH, BIT_MENU_HEIGHT);
     int x = BIT_MENU_XPOS + MENU_PADDING, y = BIT_MENU_YPOS + MENU_PADDING;
 
-    //Draw title
+    //Draw title and header
     //box type 0 is (center, y+40), no background
     gameTextSetColor(255, 255, 255, 255);
     gameTextShowStr(self->title, 0, x, y-40);
+    gameTextShowStr("Bit  T Sz Value", MENU_TEXTBOX_ID, x, y);
 
-    int start = MAX(0, self->selected - (BIT_MENU_NUM_LINES-1));
-
-    for(int i=0; i < BIT_MENU_NUM_LINES; i++) {
-        int bitIdx = i + start;
-        if(bitIdx >= NUM_GAMEBITS) break;
+    int start  = MAX(0, self->selected - (BIT_MENU_NUM_LINES-1));
+    int bitIdx = start - 1;
+    int nLines = 0;
+    int cursorY = 0;
+    while(nLines < BIT_MENU_NUM_LINES && bitIdx < NUM_GAMEBITS) {
+        bitIdx++;
+        BitTableEntry *entry = getBitTableEntry(bitIdx);
+        int tbl = (entry->flags >> 6) & 3;
+        if(bitMenuTable >= 0 && bitMenuTable != tbl) continue;
         y += MENU_LINE_HEIGHT;
+        nLines++;
+        //debugPrintf(DPRINT_FIXED "Bit %04X t %d sz %2d offs %04X\n" DPRINT_NOFIXED,
+        //    bitIdx, tbl, entry->flags & GameBitFlags_Size, entry->offset);
 
         bool selected = bitIdx == self->selected;
         if(selected) {
             u8  r = menuAnimFrame * 8, g = 255 - r;
             gameTextSetColor(r, g, 255, 255);
+            cursorY = y;
         }
         else gameTextSetColor(255, 255, 255, 255);
 
-        BitTableEntry *entry = getBitTableEntry(bitIdx);
         const char *hint = NULL;
         //this doesn't work, ghidra is being a butt so I can't find why
         /* if(!(entry->flags & GameBitFlags_IsHintText)) {
@@ -60,7 +69,8 @@ void bitMenu_draw(Menu *self) {
         } */
 
         char str[256];
-        sprintf(str, "%04X %d %08X %s", bitIdx, (entry->flags >> 6) & 3,
+        sprintf(str, "%04X %d %2d %08X %s", bitIdx, tbl,
+            (entry->flags & GameBitFlags_Size) + 1,
             mainGetBit(bitIdx), hint ? hint : "");
         gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
     }
@@ -68,12 +78,28 @@ void bitMenu_draw(Menu *self) {
     //draw instructions
     y += MENU_LINE_HEIGHT;
     gameTextSetColor(255, 255, 255, 255);
-    gameTextShowStr("B:Exit X:+ Y:- L/R:Page", MENU_TEXTBOX_ID, x, y);
+    gameTextShowStr("B:Exit X:+ Y:- L/R:Page Z:Table", MENU_TEXTBOX_ID, x, y);
 
     //draw cursor
-    drawBox(BIT_MENU_XPOS + 4 + ((bitMenuCursorX + 7) * MENU_FIXED_WIDTH),
-        BIT_MENU_YPOS + 5 + (MENU_LINE_HEIGHT * ((self->selected - start) + 1)),
-        20, 24, 255, false);
+    drawBox(BIT_MENU_XPOS + 4 + ((bitMenuCursorX + 10) * MENU_FIXED_WIDTH),
+        cursorY - 4, 20, 24, 255, false);
+}
+
+static void moveCursorY(Menu *self, int amount) {
+    int sel = self->selected + amount;
+
+    //skip past bits in a hidden table
+    amount = (amount < 0) ? -1 : 1;
+    while(true) {
+        if(sel < 0) sel = NUM_GAMEBITS - 1;
+        if(sel >= NUM_GAMEBITS) sel = 0;
+
+        BitTableEntry *entry = getBitTableEntry(sel);
+        int tbl = (entry->flags >> 6) & 3;
+        if(bitMenuTable == tbl || bitMenuTable < 0) break;
+        sel += amount;
+    }
+    self->selected = sel;
 }
 
 void bitMenu_run(Menu *self) {
@@ -96,23 +122,23 @@ void bitMenu_run(Menu *self) {
         mainSetBits(self->selected, val);
     }
     else if(buttonsJustPressed == PAD_TRIGGER_Z) {
-
+        bitMenuTable++;
+        if(bitMenuTable > 3) bitMenuTable = -1;
+        menuInputDelayTimer = MENU_INPUT_DELAY_ADJUST;
+        moveCursorY(self, 0); //move if on a now-hidden bit
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
         menuInputDelayTimer =
             (controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD)
             ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
-        if(sel == 0) sel = NUM_GAMEBITS;
-        curMenu->selected = sel - 1;
+        moveCursorY(self, -1);
     }
     else if(controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY < -MENU_CSTICK_THRESHOLD) { //down
         menuInputDelayTimer = (controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD)
             ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
-        sel++;
-        if(sel >= NUM_GAMEBITS) sel = 0;
-        curMenu->selected = sel;
+        moveCursorY(self, 1);
     }
     else if(controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickX < -MENU_CSTICK_THRESHOLD) { //left
@@ -127,15 +153,11 @@ void bitMenu_run(Menu *self) {
         bitMenuCursorX = (bitMenuCursorX + 1) & 7;
     }
     else if(controllerStates[0].triggerLeft > MENU_TRIGGER_THRESHOLD) { //L
-        sel -= 0x100;
-        if(sel <= 0) sel = NUM_GAMEBITS;
-        curMenu->selected = sel - 1;
+        moveCursorY(self, -0x100);
         menuInputDelayTimer = MENU_INPUT_DELAY_MOVE;
     }
     else if(controllerStates[0].triggerRight > MENU_TRIGGER_THRESHOLD) { //R
-        sel += 0x100;
-        if(sel >= NUM_GAMEBITS) sel = 0;
-        curMenu->selected = sel;
+        moveCursorY(self, 0x100);
         menuInputDelayTimer = MENU_INPUT_DELAY_MOVE;
     }
 }

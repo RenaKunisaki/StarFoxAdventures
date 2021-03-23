@@ -1,4 +1,4 @@
-#define NUM_GAMEBITS 0x0F59
+#define NUM_GAMEBITS 0x0F58
 
 typedef enum { //type:u32
 	BIT_WC_FoundKing = 0x7FC,
@@ -699,6 +699,7 @@ typedef enum { //type:u8
 
 typedef struct PACKED BitTableEntry {
 	u16 offset;
-	GameBitFlags flags;
+	u8 flags; //GameBitFlags
 	u8 text;
 } BitTableEntry;
+CASSERT(sizeof(BitTableEntry) == 4, sizeof_OBitTableEntry);

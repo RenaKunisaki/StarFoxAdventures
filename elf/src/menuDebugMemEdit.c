@@ -8,7 +8,7 @@
 #define HEXEDIT_NUM_LINES ((HEXEDIT_HEIGHT / MENU_LINE_HEIGHT) - 3)
 #define HEXEDIT_NUM_COLS 8
 static u8 cursorX = 0;
-u32 hexEditAddr = 0x80000000;
+u32 hexEditAddr = RAM_START;
 
 void hexEdit_draw(Menu *self) {
     //Draw function for memory editor
@@ -22,9 +22,7 @@ void hexEdit_draw(Menu *self) {
     sprintf(str, "Addr %08X", hexEditAddr);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 
-    if(hexEditAddr < 0x80000000 || hexEditAddr >= 0x81800000) {
-        hexEditAddr = 0x80000000;
-    }
+    if(!PTR_VALID(hexEditAddr)) hexEditAddr = RAM_START;
 
     u8 *addr = (u8*)hexEditAddr;
     for(int i=0; i < HEXEDIT_NUM_LINES; i++) {
@@ -97,7 +95,7 @@ void hexEdit_run(Menu *self) {
     else if(buttonsJustPressed == PAD_BUTTON_MENU) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
         u32 val = *(u32*)(addr & ~3);
-        if(val >= 0x80000000 && val < 0x81800000) hexEditAddr = val;
+        if(PTR_VALID(val)) hexEditAddr = val;
         else audioPlaySound(NULL, MENU_FAIL_SOUND);
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD

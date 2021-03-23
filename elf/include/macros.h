@@ -14,6 +14,11 @@
 #define WRITE_NOP(addr) ((*(u32*)addr) = 0x60000000)
 #define WRITE_BLR(addr) ((*(u32*)addr) = 0x4E800020)
 
+#define RAM_START 0x80000000
+#define RAM_SIZE  0x01800000
+#define RAM_END   (RAM_START + RAM_SIZE)
+#define PTR_VALID(p) (((u32)p) >= RAM_START && ((u32)p) < RAM_END)
+
 //Prologue macro for naked functions
 //Saves r0 and r3-r31, then clobbers r0
 //The purpose of using this is that r2-r31 are unchanged, and that

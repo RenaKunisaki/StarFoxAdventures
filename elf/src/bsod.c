@@ -36,8 +36,11 @@ static void drawPageGeneral() {
         bsodErrorCode, errMsg);
 
     //show player coords
-    if(pPlayer) debugPrintfxy(26, 96, "P %08X %6d %6d %6d", pPlayer,
-        (int)pPlayer->pos.pos.x, (int)pPlayer->pos.pos.y, (int)pPlayer->pos.pos.z);
+    if(PTR_VALID(pPlayer)) {
+        debugPrintfxy(26, 96, "P %08X %08X %08X %08X", pPlayer,
+            (int)pPlayer->pos.pos.x, (int)pPlayer->pos.pos.y,
+            (int)pPlayer->pos.pos.z);
+    }
 
     //show map and camera info
     debugPrintfxy( 26, 107, "CM %02X ACT %02X OBJ %04X MAPS %02X %02X",
@@ -57,7 +60,7 @@ static void drawPageGeneral() {
     debugPrintfxy(26, 228, "STACK DUMP");
     u32 *sp = (u32*)bsodCtx->gpr[1];
     for(int i=0; i<16; i++) {
-        if((u32)sp < 0x80000000 || (u32)sp >= 0x81800000) break;
+        if(!PTR_VALID(sp)) break;
         debugPrintfxy(26, 239+(i*BSOD_LINE_HEIGHT), "%08X %08X %08X %08X",
             sp[0], sp[-1], sp[-2], sp[-3]);
         sp = &sp[-4];
@@ -67,7 +70,7 @@ static void drawPageGeneral() {
     debugPrintfxy(440, 122, (const char*)0x8031d24A); //"trace"
     sp = (u32*)bsodCtx->gpr[1];
     int y = 133;
-    while((u32)sp >= 0x80000000 && (u32)sp < 0x81800000 && y < 480 - BSOD_LINE_HEIGHT) {
+    while(PTR_VALID(sp) && y < 480 - BSOD_LINE_HEIGHT) {
         debugPrintfxy(440, y, "%08X", *sp);
         sp = (u32*)*sp;
         y += BSOD_LINE_HEIGHT;

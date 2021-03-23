@@ -56,9 +56,9 @@ void menuDebugMapEnv_select(const MenuItem *self, int amount) {
 Menu menuDebugMap = {
     "Map", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
+    "Warp",                genericMenuItem_draw, menuDebugMapWarp_select,
     "Objects",             genericMenuItem_draw, menuDebugMapObjs_select,
     "Spawn Object",        genericMenuItem_draw, menuDebugMapSpawnObj_select,
-    "Warp",                genericMenuItem_draw, menuDebugMapWarp_select,
     "Reload Map",          genericMenuItem_draw, menuDebugMapReload_select,
     "Set Restart Point",   genericMenuItem_draw, menuDebugMapSetRestart_select,
     "Clear Restart Point", genericMenuItem_draw, menuDebugMapClearRestart_select,
