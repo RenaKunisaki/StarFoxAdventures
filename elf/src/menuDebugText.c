@@ -78,6 +78,17 @@ void menuDebugTextHeaps_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugTextBits_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_GAMEBIT_LOG) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugTextBits_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_GAMEBIT_LOG;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
 void menuDebugTextTricky_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_TRICKY) ? "On" : "Off");
@@ -99,6 +110,7 @@ Menu menuDebugText = {
     "Memory Stats: %s",  menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
     "Heap Details: %s",  menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
     "Interact Obj: %s",  menuDebugTextInteractObj_draw,  menuDebugTextInteractObj_select,
+    "GameBit Changes: %s", menuDebugTextBits_draw,       menuDebugTextBits_select,
     "Tricky: %s",        menuDebugTextTricky_draw,       menuDebugTextTricky_select,
     NULL,
 };

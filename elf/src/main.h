@@ -62,6 +62,10 @@ void drawBox(float x, float y, int w, int h, u8 opacity, bool fill);
 extern bool bFreeMove;
 void doFreeMove();
 
+//gameBitLog.c
+void gameBitHookInit();
+void gameBitHookUpdate();
+
 //hook.c
 uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 
