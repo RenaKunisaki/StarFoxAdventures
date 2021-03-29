@@ -6,6 +6,35 @@ import os.path
 import re
 import xml.etree.ElementTree as ET
 
+"""
+characters:
+	u32 num_char_structs;
+	characterStruct[num_char_structs];
+
+texts:
+	u16 numTexts;
+	u16 strDataLen;
+	gametextStruct[numTexts] texts;
+
+strings:
+	u32 numStrings;
+	u32 strOffset[numStrings];
+	char[] strings[numStrings];
+
+unknown: (unused?)
+	u32 len; //0x1B04
+	u8 data[len]; //0xEE x 0x1B04
+
+character textrures:
+	u16 texFmt;
+	u16 pixFmt; //4: 1 byte per pixel, else: 2 bytes per pixel
+	u16 width;
+	u16 height;
+	byte pixels;
+	//ends when width == 0 && height == 0
+	//texFmt is mapped: 2 => 0, 1 => 5
+"""
+
 def readCharStructs(file):
     numCharStructs = struct.unpack('>I', file.read(4))[0] # grumble
     charStructs = []
@@ -28,7 +57,7 @@ def readCharStructs(file):
 
 
 def readTextList(file):
-    numTexts, unknown = struct.unpack('>HH', file.read(4))
+    numTexts, strDataLen = struct.unpack('>HH', file.read(4))
     #print("numTexts=", numTexts, "unknown=", unknown)
 
     texts = {}
@@ -53,11 +82,11 @@ def readTextList(file):
     file.seek(0, 2)
     offsets.append(file.tell())
     file.seek(p)
-    return texts, offsets, numStrs, unknown
+    return texts, offsets, numStrs, strDataLen
 
 
 def readTexts(file):
-    texts, offsets, numStrs, unknown = readTextList(file)
+    texts, offsets, numStrs, strDataLen = readTextList(file)
 
     strs = []
     base = file.tell()
@@ -129,14 +158,16 @@ def readTexts(file):
             phrases.append(strs[i+text['phrases']])
         text['phrases'] = phrases
 
-    return texts, unknown
+    return texts, strDataLen
 
 
 def readGameTextFile(path):
     with open(path, 'rb') as file:
         charStructs = readCharStructs(file)
-        texts, unknown = readTexts(file)
-        return texts, unknown, charStructs
+        texts, strDataLen = readTexts(file)
+        unkLen = struct.unpack('>I', file.read(4))[0] # grumble
+        unkData = file.read(unkLen)
+        return texts, strDataLen, charStructs
 
 
 def printJson(allTexts):

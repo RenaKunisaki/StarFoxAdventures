@@ -9,9 +9,9 @@ class Zlb:
         self.file = file
 
     def decompress(self):
-        sig = self.file.readStruct('4s')
+        sig  = self.file.readStruct('4s')
+        offs = self.file.tell()
         if sig == b"\xFA\xCE\xFE\xED": # wrapper used by game
-            offs   = self.file.tell()
             header = self.file.readStruct('8I')
             decLen, zlbDataOffs, compLen = header[0:3]
             # other fields unknown
@@ -39,7 +39,8 @@ class Zlb:
             #    unk10, unk14, unk18, unk1C))
             return self.file.readBytes(decLen)
         else:
-            raise TypeError("Not a ZLB file (header: " + str(sig) + ")")
+            raise TypeError("Not a ZLB file (header: %s, offset: 0x%08X)" % (
+                sig.hex(), offs - 4))
         #print("ZLB version", version, "decLen", decLen, "compLen", compLen)
         # this can happen when a very small file is compressed
         #if decLen < compLen:

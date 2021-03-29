@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<types>
-  <enum category="/SFA/HitDetection" name="PolygonType" prefix="PolygonType_" type="u8">
-    <member name="Water" value="0xE"/>
-    <member name="NumPolyTypes" value="0x24"/>
-    <member name="MetalOrRock" value="0x19"/>
-  </enum>
-</types>

@@ -1,0 +1,75 @@
+Controller 1
+A:         attack, speak, select
+B:         cancel
+X:         roll
+Y:         item
+Z:         viewfinder
+L:         focus
+R:         shield
+Start:     pause
+D-Up:      adjust map, select items
+D-Down:    adjust map, select items
+D-Left:    adjust map, select items
+D-Right:   adjust map, select items
+C-Up:      adjust camera, select items
+C-Down:    adjust camera, select items
+C-Left:    adjust camera, select items
+C-Right:   adjust camera, select items
+LeftStick: move
+
+Controller 2
+A:
+B:
+X:
+Y:
+Z:
+L:
+R:
+Start:
+D-Up:
+D-Down:
+D-Left:
+D-Right:
+C-Up:
+C-Down:
+C-Left:
+C-Right:
+LeftStick:
+
+Controller 3
+A:       print memory stats
+B:       texture refresh
+X:       toggle free move
+Y:
+Z:       fast forward
+L:       roll camera
+R:       roll camera
+Start:
+D-Up:
+D-Down:
+D-Left:
+D-Right:
+C-Up:    tilt camera
+C-Down:  tilt camera
+C-Left:  pan camera
+C-Right: pan camera
+LeftStick:
+
+Controller 4
+A:
+B:
+X:
+Y:
+Z:
+L:
+R:
+Start:
+D-Up:
+D-Down:
+D-Left:
+D-Right:
+C-Up:
+C-Down:
+C-Left:
+C-Right:
+LeftStick

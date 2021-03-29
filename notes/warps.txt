@@ -1,0 +1,54 @@
+ -5774,   -765,  -2542,  0 ThornTail Hollow - Outside
+ -5517,   -636,   -800,  0 ThornTail Hollow - Egg Cave
+ -6664,  -1086,  -2253, -1 ThornTail Hollow - Bottom
+ -6069,   -980,  -2752,  1 ThornTail Store
+ -7317,  -1327,   8822,  0 DarkIce Mines - Landing Pad
+ -7957,  -1177,  14025,  0 DarkIce Mines - SharpClaw Fort
+-12264,    211,    451,  0 Krazoa Palace - Starting Area
+ 11840,   -245,   5864,  0 Krazoa Palace - WarpStone Pad
+ 13154,    -83,   2880,  0 Krazoa Palace - Inside
+ 13201,   1278,   2239,  0 Krazoa Palace - Final Boss Warp
+ 12188,   1379,   2461,  0 Krazoa Palace - Top
+   744,   1309, -16341,  0 CloudRunner Fortress - Dungeon
+  4125,   1464, -18232,  0 CloudRunner Fortress - Entrance
+-11923,   -268,   -331,  0 Moon Mountain Pass - Hut
+-11839,     52,  -4791,  0 Moon Mountain Pass - Warp
+-18870,      9,  28360,  0 Title Screen
+-16322,   -777, -13271,  0 Walled City - Front of Pyramid
+-16322,  -1209, -13518,  0 Walled City - Boss Door
+  3336,   6484,   4183,  0 Ice Mountain - Top
+ -9555,  -2973,  20457, -2 Galdon
+ -7954,  -2978,  20162, -2 Galdon - Inside
+ 14079,   -204, -17065,  0 Test of ???
+  7039,     58, -13887,  0 Test of ???
+ 17919,   -204, -10669,  0 Test of ???
+ 17919,   -204, -14511,  0 Test of ???
+ 10240,   -203, -18354,  0 Test of ???
+ 13440,   -204, -13225,  0 Test of ???
+ -1601,  -1216,   -960,  0 ???
+-11850,    131, -15476,  2 Andross
+  1845,  -1624,  -2330,  0 Cape Claw
+ -4159,   -521,   4159,  0 SnowHorn Wastes - Shrine Warp
+ -2634,   -130,   2167,  0 SnowHorn Wastes - Water Spout
+-18710,    389,   -307,  0 ???
+  -173,   1284, -14400,  0 ???
+   463,   1845, -16899,  0 ???
+  1534,  -2536,  -8574, -1 Ocean Force Point
+  4220,  -2536,  -8576, -1 Ocean Force Point
+  3198,  -2542,  -7981, -1 Ocean Force Point - SpellStone Platform
+-17919,    198,   -975,  0 ??? SpellStone Platform
+  3357,  -1600,  -7428,  0 Ocean Force Point - Entrance
+  2872,  -1533,  -9247,  0 Ocean ???
+  2877,  -2718,  -9277, -1 Ocean ???
+ -1299,   -814,  -1932,  0 LightFoot Village - Front
+ -3150,   -895,  -1758,  0 LightFoot Village - Back
+-18648,    -45,    499,  0 Volcano Force Point - SpellStone Platform
+-18564,    293,    647,  0 Volcano Force Point - Warp
+-16065,     57,   -320,  0 Volcano Force Point - Entrance
+  7694,   -199,  25943,  1 Boss Drakor
+-10138,      0, -13381,  0 Boss T-Rex
+ -5803,   -794,  -2173,  0 World Map
+-13753,  -1714,  11227,  0 Dragon Rock
+  7203,     86,  30980,  0 Maze Cave
+  -961,      9,  24522,  0 Great Fox
+ -9495,   -127, -19015,  0 AnimTest

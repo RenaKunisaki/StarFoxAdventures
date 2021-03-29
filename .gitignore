@@ -4,8 +4,13 @@
 *.bin
 *.gci
 *.img
+*.iso
 *.dol
 *.old
+*.rom
+*.n64
+*.v64
+*.z64
 *.lock*
 __pycache__
 **/build/*
@@ -14,6 +19,14 @@ __pycache__
 **/dump/*
 **/discroot/*
 **/junk/*
+dp/rom
+dp/decomp/**
+root/**
+demo/**
+SFAModelTesting/**
+SFAModelsBin/**
+saves/**
+v1.01/**
 
 # from https://github.com/github/gitignore
 # Object files

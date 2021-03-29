@@ -1,0 +1,43 @@
+this is very volatile between versions.
+probably infeasible to parse.
+
+StateHeader
+    char gameID[6];
+    u16 padding;
+    u32 size; //zero if not compressed
+    double time.
+LZO compressed:
+    u32 cookie = 0xBAADBABE
+    string version
+    bool is_wii
+    u32 mem1_size
+    u32 mem2_size
+    movie (even if no movie active)
+        u64 s_currentFrame
+        u64 s_currentByte
+        u64 s_currentLagCount
+        u64 s_currentInputCount
+        bool s_bPolled
+        u64 s_tickCountAtLastInput
+    video_backend
+        bool software
+        bpmem
+        cpmem
+        xfmem
+        texmem
+        fifo
+        CommandProcessor
+        PixelEngine
+        PixelShaderManager
+        VertexShaderManager
+        VertexManager
+        BoundingBox
+        FramebufferManager
+        TextureCache
+        Renderer
+    PPC
+    CoreTiming
+    HW
+    (if wii) Wiimote
+    Gecko
+    FrameDump

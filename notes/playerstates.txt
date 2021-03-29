@@ -1,0 +1,68 @@
+0x00 NoChange          init? does unused CF dungeon get-up anim
+	-> Moving
+0x01 Idle              .
+	-> NoChange, Dead, possibly 25, ClimbLedge, ClimbOntoWall, 0A, 08, Throwing, 42, everything from state 08
+0x02 Moving            .
+0x03 Dead              .
+0x04                   something to do with ice spell; runs anim 0x92
+0x05                   maybe holding object? ball?
+0x06                   related to climbing/throwing
+0x07 Throwing          .
+0x08 LiftActivate_08   several actions; interact with obj?
+0x09                   climb/drop down ledge? runs anim 0x419
+0x0A
+0x0B
+0x0C ClimbLedge        .
+0x0D                   related to climbing ledge
+0x0E ClimbOntoLadder   .
+0x0F ClimbLadder       .
+0x10 SlideDownLadder   .
+0x11 GrabWall          .
+0x12 ClimbOntoWall     .
+0x13 ClimbWall         .
+0x14 ClimbUpFromWall   .
+0x15 ClimbDownFromWall .
+0x16 ClimbOntoBike     .
+0x17
+0x18 RideBike          .
+0x19
+0x1A
+0x1B
+0x1C
+0x1D Push_1D           .
+0x1E
+0x1F
+0x20
+0x21
+0x22
+0x23
+0x24
+0x25
+0x26 Attack            .
+0x27
+0x28
+0x29
+0x2A StartAiming       .
+0x2B StopAiming        .
+0x2C Aiming            .
+0x2D TryCastSpell      .
+0x2E CastFireball      .
+0x2F CastLaser         .
+0x30
+0x31
+0x32 StaffBooster      .
+0x33 LiftRockWithStaff .
+0x34
+0x35 Activate_35       .
+0x36 SuperQuake        .
+0x37
+0x38
+0x39
+0x3A
+0x3B
+0x3C
+0x3D
+0x3E NOP_3E            .
+0x3F
+0x40
+0x41 OnWindLift        .

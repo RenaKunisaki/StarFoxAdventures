@@ -1,0 +1,77 @@
+Vague Rant — 03/04/2021
+Star Fox Adventures (USA) (Rev 1)
+
+viWidth Fix
+0004968F 000000C0
+000496A3 000000E0
+
+Vague Rant — 03/04/2021
+OK, it's pretty off topic for in here at this point, but anyway since it first came up in here, I have a Gecko code (for USA rev 1 only, should be extremely easy to port) which aims to resolve the aspect ratio issue in Star Fox Adventures.
+
+Aspect Ratio Fix
+203DBEC8 3FAAAAAB
+043DBEC8 3FA00000
+E0000000 80008000
+043DC2D0 3FA00000
+043DF89C 3FD55555
+043DFA00 3FD55555
+
+
+Aspect Ratio Fix
+ (with 16:9 as Default)
+203DBEC8 3FAAAAAB
+043DBEC8 3FD55555
+E0000000 80008000
+043DC2D0 3FA00000
+043DF89C 3FD55555
+043DFA00 3FD55555
+
+The difference is quite small: the fixed version displays about 7% wider than the original game, which accounts for the aspect ratio the developers targeted but which is not correct for the actual output of the GameCube.
+It's worth noting that this corrects only the 3D geometry (which includes the Fuel Cell Compass), it does not affect 2D elements at all--as you can see in the GIF above, the HUD is unchanged. Fixing the 2D would involve a much more comprehensive hack which I don't have the technical ability or patience to do.
+Changing the viWidth to 704 would fix both the 2D and 3D together since they were basically accidentally targeting 704 for both, that would be the real fix.
+It should be pretty doable, you'd have to find where the rmode is set up and change both the viWidth and viXOrigin.
+viWidth needs to be 704, viXOrigin should be 8.
+The video interface takes the embedded framebuffer (the normal thing people think of as the framebuffer, 640*480 for SFA) and displays it on the external framebuffer (720*480). viXOrigin is just where to start horizontally--it should basically always be (720-viWidth)/2 to keep it centered. Then the viWidth is just how many of the 720 xFB pixels to display across, which can be anywhere between 640 and 720.
+The image is scaled with IIRC 8x supersampling, so it looks pretty decent, you can't really tell that you're seeing e.g. 640 pixels scaled to 660.
+
+
+203DBEC8 3FAAAAAB if viewportAspect == 1.33333...
+043DBEC8 3FA00000 viewportAspect = 1.25
+E0000000 80008000 end
+043DC2D0 3FA00000 viewportAspectNotWidescreen = 1.25
+043DF89C 3FD55555 viewportAspectWidescreen = 1.6667
+043DFA00 3FD55555 shadows, 803ded80
+
+viWidth fix is patching tvInit viWidth and the -10 after
+
+Vague Rant — 03/06/2021
+@Rena You need to move retroben's "Increase LoD Range" code from the GeckoCodes10 page to the ARCodes10 page. Then if you want, you can put this one on the ARCodes11 page:
+
+Rev 1/v1.01
+Increase LoD Range
+42343558 00544330
+And then if you also want you can use these Gecko ports of the same code on the GeckoCodes10/GeckoCodes11 pages:
+
+Rev 0/v1.00
+Increase LoD Range
+48000000 803228F8
+DE000000 80008180
+120000A8 00004330
+E0000000 80008000
+
+Rev 1/v1.01
+Increase LoD Range
+48000000 80343558
+DE000000 80008180
+120000A8 00004330
+E0000000 80008000
+
+All credit remains to retroben, these are all just the same original AR code ported to different game revisions/code handlers.
+https://github.com/dolphin-emu/dolphin/wiki/GameCube-Action-Replay-Code-Types#subtype-1--write-to-pointer-can-be-called-04-05-and-06
+
+48000000 803228F8 load pointer
+DE000000 80008180 check range
+120000A8 00004330 16bit write
+E0000000 80008000 end
+seems wrong because there's nothing at that address
+but apparently all it does is change the player's cull distance

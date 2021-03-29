@@ -1,0 +1,97 @@
+- what actually controls the animations when releasing the first spirit?
+    - anim 0x315, 0x316 = releasing spirit, 0x574 = falling into laser, 0x272 = in crystal, but what triggers these?
+        - it's command 2 but in a script I don't know. it's running from an Override, which doesn't have its own scripts.
+        - it's at 0x714C, ID 0x614, but I can't find what triggers that. there's only the one call to ObjSeq_start
+        - setting bit 0x0316 triggers the sequence so maybe another sequence is just waiting for that?
+            - yup, a WM_seqpoint triggers on it, but that just starts seq 0x180, the one handling all this
+            - also WM_spiritplace triggers on it and runs seq 0x526 (the "release spirit" anim), which does have a "play anim" command, but param 0
+        - at some point we're playing anim 0x266 which is the "real" anim ID that the player ends up in
+            - 0266 inspect pad
+            - 0222 adjust posture
+            - 0315 fall to knees
+            - 0316 release spirit
+            - 032E knocked over by laser
+            - 032F stand up
+            - 0500 turn
+            - 0504
+            - 0500 again
+            - 0273 look back
+            - 0573 pushed
+            - 0573 pushed
+            - 0574 in laser
+            - 0272 in crystal, until end of scene (maybe AnimKrystal takes over? nope)
+        - so where did 0266 come from? maybe model header
+            - index 0x2E6 in model header's anim table is 0x266
+            - anim ID high byte is an index into header animIdxs => 0x112
+            - low byte is added to that
+        - it seems like this 02 command isn't doing much of anything, but it is an 02 command being run somewhere... 02027266 which is in seq 0x060F
+        - the seq is at 811841cc and the call traces back to ObjSeq_runBgCmds meaning some object (an Override) is running it but hasn't actually started it!?
+        - 060F is just nowhere
+            - according to ObjSeq_objLoadAnimdata, 060F is the index of seq 9801 on an override
+            - weird, because 9801 would be negative - but apparently here, being _negative_ is what triggers looking it up in OBJSEQ2C
+            - it traces back to ObjSeq_start. that 9801 comes from an object's seq list
+            - but no object has anything with 801 in its list
+        - should look at OBJEVENT and CAMACTIO; also ObjSeq_objLoadAnimdata is another thing that looks at OBJSEQ2C
+    - maybe WM_LevelControl? it has no scripts though
+    - or are there some invisible triggers?
+    - when Play Anim command is used on player, 0x531 is added to anim ID, so it can't be triggered by a script (but it is???)
+    - something else is sending commands to the WM_spiritplace to turn spirit vision on/off
+
+so let's go over the flow here
+- setting bit 0316 triggers two things:
+    - WM_seqpoint runs seq 0180
+        - objs:
+            - FFFF Override          (no seqs)
+            - 001F Krystal
+            - FFFE AnimCamera        (no seqs)
+            - 01DF SpiritPrize       (no seqs)
+            - 0783 WM_newcryst       (no seqs)
+            - 065A DepthOfFieldPoint (no seqs)
+            - 0150 WM_spiritplace
+            - 0785 WM_newcryst       (no seqs)
+            - 0784 WM_newcryst       (no seqs)
+        - sets, then clears bit 0143 (which seems to do nothing)
+        - if we delete this, then pressing A just removes the spirit and doesn't do any animation
+            - there are others but deleting them does nothing to this sequence
+            - but the sequence (0180) isn't responsible for triggering this animation
+            - but somehow it is, because changing that ID to another in this object's seq list prevents it.
+                - if we change the object list:
+                - 1) override: no effect
+                - 2) Krystal: seq does not run, but spirit is removed
+                    - if changed to an override, the seq plays but Krystal isn't put into cutscene mode, can just walk around, even trigger the scene again
+                - 3) AnimCamera: changes camera angle, obj appears, the scene looks way cooler
+                - 4) SpiritPrize: changes the object that appears, but plays the same
+                - 5) WM_newcryst: "could not find object 558" (the WM_newcryst), we fall thru ground
+                    - changing the flags = crash, something must be trying to use it?
+                    - changing it to Krystal has no effect
+                    - to 013E (WM_Door1) Krystal does anim 0266 but then the scene just hangs there. text continues but Krystal and camera don't animate. her anim timer freezes, while other anims (eg torches) continue.
+                - 6) DepthOfFieldPoint: same for 013E, otherwise no effect
+                    - I suppose with 013E it's waiting for the door to do something, but with nonexistent objects it's just skipping them
+                - 7) WM_spiritplace: could not find object, fall thru ground
+                    - 013E: same freeze, but before spirit vision filter is turned on
+                - 8) WM_newcryst: could not find object, or freeze
+                - 9) WM_newcryst: same
+            maybe anim 0266 is triggered by the player object when activating "release spirit" action, not by these scripts? that seems likely since changing any other object doesn't prevent the animation
+                - but didn't we find the write of the anim ID was from a script?
+                - overrideDef->field_0x18 = (seqIdx & 0x7ff) << 4 | 0x8000 | iItem & 0xf;
+                - seqIdx is the original sequence ID (maybe translated through obj seq list), so 0x180 => 0x9801 because it's the second object in the list
+                    - but that's Krystal?
+                    - note, (0x9801 & 0x7FF0) >> 4 = 0x0180,
+                            (0x0180 & 0x07FF) << 4 = 0x9800,
+                            so seq 0x9800 is just another representation of 0x180,
+                            and 0x9801 is the ID for the first object in the list, not the second.
+                    - so what happens with this number 0x9801?
+                        - ObjSeq_objLoadAnimdata checks it
+                        - since the high bit is set, the ID 0x1801 is looked up in OBJSEQ2C
+                            - lookup ((ID & 0x7FF0) >> 4) and add (ID & 0xF), giving 0x60F
+                            - so the only mystery left is which object this is
+    - WM_spiritplace runs seq 0526
+        - objs:
+            - FFFF Override
+            - 001F Krystal
+            - 01DF SpiritPrize
+            - FFFE AnimCamera
+        - plays anim 0
+- ??? creates an Override and gives it seq ID 9801
+    - 9801 is idx 060F
+        - 060F has the "play anim" command

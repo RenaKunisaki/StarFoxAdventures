@@ -1,0 +1,89 @@
+MAIN MENU:
+
+
+Game Settings
+    Game Speed: x%                [working]
+    Autosave: on/off              [working]
+    Subtitles: on/off             [working, need testing]
+    Language: x                   [not implemented]
+
+Control Settings
+    Rumble: on/off                [working, need testing]
+    Rumble Blur: on/off           [working]
+    Camera Control: 1/3           [working, need testing with pad 3]
+    Camera X: Normal/Invert       [working]
+    Camera Y: Normal/Invert       [working]
+
+Player Settings
+    Player: Fox/Krystal           [working]
+    Backpack: on/off/normal       [working]
+    Fur Effect: normal/always     [working]
+
+Video Settings
+    Widescreen: on/off            [working]
+    Particle Effects: on/off      [working]
+    FOV: n                        [working]
+    LOD: ???                      [what exactly would this do?]
+        this would be the "increase LOD range" cheat, which just
+        sets player's cullDistance higher (176)
+        all it really seems to do is change the lighting
+    HUD: on/off                   [working]
+
+Audio Settings
+    Music Volume: x%              [working] all of these need testing
+    SFX Volume: x%                [working]
+    CutScene Volume: x%           [working]
+    Sound Mode: x%                [working]
+    Music Test: n name            [working]
+    Sound Test: n                 [working]
+    Stream Test: n name           [working]
+
+PDA Settings
+    PDA HUD: Map/Compass/Info/Off [working]
+    Map Size: x                   [working]
+    Map Opacity: x                [working]
+    Map Zoom: x                   [working]
+
+Debug Shit
+    - game state
+        - gamebits (needs text)
+        - save data
+        - seq stuff
+    - map
+        - edit restart point
+    - memory
+        - heap view
+    - render
+        - hitboxes
+        - debug objects
+        - gametext
+
+Other things that need doing:
+- fix gametext shit
+- kill the fucking alarm in arwing sections
+- be able to stop aiming cursor from snapping back to center
+- on-screen memory view and other features we can "borrow" from GZ
+
+#define MENU_WIDTH  (SCREEN_WIDTH  * 0.6)
+#define MENU_HEIGHT (SCREEN_HEIGHT * 0.4)
+#define MENU_XPOS ((SCREEN_WIDTH/2)  - (MENU_WIDTH  / 2))
+#define MENU_YPOS ((SCREEN_HEIGHT/2) - (MENU_HEIGHT / 2))
+
+MENU_WIDTH  = 384
+MENU_HEIGHT = 192
+MENU_XPOS   = 128
+MENU_YPOS   = 144
+
+box X = 320 - (384 / 2) = 128 = MENU_XPOS
+box Y = 240 - (192 / 2) = 144 = MENU_YPOS
+
+frame 0 (0.0) cx=320 cy=240 w=  0.000000 h= 0.000000
+frame 1 (0.1) cx=320 cy=240 w= 19.200001 h= 9.600000
+frame 2 (0.2) cx=320 cy=240 w= 38.400002 h=19.200001
+frame 3 (0.3) cx=320 cy=240 w= 57.600002 h=28.800001
+frame 4 (0.4) cx=320 cy=240 w= 76.800003 h=38.400002
+frame 5 (0.5) cx=320 cy=240 w= 96.000000 h=48.000000
+frame 6 (0.6) cx=320 cy=240 w=115.200005 h=57.600002
+frame 7 (0.7) cx=320 cy=240 w=134.399994 h=67.199997
+frame 8 (0.8) cx=320 cy=240 w=153.600006 h=76.800003
+frame 9 (0.9) cx=320 cy=240 w=172.799988 h=86.399994

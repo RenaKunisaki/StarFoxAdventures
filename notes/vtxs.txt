@@ -1,0 +1,44 @@
+    size offs
+cmd:   1 0
+nvtxs: 2 1
+
+pmtx:  1 0
+t0mtx: 1 1
+t7mtx: 1 2
+pos:   2 3
+nrm:   2 5
+tex0:  2 7
+9 bytes/vtx
+
+bottom
+list 12 poly 0 vtx 3-13 (001E-0080)
+	B3C0 > 0 > 1E-80
+	list  poly  vtx
+list 12 poly 3 vtx 0-4
+	B3C0 > 0156 > 0159-0185
+texcoords
+	idx    S    T  newidx
+	0221 03FB 02C8
+	0224 03F0 02CC
+	033F 03FB 02B5
+	0340 03F1 02B6
+	034D 0279 025B 030A
+	034E 028E 0261 0309
+	03D0 0279 0255 030A
+	03D6 03C7 02D7
+	03F2 0279 025D
+	03FD 02AF 02AE
+	03FE 0278 029E
+	03FF 027A 027E
+	0400 0279 026A
+	056D 0295 0273
+	056E 02A9 0291
+	
+top
+list 12 poly 0 vtx 24, 25
+list 12 poly 5 vtx 0, 2, 3
+texcoords
+	01F6 0316 0335
+	01FA 02B2 034B
+	01FB 02B2 034B
+	020D 0359 02B6

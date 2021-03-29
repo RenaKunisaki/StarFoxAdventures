@@ -1,0 +1,121 @@
+http://www.kurtm.net/mipsasm/index.cgi nice online assembler
+MIPS ABI o32 calling convention:
+args: a0-a3, 0x10(sp), 0x14(sp)...
+so entering debugPrint we'd have:
+a0=fmt, a1=arg0, a2=arg1, a3=arg2,
+sp[0x10]=arg3, sp[0x14]=arg4...
+
+and for sprintf we want:
+a0=dest, a1=fmt, a2=arg0, a3=arg1,
+sp[0x10]=arg2, sp[0x14]=arg3...
+
+so we would want to subtract 4 from sp and store a3 there
+then move a2->a3, a1->a2, a0->a1
+
+actually though debugPrint is storing all its args on the stack
+but I don't see why sprintf would work differently
+it looks like it takes dest and fmt in regs
+and it does look at a2, a3 as well
+
+so the existing debugPrint code is:
+addiu     sp, sp, -8
+sw        a0, 0x08(sp)
+sw        a1, 0x0C(sp)
+sw        a2, 0x10(sp)
+sw        a3, 0x14(sp)
+or        v0, zero, zero # return 0
+jr        ra
+addiu     sp, sp, 8
+
+and checkHeaps is like:
+addiu     sp, sp, -0x40
+a0 = fmt
+a1 = used1
+a2 = size1
+a3 = used2
+sp[0x10] = size2
+sp[0x14] = used3
+...
+there's no sp adjustment before the call.
+so the replacement code would look like:
+80060b20: 27BDFFFC AFBF000C 080001F1 AFA70010
+addiu     sp, sp, -4 # adjust arg offset
+sw        ra, 0x0C(sp) # XXX verify
+j         0x800007C4
+sw        a3, 0x10(sp) # store a3 to new pos
+
+800007C4:
+or        a3, a2, r0 # a3 = a2
+or        a2, a1, r0 # a2 = a1
+or        a1, a0, r0 # a1 = a0
+lui       a0, 0x8009
+jal       0x8005f70c # sprintf
+lw        a0, 0x30e8(a0) # a0 = deubgLogBufPos
+lui       a0, 0x8009
+lw        a1, 0x30e8(a0) # a0 = deubgLogBufPos
+addu      a1, a1, v0
+sw        a1, 0x30e8(a0) # update debugLogPos
+lw        ra, 0x0C(sp) # XXX verify
+jr        ra
+addiu     sp, sp, 4
+
+00C03825 00A03025 00802825 3C048009 0C017DC3 8C8430E8 3C048009 8C8530E8 00A22821 AC8530E8 8FBF000C 03E00008 27BD0004 03E00008 27BD0004
+
+800b9794 01 to enable map debug
+sprintf is crashing so our stack is probably wrong
+
+Threads:  (note, stack here is the bottom, names are made up)
+OSThread MsgQueue MsgsBuf    ID Main     Stack    Name     Description
+800bfb10 800bfd58 800bfd70   -1 8006204c 800bfb10 Fault    crash handler/BSOD
+800cd690                      0 800822b0 800ce840 PI       raw cart I/O
+800ce840                      0 8007e6a0 800cedf0 RDB Mem  debug memory access
+800cfbb8 800cf120 800cf138    0 80082f10 800d3d88 RDB I/O  debug I/O
+800a5dc0 -------- --------    1 80001098 800a3e70 Idle     starts others, sleeps
+800a5ff0                      3 80013170 800a5db8 Game     main game logic
+         800a7f00 800a7f48                        SI       raw joypad I/O
+800a86a8                      4 80011afc 800aa948 AI       raw audio system I/O
+                              5 8003b820 800b09c0 RSP      raw video system I/O
+800a7fd0 800a7f18 800a7f50   98 80010510 800a8600 Pad      actual game button logic
+800ac918 800acb48 800acb60   99 80012d94 800ac910 Assets   loads files from ROM
+800b3518 800b3758 800b3754  100 800374b0 800b3510
+
+ROM offsets:
+0A4970 file table, 0x130 bytes
+0A4AA0 file base (add to table entries)
+table:
+0000004A 00000000 0000006C 0011A5E8
+0011A5F8 00931B30 00931B40 00A5E958
+00A5E968 00FFEA50 00FFFA78 01DC613C
+01DCA13C 01DCA93C 01DD493C 01F35084
+01F4445C 01F4545E 01F488E2 01F488E2
+01F488E2 01F598A0 01F5E038 01F5E284
+01F5E590 01F5E5D4 01FA95F4 01FA9604
+01FAB704 01FAB70A 01FAC84A 0203B79A
+0203BD9A 020F318A 020F3C4A 020F488A
+020F4952 020F567E 028CDD9E 028D16B6
+028D21C6 02C26346 02C273A2 031BB3D4
+031BC514 031BC584 031E4E04 031E5F40
+031E6F58 033D2AA8 033D35BE 033D3DC8
+033D68CE 033D8CB2 03705CB2 03706CC6
+03739EC6 0373C346 0373F17E 0373F186
+0373F186 03740AE6 03740B8E 0374238E
+0374239A 03748422 03748CC6 0374A0A2
+03787066 03787BDC 03788CF4 0378CD2C
+03A6013C 03A61A3C 03A62254 03A7A254
+like the final, each file isn't one asset but one collection of assets
+the first entry seems to be number of entries, not an offset.
+
+ ID|Name    |Description
+---|--------|------------------
+ -1|Fault   |crash handler/BSOD
+  0|PI      |raw cart I/O
+  0|RDB Mem |debug memory access
+  0|RDB I/O |debug I/O
+  1|Idle    |starts others, sleeps
+  3|Game    |main game logic
+  ?|SI      |raw joypad I/O
+  4|AI      |raw audio system I/O
+  5|RSP     |raw video system I/O
+ 98|Pad     |actual game button logic
+ 99|Assets  |loads files from ROM
+100|?       |?

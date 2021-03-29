@@ -1,0 +1,1794 @@
+80027710	FUN_800273f0	OSPanic	GXTexture.c
+80027f48	FUN_80027eec	OSPanic	GXBump.c
+80020808	FUN_800207ac	OSPanic	GXGeometry.c
+8001ea8c	FUN_8001ea14	OSPanic	GXAttr.c
+800119a8	(none)	OSPanic	
+80017028	(none)	OSPanic	
+80026bf0	FUN_80026b84	OSPanic	GXTexture.c
+8008f17c	FUN_8008f0e8	OSPanic	objhits.c
+80029724	FUN_80029584	OSPanic	GXTev.c
+8002a05c	FUN_80029fd4	OSPanic	GXTev.c
+80018d94	FUN_80018d60	OSPanic	ai.c
+800172dc	(none)	OSPanic	
+8003d358	FUN_8003d30c	OSPanic	CARDRdwr.c
+8002a030	FUN_80029fd4	OSPanic	GXTev.c
+8001a520	FUN_8001a4ec	OSPanic	dsp.c
+8008ed50	FUN_8008ece4	OSPanic	objhits.c
+80098080	FUN_80098024	OSPanic	objprint_dolphin.c
+800254a0	GXSetChanCtrl	OSPanic	GXLight.c
+8003ff78	FUN_8003fe74	OSPanic	CARDRead.c
+80011c5c	FUN_80011bc0	OSPanic	dvdfs.c
+8001fdc8	FUN_8001fd48	OSPanic	GXMisc.c
+80007fac	(none)	OSPanic	
+8002f660	FUN_8002f604	OSPanic	GXTransform.c
+800a1e88	FUN_800a1e28	OSPanic	shader.c
+800b0c68	FUN_800b0aec	OSPanic	track_dolphin.c
+80070804	FUN_800707ac	OSPanic	sparsearray.c
+8003e420	FUN_8003e2f0	OSPanic	CARDCheck.c
+800173fc	(none)	OSPanic	
+8000e1f8	FUN_8000e07c	OSPanic	OSThread.c
+8002e67c	GXSetCurrentMtx	OSPanic	GXTransform.c
+800102cc	FUN_8001028c	OSPanic	vec.c
+800c85f0	FUN_800c85b8	OSPanic	timer.c
+8007519c	FUN_80075138	OSPanic	light.c
+8001efa8	FUN_8001ef6c	OSPanic	GXAttr.c
+80085af0	FUN_80085ab8	OSPanic	objects.c
+80029a50	FUN_80029994	OSPanic	GXTev.c
+800212a4	FUN_8002126c	OSPanic	GXFrameBuf.c
+8000e968	MtxIdentity	OSPanic	mtx.c
+8000db0c	FUN_8000d978	OSPanic	OSThread.c
+8008f15c	FUN_8008f0e8	OSPanic	objhits.c
+80028600	FUN_80028544	OSPanic	GXBump.c
+800284ec	FUN_80028124	OSPanic	GXBump.c
+8007e384	FUN_8007e1b8	OSPanic	models_dolphin.c
+802ca530	FUN_802ca4f0	OSPanic	ARWarwingattachment.c
+8003e528	FUN_8003e2f0	OSPanic	CARDCheck.c
+80018918	FUN_800188a4	OSPanic	ai.c
+8002a224	FUN_8002a0f0	OSPanic	GXTev.c
+8000faf8	FUN_8000fa60	OSPanic	mtx44.c
+8007fe48	FUN_8007fe10	OSPanic	models_dolphin.c
+8001faf4	FUN_8001fac4	OSPanic	GXMisc.c
+80008660	FUN_800085b4	OSPanic	OSAlloc.c
+80015d04	FUN_80015aac	OSPanic	vi.c
+80017f24	FUN_80017ef0	OSPanic	Pad.c
+8007fdec	FUN_8007fd8c	OSPanic	models_dolphin.c
+80075f90	FUN_80075f4c	OSPanic	light.c
+80058c70	FUN_80058c24	OSPanic	hw_aramdma.c
+802ab8a0	FUN_802ab86c	OSPanic	CRdropbombs.c
+80058e18	FUN_80058ddc	OSPanic	hw_aramdma.c
+8000c3f4	FUN_8000c3b4	OSPanic	OSRtc.c
+80008364	FUN_8000817c	OSPanic	OSAlloc.c
+800208f8	FUN_800208b8	OSPanic	GXGeometry.c
+8002233c	FUN_8002213c	OSPanic	GXFrameBuf.c
+80028164	FUN_80028124	OSPanic	GXBump.c
+8003c008	FUN_8003bf98	OSPanic	CARDBios.c
+800b0e70	FUN_800b0aec	OSPanic	track_dolphin.c
+80092760	FUN_800926d8	OSPanic	objlib.c
+800a2584	FUN_800a2554	OSPanic	shader.c
+8000e454	FUN_8000e3a0	OSPanic	OSThread.c
+80025cd0	FUN_80025c78	OSPanic	GXTexture.c
+8002a504	FUN_8002a41c	OSPanic	GXTev.c
+800267b8	FUN_80026640	OSPanic	GXTexture.c
+8003b6dc	FUN_8003b69c	OSPanic	CARDBios.c
+8000f254	FUN_8000f20c	OSPanic	mtx.c
+8002b4bc	GXSetZMode	OSPanic	GXPixel.c
+8000d620	FUN_8000d5e8	OSPanic	OSThread.c
+8001ab0c	FUN_8001aad4	OSPanic	dsp_task.c
+800084b4	FUN_80008478	OSPanic	OSAlloc.c
+800a1818	FUN_800a17c4	OSPanic	shader.c
+800104cc	FUN_80010458	OSPanic	mtxvec.c
+800206fc	FUN_800206a0	OSPanic	GXGeometry.c
+800296b8	FUN_80029584	OSPanic	GXTev.c
+80026488	FUN_80026158	OSPanic	GXTexture.c
+80026684	FUN_80026640	OSPanic	GXTexture.c
+80007448	FUN_80007410	OSPanic	OS.c
+8000cbe0	FUN_8000cb64	OSPanic	OSSerial.c
+802cbd98	FUN_802cbd5c	OSPanic	LGTpointlight.c
+8000e434	FUN_8000e3a0	OSPanic	OSThread.c
+80029ae0	FUN_80029994	OSPanic	GXTev.c
+80037f38	(none)	OSPanic	
+80022244	FUN_8002213c	OSPanic	GXFrameBuf.c
+80028b50	FUN_80028900	OSPanic	GXBump.c
+80029218	FUN_80029198	OSPanic	GXTev.c
+8001dec0	FUN_8001de60	OSPanic	GXAttr.c
+800758d8	FUN_800757ec	OSPanic	light.c
+8003be20	FUN_8003bde0	OSPanic	CARDBios.c
+800116b8	FUN_8001166c	OSPanic	dvdfs.c
+8000d680	FUN_8000d5e8	OSPanic	OSThread.c
+8009d344	FUN_8009d140	OSPanic	pi_dolphin.c
+80070ab4	FUN_80070a40	OSPanic	sparsearray.c
+80026f34	FUN_80026e60	OSPanic	GXTexture.c
+80029250	FUN_80029198	OSPanic	GXTev.c
+80091e58	FUN_80091db4	OSPanic	objlib.c
+80024c4c	GXSetChanAmbColor	OSPanic	GXLight.c
+8001fd8c	FUN_8001fd48	OSPanic	GXMisc.c
+8001ff64	FUN_8001ff08	OSPanic	GXMisc.c
+8002a154	FUN_8002a0f0	OSPanic	GXTev.c
+800b115c	FUN_800b10fc	OSPanic	track_dolphin.c
+80025090	GXSetChanMatColor	OSPanic	GXLight.c
+8002a5ec	FUN_8002a5a8	OSPanic	GXTev.c
+8001f338	FUN_8001f1ac	OSPanic	GXAttr.c
+8002f9d4	FUN_8002f95c	OSPanic	GXTransform.c
+8001128c	FUN_800110ec	OSPanic	dvdfs.c
+8007e3c8	FUN_8007e1b8	OSPanic	models_dolphin.c
+8001e9bc	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80026830	FUN_80026640	OSPanic	GXTexture.c
+80022c58	FUN_80022be4	OSPanic	GXLight.c
+8003c1ac	FUN_8003c130	OSPanic	CARDBios.c
+80025234	GXSetNumChans	OSPanic	GXLight.c
+800222e4	FUN_8002213c	OSPanic	GXFrameBuf.c
+80013824	FUN_80013770	OSPanic	dvd.c
+8001e550	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80020914	FUN_800208b8	OSPanic	GXGeometry.c
+8000fdcc	FUN_8000fd58	OSPanic	vec.c
+800587ac	FUN_80058774	OSPanic	hardware.c
+800c6a8c	FUN_800c6a5c	OSPanic	GXGeometry.h
+80026328	FUN_80026158	OSPanic	GXTexture.c
+8002c788	FUN_8002c6f0	OSPanic	GXDisplayList.c
+8003d1cc	FUN_8003d15c	OSPanic	CARDRdwr.c
+80011abc	DVDRead	OSPanic	dvdfs.c
+80052080	FUN_80050f28	OSPanic	hw_dspctrl.c
+80020fac	FUN_80020f58	OSPanic	GXFrameBuf.c
+80081328	FUN_800812a0	OSPanic	models_dolphin.c
+80027514	FUN_800273f0	OSPanic	GXTexture.c
+8009fdf0	FUN_8009fdb4	OSPanic	rcp_dolphin.c
+80018fec	FUN_80018e50	OSPanic	ai.c
+800129a0	(none)	OSPanic	
+80084c7c	FUN_80084c24	OSPanic	objects.c
+8002bbd0	FUN_8002bb94	OSPanic	GXPixel.c
+8003fc30	FUN_8003fb54	OSPanic	CARDCreate.c
+800107c0	FUN_80010750	OSPanic	mtxvec.c
+80022e30	FUN_80022de8	OSPanic	GXLight.c
+8002db7c	FUN_8002db3c	OSPanic	GXTransform.c
+801ec6cc	FUN_801ec694	OSPanic	backpack.c
+8000c0f8	(none)	OSPanic	
+80025da0	FUN_80025c78	OSPanic	GXTexture.c
+80022d88	FUN_80022d44	OSPanic	GXLight.c
+80028978	FUN_80028900	OSPanic	GXBump.c
+80047768	FUN_80047730	OSPanic	snd_synthapi.c
+8007dbd4	FUN_8007db84	OSPanic	models_dolphin.c
+8002b4f4	GXSetZMode	OSPanic	GXPixel.c
+80024b24	GXSetChanAmbColor	OSPanic	GXLight.c
+80010010	FUN_8000ffd0	OSPanic	vec.c
+80020cbc	FUN_80020c18	OSPanic	GXFrameBuf.c
+800269d4	FUN_80026640	OSPanic	GXTexture.c
+800231ec	FUN_80023184	OSPanic	GXLight.c
+8002f9a4	FUN_8002f95c	OSPanic	GXTransform.c
+8001dba8	FUN_8001db20	OSPanic	GXAttr.c
+800280d0	FUN_80027eec	OSPanic	GXBump.c
+80012b34	(none)	OSPanic	
+8001c690	FUN_8001c5b8	OSPanic	GXFifo.c
+800137ec	FUN_80013770	OSPanic	dvd.c
+8000ccbc	FUN_8000cc4c	OSPanic	OSSerial.c
+80024e78	GXSetChanMatColor	OSPanic	GXLight.c
+80020178	FUN_800200c8	OSPanic	GXMisc.c
+80099d30	FUN_80099cec	OSPanic	pi_dolphin.c
+8000a9f4	FUN_8000a958	OSPanic	OSExi.c
+800219b4	FUN_800217d8	OSPanic	GXFrameBuf.c
+8001e224	GXSetVtxAttrFmt	OSPanic	GXAttr.c
+8008189c	FUN_800816b4	OSPanic	SKNControl.c
+80013678	DVDReadAbsAsync	OSPanic	dvd.c
+801ec730	FUN_801ec6f8	OSPanic	backpack.c
+8001f6d4	FUN_8001f1ac	OSPanic	GXAttr.c
+8004fffc	FUN_8004ff80	OSPanic	s_data.c
+80007db4	FUN_80007d34	OSPanic	OSAlarm.c
+8003c1d0	FUN_8003c130	OSPanic	CARDBios.c
+80070a98	FUN_80070a40	OSPanic	sparsearray.c
+8001e79c	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8001fd1c	FUN_8001fcc0	OSPanic	GXMisc.c
+8002348c	FUN_80023448	OSPanic	GXLight.c
+80058d44	FUN_80058cf0	OSPanic	hw_aramdma.c
+8002a678	FUN_8002a5a8	OSPanic	GXTev.c
+8007557c	FUN_80075370	OSPanic	light.c
+80040f90	FUN_80040f48	OSPanic	CARDRename.c
+800761fc	FUN_800761b4	OSPanic	light.c
+80011a40	DVDRead	OSPanic	dvdfs.c
+8007df24	FUN_8007de70	OSPanic	models_dolphin.c
+800a3448	FUN_800a339c	OSPanic	lightmap.c
+80018e0c	FUN_80018dd8	OSPanic	ai.c
+8001fc90	FUN_8001fc38	OSPanic	GXMisc.c
+80026740	FUN_80026640	OSPanic	GXTexture.c
+8005ac40	FUN_8005abe8	OSPanic	AmcExi.c
+8007e4b4	FUN_8007e1b8	OSPanic	models_dolphin.c
+8002bb38	FUN_8002bab4	OSPanic	GXPixel.c
+800758b4	FUN_800757ec	OSPanic	light.c
+8000a480	FUN_8000a43c	OSPanic	OSExi.c
+8002aa58	FUN_8002a9e0	OSPanic	GXPixel.c
+8002fdd4	FUN_8002fd5c	OSPanic	GXTransform.c
+8007b52c	FUN_8007b3a4	OSPanic	mm_dolphin.c
+800194e0	FUN_80019490	OSPanic	ar.c
+80075a00	FUN_800759b8	OSPanic	light.c
+8001d9c0	FUN_8001d5cc	OSPanic	GXAttr.c
+80085e78	FUN_80085e2c	OSPanic	objects.c
+80025a48	FUN_80025968	OSPanic	GXTexture.c
+80026e24	FUN_80026b84	OSPanic	GXTexture.c
+800293d4	FUN_8002938c	OSPanic	GXTev.c
+80025270	GXSetNumChans	OSPanic	GXLight.c
+8002ae9c	FUN_8002ae5c	OSPanic	GXPixel.c
+800803e4	FUN_8008039c	OSPanic	models_dolphin.c
+80008200	FUN_8000817c	OSPanic	OSAlloc.c
+800118f8	FUN_80011818	OSPanic	dvdfs.c
+8004ffc4	FUN_8004ff80	OSPanic	s_data.c
+80051798	FUN_80050f28	OSPanic	hw_dspctrl.c
+80081928	FUN_800816b4	OSPanic	SKNControl.c
+8000b260	FUN_8000b218	OSPanic	OSExi.c
+800137d0	FUN_80013770	OSPanic	dvd.c
+8002fcd4	FUN_8002fc78	OSPanic	GXTransform.c
+80011a24	DVDRead	OSPanic	dvdfs.c
+80015fcc	FUN_80015f90	OSPanic	vi.c
+8002fe08	FUN_8002fd5c	OSPanic	GXTransform.c
+800122e0	(none)	OSPanic	
+800255e0	GXSetChanCtrl	OSPanic	GXLight.c
+800b0bb4	FUN_800b0aec	OSPanic	track_dolphin.c
+800212c0	FUN_8002126c	OSPanic	GXFrameBuf.c
+80028368	FUN_80028124	OSPanic	GXBump.c
+80026458	FUN_80026158	OSPanic	GXTexture.c
+80011e7c	FUN_80011e40	OSPanic	dvd.c
+8003ef08	FUN_8003eecc	OSPanic	CARDMount.c
+80021f1c	FUN_800217d8	OSPanic	GXFrameBuf.c
+80020014	FUN_8001ff90	OSPanic	GXMisc.c
+80028758	FUN_80028544	OSPanic	GXBump.c
+80046fbc	FUN_80046f7c	OSPanic	snd_synthapi.c
+8000860c	FUN_800085b4	OSPanic	OSAlloc.c
+8001f7c0	FUN_8001f1ac	OSPanic	GXAttr.c
+8001c5fc	FUN_8001c5b8	OSPanic	GXFifo.c
+8000a8cc	FUN_8000a884	OSPanic	OSExi.c
+8007e64c	FUN_8007e1b8	OSPanic	models_dolphin.c
+8003c174	FUN_8003c130	OSPanic	CARDBios.c
+80048af8	FUN_80048a5c	OSPanic	synthdata.c
+80028460	FUN_80028124	OSPanic	GXBump.c
+8001fed4	FUN_8001fd48	OSPanic	GXMisc.c
+8000df54	FUN_8000de64	OSPanic	OSThread.c
+80018b48	FUN_80018a9c	OSPanic	ai.c
+80098654	FUN_8009846c	OSPanic	objprint_dolphin.c
+800709dc	FUN_80070984	OSPanic	sparsearray.c
+8007e444	FUN_8007e1b8	OSPanic	models_dolphin.c
+8002a7a4	FUN_8002a5a8	OSPanic	GXTev.c
+80080430	FUN_8008039c	OSPanic	models_dolphin.c
+800b1c1c	FUN_800b1b70	OSPanic	track_dolphin.c
+80021b18	FUN_800217d8	OSPanic	GXFrameBuf.c
+80042530	FUN_800424f0	OSPanic	seq.c
+8002ad10	FUN_8002a9e0	OSPanic	GXPixel.c
+800a34f0	FUN_800a339c	OSPanic	lightmap.c
+80029a20	FUN_80029994	OSPanic	GXTev.c
+80029234	FUN_80029198	OSPanic	GXTev.c
+8000fc74	FUN_8000fbcc	OSPanic	mtx44.c
+80028274	FUN_80028124	OSPanic	GXBump.c
+80020128	FUN_800200c8	OSPanic	GXMisc.c
+80026da0	FUN_80026b84	OSPanic	GXTexture.c
+800b0fa8	FUN_800b0f70	OSPanic	track_dolphin.c
+80029428	FUN_8002938c	OSPanic	GXTev.c
+8003bbd8	(none)	OSPanic	
+800118d0	FUN_80011818	OSPanic	dvdfs.c
+800a23c4	FUN_800a2344	OSPanic	shader.c
+8000eb54	FUN_8000eab4	OSPanic	mtx.c
+80013904	FUN_80013890	OSPanic	dvd.c
+800232ec	FUN_800232a0	OSPanic	GXLight.c
+8001db78	FUN_8001db20	OSPanic	GXAttr.c
+800b0d28	FUN_800b0aec	OSPanic	track_dolphin.c
+80027808	FUN_800273f0	OSPanic	GXTexture.c
+800b10b0	FUN_800b1078	OSPanic	track_dolphin.c
+80092160	FUN_800920b4	OSPanic	objlib.c
+80027730	FUN_800273f0	OSPanic	GXTexture.c
+80040270	(none)	OSPanic	
+8003d8dc	FUN_8003d898	OSPanic	CARDBlock.c
+8000feb4	FUN_8000fe14	OSPanic	vec.c
+800402ec	(none)	OSPanic	
+8003bd20	FUN_8003bcdc	OSPanic	CARDBios.c
+801a8894	FUN_801a87b4	OSPanic	fox.c
+80025360	GXSetChanCtrl	OSPanic	GXLight.c
+8001ffd0	FUN_8001ff90	OSPanic	GXMisc.c
+800250f0	GXSetChanMatColor	OSPanic	GXLight.c
+80070934	FUN_800708a0	OSPanic	sparsearray.c
+8000deac	FUN_8000de64	OSPanic	OSThread.c
+80013754	DVDReadAbsAsync	OSPanic	dvd.c
+8001c728	FUN_8001c6e4	OSPanic	GXFifo.c
+8002c520	FUN_8002c494	OSPanic	GXDisplayList.c
+8001efc8	FUN_8001ef6c	OSPanic	GXAttr.c
+80020b18	FUN_80020ae0	OSPanic	GXGeometry.c
+80020fd8	FUN_80020f58	OSPanic	GXFrameBuf.c
+800216a0	FUN_800215f0	OSPanic	GXFrameBuf.c
+80011408	FUN_800113d0	OSPanic	dvdfs.c
+8001a2c0	FUN_8001a228	OSPanic	arq.c
+8002a7d0	FUN_8002a5a8	OSPanic	GXTev.c
+80026b5c	FUN_80026a9c	OSPanic	GXTexture.c
+800294ec	FUN_8002938c	OSPanic	GXTev.c
+8002192c	FUN_800217d8	OSPanic	GXFrameBuf.c
+80025e48	FUN_80025c78	OSPanic	GXTexture.c
+8001d8d4	FUN_8001d5cc	OSPanic	GXAttr.c
+8000fad8	FUN_8000fa60	OSPanic	mtx44.c
+8001187c	FUN_80011818	OSPanic	dvdfs.c
+80080380	FUN_80080270	OSPanic	models_dolphin.c
+80026c94	FUN_80026b84	OSPanic	GXTexture.c
+8003fa90	(none)	OSPanic	
+8002940c	FUN_8002938c	OSPanic	GXTev.c
+80021a20	FUN_800217d8	OSPanic	GXFrameBuf.c
+80080080	FUN_80080020	OSPanic	models_dolphin.c
+80020dfc	FUN_80020db8	OSPanic	GXFrameBuf.c
+80029c30	FUN_80029ba4	OSPanic	GXTev.c
+800b0b2c	FUN_800b0aec	OSPanic	track_dolphin.c
+80022378	FUN_8002213c	OSPanic	GXFrameBuf.c
+8000b478	FUN_8000b408	OSPanic	OSInterrupt.c
+80020730	FUN_800206a0	OSPanic	GXGeometry.c
+800406d0	(none)	OSPanic	
+80027240	FUN_800271c0	OSPanic	GXTexture.c
+80086334	FUN_800860e0	OSPanic	objanim.c
+8000fdb0	FUN_8000fd58	OSPanic	vec.c
+80028a68	FUN_80028900	OSPanic	GXBump.c
+8002b4a0	GXSetZMode	OSPanic	GXPixel.c
+8001f474	FUN_8001f1ac	OSPanic	GXAttr.c
+8007efcc	FUN_8007ef84	OSPanic	models_dolphin.c
+8000e2bc	FUN_8000e22c	OSPanic	OSThread.c
+800b0708	FUN_800b061c	OSPanic	track_dolphin.c
+8007daf4	FUN_8007dab0	OSPanic	models_dolphin.c
+800260d8	FUN_80025c78	OSPanic	GXTexture.c
+80020a9c	GXSetCullMode	OSPanic	GXGeometry.c
+8000afd4	FUN_8000af80	OSPanic	OSExi.c
+8001e5b4	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8001acc8	FUN_8001ac94	OSPanic	dsp_task.c
+8002affc	FUN_8002ae5c	OSPanic	GXPixel.c
+80028ee8	FUN_80028da4	OSPanic	GXBump.c
+8002848c	FUN_80028124	OSPanic	GXBump.c
+8001e928	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8002c4e0	FUN_8002c494	OSPanic	GXDisplayList.c
+8007f0b8	FUN_8007f084	OSPanic	models_dolphin.c
+80037a6c	FUN_80037a38	OSPanic	GXPerf.c
+8002fa38	FUN_8002f95c	OSPanic	GXTransform.c
+800a3db8	FUN_800a3d54	OSPanic	lightmap.c
+8002fe88	FUN_8002fd5c	OSPanic	GXTransform.c
+800b1400	FUN_800b1348	OSPanic	track_dolphin.c
+8003d1a8	FUN_8003d15c	OSPanic	CARDRdwr.c
+8003fef0	FUN_8003fe74	OSPanic	CARDRead.c
+8007e9b4	FUN_8007e974	OSPanic	models_dolphin.c
+80028244	FUN_80028124	OSPanic	GXBump.c
+800408a4	FUN_800407ec	OSPanic	CARDWrite.c
+800288dc	FUN_80028544	OSPanic	GXBump.c
+80025cf0	FUN_80025c78	OSPanic	GXTexture.c
+800b1134	FUN_800b10fc	OSPanic	track_dolphin.c
+80040b08	FUN_80040ac4	OSPanic	CARDDelete.c
+8001a62c	(none)	OSPanic	
+8007ff50	FUN_8007ff18	OSPanic	models_dolphin.c
+80009f60	FUN_80009f08	OSPanic	OSExi.c
+8003b7f4	FUN_8003b7b8	OSPanic	CARDBios.c
+8002010c	FUN_800200c8	OSPanic	GXMisc.c
+80040b2c	FUN_80040ac4	OSPanic	CARDDelete.c
+8003fba0	FUN_8003fb54	OSPanic	CARDCreate.c
+80010e64	FUN_80010e18	OSPanic	dvdlow.c
+80089048	FUN_8008900c	OSPanic	objhits.c
+8001f890	FUN_8001f83c	OSPanic	GXAttr.c
+8001eb0c	FUN_8001ea14	OSPanic	GXAttr.c
+80026ad8	FUN_80026a9c	OSPanic	GXTexture.c
+8004719c	FUN_80047164	OSPanic	snd_synthapi.c
+800138e8	FUN_80013890	OSPanic	dvd.c
+8003b5e4	FUN_8003b5a4	OSPanic	CARDBios.c
+8000ae14	(none)	OSPanic	
+80058b4c	FUN_80058b18	OSPanic	hw_aramdma.c
+8007677c	FUN_8007673c	OSPanic	light.c
+80028398	FUN_80028124	OSPanic	GXBump.c
+8002b09c	GXSetBlendMode	OSPanic	GXPixel.c
+8001c654	FUN_8001c5b8	OSPanic	GXFifo.c
+80029a84	FUN_80029994	OSPanic	GXTev.c
+8001fe10	FUN_8001fd48	OSPanic	GXMisc.c
+8000a630	FUN_8000a5e8	OSPanic	OSExi.c
+8000ee44	FUN_8000ee08	OSPanic	mtx.c
+8002895c	FUN_80028900	OSPanic	GXBump.c
+80029e0c	FUN_80029d7c	OSPanic	GXTev.c
+8003c424	FUN_8003c3ec	OSPanic	CARDBios.c
+80027f8c	FUN_80027eec	OSPanic	GXBump.c
+80037a14	FUN_800379dc	OSPanic	GXPerf.c
+8002a304	FUN_8002a2b8	OSPanic	GXTev.c
+80023054	FUN_80023008	OSPanic	GXLight.c
+8000e414	FUN_8000e3a0	OSPanic	OSThread.c
+80052018	FUN_80050f28	OSPanic	hw_dspctrl.c
+80040364	FUN_80040318	OSPanic	CARDRead.c
+800bdefc	FUN_800bde64	OSPanic	maketex.c
+8000dab8	FUN_8000d978	OSPanic	OSThread.c
+80095fa4	FUN_80095cd4	OSPanic	objprint.c
+80025254	GXSetNumChans	OSPanic	GXLight.c
+80011898	FUN_80011818	OSPanic	dvdfs.c
+8001da74	FUN_8001d5cc	OSPanic	GXAttr.c
+8000c8a0	FUN_8000c808	OSPanic	OSSerial.c
+800253f0	GXSetChanCtrl	OSPanic	GXLight.c
+80010b54	FUN_80010af8	OSPanic	dvdlow.c
+8017c19c	FUN_8017c104	OSPanic	listcode.c
+8003bfd8	FUN_8003bf98	OSPanic	CARDBios.c
+8001f7fc	FUN_8001f1ac	OSPanic	GXAttr.c
+800a1950	FUN_800a190c	OSPanic	shader.c
+8001c8ec	FUN_8001c82c	OSPanic	GXFifo.c
+8000dbe8	FUN_8000db94	OSPanic	OSThread.c
+8001c670	FUN_8001c5b8	OSPanic	GXFifo.c
+8003fec4	FUN_8003fe74	OSPanic	CARDRead.c
+800266a0	FUN_80026640	OSPanic	GXTexture.c
+8000a244	FUN_8000a190	OSPanic	OSExi.c
+8001d628	FUN_8001d5cc	OSPanic	GXAttr.c
+8002c608	FUN_8002c5cc	OSPanic	GXDisplayList.c
+80024e4c	GXSetChanMatColor	OSPanic	GXLight.c
+8003e480	FUN_8003e2f0	OSPanic	CARDCheck.c
+800266e0	FUN_80026640	OSPanic	GXTexture.c
+8002a994	FUN_8002a910	OSPanic	GXTev.c
+8000c8e8	FUN_8000c808	OSPanic	OSSerial.c
+80091f34	FUN_80091ec4	OSPanic	objlib.c
+80022d08	FUN_80022ca0	OSPanic	GXLight.c
+8003e2a4	FUN_8003e218	OSPanic	CARDCheck.c
+80010648	FUN_800105a4	OSPanic	mtxvec.c
+800180b4	FUN_80018080	OSPanic	Pad.c
+8007dcb4	FUN_8007db84	OSPanic	models_dolphin.c
+800127f4	(none)	OSPanic	
+800234bc	FUN_80023448	OSPanic	GXLight.c
+80026af8	FUN_80026a9c	OSPanic	GXTexture.c
+8002e73c	FUN_8002e6f8	OSPanic	GXTransform.c
+80046dd0	FUN_80046d9c	OSPanic	seq_api.c
+80022214	FUN_8002213c	OSPanic	GXFrameBuf.c
+80027790	FUN_800273f0	OSPanic	GXTexture.c
+8002c750	FUN_8002c6f0	OSPanic	GXDisplayList.c
+80097378	FUN_800972d8	OSPanic	objprint_dolphin.c
+80011554	FUN_80011524	OSPanic	dvdfs.c
+800249ac	GXSetChanAmbColor	OSPanic	GXLight.c
+800b13b8	FUN_800b1348	OSPanic	track_dolphin.c
+8001b384	FUN_8001b144	OSPanic	GXInit.c
+80070740	FUN_800706e8	OSPanic	sparsearray.c
+8000eaf4	FUN_8000eab4	OSPanic	mtx.c
+8007f028	FUN_8007eff0	OSPanic	models_dolphin.c
+80097ec0	FUN_80097cd4	OSPanic	objprint_dolphin.c
+8002a398	FUN_8002a2b8	OSPanic	GXTev.c
+8001f784	FUN_8001f1ac	OSPanic	GXAttr.c
+8002ba04	FUN_8002b9a8	OSPanic	GXPixel.c
+80026ce8	FUN_80026b84	OSPanic	GXTexture.c
+80025d38	FUN_80025c78	OSPanic	GXTexture.c
+80021138	FUN_80021024	OSPanic	GXFrameBuf.c
+80029e40	FUN_80029d7c	OSPanic	GXTev.c
+80025d14	FUN_80025c78	OSPanic	GXTexture.c
+800a26ac	FUN_800a2634	OSPanic	shader.c
+800218f4	FUN_800217d8	OSPanic	GXFrameBuf.c
+80025e1c	FUN_80025c78	OSPanic	GXTexture.c
+8002a47c	FUN_8002a41c	OSPanic	GXTev.c
+8002926c	FUN_80029198	OSPanic	GXTev.c
+80017564	(none)	OSPanic	
+8007ddc4	FUN_8007dd68	OSPanic	models_dolphin.c
+80029ee4	FUN_80029ea8	OSPanic	GXTev.c
+80052254	FUN_80050f28	OSPanic	hw_dspctrl.c
+80037fe4	(none)	OSPanic	
+8001e5e4	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+800256d0	GXSetChanCtrl	OSPanic	GXLight.c
+80021964	FUN_800217d8	OSPanic	GXFrameBuf.c
+80027454	FUN_800273f0	OSPanic	GXTexture.c
+80042880	FUN_80042830	OSPanic	seq.c
+80020c5c	FUN_80020c18	OSPanic	GXFrameBuf.c
+8002083c	FUN_800207ac	OSPanic	GXGeometry.c
+80028adc	FUN_80028900	OSPanic	GXBump.c
+8002a608	FUN_8002a5a8	OSPanic	GXTev.c
+8001c8d0	FUN_8001c82c	OSPanic	GXFifo.c
+800766b8	FUN_80076680	OSPanic	light.c
+80013158	(none)	OSPanic	
+8002fa04	FUN_8002f95c	OSPanic	GXTransform.c
+8000d64c	FUN_8000d5e8	OSPanic	OSThread.c
+8002a138	FUN_8002a0f0	OSPanic	GXTev.c
+800bee58	FUN_800be590	OSPanic	maketex.c
+80021cb0	FUN_800217d8	OSPanic	GXFrameBuf.c
+800c862c	FUN_800c85b8	OSPanic	timer.c
+80025f08	FUN_80025c78	OSPanic	GXTexture.c
+800beac8	FUN_800be590	OSPanic	maketex.c
+800859bc	FUN_80085968	OSPanic	objects.c
+800a153c	FUN_800a1504	OSPanic	shader.c
+8009268c	FUN_800925e4	OSPanic	objlib.c
+8003b400	(none)	OSPanic	
+8003eb8c	FUN_8003eb4c	OSPanic	CARDMount.c
+80026234	FUN_80026158	OSPanic	GXTexture.c
+80076588	FUN_80076548	OSPanic	light.c
+80095eb8	FUN_80095cd4	OSPanic	objprint.c
+80010b38	FUN_80010af8	OSPanic	dvdlow.c
+80011a78	DVDRead	OSPanic	dvdfs.c
+8007e308	FUN_8007e1b8	OSPanic	models_dolphin.c
+802bf484	FUN_802bf428	OSPanic	DRbarrelplace.c
+8009060c	FUN_800905c0	OSPanic	objhits.c
+800a2910	FUN_800a28c8	OSPanic	shader.c
+8003ecf4	FUN_8003ec88	OSPanic	CARDMount.c
+8001fc0c	FUN_8001fbd0	OSPanic	GXMisc.c
+80007d98	FUN_80007d34	OSPanic	OSAlarm.c
+8002fe4c	FUN_8002fd5c	OSPanic	GXTransform.c
+8007e34c	FUN_8007e1b8	OSPanic	models_dolphin.c
+801edd24	FUN_801edce4	OSPanic	staffaction.c
+80011714	FUN_8001166c	OSPanic	dvdfs.c
+8000fc3c	FUN_8000fbcc	OSPanic	mtx44.c
+8000d530	FUN_8000d4d8	OSPanic	OSThread.c
+8001d19c	FUN_8001d12c	OSPanic	GXFifo.c
+80028a30	FUN_80028900	OSPanic	GXBump.c
+80017304	(none)	OSPanic	
+80029c9c	FUN_80029ba4	OSPanic	GXTev.c
+8001daec	FUN_8001d5cc	OSPanic	GXAttr.c
+80008598	FUN_80008478	OSPanic	OSAlloc.c
+80021528	FUN_80021460	OSPanic	GXFrameBuf.c
+8002c504	FUN_8002c494	OSPanic	GXDisplayList.c
+80027fb4	FUN_80027eec	OSPanic	GXBump.c
+80018cfc	FUN_80018c40	OSPanic	ai.c
+8001f5c0	FUN_8001f1ac	OSPanic	GXAttr.c
+800286c8	FUN_80028544	OSPanic	GXBump.c
+8001f078	FUN_8001f038	OSPanic	GXAttr.c
+80075838	FUN_800757ec	OSPanic	light.c
+8001f9ec	FUN_8001f9b4	OSPanic	GXMisc.c
+80026b20	FUN_80026a9c	OSPanic	GXTexture.c
+80022108	FUN_800220b4	OSPanic	GXFrameBuf.c
+80021384	FUN_80021308	OSPanic	GXFrameBuf.c
+80080304	FUN_80080270	OSPanic	models_dolphin.c
+800279fc	FUN_800273f0	OSPanic	GXTexture.c
+800084f8	FUN_80008478	OSPanic	OSAlloc.c
+80020c84	FUN_80020c18	OSPanic	GXFrameBuf.c
+800922d0	FUN_80092258	OSPanic	objlib.c
+8001b3f4	FUN_8001b144	OSPanic	GXInit.c
+800277b4	FUN_800273f0	OSPanic	GXTexture.c
+8003b908	(none)	OSPanic	
+8000b3b8	FUN_8000b344	OSPanic	OSInterrupt.c
+80025680	GXSetChanCtrl	OSPanic	GXLight.c
+800a3514	FUN_800a339c	OSPanic	lightmap.c
+8000d78c	FUN_8000d750	OSPanic	OSThread.c
+8002acd8	FUN_8002a9e0	OSPanic	GXPixel.c
+80022c34	FUN_80022be4	OSPanic	GXLight.c
+80025170	GXSetChanMatColor	OSPanic	GXLight.c
+80075a24	FUN_800759b8	OSPanic	light.c
+8003b110	(none)	OSPanic	
+800179d8	FUN_800179a4	OSPanic	Pad.c
+8001f218	FUN_8001f1ac	OSPanic	GXAttr.c
+80038b6c	(none)	OSPanic	
+8002fb54	FUN_8002f95c	OSPanic	GXTransform.c
+80021728	FUN_800215f0	OSPanic	GXFrameBuf.c
+8007e028	FUN_8007dff4	OSPanic	models_dolphin.c
+8001d840	FUN_8001d5cc	OSPanic	GXAttr.c
+80013874	FUN_80013770	OSPanic	dvd.c
+80076880	FUN_8007683c	OSPanic	light.c
+80008454	FUN_800083cc	OSPanic	OSAlloc.c
+800815bc	FUN_8008157c	OSPanic	models_dolphin.c
+8003d37c	FUN_8003d30c	OSPanic	CARDRdwr.c
+80027c10	FUN_80027ae0	OSPanic	GXTexture.c
+800a346c	FUN_800a339c	OSPanic	lightmap.c
+802bf464	FUN_802bf428	OSPanic	DRbarrelplace.c
+80021674	FUN_800215f0	OSPanic	GXFrameBuf.c
+8004dc30	FUN_8004dbe8	OSPanic	synthmacros.c
+8002b178	GXSetBlendMode	OSPanic	GXPixel.c
+8002b0d0	GXSetBlendMode	OSPanic	GXPixel.c
+80170c04	(none)	OSPanic	
+8001395c	FUN_80013890	OSPanic	dvd.c
+80059438	FUN_800593c4	OSPanic	reverb_fx.c
+8001e170	GXClearVtxDesc	OSPanic	GXAttr.c
+80088f78	FUN_80088f3c	OSPanic	objhits.c
+800196ec	FUN_80019600	OSPanic	ar.c
+80025630	GXSetChanCtrl	OSPanic	GXLight.c
+8001d218	FUN_8001d1e0	OSPanic	GXFifo.c
+8001d714	FUN_8001d5cc	OSPanic	GXAttr.c
+8002b6e0	FUN_8002b678	OSPanic	GXPixel.c
+8003e45c	FUN_8003e2f0	OSPanic	CARDCheck.c
+8001fff0	FUN_8001ff90	OSPanic	GXMisc.c
+8002142c	FUN_80021308	OSPanic	GXFrameBuf.c
+8001f2f0	FUN_8001f1ac	OSPanic	GXAttr.c
+8007e4f8	FUN_8007e1b8	OSPanic	models_dolphin.c
+8009135c	FUN_80091314	OSPanic	objlib.c
+80010b70	FUN_80010af8	OSPanic	dvdlow.c
+80089390	FUN_80089354	OSPanic	objhits.c
+80020ec0	FUN_80020db8	OSPanic	GXFrameBuf.c
+8001e830	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8000a204	FUN_8000a190	OSPanic	OSExi.c
+80024a2c	GXSetChanAmbColor	OSPanic	GXLight.c
+8001a2dc	FUN_8001a228	OSPanic	arq.c
+8007f168	FUN_8007f134	OSPanic	models_dolphin.c
+8001c384	FUN_8001c334	OSPanic	GXFifo.c
+8007e9ec	FUN_8007e974	OSPanic	models_dolphin.c
+8002b5fc	FUN_8002b5a8	OSPanic	GXPixel.c
+800b0d6c	FUN_800b0aec	OSPanic	track_dolphin.c
+80007e08	FUN_80007d34	OSPanic	OSAlarm.c
+800a2930	FUN_800a28c8	OSPanic	shader.c
+80040838	FUN_800407ec	OSPanic	CARDWrite.c
+8000b0e8	FUN_8000af80	OSPanic	OSExi.c
+8000f950	FUN_8000f8c0	OSPanic	mtx.c
+80026cb8	FUN_80026b84	OSPanic	GXTexture.c
+80007c18	FUN_80007ba0	OSPanic	OSAlarm.c
+8007e710	FUN_8007e1b8	OSPanic	models_dolphin.c
+800473c0	FUN_8004736c	OSPanic	snd_synthapi.c
+80027770	FUN_800273f0	OSPanic	GXTexture.c
+8007e5c4	FUN_8007e1b8	OSPanic	models_dolphin.c
+800222c8	FUN_8002213c	OSPanic	GXFrameBuf.c
+8007e280	FUN_8007e1b8	OSPanic	models_dolphin.c
+80020d20	FUN_80020c18	OSPanic	GXFrameBuf.c
+8004d740	FUN_8004d6fc	OSPanic	synthmacros.c
+800817a0	FUN_800816b4	OSPanic	SKNControl.c
+8001f598	FUN_8001f1ac	OSPanic	GXAttr.c
+800100a0	FUN_8000ffd0	OSPanic	vec.c
+80010618	FUN_800105a4	OSPanic	mtxvec.c
+80029c04	FUN_80029ba4	OSPanic	GXTev.c
+80037ef0	(none)	OSPanic	
+80022e54	FUN_80022de8	OSPanic	GXLight.c
+80042480	FUN_80042434	OSPanic	seq.c
+80028690	FUN_80028544	OSPanic	GXBump.c
+8002fb04	FUN_8002f95c	OSPanic	GXTransform.c
+80025148	GXSetChanMatColor	OSPanic	GXLight.c
+800a2c30	FUN_800a2bf0	OSPanic	shader.c
+80006f0c	_osInit	OSPanic	OS.c
+80075b34	FUN_80075ac0	OSPanic	light.c
+8000a268	FUN_8000a190	OSPanic	OSExi.c
+80008404	FUN_800083cc	OSPanic	OSAlloc.c
+80009fc4	FUN_80009f08	OSPanic	OSExi.c
+800298fc	FUN_8002978c	OSPanic	GXTev.c
+800284bc	FUN_80028124	OSPanic	GXBump.c
+8001db58	FUN_8001db20	OSPanic	GXAttr.c
+8000b384	FUN_8000b344	OSPanic	OSInterrupt.c
+80021b84	FUN_800217d8	OSPanic	GXFrameBuf.c
+8001b314	FUN_8001b144	OSPanic	GXInit.c
+80029cc8	FUN_80029ba4	OSPanic	GXTev.c
+800206dc	FUN_800206a0	OSPanic	GXGeometry.c
+80025540	GXSetChanCtrl	OSPanic	GXLight.c
+800763ac	FUN_80076378	OSPanic	light.c
+80026fdc	FUN_80026e60	OSPanic	GXTexture.c
+800233e8	FUN_800233ac	OSPanic	GXLight.c
+800891cc	FUN_80089188	OSPanic	objhits.c
+80021d90	FUN_800217d8	OSPanic	GXFrameBuf.c
+8007fecc	FUN_8007fe94	OSPanic	models_dolphin.c
+800a67a0	FUN_800a6770	OSPanic	GXGeometry.h
+80046e9c	FUN_80046e5c	OSPanic	seq_api.c
+80011120	FUN_800110ec	OSPanic	dvdfs.c
+8002aef4	FUN_8002ae5c	OSPanic	GXPixel.c
+8002fda0	FUN_8002fd5c	OSPanic	GXTransform.c
+80029888	FUN_8002978c	OSPanic	GXTev.c
+800117f0	FUN_800117b8	OSPanic	dvdfs.c
+800205b4	FUN_80020558	OSPanic	GXGeometry.c
+800293f0	FUN_8002938c	OSPanic	GXTev.c
+80091dfc	FUN_80091db4	OSPanic	objlib.c
+8000fe84	FUN_8000fe14	OSPanic	vec.c
+80088f10	FUN_80088ed4	OSPanic	objhits.c
+800105e8	FUN_800105a4	OSPanic	mtxvec.c
+800118b4	FUN_80011818	OSPanic	dvdfs.c
+8001c764	FUN_8001c6e4	OSPanic	GXFifo.c
+800253c8	GXSetChanCtrl	OSPanic	GXLight.c
+800194fc	FUN_80019490	OSPanic	ar.c
+8002c62c	FUN_8002c5cc	OSPanic	GXDisplayList.c
+80029db8	FUN_80029d7c	OSPanic	GXTev.c
+8002511c	GXSetChanMatColor	OSPanic	GXLight.c
+8002677c	FUN_80026640	OSPanic	GXTexture.c
+80025f90	FUN_80025c78	OSPanic	GXTexture.c
+8002acb0	FUN_8002a9e0	OSPanic	GXPixel.c
+8003d4a4	(none)	OSPanic	
+80026df4	FUN_80026b84	OSPanic	GXTexture.c
+80097ee0	FUN_80097cd4	OSPanic	objprint_dolphin.c
+80026bd0	FUN_80026b84	OSPanic	GXTexture.c
+800299d0	FUN_80029994	OSPanic	GXTev.c
+8007671c	FUN_800766e8	OSPanic	light.c
+8007ea08	FUN_8007e974	OSPanic	models_dolphin.c
+80026eec	FUN_80026e60	OSPanic	GXTexture.c
+80075d30	FUN_80075c54	OSPanic	light.c
+8001d6d8	FUN_8001d5cc	OSPanic	GXAttr.c
+801b04c4	FUN_801b0420	OSPanic	tricky.c
+8003da5c	(none)	OSPanic	
+8005a930	FUN_8005a8e4	OSPanic	AmcExi.c
+80023260	FUN_8002321c	OSPanic	GXLight.c
+8001f4d8	FUN_8001f1ac	OSPanic	GXAttr.c
+800a21c4	FUN_800a2168	OSPanic	shader.c
+80027474	FUN_800273f0	OSPanic	GXTexture.c
+8001fe84	FUN_8001fd48	OSPanic	GXMisc.c
+8001d4d0	GXSetVtxDesc	OSPanic	GXAttr.c
+80076500	FUN_800764c0	OSPanic	light.c
+8001ea50	FUN_8001ea14	OSPanic	GXAttr.c
+8001d660	FUN_8001d5cc	OSPanic	GXAttr.c
+8002a34c	FUN_8002a2b8	OSPanic	GXTev.c
+8001e618	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80011a5c	DVDRead	OSPanic	dvdfs.c
+800249d4	GXSetChanAmbColor	OSPanic	GXLight.c
+8000f1b0	FUN_8000f16c	OSPanic	mtx.c
+8001d984	FUN_8001d5cc	OSPanic	GXAttr.c
+8002ac2c	FUN_8002a9e0	OSPanic	GXPixel.c
+8002028c	FUN_80020244	OSPanic	GXMisc.c
+80028218	FUN_80028124	OSPanic	GXBump.c
+8001e4bc	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80097f9c	FUN_80097cd4	OSPanic	objprint_dolphin.c
+8001d518	GXSetVtxDesc	OSPanic	GXAttr.c
+80058ca4	FUN_80058c24	OSPanic	hw_aramdma.c
+80083480	FUN_800832c8	OSPanic	objects.c
+80024ae8	GXSetChanAmbColor	OSPanic	GXLight.c
+800136b0	DVDReadAbsAsync	OSPanic	dvd.c
+800138cc	FUN_80013890	OSPanic	dvd.c
+800bbee8	FUN_800bbda0	OSPanic	intersect.c
+800890bc	FUN_80089074	OSPanic	objhits.c
+80028940	FUN_80028900	OSPanic	GXBump.c
+8002aa78	FUN_8002a9e0	OSPanic	GXPixel.c
+8007dd9c	FUN_8007dd68	OSPanic	models_dolphin.c
+800988a0	FUN_80098814	OSPanic	objprint_dolphin.c
+800218bc	FUN_800217d8	OSPanic	GXFrameBuf.c
+8002b1bc	GXSetBlendMode	OSPanic	GXPixel.c
+8001efe4	FUN_8001ef6c	OSPanic	GXAttr.c
+80027220	FUN_800271c0	OSPanic	GXTexture.c
+800076f8	FUN_800076b4	OSPanic	OSAddress.c
+80029680	FUN_80029584	OSPanic	GXTev.c
+8001f0a8	FUN_8001f038	OSPanic	GXAttr.c
+80009e7c	FUN_80009e34	OSPanic	OSExi.c
+80088fe0	FUN_80088fa4	OSPanic	objhits.c
+80007638	FUN_80007600	OSPanic	OSAddress.c
+80027200	FUN_800271c0	OSPanic	GXTexture.c
+8001e644	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8001e76c	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80011f1c	(none)	OSPanic	
+800269f8	FUN_80026640	OSPanic	GXTexture.c
+8003d998	FUN_8003d960	OSPanic	CARDDir.c
+80007bfc	FUN_80007ba0	OSPanic	OSAlarm.c
+800b1fc8	FUN_800b1f68	OSPanic	track_dolphin.c
+800b0de8	FUN_800b0aec	OSPanic	track_dolphin.c
+800800e8	FUN_800800a4	OSPanic	models_dolphin.c
+801edd84	FUN_801edd40	OSPanic	staffaction.c
+80021d20	FUN_800217d8	OSPanic	GXFrameBuf.c
+8000a228	FUN_8000a190	OSPanic	OSExi.c
+80021f7c	FUN_800217d8	OSPanic	GXFrameBuf.c
+80021584	FUN_80021460	OSPanic	GXFrameBuf.c
+80076358	FUN_80076324	OSPanic	light.c
+800380d4	(none)	OSPanic	
+8002754c	FUN_800273f0	OSPanic	GXTexture.c
+8002c900	FUN_8002c8c4	OSPanic	GXTransform.c
+8001ecd4	FUN_8001ec8c	OSPanic	GXAttr.c
+8001d750	FUN_8001d5cc	OSPanic	GXAttr.c
+8001f418	FUN_8001f1ac	OSPanic	GXAttr.c
+80029ab0	FUN_80029994	OSPanic	GXTev.c
+8001ba38	FUN_8001b144	OSPanic	GXInit.c
+80007114	FUN_800070cc	OSPanic	OS.c
+8002b92c	FUN_8002b8d8	OSPanic	GXPixel.c
+80011928	FUN_80011818	OSPanic	dvdfs.c
+80021650	FUN_800215f0	OSPanic	GXFrameBuf.c
+80020d64	FUN_80020c18	OSPanic	GXFrameBuf.c
+800279b4	FUN_800273f0	OSPanic	GXTexture.c
+8000dd74	(none)	OSPanic	
+8003e2c4	FUN_8003e218	OSPanic	CARDCheck.c
+8001c43c	FUN_8001c3ec	OSPanic	GXFifo.c
+8003f728	FUN_8003f6c0	OSPanic	CARDOpen.c
+80091c20	FUN_80091b6c	OSPanic	objlib.c
+80029dd4	FUN_80029d7c	OSPanic	GXTev.c
+800295d0	FUN_80029584	OSPanic	GXTev.c
+8005ab04	FUN_8005aa90	OSPanic	AmcExi.c
+80028c2c	FUN_80028bf4	OSPanic	GXBump.c
+8001fe50	FUN_8001fd48	OSPanic	GXMisc.c
+80027b84	FUN_80027ae0	OSPanic	GXTexture.c
+8002181c	FUN_800217d8	OSPanic	GXFrameBuf.c
+80021068	FUN_80021024	OSPanic	GXFrameBuf.c
+80027434	FUN_800273f0	OSPanic	GXTexture.c
+80076178	FUN_8007613c	OSPanic	light.c
+8002ac88	FUN_8002a9e0	OSPanic	GXPixel.c
+80027a20	FUN_800273f0	OSPanic	GXTexture.c
+8007e1f8	FUN_8007e1b8	OSPanic	models_dolphin.c
+80022790	FUN_80022754	OSPanic	GXFrameBuf.c
+80026028	FUN_80025c78	OSPanic	GXTexture.c
+8001e0ec	FUN_8001e094	OSPanic	GXAttr.c
+80047288	FUN_80047244	OSPanic	snd_synthapi.c
+80022b68	FUN_80022b34	OSPanic	GXFrameBuf.c
+80025384	GXSetChanCtrl	OSPanic	GXLight.c
+8001ad04	FUN_8001ac94	OSPanic	dsp_task.c
+8001e584	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+800c8564	FUN_800c8510	OSPanic	timer.c
+800073c0	FUN_80007384	OSPanic	OS.c
+800555d4	FUN_80055560	OSPanic	snd_init.c
+80024bec	GXSetChanAmbColor	OSPanic	GXLight.c
+800815f8	FUN_8008157c	OSPanic	models_dolphin.c
+8002a324	FUN_8002a2b8	OSPanic	GXTev.c
+80076478	FUN_80076438	OSPanic	light.c
+8000eb24	FUN_8000eab4	OSPanic	mtx.c
+8001f710	FUN_8001f1ac	OSPanic	GXAttr.c
+80014dbc	FUN_80014d88	OSPanic	vi.c
+800b13dc	FUN_800b1348	OSPanic	track_dolphin.c
+8002ac60	FUN_8002a9e0	OSPanic	GXPixel.c
+8003be50	FUN_8003bde0	OSPanic	CARDBios.c
+80047550	FUN_80047510	OSPanic	snd_synthapi.c
+800081bc	FUN_8000817c	OSPanic	OSAlloc.c
+80013704	DVDReadAbsAsync	OSPanic	dvd.c
+8001de9c	FUN_8001de60	OSPanic	GXAttr.c
+8003c460	FUN_8003c3ec	OSPanic	CARDBios.c
+8003dcbc	FUN_8003dc7c	OSPanic	CARDCheck.c
+80011424	FUN_800113d0	OSPanic	dvdfs.c
+8002a6a8	FUN_8002a5a8	OSPanic	GXTev.c
+80026384	FUN_80026158	OSPanic	GXTexture.c
+80098564	FUN_8009846c	OSPanic	objprint_dolphin.c
+8000ded0	FUN_8000de64	OSPanic	OSThread.c
+800146e0	(none)	OSPanic	
+800266c0	FUN_80026640	OSPanic	GXTexture.c
+8000b000	FUN_8000af80	OSPanic	OSExi.c
+80011f80	(none)	OSPanic	
+8001da38	FUN_8001d5cc	OSPanic	GXAttr.c
+800816f8	FUN_800816b4	OSPanic	SKNControl.c
+8000f920	FUN_8000f8c0	OSPanic	mtx.c
+80097fbc	FUN_80097cd4	OSPanic	objprint_dolphin.c
+800b1860	FUN_800b1824	OSPanic	track_dolphin.c
+800a36b4	FUN_800a3544	OSPanic	lightmap.c
+8009156c	FUN_800914fc	OSPanic	objlib.c
+800555a8	FUN_80055560	OSPanic	snd_init.c
+8007e9d0	FUN_8007e974	OSPanic	models_dolphin.c
+8002009c	FUN_80020040	OSPanic	GXMisc.c
+80092714	FUN_800926d8	OSPanic	objlib.c
+80021fd8	FUN_800217d8	OSPanic	GXFrameBuf.c
+80023078	FUN_80023008	OSPanic	GXLight.c
+8003ec5c	FUN_8003eb4c	OSPanic	CARDMount.c
+80046f04	FUN_80046ecc	OSPanic	seq_api.c
+8002c53c	FUN_8002c494	OSPanic	GXDisplayList.c
+8003f704	FUN_8003f6c0	OSPanic	CARDOpen.c
+8002b3c8	FUN_8002b390	OSPanic	GXPixel.c
+800219e8	FUN_800217d8	OSPanic	GXFrameBuf.c
+80025fcc	FUN_80025c78	OSPanic	GXTexture.c
+800235a8	FUN_80023448	OSPanic	GXLight.c
+80009f84	FUN_80009f08	OSPanic	OSExi.c
+802cd5d4	FUN_802cd56c	OSPanic	LGTcontrollight.c
+8000870c	FUN_800085b4	OSPanic	OSAlloc.c
+8000fc58	FUN_8000fbcc	OSPanic	mtx44.c
+800280a4	FUN_80027eec	OSPanic	GXBump.c
+80019b60	FUN_800199ec	OSPanic	ar.c
+800760b8	FUN_80076074	OSPanic	light.c
+8001e8c4	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+800b11c4	FUN_800b1180	OSPanic	track_dolphin.c
+800292c8	FUN_80029198	OSPanic	GXTev.c
+80020078	FUN_80020040	OSPanic	GXMisc.c
+8001d804	FUN_8001d5cc	OSPanic	GXAttr.c
+8001e894	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80088d1c	FUN_80088ce0	OSPanic	objhits.c
+8001032c	FUN_8001028c	OSPanic	vec.c
+80025df0	FUN_80025c78	OSPanic	GXTexture.c
+8007fe70	FUN_8007fe10	OSPanic	models_dolphin.c
+800762e8	FUN_800762ac	OSPanic	light.c
+8000f444	FUN_8000f400	OSPanic	mtx.c
+800101fc	FUN_800101c0	OSPanic	vec.c
+8001e98c	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8002951c	FUN_8002938c	OSPanic	GXTev.c
+80021fac	FUN_800217d8	OSPanic	GXFrameBuf.c
+8003c030	FUN_8003bf98	OSPanic	CARDBios.c
+800758fc	FUN_800757ec	OSPanic	light.c
+8008ed70	FUN_8008ece4	OSPanic	objhits.c
+800291fc	FUN_80029198	OSPanic	GXTev.c
+80229f7c	FUN_80229f1c	OSPanic	DIMexplosion.c
+8000a548	FUN_8000a4fc	OSPanic	OSExi.c
+80008874	FUN_8000883c	OSPanic	OSArena.c
+8000ab70	FUN_8000ab28	OSPanic	OSExi.c
+80027260	FUN_800271c0	OSPanic	GXTexture.c
+8002656c	FUN_80026534	OSPanic	GXTexture.c
+8009fcbc	FUN_8009fc44	OSPanic	rcp_dolphin.c
+8002ba38	FUN_8002b9a8	OSPanic	GXPixel.c
+8000f788	FUN_8000f730	OSPanic	mtx.c
+8001af44	FUN_8001af10	OSPanic	dsp_task.c
+80025590	GXSetChanCtrl	OSPanic	GXLight.c
+80026dc4	FUN_80026b84	OSPanic	GXTexture.c
+80097904	FUN_800978c4	OSPanic	objprint_dolphin.c
+800be0dc	FUN_800bde64	OSPanic	maketex.c
+80028b18	FUN_80028900	OSPanic	GXBump.c
+8007fef4	FUN_8007fe94	OSPanic	models_dolphin.c
+8002575c	GXSetChanCtrl	OSPanic	GXLight.c
+80010494	FUN_80010458	OSPanic	mtxvec.c
+8000be2c	FUN_8000bdc4	OSPanic	OSMutex.c
+8001f74c	FUN_8001f1ac	OSPanic	GXAttr.c
+80015b7c	FUN_80015aac	OSPanic	vi.c
+80007c68	FUN_80007ba0	OSPanic	OSAlarm.c
+800a17f8	FUN_800a17c4	OSPanic	shader.c
+80024bc0	GXSetChanAmbColor	OSPanic	GXLight.c
+80022320	FUN_8002213c	OSPanic	GXFrameBuf.c
+8000c87c	FUN_8000c808	OSPanic	OSSerial.c
+80173024	(none)	OSPanic	
+80075860	FUN_800757ec	OSPanic	light.c
+80022974	FUN_80022754	OSPanic	GXFrameBuf.c
+8003f84c	FUN_8003f808	OSPanic	CARDOpen.c
+8002fba0	FUN_8002f95c	OSPanic	GXTransform.c
+80015c08	FUN_80015aac	OSPanic	vi.c
+8000a3a0	FUN_8000a354	OSPanic	OSExi.c
+8002a1ac	FUN_8002a0f0	OSPanic	GXTev.c
+800765fc	FUN_800765c0	OSPanic	light.c
+8001fc70	FUN_8001fc38	OSPanic	GXMisc.c
+8000d510	FUN_8000d4d8	OSPanic	OSThread.c
+8007e2c4	FUN_8007e1b8	OSPanic	models_dolphin.c
+8007e47c	FUN_8007e1b8	OSPanic	models_dolphin.c
+80020594	FUN_80020558	OSPanic	GXGeometry.c
+8000f5e0	FUN_8000f5a0	OSPanic	mtx.c
+80029824	FUN_8002978c	OSPanic	GXTev.c
+8000f478	FUN_8000f400	OSPanic	mtx.c
+80091ad0	FUN_80091a84	OSPanic	objlib.c
+80007cc8	FUN_80007c88	OSPanic	OSAlarm.c
+8002b2f8	FUN_8002b2c0	OSPanic	GXPixel.c
+80011aec	DVDRead	OSPanic	dvdfs.c
+80027c58	FUN_80027ae0	OSPanic	GXTexture.c
+8000dcd4	FUN_8000db94	OSPanic	OSThread.c
+800261b8	FUN_80026158	OSPanic	GXTexture.c
+8001fa40	FUN_8001f9b4	OSPanic	GXMisc.c
+8001e3bc	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80088e0c	FUN_80088dd0	OSPanic	objhits.c
+8000b170	FUN_8000b128	OSPanic	OSExi.c
+800081d8	FUN_8000817c	OSPanic	OSAlloc.c
+80020e5c	FUN_80020db8	OSPanic	GXFrameBuf.c
+8002a180	FUN_8002a0f0	OSPanic	GXTev.c
+8002a370	FUN_8002a2b8	OSPanic	GXTev.c
+8000ff80	FUN_8000ff0c	OSPanic	vec.c
+800297f4	FUN_8002978c	OSPanic	GXTev.c
+80021850	FUN_800217d8	OSPanic	GXFrameBuf.c
+802bf4a0	FUN_802bf428	OSPanic	DRbarrelplace.c
+800084d0	FUN_80008478	OSPanic	OSAlloc.c
+8001d69c	FUN_8001d5cc	OSPanic	GXAttr.c
+800128cc	(none)	OSPanic	
+80020a54	GXSetCullMode	OSPanic	GXGeometry.c
+8000f7fc	FUN_8000f730	OSPanic	mtx.c
+8001f520	FUN_8001f1ac	OSPanic	GXAttr.c
+8003e8b8	FUN_8003e87c	OSPanic	CARDMount.c
+800708d8	FUN_800708a0	OSPanic	sparsearray.c
+8000d8e0	FUN_8000d750	OSPanic	OSThread.c
+800b0ce4	FUN_800b0aec	OSPanic	track_dolphin.c
+800294bc	FUN_8002938c	OSPanic	GXTev.c
+8002bb10	FUN_8002bab4	OSPanic	GXPixel.c
+8000a1e8	FUN_8000a190	OSPanic	OSExi.c
+800403a4	FUN_80040318	OSPanic	CARDRead.c
+8000b050	FUN_8000af80	OSPanic	OSExi.c
+8001e47c	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+800a13c0	FUN_800a138c	OSPanic	shader.c
+8000fc20	FUN_8000fbcc	OSPanic	mtx44.c
+800b1bd4	FUN_800b1b70	OSPanic	track_dolphin.c
+8001f364	FUN_8001f1ac	OSPanic	GXAttr.c
+800292f8	FUN_80029198	OSPanic	GXTev.c
+8005ac1c	FUN_8005abe8	OSPanic	AmcExi.c
+8004762c	FUN_800475f4	OSPanic	snd_synthapi.c
+8002a4e4	FUN_8002a41c	OSPanic	GXTev.c
+80042818	FUN_8004269c	OSPanic	seq.c
+8007dc18	FUN_8007db84	OSPanic	models_dolphin.c
+8002162c	FUN_800215f0	OSPanic	GXFrameBuf.c
+80013d8c	FUN_80013b98	OSPanic	dvd.c
+80091408	FUN_800913c0	OSPanic	objlib.c
+8000e0e8	FUN_8000e07c	OSPanic	OSThread.c
+80081758	FUN_800816b4	OSPanic	SKNControl.c
+8003efb4	FUN_8003ef78	OSPanic	CARDMount.c
+8001253c	(none)	OSPanic	
+80009fa8	FUN_80009f08	OSPanic	OSExi.c
+80052148	FUN_80050f28	OSPanic	hw_dspctrl.c
+8001287c	(none)	OSPanic	
+80076254	FUN_800761b4	OSPanic	light.c
+80010c24	FUN_80010bec	OSPanic	dvdlow.c
+8000cb98	FUN_8000cb64	OSPanic	OSSerial.c
+800136e8	DVDReadAbsAsync	OSPanic	dvd.c
+800bb3f4	FUN_800bb288	OSPanic	intersect.c
+8004ed20	FUN_8004ece4	OSPanic	synthvoice.c
+80027f68	FUN_80027eec	OSPanic	GXBump.c
+802aa714	FUN_802aa6b4	OSPanic	CRsnowclaw.c
+80076d18	FUN_80076cdc	OSPanic	light.c
+800a3228	FUN_800a31f0	OSPanic	shader.c
+8004db98	FUN_8004db54	OSPanic	synthmacros.c
+800135d4	_dvdReadFn_80013530	OSPanic	dvd.c
+800a1e68	FUN_800a1e28	OSPanic	shader.c
+800107f0	FUN_80010750	OSPanic	mtxvec.c
+80047328	FUN_800472f0	OSPanic	snd_synthapi.c
+80083c68	FUN_80083c34	OSPanic	objects.c
+8001d94c	FUN_8001d5cc	OSPanic	GXAttr.c
+80080200	FUN_80080168	OSPanic	models_dolphin.c
+802cc404	(none)	OSPanic	
+80021d58	FUN_800217d8	OSPanic	GXFrameBuf.c
+8002b52c	GXSetZMode	OSPanic	GXPixel.c
+8000ff4c	FUN_8000ff0c	OSPanic	vec.c
+8001c748	FUN_8001c6e4	OSPanic	GXFifo.c
+8001f3c4	FUN_8001f1ac	OSPanic	GXAttr.c
+8001323c	(none)	OSPanic	
+8002ccf8	GXLoadPosMtxImm	OSPanic	GXTransform.c
+8001dc34	FUN_8001db20	OSPanic	GXAttr.c
+80008948	FUN_800088c4	OSPanic	OSAudioSystem.c
+800408cc	FUN_800407ec	OSPanic	CARDWrite.c
+8000dd94	(none)	OSPanic	
+8003d680	FUN_8003d620	OSPanic	CARDBlock.c
+800c8540	FUN_800c8510	OSPanic	timer.c
+8000a9d8	FUN_8000a958	OSPanic	OSExi.c
+80021ef0	FUN_800217d8	OSPanic	GXFrameBuf.c
+80008898	FUN_8000883c	OSPanic	OSArena.c
+80029460	FUN_8002938c	OSPanic	GXTev.c
+80026c14	FUN_80026b84	OSPanic	GXTexture.c
+80029650	FUN_80029584	OSPanic	GXTev.c
+8002e6b0	GXSetCurrentMtx	OSPanic	GXTransform.c
+8001f448	FUN_8001f1ac	OSPanic	GXAttr.c
+80008924	FUN_800088c4	OSPanic	OSAudioSystem.c
+8001e864	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8003c838	FUN_8003c7ec	OSPanic	CARDUnlock.c
+8003b34c	(none)	OSPanic	
+8001c780	FUN_8001c6e4	OSPanic	GXFifo.c
+800283c8	FUN_80028124	OSPanic	GXBump.c
+80029f00	FUN_80029ea8	OSPanic	GXTev.c
+80099410	FUN_800993e0	OSPanic	GXGeometry.h
+80025d58	FUN_80025c78	OSPanic	GXTexture.c
+80027090	FUN_80027040	OSPanic	GXTexture.c
+80092110	FUN_800920b4	OSPanic	objlib.c
+8001f964	FUN_8001f930	OSPanic	GXMisc.c
+8007fd70	FUN_8007fd3c	OSPanic	models_dolphin.c
+800bb230	FUN_800bacd8	OSPanic	intersect.c
+8000d55c	FUN_8000d4d8	OSPanic	OSThread.c
+800223cc	FUN_80022390	OSPanic	GXFrameBuf.c
+80017fe8	FUN_80017fb4	OSPanic	Pad.c
+80026f7c	FUN_80026e60	OSPanic	GXTexture.c
+8002802c	FUN_80027eec	OSPanic	GXBump.c
+80017374	(none)	OSPanic	
+800272b8	FUN_800271c0	OSPanic	GXTexture.c
+8001ff40	FUN_8001ff08	OSPanic	GXMisc.c
+800a1bf0	FUN_800a1b8c	OSPanic	shader.c
+80021ce8	FUN_800217d8	OSPanic	GXFrameBuf.c
+80029444	FUN_8002938c	OSPanic	GXTev.c
+80024a00	GXSetChanAmbColor	OSPanic	GXLight.c
+80076804	FUN_800767c4	OSPanic	light.c
+80026274	FUN_80026158	OSPanic	GXTexture.c
+800a1970	FUN_800a190c	OSPanic	shader.c
+8000a9ac	FUN_8000a958	OSPanic	OSExi.c
+800b1bb4	FUN_800b1b70	OSPanic	track_dolphin.c
+80075f2c	FUN_80075efc	OSPanic	light.c
+80076ab4	FUN_80076a74	OSPanic	light.c
+80075960	FUN_800757ec	OSPanic	light.c
+80021a58	FUN_800217d8	OSPanic	GXFrameBuf.c
+80024f9c	GXSetChanMatColor	OSPanic	GXLight.c
+802cb8cc	(none)	OSPanic	
+8002a014	FUN_80029fd4	OSPanic	GXTev.c
+80026c38	FUN_80026b84	OSPanic	GXTexture.c
+80096c58	FUN_80096b30	OSPanic	objprint_dolphin.c
+80026624	FUN_800265ec	OSPanic	GXTexture.c
+80010230	FUN_800101c0	OSPanic	vec.c
+80024ca4	GXSetChanAmbColor	OSPanic	GXLight.c
+8007db54	FUN_8007dab0	OSPanic	models_dolphin.c
+80028fec	FUN_80028fac	OSPanic	GXTev.c
+8000e2e0	FUN_8000e22c	OSPanic	OSThread.c
+8000f6a8	FUN_8000f668	OSPanic	mtx.c
+80070850	FUN_800707ac	OSPanic	sparsearray.c
+800262dc	FUN_80026158	OSPanic	GXTexture.c
+80024c18	GXSetChanAmbColor	OSPanic	GXLight.c
+80055894	FUN_80055854	OSPanic	snd_midictrl.c
+800c868c	FUN_800c865c	OSPanic	timer.c
+800291e0	FUN_80029198	OSPanic	GXTev.c
+8007f114	FUN_8007f0dc	OSPanic	models_dolphin.c
+8001cd98	FUN_8001cd48	OSPanic	GXFifo.c
+80047034	FUN_80046ff4	OSPanic	snd_synthapi.c
+80091544	FUN_800914fc	OSPanic	objlib.c
+800470a4	FUN_8004706c	OSPanic	snd_synthapi.c
+8000842c	FUN_800083cc	OSPanic	OSAlloc.c
+800211a8	FUN_80021024	OSPanic	GXFrameBuf.c
+8000fe54	FUN_8000fe14	OSPanic	vec.c
+8001e520	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+800b102c	FUN_800b0ff4	OSPanic	track_dolphin.c
+80046890	FUN_8004680c	OSPanic	synth.c
+80026004	FUN_80025c78	OSPanic	GXTexture.c
+800285cc	FUN_80028544	OSPanic	GXBump.c
+8001ecf0	FUN_8001ec8c	OSPanic	GXAttr.c
+8001d0d4	FUN_8001d08c	OSPanic	GXFifo.c
+8002b314	FUN_8002b2c0	OSPanic	GXPixel.c
+80076a0c	FUN_800769c8	OSPanic	light.c
+80021f4c	FUN_800217d8	OSPanic	GXFrameBuf.c
+80028854	FUN_80028544	OSPanic	GXBump.c
+8008177c	FUN_800816b4	OSPanic	SKNControl.c
+80025a80	FUN_80025968	OSPanic	GXTexture.c
+80021780	FUN_800215f0	OSPanic	GXFrameBuf.c
+80081718	FUN_800816b4	OSPanic	SKNControl.c
+80022290	FUN_8002213c	OSPanic	GXFrameBuf.c
+80024f60	GXSetChanMatColor	OSPanic	GXLight.c
+800a23a4	FUN_800a2344	OSPanic	shader.c
+8002ff38	FUN_8002fefc	OSPanic	GXTransform.c
+8001e284	GXSetVtxAttrFmt	OSPanic	GXAttr.c
+80024a68	GXSetChanAmbColor	OSPanic	GXLight.c
+8001e420	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8007db24	FUN_8007dab0	OSPanic	models_dolphin.c
+80076980	FUN_8007694c	OSPanic	light.c
+8002782c	FUN_800273f0	OSPanic	GXTexture.c
+8001c88c	FUN_8001c82c	OSPanic	GXFifo.c
+800279d8	FUN_800273f0	OSPanic	GXTexture.c
+8000c2c0	FUN_8000c270	OSPanic	OSRtc.c
+8007e53c	FUN_8007e1b8	OSPanic	models_dolphin.c
+80075dac	FUN_80075d68	OSPanic	light.c
+80091f0c	FUN_80091ec4	OSPanic	objlib.c
+800a488c	FUN_800a47fc	OSPanic	tex_dolphin.c
+800c86e0	FUN_800c86ac	OSPanic	timer.c
+80076220	FUN_800761b4	OSPanic	light.c
+8001f3f8	FUN_8001f1ac	OSPanic	GXAttr.c
+800297d8	FUN_8002978c	OSPanic	GXTev.c
+8002807c	FUN_80027eec	OSPanic	GXBump.c
+80025950	FUN_800258ac	OSPanic	GXTexture.c
+802cc210	FUN_802cc1e0	OSPanic	GXGeometry.h
+800104b0	FUN_80010458	OSPanic	mtxvec.c
+80089150	FUN_80089114	OSPanic	objhits.c
+80098060	FUN_80098024	OSPanic	objprint_dolphin.c
+800b1fa8	FUN_800b1f68	OSPanic	track_dolphin.c
+8000ca60	FUN_8000ca20	OSPanic	OSSerial.c
+8002afd0	FUN_8002ae5c	OSPanic	GXPixel.c
+8000fd94	FUN_8000fd58	OSPanic	vec.c
+801ec314	(none)	OSPanic	
+8007ffd4	FUN_8007ff9c	OSPanic	models_dolphin.c
+8001fb84	FUN_8001fb50	OSPanic	GXMisc.c
+80095114	FUN_80095044	OSPanic	objprint.c
+800116d8	FUN_8001166c	OSPanic	dvdfs.c
+80084c5c	FUN_80084c24	OSPanic	objects.c
+8003f980	FUN_8003f910	OSPanic	CARDOpen.c
+8003ff44	FUN_8003fe74	OSPanic	CARDRead.c
+80078690	FUN_800781d4	OSPanic	main.c
+8004ffe0	FUN_8004ff80	OSPanic	s_data.c
+800289f4	FUN_80028900	OSPanic	GXBump.c
+80016ef0	FUN_80016e8c	OSPanic	Pad.c
+8002833c	FUN_80028124	OSPanic	GXBump.c
+80026f10	FUN_80026e60	OSPanic	GXTexture.c
+80076ca0	FUN_80076c6c	OSPanic	light.c
+800298c0	FUN_8002978c	OSPanic	GXTev.c
+8000a7e4	FUN_8000a798	OSPanic	OSExi.c
+80017908	FUN_800178d4	OSPanic	Pad.c
+80029298	FUN_80029198	OSPanic	GXTev.c
+8002a3c0	FUN_8002a2b8	OSPanic	GXTev.c
+80024f34	GXSetChanMatColor	OSPanic	GXLight.c
+80015d8c	FUN_80015aac	OSPanic	vi.c
+80097320	FUN_800972d8	OSPanic	objprint_dolphin.c
+800216fc	FUN_800215f0	OSPanic	GXFrameBuf.c
+80007b48	FUN_800079b4	OSPanic	OSAlarm.c
+800a1590	FUN_800a1504	OSPanic	shader.c
+80075c1c	FUN_80075ac0	OSPanic	light.c
+8000bea0	FUN_8000be68	OSPanic	OSReset.c
+8002aba0	FUN_8002a9e0	OSPanic	GXPixel.c
+80011c2c	FUN_80011bc0	OSPanic	dvdfs.c
+80038028	(none)	OSPanic	
+8001c7d8	FUN_8001c6e4	OSPanic	GXFifo.c
+800dd3d4	FUN_800dd3a4	OSPanic	GXGeometry.h
+8001eaec	FUN_8001ea14	OSPanic	GXAttr.c
+80092134	FUN_800920b4	OSPanic	objlib.c
+80020e24	FUN_80020db8	OSPanic	GXFrameBuf.c
+80021098	FUN_80021024	OSPanic	GXFrameBuf.c
+8005a970	FUN_8005a8e4	OSPanic	AmcExi.c
+80029d00	FUN_80029ba4	OSPanic	GXTev.c
+8002948c	FUN_8002938c	OSPanic	GXTev.c
+8000ad4c	(none)	OSPanic	
+800267f4	FUN_80026640	OSPanic	GXTexture.c
+80029c68	FUN_80029ba4	OSPanic	GXTev.c
+800082a4	FUN_8000817c	OSPanic	OSAlloc.c
+800b0c30	FUN_800b0aec	OSPanic	track_dolphin.c
+800979cc	FUN_800978c4	OSPanic	objprint_dolphin.c
+800bcde8	FUN_800bcd50	OSPanic	intersect.c
+800264f4	FUN_800264b8	OSPanic	GXTexture.c
+80075cbc	FUN_80075c54	OSPanic	light.c
+8000c858	FUN_8000c808	OSPanic	OSSerial.c
+800087fc	FUN_800087c4	OSPanic	OSArena.c
+80029858	FUN_8002978c	OSPanic	GXTev.c
+800980cc	FUN_80098024	OSPanic	objprint_dolphin.c
+80020f8c	FUN_80020f58	OSPanic	GXFrameBuf.c
+8000e270	FUN_8000e22c	OSPanic	OSThread.c
+8005a954	FUN_8005a8e4	OSPanic	AmcExi.c
+8001e0cc	FUN_8001e094	OSPanic	GXAttr.c
+8002494c	GXSetChanAmbColor	OSPanic	GXLight.c
+800bb204	FUN_800bacd8	OSPanic	intersect.c
+80011d08	(none)	OSPanic	
+80021c2c	FUN_800217d8	OSPanic	GXFrameBuf.c
+8002699c	FUN_80026640	OSPanic	GXTexture.c
+80021bf4	FUN_800217d8	OSPanic	GXFrameBuf.c
+80022304	FUN_8002213c	OSPanic	GXFrameBuf.c
+800b0da4	FUN_800b0aec	OSPanic	track_dolphin.c
+80027328	FUN_800272f4	OSPanic	GXTexture.c
+800136cc	DVDReadAbsAsync	OSPanic	dvd.c
+8001cf04	FUN_8001ceac	OSPanic	GXFifo.c
+80013694	DVDReadAbsAsync	OSPanic	dvd.c
+80025714	GXSetChanCtrl	OSPanic	GXLight.c
+80092670	FUN_800925e4	OSPanic	objlib.c
+800250c4	GXSetChanMatColor	OSPanic	GXLight.c
+80091598	FUN_800914fc	OSPanic	objlib.c
+80023310	FUN_800232a0	OSPanic	GXLight.c
+80170be0	(none)	OSPanic	
+8000a420	FUN_8000a354	OSPanic	OSExi.c
+800a33dc	FUN_800a339c	OSPanic	lightmap.c
+8003ba4c	FUN_8003ba10	OSPanic	CARDBios.c
+8002a948	FUN_8002a910	OSPanic	GXTev.c
+800a3344	FUN_800a32dc	OSPanic	lightmap.c
+80085b0c	FUN_80085ab8	OSPanic	objects.c
+8003be78	FUN_8003bde0	OSPanic	CARDBios.c
+800752dc	FUN_800751f8	OSPanic	light.c
+8000896c	FUN_800088c4	OSPanic	OSAudioSystem.c
+8002c76c	FUN_8002c6f0	OSPanic	GXDisplayList.c
+800075e4	OSPhysicalToCached	OSPanic	OSAddress.c
+800102fc	FUN_8001028c	OSPanic	vec.c
+80025038	GXSetChanMatColor	OSPanic	GXLight.c
+800a46dc	FUN_800a46ac	OSPanic	GXGeometry.h
+8002961c	FUN_80029584	OSPanic	GXTev.c
+80021c7c	FUN_800217d8	OSPanic	GXFrameBuf.c
+8001e800	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+800128a0	(none)	OSPanic	
+80028ce0	FUN_80028cac	OSPanic	GXBump.c
+80026f58	FUN_80026e60	OSPanic	GXTexture.c
+800085f0	FUN_800085b4	OSPanic	OSAlloc.c
+80024dc4	GXSetChanMatColor	OSPanic	GXLight.c
+8001e674	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8003ecd0	FUN_8003ec88	OSPanic	CARDMount.c
+8002af2c	FUN_8002ae5c	OSPanic	GXPixel.c
+8003d7e8	FUN_8003d7a4	OSPanic	CARDBlock.c
+8001f698	FUN_8001f1ac	OSPanic	GXAttr.c
+8000f980	FUN_8000f8c0	OSPanic	mtx.c
+800b0ca0	FUN_800b0aec	OSPanic	track_dolphin.c
+8003d420	FUN_8003d3e8	OSPanic	CARDBlock.c
+800214c4	FUN_80021460	OSPanic	GXFrameBuf.c
+80252ea0	FUN_80252c80	OSPanic	SHthorntail.c
+800768b4	FUN_8007683c	OSPanic	light.c
+80010cc4	FUN_80010c8c	OSPanic	dvdlow.c
+80022ce4	FUN_80022ca0	OSPanic	GXLight.c
+8002a6f4	FUN_8002a5a8	OSPanic	GXTev.c
+800753c0	FUN_80075370	OSPanic	light.c
+8001d568	GXSetVtxDesc	OSPanic	GXAttr.c
+8007e754	FUN_8007e1b8	OSPanic	models_dolphin.c
+80007698	OSCachedToPhysical	OSPanic	OSAddress.c
+80028c4c	FUN_80028bf4	OSPanic	GXBump.c
+80026ec8	FUN_80026e60	OSPanic	GXTexture.c
+80094ba8	FUN_80094b10	OSPanic	objprint.c
+80025450	GXSetChanCtrl	OSPanic	GXLight.c
+8002ad3c	FUN_8002a9e0	OSPanic	GXPixel.c
+8000c730	(none)	OSPanic	
+8001e958	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80010790	FUN_80010750	OSPanic	mtxvec.c
+800b1054	FUN_800b0ff4	OSPanic	track_dolphin.c
+8007e580	FUN_8007e1b8	OSPanic	models_dolphin.c
+800214a0	FUN_80021460	OSPanic	GXFrameBuf.c
+80096b78	FUN_80096b30	OSPanic	objprint_dolphin.c
+80024abc	GXSetChanAmbColor	OSPanic	GXLight.c
+8002c474	FUN_8002c444	OSPanic	GXGeometry.h
+800b0e48	FUN_800b0aec	OSPanic	track_dolphin.c
+800912ac	FUN_80091264	OSPanic	objlib.c
+80024e24	GXSetChanMatColor	OSPanic	GXLight.c
+800296f4	FUN_80029584	OSPanic	GXTev.c
+8003e33c	FUN_8003e2f0	OSPanic	CARDCheck.c
+8001c638	FUN_8001c5b8	OSPanic	GXFifo.c
+800265c8	FUN_80026590	OSPanic	GXTexture.c
+8000cb10	FUN_8000caa0	OSPanic	OSSerial.c
+80091bc4	FUN_80091b6c	OSPanic	objlib.c
+80022178	FUN_8002213c	OSPanic	GXFrameBuf.c
+80018b84	FUN_80018a9c	OSPanic	ai.c
+8001f65c	FUN_8001f1ac	OSPanic	GXAttr.c
+801ec414	(none)	OSPanic	
+8002b128	GXSetBlendMode	OSPanic	GXPixel.c
+8007e624	FUN_8007e1b8	OSPanic	models_dolphin.c
+8000e298	FUN_8000e22c	OSPanic	OSThread.c
+800a30d4	FUN_800a30a0	OSPanic	shader.c
+800b07f4	FUN_800b0768	OSPanic	track_dolphin.c
+8002992c	FUN_8002978c	OSPanic	GXTev.c
+80017f7c	FUN_80017ef0	OSPanic	Pad.c
+800801e0	FUN_80080168	OSPanic	models_dolphin.c
+80172ed8	(none)	OSPanic	
+8001fcf8	FUN_8001fcc0	OSPanic	GXMisc.c
+8003f954	FUN_8003f910	OSPanic	CARDOpen.c
+80075a4c	FUN_800759b8	OSPanic	light.c
+8001e73c	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8002a970	FUN_8002a910	OSPanic	GXTev.c
+80040380	FUN_80040318	OSPanic	CARDRead.c
+8000b444	FUN_8000b408	OSPanic	OSInterrupt.c
+8001c61c	FUN_8001c5b8	OSPanic	GXFifo.c
+8000cc80	FUN_8000cc4c	OSPanic	OSSerial.c
+800114c8	FUN_800113d0	OSPanic	dvdfs.c
+8002b748	FUN_8002b678	OSPanic	GXPixel.c
+80050198	FUN_80050144	OSPanic	s_data.c
+80022274	FUN_8002213c	OSPanic	GXFrameBuf.c
+800259b4	FUN_80025968	OSPanic	GXTexture.c
+8001d910	FUN_8001d5cc	OSPanic	GXAttr.c
+800263b4	FUN_80026158	OSPanic	GXTexture.c
+8001e390	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80050018	FUN_8004ff80	OSPanic	s_data.c
+8002b708	FUN_8002b678	OSPanic	GXPixel.c
+8004075c	(none)	OSPanic	
+80015b34	FUN_80015aac	OSPanic	vi.c
+80097340	FUN_800972d8	OSPanic	objprint_dolphin.c
+8007591c	FUN_800757ec	OSPanic	light.c
+8000caf4	FUN_8000caa0	OSPanic	OSSerial.c
+8000aca4	(none)	OSPanic	
+800920f4	FUN_800920b4	OSPanic	objlib.c
+8003b218	(none)	OSPanic	
+8001f1fc	FUN_8001f1ac	OSPanic	GXAttr.c
+8002b6b4	FUN_8002b678	OSPanic	GXPixel.c
+8005a640	FUN_8005a41c	OSPanic	chorus_fx.c
+8000c14c	(none)	OSPanic	
+802ca61c	FUN_802ca5dc	OSPanic	ARWarwingattachment.c
+8001f4a4	FUN_8001f1ac	OSPanic	GXAttr.c
+8001237c	(none)	OSPanic	
+800a360c	FUN_800a3544	OSPanic	lightmap.c
+80021a90	FUN_800217d8	OSPanic	GXFrameBuf.c
+80046d18	FUN_80046ce4	OSPanic	seq_api.c
+800b3460	FUN_800b3430	OSPanic	GXGeometry.h
+8001aaac	(none)	OSPanic	
+800750fc	FUN_800750ac	OSPanic	light.c
+80022358	FUN_8002213c	OSPanic	GXFrameBuf.c
+800254f0	GXSetChanCtrl	OSPanic	GXLight.c
+8000ee78	FUN_8000ee08	OSPanic	mtx.c
+80046e30	FUN_80046df4	OSPanic	seq_api.c
+800225e4	FUN_80022390	OSPanic	GXFrameBuf.c
+800229c8	FUN_80022754	OSPanic	GXFrameBuf.c
+8000f7c8	FUN_8000f730	OSPanic	mtx.c
+80024b60	GXSetChanAmbColor	OSPanic	GXLight.c
+800082c8	FUN_8000817c	OSPanic	OSAlloc.c
+8002bd98	FUN_8002bd4c	OSPanic	GXDraw.c
+8002b910	FUN_8002b8d8	OSPanic	GXPixel.c
+8002ac04	FUN_8002a9e0	OSPanic	GXPixel.c
+8002a45c	FUN_8002a41c	OSPanic	GXTev.c
+80024ea4	GXSetChanMatColor	OSPanic	GXLight.c
+8001d9fc	FUN_8001d5cc	OSPanic	GXAttr.c
+8003cf14	(none)	OSPanic	
+8002af68	FUN_8002ae5c	OSPanic	GXPixel.c
+800b10d8	FUN_800b1078	OSPanic	track_dolphin.c
+8002a250	FUN_8002a0f0	OSPanic	GXTev.c
+80009b48	FUN_80009b0c	OSPanic	OSError.c
+80008018	(none)	OSPanic	
+8001404c	FUN_80013ff8	OSPanic	dvdqueue.c
+80007ab0	FUN_800079b4	OSPanic	OSAlarm.c
+800277d4	FUN_800273f0	OSPanic	GXTexture.c
+80040248	(none)	OSPanic	
+80076b80	FUN_80076afc	OSPanic	light.c
+80028aa4	FUN_80028900	OSPanic	GXBump.c
+800a3e84	FUN_800a3e1c	OSPanic	lightmap.c
+80013094	(none)	OSPanic	
+80028054	FUN_80027eec	OSPanic	GXBump.c
+802ca59c	FUN_802ca550	OSPanic	ARWarwingattachment.c
+800922ac	FUN_80092258	OSPanic	objlib.c
+80028584	FUN_80028544	OSPanic	GXBump.c
+8007e23c	FUN_8007e1b8	OSPanic	models_dolphin.c
+802aa6f4	FUN_802aa6b4	OSPanic	CRsnowclaw.c
+80046d74	FUN_80046d3c	OSPanic	seq_api.c
+80020978	FUN_800208b8	OSPanic	GXGeometry.c
+800591c0	FUN_80059180	OSPanic	hw_dolphin.c
+80040854	FUN_800407ec	OSPanic	CARDWrite.c
+8002e788	FUN_8002e6f8	OSPanic	GXTransform.c
+80028d5c	FUN_80028d28	OSPanic	GXBump.c
+800c872c	FUN_800c86fc	OSPanic	timer.c
+80022dac	FUN_80022d44	OSPanic	GXLight.c
+80085a3c	FUN_800859e8	OSPanic	objects.c
+80097920	FUN_800978c4	OSPanic	objprint_dolphin.c
+80026ea8	FUN_80026e60	OSPanic	GXTexture.c
+800b074c	FUN_800b061c	OSPanic	track_dolphin.c
+800a1bd0	FUN_800a1b8c	OSPanic	shader.c
+80027580	FUN_800273f0	OSPanic	GXTexture.c
+800a324c	FUN_800a31f0	OSPanic	shader.c
+8001d78c	FUN_8001d5cc	OSPanic	GXAttr.c
+80024b94	GXSetChanAmbColor	OSPanic	GXLight.c
+8002fab8	FUN_8002f95c	OSPanic	GXTransform.c
+8000e0c4	FUN_8000e07c	OSPanic	OSThread.c
+8001e8f8	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80012720	FUN_8001262c	OSPanic	dvd.c
+8007ea40	FUN_8007e974	OSPanic	models_dolphin.c
+8001704c	(none)	OSPanic	
+8002a758	FUN_8002a5a8	OSPanic	GXTev.c
+80011a94	DVDRead	OSPanic	dvdfs.c
+8002b3e4	FUN_8002b390	OSPanic	GXPixel.c
+8001e4ec	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80021200	FUN_80021024	OSPanic	GXFrameBuf.c
+8002a528	FUN_8002a41c	OSPanic	GXTev.c
+802cd3dc	FUN_802cd3ac	OSPanic	GXGeometry.h
+8001291c	(none)	OSPanic	
+80029f6c	FUN_80029ea8	OSPanic	GXTev.c
+80040fc4	FUN_80040f48	OSPanic	CARDRename.c
+80029328	FUN_80029198	OSPanic	GXTev.c
+8000f3cc	FUN_8000f20c	OSPanic	mtx.c
+80021340	FUN_80021308	OSPanic	GXFrameBuf.c
+8001dbd4	FUN_8001db20	OSPanic	GXAttr.c
+80021bbc	FUN_800217d8	OSPanic	GXFrameBuf.c
+800202b4	FUN_80020244	OSPanic	GXMisc.c
+800207e8	FUN_800207ac	OSPanic	GXGeometry.c
+80024c78	GXSetChanAmbColor	OSPanic	GXLight.c
+80173044	(none)	OSPanic	
+80020930	FUN_800208b8	OSPanic	GXGeometry.c
+80024a90	GXSetChanAmbColor	OSPanic	GXLight.c
+8001d250	FUN_8001d1e0	OSPanic	GXFifo.c
+8001f874	FUN_8001f83c	OSPanic	GXAttr.c
+8000aa14	FUN_8000a958	OSPanic	OSExi.c
+80028c68	FUN_80028bf4	OSPanic	GXBump.c
+80028b84	FUN_80028900	OSPanic	GXBump.c
+80011860	FUN_80011818	OSPanic	dvdfs.c
+8001ca48	FUN_8001c90c	OSPanic	GXFifo.c
+800757a4	FUN_800756a0	OSPanic	light.c
+80075940	FUN_800757ec	OSPanic	light.c
+80012940	(none)	OSPanic	
+800282a4	FUN_80028124	OSPanic	GXBump.c
+8003ce60	(none)	OSPanic	
+8007ff78	FUN_8007ff18	OSPanic	models_dolphin.c
+800086d4	FUN_800085b4	OSPanic	OSAlloc.c
+80021b4c	FUN_800217d8	OSPanic	GXFrameBuf.c
+80170d34	(none)	OSPanic	
+80021ac8	FUN_800217d8	OSPanic	GXFrameBuf.c
+8002b22c	GXSetBlendMode	OSPanic	GXPixel.c
+8002a81c	FUN_8002a5a8	OSPanic	GXTev.c
+8007e080	FUN_8007dff4	OSPanic	models_dolphin.c
+8018f478	perfViewerCreateMeter_8018f42c	OSPanic	perform_viewer.c
+8001ea70	FUN_8001ea14	OSPanic	GXAttr.c
+80019518	FUN_80019490	OSPanic	ar.c
+80024fd8	GXSetChanMatColor	OSPanic	GXLight.c
+800201ec	FUN_800201a4	OSPanic	GXMisc.c
+8007e40c	FUN_8007e1b8	OSPanic	models_dolphin.c
+80025064	GXSetChanMatColor	OSPanic	GXLight.c
+8001b544	FUN_8001b144	OSPanic	GXInit.c
+80027b40	FUN_80027ae0	OSPanic	GXTexture.c
+8007e6bc	FUN_8007e1b8	OSPanic	models_dolphin.c
+8001a278	FUN_8001a228	OSPanic	arq.c
+80010b8c	FUN_80010af8	OSPanic	dvdlow.c
+8002b1f4	GXSetBlendMode	OSPanic	GXPixel.c
+80008680	FUN_800085b4	OSPanic	OSAlloc.c
+80028004	FUN_80027eec	OSPanic	GXBump.c
+800262b8	FUN_80026158	OSPanic	GXTexture.c
+800274dc	FUN_800273f0	OSPanic	GXTexture.c
+8000ddb8	(none)	OSPanic	
+80022008	FUN_800217d8	OSPanic	GXFrameBuf.c
+8002bbec	FUN_8002bb94	OSPanic	GXPixel.c
+80029be0	FUN_80029ba4	OSPanic	GXTev.c
+8001e708	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80021884	FUN_800217d8	OSPanic	GXFrameBuf.c
+8002baf0	FUN_8002bab4	OSPanic	GXPixel.c
+80027fdc	FUN_80027eec	OSPanic	GXBump.c
+80047210	FUN_800471d4	OSPanic	snd_synthapi.c
+8001c8a8	FUN_8001c82c	OSPanic	GXFifo.c
+8001e240	GXSetVtxAttrFmt	OSPanic	GXAttr.c
+800259d8	FUN_80025968	OSPanic	GXTexture.c
+80020f04	FUN_80020db8	OSPanic	GXFrameBuf.c
+80080058	FUN_80080020	OSPanic	models_dolphin.c
+800557e0	FUN_800557a0	OSPanic	snd_midictrl.c
+80008228	FUN_8000817c	OSPanic	OSAlloc.c
+80018a5c	FUN_80018994	OSPanic	ai.c
+8001e3ec	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80086368	FUN_800860e0	OSPanic	objanim.c
+80010040	FUN_8000ffd0	OSPanic	vec.c
+8001e6a8	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80024cd0	GXSetChanAmbColor	OSPanic	GXLight.c
+8003e4b8	FUN_8003e2f0	OSPanic	CARDCheck.c
+8000c324	FUN_8000c2e0	OSPanic	OSRtc.c
+80011c00	FUN_80011bc0	OSPanic	dvdfs.c
+8000ea34	FUN_8000e9e0	OSPanic	mtx.c
+8003b4a8	FUN_8003b468	OSPanic	CARDBios.c
+80040e0c	FUN_80040dc8	OSPanic	CARDStat.c
+800709c0	FUN_80070984	OSPanic	sparsearray.c
+8000faac	FUN_8000fa60	OSPanic	mtx44.c
+8002ab70	FUN_8002a9e0	OSPanic	GXPixel.c
+80013808	FUN_80013770	OSPanic	dvd.c
+8002b9e4	FUN_8002b9a8	OSPanic	GXPixel.c
+800b0bf8	FUN_800b0aec	OSPanic	track_dolphin.c
+80012ad8	(none)	OSPanic	
+8001f18c	FUN_8001f15c	OSPanic	GXAttr.c
+80015db8	FUN_80015aac	OSPanic	vi.c
+8001cc3c	FUN_8001cc00	OSPanic	GXFifo.c
+8001b46c	FUN_8001b144	OSPanic	GXInit.c
+8002b5e0	FUN_8002b5a8	OSPanic	GXPixel.c
+800b0b70	FUN_800b0aec	OSPanic	track_dolphin.c
+8002cc34	FUN_8002cc00	OSPanic	GXTransform.c
+800b0fd0	FUN_800b0f70	OSPanic	track_dolphin.c
+80021238	FUN_80021024	OSPanic	GXFrameBuf.c
+800407c0	(none)	OSPanic	
+800a485c	FUN_800a47fc	OSPanic	tex_dolphin.c
+80007d14	FUN_80007c88	OSPanic	OSAlarm.c
+8001d164	FUN_8001d12c	OSPanic	GXFifo.c
+80040000	FUN_8003fe74	OSPanic	CARDRead.c
+80092650	FUN_800925e4	OSPanic	objlib.c
+8001b5b4	FUN_8001b144	OSPanic	GXInit.c
+8002a880	FUN_8002a5a8	OSPanic	GXTev.c
+80010138	FUN_80010100	OSPanic	vec.c
+80024f08	GXSetChanMatColor	OSPanic	GXLight.c
+80008634	FUN_800085b4	OSPanic	OSAlloc.c
+8002a088	FUN_80029fd4	OSPanic	GXTev.c
+80052204	FUN_80050f28	OSPanic	hw_dspctrl.c
+8002c72c	FUN_8002c6f0	OSPanic	GXDisplayList.c
+8001c870	FUN_8001c82c	OSPanic	GXFifo.c
+801a8808	FUN_801a87b4	OSPanic	fox.c
+8002b7e0	FUN_8002b678	OSPanic	GXPixel.c
+80012bd4	(none)	OSPanic	
+80012108	(none)	OSPanic	
+80016214	FUN_800161cc	OSPanic	vi.c
+800c860c	FUN_800c85b8	OSPanic	timer.c
+8002878c	FUN_80028544	OSPanic	GXBump.c
+8002340c	FUN_800233ac	OSPanic	GXLight.c
+8002aa34	FUN_8002a9e0	OSPanic	GXPixel.c
+800275ac	FUN_800273f0	OSPanic	GXTexture.c
+8001e7d0	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+80076038	FUN_80075ffc	OSPanic	light.c
+8001e9ec	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8000ea14	FUN_8000e9e0	OSPanic	mtx.c
+80026514	FUN_800264b8	OSPanic	GXTexture.c
+8001e6d8	gxVtxAttrFn_8001e31c	OSPanic	GXAttr.c
+8001c7ac	FUN_8001c6e4	OSPanic	GXFifo.c
+800916e4	FUN_8009169c	OSPanic	objlib.c
+80010e80	FUN_80010e18	OSPanic	dvdlow.c
+800213bc	FUN_80021308	OSPanic	GXFrameBuf.c
+800769a4	FUN_8007694c	OSPanic	light.c
+80076634	FUN_800765c0	OSPanic	light.c
+800222ac	FUN_8002213c	OSPanic	GXFrameBuf.c
+80092044	FUN_80092010	OSPanic	objlib.c
+80012b60	(none)	OSPanic	
+8003c4c0	FUN_8003c484	OSPanic	CARDBios.c
+80012afc	(none)	OSPanic	
+80020150	FUN_800200c8	OSPanic	GXMisc.c
+8009228c	FUN_80092258	OSPanic	objlib.c
+80008820	FUN_800087c4	OSPanic	OSArena.c
+8003dbd4	FUN_8003db94	OSPanic	CARDDir.c
+8003b14c	(none)	OSPanic	
+8001d4f4	GXSetVtxDesc	OSPanic	GXAttr.c
+8000cdd8	(none)	OSPanic	
+80029f38	FUN_80029ea8	OSPanic	GXTev.c
+8001feac	FUN_8001fd48	OSPanic	GXMisc.c
+80058b7c	FUN_80058b18	OSPanic	hw_aramdma.c
+800261d8	FUN_80026158	OSPanic	GXTexture.c
+80026704	FUN_80026640	OSPanic	GXTexture.c
+800b0524	FUN_800b04dc	OSPanic	track_dolphin.c
+80008af8	FUN_800088c4	OSPanic	OSAudioSystem.c
+8002abdc	FUN_8002a9e0	OSPanic	GXPixel.c
+8003d4e8	(none)	OSPanic	
+80026d18	FUN_80026b84	OSPanic	GXTexture.c
+800299f4	FUN_80029994	OSPanic	GXTev.c
+800a26cc	FUN_800a2634	OSPanic	shader.c
+800295ec	FUN_80029584	OSPanic	GXTev.c
+8007fffc	FUN_8007ff9c	OSPanic	models_dolphin.c
+8002b844	FUN_8002b678	OSPanic	GXPixel.c
+80024cf8	GXSetChanAmbColor	OSPanic	GXLight.c
+8009fd3c	FUN_8009fcfc	OSPanic	rcp_dolphin.c
+800a1688	FUN_800a1650	OSPanic	shader.c
+8000d2ac	FUN_8000d228	OSPanic	OSThread.c
+80011c94	FUN_80011bc0	OSPanic	dvdfs.c
+8003fbc4	FUN_8003fb54	OSPanic	CARDCreate.c
+80027288	FUN_800271c0	OSPanic	GXTexture.c
+8002500c	GXSetChanMatColor	OSPanic	GXLight.c
+802cbdb4	FUN_802cbd5c	OSPanic	LGTpointlight.c
+80076ba0	FUN_80076afc	OSPanic	light.c
+8001e264	GXSetVtxAttrFmt	OSPanic	GXAttr.c
+80092630	FUN_800925e4	OSPanic	objlib.c
+8001dab0	FUN_8001d5cc	OSPanic	GXAttr.c
+8007dcfc	FUN_8007db84	OSPanic	models_dolphin.c
+8002fa6c	FUN_8002f95c	OSPanic	GXTransform.c
+8002c670	FUN_8002c5cc	OSPanic	GXDisplayList.c
+80076b54	FUN_80076afc	OSPanic	light.c
+800231c8	FUN_80023184	OSPanic	GXLight.c
+80025414	GXSetChanCtrl	OSPanic	GXLight.c
+80020b34	FUN_80020ae0	OSPanic	GXGeometry.c
+80020214	FUN_800201a4	OSPanic	GXMisc.c
+80097acc	FUN_800978c4	OSPanic	objprint_dolphin.c
+8000ce14	(none)	OSPanic	
+80024ee0	GXSetChanMatColor	OSPanic	GXLight.c
+80013514	(none)	OSPanic	
+800477c0	FUN_80047788	OSPanic	snd_synthapi.c
+80022590	FUN_80022390	OSPanic	GXFrameBuf.c
+80015af0	FUN_80015aac	OSPanic	vi.c
+800768e8	FUN_8007683c	OSPanic	light.c
+80088eac	FUN_80088e74	OSPanic	objhits.c
+8002ad68	FUN_8002a9e0	OSPanic	GXPixel.c
+802cc9f4	(none)	OSPanic	
+800213f4	FUN_80021308	OSPanic	GXFrameBuf.c
+800914a8	FUN_80091460	OSPanic	objlib.c
+80011ef8	(none)	OSPanic	
+800707e8	FUN_800707ac	OSPanic	sparsearray.c
+80015d48	FUN_80015aac	OSPanic	vi.c
+8000cd34	FUN_8000ccf4	OSPanic	OSSerial.c
+80070a7c	FUN_80070a40	OSPanic	sparsearray.c
+800289c0	FUN_80028900	OSPanic	GXBump.c
+80091638	FUN_800915f0	OSPanic	objlib.c
+800b079c	FUN_800b0768	OSPanic	track_dolphin.c
+80096ce0	FUN_80096c74	OSPanic	objprint_dolphin.c
+800a21e4	FUN_800a2168	OSPanic	shader.c
+80007ed8	FUN_80007e28	OSPanic	OSAlarm.c
+8003b050	FUN_8003b020	OSPanic	GXGeometry.h
+8002aec4	FUN_8002ae5c	OSPanic	GXPixel.c
+80029148	FUN_80028fac	OSPanic	GXTev.c
+8000cad8	FUN_8000caa0	OSPanic	OSSerial.c
+8003da18	(none)	OSPanic	
+80028eb8	FUN_80028da4	OSPanic	GXBump.c
+80085a20	FUN_800859e8	OSPanic	objects.c
+800137b4	FUN_80013770	OSPanic	dvd.c
+80047118	FUN_800470d4	OSPanic	snd_synthapi.c
+8001d7c8	FUN_8001d5cc	OSPanic	GXAttr.c
+80040ff0	FUN_80040f48	OSPanic	CARDRename.c
+80076418	FUN_800763e4	OSPanic	light.c
+8001c98c	FUN_8001c90c	OSPanic	GXFifo.c
+8002881c	FUN_80028544	OSPanic	GXBump.c
+8001a29c	FUN_8001a228	OSPanic	arq.c
+8001f398	FUN_8001f1ac	OSPanic	GXAttr.c
+80025f54	FUN_80025c78	OSPanic	GXTexture.c
+80040e30	FUN_80040dc8	OSPanic	CARDStat.c
+8007fdc4	FUN_8007fd8c	OSPanic	models_dolphin.c
+8003d65c	FUN_8003d620	OSPanic	CARDBlock.c
+800220ec	FUN_800220b4	OSPanic	GXFrameBuf.c
+800221ec	FUN_8002213c	OSPanic	GXFrameBuf.c
+80120ab8	(none)	OSReport	
+8005790c	FUN_80057868	OSReport	salInitDspCtrl() is done.
+80057938	FUN_80057868	OSReport	Starting AI DMA...
+8009dc0c	(none)	OSReport	
+8001c3cc	FUN_8001c334	OSReport	[GXOverflowHandler Sleeping]
+80050630	FUN_80050340	OSReport	Initializing studio %d...
+80087c90	FUN_80087bdc	OSReport	<objanim.c -- setBlendMove> WARNING tried to load anim -1 from cache modno %d
+80007030	_osInit	OSReport	EPPC Arthur
+80075084	FUN_80074ed8	OSReport	dvdLoadFile: '%s' (%d bytes @ 0x%x)
+80006f94	_osInit	OSReport	Kernel built : %s %s
+80037820	FUN_8003752c	OSReport	GX DisplayList: Bad Display List Command: %d
+80007090	_osInit	OSReport	Arena : 0x%x - 0x%x
+80007780	FUN_80007714	OSReport	OSCheckAlarmQueue: Failed AlarmQueue.head == NULL && AlarmQueue.tail == NULL || AlarmQueue.head != NULL && AlarmQueue.tail != NULL in %d
+802a8370	(none)	OSReport	
+8009da5c	(none)	OSReport	
+80173c4c	(none)	OSReport	
+80009a98	OSPanic	OSReport	 in "%s" on line %d.
+8009d980	(none)	OSReport	
+8001c41c	FUN_8001c3ec	OSReport	[GXUnderflowHandler]
+800674e8	FUN_80067484	OSReport	ERROR:FileName wouldn't fit in string
+8000904c	(none)	OSReport	
+800097a8	OSPrintContext	OSReport	fr%d = %d  fr%d = %d
+8000bc44	(none)	OSReport	
+80068864	FUN_80068810	OSReport	audioStopSfx failed: hdl=%d @ %x, file=%s, line=%d
+80009c6c	(none)	OSReport	
+80050828	FUN_80050340	OSReport	All studios are initialized.
+80019740	FUN_80019600	OSReport	ARInit(): USER Base address: 0x%08X
+8023e3a8	(none)	OSReport	
+80075000	FUN_80074ed8	OSReport	dvdLoadFile: DVDClose failed on '%s', error code %d
+8023e67c	(none)	OSReport	
+80018c28	FUN_80018bf4	OSReport	AISetStreamSampleRate(): OBSOLETED. Only 48KHz streaming from disk is supported!
+80050418	FUN_80050340	OSReport	Allocated ITD buffers for voice array.
+80050444	FUN_80050340	OSReport	Initializing voice %d...
+800502b0	FUN_80050144	OSReport	Group ID=%d is no songgroup.
+80011ddc	FUN_80011d40	OSReport	app booted via JTAG
+8012d9e8	(none)	OSReport	
+8009e2f0	(none)	OSReport	
+80057948	FUN_80057868	OSReport	hwInit() done.
+8022f710	(none)	OSReport	
+80011e28	FUN_80011d40	OSReport	bootrom
+800502d8	FUN_80050144	OSReport	Group ID=%d is not on soundstack.
+800c04d8	FUN_800c012c	OSReport	G_MV_MMTX
+8000e888	DBExceptionDestination	OSReport	DBExceptionDestination
+80046f40	FUN_80046ecc	OSReport	Volume group could not be received from sequencer.
+8000969c	OSPrintContext	OSReport	r%-2d  = 0x%08x (%14d)  r%-2d  = 0x%08x (%14d)
+80009c4c	(none)	OSReport	
+80050858	FUN_80050340	OSReport	Default studio is active.
+8009e020	(none)	OSReport	
+8000bd2c	(none)	OSReport	
+80014434	FUN_8001433c	OSReport	  Game Name ... %c%c%c%c
+800c78f0	FUN_800c789c	OSReport	game data padding: %d
+8009df44	(none)	OSReport	
+80173c18	(none)	OSReport	
+8009dbbc	(none)	OSReport	
+8000bbd0	(none)	OSReport	
+8009f338	FUN_8009f214	OSReport	rcpScreenWrite: Texture too big
+800898fc	FUN_80089890	OSReport	hitstate frame=%f
+8005795c	FUN_80057868	OSReport	Could not initialize DSP.
+80009c78	(none)	OSReport	
+80011de8	FUN_80011d40	OSReport	load fst
+800683b4	FUN_80068124	OSReport	WARNING:Song %d not found!
+80059034	FUN_80058f78	OSReport	MusyX AI interface initialized.
+8005796c	FUN_80057868	OSReport	Could not initialize DSP control logic.
+8009df20	(none)	OSReport	
+8009de70	(none)	OSReport	
+800097c0	OSPrintContext	OSReport	PSFs----------
+80055450	FUN_800553d4	OSReport	MusyX logic is initialized.
+8000bc2c	(none)	OSReport	
+80009004	(none)	OSReport	
+80050884	FUN_80050340	OSReport	HRTF history buffer is allocated.
+80068de0	FUN_80068d94	OSReport	WARNING:DVDCancelStreamAsync returned FALSE
+80014460	FUN_8001433c	OSReport	  Disk # ...... %d
+8017c038	FUN_8017bffc	OSReport	 Display 1 
+8009e1a4	(none)	OSReport	
+8006852c	FUN_800684b8	OSReport	WARNING:audioStopSong(%d):Song not playing!
+80200250	FUN_80200074	OSReport	!!!!!!!!!!! TRIGGER %d  ident %d
+8009db0c	(none)	OSReport	
+800862d8	FUN_800860e0	OSReport	<objanim.c -- setBlendMove> WARNING tried to load anim -1 from cache modno %d
+80014408	FUN_8001433c	OSReport	
+80014494	FUN_8001433c	OSReport	  Streaming ... %s
+800d1818	(none)	OSReport	
+8012db00	(none)	OSReport	
+8009da28	(none)	OSReport	
+8012daa0	(none)	OSReport	
+80067c00	FUN_80067a30	OSReport	audioInit: sndIsInstalled() returned FALSE!
+80018fb0	FUN_80018e50	OSReport	AIInit(): DSP is 32KHz
+8001c364	FUN_8001c334	OSReport	[GXOverflowHandler]
+80019a14	FUN_800199ec	OSReport	__ARChecksize(): Initializing for RevB+ SDRAM controller...
+800096dc	OSPrintContext	OSReport	GQRs----------
+80252750	(none)	OSReport	
+80011458	FUN_800113d0	OSReport	Warning: DVDOpen(): file '%s' was not found under %s.
+80122900	FUN_80122510	OSReport	Found new walk group patch from walkgroup %d
+801c9984	(none)	OSReport	
+8009dca4	(none)	OSReport	
+8005797c	FUN_80057868	OSReport	Could not initialize AI.
+8009e000	(none)	OSReport	
+8009dfec	(none)	OSReport	
+800675d8	FUN_800675a0	OSReport	WARNING:Can't pass VARIABLE_VOICE_ID to GetActiveFromVoiceID()
+80007058	_osInit	OSReport	Development HW%d
+800681d0	FUN_80068124	OSReport	ERROR:Invalid song number
+80009aa4	OSPanic	OSReport	Address:      Back Chain    LR Save
+801d4ab4	FUN_801d4a4c	OSReport	Magic collected
+800a3420	FUN_800a339c	OSReport	LIGHTMAP: Error->Unique light map requested but none free
+80252e8c	FUN_80252c80	OSReport	Thorntail %d, is on a network with a deadend
+8009e0f0	(none)	OSReport	
+80007878	FUN_80007714	OSReport	OSCheckAlarmQueue: Failed alarm->next != NULL || AlarmQueue.tail == alarm in %d
+8009e220	(none)	OSReport	
+8009e16c	(none)	OSReport	
+8009d95c	(none)	OSReport	
+80068724	FUN_800685e8	OSReport	sndFXStart FAILED
+8009da50	(none)	OSReport	
+80011e10	FUN_80011d40	OSReport	app booted from bootrom
+80050394	FUN_80050340	OSReport	Allocated dspCmdList.
+8009dc00	(none)	OSReport	
+80068d80	(none)	OSReport	
+8009dd94	(none)	OSReport	
+80007020	_osInit	OSReport	PC Emulator
+801ff130	FUN_801fe7a8	OSReport	^^^^^^^^^^^^^^^^FREE %d
+800c7920	FUN_800c789c	OSReport	game options padding: %d
+80067a74	FUN_80067a30	OSReport	WARNING:audioInit() called more than once
+800096bc	OSPrintContext	OSReport	LR   = 0x%08x                   CR   = 0x%08x
+80067584	FUN_80067530	OSReport	ERROR in GetFreeActiveSound(), ActiveSounds[] is full!
+80009d1c	(none)	OSReport	
+80055544	FUN_8005546c	OSReport	Leaving sndInit().
+8017c024	FUN_8017bffc	OSReport	 Creatiung Di Display List 
+80074f24	FUN_80074ed8	OSReport	dvdLoadFile: Couldn't open file '%s'
+80174d5c	FUN_80174c58	OSReport	PICMENU: tex overflow
+80058c04	FUN_80058b18	OSReport	MusyX ARAM handler initialized
+80009cd8	(none)	OSReport	
+8009dd70	(none)	OSReport	
+80019ee0	FUN_800199ec	OSReport	__ARChecksize(): ARAM Expansion present
+80007040	_osInit	OSReport	EPPC Minnow
+80068634	FUN_800685e8	OSReport	WARNING:Illegal SfxNumber (%d) from file=%s, line=%d
+80009714	OSPrintContext	OSReport	gqr%d = 0x%08x  gqr%d = 0x%08x
+800790a0	FUN_80079068	OSReport	mainChangeMap(%d,%d,%d)
+8001478c	(none)	OSReport	
+80038d10	(none)	OSReport	
+80078f70	FUN_80078f48	OSReport	$$$$$  CHANGEMAP 
+80008fb8	(none)	OSReport	
+800503b4	FUN_80050340	OSReport	Allocated surround buffer.
+80014470	FUN_8001433c	OSReport	  Game ver .... %d
+80120c6c	(none)	OSReport	
+800077bc	FUN_80007714	OSReport	OSCheckAlarmQueue: Failed AlarmQueue.head == NULL || AlarmQueue.head->prev == NULL in %d
+8009dbec	(none)	OSReport	
+800c7930	FUN_800c789c	OSReport	game checksum: %d
+8009de64	(none)	OSReport	
+8009dcdc	(none)	OSReport	
+80006f80	_osInit	OSReport	Dolphin OS $Revision: 36 $.
+8009de50	(none)	OSReport	
+8018fe44	FUN_8018fd84	OSReport	
+80008fe0	(none)	OSReport	
+80184230	FUN_80184124	OSReport	class=%d
+80050128	FUN_8004ff80	OSReport	Group ID=%d could not be pushed.
+800c043c	FUN_800c012c	OSReport	G_MW_MATRIX
+800c052c	FUN_800c012c	OSReport	G_MVO_LOOKATY
+8009de3c	(none)	OSReport	
+80008280	FUN_8000817c	OSReport	OSAllocFromHeap: Warning- failed to allocate %d bytes
+80173c80	(none)	OSReport	
+80006fc4	_osInit	OSReport	Retail %d
+80009034	(none)	OSReport	
+801fee0c	FUN_801fe7a8	OSReport	Trigger [%d], Environment Effect, Action Num [%d], Range [%d]
+80009d04	(none)	OSReport	
+8009e258	(none)	OSReport	
+8012d458	(none)	OSReport	
+80008ff8	(none)	OSReport	
+800c78e0	FUN_800c789c	OSReport	game data: %d
+80009cec	(none)	OSReport	
+800a34c8	FUN_800a339c	OSReport	LIGHTMAP: Error->Unique light map requested but none free
+80008fa4	(none)	OSReport	
+80009860	OSPrintContext	OSReport	0x%08x:   0x%08x    0x%08x
+80007010	_osInit	OSReport	Mac Emulator
+800377cc	FUN_8003752c	OSReport	GX DisplayList: Nested Display Lists
+8009dfd0	(none)	OSReport	
+8001b130	(none)	OSReport	
+80014450	FUN_8001433c	OSReport	  Company ..... %c%c
+800c7910	FUN_800c789c	OSReport	game options: %d
+8017c0ec	FUN_8017bffc	OSReport	 Finished Di Display List 
+800578d8	FUN_80057868	OSReport	salInitAi() is done.
+80068c94	FUN_80068c20	OSReport	ERROR: audio.c: audioPlayStream(%d), SequenceID not found!
+8000901c	(none)	OSReport	
+80009658	OSPrintContext	OSReport	------------------------- Context 0x%08x -------------------------
+80050618	FUN_80050340	OSReport	All voices initialized.
+8009dbd8	(none)	OSReport	
+80009c94	(none)	OSReport	
+8009da3c	(none)	OSReport	
+8000983c	OSPrintContext	OSReport	Address:      Back Chain    LR Save
+8000980c	OSPrintContext	OSReport	ps%d = 0x%x  ps%d = 0x%x
+801c9968	(none)	OSReport	
+80087584	FUN_80087404	OSReport	<objanim.c -- setBlendMove> WARNING tried to load anim -1 from cache modno %d
+8009e2b8	(none)	OSReport	
+8009e0b8	(none)	OSReport	
+800899e0	FUN_80089890	OSReport	objHitReact.c: sphere overflow! %d
+80007840	FUN_80007714	OSReport	OSCheckAlarmQueue: Failed alarm->next == NULL || alarm->next->prev == alarm in %d
+80036d3c	FUN_80036c28	OSReport	GX DisplayList: Invalid CP Stream Register Address 0x%x
+80038814	FUN_800387d4	OSReport	PERF : ending an event that never started!
+80074f6c	FUN_80074ed8	OSReport	dvdLoadFile: Out of RAM loading '%s'.  Filesize = %d
+800503f4	FUN_80050340	OSReport	Allocated HW voice array.
+8000bbfc	(none)	OSReport	
+800c0510	FUN_800c012c	OSReport	G_MVO_LOOKATX
+8009e014	(none)	OSReport	
+801827b0	FUN_801826ec	OSReport	classtype=%d
+80009064	(none)	OSReport	
+80019750	FUN_80019600	OSReport	ARInit(): Refresh          : 0x%04X
+8005549c	FUN_8005546c	OSReport	Entering sndInit()
+80009bd0	(none)	OSReport	
+8000975c	OSPrintContext	OSReport	FPRs----------
+800684a0	FUN_80068124	OSReport	ERROR:PlayingSongs[] is full!  MAX_PLAYING_SONGS = 8
+80009acc	OSPanic	OSReport	0x%08x:   0x%08x    0x%08x
+80038768	FUN_800384c8	OSReport	PERF : Unknown event type for ID %d - possibly out of memory
+80057928	FUN_80057868	OSReport	salInitDsp() is done.
+8009db30	(none)	OSReport	
+80230258	FUN_802301f0	OSReport	 STARTING LOADLEVEL 
+8003877c	FUN_800384c8	OSReport	PERF : event is still open for CPU!
+80007070	_osInit	OSReport	Memory %d MB
+800c04f4	FUN_800c012c	OSReport	G_MV_PMTX
+8009da0c	(none)	OSReport	
+8009de20	(none)	OSReport	
+80055408	FUN_800553d4	OSReport	MusyX software initialization...Build Date: %s %s
+80007800	FUN_80007714	OSReport	OSCheckAlarmQueue: Failed AlarmQueue.tail == NULL || AlarmQueue.tail->next == NULL in %d
+801243b4	(none)	OSReport	
+800144a0	FUN_8001433c	OSReport	
+80173be4	(none)	OSReport	
+8000bcec	(none)	OSReport	
+80074fc0	FUN_80074ed8	OSReport	dvdLoadFile: DVDRead failed on '%s', error code %d
+80058c88	FUN_80058c24	OSReport	Uploading %d bytes to ARAM from %08x to %08x...
+800087a8	FUN_800085b4	OSReport	OSCreateHeap: Warning - Failed to find free heap descriptor.
+80089924	FUN_80089890	OSReport	reset
+80050298	FUN_80050144	OSReport	Song ID=%d is not in group ID=%d.
+80057894	FUN_80057868	OSReport	Entering hwInit()
+80006fa0	_osInit	OSReport	Console Type : 
+800096d0	OSPrintContext	OSReport	SRR0 = 0x%08x                   SRR1 = 0x%08x
+801ff0f0	FUN_801fe7a8	OSReport	^^^^^^^^^^^^^^^^LOAD %d
+802a7fac	(none)	OSReport	
+80019730	FUN_80019600	OSReport	ARInit(): ARAM size        : %d bytes
+800c7900	FUN_800c789c	OSReport	game checksum: %d

@@ -1,0 +1,48 @@
+3F0  01 0 LedgeRelated
+     02 1 Shielding
+     04 2 FallingOrLanding
+     08 3 MaybeInAir
+     10 4 Rolling
+     20 5 Swimming
+     40 6 TurningAroundFast
+     80 7 Stopping
+3F1  01 0 OnGround
+     02 1
+     04 2
+     08 3 NotMoved
+     10 4 HoldingL
+     20 5 HoldLRelated
+     40 6
+     80 7
+3F2  01 0 QuickTurnFlag_01
+     02 1 FallDamage
+     04 2 QuickTurnFlag_04
+     08 3 MaybeTakingDamageOrTalking
+     10 4 StartingToMove
+     20 5 InCutscene
+     40 6 DoEyeAnims
+     80 7
+3F3  01 0
+     02 1 IsDead
+     04 2
+     08 3 IsDisguised
+     10 4
+     20 5 FallingScreaming
+     40 6
+     80 7
+3F4  01 0
+     02 1
+     04 2
+     08 3 StaffOnBack
+     10 4 Flailing
+     20 5 StaffInHand
+     40 6 HaveStaff
+     80 7 IsDisguised
+3F6  01 0
+     02 1
+     04 2
+     08 3
+     10 4
+     20 5 ShieldingInCombat
+     40 6
+     80 7

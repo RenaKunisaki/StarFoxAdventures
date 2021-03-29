@@ -1,0 +1,56 @@
+
+DECIMAL       HEXADECIMAL     DESCRIPTION
+--------------------------------------------------------------------------------
+8296198       0x7E9706        MySQL MISAM index file Version 1
+10362086      0x9E1CE6        MySQL ISAM index file Version 2
+15420019      0xEB4A73        MySQL MISAM index file Version 3
+16338291      0xF94D73        StuffIt Deluxe Segment (data): fTRR1
+27118449      0x19DCB71       rzip compressed data - version 8.105 (-56072650 bytes)
+31975599      0x1E7E8AF       Intel x86 or x64 microcode, sig 0x1e794291, pf_mask 0x300ff00, 2000-02-12, rev 0x6c4abe06, size 256
+31978251      0x1E7F30B       Intel x86 or x64 microcode, sig 0xeb1c42f9, pf_mask 0x207e087, 20C0-02-01, rev 0x62b5bd06, size 34074668
+32059259      0x1E92F7B       Intel x86 or x64 microcode, sig 0x2c3d43ea, pf_mask 0x703e005, 2000-06-03, rev 0x0006, size 17105062
+32101431      0x1E9D437       Intel x86 or x64 microcode, sig 0x000000ca, pf_mask 0x200, 2049-03-09, rev 0x1119bd06, size 11862591
+32111971      0x1E9FD63       Intel x86 or x64 microcode, sig 0x00000029, pf_mask 0x1072000, 2000-01-07, rev 0x0006, size 17240064
+32121371      0x1EA221B       Intel x86 or x64 microcode, sig 0x44154175, pf_mask 0xe06f060, 2060-03-06, rev 0x2373c06, size 467077
+32122547      0x1EA26B3       Intel x86 or x64 microcode, sig 0x33933f21, pf_mask 0x106e050, 2000-01-06, rev 0x803e06, size 33947648
+32127423      0x1EA39BF       Intel x86 or x64 microcode, sig 0xa63f4147, pf_mask 0x1000ff00, 20FA-05-09, rev 0x1cbb4006, size 512
+32151687      0x1EA9887       Intel x86 or x64 microcode, sig 0x7021c14b, pf_mask 0x20900d0, 20FA-01-07, rev 0xf23c306, size 34144287
+32191291      0x1EB333B       Intel x86 or x64 microcode, sig 0xf0a8c07e, pf_mask 0x302e0e6, 2000-03-01, rev 0x0006, size 467139
+32192567      0x1EB3837       Intel x86 or x64 microcode, sig 0x0708412a, pf_mask 0x201f000, 2080-02-01, rev 0x-74fb41fa, size 33685504
+32193031      0x1EB3A07       Intel x86 or x64 microcode, sig 0x2281413e, pf_mask 0x601f000, 2000-06-01, rev 0x0006, size 458754
+32400351      0x1EE63DF       Intel x86 or x64 microcode, sig 0x00000062, pf_mask 0x2072000, 2000-02-07, rev 0x0006, size 34017280
+32401287      0x1EE6787       Intel x86 or x64 microcode, sig 0x295e41a9, pf_mask 0x401f062, 2000-04-01, rev 0x0006, size 467372
+32413927      0x1EE98E7       Intel x86 or x64 microcode, sig 0xcb3142c8, pf_mask 0x7e036, 2080-02-02, rev 0x-3b1040fa, size 458882
+32415175      0x1EE9DC7       Intel x86 or x64 microcode, sig 0xfe83436d, pf_mask 0x20700cd, 2090-02-07, rev 0x-b0bcfa, size 34070553
+32434791      0x1EEEA67       Intel x86 or x64 microcode, sig 0xfe9f4277, pf_mask 0x3071043, 2089-01-07, rev 0x-160bdfa, size 17309696
+32490247      0x1EFC307       Intel x86 or x64 microcode, sig 0x0000003c, pf_mask 0x4021014, 20D1-01-01, rev 0x5be23e06, size 17244412
+32491347      0x1EFC753       Intel x86 or x64 microcode, sig 0xc527379c, pf_mask 0x107e1be, 2033-04-05, rev 0x33333f06, size 17293639
+32504183      0x1EFF977       Intel x86 or x64 microcode, sig 0x00000088, pf_mask 0x1072000, 2000-01-07, rev 0x0006, size 17244160
+32595727      0x1F15F0F       Intel x86 or x64 microcode, sig 0x00000057, pf_mask 0x207f020, 2000-01-07, rev 0x0006, size 17309696
+32675683      0x1F29763       Intel x86 or x64 microcode, sig 0x5eb6403a, pf_mask 0x101018a, 2023-01-01, rev 0x-34853ffa, size 33628286
+32680375      0x1F2A9B7       Intel x86 or x64 microcode, sig 0x8aa44146, pf_mask 0x10220c5, 20C0-02-01, rev 0x36394006, size 16916608
+32682087      0x1F2B067       Intel x86 or x64 microcode, sig 0xd2b941d4, pf_mask 0x201f06e, 2089-01-01, rev 0x767c106, size 33693824
+32682427      0x1F2B1BB       Intel x86 or x64 microcode, sig 0x50bfc3c7, pf_mask 0x7e092, 20AD-02-01, rev 0x5ccfc306, size 34074687
+32693863      0x1F2DE67       Intel x86 or x64 microcode, sig 0x00000088, pf_mask 0x1072000, 2000-01-07, rev 0x0006, size 17244160
+32710011      0x1F31D7B       Intel x86 or x64 microcode, sig 0xac51c061, pf_mask 0x1070023, 20DD-01-01, rev 0x-5a2a3efa, size 17301504
+32734967      0x1F37EF7       Intel x86 or x64 microcode, sig 0xa98d4117, pf_mask 0x1060000, 20FC-01-06, rev 0x-5672befa, size 458891
+32740988      0x1F3967C       Intel x86 or x64 microcode, sig 0x2f020502, pf_mask 0x18024e02, 1C04-17-10, rev 0x30020302, size 8394765
+32747875      0x1F3B163       Intel x86 or x64 microcode, sig 0x32464223, pf_mask 0x201e0b2, 2000-02-01, rev 0x5ca8be06, size 33681408
+32752679      0x1F3C427       Intel x86 or x64 microcode, sig 0x625b419e, pf_mask 0x7e000, 2000-01-01, rev 0x5895c006, size 459000
+32753211      0x1F3C63B       Intel x86 or x64 microcode, sig 0x09ce419e, pf_mask 0x72000, 2000-01-01, rev 0x0006, size 458752
+32784851      0x1F441D3       Intel x86 or x64 microcode, sig 0x5c4e4195, pf_mask 0x802f000, 2000-07-02, rev 0x1c2cc006, size 467081
+32843183      0x1F525AF       Intel x86 or x64 microcode, sig 0x00000051, pf_mask 0x1072000, 2040-01-06, rev 0x-30e841fa, size 17236026
+32891015      0x1F5E087       Intel x86 or x64 microcode, sig 0x00000051, pf_mask 0x1072000, 2040-01-06, rev 0x-30e841fa, size 17236026
+32916523      0x1F6442B       Intel x86 or x64 microcode, sig 0xd239429a, pf_mask 0x901f0e0, 20CB-03-01, rev 0x-19cebdfa, size 34070575
+32918047      0x1F64A1F       Intel x86 or x64 microcode, sig 0x61e341d1, pf_mask 0x10100a4, 2040-01-01, rev 0x4aaf4006, size 33620036
+32972271      0x1F71DEF       Intel x86 or x64 microcode, sig 0x00003f5b, pf_mask 0x107e0a8, 200A-01-05, rev 0x-285cc3fa, size 17293376
+32972539      0x1F71EFB       Intel x86 or x64 microcode, sig 0x99193f39, pf_mask 0x1064000, 200A-01-05, rev 0x-285cc3fa, size 33951904
+32973515      0x1F722CB       Intel x86 or x64 microcode, sig 0x33333f8f, pf_mask 0x2051066, 200A-01-05, rev 0x-285cc3fa, size 17244160
+32973995      0x1F724AB       Intel x86 or x64 microcode, sig 0x00803f31, pf_mask 0x205006c, 206F-01-05, rev 0x12833a06, size 33939498
+33104347      0x1F921DB       Intel x86 or x64 microcode, sig 0x17504115, pf_mask 0x102e000, 2000-01-01, rev 0x0006, size 16969920
+58658046      0x37F0CFE       YAFFS filesystem, little endian
+58658446      0x37F0E8E       YAFFS filesystem, little endian
+58659046      0x37F10E6       YAFFS filesystem, little endian
+58659450      0x37F127A       YAFFS filesystem, little endian
+58659850      0x37F140A       YAFFS filesystem, little endian
+

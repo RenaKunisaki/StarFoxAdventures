@@ -1,0 +1,50 @@
+alloc tag names:
+"0"
+"LISTS_COL"
+"SCREEN_COL"
+"CODE_COL"
+"DLL_COL"
+"TRACK_COL"
+"TEX_COL"
+"TRACKTEX_COL"
+"SPRITETEX_COL"
+"MODELS_COL"
+"ANIMS_COL"
+"AUDIO_COL"
+"SEQ_COL"
+"SFX_COL"
+"OBJECTS_COL"
+"CAM_COL"
+"VOX_COL"
+"ANIMSEQ_COL"
+"LFX_COL"
+"GFX_COL"
+"EXPGFX_COL"
+"MODGFX_COL"
+"PROJGFX_COL"
+"SKY_COL"
+"SHAD_COL"
+"GAME_COL"
+"TEST_COL"
+"BLACK"
+"RED"
+"GREEN"
+"BLUE"
+"CYAN"
+"MAGENTA"
+"YELLOW"
+"WHITE"
+"GREY"
+"ORANGE"
+
+tag color lookup:
+802eb0e0 [0x0]                   0h,    CECECEFEh,    EEEEEEFEh,    7E7E7EFEh
+802eb0f0 [0x4]            8E8E8EFEh,      EE00FFh,    EE00EEFFh,    EE00EECCh
+802eb100 [0x8]            EE00EE99h,      EEEEFFh,      8888FFh,    EE0000FFh
+802eb110 [0xc]            EE0000DDh,    EE0000BBh,        EEFFh,    88000099h
+802eb120 [0x10]             880099h,    4050FFFFh,    FFCC00FFh,    FFAA00FFh
+802eb130 [0x14]           FF9900FFh,    FF7700FFh,    FF5500FFh,    FF3300FFh
+802eb140 [0x18]           7F7F7F99h,    12345678h,    FFDD00FFh,          FFh
+802eb150 [0x1c]           FF0000FFh,      FF00FFh,        FFFFh,      FFFFFFh
+802eb160 [0x20]           FF00FFFFh,    FFFF00FFh,    FFFFFFFFh,    7F7F7FFFh
+802eb170 [0x24]           FF7F7FFFh

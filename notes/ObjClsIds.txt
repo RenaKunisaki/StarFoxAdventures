@@ -1,0 +1,107 @@
+0000 DummyObject, xyzpoint
+0001 Player
+0002 Tricky
+0004 setuppoint
+0005 checkpoint4
+0006 collectible
+0008 InfoPoint
+0009 EffectBox
+0010 AnimatedObj
+0012 StaticCamera
+0013 WalkCamera
+0014 TrigPnt
+0015 TrigPln
+0016 TrigCyl
+0017 TrigArea
+0018 TrigTime
+0019 TrigButt
+001A TriggSetp
+001B TrigBits
+001C baddie
+001D torch
+001E sideload
+001F siderepel
+0021 texscroll
+0024 fireball
+0025 warp
+0026 mammoth
+0027 InvHit
+0028 falling rock
+0029 edible mushroom
+002A enemy mushroom
+002B bomb plant
+002C curve
+002D player weapon (and ScalesSword)
+002E bike
+0030 many things
+0031 InfoText, TrickyGuard, ReStartMarker
+0032 CampFire
+0033 PressureSwitch
+0035 CCriverflow
+0036 DFropenode
+0037 ObjCreator
+0038 Door
+0039 LevelControl
+003A Pushable
+003B TrigCrve
+003C SidekickBall
+003D CFPerch
+003E CFPrisonUncle
+003F CFPrisonCage, CFCageSwitch
+0040 CloudRunner
+0041 Area
+0042 DigTunnel
+0043 LevelName
+0044 SH_thorntail
+0045 DIMLavaBall
+0046 DIMSnowBall
+0047 DIM2PathGen
+0048 WaveAnimator
+0049 AlphaAnimator
+004A GroundAnimator
+004B HitAnimator
+004C WallAnimator
+004D XYZAnimator
+004E VisAnimator
+004F ExplodeAnimator
+0050 IceSmash
+0051 ProjectileSwitch
+0052 PressureSwitch52
+0053 Door53
+0054 Lock, Landed_Arwing
+0055 SeqObject
+0056 SeqObj2
+0057 IMMultiSeq
+0059 WM_Column
+005C sfxPlayer
+005D AppleOnTree
+0060 MAGICMaker, LFXEmitter
+0061 many things
+0063 Exploded, Explodable
+0065 MagicPlant
+0066 IMIcePillar
+0067 KT_FallingRocks, MMP_trenchFX, AreaFXEmit
+0068 PerchObject, MoonSeedPlantingSpot
+0069 CurveFish
+006A Tree
+006B DIMbosscrackpar, FXEmit
+006C KT_RexFloorSwitch
+006D KT_Rex
+006E SPShop
+006F SPShopKeeper
+0070 ShopItem
+0071 Cannon, CannonClaw
+0072 SkeetlaWall
+0073 WaterFallSpray
+0078 ARWGenerator
+0079 Light
+007A StaffActivated
+007B ProjectedLight
+007C ArwingLevelObj
+007D MagicCaveTop
+007E CmbSrc, DustMoteSou
+007F Decorative
+0080 DeathGas
+0081 FogControl
+0082 GuardClaw
+0083 Lightning

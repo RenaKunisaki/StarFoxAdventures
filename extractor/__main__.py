@@ -10,6 +10,7 @@ from PIL import Image
 from binaryfile import BinaryFile
 from tabfile import TabFile
 from zlb import Zlb
+from dplzo import DPLZO
 from sfatexture import SfaTexture, ImageFormat
 
 def printf(fmt, *args, **kw):
@@ -32,8 +33,9 @@ class App:
             and not func.startswith('_')
         ]
         for name, method in sorted(methods, key = lambda it: it[0]):
-            printf("%s: %s\n", name,
-                getattr(method, '__doc__', "(no documentation)"))
+            doc = getattr(method, '__doc__', "(no documentation)")
+            doc = [line for line in doc.split('\n') if line.strip() != '']
+            printf("%s: %s\n\n", name, '\n'.join(doc))
 
 
     def compress(self, inPath, outPath, inOffset=0):
@@ -50,6 +52,22 @@ class App:
         file = BinaryFile(inPath, 'rb', offset=inOffset)
         with open(outPath, 'wb') as outFile:
             outFile.write(Zlb(file).decompress())
+
+
+    def compressLZO(self, inPath, outPath, inOffset=0):
+        """Compress a LZO file."""
+        if type(inOffset) is str: inOffset = int(inOffset, 0)
+        file = BinaryFile(inPath, 'rb', offset=inOffset)
+        with open(outPath, 'wb') as outFile:
+            outFile.write(DPLZO(file).compress())
+
+
+    def decompressLZO(self, inPath, outPath, inOffset=0):
+        """Decompress a LZO file."""
+        if type(inOffset) is str: inOffset = int(inOffset, 0)
+        file = BinaryFile(inPath, 'rb', offset=inOffset)
+        with open(outPath, 'wb') as outFile:
+            outFile.write(DPLZO(file).decompress())
 
 
     def listTable(self, inPath):
@@ -477,6 +495,364 @@ class App:
             if length == 0: break
             offs += length * 4
             idx  += 1
+
+    def toLZO(self, path, tabPath, outBinPath, outTabPath):
+        """Convert a file's contents to LZO.
+
+        path: input file to convert.
+        tabPath: table for input file.
+        outBinPath: output path for .bin file.
+        outTabPath: output path for .tab file.
+        """
+        inFile  = BinaryFile(path,    'rb')
+        tabFile = BinaryFile(tabPath, 'rb')
+        outBin  = BinaryFile(outBinPath, 'wb')
+        outTab  = BinaryFile(outTabPath, 'wb')
+        inZlb   = Zlb(inFile)
+        outLzo  = DPLZO(outBin)
+        while True:
+            offs    = tabFile.readu32()
+            if offs == 0xFFFFFFFF: break
+            high = offs & 0xFF000000
+            inFile.seek(offs & 0xFFFFFF)
+            data = inZlb.decompress()
+            pad  = len(data) & 0xF
+            if pad: data += b'\0' * (16-pad)
+            outTab.writeu32(outBin.tell() | high)
+            outBin.write(outLzo.compress(data))
+        outTab.writeu32(outBin.tell()) # XXX verify
+        outTab.writeu32(0xFFFFFFFF)
+        # XXX should move the tab code to a common method...
+
+    def toDIR(self, path, tabPath, outBinPath, outTabPath):
+        """Convert a file's contents to uncompressed DIR format.
+
+        path: input file to convert.
+        tabPath: table for input file.
+        outBinPath: output path for .bin file.
+        outTabPath: output path for .tab file.
+        """
+        inFile  = BinaryFile(path,    'rb')
+        tabFile = BinaryFile(tabPath, 'rb')
+        outBin  = BinaryFile(outBinPath, 'wb')
+        outTab  = BinaryFile(outTabPath, 'wb')
+        inZlb   = Zlb(inFile)
+        offs    = tabFile.readu32()
+        while True:
+            nextOffs = tabFile.readu32()
+            if nextOffs == 0xFFFFFFFF: break
+            high = offs & 0xFF000000
+            offs &= 0xFFFFFF
+            size = (nextOffs & 0xFFFFFF) - offs
+            if size > 0:
+                inFile.seek(offs)
+                data = inZlb.decompress()
+                header = b'DIR\0' + struct.pack('>3I', 0, len(data), len(data))
+                pad  = len(data) & 0xF
+                if pad: data += b'\0' * (16-pad)
+            outTab.writeu32(outBin.tell() | high)
+            if size > 0: outBin.write(header + data)
+            offs = nextOffs
+        outTab.writeu32(outBin.tell()) # XXX verify
+        outTab.writeu32(0xFFFFFFFF)
+
+    def toFakeLZO(self, path, tabPath, outBinPath, outTabPath):
+        """Convert a file's contents to "fake LZO" format.
+
+        path: input file to convert.
+        tabPath: table for input file.
+        outBinPath: output path for .bin file.
+        outTabPath: output path for .tab file.
+        """
+        inFile  = BinaryFile(path,    'rb')
+        tabFile = BinaryFile(tabPath, 'rb')
+        outBin  = BinaryFile(outBinPath, 'wb')
+        outTab  = BinaryFile(outTabPath, 'wb')
+        inZlb   = Zlb(inFile)
+        offs    = tabFile.readu32()
+        while True:
+            nextOffs = tabFile.readu32()
+            if nextOffs == 0xFFFFFFFF: break
+            high = offs & 0xFF000000
+            offs &= 0xFFFFFF
+            size = (nextOffs & 0xFFFFFF) - offs
+            if size > 0:
+                inFile.seek(offs)
+                data = inZlb.decompress()
+                header = b'LZO\0' + struct.pack('>3I', 1, len(data), len(data)) + b'Rena'
+                pad  = len(data) & 0xF
+                if pad: data += b'\0' * (16-pad)
+            outTab.writeu32(outBin.tell() | high)
+            if size > 0: outBin.write(header + data)
+            offs = nextOffs
+        outTab.writeu32(outBin.tell()) # XXX verify
+        outTab.writeu32(0xFFFFFFFF)
+
+    def textoLZO(self, path, tabPath, outBinPath, outTabPath):
+        """Convert a texture file's contents to LZO.
+
+        path: input file to convert.
+        tabPath: table for input file.
+        outBinPath: output path for .bin file.
+        outTabPath: output path for .tab file.
+        """
+        inFile  = BinaryFile(path,    'rb')
+        tabFile = BinaryFile(tabPath, 'rb')
+        outBin  = BinaryFile(outBinPath, 'wb')
+        outTab  = BinaryFile(outTabPath, 'wb')
+        inZlb   = Zlb(inFile)
+        outLzo  = DPLZO(outBin)
+        tabCksum = 0
+        while True:
+            offs    = tabFile.readu32()
+            if offs == 0xFFFFFFFF: break
+            high = offs & 0xFF000000
+            if high & 0x80000000:
+                offs = (offs & 0xFFFFFF) * 2
+                nFrames = (high >> 24) & 0x3F
+                inFile.seek(offs)
+
+                # read frame values
+                if nFrames > 1: frameData = inFile.readu32(nFrames+1)
+                else: frameData = []
+
+                data = outLzo.compress(inZlb.decompress())
+                tabVal = (outBin.tell() >> 1) | (high & 0xC0000000) | ((nFrames-1) << 24)
+                if nFrames > 1: outBin.writeu32(*frameData)
+                outBin.write(data)
+                while outBin.tell() & 0xF: outBin.writeu8(0)
+
+            else: # don't use this texture
+                tabVal = 0x01000000
+            tabCksum += ((tabVal >> 24) & 0xFF)
+            tabCksum += ((tabVal >> 16) & 0xFF)
+            tabCksum += ((tabVal >>  8) & 0xFF)
+            tabCksum += ( tabVal        & 0xFF)
+            outTab.writeu32(tabVal)
+        outTab.writeu32(0xFFFFFFFF)
+        tabCksum += (0xFF * 4)
+        outTab.writeu32(tabCksum & 0xFFFFFFFF)
+        for i in range(7):
+            outTab.writeu32(0)
+
+    def textoDIR(self, path, tabPath, outBinPath, outTabPath):
+        """Convert a texture file's contents to uncompressed DIR format.
+
+        path: input file to convert.
+        tabPath: table for input file.
+        outBinPath: output path for .bin file.
+        outTabPath: output path for .tab file.
+        """
+        inFile  = BinaryFile(path,       'rb')
+        tabFile = BinaryFile(tabPath,    'rb')
+        outBin  = BinaryFile(outBinPath, 'wb')
+        outTab  = BinaryFile(outTabPath, 'wb')
+        inZlb   = Zlb(inFile)
+        tabCksum = 0
+        while True:
+            offs    = tabFile.readu32()
+            if offs == 0xFFFFFFFF: break
+            high = offs & 0xFF000000
+            if high & 0x80000000:
+                offs = (offs & 0xFFFFFF) * 2
+                nFrames = (high >> 24) & 0x3F
+                inFile.seek(offs)
+
+                # read frame values
+                if nFrames > 1: frameData = inFile.readu32(nFrames+1)
+                else: frameData = []
+
+                data = inZlb.decompress()
+                #data = b'\0\0\0\0' + b'\0\0\0\0' + b'\0\0\0\0' + data
+                dl = len(data)
+                header = b'DIR\0' + struct.pack('>3I', 0, dl, dl)
+                header += b'\0\0\0\0' + b'\0\0\0\0' + b'\0\0\0\0' + b'\0\0\0\0'
+                data = header + data
+                tabVal = (outBin.tell() >> 1) | high
+                if nFrames > 1: outBin.writeu32(*frameData)
+                outBin.write(data)
+                while outBin.tell() & 0xF: outBin.writeu8(0)
+
+            else: # don't use this texture
+                tabVal = 0x01000000
+            tabCksum += ((tabVal >> 24) & 0xFF)
+            tabCksum += ((tabVal >> 16) & 0xFF)
+            tabCksum += ((tabVal >>  8) & 0xFF)
+            tabCksum += ( tabVal        & 0xFF)
+            outTab.writeu32(tabVal)
+        outTab.writeu32(0xFFFFFFFF)
+        tabCksum += (0xFF * 4)
+        outTab.writeu32(tabCksum & 0xFFFFFFFF)
+        for i in range(7):
+            outTab.writeu32(0)
+
+    def modelstoDIR(self, path, tabPath, outBinPath, outTabPath):
+        """Convert a model file's contents to uncompressed DIR format.
+
+        path: input file to convert.
+        tabPath: table for input file.
+        outBinPath: output path for .bin file.
+        outTabPath: output path for .tab file.
+        """
+        inFile  = BinaryFile(path,       'rb')
+        tabFile = BinaryFile(tabPath,    'rb')
+        outBin  = BinaryFile(outBinPath, 'wb')
+        outTab  = BinaryFile(outTabPath, 'wb')
+        inZlb   = Zlb(inFile)
+        tabCksum = 0
+        while True:
+            offs    = tabFile.readu32()
+            if offs == 0xFFFFFFFF: break
+            high = offs & 0xFF000000
+            if high & 0x10000000:
+                #printf("Model %08X\r\n", offs)
+                offs = offs & 0xFFFFFF
+                inFile.seek(offs)
+
+                data = inFile.read(4)
+                if data == b'\xFA\xCE\xFE\xED':
+                    while data not in (b'ZLB\0', b'DIR\0', b'\xE0\xE0\xE0\xE0', b'\xF0\xF0\xF0\xF0'):
+                        outBin.write(data)
+                        data = inFile.read(4)
+                inFile.seek(offs)
+
+                data = inZlb.decompress()
+                header = b'DIR\0' + struct.pack('>3I', 0, len(data), len(data))
+                data = header + data
+                tabVal = outBin.tell() | high
+                outBin.write(data)
+                while outBin.tell() & 0xF: outBin.writeu8(0)
+
+            else: # don't use this model
+                tabVal = 0x00000000
+            tabCksum += ((tabVal >> 24) & 0xFF)
+            tabCksum += ((tabVal >> 16) & 0xFF)
+            tabCksum += ((tabVal >>  8) & 0xFF)
+            tabCksum += ( tabVal        & 0xFF)
+            outTab.writeu32(tabVal)
+
+        tabVal = outBin.tell()
+        outTab.writeu32(tabVal)
+        tabCksum += ((tabVal >> 24) & 0xFF)
+        tabCksum += ((tabVal >> 16) & 0xFF)
+        tabCksum += ((tabVal >>  8) & 0xFF)
+        tabCksum += ( tabVal        & 0xFF)
+
+        outTab.writeu32(0xFFFFFFFF)
+        tabCksum += (0xFF * 4)
+        outTab.writeu32(tabCksum & 0xFFFFFFFF)
+        for i in range(7):
+            outTab.writeu32(0)
+
+
+    def modelstoFakeLZO(self, path, tabPath, outBinPath, outTabPath):
+        """Convert a model file's contents to "fake LZO" format.
+
+        path: input file to convert.
+        tabPath: table for input file.
+        outBinPath: output path for .bin file.
+        outTabPath: output path for .tab file.
+        """
+        inFile  = BinaryFile(path,       'rb')
+        tabFile = BinaryFile(tabPath,    'rb')
+        outBin  = BinaryFile(outBinPath, 'wb')
+        outTab  = BinaryFile(outTabPath, 'wb')
+        inZlb   = Zlb(inFile)
+        tabCksum = 0
+        while True:
+            offs    = tabFile.readu32()
+            if offs == 0xFFFFFFFF: break
+            high = offs & 0xFF000000
+            if high & 0x10000000:
+                #printf("Model %08X\r\n", offs)
+                offs = offs & 0xFFFFFF
+                inFile.seek(offs)
+
+                data = inFile.read(4)
+                if data == b'\xFA\xCE\xFE\xED':
+                    while data not in (b'ZLB\0', b'DIR\0', b'\xE0\xE0\xE0\xE0', b'\xF0\xF0\xF0\xF0'):
+                        outBin.write(data)
+                        data = inFile.read(4)
+                inFile.seek(offs)
+
+                data = inZlb.decompress()
+                header = b'ZLB\0' + struct.pack('>3I', 1, len(data), len(data)) + b'Rena'
+                data = header + data
+                tabVal = outBin.tell() | high
+                outBin.write(data)
+                while outBin.tell() & 0xF: outBin.writeu8(0)
+
+            else: # don't use this model
+                tabVal = 0x00000000
+            tabCksum += ((tabVal >> 24) & 0xFF)
+            tabCksum += ((tabVal >> 16) & 0xFF)
+            tabCksum += ((tabVal >>  8) & 0xFF)
+            tabCksum += ( tabVal        & 0xFF)
+            outTab.writeu32(tabVal)
+
+        tabVal = outBin.tell()
+        outTab.writeu32(tabVal)
+        tabCksum += ((tabVal >> 24) & 0xFF)
+        tabCksum += ((tabVal >> 16) & 0xFF)
+        tabCksum += ((tabVal >>  8) & 0xFF)
+        tabCksum += ( tabVal        & 0xFF)
+
+        outTab.writeu32(0xFFFFFFFF)
+        tabCksum += (0xFF * 4)
+        outTab.writeu32(tabCksum & 0xFFFFFFFF)
+        for i in range(7):
+            outTab.writeu32(0)
+
+    def mapstoFakeLZO(self, path, tabPath, outBinPath, outTabPath):
+        """Convert MAPS.BIN file's contents to "fake LZO" format.
+
+        path: input file to convert.
+        tabPath: table for input file.
+        outBinPath: output path for .bin file.
+        outTabPath: output path for .tab file.
+        """
+        inFile  = BinaryFile(path,       'rb')
+        tabFile = BinaryFile(tabPath,    'rb')
+        outBin  = BinaryFile(outBinPath, 'wb')
+        outTab  = BinaryFile(outTabPath, 'wb')
+        inZlb   = Zlb(inFile)
+        offs    = tabFile.readu32()
+        while offs != 0xFFFFFFFF:
+            nextOffs = tabFile.readu32()
+            inLen    = nextOffs - offs
+            inFile.seek(offs)
+
+            tabVal = outBin.tell()
+            outTab.writeu32(tabVal)
+
+            while offs < nextOffs:
+                inFile.seek(offs)
+                data = inFile.read(4)
+                if len(data) == 0: break
+                elif data == b'\xFA\xCE\xFE\xED':
+                    rawLen, zlbOffs, compLen = inFile.readStruct('3I')
+                    dOut = data + struct.pack('>3I', rawLen+0x28, zlbOffs, rawLen+4)
+                    printf("Write FACEFEED at %08X: %s\r\n", outBin.tell(),
+                        dOut.hex())
+                    outBin.write(dOut)
+                    for i in range(zlbOffs):
+                        outBin.writeu16(inFile.readu16())
+                    offs += len(data)
+                elif data == b'ZLB\0':
+                    inFile.seek(offs)
+                    data = inZlb.decompress()
+                    dl   = len(data) + 4
+                    outBin.write(b'LZO\0' + struct.pack('3I', 0, 0, dl) + b'Rena' + data)
+                else:
+                    outBin.write(data)
+                offs = inFile.tell()
+            offs = nextOffs
+
+        tabVal = outBin.tell()
+        outTab.writeu32(tabVal)
+        outTab.writeu32(0xFFFFFFFF)
+        for i in range(3):
+            outTab.writeu32(0)
 
 
 

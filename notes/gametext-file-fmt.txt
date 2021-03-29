@@ -1,0 +1,45 @@
+characters:
+	u32 num_char_structs;
+	characterStruct[num_char_structs];
+
+texts:
+	u16 numTexts;
+	u16 strDataLen;
+	gametextStruct[numTexts] texts;
+
+strings:
+	u32 numStrings;
+	u32 strOffset[numStrings];
+	char[] strings[numStrings];
+
+unknown: (unused?)
+	u32 len; //0x1B04
+	u8 data[len]; //0xEE x 0x1B04
+
+character textrures:
+	u16 texFmt;
+	u16 pixFmt; //4: 1 byte per pixel, else: 2 bytes per pixel
+	u16 width;
+	u16 height;
+	byte pixels;
+	//ends when width == 0 && height == 0
+	//texFmt is mapped: 2 => 0, 1 => 5
+    actually there's only 3 textures and they're fairly large
+    so this must be one per font, not one per texture
+
+unknown:
+	00 02 00 04
+	this might just continue until end of file? might be more texture data?
+	whatever it is, the text won't show up without it
+	this might be characterStruct for the font? even though the game copies it as just u16s
+	seems like size is calculated as "everything from beginning of file to before character textures"
+	nope, it's not characterStruct, maybe gametextStruct? nope
+	and this is like the majority of the file so it's definitely something
+	though a lot of it is zeros
+	if we assume it's another texture, it reads right to the end of the file.
+	and if we interpret the operator precedence correctly, it is indeed just another texture.
+
+so if we wanted to hack this to make all characters available
+maybe easiest would be to craft a file containing the texture and character data and load that at startup, then hack the load function to just keep those instead of using the ones in other files
+we don't need to put every string in it but maybe that would be easier if we have enough memory, then we could just have it refer to that file every time
+basically same concept as Krystal hack, injecting an asset so it's always available
