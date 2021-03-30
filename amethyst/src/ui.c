@@ -6,12 +6,19 @@ bool motionBlurHook() {
     if(force) return force;
     if(!bRumbleBlur) return false;
 
+    static float prevRumbleTimer = 0;
     if(rumbleTimer > 0) {
+        prevRumbleTimer = rumbleTimer;
         float rumble = (rumbleTimer + 48) * 2;
         if(rumble > 120) rumble = 120;
-        motionBlurIntensity = rumble;
+        motionBlurIntensity = 255 - rumble;
         return true;
     }
+    else if(prevRumbleTimer > 0) {
+        //255 is min, 0 is max
+        motionBlurIntensity = 255;
+    }
+    prevRumbleTimer = rumbleTimer;
     return false;
 }
 
