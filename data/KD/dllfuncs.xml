@@ -20,9 +20,7 @@
       <params />
       <return type="void" />
     </function>
-    <function idx="2">
-      <description>Unused?</description>
-    </function>
+    <function idx="2" name="unused" />
   </interface>
 
   <interface name="UI">
@@ -47,7 +45,7 @@
   </interface>
 
   <interface name="camera">
-    <description>DLLs implementing camera nmodes.</description>
+    <description>DLLs implementing camera modes.</description>
     <extends interface="common" />
     <function idx="3" name="init">
       <description>Set up object instance</description>

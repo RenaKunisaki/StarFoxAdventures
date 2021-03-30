@@ -11,6 +11,9 @@
 *.n64
 *.v64
 *.z64
+*.xdelta
+*.state
+*.tmp
 *.lock*
 __pycache__
 **/build/*
@@ -27,6 +30,7 @@ SFAModelTesting/**
 SFAModelsBin/**
 saves/**
 v1.01/**
+SFA.rep.zip
 
 # from https://github.com/github/gitignore
 # Object files

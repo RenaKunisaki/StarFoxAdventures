@@ -39,7 +39,7 @@
       <function address="0x801733E8" idx="0x1B" name="eneryBarFn1B"/>
     </functions>
   </dll>
-  <dll id="0x0001" name="camera">
+  <dll id="0x0001" name="camcontrol">
     <functions>
       <function address="0x801534B8" idx="0x0"/>
       <function address="0x80153524" idx="0x1"/>
@@ -175,7 +175,7 @@
       <function address="0x8011BD18" idx="0x26"/>
     </functions>
   </dll>
-  <dll id="0x0006">
+  <dll id="0x0006" name="newday">
     <functions>
       <function address="0x800D17D0" idx="0x0"/>
       <function address="0x800D17D4" idx="0x1"/>
@@ -340,7 +340,7 @@
       <function address="0x800EB004" idx="0x5" name="partDefFn"/>
     </functions>
   </dll>
-  <dll id="0x0010">
+  <dll id="0x0010" name="objfsa">
     <functions>
       <function address="0x8011BD20" idx="0x0"/>
       <function address="0x8011BD24" idx="0x1"/>
@@ -625,7 +625,7 @@
       <function address="0x8012F358" idx="0x8"/>
     </functions>
   </dll>
-  <dll id="0x001D">
+  <dll id="0x001D" name="modelfx">
     <functions>
       <function address="0x800E9FCC" idx="0x0"/>
       <function address="0x800EA1E0" idx="0x1"/>
@@ -697,7 +697,7 @@
       <function address="0x800FBB34" idx="0x5"/>
     </functions>
   </dll>
-  <dll id="0x0021" name="partfx21">
+  <dll id="0x0021" name="dim_partfx">
     <functions>
       <function address="0x800FFED0" idx="0x0"/>
       <function address="0x800FFED4" idx="0x1"/>
@@ -874,7 +874,7 @@
       <function address="0x80165A3C" idx="0xF"/>
     </functions>
   </dll>
-  <dll id="0x0033">
+  <dll id="0x0033" name="pickup">
     <functions>
       <function address="0x8012F578" idx="0x0"/>
       <function address="0x8012F57C" idx="0x1"/>
@@ -1066,7 +1066,7 @@
       <function address="0x80174938" idx="0xF"/>
     </functions>
   </dll>
-  <dll id="0x0046">
+  <dll id="0x0046" name="frontend_control">
     <functions>
       <function address="0x80174D74" idx="0x0"/>
       <function address="0x80174DD8" idx="0x1"/>
@@ -1130,7 +1130,7 @@
       <function address="0x80179664" idx="0x5"/>
     </functions>
   </dll>
-  <dll id="0x004C">
+  <dll id="0x004C" name="swaphol">
     <functions>
       <function address="0x80179668" idx="0x0"/>
       <function address="0x8017966C" idx="0x1"/>
@@ -1151,7 +1151,7 @@
       <function address="0x80179A48" idx="0x3"/>
     </functions>
   </dll>
-  <dll id="0x004F" name="cutCam">
+  <dll id="0x004F" name="cutCam" interface="camera">
     <functions>
       <function address="0x801553C4" idx="0x0"/>
       <function address="0x80155404" idx="0x1"/>
@@ -1166,7 +1166,7 @@
       <function address="0x80156BAC" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0050" name="attentionCam">
+  <dll id="0x0050" name="attentionCam" interface="camera">
     <functions>
       <function address="0x80157AA4" idx="0x0"/>
       <function address="0x80157AA8" idx="0x1"/>
@@ -1176,7 +1176,7 @@
       <function address="0x8015837C" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0051">
+  <dll id="0x0051" name="cam1stperson" interface="camera">
     <functions>
       <function address="0x8015912C" idx="0x0"/>
       <function address="0x80159130" idx="0x1"/>
@@ -1186,7 +1186,7 @@
       <function address="0x80159B04" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0052">
+  <dll id="0x0052" interface="camera">
     <functions>
       <function address="0x80158B68" idx="0x0"/>
       <function address="0x80158B6C" idx="0x1"/>
@@ -1196,7 +1196,7 @@
       <function address="0x80158EA0" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0053">
+  <dll id="0x0053" interface="camera">
     <functions>
       <function address="0x8015A6AC" idx="0x0"/>
       <function address="0x8015A6B0" idx="0x1"/>
@@ -1206,7 +1206,7 @@
       <function address="0x8015AA28" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0054" name="camCtrl54">
+  <dll id="0x0054" name="camCtrl54" interface="camera">
     <functions>
       <function address="0x8015B5CC" idx="0x0"/>
       <function address="0x8015B5D0" idx="0x1"/>
@@ -1216,7 +1216,7 @@
       <function address="0x8015C0F4" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0055">
+  <dll id="0x0055" interface="camera">
     <functions>
       <function address="0x8015AA2C" idx="0x0"/>
       <function address="0x8015AA30" idx="0x1"/>
@@ -1226,7 +1226,7 @@
       <function address="0x8015AE98" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0056">
+  <dll id="0x0056" interface="camera">
     <functions>
       <function address="0x8015D7C8" idx="0x0"/>
       <function address="0x8015D7CC" idx="0x1"/>
@@ -1236,7 +1236,7 @@
       <function address="0x8015E170" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0057">
+  <dll id="0x0057" interface="camera">
     <functions>
       <function address="0x8015E4C4" idx="0x0"/>
       <function address="0x8015E4C8" idx="0x1"/>
@@ -1246,7 +1246,7 @@
       <function address="0x8015E994" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0058">
+  <dll id="0x0058" interface="camera">
     <functions>
       <function address="0x8015E9A0" idx="0x0"/>
       <function address="0x8015E9A4" idx="0x1"/>
@@ -1256,7 +1256,7 @@
       <function address="0x8015EF28" idx="0x6"/>
     </functions>
   </dll>
-  <dll id="0x0059">
+  <dll id="0x0059" interface="camera">
     <functions>
       <function address="0x8015F0B8" idx="0x0"/>
       <function address="0x8015F0BC" idx="0x1"/>
@@ -1604,7 +1604,7 @@
       <function address="0x8013AE34" idx="0x3"/>
     </functions>
   </dll>
-  <dll id="0x0086">
+  <dll id="0x0086" name="modcloudrunner2">
     <functions>
       <function address="0x8013B838" idx="0x0"/>
       <function address="0x8013B83C" idx="0x1"/>
@@ -2115,7 +2115,7 @@
       <function address="0x80152FFC" idx="0x3"/>
     </functions>
   </dll>
-  <dll id="0x00D0">
+  <dll id="0x00D0" name="tricky" interface="object">
     <functions>
       <function address="0x801A9128" idx="0x0"/>
       <function address="0x801A9228" idx="0x1"/>
@@ -2152,7 +2152,7 @@
       <function address="0x801AA17C" idx="0x1D"/>
     </functions>
   </dll>
-  <dll id="0x00D1">
+  <dll id="0x00D1" interface="object">
     <functions>
       <function address="0x801C8A8C" idx="0x0"/>
       <function address="0x801C8A90" idx="0x1"/>
@@ -2165,7 +2165,7 @@
       <function address="0x801C8ABC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00D2">
+  <dll id="0x00D2" name="animobjD2" interface="object">
     <functions>
       <function address="0x801C8AC4" idx="0x0"/>
       <function address="0x801C8AC8" idx="0x1"/>
@@ -2178,7 +2178,7 @@
       <function address="0x801C8E80" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00D3">
+  <dll id="0x00D3" interface="object">
     <functions>
       <function address="0x801C8E88" idx="0x0"/>
       <function address="0x801C8E8C" idx="0x1"/>
@@ -2191,7 +2191,7 @@
       <function address="0x801C8F2C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00D4">
+  <dll id="0x00D4" name="maybeTemplate" interface="object">
     <functions>
       <function address="0x801B110C" idx="0x0"/>
       <function address="0x801B1110" idx="0x1"/>
@@ -2204,7 +2204,7 @@
       <function address="0x801B19EC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00D5" name="snowworm">
+  <dll id="0x00D5" name="snowworm" interface="object">
     <functions>
       <function address="0x801B87D4" idx="0x0"/>
       <function address="0x801B87F4" idx="0x1"/>
@@ -2219,7 +2219,7 @@
       <function address="0x801B8E28" idx="0xB" name="handleMsg"/>
     </functions>
   </dll>
-  <dll id="0x00D6">
+  <dll id="0x00D6" name="wall_crawler" interface="object">
     <functions>
       <function address="0x801BEA4C" idx="0x0"/>
       <function address="0x801BEA6C" idx="0x1"/>
@@ -2234,7 +2234,7 @@
       <function address="0x801BEEA0" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x00D7" name="chuka">
+  <dll id="0x00D7" name="chuka" interface="object">
     <functions>
       <function address="0x801BDA94" idx="0x0"/>
       <function address="0x801BDA98" idx="0x1"/>
@@ -2248,7 +2248,7 @@
       <function address="0x801BE274" idx="0xA" name="handleMsg"/>
     </functions>
   </dll>
-  <dll id="0x00D8">
+  <dll id="0x00D8" name="chukachuck" interface="object">
     <functions>
       <function address="0x801BE43C" idx="0x0"/>
       <function address="0x801BE440" idx="0x1"/>
@@ -2261,7 +2261,7 @@
       <function address="0x801BE6C8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00D9" name="babySnowWorm">
+  <dll id="0x00D9" name="babySnowWorm" interface="object">
     <functions>
       <function address="0x801BBB50" idx="0x0"/>
       <function address="0x801BBB70" idx="0x1"/>
@@ -2281,7 +2281,7 @@
       </function>
     </functions>
   </dll>
-  <dll id="0x00DA">
+  <dll id="0x00DA" interface="object">
     <functions>
       <function address="0x801C1754" idx="0x0"/>
       <function address="0x801C1758" idx="0x1"/>
@@ -2294,7 +2294,7 @@
       <function address="0x801C1944" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00DB">
+  <dll id="0x00DB" interface="object">
     <functions>
       <function address="0x801BFA8C" idx="0x0"/>
       <function address="0x801BFAAC" idx="0x1"/>
@@ -2307,7 +2307,7 @@
       <function address="0x801BFF1C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00DC" name="Tumbleweed">
+  <dll id="0x00DC" name="Tumbleweed" interface="object">
     <functions>
       <function address="0x801C194C" idx="0x0"/>
       <function address="0x801C1950" idx="0x1"/>
@@ -2327,7 +2327,7 @@
       <function address="0x801C1E24" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x00DD">
+  <dll id="0x00DD" interface="object">
     <functions>
       <function address="0x801C2174" idx="0x0"/>
       <function address="0x801C2178" idx="0x1"/>
@@ -2346,7 +2346,7 @@
       <function address="0x801C3440" idx="0xF"/>
     </functions>
   </dll>
-  <dll id="0x00DE">
+  <dll id="0x00DE" name="skeetla" interface="object">
     <functions>
       <function address="0x801C3C98" idx="0x0"/>
       <function address="0x801C3CB8" idx="0x1"/>
@@ -2359,7 +2359,7 @@
       <function address="0x801C4764" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00DF">
+  <dll id="0x00DF" interface="object">
     <functions>
       <function address="0x801C637C" idx="0x0"/>
       <function address="0x801C6380" idx="0x1"/>
@@ -2373,7 +2373,7 @@
       <function address="0x801C676C" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x00E0">
+  <dll id="0x00E0" name="MMP_cratercritter" interface="object">
     <functions>
       <function address="0x801C687C" idx="0x0"/>
       <function address="0x801C689C" idx="0x1"/>
@@ -2388,7 +2388,7 @@
       <function address="0x801C6D98" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x00E1">
+  <dll id="0x00E1" name="MMP_critterspit" interface="object">
     <functions>
       <function address="0x801C84DC" idx="0x0"/>
       <function address="0x801C84E0" idx="0x1"/>
@@ -2401,7 +2401,7 @@
       <function address="0x801C8810" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00E2">
+  <dll id="0x00E2" interface="object">
     <functions>
       <function address="0x801C88D4" idx="0x0"/>
       <function address="0x801C88D8" idx="0x1"/>
@@ -2414,7 +2414,7 @@
       <function address="0x801C8A84" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00E3" name="balloonBaddie">
+  <dll id="0x00E3" name="balloonBaddie" interface="object">
     <functions>
       <function address="0x801B4054" idx="0x0"/>
       <function address="0x801B4058" idx="0x1"/>
@@ -2427,7 +2427,7 @@
       <function address="0x801B48D8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00E4" name="swarmBaddie">
+  <dll id="0x00E4" name="swarmBaddie" interface="object">
     <functions>
       <function address="0x801B4E5C" idx="0x0"/>
       <function address="0x801B4E60" idx="0x1"/>
@@ -2440,7 +2440,7 @@
       <function address="0x801B53A8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00E5" name="wispBaddie">
+  <dll id="0x00E5" name="wispBaddie" interface="object">
     <functions>
       <function address="0x801B5720" idx="0x0"/>
       <function address="0x801B5724" idx="0x1"/>
@@ -2453,7 +2453,7 @@
       <function address="0x801B5E24" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00E6" name="weaponE6">
+  <dll id="0x00E6" name="weaponE6" interface="object">
     <functions>
       <function address="0x801C8FD8" idx="0x0"/>
       <function address="0x801C90AC" idx="0x1"/>
@@ -2483,7 +2483,7 @@
       <function address="0x801C9B38" idx="0x16"/>
     </functions>
   </dll>
-  <dll id="0x00E7" name="cannon">
+  <dll id="0x00E7" name="cannon" interface="object">
     <functions>
       <function address="0x801CB100" idx="0x0"/>
       <function address="0x801CB104" idx="0x1"/>
@@ -2496,7 +2496,7 @@
       <function address="0x801CB8FC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00E8">
+  <dll id="0x00E8" name="cannonball" interface="object">
     <functions>
       <function address="0x801CB904" idx="0x0"/>
       <function address="0x801CB908" idx="0x1"/>
@@ -2509,7 +2509,7 @@
       <function address="0x801CBBB8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00E9">
+  <dll id="0x00E9" name="projball" interface="object">
     <functions>
       <function address="0x801CBBC0" idx="0x0"/>
       <function address="0x801CBBC4" idx="0x1"/>
@@ -2522,7 +2522,7 @@
       <function address="0x801CC378" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00EA">
+  <dll id="0x00EA" name="flamethrower" interface="object">
     <functions>
       <function address="0x801CD018" idx="0x0"/>
       <function address="0x801CD01C" idx="0x1"/>
@@ -2538,7 +2538,7 @@
       <function address="0x801CDB8C" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x00EB">
+  <dll id="0x00EB" name="tesla" interface="object">
     <functions>
       <function address="0x801CDB90" idx="0x0"/>
       <function address="0x801CDB94" idx="0x1"/>
@@ -2552,7 +2552,7 @@
       <function address="0x801CE97C" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x00EC">
+  <dll id="0x00EC" interface="object">
     <functions>
       <function address="0x801CE9AC" idx="0x0"/>
       <function address="0x801CE9B0" idx="0x1"/>
@@ -2565,7 +2565,7 @@
       <function address="0x801CEDD0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00ED">
+  <dll id="0x00ED" name="grenade" interface="object">
     <functions>
       <function address="0x801CC6A4" idx="0x0"/>
       <function address="0x801CC6A8" idx="0x1"/>
@@ -2578,7 +2578,7 @@
       <function address="0x801CD010" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00EE">
+  <dll id="0x00EE" interface="object">
     <functions>
       <function address="0x801EB560" idx="0x0"/>
       <function address="0x801EB564" idx="0x1"/>
@@ -2595,7 +2595,7 @@
       <function address="0x801EB8F4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00EF">
+  <dll id="0x00EF" name="sfxplayer" interface="object">
     <functions>
       <function address="0x801D0F88" idx="0x0"/>
       <function address="0x801D0F8C" idx="0x1"/>
@@ -2608,7 +2608,7 @@
       <function address="0x801D13C0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00F0">
+  <dll id="0x00F0" interface="object">
     <functions>
       <function address="0x801D1DA8" idx="0x0"/>
       <function address="0x801D1DAC" idx="0x1"/>
@@ -2622,7 +2622,7 @@
       <function address="0x801D1F94" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x00F1">
+  <dll id="0x00F1" interface="object">
     <functions>
       <function address="0x801D2840" idx="0x0"/>
       <function address="0x801D2844" idx="0x1"/>
@@ -2635,7 +2635,7 @@
       <function address="0x801D2964" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00F2">
+  <dll id="0x00F2" interface="object">
     <functions>
       <function address="0x801D25A8" idx="0x3"/>
       <function address="0x801D260C" idx="0x4"/>
@@ -2643,7 +2643,7 @@
       <function address="0x801D26AC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00F3">
+  <dll id="0x00F3" interface="object">
     <functions>
       <function address="0x801D26B4" idx="0x3"/>
       <function address="0x801D26F4" idx="0x6"/>
@@ -2651,7 +2651,7 @@
       <function address="0x801D2838" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00F4">
+  <dll id="0x00F4" interface="object">
     <functions>
       <function address="0x801D296C" idx="0x0"/>
       <function address="0x801D2970" idx="0x1"/>
@@ -2664,7 +2664,7 @@
       <function address="0x801D2990" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00F5">
+  <dll id="0x00F5" interface="object">
     <functions>
       <function address="0x801ECA80" idx="0x0"/>
       <function address="0x801ECA84" idx="0x1"/>
@@ -2677,7 +2677,7 @@
       <function address="0x801ECECC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00F6">
+  <dll id="0x00F6" name="collectable">
     <functions>
       <function address="0x801D2998" idx="0x0"/>
       <function address="0x801D299C" idx="0x1"/>
@@ -2697,7 +2697,7 @@
       <function address="0x801D3C6C" idx="0x10"/>
     </functions>
   </dll>
-  <dll id="0x00F7">
+  <dll id="0x00F7" interface="object">
     <functions>
       <function address="0x801D4ACC" idx="0x0"/>
       <function address="0x801D4AD0" idx="0x1"/>
@@ -2727,7 +2727,7 @@
       <function address="0x801D6138" idx="0xD"/>
     </functions>
   </dll>
-  <dll id="0x00F9">
+  <dll id="0x00F9" interface="object">
     <functions>
       <function address="0x801D6964" idx="0x0"/>
       <function address="0x801D6968" idx="0x1"/>
@@ -2740,7 +2740,7 @@
       <function address="0x801D7090" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00FA" name="OBJ_InvHit">
+  <dll id="0x00FA" name="OBJ_InvHit" interface="object">
     <functions>
       <function address="0x801D7110" idx="0x0"/>
       <function address="0x801D7114" idx="0x1"/>
@@ -2753,7 +2753,7 @@
       <function address="0x801D79B8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00FB">
+  <dll id="0x00FB" interface="object">
     <functions>
       <function address="0x801D79C0" idx="0x0"/>
       <function address="0x801D79C4" idx="0x1"/>
@@ -2766,7 +2766,7 @@
       <function address="0x801D7C38" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00FC">
+  <dll id="0x00FC" name="flameblast" interface="object">
     <functions>
       <function address="0x801D7C40" idx="0x0"/>
       <function address="0x801D7C44" idx="0x1"/>
@@ -2779,7 +2779,7 @@
       <function address="0x801D7E60" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00FD">
+  <dll id="0x00FD" interface="object">
     <functions>
       <function address="0x801D7E68" idx="0x0"/>
       <function address="0x801D7E6C" idx="0x1"/>
@@ -2792,7 +2792,7 @@
       <function address="0x801D81A8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00FE" name="sidekickToy">
+  <dll id="0x00FE" name="sidekickToy" interface="object">
     <functions>
       <function address="0x801D8D34" idx="0x3"/>
       <function address="0x801D91B0" idx="0x4"/>
@@ -2800,7 +2800,7 @@
       <function address="0x801D9440" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x00FF">
+  <dll id="0x00FF" interface="object">
     <functions>
       <function address="0x801D9550" idx="0x0"/>
       <function address="0x801D9554" idx="0x1"/>
@@ -2813,7 +2813,7 @@
       <function address="0x801D9940" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0100">
+  <dll id="0x0100" name="crate" interface="object">
     <functions>
       <function address="0x801D13C8" idx="0x0"/>
       <function address="0x801D13CC" idx="0x1"/>
@@ -2826,7 +2826,7 @@
       <function address="0x801D19C4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0101">
+  <dll id="0x0101" interface="object">
     <functions>
       <function address="0x801D20AC" idx="0x0"/>
       <function address="0x801D20B0" idx="0x1"/>
@@ -2840,7 +2840,7 @@
       <function address="0x801D2348" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0102">
+  <dll id="0x0102" interface="object">
     <functions>
       <function address="0x801D9948" idx="0x0"/>
       <function address="0x801D994C" idx="0x1"/>
@@ -2853,7 +2853,7 @@
       <function address="0x801D9DA4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0103">
+  <dll id="0x0103" name="projswitch" interface="object">
     <functions>
       <function address="0x801D9E34" idx="0x0"/>
       <function address="0x801D9E38" idx="0x1"/>
@@ -2866,7 +2866,7 @@
       <function address="0x801DA1A8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0104">
+  <dll id="0x0104" interface="object">
     <functions>
       <function address="0x801DA250" idx="0x0"/>
       <function address="0x801DA254" idx="0x1"/>
@@ -2879,7 +2879,7 @@
       <function address="0x801DA4BC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0105" name="pressureSwitch">
+  <dll id="0x0105" name="pressureSwitch" interface="object">
     <functions>
       <function address="0x801DA4C4" idx="0x0"/>
       <function address="0x801DA4C8" idx="0x1"/>
@@ -2892,7 +2892,7 @@
       <function address="0x801DA9B4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0106" name="talkObj">
+  <dll id="0x0106" name="talkObj" interface="object">
     <functions>
       <function address="0x801E2684" idx="0x0"/>
       <function address="0x801E2688" idx="0x1"/>
@@ -2909,7 +2909,7 @@
       <function address="0x801E2A18" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0107" name="interactObj">
+  <dll id="0x0107" name="interactObj" interface="object">
     <functions>
       <function address="0x801E2A20" idx="0x0"/>
       <function address="0x801E2A24" idx="0x1"/>
@@ -2926,7 +2926,7 @@
       <function address="0x801E2DF8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0108" name="magicPlant">
+  <dll id="0x0108" name="magicPlant" interface="object">
     <functions>
       <function address="0x801E2E1C" idx="0x3"/>
       <function address="0x801E2F38" idx="0x4"/>
@@ -2936,7 +2936,7 @@
       <function address="0x801E31BC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0109" name="magicGem">
+  <dll id="0x0109" name="magicGem" interface="object">
     <functions>
       <function address="0x801D3CF0" idx="0x0"/>
       <function address="0x801D3CF4" idx="0x1"/>
@@ -2949,7 +2949,7 @@
       <function address="0x801D4A44" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x010A">
+  <dll id="0x010A" interface="object">
     <functions>
       <function address="0x801E3AF0" idx="0x0"/>
       <function address="0x801E3AF4" idx="0x1"/>
@@ -2962,7 +2962,7 @@
       <function address="0x801E3D18" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x010B">
+  <dll id="0x010B" interface="object">
     <functions>
       <function address="0x801E3D20" idx="0x0"/>
       <function address="0x801E3D24" idx="0x1"/>
@@ -2975,7 +2975,7 @@
       <function address="0x801E3F64" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x010C" name="fish">
+  <dll id="0x010C" name="fish" interface="object">
     <functions>
       <function address="0x801E4670" idx="0x3"/>
       <function address="0x801E46F8" idx="0x4"/>
@@ -2983,7 +2983,7 @@
       <function address="0x801E4D5C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x010D">
+  <dll id="0x010D" name="smallbasket" interface="object">
     <functions>
       <function address="0x801E4E1C" idx="0x0"/>
       <function address="0x801E4E20" idx="0x1"/>
@@ -2996,7 +2996,7 @@
       <function address="0x801E5A08" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x010E">
+  <dll id="0x010E" name="mediumbasket" interface="object">
     <functions>
       <function address="0x801E69B0" idx="0x0"/>
       <function address="0x801E69B4" idx="0x1"/>
@@ -3009,7 +3009,7 @@
       <function address="0x801E723C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x010F">
+  <dll id="0x010F" name="scarab" interface="object">
     <functions>
       <function address="0x801E79DC" idx="0x0"/>
       <function address="0x801E79E0" idx="0x1"/>
@@ -3022,7 +3022,7 @@
       <function address="0x801E87EC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0110" name="zBomb">
+  <dll id="0x0110" name="zBomb" interface="object">
     <functions>
       <function address="0x801E8CC4" idx="0x0"/>
       <function address="0x801E8CC8" idx="0x1"/>
@@ -3035,7 +3035,7 @@
       <function address="0x801E975C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0111">
+  <dll id="0x0111" interface="object">
     <functions>
       <function address="0x801E9A04" idx="0x0"/>
       <function address="0x801E9A08" idx="0x1"/>
@@ -3048,7 +3048,7 @@
       <function address="0x801E9A28" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0112">
+  <dll id="0x0112" interface="object">
     <functions>
       <function address="0x801E9A30" idx="0x0"/>
       <function address="0x801E9A34" idx="0x1"/>
@@ -3062,7 +3062,7 @@
       <function address="0x801EA058" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0113">
+  <dll id="0x0113" name="barrel" interface="object">
     <functions>
       <function address="0x801EB8FC" idx="0x0"/>
       <function address="0x801EB900" idx="0x1"/>
@@ -3075,7 +3075,7 @@
       <function address="0x801EBC94" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0114">
+  <dll id="0x0114" name="ladders" interface="object">
     <functions>
       <function address="0x801EBC9C" idx="0x0"/>
       <function address="0x801EBCA0" idx="0x1"/>
@@ -3088,7 +3088,7 @@
       <function address="0x801EBF28" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0115">
+  <dll id="0x0115" interface="object">
     <functions>
       <function address="0x801EB250" idx="0x0"/>
       <function address="0x801EB254" idx="0x1"/>
@@ -3101,7 +3101,7 @@
       <function address="0x801EB394" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0116" name="fireflyLantern">
+  <dll id="0x0116" name="fireflyLantern" interface="object">
     <functions>
       <function address="0x801EA574" idx="0x0"/>
       <function address="0x801EA578" idx="0x1"/>
@@ -3121,7 +3121,7 @@
       <function address="0x801EB22C" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x0117">
+  <dll id="0x0117" interface="object">
     <functions>
       <function address="0x801EA074" idx="0x0"/>
       <function address="0x801EA078" idx="0x1"/>
@@ -3134,7 +3134,7 @@
       <function address="0x801EA4E0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0118">
+  <dll id="0x0118" interface="object">
     <functions>
       <function address="0x801DB2E4" idx="0x0"/>
       <function address="0x801DB2E8" idx="0x1"/>
@@ -3147,7 +3147,7 @@
       <function address="0x801DB7C8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0119">
+  <dll id="0x0119" name="door" interface="object">
     <functions>
       <function address="0x801DABDC" idx="0x0"/>
       <function address="0x801DABE0" idx="0x1"/>
@@ -3160,7 +3160,7 @@
       <function address="0x801DAF5C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x011A" name="useObj">
+  <dll id="0x011A" name="useObj" interface="object">
     <functions>
       <function address="0x801DBA08" idx="0x3">
         <params>
@@ -3175,7 +3175,7 @@
       <function address="0x801DBE04" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x011B" name="seqObj">
+  <dll id="0x011B" name="seqObj" interface="object">
     <functions>
       <function address="0x801DBEB8" idx="0x0"/>
       <function address="0x801DBEBC" idx="0x1"/>
@@ -3193,7 +3193,7 @@
       <function address="0x801DC254" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x011C" name="newSeqObj">
+  <dll id="0x011C" name="newSeqObj" interface="object">
     <functions>
       <function address="0x801DC334" idx="0x0"/>
       <function address="0x801DC338" idx="0x1"/>
@@ -3215,7 +3215,7 @@
       <function address="0x801DC670" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x011D" name="seqObj11D">
+  <dll id="0x011D" name="seqObj11D" interface="object">
     <functions>
       <function address="0x801DC738" idx="0x0"/>
       <function address="0x801DC73C" idx="0x1"/>
@@ -3228,7 +3228,7 @@
       <function address="0x801DCA44" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x011E" name="seqObj11E">
+  <dll id="0x011E" name="seqObj11E" interface="object">
     <functions>
       <function address="0x801DCB28" idx="0x0"/>
       <function address="0x801DCB2C" idx="0x1"/>
@@ -3245,7 +3245,7 @@
       <function address="0x801DCE84" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x011F">
+  <dll id="0x011F" interface="object">
     <functions>
       <function address="0x801DCF84" idx="0x0"/>
       <function address="0x801DCF88" idx="0x1"/>
@@ -3263,7 +3263,7 @@
       <function address="0x801DD1A8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0120" name="foodRelated120">
+  <dll id="0x0120" name="foodbag120" interface="object">
     <functions>
       <function address="0x801DD200" idx="0x0"/>
       <function address="0x801DD204" idx="0x1"/>
@@ -3286,7 +3286,7 @@
       <function address="0x801DDAAC" idx="0x13"/>
     </functions>
   </dll>
-  <dll id="0x0121" name="foodMenu">
+  <dll id="0x0121" name="foodMenu" interface="object">
     <functions>
       <function address="0x801DDB38" idx="0x0"/>
       <function address="0x801DDB3C" idx="0x1"/>
@@ -3309,7 +3309,7 @@
       <function address="0x801DDFD8" idx="0xF"/>
     </functions>
   </dll>
-  <dll id="0x0122" name="fruit">
+  <dll id="0x0122" name="fruit" interface="object">
     <functions>
       <function address="0x801DE030" idx="0x0"/>
       <function address="0x801DE034" idx="0x1"/>
@@ -3325,7 +3325,7 @@
       <function address="0x801DEEDC" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x0123" name="fruitBranch">
+  <dll id="0x0123" name="fruitBranch" interface="object">
     <functions>
       <function address="0x801DF71C" idx="0x0"/>
       <function address="0x801DF720" idx="0x1"/>
@@ -3339,7 +3339,7 @@
       <function address="0x801DFF28" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0124">
+  <dll id="0x0124" interface="object">
     <functions>
       <function address="0x801E01A8" idx="0x0"/>
       <function address="0x801E01AC" idx="0x1"/>
@@ -3352,7 +3352,7 @@
       <function address="0x801E1070" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0125">
+  <dll id="0x0125" interface="object">
     <functions>
       <function address="0x801E222C" idx="0x0"/>
       <function address="0x801E2230" idx="0x1"/>
@@ -3370,7 +3370,7 @@
       <function address="0x801E2630" idx="0xE"/>
     </functions>
   </dll>
-  <dll id="0x0126">
+  <dll id="0x0126" name="crate2" interface="object">
     <functions>
       <function address="0x801D19CC" idx="0x0"/>
       <function address="0x801D19D0" idx="0x1"/>
@@ -3383,7 +3383,7 @@
       <function address="0x801D1DA0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0127">
+  <dll id="0x0127" name="duster" interface="object">
     <functions>
       <function address="0x801E3F6C" idx="0x0"/>
       <function address="0x801E3F70" idx="0x1"/>
@@ -3396,7 +3396,7 @@
       <function address="0x801E4668" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0128">
+  <dll id="0x0128" interface="object">
     <functions>
       <function address="0x801EBFE4" idx="0x0"/>
       <function address="0x801EBFE8" idx="0x1"/>
@@ -3409,7 +3409,7 @@
       <function address="0x801EC18C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0129" name="waterfallControl">
+  <dll id="0x0129" name="waterfallControl" interface="object">
     <functions>
       <function address="0x801EC194" idx="0x0"/>
       <function address="0x801EC198" idx="0x1"/>
@@ -3426,7 +3426,7 @@
       <function address="0x801EC288" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x012A" name="backpack">
+  <dll id="0x012A" name="backpack" interface="object">
     <functions>
       <function address="0x801EC290" idx="0x0"/>
       <function address="0x801EC294" idx="0x1"/>
@@ -3444,7 +3444,7 @@
       <function address="0x801EC68C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x012B">
+  <dll id="0x012B" interface="object">
     <functions>
       <function address="0x801ED034" idx="0x3"/>
       <function address="0x801ED0BC" idx="0x4"/>
@@ -3453,13 +3453,13 @@
       <function address="0x801ED16C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x012C" name="landedArwing">
+  <dll id="0x012C" name="landedArwing" interface="object">
     <functions>
       <function address="0x801ED174" idx="0x3"/>
       <function address="0x801ED184" idx="0x4"/>
     </functions>
   </dll>
-  <dll id="0x012D">
+  <dll id="0x012D" interface="object">
     <functions>
       <function address="0x801ED218" idx="0x0"/>
       <function address="0x801ED254" idx="0x1"/>
@@ -3472,7 +3472,7 @@
       <function address="0x801ED6B0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x012E">
+  <dll id="0x012E" name="treasurechest" interface="object">
     <functions>
       <function address="0x801EE420" idx="0x0"/>
       <function address="0x801EE424" idx="0x1"/>
@@ -3485,7 +3485,7 @@
       <function address="0x801EE600" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x012F" name="TrickyCurve">
+  <dll id="0x012F" name="TrickyCurve" interface="object">
     <functions>
       <function address="0x801CF0FC" idx="0x0"/>
       <function address="0x801CF108" idx="0x1"/>
@@ -3500,7 +3500,7 @@
       <function address="0x801D0F80" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0130" name="trigger">
+  <dll id="0x0130" name="trigger" interface="object">
     <functions>
       <function address="0x801FDD40" idx="0x0"/>
       <function address="0x801FDD44" idx="0x1"/>
@@ -3519,7 +3519,7 @@
       <function address="0x801FE7A0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0131">
+  <dll id="0x0131" interface="object">
     <functions>
       <function address="0x801EE7AC" idx="0x0"/>
       <function address="0x801EE7B0" idx="0x1"/>
@@ -3532,7 +3532,7 @@
       <function address="0x801EE958" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0132">
+  <dll id="0x0132" interface="object">
     <functions>
       <function address="0x801EF92C" idx="0x0"/>
       <function address="0x801EF930" idx="0x1"/>
@@ -3545,7 +3545,7 @@
       <function address="0x801EFB84" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0133">
+  <dll id="0x0133" name="fire" interface="object">
     <functions>
       <function address="0x801EFB8C" idx="0x0"/>
       <function address="0x801EFB90" idx="0x1"/>
@@ -3558,7 +3558,7 @@
       <function address="0x801EFE40" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0134">
+  <dll id="0x0134" interface="object">
     <functions>
       <function address="0x801EE960" idx="0x0"/>
       <function address="0x801EE964" idx="0x1"/>
@@ -3571,7 +3571,7 @@
       <function address="0x801EEB34" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0135">
+  <dll id="0x0135" name="campfire" interface="object">
     <functions>
       <function address="0x801EEB3C" idx="0x0"/>
       <function address="0x801EEB40" idx="0x1"/>
@@ -3584,7 +3584,7 @@
       <function address="0x801EF104" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0136">
+  <dll id="0x0136" name="genprops" interface="object">
     <functions>
       <function address="0x801F0290" idx="0x0"/>
       <function address="0x801F0294" idx="0x1"/>
@@ -3597,7 +3597,7 @@
       <function address="0x801F1E58" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0137" name="gfxEmit">
+  <dll id="0x0137" name="gfxEmit" interface="object">
     <functions>
       <function address="0x801F1E60" idx="0x0"/>
       <function address="0x801F1E64" idx="0x1"/>
@@ -3610,7 +3610,7 @@
       <function address="0x801F2594" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0138">
+  <dll id="0x0138" interface="object">
     <functions>
       <function address="0x801F4738" idx="0x0"/>
       <function address="0x801F473C" idx="0x1"/>
@@ -3623,7 +3623,7 @@
       <function address="0x801F4A3C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0139">
+  <dll id="0x0139" name="transporter" interface="object">
     <functions>
       <function address="0x801F4A44" idx="0x0"/>
       <function address="0x801F4A48" idx="0x1"/>
@@ -3636,7 +3636,7 @@
       <function address="0x801F560C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x013A" name="autoTransporter">
+  <dll id="0x013A" name="autoTransporter" interface="object">
     <functions>
       <function address="0x801F561C" idx="0x0"/>
       <function address="0x801F5620" idx="0x1"/>
@@ -3649,7 +3649,7 @@
       <function address="0x801F606C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x013B">
+  <dll id="0x013B" interface="object">
     <functions>
       <function address="0x801EF10C" idx="0x0"/>
       <function address="0x801EF110" idx="0x1"/>
@@ -3662,7 +3662,7 @@
       <function address="0x801EF2E0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x013C">
+  <dll id="0x013C" interface="object">
     <functions>
       <function address="0x801EF2E8" idx="0x0"/>
       <function address="0x801EF2EC" idx="0x1"/>
@@ -3675,7 +3675,7 @@
       <function address="0x801EF924" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x013D">
+  <dll id="0x013D" interface="object">
     <functions>
       <function address="0x801F40D8" idx="0x0"/>
       <function address="0x801F40EC" idx="0x1"/>
@@ -3690,7 +3690,7 @@
       <function address="0x801F4708" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x013E">
+  <dll id="0x013E" interface="object">
     <functions>
       <function address="0x801F607C" idx="0x0"/>
       <function address="0x801F6080" idx="0x1"/>
@@ -3703,7 +3703,7 @@
       <function address="0x801F6194" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x013F">
+  <dll id="0x013F" interface="object">
     <functions>
       <function address="0x801F2BE0" idx="0x0"/>
       <function address="0x801F2BE4" idx="0x1"/>
@@ -3716,7 +3716,7 @@
       <function address="0x801F3080" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0140">
+  <dll id="0x0140" interface="object">
     <functions>
       <function address="0x801F619C" idx="0x0"/>
       <function address="0x801F61A0" idx="0x1"/>
@@ -3729,7 +3729,7 @@
       <function address="0x801F6418" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0141">
+  <dll id="0x0141" interface="object">
     <functions>
       <function address="0x801F3AC4" idx="0x0"/>
       <function address="0x801F3AC8" idx="0x1"/>
@@ -3742,7 +3742,7 @@
       <function address="0x801F3FF4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0142" name="tFrameAnimator">
+  <dll id="0x0142" name="tFrameAnimator" interface="object">
     <functions>
       <function address="0x801F643C" idx="0x0"/>
       <function address="0x801F6440" idx="0x1"/>
@@ -3755,7 +3755,7 @@
       <function address="0x801F6668" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0143" name="screenOverlay">
+  <dll id="0x0143" name="screenOverlay" interface="object">
     <functions>
       <function address="0x801F6670" idx="0x0"/>
       <function address="0x801F6694" idx="0x1"/>
@@ -3769,7 +3769,7 @@
       <function address="0x801F6A34" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0144">
+  <dll id="0x0144" interface="object">
     <functions>
       <function address="0x801FD824" idx="0x0"/>
       <function address="0x801FD828" idx="0x1"/>
@@ -3782,7 +3782,7 @@
       <function address="0x801FDD38" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0145">
+  <dll id="0x0145" interface="object">
     <functions>
       <function address="0x801F6B80" idx="0x0"/>
       <function address="0x801F6B84" idx="0x1"/>
@@ -3795,7 +3795,7 @@
       <function address="0x801F6BFC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0146" name="texScroll">
+  <dll id="0x0146" name="texScroll" interface="object">
     <functions>
       <function address="0x801F6C04" idx="0x0"/>
       <function address="0x801F6C08" idx="0x1"/>
@@ -3809,7 +3809,7 @@
       <function address="0x801F6F38" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0147">
+  <dll id="0x0147" interface="object">
     <functions>
       <function address="0x801F6F70" idx="0x0"/>
       <function address="0x801F6F74" idx="0x1"/>
@@ -3822,7 +3822,7 @@
       <function address="0x801F708C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0148">
+  <dll id="0x0148" interface="object">
     <functions>
       <function address="0x801F7098" idx="0x0"/>
       <function address="0x801F709C" idx="0x1"/>
@@ -3838,7 +3838,7 @@
       <function address="0x801F77EC" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x0149">
+  <dll id="0x0149" name="alphaanim" interface="object">
     <functions>
       <function address="0x801F781C" idx="0x0"/>
       <function address="0x801F7820" idx="0x1"/>
@@ -3851,7 +3851,7 @@
       <function address="0x801F7FD4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x014A" name="groundAnimator">
+  <dll id="0x014A" name="groundAnimator" interface="object">
     <functions>
       <function address="0x801F7FE0" idx="0x0"/>
       <function address="0x801F7FE4" idx="0x1"/>
@@ -3867,7 +3867,7 @@
       <function address="0x801F8B64" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x014B">
+  <dll id="0x014B" name="crackanim" interface="object">
     <functions>
       <function address="0x801F8B80" idx="0x0"/>
       <function address="0x801F8B84" idx="0x1"/>
@@ -3880,7 +3880,7 @@
       <function address="0x801F8EA8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x014C">
+  <dll id="0x014C" interface="object">
     <functions>
       <function address="0x801F8EB4" idx="0x0"/>
       <function address="0x801F8EB8" idx="0x1"/>
@@ -3897,7 +3897,7 @@
       <function address="0x801F91C0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x014D">
+  <dll id="0x014D" interface="object">
     <functions>
       <function address="0x801F91CC" idx="0x0"/>
       <function address="0x801F91D0" idx="0x1"/>
@@ -3910,7 +3910,7 @@
       <function address="0x801F9384" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x014E">
+  <dll id="0x014E" interface="object">
     <functions>
       <function address="0x801F9390" idx="0x0"/>
       <function address="0x801F9394" idx="0x1"/>
@@ -3926,7 +3926,7 @@
       <function address="0x801F9800" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x014F">
+  <dll id="0x014F" interface="object">
     <functions>
       <function address="0x801F981C" idx="0x0"/>
       <function address="0x801F9820" idx="0x1"/>
@@ -3939,7 +3939,7 @@
       <function address="0x801FAFB4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0150">
+  <dll id="0x0150" interface="object">
     <functions>
       <function address="0x801FAFC4" idx="0x0"/>
       <function address="0x801FAFC8" idx="0x1"/>
@@ -3952,7 +3952,7 @@
       <function address="0x801FB12C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0151" name="exploder">
+  <dll id="0x0151" name="exploder" interface="object">
     <functions>
       <function address="0x801FB290" idx="0x0"/>
       <function address="0x801FB294" idx="0x1"/>
@@ -3970,7 +3970,7 @@
       <function address="0x801FBBA8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0152">
+  <dll id="0x0152" interface="object">
     <functions>
       <function address="0x801FBFC4" idx="0x0"/>
       <function address="0x801FBFC8" idx="0x1"/>
@@ -3983,7 +3983,7 @@
       <function address="0x801FC368" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0153">
+  <dll id="0x0153" interface="object">
     <functions>
       <function address="0x801FC4EC" idx="0x0"/>
       <function address="0x801FC4F0" idx="0x1"/>
@@ -3996,7 +3996,7 @@
       <function address="0x801FCA9C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0154" name="tFrameAnimator154">
+  <dll id="0x0154" name="tFrameAnimator154" interface="object">
     <functions>
       <function address="0x801FD0FC" idx="0x0"/>
       <function address="0x801FD100" idx="0x1"/>
@@ -4009,7 +4009,7 @@
       <function address="0x801FD3D0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0155">
+  <dll id="0x0155" interface="object">
     <functions>
       <function address="0x801FD3D8" idx="0x0"/>
       <function address="0x801FD3DC" idx="0x1"/>
@@ -4022,7 +4022,7 @@
       <function address="0x801FD81C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0156">
+  <dll id="0x0156" interface="object">
     <functions>
       <function address="0x8025E7D8" idx="0x0"/>
       <function address="0x8025E7DC" idx="0x1"/>
@@ -4035,7 +4035,7 @@
       <function address="0x8025E87C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0157">
+  <dll id="0x0157" interface="object">
     <functions>
       <function address="0x8025E31C" idx="0x0"/>
       <function address="0x8025E320" idx="0x1"/>
@@ -4048,7 +4048,7 @@
       <function address="0x8025E438" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0158">
+  <dll id="0x0158" interface="object">
     <functions>
       <function address="0x8025E884" idx="0x0"/>
       <function address="0x8025E888" idx="0x1"/>
@@ -4061,7 +4061,7 @@
       <function address="0x8025E914" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0159">
+  <dll id="0x0159" interface="object">
     <functions>
       <function address="0x80200F80" idx="0x0"/>
       <function address="0x80200F8C" idx="0x1"/>
@@ -4074,7 +4074,7 @@
       <function address="0x80201330" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x015A">
+  <dll id="0x015A" interface="object">
     <functions>
       <function address="0x8020133C" idx="0x0"/>
       <function address="0x80201348" idx="0x1"/>
@@ -4087,7 +4087,7 @@
       <function address="0x80201968" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x015B">
+  <dll id="0x015B" interface="object">
     <functions>
       <function address="0x802020B0" idx="0x0"/>
       <function address="0x802020B4" idx="0x1"/>
@@ -4100,7 +4100,7 @@
       <function address="0x802023FC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x015C" name="guardian">
+  <dll id="0x015C" name="CFguardian" interface="object">
     <functions>
       <function address="0x802025D0" idx="0x0"/>
       <function address="0x802025D4" idx="0x1"/>
@@ -4119,7 +4119,7 @@
       <function address="0x802046DC" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x015D">
+  <dll id="0x015D" name="windlift" interface="object">
     <functions>
       <function address="0x80204860" idx="0x0"/>
       <function address="0x80204864" idx="0x1"/>
@@ -4132,7 +4132,7 @@
       <function address="0x80204E68" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x015E">
+  <dll id="0x015E" interface="object">
     <functions>
       <function address="0x802053B0" idx="0x0"/>
       <function address="0x802053B4" idx="0x1"/>
@@ -4145,7 +4145,7 @@
       <function address="0x80205698" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x015F">
+  <dll id="0x015F" name="CFcrystal" interface="object">
     <functions>
       <function address="0x802057FC" idx="0x0"/>
       <function address="0x80205800" idx="0x1"/>
@@ -4158,7 +4158,7 @@
       <function address="0x802059B8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0160" name="CFBaby">
+  <dll id="0x0160" name="CFBaby" interface="object">
     <functions>
       <function address="0x80206668" idx="0x0"/>
       <function address="0x8020666C" idx="0x1"/>
@@ -4177,7 +4177,7 @@
       </function>
     </functions>
   </dll>
-  <dll id="0x0161">
+  <dll id="0x0161" name="laser" interface="object">
     <functions>
       <function address="0x80207048" idx="0x0"/>
       <function address="0x8020704C" idx="0x1"/>
@@ -4190,7 +4190,7 @@
       <function address="0x8020797C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0162" name="CFPrisonGuard">
+  <dll id="0x0162" name="CFPrisonGuard" interface="object">
     <functions>
       <function address="0x80207984" idx="0x0"/>
       <function address="0x80207988" idx="0x1"/>
@@ -4207,7 +4207,7 @@
       <function address="0x80207D38" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0163">
+  <dll id="0x0163" interface="object">
     <functions>
       <function address="0x80208168" idx="0x0"/>
       <function address="0x8020816C" idx="0x1"/>
@@ -4220,7 +4220,7 @@
       <function address="0x80208604" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0164">
+  <dll id="0x0164" interface="object">
     <functions>
       <function address="0x80208744" idx="0x0"/>
       <function address="0x80208748" idx="0x1"/>
@@ -4233,7 +4233,7 @@
       <function address="0x8020879C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0165">
+  <dll id="0x0165" interface="object">
     <functions>
       <function address="0x802087A4" idx="0x0"/>
       <function address="0x802087A8" idx="0x1"/>
@@ -4246,7 +4246,7 @@
       <function address="0x80208818" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0166">
+  <dll id="0x0166" interface="object">
     <functions>
       <function address="0x80208820" idx="0x0"/>
       <function address="0x80208824" idx="0x1"/>
@@ -4259,7 +4259,7 @@
       <function address="0x802088B0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0167">
+  <dll id="0x0167" interface="object">
     <functions>
       <function address="0x802088B8" idx="0x0"/>
       <function address="0x802088BC" idx="0x1"/>
@@ -4272,7 +4272,7 @@
       <function address="0x802090F4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0168">
+  <dll id="0x0168" interface="object">
     <functions>
       <function address="0x8020AD24" idx="0x0"/>
       <function address="0x8020AD28" idx="0x1"/>
@@ -4285,7 +4285,7 @@
       <function address="0x8020AEA0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0169">
+  <dll id="0x0169" interface="object">
     <functions>
       <function address="0x8020AEA8" idx="0x0"/>
       <function address="0x8020AEAC" idx="0x1"/>
@@ -4298,7 +4298,7 @@
       <function address="0x8020AF70" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x016A">
+  <dll id="0x016A" interface="object">
     <functions>
       <function address="0x8020AF78" idx="0x0"/>
       <function address="0x8020AF7C" idx="0x1"/>
@@ -4311,7 +4311,7 @@
       <function address="0x8020B050" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x016B">
+  <dll id="0x016B" interface="object">
     <functions>
       <function address="0x8020B098" idx="0x0"/>
       <function address="0x8020B09C" idx="0x1"/>
@@ -4324,7 +4324,7 @@
       <function address="0x8020B278" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x016C">
+  <dll id="0x016C" interface="object">
     <functions>
       <function address="0x80200EA8" idx="0x0"/>
       <function address="0x80200EAC" idx="0x1"/>
@@ -4337,7 +4337,7 @@
       <function address="0x80200F60" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x016D">
+  <dll id="0x016D" name="CFtoggleswitch" interface="object">
     <functions>
       <function address="0x8020B3C8" idx="0x0"/>
       <function address="0x8020B3CC" idx="0x1"/>
@@ -4350,7 +4350,7 @@
       <function address="0x8020B67C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x016E">
+  <dll id="0x016E" interface="object">
     <functions>
       <function address="0x8020B72C" idx="0x0"/>
       <function address="0x8020B730" idx="0x1"/>
@@ -4367,7 +4367,7 @@
       <function address="0x8020B964" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x016F" name="DRbarrelplace">
+  <dll id="0x016F" name="DRbarrelplace" interface="object">
     <functions>
       <function address="0x8020B96C" idx="0x0"/>
       <function address="0x8020B970" idx="0x1"/>
@@ -4392,7 +4392,7 @@
       </function>
     </functions>
   </dll>
-  <dll id="0x0170">
+  <dll id="0x0170" interface="object">
     <functions>
       <function address="0x8020D238" idx="0x0"/>
       <function address="0x8020D23C" idx="0x1"/>
@@ -4405,7 +4405,7 @@
       <function address="0x8020D598" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0171" name="SimpleExploder">
+  <dll id="0x0171" name="SimpleExploder" interface="object">
     <functions>
       <function address="0x8020D6AC" idx="0x0"/>
       <function address="0x8020D6B0" idx="0x1"/>
@@ -4418,7 +4418,7 @@
       <function address="0x8020DA34" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0172">
+  <dll id="0x0172" interface="object">
     <functions>
       <function address="0x8020E424" idx="0x0"/>
       <function address="0x8020E428" idx="0x1"/>
@@ -4431,7 +4431,7 @@
       <function address="0x8020E4D8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0173">
+  <dll id="0x0173" name="CFforcecontrol" interface="object">
     <functions>
       <function address="0x8020E4E0" idx="0x0"/>
       <function address="0x8020E4E4" idx="0x1"/>
@@ -4444,7 +4444,7 @@
       <function address="0x8020E8D4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0174">
+  <dll id="0x0174" interface="object">
     <functions>
       <function address="0x8020F0D0" idx="0x0"/>
       <function address="0x8020F0D4" idx="0x1"/>
@@ -4457,7 +4457,7 @@
       <function address="0x8020F278" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0175">
+  <dll id="0x0175" interface="object">
     <functions>
       <function address="0x8020F464" idx="0x0"/>
       <function address="0x8020F468" idx="0x1"/>
@@ -4470,7 +4470,7 @@
       <function address="0x8020F81C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0176">
+  <dll id="0x0176" interface="object">
     <functions>
       <function address="0x8020F824" idx="0x0"/>
       <function address="0x8020F828" idx="0x1"/>
@@ -4485,7 +4485,7 @@
       <function address="0x8020F98C" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0177" name="treasureRelated0177">
+  <dll id="0x0177" name="treasureRelated0177" interface="object">
     <functions>
       <function address="0x80211370" idx="0x0"/>
       <function address="0x80211374" idx="0x1"/>
@@ -4510,7 +4510,7 @@
       <function address="0x802118D0" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x0178" name="robot">
+  <dll id="0x0178" name="robot" interface="object">
     <functions>
       <function address="0x8020FA50" idx="0x0"/>
       <function address="0x8020FA54" idx="0x1"/>
@@ -4533,7 +4533,7 @@
       <function address="0x8021082C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0179">
+  <dll id="0x0179" interface="object">
     <functions>
       <function address="0x80211D84" idx="0x0"/>
       <function address="0x80211D88" idx="0x1"/>
@@ -4546,7 +4546,7 @@
       <function address="0x80211F28" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x017A">
+  <dll id="0x017A" interface="object">
     <functions>
       <function address="0x80211F30" idx="0x0"/>
       <function address="0x80211F34" idx="0x1"/>
@@ -4559,7 +4559,7 @@
       <function address="0x80212360" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x017B">
+  <dll id="0x017B" interface="object">
     <functions>
       <function address="0x80212368" idx="0x0"/>
       <function address="0x8021236C" idx="0x1"/>
@@ -4572,7 +4572,7 @@
       <function address="0x80212704" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x017C">
+  <dll id="0x017C" name="CFTreasSharpy" interface="object">
     <functions>
       <function address="0x80212D48" idx="0x0"/>
       <function address="0x80212D4C" idx="0x1"/>
@@ -4585,7 +4585,7 @@
       <function address="0x80213384" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x017D">
+  <dll id="0x017D" name="CFchuckobj" interface="object">
     <functions>
       <function address="0x80214060" idx="0x0"/>
       <function address="0x80214064" idx="0x1"/>
@@ -4598,7 +4598,7 @@
       <function address="0x80214768" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x017E">
+  <dll id="0x017E" name="CFwalltorch" interface="object">
     <functions>
       <function address="0x802149B4" idx="0x0"/>
       <function address="0x802149B8" idx="0x1"/>
@@ -4611,7 +4611,7 @@
       <function address="0x80214D2C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x017F">
+  <dll id="0x017F" interface="object">
     <functions>
       <function address="0x80214D34" idx="0x0"/>
       <function address="0x80214D38" idx="0x1"/>
@@ -4625,7 +4625,7 @@
       <function address="0x802153D0" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0180">
+  <dll id="0x0180" interface="object">
     <functions>
       <function address="0x8021593C" idx="0x0"/>
       <function address="0x80215940" idx="0x1"/>
@@ -4638,7 +4638,7 @@
       <function address="0x80215E98" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0181" name="holoPoint">
+  <dll id="0x0181" name="holoPoint" interface="object">
     <functions>
       <function address="0x80215EA0" idx="0x0"/>
       <function address="0x80215ECC" idx="0x1"/>
@@ -4651,7 +4651,7 @@
       <function address="0x80216004" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0182">
+  <dll id="0x0182" interface="object">
     <functions>
       <function address="0x80216064" idx="0x0"/>
       <function address="0x80216068" idx="0x1"/>
@@ -4664,7 +4664,7 @@
       <function address="0x80216390" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0183">
+  <dll id="0x0183" interface="object">
     <functions>
       <function address="0x8022297C" idx="0x0"/>
       <function address="0x80222980" idx="0x1"/>
@@ -4677,7 +4677,7 @@
       <function address="0x80222CEC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0184">
+  <dll id="0x0184" name="IMicicle" interface="object">
     <functions>
       <function address="0x80223288" idx="0x0"/>
       <function address="0x80223294" idx="0x1"/>
@@ -4690,7 +4690,7 @@
       <function address="0x8022388C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0185">
+  <dll id="0x0185" interface="object">
     <functions>
       <function address="0x80223A44" idx="0x0"/>
       <function address="0x80223A48" idx="0x1"/>
@@ -4703,7 +4703,7 @@
       <function address="0x80223EE0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0186">
+  <dll id="0x0186" interface="object">
     <functions>
       <function address="0x80223FDC" idx="0x0"/>
       <function address="0x80223FE0" idx="0x1"/>
@@ -4716,7 +4716,7 @@
       <function address="0x8022445C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0187">
+  <dll id="0x0187" interface="object">
     <functions>
       <function address="0x8022492C" idx="0x0"/>
       <function address="0x80224930" idx="0x1"/>
@@ -4729,7 +4729,7 @@
       <function address="0x802249A8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0188">
+  <dll id="0x0188" name="IMspacecraft" interface="object">
     <functions>
       <function address="0x802249B0" idx="0x0"/>
       <function address="0x802249B4" idx="0x1"/>
@@ -4745,7 +4745,7 @@
       <function address="0x80224D84" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x0189">
+  <dll id="0x0189" interface="object">
     <functions>
       <function address="0x80224E58" idx="0x0"/>
       <function address="0x80224E5C" idx="0x1"/>
@@ -4758,7 +4758,7 @@
       <function address="0x80225318" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x018A">
+  <dll id="0x018A" interface="object">
     <functions>
       <function address="0x80225320" idx="0x0"/>
       <function address="0x80225324" idx="0x1"/>
@@ -4771,7 +4771,7 @@
       <function address="0x802254D8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x018B">
+  <dll id="0x018B" interface="object">
     <functions>
       <function address="0x802254E0" idx="0x0"/>
       <function address="0x802254E4" idx="0x1"/>
@@ -4784,7 +4784,7 @@
       <function address="0x80225854" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x018C">
+  <dll id="0x018C" name="DFlog" interface="object">
     <functions>
       <function address="0x80270724" idx="0x0"/>
       <function address="0x80270728" idx="0x1"/>
@@ -4811,7 +4811,7 @@
       <function address="0x802725A4" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x018D" name="riverFlowRelated018D">
+  <dll id="0x018D" name="riverFlowRelated018D" interface="object">
     <functions>
       <function address="0x80234F50" idx="0x0"/>
       <function address="0x80234F54" idx="0x1"/>
@@ -4824,7 +4824,7 @@
       <function address="0x802351C4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x018E">
+  <dll id="0x018E" interface="object">
     <functions>
       <function address="0x802351CC" idx="0x0"/>
       <function address="0x802351D0" idx="0x1"/>
@@ -4837,7 +4837,7 @@
       <function address="0x802353E4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x018F" name="rope">
+  <dll id="0x018F" name="rope" interface="object">
     <functions>
       <function address="0x802353EC" idx="0x0"/>
       <function address="0x802353F0" idx="0x1"/>
@@ -4860,7 +4860,7 @@
       <function address="0x8023663C" idx="0x13"/>
     </functions>
   </dll>
-  <dll id="0x0190">
+  <dll id="0x0190" name="DFcradle" interface="object">
     <functions>
       <function address="0x80237154" idx="0x0"/>
       <function address="0x80237158" idx="0x1"/>
@@ -4873,7 +4873,7 @@
       <function address="0x80237980" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0191">
+  <dll id="0x0191" name="DFpulley" interface="object">
     <functions>
       <function address="0x80237A68" idx="0x0"/>
       <function address="0x80237A6C" idx="0x1"/>
@@ -4886,7 +4886,7 @@
       <function address="0x80237E04" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0192">
+  <dll id="0x0192" name="DFbarrel" interface="object">
     <functions>
       <function address="0x80237E0C" idx="0x0"/>
       <function address="0x80237E10" idx="0x1"/>
@@ -4899,7 +4899,7 @@
       <function address="0x8023804C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0193">
+  <dll id="0x0193" interface="object">
     <functions>
       <function address="0x8023862C" idx="0x0"/>
       <function address="0x80238630" idx="0x1"/>
@@ -4912,7 +4912,7 @@
       <function address="0x80238AC0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0194">
+  <dll id="0x0194" interface="object">
     <functions>
       <function address="0x80238AC8" idx="0x0"/>
       <function address="0x80238ACC" idx="0x1"/>
@@ -4925,7 +4925,7 @@
       <function address="0x80238CA0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0195">
+  <dll id="0x0195" interface="object">
     <functions>
       <function address="0x80238CA8" idx="0x0"/>
       <function address="0x80238CAC" idx="0x1"/>
@@ -4938,7 +4938,7 @@
       <function address="0x80238DA0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0196">
+  <dll id="0x0196" interface="object">
     <functions>
       <function address="0x80238DA8" idx="0x0"/>
       <function address="0x80238DAC" idx="0x1"/>
@@ -4951,7 +4951,7 @@
       <function address="0x80239014" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0197">
+  <dll id="0x0197" interface="object">
     <functions>
       <function address="0x80239100" idx="0x0"/>
       <function address="0x80239120" idx="0x1"/>
@@ -4964,7 +4964,7 @@
       <function address="0x80239434" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0198">
+  <dll id="0x0198" interface="object">
     <functions>
       <function address="0x8023A89C" idx="0x0"/>
       <function address="0x8023A8A0" idx="0x1"/>
@@ -4977,7 +4977,7 @@
       <function address="0x8023AB10" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0199">
+  <dll id="0x0199" interface="object">
     <functions>
       <function address="0x8023AD6C" idx="0x0"/>
       <function address="0x8023AD70" idx="0x1"/>
@@ -4990,7 +4990,7 @@
       <function address="0x8023AE8C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x019A">
+  <dll id="0x019A" name="DFwhirlpool" interface="object">
     <functions>
       <function address="0x8023A624" idx="0x0"/>
       <function address="0x8023A628" idx="0x1"/>
@@ -5003,7 +5003,7 @@
       <function address="0x8023A894" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x019B">
+  <dll id="0x019B" name="DFlantern" interface="object">
     <functions>
       <function address="0x8023AFD0" idx="0x0"/>
       <function address="0x8023AFD4" idx="0x1"/>
@@ -5016,7 +5016,7 @@
       <function address="0x8023B6FC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x019C">
+  <dll id="0x019C" interface="object">
     <functions>
       <function address="0x8023B704" idx="0x0"/>
       <function address="0x8023B708" idx="0x1"/>
@@ -5029,7 +5029,7 @@
       <function address="0x8023C32C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x019D">
+  <dll id="0x019D" name="creator19D" interface="object">
     <functions>
       <function address="0x8023CEA8" idx="0x0"/>
       <function address="0x8023CEAC" idx="0x1"/>
@@ -5042,7 +5042,7 @@
       <function address="0x8023D284" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x019E">
+  <dll id="0x019E" interface="object">
     <functions>
       <function address="0x8023C688" idx="0x0"/>
       <function address="0x8023C68C" idx="0x1"/>
@@ -5055,7 +5055,7 @@
       <function address="0x8023CEA0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x019F">
+  <dll id="0x019F" name="laser19F" interface="object">
     <functions>
       <function address="0x8023D28C" idx="0x0"/>
       <function address="0x8023D290" idx="0x1"/>
@@ -5068,7 +5068,7 @@
       <function address="0x8023DDF0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A0">
+  <dll id="0x01A0" interface="object">
     <functions>
       <function address="0x80216418" idx="0x0"/>
       <function address="0x8021641C" idx="0x1"/>
@@ -5083,7 +5083,7 @@
       <function address="0x80219700" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x01A1">
+  <dll id="0x01A1" interface="object">
     <functions>
       <function address="0x80219D38" idx="0x0"/>
       <function address="0x80219D3C" idx="0x1"/>
@@ -5096,7 +5096,7 @@
       <function address="0x80219D5C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A2">
+  <dll id="0x01A2" interface="object">
     <functions>
       <function address="0x80219D64" idx="0x0"/>
       <function address="0x80219D68" idx="0x1"/>
@@ -5109,7 +5109,7 @@
       <function address="0x80219E18" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A3">
+  <dll id="0x01A3" name="mmp_barrel" interface="object">
     <functions>
       <function address="0x80219E20" idx="0x0"/>
       <function address="0x80219E2C" idx="0x1"/>
@@ -5122,7 +5122,7 @@
       <function address="0x8021A4E8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A4">
+  <dll id="0x01A4" interface="object">
     <functions>
       <function address="0x8021A63C" idx="0x0"/>
       <function address="0x8021A640" idx="0x1"/>
@@ -5135,7 +5135,7 @@
       <function address="0x8021A81C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A5">
+  <dll id="0x01A5" interface="object">
     <functions>
       <function address="0x8021A924" idx="0x0"/>
       <function address="0x8021A928" idx="0x1"/>
@@ -5148,7 +5148,7 @@
       <function address="0x8021AB2C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A6">
+  <dll id="0x01A6" name="MMP_asteroid" interface="object">
     <functions>
       <function address="0x8021AC88" idx="0x0"/>
       <function address="0x8021AC8C" idx="0x1"/>
@@ -5161,7 +5161,7 @@
       <function address="0x8021B480" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A7">
+  <dll id="0x01A7" interface="object">
     <functions>
       <function address="0x8021BF40" idx="0x0"/>
       <function address="0x8021BF44" idx="0x1"/>
@@ -5174,7 +5174,7 @@
       <function address="0x8021C41C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A8">
+  <dll id="0x01A8" name="MMP_moonrock" interface="object">
     <functions>
       <function address="0x8021B650" idx="0x0"/>
       <function address="0x8021B654" idx="0x1"/>
@@ -5187,7 +5187,7 @@
       <function address="0x8021BB5C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01A9">
+  <dll id="0x01A9" name="MMP_gyservent" interface="object">
     <functions>
       <function address="0x8021C424" idx="0x0"/>
       <function address="0x8021C428" idx="0x1"/>
@@ -5200,7 +5200,7 @@
       <function address="0x8021C59C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01AA">
+  <dll id="0x01AA" interface="object">
     <functions>
       <function address="0x8021C5A4" idx="0x0"/>
       <function address="0x8021C5A8" idx="0x1"/>
@@ -5213,7 +5213,7 @@
       <function address="0x8021CB74" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01AB" name="lightfootRelated01AB">
+  <dll id="0x01AB" name="cage" interface="object">
     <functions>
       <function address="0x8021CB7C" idx="0x0"/>
       <function address="0x8021CB80" idx="0x1"/>
@@ -5230,7 +5230,7 @@
       <function address="0x8021D3F8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01AC">
+  <dll id="0x01AC" interface="object">
     <functions>
       <function address="0x8021D6D4" idx="0x0"/>
       <function address="0x8021D6D8" idx="0x1"/>
@@ -5243,7 +5243,7 @@
       <function address="0x8021D8E4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01AD">
+  <dll id="0x01AD" interface="object">
     <functions>
       <function address="0x8021D98C" idx="0x0"/>
       <function address="0x8021D990" idx="0x1"/>
@@ -5256,7 +5256,7 @@
       <function address="0x8021DAA0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01AE">
+  <dll id="0x01AE" interface="object">
     <functions>
       <function address="0x8021DB50" idx="0x0"/>
       <function address="0x8021DB54" idx="0x1"/>
@@ -5269,7 +5269,7 @@
       <function address="0x8021DCEC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01AF" name="fireCrystalLightRelated01AF">
+  <dll id="0x01AF" name="fireCrystalLightRelated01AF" interface="object">
     <functions>
       <function address="0x8021E03C" idx="0x0"/>
       <function address="0x8021E040" idx="0x1"/>
@@ -5282,7 +5282,7 @@
       <function address="0x8021E448" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B0">
+  <dll id="0x01B0" interface="object">
     <functions>
       <function address="0x8021DE24" idx="0x0"/>
       <function address="0x8021DE28" idx="0x1"/>
@@ -5295,7 +5295,7 @@
       <function address="0x8021E034" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B1">
+  <dll id="0x01B1" interface="object">
     <functions>
       <function address="0x8021E594" idx="0x0"/>
       <function address="0x8021E598" idx="0x1"/>
@@ -5308,7 +5308,7 @@
       <function address="0x8021E9EC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B2">
+  <dll id="0x01B2" name="hightop" interface="object">
     <functions>
       <function address="0x8021E9F4" idx="0x0"/>
       <function address="0x8021E9F8" idx="0x1"/>
@@ -5321,7 +5321,7 @@
       <function address="0x8021EF48" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B3">
+  <dll id="0x01B3" interface="object">
     <functions>
       <function address="0x8021EF7C" idx="0x0"/>
       <function address="0x8021EF80" idx="0x1"/>
@@ -5334,7 +5334,7 @@
       <function address="0x8021F12C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B4">
+  <dll id="0x01B4" interface="object">
     <functions>
       <function address="0x8021F134" idx="0x0"/>
       <function address="0x8021F138" idx="0x1"/>
@@ -5347,7 +5347,7 @@
       <function address="0x8021FD14" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B5">
+  <dll id="0x01B5" interface="object">
     <functions>
       <function address="0x8021FF60" idx="0x0"/>
       <function address="0x8021FF64" idx="0x1"/>
@@ -5360,7 +5360,7 @@
       <function address="0x8022012C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B6">
+  <dll id="0x01B6" interface="object">
     <functions>
       <function address="0x80220134" idx="0x0"/>
       <function address="0x80220138" idx="0x1"/>
@@ -5373,7 +5373,7 @@
       <function address="0x80220294" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B7">
+  <dll id="0x01B7" interface="object">
     <functions>
       <function address="0x80220508" idx="0x0"/>
       <function address="0x8022050C" idx="0x1"/>
@@ -5386,7 +5386,7 @@
       <function address="0x80220774" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B8">
+  <dll id="0x01B8" name="sandwormBoss" interface="object">
     <functions>
       <function address="0x8022077C" idx="0x0"/>
       <function address="0x80220780" idx="0x1"/>
@@ -5399,7 +5399,7 @@
       <function address="0x80221A5C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01B9">
+  <dll id="0x01B9" interface="object">
     <functions>
       <function address="0x80221B1C" idx="0x0"/>
       <function address="0x80221B20" idx="0x1"/>
@@ -5412,7 +5412,7 @@
       <function address="0x80221DB0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01BA">
+  <dll id="0x01BA" name="gasvent" interface="object">
     <functions>
       <function address="0x80221DB8" idx="0x0"/>
       <function address="0x80221DBC" idx="0x1"/>
@@ -5425,7 +5425,7 @@
       <function address="0x80221F68" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01BB">
+  <dll id="0x01BB" name="gasventControl" interface="object">
     <functions>
       <function address="0x80222670" idx="0x0"/>
       <function address="0x80222674" idx="0x1"/>
@@ -5438,7 +5438,7 @@
       <function address="0x80222974" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01BC">
+  <dll id="0x01BC" interface="object">
     <functions>
       <function address="0x80221F70" idx="0x0"/>
       <function address="0x80221F74" idx="0x1"/>
@@ -5451,7 +5451,7 @@
       <function address="0x80222018" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01BD">
+  <dll id="0x01BD" interface="object">
     <functions>
       <function address="0x80222020" idx="0x0"/>
       <function address="0x80222024" idx="0x1"/>
@@ -5464,7 +5464,7 @@
       <function address="0x8022220C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01BE">
+  <dll id="0x01BE" name="cannontargetControl" interface="object">
     <functions>
       <function address="0x80222214" idx="0x0"/>
       <function address="0x80222218" idx="0x1"/>
@@ -5477,7 +5477,7 @@
       <function address="0x802224D8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01BF" name="mmshrine">
+  <dll id="0x01BF" name="mmshrine" interface="object">
     <functions>
       <function address="0x8023DDF8" idx="0x0"/>
       <function address="0x8023DDFC" idx="0x1"/>
@@ -5490,7 +5490,7 @@
       <function address="0x8023E4C8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C0">
+  <dll id="0x01C0" name="animobj1C0" interface="object">
     <functions>
       <function address="0x8023E79C" idx="0x0"/>
       <function address="0x8023E7A0" idx="0x1"/>
@@ -5503,7 +5503,7 @@
       <function address="0x8023EBAC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C1">
+  <dll id="0x01C1" name="torch1C1" interface="object">
     <functions>
       <function address="0x8023EBB4" idx="0x0"/>
       <function address="0x8023EBB8" idx="0x1"/>
@@ -5516,7 +5516,7 @@
       <function address="0x8023F430" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C2">
+  <dll id="0x01C2" name="shrine1C2" interface="object">
     <functions>
       <function address="0x8023F438" idx="0x0"/>
       <function address="0x8023F43C" idx="0x1"/>
@@ -5534,7 +5534,7 @@
       <function address="0x802405C4" idx="0xE"/>
     </functions>
   </dll>
-  <dll id="0x01C3">
+  <dll id="0x01C3" name="cup1C3" interface="object">
     <functions>
       <function address="0x80242E90" idx="0x0"/>
       <function address="0x80242E94" idx="0x1"/>
@@ -5547,7 +5547,7 @@
       <function address="0x80243698" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C4">
+  <dll id="0x01C4" name="creator1C4" interface="object">
     <functions>
       <function address="0x80240938" idx="0x0"/>
       <function address="0x8024093C" idx="0x1"/>
@@ -5560,7 +5560,7 @@
       <function address="0x80240C74" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C5">
+  <dll id="0x01C5" interface="object">
     <functions>
       <function address="0x80240C7C" idx="0x0"/>
       <function address="0x80240C80" idx="0x1"/>
@@ -5573,7 +5573,7 @@
       <function address="0x80241830" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C6">
+  <dll id="0x01C6" name="creator1C6" interface="object">
     <functions>
       <function address="0x80241BB8" idx="0x0"/>
       <function address="0x80241BBC" idx="0x1"/>
@@ -5586,7 +5586,7 @@
       <function address="0x80242048" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C7">
+  <dll id="0x01C7" name="scene1C7" interface="object">
     <functions>
       <function address="0x80242050" idx="0x0"/>
       <function address="0x80242054" idx="0x1"/>
@@ -5599,7 +5599,7 @@
       <function address="0x802422D4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C8">
+  <dll id="0x01C8" name="flybaddie" interface="object">
     <functions>
       <function address="0x802422DC" idx="0x0"/>
       <function address="0x802422E0" idx="0x1"/>
@@ -5612,7 +5612,7 @@
       <function address="0x8024283C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01C9">
+  <dll id="0x01C9" name="colrise" interface="object">
     <functions>
       <function address="0x80242C00" idx="0x0"/>
       <function address="0x80242C04" idx="0x1"/>
@@ -5625,7 +5625,7 @@
       <function address="0x80242E70" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01CA">
+  <dll id="0x01CA" interface="object">
     <functions>
       <function address="0x802436A0" idx="0x0"/>
       <function address="0x802436A4" idx="0x1"/>
@@ -5638,7 +5638,7 @@
       <function address="0x8024417C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01CB">
+  <dll id="0x01CB" name="symbol" interface="object">
     <functions>
       <function address="0x802444FC" idx="0x0"/>
       <function address="0x80244500" idx="0x1"/>
@@ -5651,7 +5651,7 @@
       <function address="0x80244A44" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01CC">
+  <dll id="0x01CC" interface="object">
     <functions>
       <function address="0x8024503C" idx="0x0"/>
       <function address="0x80245040" idx="0x1"/>
@@ -5664,7 +5664,7 @@
       <function address="0x802453CC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01CD">
+  <dll id="0x01CD" name="torch1CD" interface="object">
     <functions>
       <function address="0x802453D4" idx="0x0"/>
       <function address="0x802453D8" idx="0x1"/>
@@ -5677,7 +5677,7 @@
       <function address="0x80245D78" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01CE">
+  <dll id="0x01CE" name="shrine1CE" interface="object">
     <functions>
       <function address="0x80245D80" idx="0x0"/>
       <function address="0x80245D84" idx="0x1"/>
@@ -5690,7 +5690,7 @@
       <function address="0x80246778" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01CF">
+  <dll id="0x01CF" name="creator1CF" interface="object">
     <functions>
       <function address="0x80246B9C" idx="0x0"/>
       <function address="0x80246BA0" idx="0x1"/>
@@ -5703,7 +5703,7 @@
       <function address="0x80246FF8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D0">
+  <dll id="0x01D0" interface="object">
     <functions>
       <function address="0x80247000" idx="0x0"/>
       <function address="0x80247004" idx="0x1"/>
@@ -5716,7 +5716,7 @@
       <function address="0x80247444" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D1">
+  <dll id="0x01D1" interface="object">
     <functions>
       <function address="0x8024744C" idx="0x0"/>
       <function address="0x80247450" idx="0x1"/>
@@ -5729,7 +5729,7 @@
       <function address="0x802476AC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D2">
+  <dll id="0x01D2" name="ped" interface="object">
     <functions>
       <function address="0x802476B4" idx="0x0"/>
       <function address="0x802476B8" idx="0x1"/>
@@ -5742,7 +5742,7 @@
       <function address="0x80247C6C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D3">
+  <dll id="0x01D3" interface="object">
     <functions>
       <function address="0x80247C74" idx="0x0"/>
       <function address="0x80247C78" idx="0x1"/>
@@ -5755,7 +5755,7 @@
       <function address="0x802487A8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D4">
+  <dll id="0x01D4" name="creator1D4" interface="object">
     <functions>
       <function address="0x80248B64" idx="0x0"/>
       <function address="0x80248B68" idx="0x1"/>
@@ -5768,7 +5768,7 @@
       <function address="0x80248E8C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D5">
+  <dll id="0x01D5" interface="object">
     <functions>
       <function address="0x80248E94" idx="0x0"/>
       <function address="0x80248E98" idx="0x1"/>
@@ -5781,7 +5781,7 @@
       <function address="0x802498FC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D6">
+  <dll id="0x01D6" name="creator1D6" interface="object">
     <functions>
       <function address="0x80249C28" idx="0x0"/>
       <function address="0x80249C2C" idx="0x1"/>
@@ -5794,7 +5794,7 @@
       <function address="0x80249ED0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D7">
+  <dll id="0x01D7" name="flybaddie1D7" interface="object">
     <functions>
       <function address="0x80249ED8" idx="0x0"/>
       <function address="0x80249EDC" idx="0x1"/>
@@ -5807,7 +5807,7 @@
       <function address="0x8024A4A8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D8">
+  <dll id="0x01D8" name="projball1D8" interface="object">
     <functions>
       <function address="0x8024A858" idx="0x0"/>
       <function address="0x8024A85C" idx="0x1"/>
@@ -5820,7 +5820,7 @@
       <function address="0x8024AEB4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01D9">
+  <dll id="0x01D9" name="torch1D9" interface="object">
     <functions>
       <function address="0x8024AEBC" idx="0x0"/>
       <function address="0x8024AEC0" idx="0x1"/>
@@ -5833,7 +5833,7 @@
       <function address="0x8024B7A8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01DA">
+  <dll id="0x01DA" name="NWsfx" interface="object">
     <functions>
       <function address="0x8024B7B0" idx="0x0"/>
       <function address="0x8024B7B4" idx="0x1"/>
@@ -5846,7 +5846,7 @@
       <function address="0x8024B938" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01DB">
+  <dll id="0x01DB" interface="object">
     <functions>
       <function address="0x8024B940" idx="0x0"/>
       <function address="0x8024B944" idx="0x1"/>
@@ -5859,7 +5859,7 @@
       <function address="0x8024BB6C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01DC">
+  <dll id="0x01DC" interface="object">
     <functions>
       <function address="0x8024BE34" idx="0x3"/>
       <function address="0x8024BE50" idx="0x4"/>
@@ -5868,7 +5868,7 @@
       <function address="0x8024BEDC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01DD">
+  <dll id="0x01DD" name="NWmammoth" interface="object">
     <functions>
       <function address="0x8024BFD4" idx="0x0"/>
       <function address="0x8024BFD8" idx="0x1"/>
@@ -5881,7 +5881,7 @@
       <function address="0x8024C710" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01DE">
+  <dll id="0x01DE" name="NWtricky" interface="object">
     <functions>
       <function address="0x8024DBF8" idx="0x0"/>
       <function address="0x8024DBFC" idx="0x1"/>
@@ -5894,7 +5894,7 @@
       <function address="0x8024DF94" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01DF">
+  <dll id="0x01DF" interface="object">
     <functions>
       <function address="0x8024E234" idx="0x0"/>
       <function address="0x8024E238" idx="0x1"/>
@@ -5907,7 +5907,7 @@
       <function address="0x8024E2C8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E0">
+  <dll id="0x01E0" interface="object">
     <functions>
       <function address="0x8024E2D8" idx="0x0"/>
       <function address="0x8024E2DC" idx="0x1"/>
@@ -5920,7 +5920,7 @@
       <function address="0x8024E4B4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E1">
+  <dll id="0x01E1" interface="object">
     <functions>
       <function address="0x8024E4BC" idx="0x0"/>
       <function address="0x8024E4C0" idx="0x1"/>
@@ -5933,7 +5933,7 @@
       <function address="0x8024E6D8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E2">
+  <dll id="0x01E2" interface="object">
     <functions>
       <function address="0x8024E7A4" idx="0x0"/>
       <function address="0x8024E7A8" idx="0x1"/>
@@ -5946,7 +5946,7 @@
       <function address="0x8024E944" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E3">
+  <dll id="0x01E3" name="SHmushroom" interface="object">
     <functions>
       <function address="0x8024E94C" idx="0x3"/>
       <function address="0x8024EBC4" idx="0x4"/>
@@ -5955,7 +5955,7 @@
       <function address="0x8024EF1C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E4">
+  <dll id="0x01E4" name="SHkillermushroom" interface="object">
     <functions>
       <function address="0x8024FBD0" idx="0x0"/>
       <function address="0x8024FBD4" idx="0x1"/>
@@ -5968,7 +5968,7 @@
       <function address="0x8025064C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E5">
+  <dll id="0x01E5" name="SHrocketmushroom" interface="object">
     <functions>
       <function address="0x80250798" idx="0x0"/>
       <function address="0x8025079C" idx="0x1"/>
@@ -5981,7 +5981,7 @@
       <function address="0x80250FA8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E6">
+  <dll id="0x01E6" name="SHspore" interface="object">
     <functions>
       <function address="0x80251258" idx="0x0"/>
       <function address="0x8025125C" idx="0x1"/>
@@ -5994,7 +5994,7 @@
       <function address="0x80251C98" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E7">
+  <dll id="0x01E7" interface="object">
     <functions>
       <function address="0x80251CA0" idx="0x0"/>
       <function address="0x80251CA4" idx="0x1"/>
@@ -6007,7 +6007,7 @@
       <function address="0x80251DEC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E8">
+  <dll id="0x01E8" interface="object">
     <functions>
       <function address="0x802520AC" idx="0x0"/>
       <function address="0x802520B0" idx="0x1"/>
@@ -6020,7 +6020,7 @@
       <function address="0x80252428" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01E9">
+  <dll id="0x01E9" interface="object">
     <functions>
       <function address="0x80252548" idx="0x0"/>
       <function address="0x8025254C" idx="0x1"/>
@@ -6037,7 +6037,7 @@
       <function address="0x80252900" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01EA" name="lily">
+  <dll id="0x01EA" name="lily" interface="object">
     <functions>
       <function address="0x80251DF4" idx="0x0"/>
       <function address="0x80251DF8" idx="0x1"/>
@@ -6054,7 +6054,7 @@
       <function address="0x802520A4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01EB">
+  <dll id="0x01EB" name="SHroot" interface="object">
     <functions>
       <function address="0x80253E6C" idx="0x0"/>
       <function address="0x80253E70" idx="0x1"/>
@@ -6067,7 +6067,7 @@
       <function address="0x802543C8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01EC">
+  <dll id="0x01EC" interface="object">
     <functions>
       <function address="0x802543D0" idx="0x0"/>
       <function address="0x802543D4" idx="0x1"/>
@@ -6080,7 +6080,7 @@
       <function address="0x802544D4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01ED">
+  <dll id="0x01ED" interface="object">
     <functions>
       <function address="0x80255010" idx="0x0"/>
       <function address="0x80255014" idx="0x1"/>
@@ -6093,7 +6093,7 @@
       <function address="0x802551C0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01EE">
+  <dll id="0x01EE" interface="object">
     <functions>
       <function address="0x80254EE0" idx="0x0"/>
       <function address="0x80254EE4" idx="0x1"/>
@@ -6106,7 +6106,7 @@
       <function address="0x80255008" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01EF">
+  <dll id="0x01EF" interface="object">
     <functions>
       <function address="0x802551C8" idx="0x0"/>
       <function address="0x802551CC" idx="0x1"/>
@@ -6119,7 +6119,7 @@
       <function address="0x8025537C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F0">
+  <dll id="0x01F0" interface="object">
     <functions>
       <function address="0x802544DC" idx="0x0"/>
       <function address="0x802544E0" idx="0x1"/>
@@ -6132,7 +6132,7 @@
       <function address="0x802547AC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F1">
+  <dll id="0x01F1" interface="object">
     <functions>
       <function address="0x80255384" idx="0x3"/>
       <function address="0x80255394" idx="0x4"/>
@@ -6141,7 +6141,7 @@
       <function address="0x8025592C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F2">
+  <dll id="0x01F2" interface="object">
     <functions>
       <function address="0x80256814" idx="0x0"/>
       <function address="0x80256834" idx="0x1"/>
@@ -6154,7 +6154,7 @@
       <function address="0x80256C1C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F3">
+  <dll id="0x01F3" interface="object">
     <functions>
       <function address="0x80257F2C" idx="0x0"/>
       <function address="0x80257F4C" idx="0x1"/>
@@ -6167,7 +6167,7 @@
       <function address="0x802581DC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F4">
+  <dll id="0x01F4" interface="object">
     <functions>
       <function address="0x8025875C" idx="0x0"/>
       <function address="0x8025877C" idx="0x1"/>
@@ -6180,7 +6180,7 @@
       <function address="0x80258AE8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F5">
+  <dll id="0x01F5" name="SClevelcontrol" interface="object">
     <functions>
       <function address="0x80255934" idx="0x0"/>
       <function address="0x80255938" idx="0x1"/>
@@ -6195,7 +6195,7 @@
       <function address="0x80255FBC" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x01F6">
+  <dll id="0x01F6" name="SCbirchtree" interface="object">
     <functions>
       <function address="0x8025977C" idx="0x0"/>
       <function address="0x80259780" idx="0x1"/>
@@ -6208,7 +6208,7 @@
       <function address="0x80259ED8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F7" name="SCtotempole">
+  <dll id="0x01F7" name="SCtotempole" interface="object">
     <functions>
       <function address="0x8025A534" idx="0x0"/>
       <function address="0x8025A538" idx="0x1"/>
@@ -6221,7 +6221,7 @@
       <function address="0x8025A8FC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F8">
+  <dll id="0x01F8" name="SClantern" interface="object">
     <functions>
       <function address="0x8025A9B4" idx="0x0"/>
       <function address="0x8025A9B8" idx="0x1"/>
@@ -6234,7 +6234,7 @@
       <function address="0x8025B0C4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01F9">
+  <dll id="0x01F9" name="SCcollectables" interface="object">
     <functions>
       <function address="0x8025B0CC" idx="0x0"/>
       <function address="0x8025B0D0" idx="0x1"/>
@@ -6249,7 +6249,7 @@
       <function address="0x8025B96C" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x01FA">
+  <dll id="0x01FA" name="SCanimobj" interface="object">
     <functions>
       <function address="0x8025B9A0" idx="0x0"/>
       <function address="0x8025B9A4" idx="0x1"/>
@@ -6262,7 +6262,7 @@
       <function address="0x8025C114" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01FB">
+  <dll id="0x01FB" name="SCtotemlogpuz" interface="object">
     <functions>
       <function address="0x8025C11C" idx="0x0"/>
       <function address="0x8025C120" idx="0x1"/>
@@ -6275,7 +6275,7 @@
       <function address="0x8025C5EC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01FC">
+  <dll id="0x01FC" name="SCtumbleweedmeter" interface="object">
     <functions>
       <function address="0x8025C77C" idx="0x0"/>
       <function address="0x8025C780" idx="0x1"/>
@@ -6288,7 +6288,7 @@
       <function address="0x8025C9D0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01FD">
+  <dll id="0x01FD" name="SCtotembondpuz" interface="object">
     <functions>
       <function address="0x8025C9D8" idx="0x0"/>
       <function address="0x8025C9DC" idx="0x1"/>
@@ -6301,7 +6301,7 @@
       <function address="0x8025CC24" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01FE">
+  <dll id="0x01FE" name="SCtotemstrength" interface="object">
     <functions>
       <function address="0x8025D34C" idx="0x0"/>
       <function address="0x8025D350" idx="0x1"/>
@@ -6314,7 +6314,7 @@
       <function address="0x8025D690" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x01FF">
+  <dll id="0x01FF" interface="object">
     <functions>
       <function address="0x8025DFF0" idx="0x0"/>
       <function address="0x8025DFF4" idx="0x1"/>
@@ -6327,7 +6327,7 @@
       <function address="0x8025E13C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0200">
+  <dll id="0x0200" name="DIMlavaball" interface="object">
     <functions>
       <function address="0x8022585C" idx="0x0"/>
       <function address="0x80225860" idx="0x1"/>
@@ -6342,7 +6342,7 @@
       <function address="0x80225E20" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0201">
+  <dll id="0x0201" interface="object">
     <functions>
       <function address="0x80226240" idx="0x0"/>
       <function address="0x80226244" idx="0x1"/>
@@ -6357,7 +6357,7 @@
       <function address="0x80226680" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0202">
+  <dll id="0x0202" name="DIMlogfire" interface="object">
     <functions>
       <function address="0x802266B8" idx="0x0"/>
       <function address="0x802266BC" idx="0x1"/>
@@ -6371,7 +6371,7 @@
       <function address="0x80226AF0" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0203">
+  <dll id="0x0203" name="DIMsnowball" interface="object">
     <functions>
       <function address="0x80226C8C" idx="0x0"/>
       <function address="0x80226C90" idx="0x1"/>
@@ -6384,7 +6384,7 @@
       <function address="0x80227270" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0204">
+  <dll id="0x0204" interface="object">
     <functions>
       <function address="0x80227278" idx="0x0"/>
       <function address="0x8022727C" idx="0x1"/>
@@ -6397,7 +6397,7 @@
       <function address="0x8022745C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0205">
+  <dll id="0x0205" interface="object">
     <functions>
       <function address="0x80227464" idx="0x0"/>
       <function address="0x80227468" idx="0x1"/>
@@ -6410,7 +6410,7 @@
       <function address="0x8022764C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0206">
+  <dll id="0x0206" interface="object">
     <functions>
       <function address="0x8022765C" idx="0x0"/>
       <function address="0x80227660" idx="0x1"/>
@@ -6424,7 +6424,7 @@
       <function address="0x8022791C" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0207">
+  <dll id="0x0207" name="DIMboulder" interface="object">
     <functions>
       <function address="0x80227958" idx="0x0"/>
       <function address="0x8022795C" idx="0x1"/>
@@ -6437,7 +6437,7 @@
       <function address="0x80227EF8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0208">
+  <dll id="0x0208" name="DIMcannon" interface="object">
     <functions>
       <function address="0x80227F00" idx="0x0"/>
       <function address="0x80227F04" idx="0x1"/>
@@ -6450,7 +6450,7 @@
       <function address="0x8022877C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0209">
+  <dll id="0x0209" name="DIMlavasmash" interface="object">
     <functions>
       <function address="0x80229428" idx="0x0"/>
       <function address="0x8022942C" idx="0x1"/>
@@ -6463,7 +6463,7 @@
       <function address="0x80229600" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x020A">
+  <dll id="0x020A" interface="object">
     <functions>
       <function address="0x80229714" idx="0x0"/>
       <function address="0x80229718" idx="0x1"/>
@@ -6476,7 +6476,7 @@
       <function address="0x80229994" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x020B">
+  <dll id="0x020B" interface="object">
     <functions>
       <function address="0x80229A08" idx="0x0"/>
       <function address="0x80229A0C" idx="0x1"/>
@@ -6491,7 +6491,7 @@
       <function address="0x80229C58" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x020C" name="DIMExplosion">
+  <dll id="0x020C" name="DIMExplosion" interface="object">
     <functions>
       <function address="0x80229CA4" idx="0x0"/>
       <function address="0x80229CA8" idx="0x1"/>
@@ -6504,7 +6504,7 @@
       <function address="0x80229F14" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x020D">
+  <dll id="0x020D" name="DIMwooddoor" interface="object">
     <functions>
       <function address="0x8022A080" idx="0x0"/>
       <function address="0x8022A084" idx="0x1"/>
@@ -6517,7 +6517,7 @@
       <function address="0x8022A2E8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x020E">
+  <dll id="0x020E" interface="object">
     <functions>
       <function address="0x8022AB34" idx="0x0"/>
       <function address="0x8022AB38" idx="0x1"/>
@@ -6530,7 +6530,7 @@
       <function address="0x8022AE40" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x020F">
+  <dll id="0x020F" name="DIMlevcontrol" interface="object">
     <functions>
       <function address="0x8022B100" idx="0x0"/>
       <function address="0x8022B104" idx="0x1"/>
@@ -6543,7 +6543,7 @@
       <function address="0x8022B308" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0210">
+  <dll id="0x0210" interface="object">
     <functions>
       <function address="0x8022A2F0" idx="0x0"/>
       <function address="0x8022A2F4" idx="0x1"/>
@@ -6556,7 +6556,7 @@
       <function address="0x8022A68C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0211">
+  <dll id="0x0211" interface="object">
     <functions>
       <function address="0x8022B310" idx="0x0"/>
       <function address="0x8022B314" idx="0x1"/>
@@ -6569,7 +6569,7 @@
       <function address="0x8022B400" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0212" name="worldMap">
+  <dll id="0x0212" name="worldMap" interface="object">
     <functions>
       <function address="0x802A7EF0" idx="0x0"/>
       <function address="0x802A7EF4" idx="0x1"/>
@@ -6586,7 +6586,7 @@
       <function address="0x802A8E78" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0213">
+  <dll id="0x0213" interface="object">
     <functions>
       <function address="0x802A8F24" idx="0x0"/>
       <function address="0x802A8F28" idx="0x1"/>
@@ -6599,7 +6599,7 @@
       <function address="0x802A97DC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0214">
+  <dll id="0x0214" interface="object">
     <functions>
       <function address="0x802A7B7C" idx="0x0"/>
       <function address="0x80173480" idx="0x1"/>
@@ -6612,7 +6612,7 @@
       <function address="0x802A7EE8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0215">
+  <dll id="0x0215" name="DIM2conveyor" interface="object">
     <functions>
       <function address="0x8022B408" idx="0x0"/>
       <function address="0x8022B40C" idx="0x1"/>
@@ -6626,7 +6626,7 @@
       <function address="0x8022B5CC" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0216">
+  <dll id="0x0216" name="DIM2flameburst" interface="object">
     <functions>
       <function address="0x8022B628" idx="0x0"/>
       <function address="0x8022B62C" idx="0x1"/>
@@ -6639,7 +6639,7 @@
       <function address="0x8022BE44" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0217" name="DIM2snowball">
+  <dll id="0x0217" name="DIM2snowball" interface="object">
     <functions>
       <function address="0x8022BE50" idx="0x0"/>
       <function address="0x8022BE54" idx="0x1"/>
@@ -6652,7 +6652,7 @@
       <function address="0x8022C4DC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0218" name="DIM2generator">
+  <dll id="0x0218" name="DIM2generator" interface="object">
     <functions>
       <function address="0x8022C564" idx="0x0"/>
       <function address="0x8022C568" idx="0x1"/>
@@ -6670,7 +6670,7 @@
       <function address="0x8022C9D8" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0219">
+  <dll id="0x0219" interface="object">
     <functions>
       <function address="0x8022CA1C" idx="0x0"/>
       <function address="0x8022CA3C" idx="0x1"/>
@@ -6683,7 +6683,7 @@
       <function address="0x8022CCE8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x021A">
+  <dll id="0x021A" name="DIM2projrock" interface="object">
     <functions>
       <function address="0x8022D080" idx="0x0"/>
       <function address="0x8022D084" idx="0x1"/>
@@ -6696,7 +6696,7 @@
       <function address="0x8022D580" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x021B">
+  <dll id="0x021B" name="DIM2lift" interface="object">
     <functions>
       <function address="0x8022D588" idx="0x0"/>
       <function address="0x8022D58C" idx="0x1"/>
@@ -6709,7 +6709,7 @@
       <function address="0x8022DA04" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x021C" name="DIM2icefloe">
+  <dll id="0x021C" name="DIM2icefloe" interface="object">
     <functions>
       <function address="0x8022DA0C" idx="0x0"/>
       <function address="0x8022DA10" idx="0x1"/>
@@ -6722,7 +6722,7 @@
       <function address="0x8022DE40" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x021D">
+  <dll id="0x021D" name="DIM2icicle" interface="object">
     <functions>
       <function address="0x8022DE48" idx="0x0"/>
       <function address="0x8022DE4C" idx="0x1"/>
@@ -6735,7 +6735,7 @@
       <function address="0x8022E2D4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x021E">
+  <dll id="0x021E" interface="object">
     <functions>
       <function address="0x8022E2DC" idx="0x0"/>
       <function address="0x8022E2E0" idx="0x1"/>
@@ -6749,7 +6749,7 @@
       <function address="0x8022E404" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x021F">
+  <dll id="0x021F" interface="object">
     <functions>
       <function address="0x8022E60C" idx="0x0"/>
       <function address="0x8022E610" idx="0x1"/>
@@ -6762,7 +6762,7 @@
       <function address="0x8022EB70" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0220">
+  <dll id="0x0220" interface="object">
     <functions>
       <function address="0x8022EB78" idx="0x0"/>
       <function address="0x8022EB98" idx="0x1"/>
@@ -6777,7 +6777,7 @@
       <function address="0x8022F478" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0221">
+  <dll id="0x0221" interface="object">
     <functions>
       <function address="0x8023241C" idx="0x0"/>
       <function address="0x80232420" idx="0x1"/>
@@ -6790,7 +6790,7 @@
       <function address="0x80232518" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0222">
+  <dll id="0x0222" name="DIMbosstonsil" interface="object">
     <functions>
       <function address="0x80232538" idx="0x0"/>
       <function address="0x80232558" idx="0x1"/>
@@ -6805,7 +6805,7 @@
       <function address="0x80232A4C" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0223">
+  <dll id="0x0223" interface="object">
     <functions>
       <function address="0x8023366C" idx="0x0"/>
       <function address="0x80233670" idx="0x1"/>
@@ -6820,7 +6820,7 @@
       <function address="0x80233A70" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0224">
+  <dll id="0x0224" interface="object">
     <functions>
       <function address="0x80234730" idx="0x0"/>
       <function address="0x80234734" idx="0x1"/>
@@ -6833,7 +6833,7 @@
       <function address="0x80234940" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0225">
+  <dll id="0x0225" name="DIMbossspit" interface="object">
     <functions>
       <function address="0x8023403C" idx="0x0"/>
       <function address="0x80234040" idx="0x1"/>
@@ -6846,7 +6846,7 @@
       <function address="0x80234230" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0226">
+  <dll id="0x0226" interface="object">
     <functions>
       <function address="0x80234948" idx="0x0"/>
       <function address="0x8023494C" idx="0x1"/>
@@ -6859,7 +6859,7 @@
       <function address="0x80234AF0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0227">
+  <dll id="0x0227" interface="object">
     <functions>
       <function address="0x80234B9C" idx="0x0"/>
       <function address="0x80234BA0" idx="0x1"/>
@@ -6872,7 +6872,7 @@
       <function address="0x80234F48" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0228">
+  <dll id="0x0228" name="SBship" interface="object">
     <functions>
       <function address="0x8025E92C" idx="0x0"/>
       <function address="0x8025E930" idx="0x1"/>
@@ -6890,7 +6890,7 @@
       <function address="0x8025EEE4" idx="0xE"/>
     </functions>
   </dll>
-  <dll id="0x0229">
+  <dll id="0x0229" name="SBcloudrunner" interface="object">
     <functions>
       <function address="0x80260B40" idx="0x0"/>
       <function address="0x80260B44" idx="0x1"/>
@@ -6908,7 +6908,7 @@
       <function address="0x80261DF8" idx="0xE"/>
     </functions>
   </dll>
-  <dll id="0x022A">
+  <dll id="0x022A" name="SBpropeller" interface="object">
     <functions>
       <function address="0x80261E44" idx="0x0"/>
       <function address="0x80261E48" idx="0x1"/>
@@ -6921,7 +6921,7 @@
       <function address="0x802623BC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x022B">
+  <dll id="0x022B" name="SBshiphead" interface="object">
     <functions>
       <function address="0x802623C4" idx="0x0"/>
       <function address="0x802623C8" idx="0x1"/>
@@ -6934,7 +6934,7 @@
       <function address="0x80262E4C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x022C">
+  <dll id="0x022C" interface="object">
     <functions>
       <function address="0x80262E54" idx="0x0"/>
       <function address="0x80262E58" idx="0x1"/>
@@ -6947,7 +6947,7 @@
       <function address="0x80262FE0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x022D">
+  <dll id="0x022D" name="SBshipgun" interface="object">
     <functions>
       <function address="0x80262FE8" idx="0x0"/>
       <function address="0x80262FEC" idx="0x1"/>
@@ -6960,7 +6960,7 @@
       <function address="0x80263A8C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x022E">
+  <dll id="0x022E" interface="object">
     <functions>
       <function address="0x80264310" idx="0x0"/>
       <function address="0x80264314" idx="0x1"/>
@@ -6973,7 +6973,7 @@
       <function address="0x8026461C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x022F">
+  <dll id="0x022F" name="SBcannonball" interface="object">
     <functions>
       <function address="0x80263A94" idx="0x0"/>
       <function address="0x80263A98" idx="0x1"/>
@@ -6986,7 +6986,7 @@
       <function address="0x80264308" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0230">
+  <dll id="0x0230" name="SBcloudball" interface="object">
     <functions>
       <function address="0x80264774" idx="0x0"/>
       <function address="0x80264778" idx="0x1"/>
@@ -6999,7 +6999,7 @@
       <function address="0x80264DAC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0231">
+  <dll id="0x0231" interface="object">
     <functions>
       <function address="0x80264DB4" idx="0x0"/>
       <function address="0x80264DB8" idx="0x1"/>
@@ -7012,7 +7012,7 @@
       <function address="0x802654DC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0232">
+  <dll id="0x0232" interface="object">
     <functions>
       <function address="0x802657A0" idx="0x0"/>
       <function address="0x802657A4" idx="0x1"/>
@@ -7025,7 +7025,7 @@
       <function address="0x8026586C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0233">
+  <dll id="0x0233" name="SBcagedkyte" interface="object">
     <functions>
       <function address="0x8026555C" idx="0x0"/>
       <function address="0x80265560" idx="0x1"/>
@@ -7038,7 +7038,7 @@
       <function address="0x8026575C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0234">
+  <dll id="0x0234" interface="object">
     <functions>
       <function address="0x8026588C" idx="0x0"/>
       <function address="0x80265890" idx="0x1"/>
@@ -7051,7 +7051,7 @@
       <function address="0x80265D10" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0235">
+  <dll id="0x0235" interface="object">
     <functions>
       <function address="0x80265D18" idx="0x0"/>
       <function address="0x80265D1C" idx="0x1"/>
@@ -7064,7 +7064,7 @@
       <function address="0x80266164" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0236">
+  <dll id="0x0236" interface="object">
     <functions>
       <function address="0x80266B98" idx="0x0"/>
       <function address="0x80266B9C" idx="0x1"/>
@@ -7077,7 +7077,7 @@
       <function address="0x8026712C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0237">
+  <dll id="0x0237" name="scalesanim" interface="object">
     <functions>
       <function address="0x8026616C" idx="0x0"/>
       <function address="0x80266170" idx="0x1"/>
@@ -7090,7 +7090,7 @@
       <function address="0x80266558" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0238">
+  <dll id="0x0238" interface="object">
     <functions>
       <function address="0x80267134" idx="0x0"/>
       <function address="0x80267138" idx="0x1"/>
@@ -7103,7 +7103,7 @@
       <function address="0x8026724C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0239">
+  <dll id="0x0239" name="brokecannon" interface="object">
     <functions>
       <function address="0x80267254" idx="0x0"/>
       <function address="0x80267258" idx="0x1"/>
@@ -7116,7 +7116,7 @@
       <function address="0x80267340" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x023A">
+  <dll id="0x023A" interface="object">
     <functions>
       <function address="0x8027E6D0" idx="0x0"/>
       <function address="0x8027E6D4" idx="0x1"/>
@@ -7129,7 +7129,7 @@
       <function address="0x8027EC0C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x023B">
+  <dll id="0x023B" interface="object">
     <functions>
       <function address="0x8027DAB0" idx="0x0"/>
       <function address="0x8027DAB4" idx="0x1"/>
@@ -7142,7 +7142,7 @@
       <function address="0x8027E6C8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x023C">
+  <dll id="0x023C" interface="object">
     <functions>
       <function address="0x8027EE40" idx="0x0"/>
       <function address="0x8027EE44" idx="0x1"/>
@@ -7155,7 +7155,7 @@
       <function address="0x8027F080" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x023D">
+  <dll id="0x023D" name="deaddino" interface="object">
     <functions>
       <function address="0x8027F0F0" idx="0x0"/>
       <function address="0x8027F0F4" idx="0x1"/>
@@ -7168,7 +7168,7 @@
       <function address="0x8027F6C4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x023E">
+  <dll id="0x023E" name="laser23E" interface="object">
     <functions>
       <function address="0x8027F844" idx="0x0"/>
       <function address="0x8027F848" idx="0x1"/>
@@ -7181,7 +7181,7 @@
       <function address="0x802805DC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x023F">
+  <dll id="0x023F" interface="object">
     <functions>
       <function address="0x80280E78" idx="0x0"/>
       <function address="0x80280E7C" idx="0x1"/>
@@ -7194,7 +7194,7 @@
       <function address="0x80281040" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0240">
+  <dll id="0x0240" name="pswitch" interface="object">
     <functions>
       <function address="0x802805E4" idx="0x0"/>
       <function address="0x802805E8" idx="0x1"/>
@@ -7207,7 +7207,7 @@
       <function address="0x80280A88" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0241">
+  <dll id="0x0241" interface="object">
     <functions>
       <function address="0x80280AA8" idx="0x0"/>
       <function address="0x80280AAC" idx="0x1"/>
@@ -7220,7 +7220,7 @@
       <function address="0x80280E04" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0242">
+  <dll id="0x0242" interface="object">
     <functions>
       <function address="0x80281048" idx="0x0"/>
       <function address="0x8028104C" idx="0x1"/>
@@ -7233,7 +7233,7 @@
       <function address="0x802812D0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0243">
+  <dll id="0x0243" name="colrise243" interface="object">
     <functions>
       <function address="0x80281EE8" idx="0x0"/>
       <function address="0x80281EEC" idx="0x1"/>
@@ -7246,7 +7246,7 @@
       <function address="0x80282228" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0244">
+  <dll id="0x0244" interface="object">
     <functions>
       <function address="0x80282248" idx="0x0"/>
       <function address="0x8028224C" idx="0x1"/>
@@ -7259,7 +7259,7 @@
       <function address="0x802824DC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0245">
+  <dll id="0x0245" interface="object">
     <functions>
       <function address="0x802824F4" idx="0x0"/>
       <function address="0x802824F8" idx="0x1"/>
@@ -7272,7 +7272,7 @@
       <function address="0x802827B0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0246">
+  <dll id="0x0246" name="torch246" interface="object">
     <functions>
       <function address="0x80282870" idx="0x0"/>
       <function address="0x80282874" idx="0x1"/>
@@ -7285,7 +7285,7 @@
       <function address="0x80282DA4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0247">
+  <dll id="0x0247" interface="object">
     <functions>
       <function address="0x80282DAC" idx="0x0"/>
       <function address="0x80282DB0" idx="0x1"/>
@@ -7298,7 +7298,7 @@
       <function address="0x802830CC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0248">
+  <dll id="0x0248" name="walltorch248" interface="object">
     <functions>
       <function address="0x802830D4" idx="0x0"/>
       <function address="0x802830D8" idx="0x1"/>
@@ -7311,7 +7311,7 @@
       <function address="0x802836E4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0249">
+  <dll id="0x0249" interface="object">
     <functions>
       <function address="0x802836EC" idx="0x0"/>
       <function address="0x802836F0" idx="0x1"/>
@@ -7324,7 +7324,7 @@
       <function address="0x80283AD8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x024A">
+  <dll id="0x024A" interface="object">
     <functions>
       <function address="0x80283AE0" idx="0x0"/>
       <function address="0x80283AE4" idx="0x1"/>
@@ -7337,7 +7337,7 @@
       <function address="0x80283F70" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x024B">
+  <dll id="0x024B" name="WMlevcontrol" interface="object">
     <functions>
       <function address="0x80283F78" idx="0x0"/>
       <function address="0x80283F7C" idx="0x1"/>
@@ -7350,7 +7350,7 @@
       <function address="0x80284280" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x024C">
+  <dll id="0x024C" name="WMgeneralscales" interface="object">
     <functions>
       <function address="0x802850D0" idx="0x0"/>
       <function address="0x802850D4" idx="0x1"/>
@@ -7363,7 +7363,7 @@
       <function address="0x80285208" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x024D">
+  <dll id="0x024D" interface="object">
     <functions>
       <function address="0x802858E8" idx="0x0"/>
       <function address="0x802858EC" idx="0x1"/>
@@ -7376,7 +7376,7 @@
       <function address="0x80285ED0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x024E">
+  <dll id="0x024E" interface="object">
     <functions>
       <function address="0x8028612C" idx="0x0"/>
       <function address="0x80286130" idx="0x1"/>
@@ -7389,7 +7389,7 @@
       <function address="0x802865B4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x024F" name="openingScene">
+  <dll id="0x024F" name="openingScene" interface="object">
     <functions>
       <function address="0x802865D4" idx="0x0"/>
       <function address="0x802865D8" idx="0x1"/>
@@ -7406,7 +7406,7 @@
       <function address="0x802869F0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0250">
+  <dll id="0x0250" name="WMcrystal" interface="object">
     <functions>
       <function address="0x802873D8" idx="0x0"/>
       <function address="0x802873DC" idx="0x1"/>
@@ -7419,7 +7419,7 @@
       <function address="0x8028855C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0251">
+  <dll id="0x0251" interface="object">
     <functions>
       <function address="0x80288BDC" idx="0x0"/>
       <function address="0x80288BE0" idx="0x1"/>
@@ -7432,7 +7432,7 @@
       <function address="0x80288CD0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0252">
+  <dll id="0x0252" interface="object">
     <functions>
       <function address="0x80288CD8" idx="0x0"/>
       <function address="0x80288CDC" idx="0x1"/>
@@ -7445,7 +7445,7 @@
       <function address="0x80288FC0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0253">
+  <dll id="0x0253" name="crawler253" interface="object">
     <functions>
       <function address="0x80288FC8" idx="0x0"/>
       <function address="0x80288FCC" idx="0x1"/>
@@ -7458,7 +7458,7 @@
       <function address="0x8028A32C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0254">
+  <dll id="0x0254" interface="object">
     <functions>
       <function address="0x8028A484" idx="0x0"/>
       <function address="0x8028A488" idx="0x1"/>
@@ -7471,7 +7471,7 @@
       <function address="0x8028AAFC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0255">
+  <dll id="0x0255" interface="object">
     <functions>
       <function address="0x8028AB04" idx="0x0"/>
       <function address="0x8028AB08" idx="0x1"/>
@@ -7484,7 +7484,7 @@
       <function address="0x8028AB94" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0256">
+  <dll id="0x0256" interface="object">
     <functions>
       <function address="0x8028AB9C" idx="0x0"/>
       <function address="0x8028ABA0" idx="0x1"/>
@@ -7497,7 +7497,7 @@
       <function address="0x8028ACE0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0257" name="VFlevcontrol">
+  <dll id="0x0257" name="VFlevcontrol" interface="object">
     <functions>
       <function address="0x8028AF98" idx="0x0"/>
       <function address="0x8028AF9C" idx="0x1"/>
@@ -7510,7 +7510,7 @@
       <function address="0x8028B600" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0258">
+  <dll id="0x0258" interface="object">
     <functions>
       <function address="0x8028B780" idx="0x0"/>
       <function address="0x8028B784" idx="0x1"/>
@@ -7523,7 +7523,7 @@
       <function address="0x8028B890" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0259">
+  <dll id="0x0259" name="minifire" interface="object">
     <functions>
       <function address="0x8028B898" idx="0x0"/>
       <function address="0x8028B89C" idx="0x1"/>
@@ -7536,7 +7536,7 @@
       <function address="0x8028BE30" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x025A">
+  <dll id="0x025A" interface="object">
     <functions>
       <function address="0x8028BE38" idx="0x0"/>
       <function address="0x8028BE3C" idx="0x1"/>
@@ -7549,7 +7549,7 @@
       <function address="0x8028BFC0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x025B">
+  <dll id="0x025B" name="statueball" interface="object">
     <functions>
       <function address="0x8028BFC8" idx="0x0"/>
       <function address="0x8028BFCC" idx="0x1"/>
@@ -7562,7 +7562,7 @@
       <function address="0x8028C59C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x025C">
+  <dll id="0x025C" interface="object">
     <functions>
       <function address="0x8028C5A4" idx="0x0"/>
       <function address="0x8028C5A8" idx="0x1"/>
@@ -7575,7 +7575,7 @@
       <function address="0x8028C94C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x025D">
+  <dll id="0x025D" name="ladders25D" interface="object">
     <functions>
       <function address="0x8028C954" idx="0x0"/>
       <function address="0x8028C958" idx="0x1"/>
@@ -7588,7 +7588,7 @@
       <function address="0x8028CB38" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x025E" name="lift1">
+  <dll id="0x025E" name="lift1" interface="object">
     <functions>
       <function address="0x8028CC88" idx="0x0"/>
       <function address="0x8028CC8C" idx="0x1"/>
@@ -7601,7 +7601,7 @@
       <function address="0x8028D498" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x025F">
+  <dll id="0x025F" name="fireblock" interface="object">
     <functions>
       <function address="0x8028DDEC" idx="0x0"/>
       <function address="0x8028DDF0" idx="0x1"/>
@@ -7614,7 +7614,7 @@
       <function address="0x8028E044" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0260">
+  <dll id="0x0260" name="platform1" interface="object">
     <functions>
       <function address="0x8028E04C" idx="0x0"/>
       <function address="0x8028E050" idx="0x1"/>
@@ -7627,7 +7627,7 @@
       <function address="0x8028E700" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0261">
+  <dll id="0x0261" name="doorswitch261" interface="object">
     <functions>
       <function address="0x8028E9DC" idx="0x0"/>
       <function address="0x8028E9E0" idx="0x1"/>
@@ -7640,7 +7640,7 @@
       <function address="0x8028EBAC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0262">
+  <dll id="0x0262" interface="object">
     <functions>
       <function address="0x8028ED58" idx="0x0"/>
       <function address="0x8028ED5C" idx="0x1"/>
@@ -7653,7 +7653,7 @@
       <function address="0x8028F154" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0263">
+  <dll id="0x0263" name="draghead" interface="object">
     <functions>
       <function address="0x8028F1B4" idx="0x0"/>
       <function address="0x8028F1B8" idx="0x1"/>
@@ -7666,7 +7666,7 @@
       <function address="0x8028F3B4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0264">
+  <dll id="0x0264" interface="object">
     <functions>
       <function address="0x8028FAA0" idx="0x0"/>
       <function address="0x8028FAA4" idx="0x1"/>
@@ -7679,7 +7679,7 @@
       <function address="0x8028FBF4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0265">
+  <dll id="0x0265" interface="object">
     <functions>
       <function address="0x8028FC04" idx="0x0"/>
       <function address="0x8028FC08" idx="0x1"/>
@@ -7692,7 +7692,7 @@
       <function address="0x8028FDB8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0266">
+  <dll id="0x0266" interface="object">
     <functions>
       <function address="0x8028FFA0" idx="0x0"/>
       <function address="0x8028FFA4" idx="0x1"/>
@@ -7706,7 +7706,7 @@
       <function address="0x80290240" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0267">
+  <dll id="0x0267" name="lavaflow" interface="object">
     <functions>
       <function address="0x8029027C" idx="0x0"/>
       <function address="0x80290280" idx="0x1"/>
@@ -7719,7 +7719,7 @@
       <function address="0x80290414" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0268">
+  <dll id="0x0268" interface="object">
     <functions>
       <function address="0x80290750" idx="0x0"/>
       <function address="0x80290754" idx="0x1"/>
@@ -7732,7 +7732,7 @@
       <function address="0x80290A10" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0269" name="spellStonePlace">
+  <dll id="0x0269" name="spellStonePlace" interface="object">
     <functions>
       <function address="0x80290A18" idx="0x0"/>
       <function address="0x80290A1C" idx="0x1"/>
@@ -7745,7 +7745,7 @@
       <function address="0x80290B54" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x026A">
+  <dll id="0x026A" name="DBrockfall" interface="object">
     <functions>
       <function address="0x80290CEC" idx="0x0"/>
       <function address="0x80290CF0" idx="0x1"/>
@@ -7758,7 +7758,7 @@
       <function address="0x802915F4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x026B" name="rockGenerator">
+  <dll id="0x026B" name="rockGenerator" interface="object">
     <functions>
       <function address="0x802915FC" idx="0x0"/>
       <function address="0x80291600" idx="0x1"/>
@@ -7771,7 +7771,7 @@
       <function address="0x8029189C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x026C" name="birdOrMenu">
+  <dll id="0x026C" name="birdOrMenu" interface="object">
     <functions>
       <function address="0x802918A4" idx="0x0"/>
       <function address="0x802918A8" idx="0x1"/>
@@ -7789,7 +7789,7 @@
       <function address="0x80291D58" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x026D">
+  <dll id="0x026D" interface="object">
     <functions>
       <function address="0x80293554" idx="0x0"/>
       <function address="0x80293558" idx="0x1"/>
@@ -7802,7 +7802,7 @@
       <function address="0x80293910" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x026E">
+  <dll id="0x026E" name="DBspike" interface="object">
     <functions>
       <function address="0x80293B20" idx="0x0"/>
       <function address="0x80293B24" idx="0x1"/>
@@ -7815,7 +7815,7 @@
       <function address="0x80293E64" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x026F">
+  <dll id="0x026F" interface="object">
     <functions>
       <function address="0x80293E6C" idx="0x0"/>
       <function address="0x80293E70" idx="0x1"/>
@@ -7847,7 +7847,7 @@
       <function address="0x80295B30" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0271">
+  <dll id="0x0271" interface="object">
     <functions>
       <function address="0x80295B78" idx="0x0"/>
       <function address="0x80295B7C" idx="0x1"/>
@@ -7860,7 +7860,7 @@
       <function address="0x80295DEC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0272">
+  <dll id="0x0272" interface="object">
     <functions>
       <function address="0x80295DF4" idx="0x0"/>
       <function address="0x80295DF8" idx="0x1"/>
@@ -7873,7 +7873,7 @@
       <function address="0x802962D8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0273">
+  <dll id="0x0273" interface="object">
     <functions>
       <function address="0x802962E0" idx="0x0"/>
       <function address="0x802962E4" idx="0x1"/>
@@ -7886,7 +7886,7 @@
       <function address="0x8029683C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0274" name="dbayMap">
+  <dll id="0x0274" name="dbayMap" interface="object">
     <functions>
       <function address="0x80297004" idx="0x0"/>
       <function address="0x80297008" idx="0x1"/>
@@ -7911,7 +7911,7 @@
       </function>
     </functions>
   </dll>
-  <dll id="0x0275">
+  <dll id="0x0275" interface="object">
     <functions>
       <function address="0x80297D3C" idx="0x0"/>
       <function address="0x80297D40" idx="0x1"/>
@@ -7924,7 +7924,7 @@
       <function address="0x8029802C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0276">
+  <dll id="0x0276" interface="object">
     <functions>
       <function address="0x802982EC" idx="0x0"/>
       <function address="0x802982F0" idx="0x1"/>
@@ -7937,7 +7937,7 @@
       <function address="0x80298504" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0277">
+  <dll id="0x0277" interface="object">
     <functions>
       <function address="0x8029850C" idx="0x0"/>
       <function address="0x80298510" idx="0x1"/>
@@ -7954,7 +7954,7 @@
       <function address="0x80299004" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0278">
+  <dll id="0x0278" interface="object">
     <functions>
       <function address="0x80299BA4" idx="0x0"/>
       <function address="0x80299BA8" idx="0x1"/>
@@ -7967,7 +7967,7 @@
       <function address="0x80299CF4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0279" name="dbayExp">
+  <dll id="0x0279" name="dbayExp" interface="object">
     <functions>
       <function address="0x80299CFC" idx="0x0"/>
       <function address="0x80299D00" idx="0x1"/>
@@ -7986,7 +7986,7 @@
       <function address="0x8029A120" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x027A">
+  <dll id="0x027A" name="DBwaterflow" interface="object">
     <functions>
       <function address="0x8029A678" idx="0x0"/>
       <function address="0x8029A67C" idx="0x1"/>
@@ -7999,7 +7999,7 @@
       <function address="0x8029AC4C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x027B">
+  <dll id="0x027B" interface="object">
     <functions>
       <function address="0x8029AE0C" idx="0x0"/>
       <function address="0x8029AE10" idx="0x1"/>
@@ -8012,7 +8012,7 @@
       <function address="0x8029B0A4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x027C">
+  <dll id="0x027C" interface="object">
     <functions>
       <function address="0x8029B398" idx="0x0"/>
       <function address="0x8029B39C" idx="0x1"/>
@@ -8025,7 +8025,7 @@
       <function address="0x8029B728" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x027D">
+  <dll id="0x027D" interface="object">
     <functions>
       <function address="0x8029B730" idx="0x0"/>
       <function address="0x8029B734" idx="0x1"/>
@@ -8038,7 +8038,7 @@
       <function address="0x8029BCF8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x027E">
+  <dll id="0x027E" interface="object">
     <functions>
       <function address="0x8029BEC8" idx="0x0"/>
       <function address="0x8029BECC" idx="0x1"/>
@@ -8055,7 +8055,7 @@
       <function address="0x8029C2D8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x027F">
+  <dll id="0x027F" name="DBlightgo" interface="object">
     <functions>
       <function address="0x8029C2E0" idx="0x0"/>
       <function address="0x8029C2E4" idx="0x1"/>
@@ -8071,7 +8071,7 @@
       <function address="0x8029CB14" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x0280">
+  <dll id="0x0280" interface="object">
     <functions>
       <function address="0x8029CFB0" idx="0x0"/>
       <function address="0x8029CFB4" idx="0x1"/>
@@ -8084,7 +8084,7 @@
       <function address="0x8029D1D0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0281">
+  <dll id="0x0281" name="DBshooter" interface="object">
     <functions>
       <function address="0x8029D358" idx="0x0"/>
       <function address="0x8029D35C" idx="0x1"/>
@@ -8099,7 +8099,7 @@
       <function address="0x8029DA30" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0282">
+  <dll id="0x0282" name="DBbullet" interface="object">
     <functions>
       <function address="0x8029DEC8" idx="0x0"/>
       <function address="0x8029DECC" idx="0x1"/>
@@ -8116,7 +8116,7 @@
       <function address="0x8029E56C" idx="0xD"/>
     </functions>
   </dll>
-  <dll id="0x0283">
+  <dll id="0x0283" name="DBprotection" interface="object">
     <functions>
       <function address="0x8029E810" idx="0x0"/>
       <function address="0x8029E814" idx="0x1"/>
@@ -8129,7 +8129,7 @@
       <function address="0x8029EB44" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0284" name="killbot">
+  <dll id="0x0284" name="killbot" interface="object">
     <functions>
       <function address="0x8029EB4C" idx="0x0"/>
       <function address="0x8029EB50" idx="0x1"/>
@@ -8142,7 +8142,7 @@
       <function address="0x8029F3CC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0285">
+  <dll id="0x0285" interface="object">
     <functions>
       <function address="0x8029F634" idx="0x0"/>
       <function address="0x8029F638" idx="0x1"/>
@@ -8155,7 +8155,7 @@
       <function address="0x8029F784" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0286">
+  <dll id="0x0286" name="DBdustgeezer" interface="object">
     <functions>
       <function address="0x8029F78C" idx="0x0"/>
       <function address="0x8029F790" idx="0x1"/>
@@ -8171,7 +8171,7 @@
       <function address="0x8029FD88" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x0287">
+  <dll id="0x0287" name="DBbonedust" interface="object">
     <functions>
       <function address="0x8029FEAC" idx="0x0"/>
       <function address="0x8029FEB0" idx="0x1"/>
@@ -8186,7 +8186,7 @@
       <function address="0x802A0310" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0288">
+  <dll id="0x0288" name="DBkillboulder" interface="object">
     <functions>
       <function address="0x802A0394" idx="0x0"/>
       <function address="0x802A0398" idx="0x1"/>
@@ -8204,7 +8204,7 @@
       <function address="0x802A0C5C" idx="0xE"/>
     </functions>
   </dll>
-  <dll id="0x0289">
+  <dll id="0x0289" interface="object">
     <functions>
       <function address="0x802A0D74" idx="0x0"/>
       <function address="0x802A0D78" idx="0x1"/>
@@ -8217,7 +8217,7 @@
       <function address="0x802A0ED4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x028A" name="snowWorm">
+  <dll id="0x028A" name="snowWorm" interface="object">
     <functions>
       <function address="0x802A0F64" idx="0x0"/>
       <function address="0x802A0F84" idx="0x1"/>
@@ -8232,7 +8232,7 @@
       <function address="0x802A1634" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x028B">
+  <dll id="0x028B" interface="object">
     <functions>
       <function address="0x802A521C" idx="0x0"/>
       <function address="0x802A5220" idx="0x1"/>
@@ -8249,7 +8249,7 @@
       <function address="0x802A56A4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x028C">
+  <dll id="0x028C" name="useobj28C" interface="object">
     <functions>
       <function address="0x802A57D0" idx="0x0"/>
       <function address="0x802A57D4" idx="0x1"/>
@@ -8268,7 +8268,7 @@
       <function address="0x802A5CA0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x028D">
+  <dll id="0x028D" interface="object">
     <functions>
       <function address="0x802A5FCC" idx="0x0"/>
       <function address="0x802A5FD0" idx="0x1"/>
@@ -8281,7 +8281,7 @@
       <function address="0x802A6148" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x028E">
+  <dll id="0x028E" interface="object">
     <functions>
       <function address="0x802A6150" idx="0x0"/>
       <function address="0x802A6154" idx="0x1"/>
@@ -8294,7 +8294,7 @@
       <function address="0x802A6358" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x028F">
+  <dll id="0x028F" interface="object">
     <functions>
       <function address="0x802A6A34" idx="0x0"/>
       <function address="0x802A6A38" idx="0x1"/>
@@ -8308,7 +8308,7 @@
       <function address="0x802A6AE4" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0290">
+  <dll id="0x0290" interface="object">
     <functions>
       <function address="0x802A6750" idx="0x0"/>
       <function address="0x802A6754" idx="0x1"/>
@@ -8323,7 +8323,7 @@
       <function address="0x802A692C" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0291">
+  <dll id="0x0291" interface="object">
     <functions>
       <function address="0x802A6948" idx="0x0"/>
       <function address="0x802A694C" idx="0x1"/>
@@ -8338,7 +8338,7 @@
       <function address="0x802A6A18" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x0292">
+  <dll id="0x0292" interface="object">
     <functions>
       <function address="0x802A6B64" idx="0x0"/>
       <function address="0x802A6B68" idx="0x1"/>
@@ -8351,7 +8351,7 @@
       <function address="0x802A6BBC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0293">
+  <dll id="0x0293" interface="object">
     <functions>
       <function address="0x802A6BC4" idx="0x0"/>
       <function address="0x802A6BC8" idx="0x1"/>
@@ -8364,7 +8364,7 @@
       <function address="0x802A6C90" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0294">
+  <dll id="0x0294" interface="object">
     <functions>
       <function address="0x802A6D50" idx="0x0"/>
       <function address="0x802A6D70" idx="0x1"/>
@@ -8377,7 +8377,7 @@
       <function address="0x802A6FDC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0295">
+  <dll id="0x0295" name="BOSSdrakor_laser" interface="object">
     <functions>
       <function address="0x802A742C" idx="0x0"/>
       <function address="0x802A7430" idx="0x1"/>
@@ -8391,7 +8391,7 @@
       <function address="0x802A763C" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x0296">
+  <dll id="0x0296" interface="object">
     <functions>
       <function address="0x802A7A7C" idx="0x0"/>
       <function address="0x802A7A80" idx="0x1"/>
@@ -8404,7 +8404,7 @@
       <function address="0x802A7AC0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0297">
+  <dll id="0x0297" interface="object">
     <functions>
       <function address="0x802A7AC8" idx="0x0"/>
       <function address="0x802A7ACC" idx="0x1"/>
@@ -8417,7 +8417,7 @@
       <function address="0x802A7B74" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0298">
+  <dll id="0x0298" name="TREX_levelcontrol" interface="object">
     <functions>
       <function address="0x802AB914" idx="0x0"/>
       <function address="0x802AB918" idx="0x1"/>
@@ -8430,7 +8430,7 @@
       <function address="0x802ABCAC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x0299">
+  <dll id="0x0299" name="TREX_trex" interface="object">
     <functions>
       <function address="0x802ABCB4" idx="0x0"/>
       <function address="0x802ABCD4" idx="0x1"/>
@@ -8445,7 +8445,7 @@
       <function address="0x802AC528" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x029A">
+  <dll id="0x029A" interface="object">
     <functions>
       <function address="0x802AF044" idx="0x0"/>
       <function address="0x802AF048" idx="0x1"/>
@@ -8458,7 +8458,7 @@
       <function address="0x802AF7A4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x029B">
+  <dll id="0x029B" name="TREX_Lazerwall" interface="object">
     <functions>
       <function address="0x802AF85C" idx="0x0"/>
       <function address="0x802AF860" idx="0x1"/>
@@ -8471,7 +8471,7 @@
       <function address="0x802AFDEC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x029C">
+  <dll id="0x029C" interface="object">
     <functions>
       <function address="0x802AFDF4" idx="0x0"/>
       <function address="0x802AFDF8" idx="0x1"/>
@@ -8484,7 +8484,7 @@
       <function address="0x802AFF18" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x029D">
+  <dll id="0x029D" interface="object">
     <functions>
       <function address="0x802AFF20" idx="0x0"/>
       <function address="0x802AFF24" idx="0x1"/>
@@ -8497,7 +8497,7 @@
       <function address="0x802B00FC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x029E">
+  <dll id="0x029E" name="IMsnowbike" interface="object">
     <functions>
       <function address="0x8026A218" idx="0x0"/>
       <function address="0x8026A21C" idx="0x1"/>
@@ -8524,7 +8524,7 @@
       <function address="0x8026DE18" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x029F">
+  <dll id="0x029F" interface="object">
     <functions>
       <function address="0x8026DE1C" idx="0x0"/>
       <function address="0x8026DE78" idx="0x1"/>
@@ -8551,7 +8551,7 @@
       <function address="0x8027065C" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x02A0">
+  <dll id="0x02A0" name="DRearthwalk" interface="object">
     <functions>
       <function address="0x802725A8" idx="0x0"/>
       <function address="0x802725C8" idx="0x1"/>
@@ -8578,7 +8578,7 @@
       <function address="0x80274E14" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x02A1">
+  <dll id="0x02A1" name="DRcloudrunner" interface="object">
     <functions>
       <function address="0x8027AB4C" idx="0x0"/>
       <function address="0x8027AB6C" idx="0x1"/>
@@ -8605,7 +8605,7 @@
       <function address="0x8027D614" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x02A2">
+  <dll id="0x02A2" interface="object">
     <functions>
       <function address="0x8027D968" idx="0x0"/>
       <function address="0x8027D96C" idx="0x1"/>
@@ -8618,7 +8618,7 @@
       <function address="0x8027DAA8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02A3" name="CRsnowClaw">
+  <dll id="0x02A3" name="CRsnowClaw" interface="object">
     <functions>
       <function address="0x802A99AC" idx="0x0"/>
       <function address="0x802A99B0" idx="0x1"/>
@@ -8635,7 +8635,7 @@
       <function address="0x802AA188" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02A4">
+  <dll id="0x02A4" interface="object">
     <functions>
       <function address="0x802AA818" idx="0x0"/>
       <function address="0x802AA81C" idx="0x1"/>
@@ -8648,7 +8648,7 @@
       <function address="0x802AA900" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02A5">
+  <dll id="0x02A5" interface="object">
     <functions>
       <function address="0x802AABAC" idx="0x0"/>
       <function address="0x802AABB0" idx="0x1"/>
@@ -8663,7 +8663,7 @@
       <function address="0x802AAE38" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x02A6">
+  <dll id="0x02A6" name="CRfueltank" interface="object">
     <functions>
       <function address="0x802AAE70" idx="0x0"/>
       <function address="0x802AAE74" idx="0x1"/>
@@ -8676,7 +8676,7 @@
       <function address="0x802AB0C4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02A7" name="zBomb02A7">
+  <dll id="0x02A7" name="zBomb02A7" interface="object">
     <functions>
       <function address="0x802AB0CC" idx="0x0"/>
       <function address="0x802AB0D0" idx="0x1"/>
@@ -8689,7 +8689,7 @@
       <function address="0x802AB700" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02A8" name="bike">
+  <dll id="0x02A8" name="bike" interface="object">
     <functions>
       <function address="0x80276F88" idx="0x0"/>
       <function address="0x80276F8C" idx="0x1"/>
@@ -8716,7 +8716,7 @@
       <function address="0x8027AB48" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x02A9" name="DRlaserturret">
+  <dll id="0x02A9" name="DRlaserturret" interface="object">
     <functions>
       <function address="0x802B0104" idx="0x0"/>
       <function address="0x802B0108" idx="0x1"/>
@@ -8733,7 +8733,7 @@
       <function address="0x802B084C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02AA">
+  <dll id="0x02AA" name="DRpushcart" interface="object">
     <functions>
       <function address="0x802B0E2C" idx="0x0"/>
       <function address="0x802B0E30" idx="0x1"/>
@@ -8747,7 +8747,7 @@
       <function address="0x802B1784" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x02AB">
+  <dll id="0x02AB" name="DRbullet" interface="object">
     <functions>
       <function address="0x802B3094" idx="0x0"/>
       <function address="0x802B3098" idx="0x1"/>
@@ -8764,7 +8764,7 @@
       <function address="0x802B36F4" idx="0xD"/>
     </functions>
   </dll>
-  <dll id="0x02AC">
+  <dll id="0x02AC" name="DRCloudball" interface="object">
     <functions>
       <function address="0x802B39A4" idx="0x0"/>
       <function address="0x802B39A8" idx="0x1"/>
@@ -8777,7 +8777,7 @@
       <function address="0x802B3DFC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02AD">
+  <dll id="0x02AD" name="DRlavacontrol" interface="object">
     <functions>
       <function address="0x802B3E04" idx="0x0"/>
       <function address="0x802B3E08" idx="0x1"/>
@@ -8790,7 +8790,7 @@
       <function address="0x802B4050" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02AE">
+  <dll id="0x02AE" name="DRcreator" interface="object">
     <functions>
       <function address="0x802B53E4" idx="0x0"/>
       <function address="0x802B53E8" idx="0x1"/>
@@ -8803,7 +8803,7 @@
       <function address="0x802B5A08" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02AF" name="foodRelated02AF">
+  <dll id="0x02AF" name="foodRelated02AF" interface="object">
     <functions>
       <function address="0x802B4538" idx="0x0"/>
       <function address="0x802B453C" idx="0x1"/>
@@ -8816,7 +8816,7 @@
       <function address="0x802B4BB4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02B0">
+  <dll id="0x02B0" name="DRyoutube" interface="object">
     <functions>
       <function address="0x802B5A10" idx="0x0"/>
       <function address="0x802B5A14" idx="0x1"/>
@@ -8829,7 +8829,7 @@
       <function address="0x802B5C9C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02B1">
+  <dll id="0x02B1" name="DRcagecontrol" interface="object">
     <functions>
       <function address="0x802B65EC" idx="0x0"/>
       <function address="0x802B65F0" idx="0x1"/>
@@ -8842,7 +8842,7 @@
       <function address="0x802B675C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02B2">
+  <dll id="0x02B2" name="DRexplodeDoor" interface="object">
     <functions>
       <function address="0x802B5E34" idx="0x0"/>
       <function address="0x802B5E38" idx="0x1"/>
@@ -8855,7 +8855,7 @@
       <function address="0x802B6184" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02B3" name="DRgeezer">
+  <dll id="0x02B3" name="DRgeezer" interface="object">
     <functions>
       <function address="0x802B618C" idx="0x0"/>
       <function address="0x802B6190" idx="0x1"/>
@@ -8868,7 +8868,7 @@
       <function address="0x802B65E4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02B4">
+  <dll id="0x02B4" interface="object">
     <functions>
       <function address="0x802B68B0" idx="0x0"/>
       <function address="0x802B68B4" idx="0x1"/>
@@ -8886,7 +8886,7 @@
       <function address="0x802B6CB0" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x02B5">
+  <dll id="0x02B5" name="DRcloudcage" interface="object">
     <functions>
       <function address="0x802B6DAC" idx="0x0"/>
       <function address="0x802B6DB0" idx="0x1"/>
@@ -8900,7 +8900,7 @@
       <function address="0x802B7964" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x02B6">
+  <dll id="0x02B6" name="DRvines" interface="object">
     <functions>
       <function address="0x802B7984" idx="0x0"/>
       <function address="0x802B7988" idx="0x1"/>
@@ -8913,7 +8913,7 @@
       <function address="0x802B7DB8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02B7">
+  <dll id="0x02B7" name="DRshackle" interface="object">
     <functions>
       <function address="0x802B7E4C" idx="0x0"/>
       <function address="0x802B7E50" idx="0x1"/>
@@ -8928,7 +8928,7 @@
       <function address="0x802B846C" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x02B8">
+  <dll id="0x02B8" name="DRbells" interface="object">
     <functions>
       <function address="0x802BA094" idx="0x0"/>
       <function address="0x802BA098" idx="0x1"/>
@@ -8941,7 +8941,7 @@
       <function address="0x802BA4FC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02B9">
+  <dll id="0x02B9" name="DRpickup" interface="object">
     <functions>
       <function address="0x802BA504" idx="0x0"/>
       <function address="0x802BA508" idx="0x1"/>
@@ -8957,7 +8957,7 @@
       <function address="0x802BAC78" idx="0xC"/>
     </functions>
   </dll>
-  <dll id="0x02BA">
+  <dll id="0x02BA" name="DRhightop" interface="object">
     <functions>
       <function address="0x802B8528" idx="0x0"/>
       <function address="0x802B8548" idx="0x1"/>
@@ -8971,7 +8971,7 @@
       <function address="0x802B9EE4" idx="0xA"/>
     </functions>
   </dll>
-  <dll id="0x02BB">
+  <dll id="0x02BB" name="DRicefire" interface="object">
     <functions>
       <function address="0x802BADF8" idx="0x0"/>
       <function address="0x802BADFC" idx="0x1"/>
@@ -8984,7 +8984,7 @@
       <function address="0x802BB660" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02BC">
+  <dll id="0x02BC" name="DRpulley" interface="object">
     <functions>
       <function address="0x802BBDA4" idx="0x0"/>
       <function address="0x802BBDA8" idx="0x1"/>
@@ -8997,7 +8997,7 @@
       <function address="0x802BC120" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02BD">
+  <dll id="0x02BD" name="DRcradle" interface="object">
     <functions>
       <function address="0x802BB668" idx="0x0"/>
       <function address="0x802BB66C" idx="0x1"/>
@@ -9010,7 +9010,7 @@
       <function address="0x802BBD9C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02BE">
+  <dll id="0x02BE" interface="object">
     <functions>
       <function address="0x802BC128" idx="0x0"/>
       <function address="0x802BC12C" idx="0x1"/>
@@ -9027,7 +9027,7 @@
       <function address="0x802BC3E8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02BF">
+  <dll id="0x02BF" name="DRprojswitch" interface="object">
     <functions>
       <function address="0x802BC4D4" idx="0x0"/>
       <function address="0x802BC4D8" idx="0x1"/>
@@ -9040,7 +9040,8 @@
       <function address="0x802BC84C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C0">
+  <dll id="0x02C0" name="DRcollpieace" interface="object">
+    <note>name seems to be mispelled</note>
     <functions>
       <function address="0x802BC854" idx="0x0"/>
       <function address="0x802BC858" idx="0x1"/>
@@ -9053,7 +9054,7 @@
       <function address="0x802BCF04" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C1">
+  <dll id="0x02C1" interface="object">
     <functions>
       <function address="0x802BD064" idx="0x0"/>
       <function address="0x802BD068" idx="0x1"/>
@@ -9070,7 +9071,7 @@
       <function address="0x802BD238" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C2">
+  <dll id="0x02C2" interface="object">
     <functions>
       <function address="0x802BD38C" idx="0x0"/>
       <function address="0x802BD390" idx="0x1"/>
@@ -9083,7 +9084,7 @@
       <function address="0x802BD694" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C3">
+  <dll id="0x02C3" name="DRcavein" interface="object">
     <functions>
       <function address="0x802BD69C" idx="0x0"/>
       <function address="0x802BD6A0" idx="0x1"/>
@@ -9096,7 +9097,7 @@
       <function address="0x802BD9DC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C4">
+  <dll id="0x02C4" interface="object">
     <functions>
       <function address="0x802BDED8" idx="0x0"/>
       <function address="0x802BDEDC" idx="0x1"/>
@@ -9109,7 +9110,7 @@
       <function address="0x802BE0D4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C5">
+  <dll id="0x02C5" interface="object">
     <functions>
       <function address="0x802BE160" idx="0x0"/>
       <function address="0x802BE164" idx="0x1"/>
@@ -9122,7 +9123,7 @@
       <function address="0x802BE418" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C6">
+  <dll id="0x02C6" interface="object">
     <functions>
       <function address="0x802BE6B4" idx="0x0"/>
       <function address="0x802BE6B8" idx="0x1"/>
@@ -9135,7 +9136,7 @@
       <function address="0x802BE80C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C7">
+  <dll id="0x02C7" name="DRhalolight" interface="object">
     <functions>
       <function address="0x802BE814" idx="0x0"/>
       <function address="0x802BE818" idx="0x1"/>
@@ -9148,7 +9149,7 @@
       <function address="0x802BECE4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02C8" name="dinoCall02C8">
+  <dll id="0x02C8" name="dinoCall02C8" interface="object">
     <functions>
       <function address="0x802BECEC" idx="0x0"/>
       <function address="0x802BECF0" idx="0x1"/>
@@ -9163,7 +9164,7 @@
       <function address="0x802BEE94" idx="0xB"/>
     </functions>
   </dll>
-  <dll id="0x02C9" name="dinoCall02C9">
+  <dll id="0x02C9" name="dinoCall02C9" interface="object">
     <functions>
       <function address="0x802BEFA0" idx="0x0"/>
       <function address="0x802BEFA4" idx="0x1"/>
@@ -9181,7 +9182,7 @@
       </function>
     </functions>
   </dll>
-  <dll id="0x02CA">
+  <dll id="0x02CA" interface="object">
     <functions>
       <function address="0x802BF1C8" idx="0x0"/>
       <function address="0x802BF1CC" idx="0x1"/>
@@ -9194,7 +9195,7 @@
       <function address="0x802BF420" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02CB">
+  <dll id="0x02CB" interface="object">
     <functions>
       <function address="0x80269330" idx="0x0"/>
       <function address="0x80269334" idx="0x1"/>
@@ -9207,7 +9208,7 @@
       <function address="0x802696CC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02CC">
+  <dll id="0x02CC" name="SPshop" interface="object">
     <functions>
       <function address="0x80267348" idx="0x0"/>
       <function address="0x8026734C" idx="0x1"/>
@@ -9234,7 +9235,7 @@
       <function address="0x80267A24" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x02CD">
+  <dll id="0x02CD" name="maybeSPshopkeeper" interface="object">
     <functions>
       <function address="0x80267AD0" idx="0x0"/>
       <function address="0x80267AF0" idx="0x1"/>
@@ -9247,7 +9248,7 @@
       <function address="0x80267DC8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02CE">
+  <dll id="0x02CE" name="SPscarab" interface="object">
     <functions>
       <function address="0x80269784" idx="0x0"/>
       <function address="0x80269788" idx="0x1"/>
@@ -9260,7 +9261,7 @@
       <function address="0x80269B20" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02CF">
+  <dll id="0x02CF" name="SPdrape" interface="object">
     <functions>
       <function address="0x80269B28" idx="0x0"/>
       <function address="0x80269B2C" idx="0x1"/>
@@ -9273,7 +9274,7 @@
       <function address="0x80269FA8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D0">
+  <dll id="0x02D0" interface="object">
     <functions>
       <function address="0x8026A0D0" idx="0x0"/>
       <function address="0x8026A0D4" idx="0x1"/>
@@ -9286,7 +9287,7 @@
       <function address="0x8026A210" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D1">
+  <dll id="0x02D1" interface="object">
     <functions>
       <function address="0x802BF7AC" idx="0x0"/>
       <function address="0x802BF7CC" idx="0x1"/>
@@ -9299,7 +9300,7 @@
       <function address="0x802BFA00" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D2">
+  <dll id="0x02D2" interface="object">
     <functions>
       <function address="0x802BFC24" idx="0x0"/>
       <function address="0x802BFC28" idx="0x1"/>
@@ -9312,7 +9313,7 @@
       <function address="0x802BFE70" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D3">
+  <dll id="0x02D3" interface="object">
     <functions>
       <function address="0x802BFF40" idx="0x0"/>
       <function address="0x802BFF60" idx="0x1"/>
@@ -9325,7 +9326,7 @@
       <function address="0x802C02C0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D4">
+  <dll id="0x02D4" interface="object">
     <functions>
       <function address="0x802C07D8" idx="0x0"/>
       <function address="0x802C07DC" idx="0x1"/>
@@ -9338,7 +9339,7 @@
       <function address="0x802C09B4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D5">
+  <dll id="0x02D5" interface="object">
     <functions>
       <function address="0x802C187C" idx="0x0"/>
       <function address="0x802C1880" idx="0x1"/>
@@ -9351,7 +9352,7 @@
       <function address="0x802C18F8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D6">
+  <dll id="0x02D6" interface="object">
     <functions>
       <function address="0x802C1900" idx="0x0"/>
       <function address="0x802C1904" idx="0x1"/>
@@ -9364,7 +9365,7 @@
       <function address="0x802C197C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D7" name="sunMoonBlockPuzzle">
+  <dll id="0x02D7" name="sunMoonBlockPuzzle" interface="object">
     <functions>
       <function address="0x802C1984" idx="0x0"/>
       <function address="0x802C1988" idx="0x1"/>
@@ -9403,7 +9404,7 @@
       <function address="0x802C268C" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x02D8">
+  <dll id="0x02D8" name="WCbeacon" interface="object">
     <functions>
       <function address="0x802C3054" idx="0x0"/>
       <function address="0x802C3058" idx="0x1"/>
@@ -9416,7 +9417,7 @@
       <function address="0x802C34AC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02D9" name="pressureSwitch02D9">
+  <dll id="0x02D9" name="WCpressureSwitch" interface="object">
     <functions>
       <function address="0x802C399C" idx="0x0"/>
       <function address="0x802C39A0" idx="0x1"/>
@@ -9434,7 +9435,7 @@
       <function address="0x802C3E94" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02DA">
+  <dll id="0x02DA" name="WCpushblock" interface="object">
     <functions>
       <function address="0x802C0A70" idx="0x0"/>
       <function address="0x802C0A74" idx="0x1"/>
@@ -9447,7 +9448,7 @@
       <function address="0x802C16D4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02DB">
+  <dll id="0x02DB" interface="object">
     <functions>
       <function address="0x802C34B4" idx="0x0"/>
       <function address="0x802C34B8" idx="0x1"/>
@@ -9460,7 +9461,7 @@
       <function address="0x802C3994" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02DC">
+  <dll id="0x02DC" interface="object">
     <functions>
       <function address="0x802C40BC" idx="0x0"/>
       <function address="0x802C40C0" idx="0x1"/>
@@ -9473,7 +9474,7 @@
       <function address="0x802C42DC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02DD">
+  <dll id="0x02DD" name="useobj2DD" interface="object">
     <functions>
       <function address="0x802C4368" idx="0x0"/>
       <function address="0x802C436C" idx="0x1"/>
@@ -9486,7 +9487,7 @@
       <function address="0x802C48B4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02DE">
+  <dll id="0x02DE" interface="object">
     <functions>
       <function address="0x802C49F8" idx="0x0"/>
       <function address="0x802C49FC" idx="0x1"/>
@@ -9499,7 +9500,7 @@
       <function address="0x802C4C38" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02DF">
+  <dll id="0x02DF" interface="object">
     <functions>
       <function address="0x802C4F10" idx="0x0"/>
       <function address="0x802C4F14" idx="0x1"/>
@@ -9512,7 +9513,7 @@
       <function address="0x802C5214" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E0">
+  <dll id="0x02E0" name="WClaser" interface="object">
     <functions>
       <function address="0x802C5A28" idx="0x0"/>
       <function address="0x802C5A2C" idx="0x1"/>
@@ -9525,7 +9526,7 @@
       <function address="0x802C62C0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E1">
+  <dll id="0x02E1" name="WCdial" interface="object">
     <functions>
       <function address="0x802C5578" idx="0x0"/>
       <function address="0x802C557C" idx="0x1"/>
@@ -9538,7 +9539,7 @@
       <function address="0x802C5970" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E2">
+  <dll id="0x02E2" interface="object">
     <functions>
       <function address="0x802C62C8" idx="0x0"/>
       <function address="0x802C62CC" idx="0x1"/>
@@ -9551,7 +9552,7 @@
       <function address="0x802C6630" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E3">
+  <dll id="0x02E3" name="WCfloortile" interface="object">
     <functions>
       <function address="0x802C68F0" idx="0x0"/>
       <function address="0x802C68F4" idx="0x1"/>
@@ -9564,7 +9565,7 @@
       <function address="0x802C6CB0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E4">
+  <dll id="0x02E4" interface="object">
     <functions>
       <function address="0x802C4C40" idx="0x0"/>
       <function address="0x802C4C44" idx="0x1"/>
@@ -9577,7 +9578,7 @@
       <function address="0x802C4F08" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E5" name="BWlog">
+  <dll id="0x02E5" name="BWlog" interface="object">
     <functions>
       <function address="0x80274ECC" idx="0x0"/>
       <function address="0x80274ED0" idx="0x1"/>
@@ -9604,7 +9605,7 @@
       <function address="0x80275AC8" idx="0x17"/>
     </functions>
   </dll>
-  <dll id="0x02E6" name="BWalphaanim">
+  <dll id="0x02E6" name="BWalphaanim" interface="object">
     <functions>
       <function address="0x802BF4DC" idx="0x0"/>
       <function address="0x802BF4E0" idx="0x1"/>
@@ -9621,7 +9622,7 @@
       <function address="0x802BF6D0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E7">
+  <dll id="0x02E7" interface="object">
     <functions>
       <function address="0x802BF6D8" idx="0x0"/>
       <function address="0x802BF6DC" idx="0x1"/>
@@ -9634,7 +9635,7 @@
       <function address="0x802BF7A4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E8">
+  <dll id="0x02E8" interface="object">
     <functions>
       <function address="0x802C6D38" idx="0x0"/>
       <function address="0x802C6D3C" idx="0x1"/>
@@ -9647,7 +9648,7 @@
       <function address="0x802C6EB4" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02E9" name="laserBomb02E9">
+  <dll id="0x02E9" name="laserBomb02E9" interface="object">
     <functions>
       <function address="0x802C6ECC" idx="0x0"/>
       <function address="0x802C6ED0" idx="0x1"/>
@@ -9660,7 +9661,7 @@
       <function address="0x802C6FFC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02EA">
+  <dll id="0x02EA" interface="object">
     <functions>
       <function address="0x802C9B64" idx="0x0"/>
       <function address="0x802C9B68" idx="0x1"/>
@@ -9673,7 +9674,7 @@
       <function address="0x802C9D18" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02EB">
+  <dll id="0x02EB" interface="object">
     <functions>
       <function address="0x802C9DF4" idx="0x0"/>
       <function address="0x802C9DF8" idx="0x1"/>
@@ -9686,7 +9687,7 @@
       <function address="0x802CA198" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02EC">
+  <dll id="0x02EC" interface="object">
     <functions>
       <function address="0x802CA274" idx="0x0"/>
       <function address="0x802CA278" idx="0x1"/>
@@ -9699,7 +9700,7 @@
       <function address="0x802CA330" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02ED">
+  <dll id="0x02ED" interface="object">
     <functions>
       <function address="0x802CA654" idx="0x0"/>
       <function address="0x802CA658" idx="0x1"/>
@@ -9712,7 +9713,7 @@
       <function address="0x802CA678" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02EE">
+  <dll id="0x02EE" interface="object">
     <functions>
       <function address="0x802CA680" idx="0x0"/>
       <function address="0x802CA684" idx="0x1"/>
@@ -9725,7 +9726,7 @@
       <function address="0x802CA6EC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02EF">
+  <dll id="0x02EF" interface="object">
     <functions>
       <function address="0x802CA6F4" idx="0x0"/>
       <function address="0x802CA6F8" idx="0x1"/>
@@ -9738,7 +9739,7 @@
       <function address="0x802CA760" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F0">
+  <dll id="0x02F0" interface="object">
     <functions>
       <function address="0x802CA768" idx="0x0"/>
       <function address="0x802CA76C" idx="0x1"/>
@@ -9751,7 +9752,7 @@
       <function address="0x802CA87C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F1">
+  <dll id="0x02F1" interface="object">
     <functions>
       <function address="0x802CA990" idx="0x0"/>
       <function address="0x802CA994" idx="0x1"/>
@@ -9764,7 +9765,7 @@
       <function address="0x802CABC8" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F2">
+  <dll id="0x02F2" interface="object">
     <functions>
       <function address="0x802CAC54" idx="0x0"/>
       <function address="0x802CAC58" idx="0x1"/>
@@ -9777,7 +9778,7 @@
       <function address="0x802CAF98" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F3">
+  <dll id="0x02F3" interface="object">
     <functions>
       <function address="0x802CAFF4" idx="0x0"/>
       <function address="0x802CAFF8" idx="0x1"/>
@@ -9790,7 +9791,7 @@
       <function address="0x802CB2AC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F4">
+  <dll id="0x02F4" interface="object">
     <functions>
       <function address="0x802CB308" idx="0x0"/>
       <function address="0x802CB30C" idx="0x1"/>
@@ -9803,7 +9804,7 @@
       <function address="0x802CB468" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F5">
+  <dll id="0x02F5" name="LGTpointlight" interface="object">
     <functions>
       <function address="0x802CB828" idx="0x0"/>
       <function address="0x802CB82C" idx="0x1"/>
@@ -9816,7 +9817,7 @@
       <function address="0x802CBD54" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F6" name="LGTDirectional">
+  <dll id="0x02F6" name="LGTDirectionallight" interface="object">
     <functions>
       <function address="0x802CC360" idx="0x0"/>
       <function address="0x802CC364" idx="0x1"/>
@@ -9829,7 +9830,7 @@
       <function address="0x802CC628" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F7">
+  <dll id="0x02F7" name="LGTprojectedlight" interface="object">
     <functions>
       <function address="0x802CC938" idx="0x0"/>
       <function address="0x802CC93C" idx="0x1"/>
@@ -9847,7 +9848,7 @@
       <function address="0x802CCEBC" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F8">
+  <dll id="0x02F8" name="LGTcontrollight" interface="object">
     <functions>
       <function address="0x802CD3F8" idx="0x0"/>
       <function address="0x802CD3FC" idx="0x1"/>
@@ -9860,7 +9861,7 @@
       <function address="0x802CD564" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02F9">
+  <dll id="0x02F9" interface="object">
     <functions>
       <function address="0x802CD620" idx="0x0"/>
       <function address="0x802CD624" idx="0x1"/>
@@ -9873,7 +9874,7 @@
       <function address="0x802CD7C0" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02FA">
+  <dll id="0x02FA" name="tree2FA" interface="object">
     <functions>
       <function address="0x802CD7C8" idx="0x0"/>
       <function address="0x802CD804" idx="0x1"/>
@@ -9886,7 +9887,7 @@
       <function address="0x802CE07C" idx="0x9"/>
     </functions>
   </dll>
-  <dll id="0x02FB">
+  <dll id="0x02FB" name="boulder2FB" interface="object">
     <functions>
       <function address="0x802CE6D0" idx="0x0"/>
       <function address="0x802CE70C" idx="0x1"/>
