@@ -20,6 +20,10 @@ BOOL gameBitHook(int bit, int val) {
     //GET_REGISTER(30, val);
     //DPRINT("GameBit 0x%04X set to %d", bit, val);
 
+    if(mainGetBit(bit) == val) {
+        return gameBitHook_replaced();
+    }
+
     //log the change
     bool found = false;
     for(int i=0; i<MAX_BIT_LOG; i++) {
