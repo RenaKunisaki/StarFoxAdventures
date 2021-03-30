@@ -1,7 +1,7 @@
 #define MENU_ANIM_NUM_FRAMES 10
 #define MENU_PADDING 8
 #define MENU_WIDTH  (SCREEN_WIDTH  * 0.6)
-#define MENU_HEIGHT (SCREEN_HEIGHT * 0.4)
+#define MENU_HEIGHT ((SCREEN_HEIGHT * 0.4) + 8)
 #define MENU_XPOS ((SCREEN_WIDTH/2)  - (MENU_WIDTH  / 2))
 #define MENU_YPOS ((SCREEN_HEIGHT/2) - (MENU_HEIGHT / 2))
 #define MENU_TEXTBOX_ID 0x93 //same as game uses for HUD
