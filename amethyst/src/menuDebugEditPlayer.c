@@ -2,28 +2,28 @@
  */
 #include "main.h"
 
-static u8 playerIdx = 0;
+u8 editPlayerIdx = 0;
 
 void menuEditPlayerWhich_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
-    sprintf(str, self->name, (playerIdx == 0) ? "Krystal" : "Fox");
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
+    sprintf(str, self->name, (editPlayerIdx == 0) ? "Krystal" : "Fox");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuEditPlayerWhich_select(const MenuItem *self, int amount) {
-    playerIdx ^= 1;
+    editPlayerIdx ^= 1;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
 
 void menuEditPlayerCurHp_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->curHealth);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuEditPlayerCurHp_select(const MenuItem *self, int amount) {
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     if(amount) playerState->curHealth += amount;
     else playerState->curHealth = playerState->maxHealth;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
@@ -32,12 +32,12 @@ void menuEditPlayerCurHp_select(const MenuItem *self, int amount) {
 
 void menuEditPlayerMaxHp_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->maxHealth);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuEditPlayerMaxHp_select(const MenuItem *self, int amount) {
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     playerState->maxHealth += amount;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
@@ -45,12 +45,12 @@ void menuEditPlayerMaxHp_select(const MenuItem *self, int amount) {
 
 void menuEditPlayerCurMp_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->curMagic);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuEditPlayerCurMp_select(const MenuItem *self, int amount) {
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     if(amount) playerState->curMagic += amount;
     else playerState->curMagic = playerState->maxMagic;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
@@ -59,12 +59,12 @@ void menuEditPlayerCurMp_select(const MenuItem *self, int amount) {
 
 void menuEditPlayerMaxMp_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->maxMagic);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuEditPlayerMaxMp_select(const MenuItem *self, int amount) {
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     playerState->maxMagic += amount;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
@@ -72,12 +72,12 @@ void menuEditPlayerMaxMp_select(const MenuItem *self, int amount) {
 
 void menuEditPlayerCurLives_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->curBafomDads);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuEditPlayerCurLives_select(const MenuItem *self, int amount) {
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     if(amount) playerState->curBafomDads += amount;
     else playerState->curBafomDads = playerState->maxBafomDads;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
@@ -86,12 +86,12 @@ void menuEditPlayerCurLives_select(const MenuItem *self, int amount) {
 
 void menuEditPlayerMaxLives_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->maxBafomDads);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuEditPlayerMaxLives_select(const MenuItem *self, int amount) {
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     playerState->maxBafomDads += amount;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
@@ -99,12 +99,12 @@ void menuEditPlayerMaxLives_select(const MenuItem *self, int amount) {
 
 void menuEditPlayerMoney_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->money);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuEditPlayerMoney_select(const MenuItem *self, int amount) {
-    PlayerCharState *playerState = &saveData.curSaveGame.charState[playerIdx];
+    PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     if(amount) playerState->money += amount;
     else playerState->money = 255;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);

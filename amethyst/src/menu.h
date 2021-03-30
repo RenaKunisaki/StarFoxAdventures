@@ -74,6 +74,9 @@ void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected);
 //menuDebug.c
 void debugSubMenu_close(const Menu *self);
 
+//menuDebugEditPlayer.c
+extern u8 editPlayerIdx;
+
 //menuDebugGameState.c
 void debugGameSubMenu_close(const Menu *self);
 

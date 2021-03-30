@@ -15,6 +15,10 @@ void menuDebugGameStateBits_select(const MenuItem *self, int amount) {
 
 void menuDebugGameStatePlayer_select(const MenuItem *self, int amount) {
     if(amount) return;
+    if(pPlayer) {
+        editPlayerIdx = (pPlayer->defNo == ObjDefEnum_Sabre) ?
+            PLAYER_ID_FOX : PLAYER_ID_KRYSTAL;
+    }
     curMenu = &menuDebugEditPlayer;
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
