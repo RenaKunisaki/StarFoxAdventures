@@ -210,7 +210,7 @@ void bsodHook(void) {
             case  6: drawPageBits2(); break;
         }
 
-        debugPrintfxy(615, 438, "P%d", page);
+        debugPrintfxy(610, 438, "P%d", page);
 
         //swap buffers
         dCacheStore(debugFrameBuffer[0], 640*480*2);
