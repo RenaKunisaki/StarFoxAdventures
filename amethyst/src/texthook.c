@@ -12,14 +12,14 @@ int textHook(char *str) {
 
     while(*str) {
         int cSize;
-        char c = shiftJisGetNextChar(str, &cSize);
+        int c = shiftJisGetNextChar(str, &cSize);
         if(!c) break;
         if     (c == 'l' || c == 'r') *str = 'w';
         else if(c == 'L' || c == 'R') *str = 'W';
         else { //of course this can't be simple
             for(int i=0; i<46; i++) {
                 if(controlCharLength[i].chr == c) {
-                    cSize = controlCharLength[i].len * 2;
+                    cSize += controlCharLength[i].len * 2;
                     break;
                 }
             }
