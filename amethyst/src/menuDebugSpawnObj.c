@@ -66,6 +66,7 @@ void spawnMenu_draw(Menu *self) {
     menuAnimFrame++;
 
     drawMenuBox(SPAWN_MENU_XPOS, SPAWN_MENU_YPOS, SPAWN_MENU_WIDTH, SPAWN_MENU_HEIGHT);
+    gameTextSetColor(255, 255, 255, 255);
 
     int x = SPAWN_MENU_XPOS + MENU_PADDING, y = SPAWN_MENU_YPOS + MENU_PADDING;
     s16  *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];

@@ -120,6 +120,7 @@ void objMenu_draw(Menu *self) {
 
     drawMenuBox(OBJ_MENU_XPOS, OBJ_MENU_YPOS, OBJ_MENU_WIDTH, OBJ_MENU_HEIGHT);
     drawMenuBox(OBJ_INFO_XPOS, OBJ_INFO_YPOS, OBJ_INFO_WIDTH, OBJ_INFO_HEIGHT);
+    gameTextSetColor(255, 255, 255, 255);
 
     int x = OBJ_MENU_XPOS + MENU_PADDING, y = OBJ_MENU_YPOS + MENU_PADDING;
     int start = MAX(0, self->selected - (OBJ_MENU_NUM_LINES-1));
