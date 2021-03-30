@@ -43,10 +43,12 @@ static void drawPageGeneral() {
     }
 
     //show map and camera info
-    debugPrintfxy( 26, 107, "CM %02X ACT %02X OBJ %04X MAPS %02X %02X",
+    debugPrintfxy( 26, 107, "CM %02X ACT %02X OBJ %04X MAPS %02X %02X %02X %02X",
         cameraMode, curMapAct, numLoadedObjs,
         loadedFileMapIds[FILE_MODELS_BIN]  & 0xFF,
-        loadedFileMapIds[FILE_MODELS_BIN2] & 0xFF);
+        loadedFileMapIds[FILE_MODELS_BIN2] & 0xFF,
+        //buckets are int, but we really only need lowest byte.
+        levelLockBuckets[0] & 0xFF, levelLockBuckets[1] & 0xFF);
 
     //show GPRs
     debugPrintfxy(26, 122, (const char*)0x8031d270); //"General purpose registers"
