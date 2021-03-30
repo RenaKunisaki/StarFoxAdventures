@@ -4,7 +4,7 @@
 
 void menuMusicVol_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (int)(volumeMusic * 100));
+    sprintf(str, self->name, (int)(volumeMusic * 100.0));
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuMusicVol_select(const MenuItem *self, int amount) {
@@ -17,7 +17,7 @@ void menuMusicVol_select(const MenuItem *self, int amount) {
 
 void menuSfxVol_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (int)(volumeSFX * 100));
+    sprintf(str, self->name, (int)(volumeSFX * 100.0));
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuSfxVol_select(const MenuItem *self, int amount) {
@@ -30,11 +30,13 @@ void menuSfxVol_select(const MenuItem *self, int amount) {
 
 void menuSceneVol_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (int)((volumeCutScenes / 127.0) * 100.0));
+    int v = (int)((volumeCutScenes / 127.0) * 100.0);
+    sprintf(str, self->name, roundTo(v, 10));
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuSceneVol_select(const MenuItem *self, int amount) {
     int vol = volumeCutScenes + (amount * 13);
+    if(vol > 117 && vol < 137) vol = 127; //ensure we center back at 100%
     if(vol <   0) vol =   0;
     if(vol > 255) vol = 255;
     volumeCutScenes = vol;

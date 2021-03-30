@@ -18,3 +18,15 @@ char* bin2str(char *str, u32 val, int len) {
     *str = '\0';
     return str;
 }
+
+/** @description Round number up or down to nearest multiple of target.
+ *  @param num number to round.
+ *  @param target multiple to round to.
+ *  @return rounded number.
+ */
+int roundTo(int num, int target) {
+    int val = num % target;
+    if(!val) return num;
+    if(val >= target / 2) return num + (target - val); //round up
+    else return num - val; //round down
+}

@@ -126,6 +126,7 @@ void hudDrawHook(int p1, int p2, int p3);
 
 //util.c
 char* bin2str(char *str, u32 val, int len);
+int roundTo(int num, int target);
 
 //worldmap.c
 void worldMapHook();

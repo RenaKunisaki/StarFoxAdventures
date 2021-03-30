@@ -45,7 +45,8 @@ void menuPdaSize_select(const MenuItem *self, int amount) {
 
 void menuPdaOpacity_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (int)((overrideMinimapAlpha / 255.0) * 100));
+    int v = (int)((overrideMinimapAlpha / 255.0) * 100);
+    sprintf(str, self->name, roundTo(v, 10));
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuPdaOpacity_select(const MenuItem *self, int amount) {
@@ -59,7 +60,8 @@ void menuPdaOpacity_select(const MenuItem *self, int amount) {
 
 void menuPdaZoom_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (int)(minimapZoom * 100));
+    int v = (int)(minimapZoom * 100);
+    sprintf(str, self->name, roundTo(v, 5));
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuPdaZoom_select(const MenuItem *self, int amount) {
