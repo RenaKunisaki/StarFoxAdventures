@@ -66,6 +66,7 @@ typedef struct PACKED {
 } SaveGameSettings;
 CASSERT(sizeof(SaveGameSettings) == 0x1C, sizeof_SaveGameSettings);
 
+#define NUM_HIGH_SCORES 5
 typedef struct PACKED {
     u32 score;
     char name[4];
@@ -73,11 +74,11 @@ typedef struct PACKED {
 
 typedef struct {
     SaveGameSettings saveSettings; //0x0
-    SavedHighScore score1[5]; //XXX which score is for which level?
-    SavedHighScore score2[5]; //and why 5 entries? should only be 4?
-    SavedHighScore score3[5];
-    SavedHighScore score4[5];
-    SavedHighScore score5[5];
+    SavedHighScore score1[NUM_HIGH_SCORES]; //XXX which score is for which level?
+    SavedHighScore score2[NUM_HIGH_SCORES]; //and why 5 entries? should only be 4?
+    SavedHighScore score3[NUM_HIGH_SCORES];
+    SavedHighScore score4[NUM_HIGH_SCORES];
+    SavedHighScore score5[NUM_HIGH_SCORES];
     SaveGame curSaveGame; //0xE4
 } SaveData;
 CASSERT(sizeof(SaveData) == 0x7d0, sizeof_SaveData);

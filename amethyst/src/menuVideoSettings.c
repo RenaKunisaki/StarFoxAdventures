@@ -9,6 +9,7 @@ void menuWidescreen_draw(const MenuItem *self, int x, int y, bool selected) {
 }
 void menuWidescreen_select(const MenuItem *self, int amount) {
     setWidescreen(!(renderFlags & RenderFlag_Widescreen));
+    saveData.saveSettings.bWidescreen = (renderFlags & RenderFlag_Widescreen) ? 1 : 0;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 

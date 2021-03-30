@@ -9,6 +9,7 @@ void menuRumble_draw(const MenuItem *self, int x, int y, bool selected) {
 }
 void menuRumble_select(const MenuItem *self, int amount) {
     enableRumble = !enableRumble;
+    saveData.saveSettings.bRumbleEnabled = enableRumble;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
     if(enableRumble) doRumble(60);
 }
