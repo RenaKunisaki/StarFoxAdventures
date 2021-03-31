@@ -1,0 +1,11 @@
+/* first three are for Dolphin SDK.
+ * it uses AT_ADDRESS macro, but gcc doesn't support this for PPC, so we
+ * hacked its files to make that macro do nothing, and put them here.
+ */
+GXWGFifo = 0xCC008000;
+__OSBusClock = 0x800000F8;
+__OSCoreClock = 0x800000FC;
+
+audioInit = 0x80067a30;
+dvdLoadFile = 0x80074ed8;
+OSReport = 0x80009968;
