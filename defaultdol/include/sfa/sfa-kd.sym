@@ -6,6 +6,11 @@ GXWGFifo = 0xCC008000;
 __OSBusClock = 0x800000F8;
 __OSCoreClock = 0x800000FC;
 
+allocTagged = 0x8007b690;
 audioInit = 0x80067a30;
+dataFileBuffers = 0x8035cad0;
+dCacheStore = 0x80008bcc;
 dvdLoadFile = 0x80074ed8;
+lzoDecompress = 0x800a0dd8;
+memcpy = 0x8000346c;
 OSReport = 0x80009968;

@@ -1,6 +1,6 @@
 default.dol is some old debug build that seems to have just been ported from N64
 
-it isn't compatible with the kioslk version's files
+it isn't compatible with the kiosk version's files
 
 in some places it does things like:
 li  r30, 0

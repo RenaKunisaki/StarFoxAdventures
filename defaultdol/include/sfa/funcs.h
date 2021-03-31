@@ -10,6 +10,10 @@
 //Hopefully this workaround still works if a variable gets put at 0. Or maybe
 //that can't happen because .text comes first?
 #define GLOBALFN __attribute__((longcall))
+GLOBALFN void* allocTagged(u32 size, u32 tag, const char *name);
 GLOBALFN void audioInit(void);
+GLOBALFN void* dCacheStore(void*, uint);
 GLOBALFN void* dvdLoadFile(const char *path, int *outSize, BOOL bLog);
+GLOBALFN int lzoDecompress(byte *src,int compLen,byte *dest,int *outLen);
+GLOBALFN void* memcpy(void *dest, void *src, int len);
 GLOBALFN void OSReport(const char *fmt, ...);

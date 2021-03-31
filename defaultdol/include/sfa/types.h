@@ -5,7 +5,7 @@ typedef struct Texture Texture;
 typedef struct TextureHeader TextureHeader;
 
 #define NUM_DLLS 0x2C2
-#define NUM_FILES 0x5A
+#define NUM_FILES 80
 #define NUM_HEAPS 4
 #define NUM_MAPS 120
 #define NUM_MAP_DIRS 80
@@ -37,31 +37,6 @@ typedef s32 ObjUniqueId;
 typedef s32 PlayerStateEnum32;
 
 #include "math.h"
-#include "debug/debug.h"
-#include "dll/dll.h"
-#include "data/fileids.h"
-#include "data/zlb.h"
 #include "gx/gx.h"
 #include "gx/dlist.h"
 #include "gx/opcodes.h"
-#include "gametext/gametext.h"
-#include "objects/objcats.h"
-#include "objects/objseq.h"
-#include "objects/objdata.h"
-#include "objects/objhits.h"
-#include "assets/texture.h"
-#include "assets/model.h"
-#include "objects/objdef.h"
-#include "objects/objinstance.h"
-#include "objects/camera.h"
-#include "assets/assets.h"
-#include "memory/alloc.h"
-#include "audio/audio.h"
-#include "map/map.h"
-#include "game/game.h"
-#include "game/gamebits.h"
-#include "game/cheats.h"
-#include "game/player/playerstate.h"
-#include "game/save/savegame.h"
-#include "ui/pda.h"
-#include "ui/hud.h"
