@@ -75,9 +75,9 @@ void saveUpdateHook() {
     save->unusedHudSetting = cameraFlags;
 
     //we also need to update these
-    save->musicVolume    = volumeMusic * 127;
-    save->sfxVolume      = volumeSFX * 127;
-    save->cutsceneVolume = volumeCutScenes;
+    //but don't save the volume settings here because they can change during
+    //the game. especially the music volume fades in at the title screen and
+    //we don't want to save it as zero there.
     save->bWidescreen    = (renderFlags & RenderFlag_Widescreen) ? 1 : 0;
     save->bRumbleEnabled = enableRumble ? 1 : 0;
     save->bSubtitlesOn   = bSubtitlesEnabled ? 1 : 0;
