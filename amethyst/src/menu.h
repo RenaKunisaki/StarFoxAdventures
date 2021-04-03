@@ -7,6 +7,7 @@
 #define MENU_TEXTBOX_ID 0x93 //same as game uses for HUD
 #define MENU_LINE_HEIGHT 18
 #define MENU_ADJUST_SOUND 0xF4 //generic adjustment sound effect ID
+#define MENU_MOVE_SOUND 0xF4 //sound ID for moving cursor
 #define MENU_OPEN_SOUND 0xFC //submenu open sound effect ID
 #define MENU_CLOSE_SOUND 0xFC //submenu close sound effect ID
 #define MENU_FAIL_SOUND 0xFD //"can't use this item" sound

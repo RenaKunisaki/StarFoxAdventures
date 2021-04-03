@@ -74,6 +74,7 @@ void genericMenu_run(Menu *self) {
             while(self->items[sel].name) sel++;
         }
         self->selected = sel - 1;
+        audioPlaySound(NULL, MENU_MOVE_SOUND);
     }
     else if(controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY < -MENU_CSTICK_THRESHOLD) { //down
@@ -82,6 +83,7 @@ void genericMenu_run(Menu *self) {
         sel++;
         if(!self->items[sel].name) sel = 0;
         self->selected = sel;
+        audioPlaySound(NULL, MENU_MOVE_SOUND);
     }
     else if(controllerStates[0].stickX > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickX > MENU_CSTICK_THRESHOLD) { //right
