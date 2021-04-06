@@ -115,8 +115,11 @@ int padGetStickXHook(int pad) {
     //replaces the body of padGetStickX().
     if(joypadDisable || isDvdDriveBusy) return 0;
     int result = controllerStates[pad + (whichControllerFrame * 4)].stickX;
-    if(cameraFlags & CAM_FLAG_INVERT_X) {
-        if(cameraMode == 0x43    //staff aiming
+    u16 buttons = controllerStates[pad + (whichControllerFrame * 4)].button;
+    //XXX mode 0x52 is both holding L button and aiming with staff.
+    //find a better way to distinguish the two than checking for L button.
+    if((cameraFlags & CAM_FLAG_INVERT_X) && !(buttons & PAD_TRIGGER_L)) {
+        if(cameraMode == 0x52    //staff aiming
         || cameraMode == 0x44    //viewfinder
         || cameraMode == 0x51) { //aim cannon
             return -result;
@@ -129,12 +132,13 @@ int padGetStickYHook(int pad) {
     //replaces the body of padGetStickY().
     if(joypadDisable || isDvdDriveBusy) return 0;
     int result = controllerStates[pad + (whichControllerFrame * 4)].stickY;
+    u16 buttons = controllerStates[pad + (whichControllerFrame * 4)].button;
     if(cameraMode == 0x44) { //viewfinder
         //already inverted by default, so do opposite
         if(!(cameraFlags & CAM_FLAG_INVERT_Y)) return -result;
     }
-    else if((cameraFlags & CAM_FLAG_INVERT_Y) && (
-    cameraMode == 0x43 || cameraMode == 0x51)) {
+    else if((cameraFlags & CAM_FLAG_INVERT_Y) && !(buttons & PAD_TRIGGER_L) && (
+    cameraMode == 0x52 || cameraMode == 0x51)) {
         return -result;
     }
     return result;

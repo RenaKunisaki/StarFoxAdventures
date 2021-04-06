@@ -77,8 +77,9 @@ static void printRestartPoint() {
 static void printCamera() {
     //Display camera coords
     if(pCamera) {
-        debugPrintf("C:" DPRINT_FIXED "%6d %6d %6d " DPRINT_NOFIXED "\n",
-            (int)pCamera->pos.pos.x, (int)pCamera->pos.pos.y, (int)pCamera->pos.pos.z);
+        debugPrintf("C:" DPRINT_FIXED "%6d %6d %6d M%02X" DPRINT_NOFIXED "\n",
+            (int)pCamera->pos.pos.x, (int)pCamera->pos.pos.y,
+            (int)pCamera->pos.pos.z, cameraMode);
     }
 }
 
