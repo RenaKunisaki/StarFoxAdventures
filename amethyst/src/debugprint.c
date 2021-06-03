@@ -2,7 +2,7 @@
  */
 #include "main.h"
 
-u32 debugTextFlags = DEBUGTEXT_PLAYER_COORDS |
+u32 debugTextFlags = DEBUGTEXT_PLAYER_COORDS | DEBUGTEXT_PLAYER_STATE |
     DEBUGTEXT_CAMERA_COORDS | DEBUGTEXT_MEMORY_INFO |
     DEBUGTEXT_INTERACT_OBJ_INFO;
 
@@ -141,6 +141,27 @@ static void printTarget() {
     }
 }
 
+static void printPlayerState() {
+    void *pState = pPlayer ? pPlayer->state : NULL;
+    if(!pState) return;
+    if(pPlayer->catId != 1) return; //don't apply to title screen Fox
+    PlayerCharState *cState = *(PlayerCharState**)(pState + 0x35C);
+
+    debugPrintf("Player " DPRINT_FIXED "%02X %08X %08X %08X %08X ",
+        *(u16*)(pState + 0x274),
+        *(u32*)(pState + 0x310),
+        *(u32*)(pState + 0x314),
+        *(u32*)(pState + 0x318),
+        *(u32*)(pState + 0x31C));
+
+    debugPrintf("%08X %08X %08X %04X %02X" DPRINT_NOFIXED "\n",
+        *(u32*)(pState + 0x360),
+        *(u32*)(pState + 0x3F0),
+        *(u32*)(pState + 0x3F4),
+        cState ? ((cState->flags02 << 8) | cState->field_03) : 0,
+        cState ? cState->field_0B : 0);
+}
+
 void mainLoopDebugPrint() {
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"); //reset color
     /* debugPrintf("Player=%08X: ", pPlayer);
@@ -152,6 +173,7 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
     if(debugTextFlags & DEBUGTEXT_RESTART_POINT) printRestartPoint();
+    if(debugTextFlags & DEBUGTEXT_PLAYER_STATE)  printPlayerState();
     if(debugTextFlags & DEBUGTEXT_MEMORY_INFO) {
         printObjCount();
         printMemory();
