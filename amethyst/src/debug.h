@@ -11,6 +11,7 @@ typedef enum {
     DEBUGTEXT_HEAP_STATE        = (1 << 6),
     DEBUGTEXT_GAMEBIT_LOG       = (1 << 7),
     DEBUGTEXT_PLAYER_STATE      = (1 << 8),
+    DEBUGTEXT_HEAP_GRAPH        = (1 << 9), //not really text but oh well
 } DebugTextFlags;
 
 //debuglog.s

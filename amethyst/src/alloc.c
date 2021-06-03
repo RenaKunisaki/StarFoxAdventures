@@ -65,6 +65,16 @@ void doEmergencyFree() {
     //XXX try more things
 }
 
+void _heapAllocHook(void);
+__asm__(
+    "_heapAllocHook:               \n"
+    "mr      4, 23                 \n" //return SfaHeapEntry* in r4
+    "lis     23,     _restgpr_23@h \n"
+    "ori     23, 23, _restgpr_23@l \n"
+    "mtctr   23                    \n"
+    "bctr                          \n"
+);
+
 void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     //replaces the body of allocTagged.
     //implements the same logic, but with tweaks:
@@ -77,39 +87,77 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     //name is almost never set and isn't stored
     u32 lr = (u32)__builtin_return_address(0);
     //DPRINT("alloc size=%8X tag=%08X lr=%08X", size, tag, lr);
-    tag = lr; //this is more useful
+    //tag = lr; //this is more useful
 
     //mostly copied game code
     if (size == 0) return NULL;
 
     int count = 0;
     void *buf = NULL;
+    SfaHeapEntry *entry = NULL;
     while((buf == NULL) && (count < 100)) {
         if(bOnlyUseHeaps1and2 == 1) {
+            //heapAlloc "leaks" the SfaHeapEntry in r4 on return.
+            //we can exploit this to modify some fields that otherwise
+            //serve no real purpose.
             buf = heapAlloc(1,size,tag,name);
-            if(buf == NULL) buf = heapAlloc(2,size,tag,name);
+            GET_REGISTER(4, entry);
+            if(buf == NULL) {
+                buf = heapAlloc(2,size,tag,name);
+                GET_REGISTER(4, entry);
+            }
         }
         else if(bOnlyUseHeap3 != 0) {
             buf = heapAlloc(3,size,tag,name);
+            GET_REGISTER(4, entry);
         }
         else if(size < 0x3000) {
             if(size < 0x400) {
                 buf = heapAlloc(2,size,tag,name);
-                if(buf == NULL) buf = heapAlloc(1,size,tag,name);
-                if(buf == NULL) buf = heapAlloc(0,size,tag,name);
+                GET_REGISTER(4, entry);
+                if(buf == NULL) {
+                    buf = heapAlloc(1,size,tag,name);
+                    GET_REGISTER(4, entry);
+                }
+                if(buf == NULL) {
+                    buf = heapAlloc(0,size,tag,name);
+                    GET_REGISTER(4, entry);
+                }
             }
             else {
                 buf = heapAlloc(1,size,tag,name);
-                if(buf == NULL) buf = heapAlloc(2,size,tag,name);
-                if(buf == NULL) buf = heapAlloc(0,size,tag,name);
+                GET_REGISTER(4, entry);
+                if(buf == NULL) {
+                    buf = heapAlloc(2,size,tag,name);
+                    GET_REGISTER(4, entry);
+                }
+                if(buf == NULL) {
+                    buf = heapAlloc(0,size,tag,name);
+                    GET_REGISTER(4, entry);
+                }
             }
         }
         else {
             buf = heapAlloc(0,size,tag,name);
-            if(buf == NULL) buf = heapAlloc(1,size,tag,name);
+            GET_REGISTER(4, entry);
+            if(buf == NULL) {
+                buf = heapAlloc(1,size,tag,name);
+                GET_REGISTER(4, entry);
+            }
         }
         if(buf) {
-            //DPRINT("alloc success, %08X", buf);
+            //DPRINT("alloc success, %08X, entry %08X (unk %04X %08X ID %08X stack %04X %04X)", buf, entry,
+            //    entry->unk08, entry->unk14, entry->mmUniqueIdent,
+            //    entry->stack, entry->stack2);
+            if(!PTR_VALID(entry) || entry->unk08 > 1) {
+                //sanity check, in case our patch to return the heap entry
+                //doesn't work. XXX why does this happen?
+                OSReport("Alloc %08X got bad r4 %08X", lr, entry);
+            }
+            else {
+                //this seems to be unused
+                entry->unk14 = lr;
+            }
             return buf;
         }
         else {
@@ -124,4 +172,9 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     allocFailLogIdx++;
     if(allocFailLogIdx >= ALLOC_FAIL_LOG_SIZE) allocFailLogIdx = 0;
     return NULL;
+}
+
+void allocInit() {
+    hookBranch(0x80023c14, _heapAllocHook, 1);
+    hookBranch((u32)allocTagged, allocTaggedHook, 0);
 }

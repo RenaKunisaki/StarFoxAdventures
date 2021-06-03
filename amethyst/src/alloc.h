@@ -10,3 +10,4 @@ extern u32 emergFreeCount;
 extern u8 allocFailLogIdx;
 extern AllocFailLogItem allocFailLog[ALLOC_FAIL_LOG_SIZE];
 void* allocTaggedHook(u32 size, AllocTag tag, const char *name);
+void allocInit();

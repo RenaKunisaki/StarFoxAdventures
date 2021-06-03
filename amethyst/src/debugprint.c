@@ -160,6 +160,34 @@ static void printPlayerState() {
         *(u32*)(pState + 0x3F4),
         cState ? ((cState->flags02 << 8) | cState->field_03) : 0,
         cState ? cState->field_0B : 0);
+
+    ObjInstance *obj = *(ObjInstance**)(pState + 0x46C);
+    if(obj) debugPrintf("Death obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+        obj, obj->file->name);
+
+    obj = *(ObjInstance**)(pState + 0x4C4);
+    if(obj) debugPrintf("Obj4C4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+        obj, obj->file->name);
+
+    obj = *(ObjInstance**)(pState + 0x684);
+    if(obj) debugPrintf("Collect obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+        obj, obj->file->name);
+
+    obj = *(ObjInstance**)(pState + 0x7B0);
+    if(obj) debugPrintf("Obj7B0 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+        obj, obj->file->name);
+
+    obj = *(ObjInstance**)(pState + 0x7F0);
+    if(obj) debugPrintf("Ride obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+        obj, obj->file->name);
+
+    obj = *(ObjInstance**)(pState + 0x7F4); //XXX confirm this is an object
+    if(obj) debugPrintf("Obj7F4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+        obj, obj->file->name);
+
+    obj = *(ObjInstance**)(pState + 0x7F8);
+    if(obj) debugPrintf("Hold obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+        obj, obj->file->name);
 }
 
 void mainLoopDebugPrint() {
@@ -182,4 +210,6 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
 
     debugPrintf("\n"); //for game's own messages
+
+    if(debugTextFlags & DEBUGTEXT_HEAP_GRAPH) drawHeaps();
 }

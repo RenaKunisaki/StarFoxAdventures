@@ -58,6 +58,9 @@ void bsodHook(void);
 //drawbox.c
 void drawBox(float x, float y, int w, int h, u8 opacity, bool fill);
 
+//drawheap.c
+void drawHeaps();
+
 //freemove.c
 extern bool bFreeMove;
 void doFreeMove();
