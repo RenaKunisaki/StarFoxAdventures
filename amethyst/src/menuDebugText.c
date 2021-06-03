@@ -121,7 +121,6 @@ void menuDebugTextTricky_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
-
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,

@@ -40,9 +40,25 @@ void genericMenu_draw(Menu *self) {
     gameTextSetColor(255, 255, 255, 255);
     gameTextShowStr(self->title, 0, x, y-40);
 
-    for(int i=0; self->items[i].name; i++) {
+    //find Y position of current item
+    int iStart = 0;
+    int ySel = MENU_LINE_HEIGHT * (self->selected+2) + MENU_PADDING;
+    //debugPrintf("ySel=%d/%d ", ySel, (int)MENU_HEIGHT);
+    while(ySel >= (int)MENU_HEIGHT) {
+        ySel -= MENU_LINE_HEIGHT;
+        iStart++;
+    }
+    //debugPrintf("iStart=%d\n", iStart);
+
+    //draw items
+    bool drawBottomArrow = false;
+    for(int i=iStart; self->items[i].name; i++) {
         y += MENU_LINE_HEIGHT;
         bool selected = i == self->selected;
+        if(y + MENU_LINE_HEIGHT >= MENU_YPOS + MENU_HEIGHT) {
+            drawBottomArrow = true;
+            break;
+        }
         if(selected) {
             u8  r = menuAnimFrame * 8, g = 255 - r;
             gameTextSetColor(r, g, 255, 255);
@@ -51,6 +67,23 @@ void genericMenu_draw(Menu *self) {
         self->items[i].draw(&self->items[i], x, y, selected);
     }
     //gameTextDrawFunc = prevDrawFunc;
+
+    //draw arrows if there are more items.
+    //this is actually the location indicator for the world map,
+    //but it's a vertical arrow that's always loaded.
+    Texture *arrow = getLoadedTexture(0xBE8);
+    if(drawBottomArrow) {
+        drawScaledTexture(
+            (float)(MENU_XPOS + MENU_WIDTH - (MENU_PADDING * 3)),
+            (float)(MENU_YPOS + MENU_HEIGHT - (MENU_PADDING*1)),
+            arrow, 255, 256, 16, 12, DRAW_SCALED_TEXTURE_FLIP_V);
+    }
+    if(iStart > 0) { //draw top arrow
+        drawScaledTexture(
+            (float)(MENU_XPOS + MENU_WIDTH - (MENU_PADDING * 3)),
+            (float)(MENU_YPOS - 4),
+            arrow, 255, 256, 16, 12, 0);
+    }
 }
 
 void genericMenu_run(Menu *self) {
