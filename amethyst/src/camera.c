@@ -3,6 +3,11 @@
 u8 cameraFlags = 0; //CameraFlags
 s8 debugCameraMode = CAM_MODE_NORMAL; //CameraMode
 
+//position to override camera for free/stay modes
+static float camOverrideX, camOverrideY, camOverrideZ;
+static s16 camOverrideRX, camOverrideRY, camOverrideRZ;
+static u8 camOverrideValid; //bool
+
 void _camUpdateNormal() {
     int pad = (cameraFlags & CAM_FLAG_PAD3) ? 2 : 0;
     s8 stickX = controllerStates[pad].substickX & 0xFC;
@@ -15,6 +20,7 @@ void _camUpdateNormal() {
         pCamera->pos.rotation.x += stickX * 128;
         pCamera->pos.rotation.y += stickY *  16;
     }
+    camOverrideValid = 0;
 }
 
 void _drawDebugInfo() {
@@ -46,6 +52,18 @@ void cameraUpdateHook() {
         _camUpdateNormal();
     }
     else {
+
+        if(camOverrideValid) {
+            pCamera->pos.pos.x = camOverrideX;
+            pCamera->pos.pos.y = camOverrideY;
+            pCamera->pos.pos.z = camOverrideZ;
+            if(debugCameraMode == CAM_MODE_FREE) {
+                pCamera->pos.rotation.x = camOverrideRX;
+                pCamera->pos.rotation.y = camOverrideRY;
+                pCamera->pos.rotation.z = camOverrideRZ;
+            }
+        }
+
         if(debugCameraMode == CAM_MODE_STAY || bHeld4 & PAD_BUTTON_Y) {
             //turn to look at target
             vec3f targetPos;
@@ -61,26 +79,66 @@ void cameraUpdateHook() {
             pCamera->pos.rotation.y = atan2(targetPos.y, targetXZ);
         }
 
-        int scale = (bHeld4 & PAD_TRIGGER_Z) ? 2 : 1;
-        float srx = scale * 5 * (cameraFlags & CAM_FLAG_INVERT_X) ? -1 : 1;
-        float sry = scale * 5 * (cameraFlags & CAM_FLAG_INVERT_Y) ? -1 : 1;
-        float spx = scale *  0.25;
-        float spy = scale *  0.05;
-        float spz = scale * -0.25;
+        if(bHeld4 & PAD_BUTTON_A) { //reset
+            origFunc(pCamera);
+            _camUpdateNormal();
+        }
 
-        pCamera->pos.rotation.x += srx * controllerStates[3].substickX;
-        pCamera->pos.rotation.y += sry * controllerStates[3].substickY;
-        pCamera->pos.pos.y += spy *
-            (controllerStates[3].triggerRight - controllerStates[3].triggerLeft);
-        pCamera->pos.pos.x += spx * controllerStates[3].stickX;
-        pCamera->pos.pos.z += spz * controllerStates[3].stickY;
+        //calculate movement scale
+        float scale = (bHeld4 & PAD_TRIGGER_Z) ? 2 : 1;
+        float srx = scale * 10.0 * ((cameraFlags & CAM_FLAG_INVERT_X) ? -1.0 : 1.0);
+        float sry = scale * 10.0 * ((cameraFlags & CAM_FLAG_INVERT_Y) ? -1.0 : 1.0);
+        float spx = scale * -0.25;
+        float spy = scale *  0.05;
+        float spz = scale *  0.25;
+
+        //apply deadzones
+        int sx = controllerStates[3].stickX;
+        int sy = controllerStates[3].stickY;
+        int cx = controllerStates[3].substickX;
+        int cy = controllerStates[3].substickY;
+        int tl = controllerStates[3].triggerLeft;
+        int tr = controllerStates[3].triggerRight;
+        if(sx < CAMERA_LSTICK_DEADZONE && sx > -CAMERA_LSTICK_DEADZONE) sx = 0;
+        if(sy < CAMERA_LSTICK_DEADZONE && sy > -CAMERA_LSTICK_DEADZONE) sy = 0;
+        if(cx < CAMERA_RSTICK_DEADZONE && cx > -CAMERA_RSTICK_DEADZONE) cx = 0;
+        if(cy < CAMERA_RSTICK_DEADZONE && cy > -CAMERA_RSTICK_DEADZONE) cy = 0;
+        if(tl < CAMERA_TRIGGER_DEADZONE) tl = 0;
+        if(tr < CAMERA_TRIGGER_DEADZONE) tr = 0;
+
+        //apply rotation
+        pCamera->pos.rotation.x += srx * cx;
+        pCamera->pos.rotation.y += sry * cy;
+
+        //apply Y translation (movement)
+        pCamera->pos.pos.y += spy * (tr - tl);
+
+        //calculate XZ movement vector
+        float tx = spx * sx;
+        float tz = spz * sy; //not sz, since it's analog stick input
+        //X here is actually the rotation around the Y axis...
+        float sinR = sinf((float)pCamera->pos.rotation.x * S16_TO_RADIANS);
+        float cosR = cosf((float)pCamera->pos.rotation.x * S16_TO_RADIANS);
+
+        pCamera->pos.pos.x += (tx * cosR) - (tz * sinR);
+        pCamera->pos.pos.z += (tx * sinR) + (tz * cosR);
+
         //debugPrintf(DPRINT_FIXED "S %d %d C %d %d L %d R %d\n" DPRINT_NOFIXED,
         //    controllerStates[3].stickX,      controllerStates[3].stickY,
         //    controllerStates[3].substickX,   controllerStates[3].substickY,
         //    controllerStates[3].triggerLeft, controllerStates[3].triggerRight);
 
+        //update camera
         cameraUpdateViewMtx(pCamera);
         _drawDebugInfo();
+
+        camOverrideX  = pCamera->pos.pos.x;
+        camOverrideY  = pCamera->pos.pos.y;
+        camOverrideZ  = pCamera->pos.pos.z;
+        camOverrideRX = pCamera->pos.rotation.x;
+        camOverrideRY = pCamera->pos.rotation.y;
+        camOverrideRZ = pCamera->pos.rotation.z;
+        camOverrideValid = 1;
     }
 }
 
@@ -168,5 +226,9 @@ int viewFinderZoomHook(int pad) {
         return padGetCY(pad);
     }
     //remap to L/R, since D-pad is slow and digital.
-    return controllerStates[pad].triggerLeft -  controllerStates[pad].triggerRight;
+    int tl = controllerStates[pad].triggerLeft;
+    int tr = controllerStates[pad].triggerRight;
+    if(tl < CAMERA_TRIGGER_DEADZONE) tl = 0;
+    if(tr < CAMERA_TRIGGER_DEADZONE) tr = 0;
+    return tl - tr;
 }

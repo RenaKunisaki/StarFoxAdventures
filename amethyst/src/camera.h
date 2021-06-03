@@ -12,6 +12,13 @@ typedef enum {
     NUM_CAM_MODES,
 } CameraMode;
 
+//turns out gamecube had joycon drift before joycons did
+#define CAMERA_LSTICK_DEADZONE 4
+#define CAMERA_RSTICK_DEADZONE 4
+#define CAMERA_TRIGGER_DEADZONE 4
+
+#define S16_TO_RADIANS (1.0 / 10430.37835)
+
 //camera.c
 extern u8 cameraFlags; //CameraFlags
 extern s8 debugCameraMode; //CameraMode
