@@ -10,6 +10,7 @@ typedef enum {
     DEBUGTEXT_INTERACT_OBJ_INFO = (1 << 5),
     DEBUGTEXT_HEAP_STATE        = (1 << 6),
     DEBUGTEXT_GAMEBIT_LOG       = (1 << 7),
+    DEBUGTEXT_PLAYER_STATE      = (1 << 8),
 } DebugTextFlags;
 
 //debuglog.s
