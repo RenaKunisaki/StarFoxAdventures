@@ -142,12 +142,21 @@ static void printTarget() {
 }
 
 static void printPlayerState() {
+    debugPrintf("Player=%08X: ", pPlayer);
+    if(pPlayer) {
+        debugPrintf("%s\n", pPlayer->file->name);
+    }
+    else {
+        debugPrintf("-\n");
+        return;
+    }
+    if(pPlayer->catId != 1) return; //don't apply to title screen Fox
+
     void *pState = pPlayer ? pPlayer->state : NULL;
     if(!pState) return;
-    if(pPlayer->catId != 1) return; //don't apply to title screen Fox
     PlayerCharState *cState = *(PlayerCharState**)(pState + 0x35C);
 
-    debugPrintf("Player " DPRINT_FIXED "%02X %08X %08X %08X %08X ",
+    debugPrintf(DPRINT_FIXED "%02X %08X %08X %08X %08X ",
         *(u16*)(pState + 0x274),
         *(u32*)(pState + 0x310),
         *(u32*)(pState + 0x314),
@@ -162,41 +171,50 @@ static void printPlayerState() {
         cState ? cState->field_0B : 0);
 
     ObjInstance *obj = *(ObjInstance**)(pState + 0x46C);
-    if(obj) debugPrintf("Death obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-        obj, obj->file->name);
+    if(PTR_VALID(obj)) {
+        debugPrintf("Death obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+            obj, obj->file->name);
+    }
 
     obj = *(ObjInstance**)(pState + 0x4C4);
-    if(obj) debugPrintf("Obj4C4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-        obj, obj->file->name);
+    if(PTR_VALID(obj)) {
+        debugPrintf("Obj4C4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+            obj, obj->file->name);
+    }
 
     obj = *(ObjInstance**)(pState + 0x684);
-    if(obj) debugPrintf("Collect obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-        obj, obj->file->name);
+    if(PTR_VALID(obj)) {
+        debugPrintf("Collect obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+            obj, obj->file->name);
+    }
 
     obj = *(ObjInstance**)(pState + 0x7B0);
-    if(obj) debugPrintf("Obj7B0 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-        obj, obj->file->name);
+    if(PTR_VALID(obj)) {
+        debugPrintf("Obj7B0 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+            obj, obj->file->name);
+    }
 
     obj = *(ObjInstance**)(pState + 0x7F0);
-    if(obj) debugPrintf("Ride obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-        obj, obj->file->name);
+    if(PTR_VALID(obj)) {
+        debugPrintf("Ride obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+            obj, obj->file->name);
+    }
 
     obj = *(ObjInstance**)(pState + 0x7F4); //XXX confirm this is an object
-    if(obj) debugPrintf("Obj7F4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-        obj, obj->file->name);
+    if(PTR_VALID(obj)) {
+        debugPrintf("Obj7F4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+            obj, obj->file->name);
+    }
 
     obj = *(ObjInstance**)(pState + 0x7F8);
-    if(obj) debugPrintf("Hold obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-        obj, obj->file->name);
+    if(PTR_VALID(obj)) {
+        debugPrintf("Hold obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
+            obj, obj->file->name);
+    }
 }
 
 void mainLoopDebugPrint() {
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"); //reset color
-    /* debugPrintf("Player=%08X: ", pPlayer);
-    if(pPlayer) {
-        debugPrintf("%s\n", pPlayer->file->name);
-    }
-    else debugPrintf("-\n"); */
 
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
