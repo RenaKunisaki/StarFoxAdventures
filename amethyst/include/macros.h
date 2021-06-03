@@ -38,6 +38,21 @@
     "lmw     3,                0x14(1) \n" \
     "addi    1, 1, " #stackSize       "\n"
 
+//same as above, but doesn't preserve r3, for return values.
+#define ASM_RFUNC_START(stackSize) \
+    "stwu    1, -" #stackSize      "(1) \n" \
+    "stw     0,                 0x10(1) \n" \
+    "stmw    4,                 0x14(1) \n" \
+    "mflr    0                          \n" \
+    "stw     0,  (" #stackSize  "+4)(1) \n"
+
+#define ASM_RFUNC_END(stackSize) \
+    "lwz     0,                0x10(1) \n" \
+    "lwz     4, (" #stackSize  "+4)(1) \n" \
+    "mtlr    4                         \n" \
+    "lmw     4,                0x14(1) \n" \
+    "addi    1, 1, " #stackSize       "\n"
+
 /** A compile time assertion check.
  *
  *  Validate at compile time that the predicate is true without
