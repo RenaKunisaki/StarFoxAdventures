@@ -141,6 +141,16 @@ static void printTarget() {
     }
 }
 
+static void printPlayerObj(const char *name, ObjInstance *obj) {
+    if(!(PTR_VALID(obj) && PTR_VALID(obj->file))) return;
+    debugPrintf("%s " DPRINT_FIXED "%08X %s %08X ",
+        name, obj, obj->file->name, obj->objDef->id);
+    debugPrintf("%d, %d, %d" DPRINT_NOFIXED "\n",
+        (int)obj->pos.pos.x,
+        (int)obj->pos.pos.y,
+        (int)obj->pos.pos.z);
+}
+
 static void printPlayerState() {
     debugPrintf("Player=%08X: ", pPlayer);
     if(pPlayer && pPlayer->file) {
@@ -171,47 +181,14 @@ static void printPlayerState() {
         cState ? ((cState->flags02 << 8) | cState->field_03) : 0,
         cState ? cState->field_0B : 0);
 
-    ObjInstance *obj = *(ObjInstance**)(pState + 0x46C);
-    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
-        debugPrintf("Death obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-            obj, obj->file->name);
-    }
-
-    obj = *(ObjInstance**)(pState + 0x4C4);
-    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
-        debugPrintf("Obj4C4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-            obj, obj->file->name);
-    }
-
-    obj = *(ObjInstance**)(pState + 0x684);
-    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
-        debugPrintf("Collect obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-            obj, obj->file->name);
-    }
-
-    obj = *(ObjInstance**)(pState + 0x7B0);
-    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
-        debugPrintf("Obj7B0 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-            obj, obj->file->name);
-    }
-
-    obj = *(ObjInstance**)(pState + 0x7F0);
-    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
-        debugPrintf("Ride obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-            obj, obj->file->name);
-    }
-
-    obj = *(ObjInstance**)(pState + 0x7F4); //XXX confirm this is an object
-    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
-        debugPrintf("Obj7F4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-            obj, obj->file->name);
-    }
-
-    obj = *(ObjInstance**)(pState + 0x7F8);
-    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
-        debugPrintf("Hold obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
-            obj, obj->file->name);
-    }
+    printPlayerObj("Death obj",   *(ObjInstance**)(pState + 0x46C));
+    printPlayerObj("Obj4C4",      *(ObjInstance**)(pState + 0x4C4));
+    printPlayerObj("Collect obj", *(ObjInstance**)(pState + 0x684));
+    printPlayerObj("Obj7B0",      *(ObjInstance**)(pState + 0x7B0));
+    printPlayerObj("Ride obj",    *(ObjInstance**)(pState + 0x7F0));
+    //XXX confirm 7F4 is an object
+    printPlayerObj("Obj7F4",      *(ObjInstance**)(pState + 0x7F4));
+    printPlayerObj("Hold obj",    *(ObjInstance**)(pState + 0x7F8));
 }
 
 void mainLoopDebugPrint() {
