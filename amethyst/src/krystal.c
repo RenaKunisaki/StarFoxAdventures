@@ -254,7 +254,7 @@ void krystalInit() {
     hookBranch(0x80043D7C, _krystalHook_modelsTab, 0);
     hookBranch(0x80046164, krystalHook_tex1Bin,    1);
     hookBranch(0x80043DB8, _krystalHook_tex1Tab,   0);
-    hookBranch(0x80087050, _krystalHook_eyePatch,   0); //yarr.
+    hookBranch(0x80087050, _krystalHook_eyePatch,  0); //yarr.
     hookBranch(0x8002cb20, krystalHook_loadSave,   1);
 }
 

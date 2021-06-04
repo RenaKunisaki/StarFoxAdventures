@@ -1,3 +1,21 @@
+Btn  | Player 1    | Player 2 | Player 3 | Player 4
+L.St | Move        |          |          | FreeCam Move
+C.St | Item/Camera |          | Camera   | FreeCam Turn
+A    | Attack      |          |          | FreeCam Reset
+B    | Cancel      |          |          |
+X    | Roll        |          | FreeMove |
+Y    | Item        |          | FrameAdv | FreeCam Look at player
+St   | Pause       |          | TimeStop |
+L    | Strafe      |          | Camera   | FreeCam Move
+R    | Shield      |          | Camera   | FreeCam Move
+Z    | FirstPerson |          | SpeedUp  | FreeCam Fast
+Up   | Item/Map    |          |          |
+Down | Item/Map    |          |          |
+Left | Item/Map    |          |          |
+Rght | Item/Map    |          |          |
+
+
+
 Section Header #1 @ 0x0000026C:
   Type:     SHT_PROGBITS
   Name @    0x00000020: .text

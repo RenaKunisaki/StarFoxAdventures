@@ -39,7 +39,21 @@ static inline void doPadMainLoop() {
     u32 bPressed3 = bHeld3 & ~prevBtn3;
     prevBtn3 = bHeld3;
 
+    //Pad 3 start: toggle time stop
     if(bPressed3 & PAD_BUTTON_START) timeStop = !timeStop;
+
+    //while time stopped, pad 3 Y to advance one tick
+    static bool isStep = false;
+    if(timeStop) {
+        if(bPressed3 & PAD_BUTTON_Y) {
+            isStep = true;
+            timeStop = false;
+        }
+    }
+    else if(isStep) {
+        timeStop = true;
+        isStep = false;
+    }
 }
 
 void mainLoopHook() {
