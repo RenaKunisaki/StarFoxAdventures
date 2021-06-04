@@ -13,7 +13,9 @@ void minimapMainLoopHook() {
     //override the minimap size and position
     static u8 prevSize = 0;
     int xpos, ypos, size;
-    switch(overrideMinimapSize) {
+    int override = overrideMinimapSize;
+    if(minimapMode != 0) override = MINIMAP_SIZE_NORMAL; //not map mode
+    switch(override) {
         case MINIMAP_SIZE_SMALL:  xpos = 50; ypos = 440; size =  64; break;
         case MINIMAP_SIZE_NORMAL: xpos = 50; ypos = 440; size = 128; break;
         case MINIMAP_SIZE_BIG:    xpos =  2; ypos = 472; size = 256; break;
