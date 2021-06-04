@@ -143,7 +143,7 @@ static void printTarget() {
 
 static void printPlayerState() {
     debugPrintf("Player=%08X: ", pPlayer);
-    if(pPlayer) {
+    if(pPlayer && pPlayer->file) {
         debugPrintf("%s\n", pPlayer->file->name);
     }
     else {
@@ -156,6 +156,7 @@ static void printPlayerState() {
     if(!pState) return;
     PlayerCharState *cState = *(PlayerCharState**)(pState + 0x35C);
 
+    //most of these are unknown
     debugPrintf(DPRINT_FIXED "%02X %08X %08X %08X %08X ",
         *(u16*)(pState + 0x274),
         *(u32*)(pState + 0x310),
@@ -171,43 +172,43 @@ static void printPlayerState() {
         cState ? cState->field_0B : 0);
 
     ObjInstance *obj = *(ObjInstance**)(pState + 0x46C);
-    if(PTR_VALID(obj)) {
+    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
         debugPrintf("Death obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
             obj, obj->file->name);
     }
 
     obj = *(ObjInstance**)(pState + 0x4C4);
-    if(PTR_VALID(obj)) {
+    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
         debugPrintf("Obj4C4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
             obj, obj->file->name);
     }
 
     obj = *(ObjInstance**)(pState + 0x684);
-    if(PTR_VALID(obj)) {
+    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
         debugPrintf("Collect obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
             obj, obj->file->name);
     }
 
     obj = *(ObjInstance**)(pState + 0x7B0);
-    if(PTR_VALID(obj)) {
+    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
         debugPrintf("Obj7B0 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
             obj, obj->file->name);
     }
 
     obj = *(ObjInstance**)(pState + 0x7F0);
-    if(PTR_VALID(obj)) {
+    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
         debugPrintf("Ride obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
             obj, obj->file->name);
     }
 
     obj = *(ObjInstance**)(pState + 0x7F4); //XXX confirm this is an object
-    if(PTR_VALID(obj)) {
+    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
         debugPrintf("Obj7F4 " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
             obj, obj->file->name);
     }
 
     obj = *(ObjInstance**)(pState + 0x7F8);
-    if(PTR_VALID(obj)) {
+    if(PTR_VALID(obj) && PTR_VALID(obj->file)) {
         debugPrintf("Hold obj " DPRINT_FIXED "%08X" DPRINT_NOFIXED "%s\n",
             obj, obj->file->name);
     }
