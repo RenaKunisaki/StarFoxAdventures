@@ -42,7 +42,8 @@ void startMsg_initDoneHook() {
     //the game seems fine without it.
     //startMsg_initDoneHook_replaced();
 
-    u16 buttons = controllerStates[0].button;
+    //check current and previous frame
+    u16 buttons = controllerStates[0].button | controllerStates[4].button;
     if(!(buttons & PAD_TRIGGER_Z)) {
         enableDebugText = 0;
         //DPRINT("Turning debug text off");
