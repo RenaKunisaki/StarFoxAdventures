@@ -84,6 +84,11 @@ extern bool bDisableParticleFx;
 //menu.c
 void runMenu();
 
+//menuDebugGameBits.c
+extern s8 *bitNames;
+BitTableEntry* getBitTableEntry(int bit);
+const char* getBitName(int bit);
+
 //minimap.c
 extern u8 overrideMinimapSize;
 extern u8 overrideMinimapAlpha;

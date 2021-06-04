@@ -6,12 +6,29 @@
 #define BIT_MENU_WIDTH  (SCREEN_WIDTH  - (BIT_MENU_XPOS * 2))
 #define BIT_MENU_HEIGHT (SCREEN_HEIGHT - (BIT_MENU_YPOS * 2))
 #define BIT_MENU_NUM_LINES ((BIT_MENU_HEIGHT / MENU_LINE_HEIGHT) - 3)
+s8 *bitNames = NULL;
 static u8 bitMenuCursorX = 7;
 static s8 bitMenuTable = -1;
 
-static BitTableEntry* getBitTableEntry(int bit) {
+BitTableEntry* getBitTableEntry(int bit) {
     BitTableEntry *bitTable = (BitTableEntry*)dataFileBuffers[FILE_BITTABLE_BIN];
     return &bitTable[bit];
+}
+
+const char* getBitName(int bit) {
+    if(!bitNames) {
+        //try to load bitnames.dat
+        bitNames = loadFileByPath("bitnames.dat", NULL);
+        if(!bitNames) return "";
+    }
+
+    //this is hilariously inefficient time-wise, but saves a ton of memory.
+    const char *res = bitNames;
+    while(bit > 0) {
+        if(res[0] == 0) bit--;
+        res++;
+    }
+    return res;
 }
 
 void bitMenu_draw(Menu *self) {
@@ -49,29 +66,10 @@ void bitMenu_draw(Menu *self) {
         }
         else gameTextSetColor(255, 255, 255, 255);
 
-        const char *hint = NULL;
-        //this doesn't work, ghidra is being a butt so I can't find why
-        /* if(!(entry->flags & GameBitFlags_IsHintText)) {
-            int tid = -1, sid = -1;
-            ((void (*)(int,int*,int*))0x80015d70)(bitIdx, &sid, &tid);
-            if(tid == 0x29) {
-                void *r = ((void* (*)(int,int))0x8001a420)(tid,sid);
-                OSReport("bit %04X tid %08X %04X sid %08X -> %08X", bitIdx, tid,
-                    entry->text, sid, r);
-            }
-            gametextStruct *text = gameTextGet(entry->text + 0xF4);
-            //the text always has 16 bytes worth of control codes at the start.
-            //these contain nulls which won't carry through sprintf,
-            //so skip over them.
-            hint = text ? &text->phrases[0][16] : NULL;
-            //DPRINT("Bit 0x%X Text 0x%X: %08X %s", bitIdx,
-            //    entry->text + 0xF4, text, hint ? hint : "-");
-        } */
-
         char str[256];
         sprintf(str, "%04X %d %2d %08X %s", bitIdx, tbl,
             (entry->flags & GameBitFlags_Size) + 1,
-            mainGetBit(bitIdx), hint ? hint : "");
+            mainGetBit(bitIdx), getBitName(bitIdx));
         gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
     }
 

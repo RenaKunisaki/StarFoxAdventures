@@ -69,9 +69,9 @@ void gameBitHookUpdate() {
             u8 t = 255 - ((now - bitLog[i].time) * 4);
             if(!t) t = 1;
             char color[6] = {0x81, t, t, t, t, 0};
-            debugPrintf("%sBit " DPRINT_FIXED "%03X = %X"
+            debugPrintf("%sBit " DPRINT_FIXED "%03X = %X %s"
                 "\x81\xFF\xFF\xFF\xFF\n" DPRINT_NOFIXED,
-                color, bitLog[i].bit, bitLog[i].val);
+                color, bitLog[i].bit, bitLog[i].val, getBitName(bitLog[i].bit));
         }
     }
 }

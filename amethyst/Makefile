@@ -36,6 +36,7 @@ install: all
 	@echo "[*] Installing..."
 	@cp $(BUILDDIR)/boot.bin $(DISCROOT)/debug.bin
 	@./tools/elf2bin.py $(BUILDDIR) $(DISCROOT)
+	@./tools/makebitnames.py ../data/U0/gamebits.xml $(DISCROOT)/bitnames.dat
 
 # dolphin seems to only work with absolute paths for this
 run: install
