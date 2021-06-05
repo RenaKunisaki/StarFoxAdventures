@@ -208,4 +208,5 @@ void mainLoopDebugPrint() {
     debugPrintf("\n"); //for game's own messages
 
     if(debugTextFlags & DEBUGTEXT_HEAP_GRAPH) drawHeaps();
+    if(debugTextFlags & DEBUGTEXT_WORLD_MAP) drawMapGrid();
 }

@@ -64,9 +64,10 @@ GLOBALFN void gxSetVtxDescr(int which, int val);
 GLOBALFN void gxSetVtxDescrs(u32*);
 GLOBALFN void gxWaitFn_80258330(void);
 GLOBALFN void* heapAlloc(int region, uint size, AllocTag tag, const char* name); //don't use this, use allocTagged
+GLOBALFN void hudDrawAirMeter(void);
 GLOBALFN void hudDrawButtons(int,int,int); //XXX params
 GLOBALFN void hudDrawRect(int x1,int y1,int x2,int y2,Color4b *color);
-GLOBALFN void hudDrawAirMeter(void);
+GLOBALFN void hudDrawTriangle(float x1,float y1,float x2,float y2,float x3, float y3,Color4b *color); //WARNING: changes color->a
 GLOBALFN void* iCacheFlush(void* dest, uint size);
 GLOBALFN bool isCheatActive(uint);
 GLOBALFN bool isCheatUnlocked(uint);

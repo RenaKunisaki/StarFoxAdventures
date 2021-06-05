@@ -111,6 +111,17 @@ void menuDebugTextHeapGraph_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugTextMapGrid_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_WORLD_MAP) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugTextMapGrid_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_WORLD_MAP;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
 void menuDebugTextTricky_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_TRICKY) ? "On" : "Off");
@@ -124,16 +135,17 @@ void menuDebugTextTricky_select(const MenuItem *self, int amount) {
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Master: %s",        menuDebugTextMaster_draw,       menuDebugTextMaster_select,
-    "Player Coords: %s", menuDebugTextPlayerCoords_draw, menuDebugTextPlayerCoords_select,
-    "Camera Coords: %s", menuDebugTextCameraCoords_draw, menuDebugTextCameraCoords_select,
-    "Restart Point: %s", menuDebugTextRestartPoint_draw, menuDebugTextRestartPoint_select,
-    "Memory Stats: %s",  menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
-    "Heap Details: %s",  menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
-    "Heap Graph: %s",    menuDebugTextHeapGraph_draw,    menuDebugTextHeapGraph_select,
-    "Interact Obj: %s",  menuDebugTextInteractObj_draw,  menuDebugTextInteractObj_select,
-    "GameBit Changes: %s", menuDebugTextBits_draw,       menuDebugTextBits_select,
-    "Player State: %s",  menuDebugTextPlayerState_draw,  menuDebugTextPlayerState_select,
-    "Tricky: %s",        menuDebugTextTricky_draw,       menuDebugTextTricky_select,
+    "Master: %s",        menuDebugTextMaster_draw,         menuDebugTextMaster_select,
+    "Player State: %s",    menuDebugTextPlayerState_draw,  menuDebugTextPlayerState_select,
+    "Tricky: %s",          menuDebugTextTricky_draw,       menuDebugTextTricky_select,
+    "Player Coords: %s",   menuDebugTextPlayerCoords_draw, menuDebugTextPlayerCoords_select,
+    "Camera Coords: %s",   menuDebugTextCameraCoords_draw, menuDebugTextCameraCoords_select,
+    "Restart Point: %s",   menuDebugTextRestartPoint_draw, menuDebugTextRestartPoint_select,
+    "Interact Obj: %s",    menuDebugTextInteractObj_draw,  menuDebugTextInteractObj_select,
+    "GameBit Changes: %s", menuDebugTextBits_draw,         menuDebugTextBits_select,
+    "Memory Stats: %s",    menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
+    "Heap Details: %s",    menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
+    "Heap Graph: %s",      menuDebugTextHeapGraph_draw,    menuDebugTextHeapGraph_select,
+    "Map Grid: %s",        menuDebugTextMapGrid_draw,      menuDebugTextMapGrid_select,
     NULL,
 };

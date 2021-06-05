@@ -61,6 +61,9 @@ void drawBox(float x, float y, int w, int h, u8 opacity, bool fill);
 //drawheap.c
 void drawHeaps();
 
+//drawmap.c
+void drawMapGrid();
+
 //freemove.c
 extern bool bFreeMove;
 void doFreeMove();
