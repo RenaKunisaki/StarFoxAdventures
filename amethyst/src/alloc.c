@@ -100,6 +100,8 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
             //heapAlloc "leaks" the SfaHeapEntry in r4 on return.
             //we can exploit this to modify some fields that otherwise
             //serve no real purpose.
+            //XXX this doesn't always work? even though we patched it to
+            //supposedly ensure it would...
             buf = heapAlloc(1,size,tag,name);
             GET_REGISTER(4, entry);
             if(buf == NULL) {
@@ -149,7 +151,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
             //DPRINT("alloc success, %08X, entry %08X (unk %04X %08X ID %08X stack %04X %04X)", buf, entry,
             //    entry->unk08, entry->unk14, entry->mmUniqueIdent,
             //    entry->stack, entry->stack2);
-            if(!PTR_VALID(entry) || entry->unk08 > 1) {
+            if((!PTR_VALID(entry)) || (entry->unk08 > 1)) {
                 //sanity check, in case our patch to return the heap entry
                 //doesn't work. XXX why does this happen?
                 OSReport("Alloc %08X got bad r4 %08X", lr, entry);
@@ -169,6 +171,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     OSReport("ALLOC FAIL size=0x%X tag=0x%X", size, tag);
     allocFailLog[allocFailLogIdx].size = size;
     allocFailLog[allocFailLogIdx].tag  = tag;
+    allocFailLog[allocFailLogIdx].lr   = lr;
     allocFailLogIdx++;
     if(allocFailLogIdx >= ALLOC_FAIL_LOG_SIZE) allocFailLogIdx = 0;
     return NULL;

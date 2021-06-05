@@ -2,6 +2,7 @@
 typedef struct {
     u32 size;
     AllocTag tag;
+    u32 lr; //return address of allocTagged
 } AllocFailLogItem;
 
 //alloc.c

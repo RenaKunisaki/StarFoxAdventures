@@ -94,11 +94,12 @@ static void drawPageMemory() {
     //show alloc fail log
     debugPrintfxy(26, 86,
         "Emerg frees: %d; alloc fails: %d\n", emergFreeCount, allocFailCount);
-    debugPrintfxy(26, 97, "FailSize FailTag");
+    debugPrintfxy(26, 97, "FailSize FailTag  CallAddr");
     for(int i=0; i<MIN(allocFailCount, ALLOC_FAIL_LOG_SIZE); i++) {
-        debugPrintfxy(26, 108 + (i*BSOD_LINE_HEIGHT), "%c %08X %08X",
+        debugPrintfxy(26, 108 + (i*BSOD_LINE_HEIGHT), "%c %08X %08X %08X",
             (i == allocFailLogIdx) ? '*' : ' ',
-            allocFailLog[i].size, allocFailLog[i].tag);
+            allocFailLog[i].size, allocFailLog[i].tag,
+            allocFailLog[i].lr);
     }
 }
 
