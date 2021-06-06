@@ -81,16 +81,39 @@ void menuDebugRenderTextures_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugRenderHeapGraph_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_HEAP_GRAPH) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugRenderHeapGraph_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_HEAP_GRAPH;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
+void menuDebugRenderMapGrid_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_WORLD_MAP) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugRenderMapGrid_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_WORLD_MAP;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
 
 Menu menuDebugRender = {
     "Render", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Blur Filter: %s",   menuDebugRenderBlur_draw,    menuDebugRenderBlur_select,
-    "Motion Blur: %d",   menuDebugRenderMotBlur_draw, menuDebugRenderMotBlur_select,
-    "Heat Effect: %d",   menuDebugRenderHeatFx_draw,  menuDebugRenderHeatFx_select,
-    "Monochrome: %s",    menuDebugRenderMono_draw,    menuDebugRenderMono_select,
-    "Spirit Vision: %s", menuDebugRenderSpirit_draw,  menuDebugRenderSpirit_select,
-    "Color Filters",     genericMenuItem_draw,        menuDebugRenderFilter_select,
-    "View Textures",     genericMenuItem_draw,        menuDebugRenderTextures_select,
+    "Blur Filter: %s",   menuDebugRenderBlur_draw,     menuDebugRenderBlur_select,
+    "Motion Blur: %d",   menuDebugRenderMotBlur_draw,  menuDebugRenderMotBlur_select,
+    "Heat Effect: %d",   menuDebugRenderHeatFx_draw,   menuDebugRenderHeatFx_select,
+    "Monochrome: %s",    menuDebugRenderMono_draw,     menuDebugRenderMono_select,
+    "Spirit Vision: %s", menuDebugRenderSpirit_draw,   menuDebugRenderSpirit_select,
+    "Color Filters",     genericMenuItem_draw,         menuDebugRenderFilter_select,
+    "View Textures",     genericMenuItem_draw,         menuDebugRenderTextures_select,
+    "Heap Graph: %s",    menuDebugRenderHeapGraph_draw,menuDebugRenderHeapGraph_select,
+    "Map Grid: %s",      menuDebugRenderMapGrid_draw,  menuDebugRenderMapGrid_select,
     NULL,
 };

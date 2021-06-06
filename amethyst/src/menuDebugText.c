@@ -100,28 +100,6 @@ void menuDebugTextPlayerState_select(const MenuItem *self, int amount) {
 }
 
 
-void menuDebugTextHeapGraph_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_HEAP_GRAPH) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
-}
-void menuDebugTextHeapGraph_select(const MenuItem *self, int amount) {
-    debugTextFlags ^= DEBUGTEXT_HEAP_GRAPH;
-    audioPlaySound(NULL, MENU_ADJUST_SOUND);
-}
-
-
-void menuDebugTextMapGrid_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_WORLD_MAP) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
-}
-void menuDebugTextMapGrid_select(const MenuItem *self, int amount) {
-    debugTextFlags ^= DEBUGTEXT_WORLD_MAP;
-    audioPlaySound(NULL, MENU_ADJUST_SOUND);
-}
-
-
 void menuDebugTextTricky_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_TRICKY) ? "On" : "Off");
@@ -145,7 +123,5 @@ Menu menuDebugText = {
     "GameBit Changes: %s", menuDebugTextBits_draw,         menuDebugTextBits_select,
     "Memory Stats: %s",    menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
     "Heap Details: %s",    menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
-    "Heap Graph: %s",      menuDebugTextHeapGraph_draw,    menuDebugTextHeapGraph_select,
-    "Map Grid: %s",        menuDebugTextMapGrid_draw,      menuDebugTextMapGrid_select,
     NULL,
 };
