@@ -6,6 +6,25 @@ u32 debugTextFlags = DEBUGTEXT_PLAYER_COORDS | //DEBUGTEXT_PLAYER_STATE |
     DEBUGTEXT_CAMERA_COORDS | DEBUGTEXT_MEMORY_INFO |
     DEBUGTEXT_INTERACT_OBJ_INFO;
 
+static void printObjName(const char *fmt, ObjInstance *obj) {
+    //print object's name, with sanity checking
+    //in case the object is unloaded or such
+    char name[12];
+    name[0] = 0;
+
+    if(PTR_VALID(obj) && PTR_VALID(obj->file) && PTR_VALID(obj->file->name)) {
+        for(int i=0; i<11; i++) {
+            name[i] = 0;
+            name[i+1] = 0;
+            char c = obj->file->name[i];
+            if(!c) break;
+            if(c >= 0x20 && c <= 0x7E) name[i] = c;
+            else name[i] = '?';
+        }
+    }
+    debugPrintf(fmt, name);
+}
+
 static void printCoords() {
     //Display player coords
     //debugPrintf doesn't support eg '%+7.2f' so we'll just convert
@@ -133,19 +152,20 @@ static void printHeapInfo() {
 static void printTarget() {
     //Display target that player is focused on
     if(pCamera && pCamera->target) {
-        debugPrintf("Target: " DPRINT_FIXED "%08X %08X %04X " DPRINT_NOFIXED "%s\n",
+        debugPrintf("Target: " DPRINT_FIXED "%08X %08X %04X " DPRINT_NOFIXED,
             pCamera->target,
             pCamera->target->objDef->id,
-            pCamera->target->defNo,
-            pCamera->target->file->name);
+            pCamera->target->defNo);
+        printObjName("%s\n", pCamera->target);
     }
 }
 
 static void printPlayerObj(const char *name, ObjInstance *obj) {
     if(!(PTR_VALID(obj) && PTR_VALID(obj->file))) return;
-    debugPrintf("%s " DPRINT_FIXED "%08X %s %08X ",
-        name, obj, obj->file->name, obj->objDef->id);
-    debugPrintf("%d, %d, %d" DPRINT_NOFIXED "\n",
+    debugPrintf("%s " DPRINT_FIXED "%08X ", name, obj);
+    printObjName("%s", obj);
+    debugPrintf(" %08X %d, %d, %d" DPRINT_NOFIXED "\n",
+        obj->objDef->id,
         (int)obj->pos.pos.x,
         (int)obj->pos.pos.y,
         (int)obj->pos.pos.z);
@@ -153,14 +173,9 @@ static void printPlayerObj(const char *name, ObjInstance *obj) {
 
 static void printPlayerState() {
     debugPrintf("Player=%08X: ", pPlayer);
-    if(pPlayer && pPlayer->file) {
-        debugPrintf("%s\n", pPlayer->file->name);
-    }
-    else {
-        debugPrintf("-\n");
-        return;
-    }
-    if(pPlayer->catId != 1) return; //don't apply to title screen Fox
+    printObjName("%s\n", pPlayer);
+    if(!(pPlayer && pPlayer->file)) return;
+    if(pPlayer->catId != ObjCatId_Player) return; //don't apply to title screen Fox
 
     void *pState = pPlayer ? pPlayer->state : NULL;
     if(!pState) return;

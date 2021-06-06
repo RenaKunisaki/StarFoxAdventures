@@ -2,6 +2,8 @@
  */
 #include "main.h"
 
+static int offsX = SCREEN_WIDTH / 2, offsY = -(SCREEN_HEIGHT / 3);
+
 Color4b _mapIdToColor(int id) {
     Color4b result;
     int n = id + 1;
@@ -16,6 +18,61 @@ Color4b _mapIdToColor(int id) {
     return result;
 }
 
+static void drawMap(GlobalMaEntry *map, MapsTabEntry *tab,
+MapsBinInfoEntry *mapsBin, float scale) {
+    MapsBinInfoEntry *info = (MapsBinInfoEntry*)(tab->infoOffset + (u32)mapsBin);
+    if(!PTR_VALID(info)) return;
+
+    Color4b color = _mapIdToColor(map->mapId);
+    int mx =  map->x - info->originX;
+    int mz =  map->z - info->originZ;
+    int x1 =  mx * scale;
+    int y1 =  mz * scale;
+    //add 1 because we need to cover the last row/col too
+    int x2 = (mx + info->width  + 0) * scale;
+    int y2 = (mz + info->height + 0) * scale;
+    //OSReport("Map 0x%02X at %d, %d, %dx%d; %d, %d - %d, %d\n", map->mapId,
+    //    map->x, map->z, info->width, info->height, x1, y1, x2, y2);
+
+    //the previous maps I've shown have been flipped, oops
+    y1 = SCREEN_HEIGHT - y1;
+    y2 = SCREEN_HEIGHT - y2;
+
+    //draw the map's region
+    color.a = 64;
+    hudDrawRect(x1+offsX, y1+offsY, x2+offsX, y2+offsY, &color);
+    //outline
+    Color4b outline = {255, 255, 255, 128};
+    hudDrawRect(x1+offsX, (y1-1)+offsY, x2+offsX, y1+offsY, &outline); //top
+    hudDrawRect(x1+offsX, (y2+1)+offsY, x2+offsX, y2+offsY, &outline); //bot
+    hudDrawRect((x1-1)+offsX, y1+offsY, x1+offsX, y2+offsY, &outline); //left
+    hudDrawRect((x2-1)+offsX, y1+offsY, x2+offsX, y2+offsY, &outline); //right
+
+    //draw the cells
+    u32 *blocks = (u32*)(tab->blockTable + (u32)mapsBin);
+    if(!PTR_VALID(blocks)) return;
+
+    color.a = 192;
+    for(int by=0; by<info->height; by++) {
+        for(int bx=0; bx<info->width; bx++) {
+            u32 block = blocks[(by * info->width) + bx];
+            u32 mod   = (block >> 23) & 0xFF;
+            //u32 sub   = (block >> 17) & 0x3F;
+            if(mod != 0xFF) {
+                int ry = info->height - (by+1);
+                int rx1 = x1 + ( bx    * scale);
+                int ry1 = y2 + ( ry    * scale);
+                int rx2 = x1 + ((bx+1) * scale);
+                int ry2 = y2 + ((ry+1) * scale);
+                hudDrawRect(
+                    rx1 + offsX, ry1 + offsY,
+                    rx2 + offsX, ry2 + offsY,
+                    &color);
+            }
+        }
+    }
+}
+
 void drawMapGrid() {
     GlobalMaEntry    *mapGrid = dataFileBuffers[FILE_GLOBALMA_BIN];
     MapsTabEntry     *mapsTab = dataFileBuffers[FILE_MAPS_TAB];
@@ -23,38 +80,12 @@ void drawMapGrid() {
     if(!(mapGrid && mapsTab && mapsBin)) return;
 
     int layer = curMapLayer;
-    int scale = 4;
-    int offsX = SCREEN_WIDTH / 2, offsY = -(SCREEN_HEIGHT / 3);
+    float scale = 4.0f;
     for(int i=0; mapGrid[i].mapId >= 0; i++) {
         GlobalMaEntry *map = &mapGrid[i];
         if(map->layer != layer) continue;
         MapsTabEntry *tab = &mapsTab[map->mapId];
-        MapsBinInfoEntry *info = (MapsBinInfoEntry*)(tab->infoOffset + (u32)mapsBin);
-        if(!PTR_VALID(info)) continue;
-
-        Color4b color = _mapIdToColor(map->mapId);
-        color.a = 128;
-        int x1 =  map->x * scale;
-        int y1 =  map->z * scale;
-        int x2 = (map->x + info->width)  * scale;
-        int y2 = (map->z + info->height) * scale;
-        //OSReport("Map 0x%02X at %d, %d, %dx%d; %d, %d - %d, %d\n", map->mapId,
-        //    map->x, map->z, info->width, info->height, x1, y1, x2, y2);
-
-        //the previous maps I've shown have been flipped
-        y1 = SCREEN_HEIGHT - y1;
-        y2 = SCREEN_HEIGHT - y2;
-
-        hudDrawRect(x1+offsX, y1+offsY, x2+offsX, y2+offsY, &color);
-        //outline
-        Color4b outline = {255, 255, 255, 128};
-        hudDrawRect(x1+offsX, (y1-1)+offsY, x2+offsX, y1+offsY, &outline); //top
-        hudDrawRect(x1+offsX, (y2+1)+offsY, x2+offsX, y2+offsY, &outline); //bot
-        hudDrawRect((x1-1)+offsX, y1+offsY, x1+offsX, y2+offsY, &outline); //left
-        hudDrawRect((x2-1)+offsX, y1+offsY, x2+offsX, y2+offsY, &outline); //right
-
-        //XXX draw individual cells?
-        //also for some reason this isn't quite accurate!?
+        drawMap(map, tab, mapsBin, scale);
     }
 
     //draw player position

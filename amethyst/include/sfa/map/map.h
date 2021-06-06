@@ -22,7 +22,7 @@ typedef struct {
     u16	width;   //Number of columns
     u16	height;  //Number of rows
     u16	originX; //Which column is the origin
-    u16	originY; //Which row is the origin
+    u16	originZ; //Which row is the origin
     //XXX more here?
 } MapsBinInfoEntry;
 CASSERT(sizeof(MapsBinInfoEntry) == 8, sizeof_MapsBinInfoEntry);
