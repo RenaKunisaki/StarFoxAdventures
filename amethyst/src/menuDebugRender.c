@@ -81,6 +81,7 @@ void menuDebugRenderTextures_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+
 void menuDebugRenderHeapGraph_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_HEAP_GRAPH) ? "On" : "Off");

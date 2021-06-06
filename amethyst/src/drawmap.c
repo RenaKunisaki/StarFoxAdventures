@@ -35,7 +35,7 @@ MapsBinInfoEntry *mapsBin, float scale) {
     //    map->x, map->z, info->width, info->height, x1, y1, x2, y2);
 
     //the previous maps I've shown have been flipped, oops
-    y1 = SCREEN_HEIGHT - y1;
+    y1 = SCREEN_HEIGHT - (y1+1);
     y2 = SCREEN_HEIGHT - y2;
 
     //draw the map's region
@@ -62,8 +62,8 @@ MapsBinInfoEntry *mapsBin, float scale) {
                 int ry = info->height - (by+1);
                 int rx1 = x1 + ( bx    * scale);
                 int ry1 = y2 + ( ry    * scale);
-                int rx2 = x1 + ((bx+1) * scale);
-                int ry2 = y2 + ((ry+1) * scale);
+                int rx2 = x1 + ((bx+1) * scale) - 1;
+                int ry2 = y2 + ((ry+1) * scale) - 1;
                 hudDrawRect(
                     rx1 + offsX, ry1 + offsY,
                     rx2 + offsX, ry2 + offsY,
