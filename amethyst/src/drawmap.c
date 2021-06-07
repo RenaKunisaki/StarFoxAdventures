@@ -73,6 +73,41 @@ MapsBinInfoEntry *mapsBin, float scale) {
     }
 }
 
+static void drawObjPos(ObjInstance *obj, Color4b *color, float scale) {
+    int   x    = (obj->pos.pos.x * scale) / MAP_CELL_SCALE;
+    int   y    = (obj->pos.pos.z * scale) / MAP_CELL_SCALE;
+    float rx   = (float)obj->pos.rotation.x * S16_TO_RADIANS;
+    float sinR = sinf(rx);
+    float cosR = cosf(rx);
+    float x1   = -sinR * scale * 2.1;
+    float y1   =  cosR * scale * 2.1;
+    float x2   = -cosR * scale * 0.6;
+    float y2   = -sinR * scale * 0.6;
+    float x3   =  cosR * scale * 0.6;
+    float y3   =  sinR * scale * 0.6;
+
+    //draw the outline
+    Color4b outline = {255, 0, 0, 0};
+    hudDrawTriangle(
+        (x+x1) + offsX, (SCREEN_HEIGHT - (y+y1)) + offsY,
+        (x+x2) + offsX, (SCREEN_HEIGHT - (y+y2)) + offsY,
+        (x+x3) + offsX, (SCREEN_HEIGHT - (y+y3)) + offsY,
+        &outline);
+
+    //draw the actual triangle
+    x1 = -sinR * scale * 2;
+    y1 =  cosR * scale * 2;
+    x2 = -cosR * scale * 0.5;
+    y2 = -sinR * scale * 0.5;
+    x3 =  cosR * scale * 0.5;
+    y3 =  sinR * scale * 0.5;
+    hudDrawTriangle(
+        (x+x1) + offsX, (SCREEN_HEIGHT - (y+y1)) + offsY,
+        (x+x2) + offsX, (SCREEN_HEIGHT - (y+y2)) + offsY,
+        (x+x3) + offsX, (SCREEN_HEIGHT - (y+y3)) + offsY,
+        color);
+}
+
 void drawMapGrid() {
     GlobalMaEntry    *mapGrid = dataFileBuffers[FILE_GLOBALMA_BIN];
     MapsTabEntry     *mapsTab = dataFileBuffers[FILE_MAPS_TAB];
@@ -95,24 +130,31 @@ void drawMapGrid() {
         color.g += 16;
         color.b += 16;
         color.a = 255; //hudDrawTriangle actually changes this!
+        drawObjPos(pPlayer, &color, scale);
 
-        int   x    = (pPlayer->pos.pos.x * scale) / MAP_CELL_SCALE;
-        int   y    = (pPlayer->pos.pos.z * scale) / MAP_CELL_SCALE;
-        float rx   = (float)pCamera->pos.rotation.x * S16_TO_RADIANS;
-        float sinR = sinf(rx);
-        float cosR = cosf(rx);
-        float x1   = -sinR * scale * 2;
-        float y1   =  cosR * scale * 2;
-        float x2   = -cosR * scale * 0.5;
-        float y2   = -sinR * scale * 0.5;
-        float x3   =  cosR * scale * 0.5;
-        float y3   =  sinR * scale * 0.5;
-
-        hudDrawTriangle(
-            (x+x1) + offsX, (SCREEN_HEIGHT - (y+y1)) + offsY,
-            (x+x2) + offsX, (SCREEN_HEIGHT - (y+y2)) + offsY,
-            (x+x3) + offsX, (SCREEN_HEIGHT - (y+y3)) + offsY,
-            &color);
+        if(pPlayer->catId == ObjCatId_Player) {
+            void *pState = pPlayer ? pPlayer->state : NULL;
+            if(pState) {
+                //draw riding object
+                ObjInstance *ride = *(ObjInstance**)(pState + 0x7F0);
+                if(ride) {
+                    static Color4b cRide = {0, 0, 0, 0};
+                    cRide.r =   0;
+                    cRide.g = 255;
+                    cRide.b += 16;
+                    cRide.a = 255; //hudDrawTriangle actually changes this!
+                    drawObjPos(ride, &cRide, scale);
+                }
+            }
+        }
+    }
+    if(pTricky) {
+        static Color4b color = {0, 0, 0, 0};
+        color.r = 255;
+        color.g =   0;
+        color.b += 16;
+        color.a = 255; //hudDrawTriangle actually changes this!
+        drawObjPos(pTricky, &color, scale);
     }
 
     //XXX draw respawn point?

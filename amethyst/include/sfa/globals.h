@@ -98,6 +98,7 @@ extern struct {
 } playerPrevPositions[PLAYER_POS_LOG_SIZE];
 extern ObjInstance *pPlayer;
 extern SaveGame *pRestartPoint;
+extern ObjInstance *pTricky;
 extern u32 renderFlags;
 extern float rumbleTimer;
 extern SaveData saveData;

@@ -2,9 +2,19 @@
  */
 #include "main.h"
 
-u32 debugTextFlags = DEBUGTEXT_PLAYER_COORDS | //DEBUGTEXT_PLAYER_STATE |
-    DEBUGTEXT_CAMERA_COORDS | DEBUGTEXT_MEMORY_INFO |
-    DEBUGTEXT_INTERACT_OBJ_INFO;
+u32 debugTextFlags =
+    //DEBUGTEXT_TRICKY |
+    DEBUGTEXT_PLAYER_COORDS |
+    DEBUGTEXT_CAMERA_COORDS |
+    //DEBUGTEXT_RESTART_POINT |
+    DEBUGTEXT_MEMORY_INFO |
+    DEBUGTEXT_INTERACT_OBJ_INFO |
+    //DEBUGTEXT_HEAP_STATE |
+    DEBUGTEXT_GAMEBIT_LOG |
+    //DEBUGTEXT_PLAYER_STATE |
+    //DEBUGTEXT_HEAP_GRAPH |
+    //DEBUGTEXT_WORLD_MAP |
+    0;
 
 static void printObjName(const char *fmt, ObjInstance *obj) {
     //print object's name, with sanity checking
