@@ -73,26 +73,41 @@ MapsBinInfoEntry *mapsBin, float scale) {
     }
 }
 
+static void drawPoint(float wx, float wz, Color4b *color, float scale, int size) {
+    int x = (wx * scale) / MAP_CELL_SCALE;
+    int y = (wz * scale) / MAP_CELL_SCALE;
+    y = SCREEN_HEIGHT - y;
+    //horizontal
+    hudDrawRect((x-size)+offsX, (y-1)+offsY, (x+size)+offsX, y+offsY, color);
+    //vertical
+    hudDrawRect((x-1)+offsX, (y-size)+offsY, x+offsX, (y+size)+offsY, color);
+    //XXX find/make a "draw line" method and draw diagonals instead so they
+    //don't blend into the map borders.
+}
+
 static void drawObjPos(ObjInstance *obj, Color4b *color, float scale) {
+    float x1, y1, x2, y2, x3, y3;
     int   x    = (obj->pos.pos.x * scale) / MAP_CELL_SCALE;
     int   y    = (obj->pos.pos.z * scale) / MAP_CELL_SCALE;
-    float rx   = (float)obj->pos.rotation.x * S16_TO_RADIANS;
+    //no idea why this subtraction is necessary.
+    //the game does similar in various places.
+    float rx   = (float)(0x8000 - (int)obj->pos.rotation.x) * S16_TO_RADIANS;
     float sinR = sinf(rx);
     float cosR = cosf(rx);
-    float x1   = -sinR * scale * 2.1;
-    float y1   =  cosR * scale * 2.1;
-    float x2   = -cosR * scale * 0.6;
-    float y2   = -sinR * scale * 0.6;
-    float x3   =  cosR * scale * 0.6;
-    float y3   =  sinR * scale * 0.6;
 
     //draw the outline
+    /* x1 = -sinR * scale * 2.1;
+    y1 =  cosR * scale * 2.1;
+    x2 = -cosR * scale * 0.6;
+    y2 = -sinR * scale * 0.6;
+    x3 =  cosR * scale * 0.6;
+    y3 =  sinR * scale * 0.6;
     Color4b outline = {255, 0, 0, 0};
     hudDrawTriangle(
         (x+x1) + offsX, (SCREEN_HEIGHT - (y+y1)) + offsY,
         (x+x2) + offsX, (SCREEN_HEIGHT - (y+y2)) + offsY,
         (x+x3) + offsX, (SCREEN_HEIGHT - (y+y3)) + offsY,
-        &outline);
+        &outline); */
 
     //draw the actual triangle
     x1 = -sinR * scale * 2;
@@ -123,19 +138,49 @@ void drawMapGrid() {
         drawMap(map, tab, mapsBin, scale);
     }
 
-    //draw player position
-    if(pPlayer) {
-        static Color4b color = {0, 0, 0, 0};
-        color.r += 16; //just let these overflow.
-        color.g += 16;
-        color.b += 16;
-        color.a = 255; //hudDrawTriangle actually changes this!
-        drawObjPos(pPlayer, &color, scale);
+    //draw characters' saved positions (not very useful)
+    /* if(pLastSavedGame) {
+        static Color4b colors[2] = {{255, 255, 255, 255}, {255, 255, 255, 255}};
+        colors[0].r += 16;
+        colors[1].b += 16;
 
+        for(int i=0; i<2; i++) {
+            PlayerCharPos *chrPos = &pLastSavedGame->charPos[i];
+            if(chrPos->mapLayer == curMapLayer) {
+                colors[i].a = 255;
+                drawPoint(chrPos->pos.x, chrPos->pos.z, &colors[i], scale, 4);
+            }
+        }
+    } */
+
+    //draw respawn point (pink cross)
+    SaveGame *restart = pRestartPoint;
+    if(!restart) restart = pLastSavedGame;
+    if(restart) {
+        PlayerCharPos *chrPos = &restart->charPos[restart->character];
+        if(chrPos->mapLayer == curMapLayer) {
+            static Color4b cRespawn = {255, 255, 255, 255};
+            cRespawn.g += 16;
+            cRespawn.a = 255;
+            drawPoint(chrPos->pos.x, chrPos->pos.z, &cRespawn, scale, 8);
+        }
+    }
+
+    //draw Tricky position (red arrow)
+    if(pTricky && pTricky->catId == ObjCatId_Tricky) {
+        static Color4b cTricky = {0, 0, 0, 0};
+        cTricky.r += 16;
+        cTricky.g =   0;
+        cTricky.b =   0;
+        cTricky.a = 255; //hudDrawTriangle actually changes this!
+        drawObjPos(pTricky, &cTricky, scale);
+    }
+
+    if(pPlayer) {
         if(pPlayer->catId == ObjCatId_Player) {
             void *pState = pPlayer ? pPlayer->state : NULL;
             if(pState) {
-                //draw riding object
+                //draw riding object (blue/green arrow)
                 ObjInstance *ride = *(ObjInstance**)(pState + 0x7F0);
                 if(ride) {
                     static Color4b cRide = {0, 0, 0, 0};
@@ -147,15 +192,13 @@ void drawMapGrid() {
                 }
             }
         }
-    }
-    if(pTricky) {
+
+        //draw player position last, so it's above the others (white arrow)
         static Color4b color = {0, 0, 0, 0};
-        color.r = 255;
-        color.g =   0;
+        color.r += 16; //just let these overflow.
+        color.g += 16;
         color.b += 16;
         color.a = 255; //hudDrawTriangle actually changes this!
-        drawObjPos(pTricky, &color, scale);
+        drawObjPos(pPlayer, &color, scale);
     }
-
-    //XXX draw respawn point?
 }
