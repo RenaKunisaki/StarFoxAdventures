@@ -51,6 +51,7 @@ GLOBALFN u16 getButtonsJustPressed(int padNo);
 GLOBALFN Texture* getLoadedTexture(int id);
 GLOBALFN void gplayClearRestartPoint(void);
 GLOBALFN void gplayGotoRestartPoint(void);
+GLOBALFN void gplayGotoSavegame(void);
 GLOBALFN void gplayRestartPoint(vec3f *pos, s16 rot, byte layer, int bSaveWithOneLessHealth);
 GLOBALFN void gplaySetAct(u32 map, u32 act); //XXX which type of map ID?
 GLOBALFN void gplaySetObjGroupStatus(MapDirIdx32 map,uint group,int set);
@@ -78,7 +79,8 @@ GLOBALFN void loadMapForCurrentSaveGame(void);
 GLOBALFN void logSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN u32 mainGetBit(GameBit bit);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
-GLOBALFN int mapCoordsToId(int x, int z, int layer);
+GLOBALFN int mapCoordsToId(int x, int z, int layer); //MapId32
+GLOBALFN int mapGetDirIdx(int id); //MapId32 -> MapDirIdx32
 GLOBALFN void* mapLoadDataFile(MapDirIdx32 map, DataFileEnum file);
 GLOBALFN void mapReload(void);
 GLOBALFN void mapScreenDrawHud(void);
