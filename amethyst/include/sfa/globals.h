@@ -63,7 +63,7 @@ extern GameBit16 mapObjGroupBit[NUM_MAPS];
 extern struct {
     int mapX, mapZ, cellX, cellZ;
 } mapCoords;
-extern char *mapNames;
+extern const char *mapNames[NUM_MAPS];
 extern u16 minimapAlpha;
 extern int minimapHeight;
 extern u8 minimapMode; //0=map 1=compass 2=info
