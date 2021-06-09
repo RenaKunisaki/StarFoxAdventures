@@ -11,9 +11,17 @@ typedef enum {
     DEBUGTEXT_HEAP_STATE        = (1 <<  6),
     DEBUGTEXT_GAMEBIT_LOG       = (1 <<  7),
     DEBUGTEXT_PLAYER_STATE      = (1 <<  8),
-    DEBUGTEXT_HEAP_GRAPH        = (1 <<  9), //not really text but oh well
-    DEBUGTEXT_WORLD_MAP         = (1 << 10),
+    DEBUGTEXT_WORLD_MAP         = (1 <<  9), //not really text but oh well
 } DebugTextFlags;
+
+typedef enum {
+    HEAP_DRAW_NONE = 0,
+    HEAP_DRAW_BLOCK_GRAPH,
+    HEAP_DRAW_BYTE_GRAPH,
+    HEAP_DRAW_TOTALS,
+    HEAP_DRAW_TABLE,
+    NUM_HEAP_DRAW_MODES
+} HeapDrawMode;
 
 //debuglog.s
 void debugPrintfHook(const char *fmt, ...);
@@ -21,3 +29,6 @@ void debugPrintfHook(const char *fmt, ...);
 //debugprint.c
 extern u32 debugTextFlags;
 void mainLoopDebugPrint();
+
+//drawheap.c
+extern u8 heapDrawMode;

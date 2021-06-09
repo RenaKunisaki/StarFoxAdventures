@@ -19,18 +19,18 @@ typedef enum {
     ALLOC_TAG_FACEFEED              = 0xFACEFEED,
     ALLOC_TAG_INTERSECT_POINT       = 0xFFFF00FF,
     ALLOC_TAG_SAVEGAME              = 0xFFFFFFFF,
-} AllocTag;
+} AllocTag; //XXX update this.
 
 typedef struct { //names extracted from debug messages
     void *loc;
     int   size;
     u16   unk08;
     short idx;
-    short stack2;
+    short stack2; //no idea
     short stack;
     u32   col; //AllocTag
-    int   unk14;
-    int   mmUniqueIdent;
+    int   unk14; //unused? we stash lr here.
+    int   mmUniqueIdent; //just incrementing unique ID
 } SfaHeapEntry;
 
 typedef struct {

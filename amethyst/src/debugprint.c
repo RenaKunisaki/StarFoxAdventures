@@ -9,10 +9,9 @@ u32 debugTextFlags =
     //DEBUGTEXT_RESTART_POINT |
     DEBUGTEXT_MEMORY_INFO |
     DEBUGTEXT_INTERACT_OBJ_INFO |
-    //DEBUGTEXT_HEAP_STATE |
+    DEBUGTEXT_HEAP_STATE |
     DEBUGTEXT_GAMEBIT_LOG |
     //DEBUGTEXT_PLAYER_STATE |
-    DEBUGTEXT_HEAP_GRAPH |
     //DEBUGTEXT_WORLD_MAP |
     0;
 
@@ -220,7 +219,7 @@ void mainLoopDebugPrint() {
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"
         DPRINT_BGCOLOR "\x01\x01\x01\x3F"); //reset color
 
-    if(debugTextFlags & DEBUGTEXT_HEAP_GRAPH)    drawHeaps();
+    drawHeaps();
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
     if(debugTextFlags & DEBUGTEXT_RESTART_POINT) printRestartPoint();

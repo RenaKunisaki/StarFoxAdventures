@@ -2,6 +2,8 @@
  */
 #include "main.h"
 #define NUM_TAGS 37
+#define BYTE_SCALE 4096
+u8 heapDrawMode = HEAP_DRAW_NONE;
 
 //extracted from default.dol
 static const u32 allocTagColorTbl[] = {
@@ -123,13 +125,17 @@ static void updateCounts() {
     }
 }
 
-static void drawCounts() {
+static void drawCounts(bool all) {
+    //draw color legend, block count, and Kbyte count of each tag.
+    //takes up the whole damn screen.
     updateCounts();
     debugPrintf(DPRINT_FIXED "Tag      ");
-    for(int iHeap=0; iHeap<NUM_HEAPS; iHeap++) {
-        debugPrintf("|Blk%d KByte%d ", iHeap, iHeap);
+    if(all) {
+        for(int iHeap=0; iHeap<NUM_HEAPS; iHeap++) {
+            debugPrintf("|Blk%d KByte%d ", iHeap, iHeap);
+        }
     }
-    debugPrintf("|Totals");
+    debugPrintf("|BlkTotl KBtotl");
 
     for(int iTag=0; tagNames[iTag]; iTag++) {
         u32 color = allocTagColorTbl[iTag];
@@ -141,10 +147,10 @@ static void drawCounts() {
         if(!g) g=1;
         if(!b) b=1;
         if(!a) a=1;
-        if(r+g+b < 0x40) {
-            r |= 0x40;
-            g |= 0x40;
-            b |= 0x40;
+        if(r+g+b < 0x80) {
+            r |= 0x80;
+            g |= 0x80;
+            b |= 0x80;
         }
 
         //int y = iTag * 5;
@@ -160,7 +166,7 @@ static void drawCounts() {
             0x85, r, g, b, 0x40, //set BG color
             0};
         debugPrintf(fmt, tagNames[iTag]);
-        for(int iHeap=0; iHeap<NUM_HEAPS+1; iHeap++) {
+        for(int iHeap=all ? 0 : NUM_HEAPS; iHeap<NUM_HEAPS+1; iHeap++) {
             debugPrintf("|%4d %6d ", tagCounts[iHeap][iTag],
                 tagBytes[iHeap][iTag] / 1024);
         }
@@ -170,7 +176,8 @@ static void drawCounts() {
         "\n");
 }
 
-static void drawHeap(int iHeap) {
+static void drawHeapBlocks(int iHeap) {
+    //draw graph showing tag color of each heap block.
     int x = 16, y = 400 + (iHeap * 6);
     SfaHeap *heap = &heaps[iHeap];
     //OSReport("heap %d %d/%d\r\n", iHeap, heap->used, heap->avail);
@@ -183,13 +190,13 @@ static void drawHeap(int iHeap) {
 
     //XXX an option to hide the unused slots entirely?
     //just means using i<used instead of i<avail
-    for(u32 i=0; i<avail; i++) {
-        SfaHeapEntry *entry = &heap->data[i];
+    for(u32 iBlock=0; iBlock<avail; iBlock++) {
+        SfaHeapEntry *entry = &heap->data[iBlock];
         if(entry) {
             u32 col = entry->col;
-            if(col <= 0x21) col = allocTagColorTbl[col];
+            if(col < NUM_TAGS) col = allocTagColorTbl[col];
             color.value = col;
-            if(i >= used) color.a /= 8;
+            if(iBlock >= used) color.a /= 8;
             hudDrawRect(x, y, x+w, y+6, &color);
         }
         x += w;
@@ -197,7 +204,59 @@ static void drawHeap(int iHeap) {
     }
 }
 
+static void drawHeapBytes(int iHeap) {
+    //draw graph showing tag color of each heap block scaled to its size.
+    if(iHeap == 0) return; //XXX game doesn't fill in size correctly...
+    int x = 16, y = 400 + (iHeap * 6);
+    SfaHeap *heap = &heaps[iHeap];
+    //OSReport("heap %d %d/%d\r\n", iHeap, heap->used, heap->avail);
+
+    u32 used  = heap->size;
+    u32 avail = heap->dataSize;
+    float scale = (float)(SCREEN_WIDTH-(x*2)) / (float)(avail / BYTE_SCALE);
+    int w;
+    Color4b color = {0, 0, 0, 128};
+    hudDrawRect(x, y, x+(SCREEN_WIDTH-(x*2)), y+6, &color);
+
+    //WTF these numbers don't add up.
+    //is the game actually updating this info?
+    //the heap code makes no bloody sense.
+    u32 total = 0;
+    for(u32 iBlock=0; iBlock<heap->avail; iBlock++) {
+        SfaHeapEntry *entry = &heap->data[iBlock];
+        if(entry) {
+            u32 col = entry->col;
+            if(col < NUM_TAGS) col = allocTagColorTbl[col];
+            color.value = col;
+            //if(iBlock >= heap->used) color.a /= 8;
+            //else total += entry->size;
+            if(entry->loc) total += entry->size;
+            else color.a /= 8;
+            w = (entry->size / BYTE_SCALE) / scale;
+            hudDrawRect(x, y, x+w, y+6, &color);
+        }
+        x += w;
+        if(x > SCREEN_WIDTH) break;
+    }
+    //debugPrintf("heap %d used %d: %d / %d\n", iHeap,
+    //    used/1024, total/1024, avail/1024);
+}
+
 void drawHeaps() {
-    //drawCounts();
-    for(int i=0; i<NUM_HEAPS; i++) drawHeap(i);
+    switch(heapDrawMode) {
+        case HEAP_DRAW_BLOCK_GRAPH: {
+            for(int i=0; i<NUM_HEAPS; i++) drawHeapBlocks(i);
+            break;
+        }
+
+        case HEAP_DRAW_BYTE_GRAPH: {
+            for(int i=0; i<NUM_HEAPS; i++) drawHeapBytes(i);
+            break;
+        }
+
+        case HEAP_DRAW_TOTALS: drawCounts(false); break;
+        case HEAP_DRAW_TABLE:  drawCounts(true); break;
+
+        default: return;
+    }
 }

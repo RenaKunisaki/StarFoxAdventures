@@ -54,6 +54,13 @@ static inline void doPadMainLoop() {
         timeStop = true;
         isStep = false;
     }
+
+
+    //Pad 3 Up: cycle heap displays
+    if(bPressed3 & PAD_BUTTON_UP) {
+        heapDrawMode++;
+        if(heapDrawMode >= NUM_HEAP_DRAW_MODES) heapDrawMode = 0;
+    }
 }
 
 void mainLoopHook() {
