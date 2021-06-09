@@ -6,7 +6,6 @@
 #define MAP_STATES_MENU_NUM_LINES ((MAP_STATES_MENU_HEIGHT / MENU_LINE_HEIGHT) - 2)
 
 static u8 listOrder[] = {
-    0x1a, //"Animtest",                     animtest
     0x1d, //"Cape Claw",                    capeclaw
     0x10, //"CloudRunner Dungeon",          clouddungeon
     0x0c, //"CloudRunner Fortress",         fortress
@@ -16,7 +15,6 @@ static u8 listOrder[] = {
     0x1c, //"DarkIce Mines Boss",           snowmines3
     0x02, //"Dragon Rock",                  dragrock
     0x2c, //"Drakor",                       finalboss
-    0x50, //"galleonship",                  galleonship
     0x09, //"Game Well Maze",               mazecave
     0x41, //"Great Fox",                    greatfox
     0x17, //"Ice Mountain",                 newicemount
@@ -33,31 +31,33 @@ static u8 listOrder[] = {
     0x36, //"Magic Cave",                   magicave
     0x12, //"Moon Mountain Pass",           moonpass
     0x15, //"Ocean Force Point - Bottom",   kraztest
-    0x32, //"Ocean Force Point - Top",      dfptop
+    //0x32, //"Ocean Force Point - Top",      dfptop
     0x00, //"Ship Battle",                  frontend
     0x0a, //"SnowHorn Wastes",              wastes
     0x1f, //"Test Of Combat",               dfshrine
     0x27, //"Test Of Strength",             dbshrine
-    0x08, //"ThornTail Hollow Underground", hollow2
+    //0x08, //"ThornTail Hollow Underground", hollow2
     0x07, //"ThornTail Hollow",             hollow
     0x33, //"ThornTail Shop",               swapstore
     0x30, //"TRex Boss",                    trexboss
     0x04, //"Volcano Force Point",          temple
     0x0d, //"Walled City",                  wallcity
+    0x1a, //"Animtest",                     animtest
     0x11, //"(unused) CloudTrap",           cloudtrap
     0x0f, //"(unused) CloudTreasure",       cloudtreasure
-    0x2e, //"(unused) DarkIce Mines 4",     snowmines4
-    0x2f, //"(unused) DarkIce Mines 5",     snowmines5
+    //0x2e, //"(unused) DarkIce Mines 4",     snowmines4
+    //0x2f, //"(unused) DarkIce Mines 5",     snowmines5
     0x23, //"(unused) Diamond Bay",         diamondbay
     0x06, //"(unused) Discovery Falls",     discovery
     0x34, //"(unused) Dragon Rock Bottom",  dragbot
     0x01, //"(unused) Frontend 2",          frontend2
+    0x50, //"galleonship",                  galleonship
     0x05, //"(unused) HighTop",             hightop
-    0x18, //"(unused) Ice Mountain 2",      newicemount2
-    0x19, //"(unused) Ice Mountain 3",      newicemount3
+    //0x18, //"(unused) Ice Mountain 2",      newicemount2
+    //0x19, //"(unused) Ice Mountain 3",      newicemount3
     0x1e, //"(unused) Inside Galleon",      insidegal
     0x03, //"(unused) Old Krazoa Palace",   krazoapalace
-    0xFF,
+    0xFF, //end
 };
 
 static const char *displayNames[] = {
@@ -69,7 +69,7 @@ static const char *displayNames[] = {
     "(unused) HighTop",   //05 hightop        "Rolling Demo - Just In Case"
     "(unused) DiscFalls", //06 discovery
     "ThornTail Hollow",   //07 hollow
-    "ThornTail Undrgrnd", //08 hollow2
+    NULL, //"ThornTail Undrgrnd", //08 hollow2
     "Game Well Maze",     //09 mazecave
     "SnowHorn Wastes",    //0a wastes
     "Krazoa Palace",      //0b warlock
@@ -82,12 +82,12 @@ static const char *displayNames[] = {
     "Moon Mountain Pass", //12 moonpass
     "DarkIceMines Top",   //13 snowmines
     NULL, //"(unused) Krazoa Shrine",       //14 krashrin2
-    "OceanForceP Bottom", //15 kraztest
+    "Ocean Force Point", //15 kraztest
     NULL, //"krazchamber",                  //16 krazchamber
     "Ice Mountain",                 //17 newicemount
-    "(unused) Ice Mt2",   //18 newicemount2
-    "(unused) Ice Mt3",   //19 newicemount3
-    "Animtest",           //1a animtest
+    NULL, //"(unused) Ice Mt2",   //18 newicemount2
+    NULL, //"(unused) Ice Mt3",   //19 newicemount3
+    "(unused) Animtest",           //1a animtest
     "DarkIceMines Botm",  //1b snowmines2
     "DarkIceMines Boss",  //1c snowmines3
     "Cape Claw",          //1d capeclaw
@@ -107,11 +107,11 @@ static const char *displayNames[] = {
     "CloudRunner Race",   //2b cloudrace
     "Drakor",             //2c finalboss
     NULL, //"(unused) WMinsert",            //2d wminsert
-    "(unused) DrkIceMn4", //2e snowmines4
-    "(unused) DrkIceMn5", //2f snowmines5
+    NULL, //"(unused) DrkIceMn4", //2e snowmines4
+    NULL, //"(unused) DrkIceMn5", //2f snowmines5
     "TRex Boss",          //30 trexboss
     NULL, //"(unused) MikesLava",           //31 mikelava
-    "Ocean Force Pt Top", //32 dfptop
+    NULL, //"Ocean Force Pt Top", //32 dfptop
     "ThornTail Shop",     //33 swapstore
     "(unused) DrgRckBot", //34 dragbot
     NULL, //"(unused) Boss KamerianD",      //35 kamdrag
@@ -141,7 +141,7 @@ static const char *displayNames[] = {
     NULL, //"dfcavehatch1",                 //4d dfcavehatch1
     NULL, //"dfcavehatch2",                 //4e dfcavehatch2
     NULL, //"scstatue",                     //4f scstatue
-    "galleonship",                  //50 galleonship
+    "(unused) galeonshp",                  //50 galleonship
     /* "cfgalleon",                    //51 cfgalleon
     "cfgangplank",                  //52 cfgangplank
     "nwtreebridge",                 //53 nwtreebridge
@@ -181,6 +181,7 @@ static const char *displayNames[] = {
     NULL
 };
 
+static u8 cursorX = 0;
 void mapStatesMenu_draw(Menu *self) {
     //Draw function for map states menu
     menuAnimFrame++;
@@ -196,6 +197,11 @@ void mapStatesMenu_draw(Menu *self) {
     gameTextShowStr("Act", MENU_TEXTBOX_ID, x+180, y);
     gameTextShowStr("ObjGroups", MENU_TEXTBOX_ID, x+220, y);
 
+    if(cursorX > 0) {
+        sprintf(str, "%2d", cursorX - 1);
+        gameTextShowStr(str, MENU_TEXTBOX_ID, x+(MAP_STATES_MENU_WIDTH-35), y);
+    }
+
     int start = MAX(0, self->selected - (MAP_STATES_MENU_NUM_LINES-1));
 
     for(int i=0; i < MAP_STATES_MENU_NUM_LINES; i++) {
@@ -206,12 +212,16 @@ void mapStatesMenu_draw(Menu *self) {
         y += MENU_LINE_HEIGHT;
         bool selected = (i+start) == self->selected;
         if(selected) {
+            debugPrintf("ActBit=%04X ObjsBit=%04X\n",
+                mapActBitIdx[iMap], mapObjGroupBit[iMap]);
             u8  r = menuAnimFrame * 8, g = 255 - r;
             gameTextSetColor(r, g, 255, 255);
         }
         else gameTextSetColor(255, 255, 255, 255);
 
-        gameTextShowStr(displayNames[iMap], MENU_TEXTBOX_ID, x, y);
+        if(displayNames[iMap]) {
+            gameTextShowStr(displayNames[iMap], MENU_TEXTBOX_ID, x, y);
+        }
 
         if(mapActBitIdx[iMap]) {
             sprintf(str, "%X", mainGetBit(mapActBitIdx[iMap]));
@@ -226,6 +236,13 @@ void mapStatesMenu_draw(Menu *self) {
             gameTextShowStr(str, MENU_TEXTBOX_ID, x + 220, y);
         }
     }
+
+    //draw cursor
+    if(cursorX == 0) x = 203;
+    else x = (223 - MENU_FIXED_WIDTH) + (cursorX * MENU_FIXED_WIDTH);
+    x += MAP_STATES_MENU_XPOS;
+    y = MAP_STATES_MENU_YPOS + 5 + (MENU_LINE_HEIGHT * (self->selected - start+1));
+    drawBox(x, y, 20, 24, 255, false);
 }
 
 
@@ -233,10 +250,34 @@ void mapStatesMenu_run(Menu *self) {
     //Run function for map states menu
     textForceFixedWidth = MENU_FIXED_WIDTH;
 
-    int sel = curMenu->selected;
+    int sel  = curMenu->selected;
+    int iMap = listOrder[sel];
+
     if(buttonsJustPressed == PAD_BUTTON_B) {
         menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
         curMenu->close(curMenu);
+    }
+    else if(buttonsJustPressed == PAD_BUTTON_X
+    ||      buttonsJustPressed == PAD_BUTTON_Y
+    ||      buttonsJustPressed == PAD_BUTTON_A) {
+        menuInputDelayTimer = MENU_INPUT_DELAY_ADJUST;
+        if(cursorX == 0) { //change act
+            if(mapActBitIdx[iMap]) {
+                int adj = (buttonsJustPressed == PAD_BUTTON_Y) ? -1 : 1;
+                int act = mainGetBit(mapActBitIdx[iMap]);
+                gplaySetAct(iMap, act + adj);
+            }
+            else audioPlaySound(NULL, MENU_FAIL_SOUND);
+        }
+        else { //change obj group
+            if(mapObjGroupBit[iMap]) {
+                int iBit = 31 - (cursorX - 1);
+                u32 groups = mainGetBit(mapObjGroupBit[iMap]);
+                groups = (groups >> iBit) & 1;
+                gplaySetObjGroupStatus(iMap, iBit, groups ^ 1);
+            }
+            else audioPlaySound(NULL, MENU_FAIL_SOUND);
+        }
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
@@ -255,6 +296,20 @@ void mapStatesMenu_run(Menu *self) {
         sel++;
         if(listOrder[sel] == 0xFF) sel = 0;
         curMenu->selected = sel;
+    }
+    else if(controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD
+    ||      controllerStates[0].substickX < -MENU_CSTICK_THRESHOLD) { //left
+        menuInputDelayTimer = (controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD)
+            ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
+        if(cursorX > 0) cursorX--;
+        else cursorX = 32;
+    }
+    else if(controllerStates[0].stickX > MENU_ANALOG_STICK_THRESHOLD
+    ||      controllerStates[0].substickX > MENU_CSTICK_THRESHOLD) { //right
+        menuInputDelayTimer = (controllerStates[0].stickX > MENU_ANALOG_STICK_THRESHOLD)
+            ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
+        cursorX++;
+        if(cursorX >= 33) cursorX = 0;
     }
 }
 
