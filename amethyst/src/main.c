@@ -178,6 +178,7 @@ static inline void _initDebugPrintHacks() {
     WRITE8    (0x80137317, 6); //smaller text for fixed-width mode
     WRITE16   (0x803E23B8, 0x3FA0); //smaller text
     WRITE32   (0x80137CF4, 0x3BFF000C); //smaller text for debugPrintfxy
+    WRITE16   (0x801372AA, 8); //less line spacing
     if(consoleType & 0xF0000000) { //emulator
         //move debug print to edge of screen
         WRITE16(0x8013761A, 0); //min X at 320 screen width
