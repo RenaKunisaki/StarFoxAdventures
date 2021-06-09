@@ -12,7 +12,7 @@ u32 debugTextFlags =
     //DEBUGTEXT_HEAP_STATE |
     DEBUGTEXT_GAMEBIT_LOG |
     //DEBUGTEXT_PLAYER_STATE |
-    //DEBUGTEXT_HEAP_GRAPH |
+    DEBUGTEXT_HEAP_GRAPH |
     //DEBUGTEXT_WORLD_MAP |
     0;
 
@@ -217,8 +217,10 @@ static void printPlayerState() {
 }
 
 void mainLoopDebugPrint() {
-    debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"); //reset color
+    debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"
+        DPRINT_BGCOLOR "\x01\x01\x01\x3F"); //reset color
 
+    if(debugTextFlags & DEBUGTEXT_HEAP_GRAPH)    drawHeaps();
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
     if(debugTextFlags & DEBUGTEXT_RESTART_POINT) printRestartPoint();
@@ -232,6 +234,5 @@ void mainLoopDebugPrint() {
 
     debugPrintf("\n"); //for game's own messages
 
-    if(debugTextFlags & DEBUGTEXT_HEAP_GRAPH) drawHeaps();
     if(debugTextFlags & DEBUGTEXT_WORLD_MAP) drawMapGrid();
 }
