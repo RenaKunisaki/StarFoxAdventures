@@ -86,3 +86,10 @@ typedef struct {
 //these are not actually bool, they get set to -1 sometimes
 extern int bOnlyUseHeaps1and2;
 extern int bOnlyUseHeap3;
+
+
+typedef enum {
+    OBJ_FREE_IMMEDIATE = 0, //set by objFreeAll()
+    OBJ_FREE_DEFERRED  = 2, //normal mode
+} ObjFreeMode;
+extern u32 objFreeMode; //ObjFreeMode

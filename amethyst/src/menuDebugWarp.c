@@ -269,9 +269,8 @@ void warpMenu_run(Menu *self) {
     else if(buttonsJustPressed == PAD_BUTTON_A) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
         WarpMenuItem *warp = &warps[self->selected];
-        DPRINT("Warp to %f %f %f ly %d: %s",
-            (float)warp->x, (float)warp->y, (float)warp->z,
-            warp->layer, warpNames[self->selected]);
+        DPRINT("Warp to %f %f %f ly %d",
+            (float)warp->x, (float)warp->y, (float)warp->z, warp->layer);
         debugDoWarp(warp->x, warp->y, warp->z, warp->layer);
         //close all menus
         mainMenu_close(&menuMain);

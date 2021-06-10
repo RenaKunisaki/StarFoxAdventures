@@ -45,24 +45,55 @@ static const u8 objEmergFreeCats[] = {
     0xFF, //end of list
 };
 
-void doEmergencyFree() {
+void getFreeMemory(u32 *outTotalBlocks, u32 *outTotalBytes,
+u32 *outUsedBlocks, u32 *outUsedBytes, int *outBlocksPct, int *outBytesPct) {
+    u32 totalBlocks=0, totalBytes=0, usedBlocks=0, usedBytes=0;
+    for(int i=0; i<NUM_HEAPS; i++) {
+        totalBytes  += heaps[i].dataSize;
+        totalBlocks += heaps[i].avail;
+        usedBytes   += heaps[i].size;
+        usedBlocks  += heaps[i].used;
+    }
+    if(outTotalBlocks) *outTotalBlocks = totalBlocks;
+    if(outTotalBytes)  *outTotalBytes  = totalBytes;
+    if(outUsedBlocks)  *outUsedBlocks  = usedBlocks;
+    if(outUsedBytes)   *outUsedBytes   = usedBytes;
+
+    if(outBlocksPct) *outBlocksPct = (usedBlocks * 100) / totalBlocks;
+    if(outBytesPct)  *outBytesPct  = (usedBytes  * 100) / totalBytes;
+}
+
+bool doEmergencyFree(int attempt) {
     emergFreeCount++;
+    if(attempt == 0) {
+        OSReport("Emergency free: dumping expgfx");
+        expgfxRemoveAll();
+        return true;
+    }
+
     int nObj = numLoadedObjs;
     for(int i=0; i<nObj; i++) {
         ObjInstance *obj = loadedObjects[i];
         if(obj) {
             for(int cat=0; objEmergFreeCats[cat] != 0xFF; cat++) {
                 if(obj->catId == objEmergFreeCats[cat]) {
-                    OSReport("Emergency free object \"%s\"", obj->file->name);
+                    OSReport("Emergency free object 0x%08X \"%s\"",
+                        obj, obj->file->name);
+                    objFreeMode = OBJ_FREE_IMMEDIATE; //actually free it now
                     objFree(obj);
-                    return;
+                    objFreeMode = OBJ_FREE_DEFERRED; //back to normal
+                    return true;
                 }
             }
         }
     }
-    OSReport("Emergency free: didn't free any object");
-    expgfxRemoveAll(); //maybe this will help
+
+    u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
+    getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes, NULL, NULL);
+    OSReport("Emergency free: didn't free any object. Used blocks %d/%d, bytes %d/%d K",
+        usedBlocks, totalBlocks, usedBytes/1024, totalBytes/1024);
     //XXX try more things
+    return false;
 }
 
 void _heapAllocHook(void);
@@ -95,7 +126,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     int count = 0;
     void *buf = NULL;
     SfaHeapEntry *entry = NULL;
-    while((buf == NULL) && (count < 100)) {
+    while((buf == NULL) && (count < 1000)) {
         if(bOnlyUseHeaps1and2 == 1) {
             //heapAlloc "leaks" the SfaHeapEntry in r4 on return.
             //we can exploit this to modify some fields that otherwise
@@ -154,21 +185,34 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
             if((!PTR_VALID(entry)) || (entry->type > 1)) {
                 //sanity check, in case our patch to return the heap entry
                 //doesn't work. XXX why does this happen?
-                OSReport("Alloc %08X got bad r4 %08X (%d)", lr, entry, entry->type);
+                //OSReport("Alloc %08X got bad r4 %08X (%d)", lr, entry, entry->type);
             }
             else {
                 //this seems to be unused (or not?)
-                //entry->unk14 = lr;
+                entry->unk14 = lr;
             }
             return buf;
         }
         else {
             //alloc failed. try freeing something.
-            doEmergencyFree();
+            if(!count) {
+                u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
+                getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes,
+                    NULL, NULL);
+                OSReport("Out of memory! size=0x%X tag=0x%X Used blocks %d/%d, bytes %d/%d K - initiating emergency free",
+                    size, tag, usedBlocks, totalBlocks, usedBytes/1024,
+                    totalBytes/1024);
+            }
+            if(!doEmergencyFree(count)) break;
+            //OSReport("Emergency free attempt %d OK", count);
         }
         count += 1;
     }
-    OSReport("ALLOC FAIL size=0x%X tag=0x%X", size, tag);
+
+    u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
+    getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes, NULL, NULL);
+    OSReport("ALLOC FAIL size=0x%X tag=0x%X Used blocks %d/%d, bytes %d/%d K",
+        size, tag, usedBlocks, totalBlocks, usedBytes/1024, totalBytes/1024);
     allocFailLog[allocFailLogIdx].size = size;
     allocFailLog[allocFailLogIdx].tag  = tag;
     allocFailLog[allocFailLogIdx].lr   = lr;
