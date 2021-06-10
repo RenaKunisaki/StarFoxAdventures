@@ -171,8 +171,7 @@ void bsodHook(void) {
     //replace BSOD thread main function.
     //this thread only runs when the game crashes.
 
-    //XXX why is this causing a relocation error?
-    //u32 msr = OSDisableInterrupts();
+    OSInterruptMask msr = OSDisableInterrupts();
     debugFrameBuffer[0] = pFrameBuffer[0];
     debugFrameBuffer[1] = pFrameBuffer[1];
 
@@ -181,7 +180,7 @@ void bsodHook(void) {
     setGpuErrorHandler(NULL);
     videoSetCallback_80256460(NULL);
     gxWaitFn_80258330();
-    //OSRestoreInterrupts(msr);
+    OSRestoreInterrupts(msr);
 
     int page = 0;
     int padDelay = 60;
