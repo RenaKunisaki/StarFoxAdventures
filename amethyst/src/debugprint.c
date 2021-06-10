@@ -147,12 +147,12 @@ static void printHeapInfo() {
 
     debugPrintf("Emerg frees: %d; alloc fails: %d\n", emergFreeCount, allocFailCount);
     if(allocFailCount > 0) {
-        debugPrintf(DPRINT_FIXED "FailSize FailTag" DPRINT_NOFIXED "\n");
+        debugPrintf(DPRINT_FIXED "FailSize FailTag  FailAddr" DPRINT_NOFIXED "\n");
         for(int i=0; i<MIN(allocFailCount, ALLOC_FAIL_LOG_SIZE); i++) {
             if(i == allocFailLogIdx) debugPrintf(DPRINT_COLOR "\x00\xFF\x00\xFF");
             else debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF");
-            debugPrintf(DPRINT_FIXED "%08X %08X" DPRINT_NOFIXED "\n",
-                allocFailLog[i].size, allocFailLog[i].tag);
+            debugPrintf(DPRINT_FIXED "%08X %08X %08X" DPRINT_NOFIXED "\n",
+                allocFailLog[i].size, allocFailLog[i].tag, allocFailLog[i].lr);
         }
         debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF");
     }

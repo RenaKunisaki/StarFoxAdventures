@@ -189,6 +189,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
             }
             else {
                 //this seems to be unused (or not?)
+                //it's set, but not read.
                 entry->unk14 = lr;
             }
             return buf;
@@ -209,6 +210,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
         count += 1;
     }
 
+    allocFailCount++;
     u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
     getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes, NULL, NULL);
     OSReport("ALLOC FAIL size=0x%X tag=0x%X Used blocks %d/%d, bytes %d/%d K",
