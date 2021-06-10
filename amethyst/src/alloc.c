@@ -151,14 +151,14 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
             //DPRINT("alloc success, %08X, entry %08X (unk %04X %08X ID %08X stack %04X %04X)", buf, entry,
             //    entry->unk08, entry->unk14, entry->mmUniqueIdent,
             //    entry->stack, entry->stack2);
-            if((!PTR_VALID(entry)) || (entry->unk08 > 1)) {
+            if((!PTR_VALID(entry)) || (entry->type > 1)) {
                 //sanity check, in case our patch to return the heap entry
                 //doesn't work. XXX why does this happen?
-                OSReport("Alloc %08X got bad r4 %08X", lr, entry);
+                OSReport("Alloc %08X got bad r4 %08X (%d)", lr, entry, entry->type);
             }
             else {
-                //this seems to be unused
-                entry->unk14 = lr;
+                //this seems to be unused (or not?)
+                //entry->unk14 = lr;
             }
             return buf;
         }

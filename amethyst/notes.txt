@@ -9,7 +9,7 @@ St   | Pause       |          | TimeStop |
 L    | Strafe      |          | Camera   | FreeCam Move
 R    | Shield      |          | Camera   | FreeCam Move
 Z    | FirstPerson |          | SpeedUp  | FreeCam Fast
-Up   | Item/Map    |          |          |
+Up   | Item/Map    |          | HeapDisp |
 Down | Item/Map    |          |          |
 Left | Item/Map    |          |          |
 Rght | Item/Map    |          |          |

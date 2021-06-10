@@ -1,12 +1,12 @@
 /** Draw heap usage on screen.
  */
 #include "main.h"
-#define NUM_TAGS 37
 #define BYTE_SCALE 4096
+#define GRAPH_HEIGHT 6
 u8 heapDrawMode = HEAP_DRAW_NONE;
 
 //extracted from default.dol
-static const u32 allocTagColorTbl[] = {
+const u32 allocTagColorTbl[] = {
     0x00000000, //"0"
     0xCECECEFE, //"LISTS_COL"
     0xEEEEEEFE, //"SCREEN_COL"
@@ -91,8 +91,8 @@ static const char *tagNames[] = {
 
 //last heap entry is total.
 //last tag entry is unknown tags.
-static int tagCounts[NUM_HEAPS+1][NUM_TAGS+1];
-static u32 tagBytes [NUM_HEAPS+1][NUM_TAGS+1];
+static int tagCounts[NUM_HEAPS+1][NUM_ALLOC_TAGS+1];
+static u32 tagBytes [NUM_HEAPS+1][NUM_ALLOC_TAGS+1];
 
 static void updateCounts() {
     //init counts
@@ -107,14 +107,14 @@ static void updateCounts() {
             if(!entry) break;
 
             u32 tag = entry->col;
-            if(tag >= NUM_TAGS) {
-                for(int iTag=0; iTag<NUM_TAGS; iTag++) {
+            if(tag >= NUM_ALLOC_TAGS) {
+                for(int iTag=0; iTag<NUM_ALLOC_TAGS; iTag++) {
                     if(allocTagColorTbl[iTag] == tag) {
                         tag = iTag;
                         break;
                     }
                 }
-                if(tag >= NUM_TAGS) tag = NUM_TAGS; //unknown tag
+                if(tag >= NUM_ALLOC_TAGS) tag = ALLOC_TAG_UNKNOWN;
             }
 
             tagCounts[iHeap][tag]++;
@@ -178,7 +178,7 @@ static void drawCounts(bool all) {
 
 static void drawHeapBlocks(int iHeap) {
     //draw graph showing tag color of each heap block.
-    int x = 16, y = 400 + (iHeap * 6);
+    int x = 16, y = 400 + (iHeap * GRAPH_HEIGHT);
     SfaHeap *heap = &heaps[iHeap];
     //OSReport("heap %d %d/%d\r\n", iHeap, heap->used, heap->avail);
 
@@ -186,7 +186,7 @@ static void drawHeapBlocks(int iHeap) {
     u32 avail = heap->avail;
     int w = (avail > 300) ? 1 : 2;
     Color4b color = {0, 0, 0, 128};
-    hudDrawRect(x, y, x+(avail*w), y+6, &color);
+    hudDrawRect(x, y, x+(avail*w), y+GRAPH_HEIGHT, &color);
 
     //XXX an option to hide the unused slots entirely?
     //just means using i<used instead of i<avail
@@ -194,10 +194,10 @@ static void drawHeapBlocks(int iHeap) {
         SfaHeapEntry *entry = &heap->data[iBlock];
         if(entry) {
             u32 col = entry->col;
-            if(col < NUM_TAGS) col = allocTagColorTbl[col];
+            if(col < NUM_ALLOC_TAGS) col = allocTagColorTbl[col];
             color.value = col;
             if(iBlock >= used) color.a /= 8;
-            hudDrawRect(x, y, x+w, y+6, &color);
+            hudDrawRect(x, y, x+w, y+GRAPH_HEIGHT, &color);
         }
         x += w;
         if(x > SCREEN_WIDTH) break;
@@ -207,7 +207,7 @@ static void drawHeapBlocks(int iHeap) {
 static void drawHeapBytes(int iHeap) {
     //draw graph showing tag color of each heap block scaled to its size.
     if(iHeap == 0) return; //XXX game doesn't fill in size correctly...
-    int x = 16, y = 400 + (iHeap * 6);
+    int x = 16, y = 400 + (iHeap * GRAPH_HEIGHT);
     SfaHeap *heap = &heaps[iHeap];
     //OSReport("heap %d %d/%d\r\n", iHeap, heap->used, heap->avail);
 
@@ -216,30 +216,51 @@ static void drawHeapBytes(int iHeap) {
     float scale = (float)(SCREEN_WIDTH-(x*2)) / (float)(avail / BYTE_SCALE);
     int w;
     Color4b color = {0, 0, 0, 128};
-    hudDrawRect(x, y, x+(SCREEN_WIDTH-(x*2)), y+6, &color);
+    hudDrawRect(x, y, x+(SCREEN_WIDTH-(x*2)), y+GRAPH_HEIGHT, &color);
 
-    //WTF these numbers don't add up.
-    //is the game actually updating this info?
-    //the heap code makes no bloody sense.
-    u32 total = 0;
-    for(u32 iBlock=0; iBlock<heap->avail; iBlock++) {
+    u32 total = 0, totalBlocks = 0;
+    for(int iBlock=0; iBlock >= 0; iBlock = heap->data[iBlock].next) {
         SfaHeapEntry *entry = &heap->data[iBlock];
-        if(entry) {
+        if(entry && entry->type != HEAP_ENTRY_TYPE_FREE) {
             u32 col = entry->col;
-            if(col < NUM_TAGS) col = allocTagColorTbl[col];
+            if(col < NUM_ALLOC_TAGS) col = allocTagColorTbl[col];
             color.value = col;
             //if(iBlock >= heap->used) color.a /= 8;
             //else total += entry->size;
-            if(entry->loc) total += entry->size;
+            if(entry->loc) {
+                total += entry->size;
+                totalBlocks++;
+            }
             else color.a /= 8;
             w = (entry->size / BYTE_SCALE) / scale;
-            hudDrawRect(x, y, x+w, y+6, &color);
+            hudDrawRect(x, y, x+w, y+GRAPH_HEIGHT, &color);
         }
         x += w;
         if(x > SCREEN_WIDTH) break;
     }
-    //debugPrintf("heap %d used %d: %d / %d\n", iHeap,
-    //    used/1024, total/1024, avail/1024);
+
+    //this shows that the correct usage values seem to belong to the NEXT heap.
+    //no idea why. smells like a bug since even the game's original debug prints
+    //give wrong values.
+    //debugPrintf("heap %d used %d (%d) / %d blocks", iHeap,
+    //    heap->used, totalBlocks, heap->avail);
+    //debugPrintf(" %d (%d) / %d KB\n",
+    //    heap->size/1024, total/1024, heap->dataSize/1024);
+}
+
+void printHeaps() {
+    //print heap table to stdout
+    OSReport(";heap;block;loc;size;type;prev;next;stack;col;lr;id\n");
+    for(int iHeap=0; iHeap<NUM_HEAPS; iHeap++) {
+        SfaHeap *heap = &heaps[iHeap];
+        for(u32 iBlock=0; iBlock<heap->used; iBlock++) {
+            SfaHeapEntry *block = &heap->data[iBlock];
+            OSReport(";%d;%d;0x%08X;%d;%d;%d;%d;%d;0x%08X;0x%08X;%d\n",
+                iHeap, iBlock, block->loc, block->size, block->type,
+                block->prev, block->next, block->stack, block->col,
+                block->unk14, block->mmUniqueIdent);
+        }
+    }
 }
 
 void drawHeaps() {

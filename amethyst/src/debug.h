@@ -32,3 +32,4 @@ void mainLoopDebugPrint();
 
 //drawheap.c
 extern u8 heapDrawMode;
+void printHeaps();

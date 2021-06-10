@@ -61,6 +61,7 @@ static inline void doPadMainLoop() {
         heapDrawMode++;
         if(heapDrawMode >= NUM_HEAP_DRAW_MODES) heapDrawMode = 0;
     }
+    if(bPressed3 & PAD_BUTTON_DOWN) printHeaps();
 }
 
 void mainLoopHook() {
@@ -262,6 +263,15 @@ __asm__(
 
 void _start(void) {
     DPRINT("Patch running!");
+
+    //attempt to fix heap metrics (doesn't actually work)
+    //WRITE32(0x800239ec, 0x38A5FFFC); //subi      r5,r5,0x4
+    //WRITE32(0x80023a0c, 0x8003FFF8); //lwz       r0,-0x8(size2)
+    //these won't work here because the code has already run.
+    //need to directly patch the DOL instead.
+    //XXX automate that.
+    //WRITE32(0x80023f18, 0x9085FFF8); //stw       size,-0x8(slots)
+    //WRITE32(0x80023f1c, 0x9005FFFC); //stw       r0,-0x4(slots)
 
     //Install hooks
     hookBranch(0x80137df8, bsodHook, 1);
