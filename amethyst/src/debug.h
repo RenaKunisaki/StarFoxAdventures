@@ -26,6 +26,9 @@ typedef enum {
 //debuglog.s
 void debugPrintfHook(const char *fmt, ...);
 
+//debugobjs.c
+void debugObjsInit();
+
 //debugprint.c
 extern u32 debugTextFlags;
 void mainLoopDebugPrint();

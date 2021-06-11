@@ -295,6 +295,7 @@ void _start(void) {
     _initCameraHacks();
     _initPlayerHacks();
     gameBitHookInit();
+    debugObjsInit();
 
     //debug stuff
     WRITE_NOP(0x80119D90); //chapter select only needs Z button
