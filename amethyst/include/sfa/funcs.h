@@ -95,6 +95,7 @@ GLOBALFN void musicTestPlaySong(int song);
 GLOBALFN ObjDef* objAlloc(int size, int type);
 GLOBALFN void objDisableHitbox(ObjInstance*); //only for next frame
 GLOBALFN void objFree(ObjInstance*);
+GLOBALFN void objFreeAll(void);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
 GLOBALFN void objSetModel(ObjInstance *obj, int modelIdx);

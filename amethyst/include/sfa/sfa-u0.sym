@@ -266,6 +266,7 @@ numLoadedTextures = 0x803dcdbc;
 objAlloc = 0x8002bdf4;
 objDisableHitbox = 0x80035f00;
 objFree = 0x8002cbc4;
+objFreeAll = 0x8002e294;
 objFreeMode = 0x803db448;
 objInstantiateCharacter = 0x8002df90;
 objLoadPlayerFromSave = 0x802b6ad4;

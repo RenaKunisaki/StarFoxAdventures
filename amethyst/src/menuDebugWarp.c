@@ -259,6 +259,7 @@ void debugDoWarp(float x, float y, float z, int layer) {
     freeMoveCoords.x = x;
     freeMoveCoords.y = y;
     freeMoveCoords.z = z;
+    objFreeAll();
     loadMapForCurrentSaveGame();
 }
 
