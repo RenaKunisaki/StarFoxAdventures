@@ -1,7 +1,7 @@
 #include "main.h"
 
 bool bFreeMove = false;
-static vec3f startCoords;
+vec3f freeMoveCoords;
 static u16 startFlags;
 static u16 startPlayerFlags;
 static bool bWasOn = false;
@@ -50,7 +50,7 @@ void doFreeMove() {
 
     if(!bWasOn) {
         DPRINT("Start free move for obj %08X %s", obj, obj->file->name);
-        startCoords = obj->pos.pos;
+        freeMoveCoords = obj->pos.pos;
         startFlags  = obj->flags_0xb0;
         obj->flags_0xb0 = (obj->flags_0xb0 |
             ObjInstance_FlagsB0_DontUpdate | ObjInstance_FlagsB0_DontMove) &
@@ -65,7 +65,7 @@ void doFreeMove() {
         }
         bWasTimeStopped = timeStop;
         bWasOn = true;
-        DPRINT("Start obj pos: %f %f %f", startCoords.x, startCoords.y, startCoords.z);
+        DPRINT("Start obj pos: %f %f %f", freeMoveCoords.x, freeMoveCoords.y, freeMoveCoords.z);
     }
 
     //get angle as X, Z multipliers
@@ -104,35 +104,35 @@ void doFreeMove() {
     //update saved coords
     //this keeps the object from moving on its own
     //XXX is this needed since we set the flags?
-    startCoords.x += mx;
-    startCoords.z += mz;
-    startCoords.y += dy;
-    obj->pos.pos = startCoords;
+    freeMoveCoords.x += mx;
+    freeMoveCoords.z += mz;
+    freeMoveCoords.y += dy;
+    obj->pos.pos = freeMoveCoords;
     obj->pos.rotation.x += (s16)rx;
     obj->pos.rotation.y += (s16)ry;
     //OSReport("Move by %f %f %f to %f %f %f", dx, dy, dz,
-    //    startCoords.x, startCoords.y, startCoords.z);
+    //    freeMoveCoords.x, freeMoveCoords.y, freeMoveCoords.z);
 
     //update object state.
     //why yes, this IS nuts. a lot of this can probably be removed.
     if(obj->catId == ObjCatId_Player) {
         void *state = obj->state;
-        *(vec3f*)(state + 0x000C) = startCoords;
-        *(vec3f*)(state + 0x0018) = startCoords;
-        *(vec3f*)(state + 0x0024) = startCoords;
-        *(vec3f*)(state + 0x003C) = startCoords;
-        *(vec3f*)(state + 0x0048) = startCoords;
-        *(vec3f*)(state + 0x0054) = startCoords;
-        *(vec3f*)(state + 0x00B4) = startCoords;
-        *(vec3f*)(state + 0x00E8) = startCoords;
-        *(vec3f*)(state + 0x0118) = startCoords;
-        *(float*)(state + 0x01BC) = startCoords.y;
-        *(float*)(state + 0x01F4) = startCoords.y;
+        *(vec3f*)(state + 0x000C) = freeMoveCoords;
+        *(vec3f*)(state + 0x0018) = freeMoveCoords;
+        *(vec3f*)(state + 0x0024) = freeMoveCoords;
+        *(vec3f*)(state + 0x003C) = freeMoveCoords;
+        *(vec3f*)(state + 0x0048) = freeMoveCoords;
+        *(vec3f*)(state + 0x0054) = freeMoveCoords;
+        *(vec3f*)(state + 0x00B4) = freeMoveCoords;
+        *(vec3f*)(state + 0x00E8) = freeMoveCoords;
+        *(vec3f*)(state + 0x0118) = freeMoveCoords;
+        *(float*)(state + 0x01BC) = freeMoveCoords.y;
+        *(float*)(state + 0x01F4) = freeMoveCoords.y;
         *(s16*)  (state + 0x0478) = obj->pos.rotation.x;
     }
-    obj->prevPos  = startCoords; //0x18
-    obj->oldPos   = startCoords; //0x80
-    obj->pos_0x8c = startCoords; //0x8C
+    obj->prevPos  = freeMoveCoords; //0x18
+    obj->oldPos   = freeMoveCoords; //0x80
+    obj->pos_0x8c = freeMoveCoords; //0x8C
 
     //force camera behind object
     vec3f vCam;

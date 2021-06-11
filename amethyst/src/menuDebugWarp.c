@@ -256,6 +256,9 @@ void debugDoWarp(float x, float y, float z, int layer) {
     chr->pos.z = z;
     chr->mapLayer = layer;
     chr->mapId = mapCoordsToId(x / MAP_CELL_SCALE, z / MAP_CELL_SCALE, layer);
+    freeMoveCoords.x = x;
+    freeMoveCoords.y = y;
+    freeMoveCoords.z = z;
     loadMapForCurrentSaveGame();
 }
 

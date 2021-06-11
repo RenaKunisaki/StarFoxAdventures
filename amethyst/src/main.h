@@ -66,6 +66,7 @@ void drawMapGrid();
 
 //freemove.c
 extern bool bFreeMove;
+extern vec3f freeMoveCoords;
 void doFreeMove();
 
 //gameBitLog.c
