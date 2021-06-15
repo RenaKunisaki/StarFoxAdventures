@@ -64,7 +64,7 @@ typedef struct ObjInstance {
 	u8                  opacity;            //0x37
 	ObjInstance        *next;               //0x38
 	float               camDistVar3C;       //0x3C
-	float               camDistVar40;       //0x40
+	float               cullDistance;       //0x40
 	u16                 catId;              //0x44 ObjCatId
 	u16                 defNo;              //0x46 ObjDefEnum
 	short               defNo48;            //0x48
@@ -89,7 +89,7 @@ typedef struct ObjInstance {
 	s16                 animId;             //0xA0
 	s16                 animVal_a2;         //0xA2 GameBit16
 	float               cullOffset;         //0xA4
-	float               cullDistance;       //0xA8
+	float               cullDistance_a8;    //0xA8
 	s8                  mapId;              //0xAC MapId8
 	byte                curModel;           //0xAD
 	u8                  slot;               //0xAE

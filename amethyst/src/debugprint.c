@@ -12,7 +12,10 @@ u32 debugTextFlags =
     //DEBUGTEXT_HEAP_STATE |
     DEBUGTEXT_GAMEBIT_LOG |
     //DEBUGTEXT_PLAYER_STATE |
-    //DEBUGTEXT_WORLD_MAP |
+    0;
+u32 debugRenderFlags =
+    //DEBUGRENDER_WORLD_MAP |
+    DEBUGRENDER_DEBUG_OBJS |
     0;
 
 static void printObjName(const char *fmt, ObjInstance *obj) {
@@ -233,5 +236,5 @@ void mainLoopDebugPrint() {
 
     debugPrintf("\n"); //for game's own messages
 
-    if(debugTextFlags & DEBUGTEXT_WORLD_MAP) drawMapGrid();
+    if(debugRenderFlags & DEBUGRENDER_WORLD_MAP) drawMapGrid();
 }

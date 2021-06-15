@@ -55,7 +55,8 @@ typedef struct PACKED ModelFileHeader {
 	u8                  refCount;               //0x00
     u8                  unk01;                  //0x01
 	u16                 flags;                  //0x02 ModelDataFlags2
-	u32                 modelId;                //0x04 ModelId
+	u16                 modelId;                //0x04 ModelId
+    u16                 unk06;                  //0x06
 	dword               unk08;                  //0x08
 	u32                 fileSize;               //0x0C
     u32                 unk10;                  //0x10
@@ -161,7 +162,7 @@ typedef struct PACKED Model {
 	Mtx44            *mtxs;                     //0x0C
     u32               unk10;                    //0x10
 	float            *unk14;                    //0x14
-	u32              flags;                     //0x18 ModelFlags18
+	u32               flags;                    //0x18 ModelFlags18
 	vec3s            *vtxs;                     //0x1C
     void             *unk20;                    //0x20
 	vec3s            *normals;                  //0x24

@@ -15,6 +15,46 @@ Left | Item/Map    |          |          |
 Rght | Item/Map    |          |          |
 
 
+force debug object models to load.
+XXX this somehow breaks magic caves. you can't exit or collect the upgrade.
+it changes the order the objects load, but not their coords...
+MagicCaveBo flags_AF is zero. it should be 4 after the animation.
+set to 0 at 8002e148 (updateObjectMtxs)
+set to 4 at 80102350 (objDoAButtonInteractions)
+the latter never happens, target is null
+This only seems to affect the MP boost ones, not the spell unlocks.
+We can target other objects (if we spawn some) but not these.
+Looks like specifically it checks (obj->file->flags & HaveModels)
+putting NOP at 80101184 fixes this but why does this check exist?
+this makes it so you can pick up and throw explosive barrels even after
+they explode...
+seems like the "player nearby" flag isn't getting set for the cave.
+
+this affects MagicCaveBottom and MCUpgradeMa, maybe other things too
+if the object is visible then for some reason it can't become the target for the player to interact with. we can patch it to allow targeting objects that are normally invisible but this makes it possible to eg pick up a barrel after it explodes.
+ideally, should figure out why this object behaves this way, but it's been difficult to follow the code...
+ultimately, the "playerIsNearby" flag doesn't get set, and the object can't be targeted, but I'm not sure which of those causes which.
+0x80321C98 DLL MagicCaveBottom
+0x8032BF78 DLL MCUpgradeMa  (upgrade that gives more MP)
+0x8032BF40 DLL MCUpgrade    (upgrade that gives new spells - not affected?)
+
+MagicCaveBottom has no init method.
+its update method calls `objAreWeTalkingTo(this)` when its state is 2 (Run), which it is
+it's also invisible even with the hack so maybe the model is the problem?
+it might be super tiny or something?
+and the "can we target this" logic might be different for visible vs invisible objects making it do an alternate check that fails for this object
+if I change its model to Krystal's, it's still invisible.
+camDistVar40 is 0. if I set it to 2048.0 the game crashes at 8007315c with a null pointer because no shader
+but that's with the Krystal model. if we use the original model, suddenly we can interact with it again! but it's still invisible, even if we give it another model
+it has no render method, and after changing the distance, its opacity is 100%
+there is a cube that shows up below us during the animations then vanishes...
+anyway more important is why that value is 0. it's set when the object is instantiated, and never changed.
+looks like it's meant to be initialized by the object? I'm not seeing code that initializes it except specific DLLs.
+might be the cull distance in the model, which is 0x0013... changing to 0x1234 doesn't seem to help though
+no, it's field 7 of the ObjDef
+so best fix would be to update the romlist for the cave
+easier would be to hack these objects' update methods to set the value
+
 
 Section Header #1 @ 0x0000026C:
   Type:     SHT_PROGBITS

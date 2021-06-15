@@ -84,11 +84,22 @@ void menuDebugRenderTextures_select(const MenuItem *self, int amount) {
 
 void menuDebugRenderMapGrid_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_WORLD_MAP) ? "On" : "Off");
+    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_WORLD_MAP) ? "On" : "Off");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuDebugRenderMapGrid_select(const MenuItem *self, int amount) {
-    debugTextFlags ^= DEBUGTEXT_WORLD_MAP;
+    debugRenderFlags ^= DEBUGRENDER_WORLD_MAP;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
+void menuDebugRenderDebugObjs_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_DEBUG_OBJS) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugRenderDebugObjs_select(const MenuItem *self, int amount) {
+    debugRenderFlags ^= DEBUGRENDER_DEBUG_OBJS;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
@@ -104,5 +115,6 @@ Menu menuDebugRender = {
     "Color Filters",     genericMenuItem_draw,         menuDebugRenderFilter_select,
     "View Textures",     genericMenuItem_draw,         menuDebugRenderTextures_select,
     "Map Grid: %s",      menuDebugRenderMapGrid_draw,  menuDebugRenderMapGrid_select,
+    "Debug Objects: %s", menuDebugRenderDebugObjs_draw,menuDebugRenderDebugObjs_select,
     NULL,
 };

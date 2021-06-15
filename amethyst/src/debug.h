@@ -11,8 +11,12 @@ typedef enum {
     DEBUGTEXT_HEAP_STATE        = (1 <<  6),
     DEBUGTEXT_GAMEBIT_LOG       = (1 <<  7),
     DEBUGTEXT_PLAYER_STATE      = (1 <<  8),
-    DEBUGTEXT_WORLD_MAP         = (1 <<  9), //not really text but oh well
 } DebugTextFlags;
+
+typedef enum {
+    DEBUGRENDER_WORLD_MAP  = (1 <<  0),
+    DEBUGRENDER_DEBUG_OBJS = (1 <<  1),
+} DebugRenderFlags;
 
 typedef enum {
     HEAP_DRAW_NONE = 0,
@@ -31,6 +35,7 @@ void debugObjsInit();
 
 //debugprint.c
 extern u32 debugTextFlags;
+extern u32 debugRenderFlags;
 void mainLoopDebugPrint();
 
 //drawheap.c

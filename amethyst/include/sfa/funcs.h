@@ -32,6 +32,7 @@ GLOBALFN void* dCacheStore(void*, uint);
 GLOBALFN void debugPrintDraw(void);
 GLOBALFN void debugPrintf(const char*, ...);
 GLOBALFN void debugPrintfxy(int x, int y, const char*, ...);
+GLOBALFN void dll_MCUpgradeMa_init(ObjInstance *obj);
 GLOBALFN void doRumble(float time);
 GLOBALFN void drawScaledTexture(float x,float y,Texture *texture,uint opacity,uint scale,int width,int height,uint flags);
 GLOBALFN void drawTexture(float x,float y,Texture *texture,uint opacity,uint scale);
@@ -100,6 +101,7 @@ GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
 GLOBALFN void objSetModel(ObjInstance *obj, int modelIdx);
 GLOBALFN void objStopSound_(ObjInstance *obj, int id);
+GLOBALFN bool objUpdateOpacity(ObjInstance *obj);
 GLOBALFN BOOL OSDisableInterrupts(void);
 GLOBALFN BOOL OSEnableInterrupts(void);
 GLOBALFN OSInterruptMask OSGetInterruptMask(void);
