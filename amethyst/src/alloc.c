@@ -96,15 +96,28 @@ bool doEmergencyFree(int attempt) {
     return false;
 }
 
-void _heapAllocHook(void);
-__asm__(
-    "_heapAllocHook:               \n"
-    "mr      4, 23                 \n" //return SfaHeapEntry* in r4
-    "lis     23,     _restgpr_23@h \n"
-    "ori     23, 23, _restgpr_23@l \n"
-    "mtctr   23                    \n"
-    "bctr                          \n"
-);
+void* _doAlloc(int iRegion, u32 size, AllocTag tag, const char *name,
+SfaHeapEntry **outEntry) {
+    void *res = heapAlloc(iRegion, size, tag, name);
+    if(!res) {
+        if(outEntry) *outEntry = NULL;
+        return NULL;
+    }
+    if(!outEntry) return res;
+
+    //the only reliable way to get the entry seems to be this.
+    //we do it in reverse order since the last block is most likely
+    //to be the one we want.
+    *outEntry = NULL;
+    SfaHeap *heap = &heaps[iRegion];
+    for(int i=heap->avail - 1; i >= 0; i--) {
+        if(heap->data[i].loc == res) {
+            *outEntry = &heap->data[i];
+            break;
+        }
+    }
+    return res;
+}
 
 void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     //replaces the body of allocTagged.
@@ -118,7 +131,6 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     //name is almost never set and isn't stored
     u32 lr = (u32)__builtin_return_address(0);
     //DPRINT("alloc size=%8X tag=%08X lr=%08X", size, tag, lr);
-    //tag = lr; //this is more useful
 
     //mostly copied game code
     if (size == 0) return NULL;
@@ -128,55 +140,25 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     SfaHeapEntry *entry = NULL;
     while((buf == NULL) && (count < 1000)) {
         if(bOnlyUseHeaps1and2 == 1) {
-            //heapAlloc "leaks" the SfaHeapEntry in r4 on return.
-            //we can exploit this to modify some fields that otherwise
-            //serve no real purpose.
-            //XXX this doesn't always work? even though we patched it to
-            //supposedly ensure it would...
-            buf = heapAlloc(1,size,tag,name);
-            GET_REGISTER(4, entry);
-            if(buf == NULL) {
-                buf = heapAlloc(2,size,tag,name);
-                GET_REGISTER(4, entry);
-            }
+            buf = _doAlloc(1, size, tag, name, &entry);
+            if(buf == NULL) buf = _doAlloc(2, size, tag, name, &entry);
         }
-        else if(bOnlyUseHeap3 != 0) {
-            buf = heapAlloc(3,size,tag,name);
-            GET_REGISTER(4, entry);
-        }
+        else if(bOnlyUseHeap3 != 0) buf = _doAlloc(3, size, tag, name, &entry);
         else if(size < 0x3000) {
             if(size < 0x400) {
-                buf = heapAlloc(2,size,tag,name);
-                GET_REGISTER(4, entry);
-                if(buf == NULL) {
-                    buf = heapAlloc(1,size,tag,name);
-                    GET_REGISTER(4, entry);
-                }
-                if(buf == NULL) {
-                    buf = heapAlloc(0,size,tag,name);
-                    GET_REGISTER(4, entry);
-                }
+                buf = _doAlloc(2, size, tag, name, &entry);
+                if(buf == NULL) buf = _doAlloc(1, size, tag, name, &entry);
+                if(buf == NULL) buf = _doAlloc(0, size, tag, name, &entry);
             }
             else {
-                buf = heapAlloc(1,size,tag,name);
-                GET_REGISTER(4, entry);
-                if(buf == NULL) {
-                    buf = heapAlloc(2,size,tag,name);
-                    GET_REGISTER(4, entry);
-                }
-                if(buf == NULL) {
-                    buf = heapAlloc(0,size,tag,name);
-                    GET_REGISTER(4, entry);
-                }
+                buf = _doAlloc(1, size, tag, name, &entry);
+                if(buf == NULL) buf = _doAlloc(2, size, tag, name, &entry);
+                if(buf == NULL) buf = _doAlloc(0, size, tag, name, &entry);
             }
         }
         else {
-            buf = heapAlloc(0,size,tag,name);
-            GET_REGISTER(4, entry);
-            if(buf == NULL) {
-                buf = heapAlloc(1,size,tag,name);
-                GET_REGISTER(4, entry);
-            }
+            buf = _doAlloc(0, size, tag, name, &entry);
+            if(buf == NULL) buf = _doAlloc(1, size, tag, name, &entry);
         }
         if(buf) {
             //DPRINT("alloc success, %08X, entry %08X (unk %04X %08X ID %08X stack %04X %04X)", buf, entry,
@@ -185,7 +167,9 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
             if((!PTR_VALID(entry)) || (entry->type > 1)) {
                 //sanity check, in case our patch to return the heap entry
                 //doesn't work. XXX why does this happen?
-                //OSReport("Alloc %08X got bad r4 %08X (%d)", lr, entry, entry->type);
+                OSReport("Alloc %08X got bad entry %08X (%d) ptr %08X sz %d",
+                    lr, entry, PTR_VALID(entry) ? entry->type : -1,
+                    buf, size);
             }
             else {
                 //this seems to be unused (or not?)
@@ -224,6 +208,5 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
 }
 
 void allocInit() {
-    hookBranch(0x80023c14, _heapAllocHook, 1);
     hookBranch((u32)allocTagged, allocTaggedHook, 0);
 }

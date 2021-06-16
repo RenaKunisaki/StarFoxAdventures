@@ -248,19 +248,66 @@ void warpMenu_draw(Menu *self) {
 void debugDoWarp(float x, float y, float z, int layer) {
     //calling warpToMap doesn't initialize the map correctly.
     //it's meant to be used from a sequence.
-    //instead, we'll change the player's "last saved" position and then
-    //load that as if we were loading the save file.
-    PlayerCharPos *chr = &saveData.curSaveGame.charPos[saveData.curSaveGame.character];
+    //previously we instead changed the player's "last saved" location and
+    //loaded that as if loading the save file, but that has memory issues.
+    //what we do now is create a restart point at the destination, respawn at
+    //it, then restore the previous restart point (if any).
+    int blocksPct=0, bytesPct=0;
+    getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
+    OSReport("Before unload: free = %d%%, %d%%", blocksPct, bytesPct);
+
+    //objFreeAll(); //already done in unloadMap
+    objFreeMode = OBJ_FREE_IMMEDIATE; //actually free it now
+    unloadMap();
+    mapUnload(0, 0x80000000);
+    expgfxRemoveAll();
+    waitNextFrame();
+    waitNextFrame();
+    waitNextFrame();
+    objFreeMode = OBJ_FREE_DEFERRED; //back to normal
+
+    getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
+    OSReport("After unload: free = %d%%, %d%%", blocksPct, bytesPct);
+
+    //back up the current restart point
+    SaveGame *save = NULL;
+    if(pRestartPoint) {
+        SaveGame *save = allocTagged(sizeof(SaveGame), ALLOC_TAG_GAME_COL,
+            "saveTemp");
+        if(!save) OSReport("Warp buffer out of memory! "
+            "Discarding restart point instead.");
+        else memcpy(save, pRestartPoint, sizeof(SaveGame));
+    }
+
+    //replace the current restart point.
+    vec3f pos; pos.x = x; pos.y = y; pos.z = z;
+    gplayRestartPoint(&pos, 0, layer, false);
+    waitNextFrame();
+    gplayGotoRestartPoint();
+
+    //don't immediately warp back if free move is on.
+    freeMoveCoords.x = x;
+    freeMoveCoords.y = y;
+    freeMoveCoords.z = z;
+
+    //not sure why this doesn't work, since it's basically the same thing
+    //as what gplayGotoRestartPoint() does.
+    /* PlayerCharPos *chr = &saveData.curSaveGame.charPos[saveData.curSaveGame.character];
     chr->pos.x = x;
     chr->pos.y = y;
     chr->pos.z = z;
     chr->mapLayer = layer;
     chr->mapId = mapCoordsToId(x / MAP_CELL_SCALE, z / MAP_CELL_SCALE, layer);
-    freeMoveCoords.x = x;
-    freeMoveCoords.y = y;
-    freeMoveCoords.z = z;
-    objFreeAll();
-    loadMapForCurrentSaveGame();
+    loadMapForCurrentSaveGame(); */
+
+    if(save) { //restore the restart point
+        if(pRestartPoint) memcpy(pRestartPoint, save, sizeof(SaveGame));
+        free(save);
+    }
+    else gplayClearRestartPoint(); //wasn't one before, so don't have one now.
+
+    getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
+    OSReport("After load: free = %d%%, %d%%", blocksPct, bytesPct);
 }
 
 void warpMenu_run(Menu *self) {

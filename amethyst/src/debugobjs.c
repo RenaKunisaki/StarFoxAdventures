@@ -51,12 +51,19 @@ __asm__(
     "bctr                          \n" //jump to default render method
 );
 
+static bool isInList_u16(u16 val, u16 *list) {
+    for(int i=0; list[i] != 0xFFFF; i++) {
+        if(list[i] == val) return true;
+    }
+    return false;
+}
+
 bool _updateOpacityHook(ObjInstance *obj) {
     static u16 debugModels[] = {
         0x0000, //Placeholder Cube
         0x0002, //yellow cylinder
         0x0010, //small gray sphere
-        0x004D, //checkered sphere or tumbleweed
+        0x004D, //checkered sphere
         0x02D1, //N64 logo
         0x02D3, //Rare logo
         0x02D5, //small pyramid
@@ -77,33 +84,58 @@ bool _updateOpacityHook(ObjInstance *obj) {
         0x046C, //RE START POINT cube
         0x046D, //WAVE ANIM cube
         0x046E, //ALPHA ANIM cube
+        //XXX 0x046F, 0x0470?
         0x0471, //GRND ANIM cube
         0x0472, //TRIG AREA cube
         0x0473, //TRIG CURVE cube
+        0x0474, //should be TRIG BITS cube?
+        //XXX 0x0475?
         0x0476, //OVER RIDE cube
+        //XXX 0x0477?
         0x0478, //HIT ANIM cube
         0x0479, //light bulb
-        0xFFFF
+        0xFFFF  //end of list
+    };
+    //the models for these are also used for debug objects,
+    //so don't hide those.
+    static u16 excludeDefs[] = {
+        0x00D9, //CFPowerCrys red collectible
+        0x00DB, //CFPowerCrys red anim
+        0x00DF, //CFPowerCrys green collectible
+        0x00E0, //CFPowerCrys blue collectible
+        0x00E1, //CFPowerCrys green anim
+        0x00E2, //CFPowerCrys blue anim
+        0x075A, //CFSmallPowe red
+        0x075B, //CFSmallPowe green
+        0x075C, //CFSmallPowe blue
+        0xFFFF  //end of list
     };
 
     //if debug objects are disabled, hide any object that uses a debug model.
-    if(!(debugRenderFlags & DEBUGRENDER_DEBUG_OBJS)) {
-        Model *model = PTR_VALID(obj->models) ? obj->models[obj->curModel] : NULL;
-        u16 mid = (PTR_VALID(model) && PTR_VALID(model->header)) ?
-            model->header->modelId : 0xFFFF;
-        if(mid != 0xFFFF) {
-            for(int i=0; debugModels[i] != 0xFFFF; i++) {
-                if(mid == debugModels[i]) {
-                    //OSReport("Obj %s model ID %04X (%04X %08X)", obj->file->name,
-                    //    mid, model->cacheModNo, model);
-                    //setting to 0 makes them skipped entirely which breaks
-                    //magic caves again because lol.
-                    //setting to 1 makes them still effectively invisible,
-                    //while not being actually considered "invisible".
-                    obj->opacity = 1;
-                    return true; //object is "visible"
-                }
-            }
+    bool visible = debugRenderFlags & DEBUGRENDER_DEBUG_OBJS;
+    Model *model = PTR_VALID(obj->models) ? obj->models[obj->curModel] : NULL;
+    u16 mid = (PTR_VALID(model) && PTR_VALID(model->header)) ?
+        model->header->modelId : 0xFFFF;
+    if(mid != 0xFFFF && isInList_u16(mid, debugModels)
+    && !isInList_u16(obj->defNo, excludeDefs)) {
+        if(visible) {
+            //some fade away if you aren't right on top of them,
+            //so prevent that. also, prevent them from being fully opaque
+            //and being in the way.
+            objUpdateOpacity(obj);
+            if(obj->opacity > 192) obj->opacity = 192;
+            if(obj->opacity <  64) obj->opacity =  64;
+            return true;
+        }
+        else {
+            //OSReport("Obj %s model ID %04X (%04X %08X)", obj->file->name,
+            //    mid, model->cacheModNo, model);
+            //setting to 0 makes them skipped entirely which breaks
+            //magic caves again because lol.
+            //setting to 1 makes them still effectively invisible,
+            //while not being actually considered "invisible".
+            obj->opacity = 1;
+            return true; //object is "visible"
         }
     }
 

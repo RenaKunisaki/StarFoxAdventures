@@ -85,6 +85,7 @@ GLOBALFN int mapGetDirIdx(int id); //MapId32 -> MapDirIdx32
 GLOBALFN void* mapLoadDataFile(MapDirIdx32 map, DataFileEnum file);
 GLOBALFN void mapReload(void);
 GLOBALFN void mapScreenDrawHud(void);
+GLOBALFN void mapUnload(MapDirIdx32 map, uint flags);
 GLOBALFN void* memcpy(void *dest, void *src, int len); // clobbers: r0, r4, r5, r6
 GLOBALFN void* memset(void *dest, u8 val, int len); // clobbers: r0, r6, r7
 GLOBALFN void mm_free(void*); // wrapper for free()
@@ -142,6 +143,7 @@ GLOBALFN void textRenderChar(s16 x1, s16 y1, s16 x2, s16 y2, double s1, double t
 GLOBALFN void textRenderSetup(void);
 GLOBALFN Texture* textureIdxToPtr(int);
 GLOBALFN void timeListDraw(void);
+GLOBALFN void unloadMap(void);
 GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);
 GLOBALFN void vec3f_scale(double scale, vec3f *in, vec3f *out);
 GLOBALFN void videoSetBufferSwapCb(void*);
