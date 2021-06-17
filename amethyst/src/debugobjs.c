@@ -69,6 +69,7 @@ bool _updateOpacityHook(ObjInstance *obj) {
         0x02D5, //small pyramid
         0x02D9, //small arrow
         0x031B, //red crystal (InvisibleHitSwitch)
+        0x0321, //default dube (WaterFallSpray)
         0x044C, //red cylinder
         0x044E, //red/green disc
         0x0458, //CHECK plane
@@ -94,6 +95,7 @@ bool _updateOpacityHook(ObjInstance *obj) {
         //XXX 0x0477?
         0x0478, //HIT ANIM cube
         0x0479, //light bulb
+        0x047E, //LGTDirectio
         0xFFFF  //end of list
     };
     //the models for these are also used for debug objects,
