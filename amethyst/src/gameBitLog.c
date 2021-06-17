@@ -1,6 +1,6 @@
 #include "main.h"
 
-#define BIT_LOG_TIME 60
+#define BIT_LOG_TIME 120
 #define MAX_BIT_LOG 16
 struct {
     u32 val;
@@ -66,8 +66,8 @@ void gameBitHookUpdate() {
     u32 now = frameCount;
     for(int i=0; i<MAX_BIT_LOG; i++) {
         if(bitLog[i].bit != 0xFFFF && now - bitLog[i].time < BIT_LOG_TIME) {
-            u8 t = 255 - ((now - bitLog[i].time) * 4);
-            if(!t) t = 1;
+            u8 t = 255 - ((now - bitLog[i].time) * 2);
+            if(t < 32) t = 32;
             char color[6] = {0x81, t, t, t, t, 0};
             debugPrintf("%sBit " DPRINT_FIXED "%03X = %X %s"
                 "\x81\xFF\xFF\xFF\xFF\n" DPRINT_NOFIXED,

@@ -15,7 +15,7 @@ u32 debugTextFlags =
     0;
 u32 debugRenderFlags =
     //DEBUGRENDER_WORLD_MAP |
-    DEBUGRENDER_DEBUG_OBJS |
+    //DEBUGRENDER_DEBUG_OBJS |
     0;
 
 static void printObjName(const char *fmt, ObjInstance *obj) {

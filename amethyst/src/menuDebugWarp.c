@@ -257,13 +257,14 @@ void debugDoWarp(float x, float y, float z, int layer) {
     OSReport("Before unload: free = %d%%, %d%%", blocksPct, bytesPct);
 
     //objFreeAll(); //already done in unloadMap
+    //not sure how much of this is necessary...
     objFreeMode = OBJ_FREE_IMMEDIATE; //actually free it now
     unloadMap();
     mapUnload(0, 0x80000000);
     expgfxRemoveAll();
-    waitNextFrame();
-    waitNextFrame();
-    waitNextFrame();
+    waitNextFrame(); //the game waits 3 frames between some loading methods,
+    waitNextFrame(); //so we'll do the same. not sure it's necessary,
+    waitNextFrame(); //but it doesn't hurt.
     objFreeMode = OBJ_FREE_DEFERRED; //back to normal
 
     getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
@@ -282,7 +283,7 @@ void debugDoWarp(float x, float y, float z, int layer) {
     //replace the current restart point.
     vec3f pos; pos.x = x; pos.y = y; pos.z = z;
     gplayRestartPoint(&pos, 0, layer, false);
-    waitNextFrame();
+    waitNextFrame(); //probably unnecessary
     gplayGotoRestartPoint();
 
     //don't immediately warp back if free move is on.
@@ -300,7 +301,7 @@ void debugDoWarp(float x, float y, float z, int layer) {
     chr->mapId = mapCoordsToId(x / MAP_CELL_SCALE, z / MAP_CELL_SCALE, layer);
     loadMapForCurrentSaveGame(); */
 
-    if(save) { //restore the restart point
+    if(save) { //restore the previous restart point
         if(pRestartPoint) memcpy(pRestartPoint, save, sizeof(SaveGame));
         free(save);
     }
