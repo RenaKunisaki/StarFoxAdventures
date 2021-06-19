@@ -24,38 +24,39 @@ void drawMenuBox(int xpos, int ypos, int width, int height) {
     }
 }
 
-void genericMenu_draw(Menu *self) {
-    //Draw function for most menus
+void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
     menuAnimFrame++;
+
     //debugPrintf("Menu flags %02X delay %d\n", menuPrevGameFlags, menuInputDelayTimer);
     //GameTextDrawFunc prevDrawFunc = menuGameTextDrawFunc;
     //gameTextDrawFunc = menuGameTextDrawFunc;
 
-    int x = MENU_XPOS + MENU_PADDING, y = MENU_YPOS + MENU_PADDING;
-
-    drawMenuBox(MENU_XPOS, MENU_YPOS, MENU_WIDTH, MENU_HEIGHT);
+    drawMenuBox(xpos, ypos, width, height);
 
     //Draw title
     //box type 0 is (center, y+40), no background
-    gameTextSetColor(255, 255, 255, 255);
-    gameTextShowStr(self->title, 0, x, y-40);
+    if(self->title && self->title[0]) {
+        gameTextSetColor(255, 255, 255, 255);
+        gameTextShowStr(self->title, 0, xpos, ypos+MENU_PADDING-40);
+    }
 
     //find Y position of current item
     int iStart = 0;
     int ySel = MENU_LINE_HEIGHT * (self->selected+2) + MENU_PADDING;
-    //debugPrintf("ySel=%d/%d ", ySel, (int)MENU_HEIGHT);
-    while(ySel >= (int)MENU_HEIGHT) {
+    //debugPrintf("ySel=%d/%d ", ySel, (int)height);
+    while(ySel >= (int)(height-MENU_PADDING)) {
         ySel -= MENU_LINE_HEIGHT;
         iStart++;
     }
     //debugPrintf("iStart=%d\n", iStart);
 
     //draw items
+    int y = ypos;
     bool drawBottomArrow = false;
     for(int i=iStart; self->items[i].name; i++) {
         y += MENU_LINE_HEIGHT;
         bool selected = i == self->selected;
-        if(y + MENU_LINE_HEIGHT >= MENU_YPOS + MENU_HEIGHT) {
+        if(y + MENU_LINE_HEIGHT >= ypos + (height-(MENU_PADDING*2))) {
             drawBottomArrow = true;
             break;
         }
@@ -64,7 +65,8 @@ void genericMenu_draw(Menu *self) {
             gameTextSetColor(r, g, 255, 255);
         }
         else gameTextSetColor(255, 255, 255, 255);
-        self->items[i].draw(&self->items[i], x, y, selected);
+        self->items[i].draw(&self->items[i],
+            xpos+MENU_PADDING, y+MENU_PADDING, selected);
     }
     //gameTextDrawFunc = prevDrawFunc;
 
@@ -74,16 +76,22 @@ void genericMenu_draw(Menu *self) {
     Texture *arrow = getLoadedTexture(0xBE8);
     if(drawBottomArrow) {
         drawScaledTexture(
-            (float)(MENU_XPOS + MENU_WIDTH - (MENU_PADDING * 3)),
-            (float)(MENU_YPOS + MENU_HEIGHT - (MENU_PADDING*1)),
+            (float)(xpos + width - (MENU_PADDING * 3)),
+            (float)(ypos + height - (MENU_PADDING*1)),
             arrow, 255, 256, 16, 12, DRAW_SCALED_TEXTURE_FLIP_V);
     }
     if(iStart > 0) { //draw top arrow
         drawScaledTexture(
-            (float)(MENU_XPOS + MENU_WIDTH - (MENU_PADDING * 3)),
-            (float)(MENU_YPOS - 4),
+            (float)(xpos + width - (MENU_PADDING * 3)),
+            (float)(ypos - 4),
             arrow, 255, 256, 16, 12, 0);
     }
+}
+
+void genericMenu_draw(Menu *self) {
+    //Draw function for most menus
+    genericMenu_drawAt(self, MENU_XPOS, MENU_YPOS,
+        MENU_WIDTH, MENU_HEIGHT);
 }
 
 void genericMenu_run(Menu *self) {

@@ -1,54 +1,11 @@
 /** Debug Object List submenu.
  */
 #include "main.h"
-#define OBJ_MENU_XPOS 2
-#define OBJ_MENU_YPOS 40
-#define OBJ_MENU_WIDTH  310
-#define OBJ_MENU_HEIGHT 438
-#define OBJ_INFO_XPOS (OBJ_MENU_XPOS + OBJ_MENU_WIDTH)
-#define OBJ_INFO_YPOS 40
-#define OBJ_INFO_WIDTH  330
-#define OBJ_INFO_HEIGHT 438
-#define OBJ_MENU_NUM_LINES ((OBJ_MENU_HEIGHT / MENU_LINE_HEIGHT) - 1)
+#include "menuDebugObjs.h"
 
 //store list of all obj pointers which we can then sort
 static ObjInstance **objList = NULL;
-
-static int compareObjsByType(const void *objA, const void *objB) {
-    ObjInstance *A = ((ObjInstance*)objA);
-    ObjInstance *B = ((ObjInstance*)objB);
-    return ((A ? A->defNo : 0) - (B ? B->defNo : 0));
-}
-static int compareObjsById(const void *objA, const void *objB) {
-    ObjInstance *A = ((ObjInstance*)objA);
-    ObjInstance *B = ((ObjInstance*)objB);
-    return ((A && A->objDef ? A->objDef->id : 0) -
-        (B && B->objDef ? B->objDef->id : 0));
-}
-static int compareObjsByName(const void *objA, const void *objB) {
-    ObjInstance *A = ((ObjInstance*)objA);
-    ObjInstance *B = ((ObjInstance*)objB);
-    if(A && A->file && B && B->file) {
-        return strcmpi(A->file->name, B->file->name);
-    }
-    else if(A && A->file) return -1;
-    else return 1;
-}
-static int compareObjsByDistance(const void *objA, const void *objB) {
-    ObjInstance *focus = pCamera ? pCamera->focus : NULL;
-    if(!focus) focus = pPlayer;
-    if(!focus) return 0; //should not be allowed to reach here.
-        //ensure this method isn't used if this condition exists.
-    vec3f *fp = &focus->pos.pos;
-
-    ObjInstance *A = ((ObjInstance*)objA);
-    ObjInstance *B = ((ObjInstance*)objB);
-    float dA = A ? vec3f_distance(&A->pos.pos, fp) : 0;
-    float dB = B ? vec3f_distance(&B->pos.pos, fp) : 0;
-    if(dA < dB) return -1;
-    if(dA > dB) return  1;
-    return 0;
-}
+ObjInstance *objMenuSelected = NULL;
 
 enum {
     ObjListSortNone,
@@ -96,7 +53,16 @@ static void sortObjs(int method) {
 }
 
 
-static void objMenu_drawObjInfo(ObjInstance *obj) {
+void objListSubmenu_close(const Menu *self) {
+    //Close function for submenus of the object list menu
+    curMenu = &menuDebugObjList;
+    audioPlaySound(NULL, MENU_CLOSE_SOUND);
+}
+
+
+void objMenu_drawObjInfo(ObjInstance *obj) {
+    //Draw the right side pane (object info).
+
     int x = OBJ_INFO_XPOS + MENU_PADDING;
     int y = OBJ_INFO_YPOS + MENU_PADDING;
     char str[256];
@@ -249,74 +215,71 @@ void objMenu_draw(Menu *self) {
     }
 }
 
+static bool objMenuCheckClose(Menu *self) {
+    if(buttonsJustPressed == PAD_BUTTON_B) { //close menu
+        menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
+        self->close(curMenu);
+        return true;
+    }
+    return false;
+}
+
+static void objMenuSelectPlayer(Menu *self) {
+    menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+    for(int i=0; i<numLoadedObjs; i++) {
+        if(objList[i] == pPlayer) {
+            self->selected = i;
+            break;
+        }
+    }
+}
+
+static void objMenuChangeSort(Menu *self) {
+    ObjInstance *obj = objList[self->selected];
+    menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+
+    sortMode++;
+    if(sortMode >= NumObjListSortMethods) sortMode = 0;
+    sortObjs(sortMode);
+    //re-select previously selected obj
+    if(objList) {
+        for(int i=0; i<numLoadedObjs; i++) {
+            if(objList[i] == obj) {
+                self->selected = i;
+                break;
+            }
+        }
+    }
+}
+
+
 void objMenu_run(Menu *self) {
     //Run function for Object List menu
     textForceFixedWidth = MENU_FIXED_WIDTH;
     int sel = self->selected;
 
+    objMenuSelected = NULL;
     if(!objList) sortObjs(sortMode);
     if(!objList) { //out of memory
-        if(buttonsJustPressed == PAD_BUTTON_B) { //close menu
-            menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
-            self->close(curMenu);
-        }
+        objMenuCheckClose(self);
         return;
     }
 
     ObjInstance *obj = objList[sel];
+    objMenuSelected = obj;
 
-    if(buttonsJustPressed == PAD_BUTTON_B) { //close menu
-        menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
-        if(objList) free(objList);
-        objList = NULL;
-        self->close(curMenu);
+    if(objMenuCheckClose(self)) {
+        //nothing to do
     }
-    else if(buttonsJustPressed == PAD_BUTTON_X) { //delete object
-        menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
-        objFree(obj);
+    else if(buttonsJustPressed == PAD_TRIGGER_Z) { //change sort mode
+        objMenuChangeSort(self);
     }
-    else if(buttonsJustPressed == PAD_BUTTON_Y) { //move player to object
-        menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
-        if(pPlayer) {
-            objDisableHitbox(pPlayer); //only for next tick
-            pPlayer->pos.pos = obj->pos.pos;
-            //try to override hit detection...
-            pPlayer->prevPos = obj->pos.pos;
-        }
-        cameraUpdate(1);
-    }
-    else if(buttonsJustPressed == PAD_TRIGGER_Z) { //focus camera on object
-        menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
-        //focusing the camera on an object with NULL state poiner
-        //will crash the game, so don't do that.
-        /* if(pCamera && obj->state) {
-            pCamera->focus = obj;
-            //since time is stopped we must manually update
-            //the camera position.
-            cameraUpdate(1);
-        }
-        else audioPlaySound(NULL, MENU_FAIL_SOUND); */
-        sortMode++;
-        if(sortMode >= NumObjListSortMethods) sortMode = 0;
-        sortObjs(sortMode);
-        //re-select previously selected obj
-        if(objList) {
-            for(int i=0; i<numLoadedObjs; i++) {
-                if(objList[i] == obj) {
-                    self->selected = i;
-                    break;
-                }
-            }
-        }
+    else if(buttonsJustPressed == PAD_BUTTON_A) { //open submenu
+        curMenu = &menuDebugObjSelected;
+        audioPlaySound(NULL, MENU_OPEN_SOUND);
     }
     else if(buttonsJustPressed == PAD_BUTTON_MENU) { //jump to player in list
-        menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
-        for(int i=0; i<numLoadedObjs; i++) {
-            if(objList[i] == pPlayer) {
-                self->selected = i;
-                break;
-            }
-        }
+        objMenuSelectPlayer(self);
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up

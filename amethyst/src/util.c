@@ -42,3 +42,44 @@ int strcmpi(const char *sa, const char *sb) {
     }
     return *sa - *sb;
 }
+
+
+//compare functions for sorting object lists
+int compareObjsByType(const void *objA, const void *objB) {
+    ObjInstance *A = ((ObjInstance*)objA);
+    ObjInstance *B = ((ObjInstance*)objB);
+    return ((A ? A->defNo : 0) - (B ? B->defNo : 0));
+}
+
+int compareObjsById(const void *objA, const void *objB) {
+    ObjInstance *A = ((ObjInstance*)objA);
+    ObjInstance *B = ((ObjInstance*)objB);
+    return ((A && A->objDef ? A->objDef->id : 0) -
+        (B && B->objDef ? B->objDef->id : 0));
+}
+
+int compareObjsByName(const void *objA, const void *objB) {
+    ObjInstance *A = ((ObjInstance*)objA);
+    ObjInstance *B = ((ObjInstance*)objB);
+    if(A && A->file && B && B->file) {
+        return strcmpi(A->file->name, B->file->name);
+    }
+    else if(A && A->file) return -1;
+    else return 1;
+}
+
+int compareObjsByDistance(const void *objA, const void *objB) {
+    ObjInstance *focus = pCamera ? pCamera->focus : NULL;
+    if(!focus) focus = pPlayer;
+    if(!focus) return 0; //should not be allowed to reach here.
+        //ensure this method isn't used if this condition exists.
+    vec3f *fp = &focus->pos.pos;
+
+    ObjInstance *A = ((ObjInstance*)objA);
+    ObjInstance *B = ((ObjInstance*)objB);
+    float dA = A ? vec3f_distance(&A->pos.pos, fp) : 0;
+    float dB = B ? vec3f_distance(&B->pos.pos, fp) : 0;
+    if(dA < dB) return -1;
+    if(dA > dB) return  1;
+    return 0;
+}

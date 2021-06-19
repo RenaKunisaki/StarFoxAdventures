@@ -145,6 +145,10 @@ void hudDrawHook(int p1, int p2, int p3);
 char* bin2str(char *str, u32 val, int len);
 int roundTo(int num, int target);
 int strcmpi(const char *sa, const char *sb);
+int compareObjsByType(const void *objA, const void *objB);
+int compareObjsById(const void *objA, const void *objB);
+int compareObjsByName(const void *objA, const void *objB);
+int compareObjsByDistance(const void *objA, const void *objB);
 
 //worldmap.c
 void worldMapHook();

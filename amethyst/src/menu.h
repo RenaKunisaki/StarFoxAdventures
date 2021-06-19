@@ -68,6 +68,7 @@ typedef struct Menu {
 //menu.c
 void openMainMenu();
 void drawMenuBox(int cx, int cy, int width, int height);
+void genericMenu_drawAt(Menu *self, int x, int y, int width, int height);
 void genericMenu_draw(Menu *self);
 void genericMenu_run(Menu *self);
 void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected);
@@ -110,6 +111,7 @@ extern Menu menuDebugMapEnv;
 extern Menu menuDebugMapStates;
 extern Menu menuDebugMisc;
 extern Menu menuDebugObjList;
+extern Menu menuDebugObjSelected;
 extern Menu menuDebugRender;
 extern Menu menuDebugSpawnObj;
 extern Menu menuDebugText;
