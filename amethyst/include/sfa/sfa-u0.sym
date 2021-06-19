@@ -357,6 +357,7 @@ timeListVisible = 0x803dd75b;
 timeStop = 0x803dca3c;
 unloadMap = 0x80056f7c;
 unlockLevel = 0x8004350c;
+vec3f_distance = 0x80021704;
 vec3f_scale = 0x80292c74;
 videoSetBufferSwapCb = 0x8024c168;
 videoSetCallback_80256460 = 0x80256460;

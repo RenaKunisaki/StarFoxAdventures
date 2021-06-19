@@ -30,3 +30,15 @@ int roundTo(int num, int target) {
     if(val >= target / 2) return num + (target - val); //round up
     else return num - val; //round down
 }
+
+
+int strcmpi(const char *sa, const char *sb) {
+    while(*sa && *sb) {
+        char a = *(sa++);
+        char b = *(sb++);
+        if(a >= 'a' && a <= 'z') a -= 0x20;
+        if(b >= 'a' && b <= 'z') b -= 0x20;
+        if(a != b) return a - b;
+    }
+    return *sa - *sb;
+}

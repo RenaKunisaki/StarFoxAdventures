@@ -115,6 +115,11 @@ void saveUpdateHook();
 void* saveMapLoadHook(MapDirIdx32 map, DataFileEnum file);
 void saveShowMsgHook(int param);
 
+//sort.c
+typedef int(*CompareFunc)(const void *itemA, const void *itemB);
+//void quicksortStrings(const char **items, int iStart, int iEnd);
+void quicksort(const void **items, int iStart, int iEnd, CompareFunc compare);
+
 //stafffx.c
 void staffFxInit(void);
 
@@ -139,6 +144,7 @@ void hudDrawHook(int p1, int p2, int p3);
 //util.c
 char* bin2str(char *str, u32 val, int len);
 int roundTo(int num, int target);
+int strcmpi(const char *sa, const char *sb);
 
 //worldmap.c
 void worldMapHook();

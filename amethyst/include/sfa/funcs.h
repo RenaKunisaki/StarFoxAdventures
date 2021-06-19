@@ -145,6 +145,7 @@ GLOBALFN Texture* textureIdxToPtr(int);
 GLOBALFN void timeListDraw(void);
 GLOBALFN void unloadMap(void);
 GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);
+GLOBALFN float vec3f_distance(vec3f *a, vec3f *b);
 GLOBALFN void vec3f_scale(double scale, vec3f *in, vec3f *out);
 GLOBALFN void videoSetBufferSwapCb(void*);
 GLOBALFN void videoSetCallback_80256460(void*);

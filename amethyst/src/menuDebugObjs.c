@@ -11,6 +11,91 @@
 #define OBJ_INFO_HEIGHT 438
 #define OBJ_MENU_NUM_LINES ((OBJ_MENU_HEIGHT / MENU_LINE_HEIGHT) - 1)
 
+//store list of all obj pointers which we can then sort
+static ObjInstance **objList = NULL;
+
+static int compareObjsByType(const void *objA, const void *objB) {
+    ObjInstance *A = ((ObjInstance*)objA);
+    ObjInstance *B = ((ObjInstance*)objB);
+    return ((A ? A->defNo : 0) - (B ? B->defNo : 0));
+}
+static int compareObjsById(const void *objA, const void *objB) {
+    ObjInstance *A = ((ObjInstance*)objA);
+    ObjInstance *B = ((ObjInstance*)objB);
+    return ((A && A->objDef ? A->objDef->id : 0) -
+        (B && B->objDef ? B->objDef->id : 0));
+}
+static int compareObjsByName(const void *objA, const void *objB) {
+    ObjInstance *A = ((ObjInstance*)objA);
+    ObjInstance *B = ((ObjInstance*)objB);
+    if(A && A->file && B && B->file) {
+        return strcmpi(A->file->name, B->file->name);
+    }
+    else if(A && A->file) return -1;
+    else return 1;
+}
+static int compareObjsByDistance(const void *objA, const void *objB) {
+    ObjInstance *focus = pCamera ? pCamera->focus : NULL;
+    if(!focus) focus = pPlayer;
+    if(!focus) return 0; //should not be allowed to reach here.
+        //ensure this method isn't used if this condition exists.
+    vec3f *fp = &focus->pos.pos;
+
+    ObjInstance *A = ((ObjInstance*)objA);
+    ObjInstance *B = ((ObjInstance*)objB);
+    float dA = A ? vec3f_distance(&A->pos.pos, fp) : 0;
+    float dB = B ? vec3f_distance(&B->pos.pos, fp) : 0;
+    if(dA < dB) return -1;
+    if(dA > dB) return  1;
+    return 0;
+}
+
+enum {
+    ObjListSortNone,
+    ObjListSortId,
+    ObjListSortType,
+    ObjListSortName,
+    ObjListSortDistance,
+    NumObjListSortMethods
+} ObjListSortMethods;
+static const char *sortModeNames[] = {
+    "None", "UniqueID", "DefNo", "Name", "Distance",
+};
+
+static u8 sortMode = ObjListSortNone;
+
+static void sortObjs(int method) {
+    u32 size = sizeof(ObjInstance*) * numLoadedObjs;
+    if(objList) free(objList);
+    objList = allocTagged(size, ALLOC_TAG_LISTS_COL, "debug:objList");
+    if(!objList) return;
+    memcpy(objList, loadedObjects, size);
+
+    switch(method) {
+        case ObjListSortId:
+            quicksort((const void**)objList, 0, numLoadedObjs-1,
+                compareObjsById);
+            break;
+
+        case ObjListSortType:
+            quicksort((const void**)objList, 0, numLoadedObjs-1,
+                compareObjsByType);
+            break;
+
+        case ObjListSortName:
+            quicksort((const void**)objList, 0, numLoadedObjs-1,
+                compareObjsByName);
+            break;
+
+        case ObjListSortDistance:
+            quicksort((const void**)objList, 0, numLoadedObjs-1, compareObjsByDistance);
+            break;
+
+        default: break;
+    }
+}
+
+
 static void objMenu_drawObjInfo(ObjInstance *obj) {
     int x = OBJ_INFO_XPOS + MENU_PADDING;
     int y = OBJ_INFO_YPOS + MENU_PADDING;
@@ -106,10 +191,14 @@ static void objMenu_drawObjInfo(ObjInstance *obj) {
         y += MENU_LINE_HEIGHT;
     }
 
-    gameTextShowStr("Z:Focus S:Player", MENU_TEXTBOX_ID,
+    /* gameTextShowStr("Z:Focus S:Player", MENU_TEXTBOX_ID,
         OBJ_INFO_XPOS + MENU_PADDING,
         OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*2) - MENU_PADDING);
     gameTextShowStr("Y:GoTo  X:Delete", MENU_TEXTBOX_ID,
+        OBJ_INFO_XPOS + MENU_PADDING,
+        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*1) - MENU_PADDING); */
+    sprintf(str, "Z:Sort: %s", sortModeNames[sortMode]);
+    gameTextShowStr(str, MENU_TEXTBOX_ID,
         OBJ_INFO_XPOS + MENU_PADDING,
         OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*1) - MENU_PADDING);
 }
@@ -125,11 +214,16 @@ void objMenu_draw(Menu *self) {
     int x = OBJ_MENU_XPOS + MENU_PADDING, y = OBJ_MENU_YPOS + MENU_PADDING;
     int start = MAX(0, self->selected - (OBJ_MENU_NUM_LINES-1));
 
+    if(!objList) {
+        gameTextShowStr("Sorting...", MENU_TEXTBOX_ID, x, y);
+        return;
+    }
+
     for(int i=0; i < OBJ_MENU_NUM_LINES; i++) {
         int objIdx = i + start;
         if(objIdx >= numLoadedObjs) break;
 
-        ObjInstance *obj = loadedObjects[objIdx];
+        ObjInstance *obj = objList[objIdx];
         bool selected = objIdx == self->selected;
         if(selected) {
             gameTextSetColor(255, 255, 255, 255);
@@ -159,10 +253,22 @@ void objMenu_run(Menu *self) {
     //Run function for Object List menu
     textForceFixedWidth = MENU_FIXED_WIDTH;
     int sel = self->selected;
-    ObjInstance *obj = loadedObjects[sel];
+
+    if(!objList) sortObjs(sortMode);
+    if(!objList) { //out of memory
+        if(buttonsJustPressed == PAD_BUTTON_B) { //close menu
+            menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
+            self->close(curMenu);
+        }
+        return;
+    }
+
+    ObjInstance *obj = objList[sel];
 
     if(buttonsJustPressed == PAD_BUTTON_B) { //close menu
         menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
+        if(objList) free(objList);
+        objList = NULL;
         self->close(curMenu);
     }
     else if(buttonsJustPressed == PAD_BUTTON_X) { //delete object
@@ -183,18 +289,30 @@ void objMenu_run(Menu *self) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
         //focusing the camera on an object with NULL state poiner
         //will crash the game, so don't do that.
-        if(pCamera && obj->state) {
+        /* if(pCamera && obj->state) {
             pCamera->focus = obj;
             //since time is stopped we must manually update
             //the camera position.
             cameraUpdate(1);
         }
-        else audioPlaySound(NULL, MENU_FAIL_SOUND);
+        else audioPlaySound(NULL, MENU_FAIL_SOUND); */
+        sortMode++;
+        if(sortMode >= NumObjListSortMethods) sortMode = 0;
+        sortObjs(sortMode);
+        //re-select previously selected obj
+        if(objList) {
+            for(int i=0; i<numLoadedObjs; i++) {
+                if(objList[i] == obj) {
+                    self->selected = i;
+                    break;
+                }
+            }
+        }
     }
     else if(buttonsJustPressed == PAD_BUTTON_MENU) { //jump to player in list
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
         for(int i=0; i<numLoadedObjs; i++) {
-            if(loadedObjects[i] == pPlayer) {
+            if(objList[i] == pPlayer) {
                 self->selected = i;
                 break;
             }
