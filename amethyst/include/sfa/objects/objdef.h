@@ -1500,7 +1500,7 @@ typedef struct ObjDef {
 CASSERT(sizeof(ObjDef) == 0x18, sizeof_ObjDef);
 
 typedef struct PACKED ObjDef_Override {
-	ObjDef     unk00;       //0x00
+	ObjDef     def;         //0x00
 	ushort     seqId;       //0x18
 	undefined2 unk1A;       //0x1A
 	s16        defNoPlus4;  //0x1C ObjDefEnum

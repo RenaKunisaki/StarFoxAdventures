@@ -22,6 +22,7 @@ GLOBALFN void cameraCheckEnterFirstPerson(void *param1, void *param2); //XXX sig
 GLOBALFN void cameraGetFocusObjDistance(float offsY, Camera *this,
     float *outX, float *outY, float *outZ, float *outXZ, //outXZ can be null
     BOOL bUseCurPos);
+GLOBALFN void camera_overridePos(float x, float y, float z);
 GLOBALFN void cameraUpdate(int frames);
 GLOBALFN void cameraUpdateViewMtx(Camera *camera);
 GLOBALFN void ClearArena(void);
@@ -50,6 +51,7 @@ GLOBALFN ObjInstance* getArwing(void);
 GLOBALFN u16 getButtonsHeld(int padNo);
 GLOBALFN u16 getButtonsJustPressed(int padNo);
 GLOBALFN Texture* getLoadedTexture(int id);
+GLOBALFN ObjPos* getCameraPos(void);
 GLOBALFN void gplayClearRestartPoint(void);
 GLOBALFN void gplayGotoRestartPoint(void);
 GLOBALFN void gplayGotoSavegame(void);
@@ -124,6 +126,7 @@ GLOBALFN void playerInitFuncPtrs(void);
 GLOBALFN void reset(int, int, int);
 GLOBALFN PlayerCharState* SaveGame_getCurCharacterState(void);
 GLOBALFN void saveGame_save(void);
+GLOBALFN void sceneRender(void);
 GLOBALFN void setGpuErrorHandler(void*);
 GLOBALFN void setSoundMode(u8 mode, bool force);
 GLOBALFN void setSubtitlesEnabled(bool);
@@ -145,6 +148,7 @@ GLOBALFN Texture* textureIdxToPtr(int);
 GLOBALFN void timeListDraw(void);
 GLOBALFN void unloadMap(void);
 GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);
+GLOBALFN void updateViewMatrix(void);
 GLOBALFN float vec3f_distance(vec3f *a, vec3f *b);
 GLOBALFN void vec3f_scale(double scale, vec3f *in, vec3f *out);
 GLOBALFN void videoSetBufferSwapCb(void*);

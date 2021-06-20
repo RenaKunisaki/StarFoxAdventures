@@ -63,6 +63,7 @@ void objListSubmenu_close(const Menu *self) {
 void objMenu_drawObjInfo(ObjInstance *obj) {
     //Draw the right side pane (object info).
 
+    gameTextSetColor(255, 255, 255, 255);
     int x = OBJ_INFO_XPOS + MENU_PADDING;
     int y = OBJ_INFO_YPOS + MENU_PADDING;
     char str[256];
@@ -156,17 +157,6 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
         gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
         y += MENU_LINE_HEIGHT;
     }
-
-    /* gameTextShowStr("Z:Focus S:Player", MENU_TEXTBOX_ID,
-        OBJ_INFO_XPOS + MENU_PADDING,
-        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*2) - MENU_PADDING);
-    gameTextShowStr("Y:GoTo  X:Delete", MENU_TEXTBOX_ID,
-        OBJ_INFO_XPOS + MENU_PADDING,
-        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*1) - MENU_PADDING); */
-    sprintf(str, "Z:Sort: %s", sortModeNames[sortMode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID,
-        OBJ_INFO_XPOS + MENU_PADDING,
-        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*1) - MENU_PADDING);
 }
 
 void objMenu_draw(Menu *self) {
@@ -185,11 +175,14 @@ void objMenu_draw(Menu *self) {
         return;
     }
 
+    char str[256];
     for(int i=0; i < OBJ_MENU_NUM_LINES; i++) {
         int objIdx = i + start;
         if(objIdx >= numLoadedObjs) break;
 
         ObjInstance *obj = objList[objIdx];
+        if(!PTR_VALID(obj)) break;
+
         bool selected = objIdx == self->selected;
         if(selected) {
             gameTextSetColor(255, 255, 255, 255);
@@ -205,7 +198,6 @@ void objMenu_draw(Menu *self) {
         }
         else gameTextSetColor(255, 255, 255, 255);
 
-        char str[256];
         sprintf(str, "%04X %08X %s",
             (obj->objDef ? obj->objDef->objType : -1) & 0xFFFF,
             (obj->objDef ? obj->objDef->id      : -1),
@@ -213,12 +205,25 @@ void objMenu_draw(Menu *self) {
         gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
         y += MENU_LINE_HEIGHT;
     }
+
+    //draw instructions in right pane
+    //done here so they don't stay when submenu is open
+    gameTextSetColor(255, 255, 255, 255);
+    gameTextShowStr("S:Player  Y:Show", MENU_TEXTBOX_ID,
+        OBJ_INFO_XPOS + MENU_PADDING,
+        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*2) - MENU_PADDING);
+    sprintf(str, "Z:Sort: %s", sortModeNames[sortMode]);
+    gameTextShowStr(str, MENU_TEXTBOX_ID,
+        OBJ_INFO_XPOS + MENU_PADDING,
+        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*1) - MENU_PADDING);
 }
 
 static bool objMenuCheckClose(Menu *self) {
     if(buttonsJustPressed == PAD_BUTTON_B) { //close menu
         menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
         self->close(curMenu);
+        if(objList) free(objList);
+        objList = NULL;
         return true;
     }
     return false;
@@ -232,6 +237,43 @@ static void objMenuSelectPlayer(Menu *self) {
             break;
         }
     }
+}
+
+static void objMenuShow(Menu *self) {
+    menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+
+    //the object keeps a pointer to the ObjDef and frees it
+    //so it's important that it be allocated, not local.
+    //manually setting camera position doesn't work no matter how
+    //aggressively. we can either bypass it entirely and modify the
+    //view matrix and do the math ourselves, or this.
+    ObjDef_Override *obj = objAlloc(9*4, ObjDefEnum_Override);
+    if(!obj) {
+        OSReport("Failed to alloc object");
+        return;
+    }
+    obj->def.pos.x = objMenuSelected->pos.pos.x;
+    obj->def.pos.y = objMenuSelected->pos.pos.y;
+    obj->def.pos.z = objMenuSelected->pos.pos.z;
+    ObjInstance* target = objInstantiateCharacter((ObjDef*)obj,
+        5, -1, -1, NULL);
+    if(!target) {
+        OSReport("Failed to spawn override");
+        free(obj);
+        return;
+    }
+
+    ObjInstance *oldTarget = pCamera->focus;
+    pCamera->focus = target;
+    cameraUpdate(1);
+    //sceneRender();
+    pCamera->focus = oldTarget;
+    objFree(target);
+    //free(obj); //objFree does it for us
+
+    //refresh list
+    if(objList) free(objList);
+    objList = NULL;
 }
 
 static void objMenuChangeSort(Menu *self) {
@@ -277,6 +319,12 @@ void objMenu_run(Menu *self) {
     else if(buttonsJustPressed == PAD_BUTTON_A) { //open submenu
         curMenu = &menuDebugObjSelected;
         audioPlaySound(NULL, MENU_OPEN_SOUND);
+        //ensure the list is refreshed when we return
+        if(objList) free(objList);
+        objList = NULL;
+    }
+    else if(buttonsJustPressed == PAD_BUTTON_Y) { //view object
+        objMenuShow(self);
     }
     else if(buttonsJustPressed == PAD_BUTTON_MENU) { //jump to player in list
         objMenuSelectPlayer(self);

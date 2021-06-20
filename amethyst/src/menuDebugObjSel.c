@@ -8,7 +8,13 @@ void objSelMenu_draw(Menu *self) {
     drawMenuBox(OBJ_INFO_XPOS, OBJ_INFO_YPOS, OBJ_INFO_WIDTH, OBJ_INFO_HEIGHT);
     genericMenu_drawAt(self, OBJ_MENU_XPOS, OBJ_MENU_YPOS,
         OBJ_MENU_WIDTH, OBJ_MENU_HEIGHT);
-    if(objMenuSelected) objMenu_drawObjInfo(objMenuSelected);
+    objMenu_drawObjInfo(objMenuSelected);
+
+    char title[16];
+    sprintf(title, "<%s>", objMenuSelected->file->name);
+    gameTextSetColor(0, 255, 255, 255);
+    gameTextShowStr(title, MENU_TEXTBOX_ID,
+        OBJ_MENU_XPOS+MENU_PADDING+8, OBJ_MENU_YPOS+MENU_PADDING);
 }
 
 void menuObjSelFocus_select(const MenuItem *self, int amount) {
@@ -45,11 +51,18 @@ void menuObjSelMovePlayer_select(const MenuItem *self, int amount) {
     cameraUpdate(1);
 }
 
+void menuObjSelSetPlayer_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+    pPlayer = objMenuSelected;
+}
+
 Menu menuDebugObjSelected = {
     "", 0,
     genericMenu_run, objSelMenu_draw, objListSubmenu_close,
-    "Focus",  genericMenuItem_draw, menuObjSelFocus_select,
-    "Go To",  genericMenuItem_draw, menuObjSelMovePlayer_select,
-    "Delete", genericMenuItem_draw, menuObjSelDelete_select,
+    "Set Camera Focus", genericMenuItem_draw, menuObjSelFocus_select,
+    "Go To",            genericMenuItem_draw, menuObjSelMovePlayer_select,
+    "Delete",           genericMenuItem_draw, menuObjSelDelete_select,
+    "Set as Player",    genericMenuItem_draw, menuObjSelSetPlayer_select,
     NULL,
 };

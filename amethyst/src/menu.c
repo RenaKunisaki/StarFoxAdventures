@@ -35,8 +35,8 @@ void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
 
     //Draw title
     //box type 0 is (center, y+40), no background
+    gameTextSetColor(255, 255, 255, 255);
     if(self->title && self->title[0]) {
-        gameTextSetColor(255, 255, 255, 255);
         gameTextShowStr(self->title, 0, xpos, ypos+MENU_PADDING-40);
     }
 
