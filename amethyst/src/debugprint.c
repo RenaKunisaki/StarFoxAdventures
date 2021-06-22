@@ -63,46 +63,52 @@ static void printCoords() {
         levelLockBuckets[0] & 0xFF, levelLockBuckets[1] & 0xFF);
 }
 
-static void printRestartPoint() {
-    //Display restart point
-    static int restartPointFrameCount = 0;
-    static vec3f prevRestartPoint = {0, 0, 0};
-    static u8 prevRestartPointLayer = 0;
-    static u8 prevRestartPointMap = 0;
+static int restartPointFrameCount[2] = {0, 0};
+static vec3f prevRestartPoint[2] = {{0, 0, 0}, {0, 0, 0}};
+static u8 prevRestartPointLayer[2] = {0, 0};
+static u8 prevRestartPointMap[2] = {0, 0};
+static const char *restartPointNames = "RS";
 
-    SaveGame *restart = pRestartPoint;
-    if(!restart) restart = pLastSavedGame;
-    if(restart) {
-        //PlayerCharState *chrState = restart->charState[restart->character];
-        PlayerCharPos   *chrPos   = &restart->charPos  [restart->character];
+static void printRestartPointForSave(SaveGame *save, int which) {
+    if(save) {
+        //PlayerCharState *chrState = save->charState[save->character];
+        PlayerCharPos   *chrPos   = &save->charPos  [save->character];
 
         //if restart point has changed, highlight it
-        if(chrPos->pos.x    != prevRestartPoint.x
-        || chrPos->pos.y    != prevRestartPoint.y
-        || chrPos->pos.z    != prevRestartPoint.z
-        || chrPos->mapLayer != prevRestartPointLayer
-        || chrPos->mapId    != prevRestartPointMap) {
-            restartPointFrameCount = 60;
-            prevRestartPoint.x    = chrPos->pos.x;
-            prevRestartPoint.y    = chrPos->pos.y;
-            prevRestartPoint.z    = chrPos->pos.z;
-            prevRestartPointLayer = chrPos->mapLayer;
-            prevRestartPointMap   = chrPos->mapId;
+        if(chrPos->pos.x    != prevRestartPoint[which].x
+        || chrPos->pos.y    != prevRestartPoint[which].y
+        || chrPos->pos.z    != prevRestartPoint[which].z
+        || chrPos->mapLayer != prevRestartPointLayer[which]
+        || chrPos->mapId    != prevRestartPointMap[which]) {
+            restartPointFrameCount[which] = 60;
+            prevRestartPoint[which].x    = chrPos->pos.x;
+            prevRestartPoint[which].y    = chrPos->pos.y;
+            prevRestartPoint[which].z    = chrPos->pos.z;
+            prevRestartPointLayer[which] = chrPos->mapLayer;
+            prevRestartPointMap[which]   = chrPos->mapId;
         }
-        else if(restartPointFrameCount > 0) restartPointFrameCount--;
+        else if(restartPointFrameCount[which] > 0) restartPointFrameCount[which]--;
 
-        u8 color = pRestartPoint ? 0xFF : 0x7F;
-        char sColor[6] = {0x81, color, color, color, 0xFF, 0};
+        //u8 color = pRestartPoint ? 0xFF : 0x7F;
+        u8 color = 255 - (restartPointFrameCount[which] * 4);
+        char sColor[6] = {0x81, 0xFF, color, 0xFF, 0xFF, 0};
 
         //map ID is 0xFF sometimes, no idea why
-        debugPrintf("%sR:" DPRINT_FIXED "%6d %6d %6d %d M%02X" DPRINT_NOFIXED,
-            sColor,
+        debugPrintf("%s%c:" DPRINT_FIXED "%6d %6d %6d %d ",
+            sColor, restartPointNames[which],
             (int)chrPos->pos.x, (int)chrPos->pos.y, (int)chrPos->pos.z,
-            chrPos->mapLayer, chrPos->mapId & 0xFF);
-        debugPrintf("%s\n" DPRINT_COLOR "\xFF\xFF\xFF\xFF",
-            restartPointFrameCount == 0 ? "" : " CHANGED");
+            chrPos->mapLayer);
+        //after a certain number of params, it starts printing nonsense.
+        debugPrintf("M%02X" DPRINT_NOFIXED DPRINT_COLOR "\xFF\xFF\xFF\xFF\n",
+            chrPos->mapId & 0xFF);
     }
-    else debugPrintf(DPRINT_FIXED "R: none" DPRINT_NOFIXED "\n");
+    else debugPrintf(DPRINT_FIXED "%c: none" DPRINT_NOFIXED "\n", restartPointNames[which]);
+}
+
+static void printRestartPoint() {
+    //Display restart point
+    printRestartPointForSave(pRestartPoint,  0);
+    printRestartPointForSave(pLastSavedGame, 1);
 }
 
 static void printCamera() {

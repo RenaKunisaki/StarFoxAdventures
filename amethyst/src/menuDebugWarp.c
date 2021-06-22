@@ -271,10 +271,10 @@ void debugDoWarp(float x, float y, float z, int layer) {
     OSReport("After unload: free = %d%%, %d%%", blocksPct, bytesPct);
 
     //back up the current restart point
+    //OSReport("restart=0x%08X save=0x%08X", pRestartPoint, pLastSavedGame);
     SaveGame *save = NULL;
     if(pRestartPoint) {
-        SaveGame *save = allocTagged(sizeof(SaveGame), ALLOC_TAG_GAME_COL,
-            "saveTemp");
+        save = allocTagged(sizeof(SaveGame), ALLOC_TAG_GAME_COL, "debug:saveTemp");
         if(!save) OSReport("Warp buffer out of memory! "
             "Discarding restart point instead.");
         else memcpy(save, pRestartPoint, sizeof(SaveGame));
@@ -302,10 +302,14 @@ void debugDoWarp(float x, float y, float z, int layer) {
     loadMapForCurrentSaveGame(); */
 
     if(save) { //restore the previous restart point
+        //OSReport("Restore restart point to 0x%08X", pRestartPoint);
         if(pRestartPoint) memcpy(pRestartPoint, save, sizeof(SaveGame));
         free(save);
     }
-    else gplayClearRestartPoint(); //wasn't one before, so don't have one now.
+    else {
+        //OSReport("No restart point");
+        gplayClearRestartPoint(); //wasn't one before, so don't have one now.
+    }
 
     getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
     OSReport("After load: free = %d%%, %d%%", blocksPct, bytesPct);
