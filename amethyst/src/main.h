@@ -144,6 +144,7 @@ void hudDrawHook(int p1, int p2, int p3);
 //util.c
 char* bin2str(char *str, u32 val, int len);
 int roundTo(int num, int target);
+void getObjName(char *dest, ObjectFileStruct *file);
 int strcmpi(const char *sa, const char *sb);
 int compareObjsByType(const void *objA, const void *objB);
 int compareObjsById(const void *objA, const void *objB);

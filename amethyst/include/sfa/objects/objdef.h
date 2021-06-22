@@ -1,3 +1,5 @@
+#define NUM_OBJECTS 0x5C6
+
 typedef enum { //type:u16
 	ObjDefEnum_SkyDome = 0x61F,
 	ObjDefEnum_ProjectileS = 0x1D3,

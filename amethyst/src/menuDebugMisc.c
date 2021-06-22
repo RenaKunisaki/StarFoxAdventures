@@ -8,6 +8,7 @@ void debugMiscSubMenu_close(const Menu *self) {
 
 void menuDebugMiscHexEdit_select(const MenuItem *self, int amount) {
     if(amount) return;
+    hexEditPrevMenu = curMenu;
     curMenu = &menuDebugHexEdit;
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }

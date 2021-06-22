@@ -193,13 +193,18 @@ static void printPlayerState() {
     if(!pState) return;
     PlayerCharState *cState = *(PlayerCharState**)(pState + 0x35C);
 
+    float onFire = *(float*)(pState + 0x79C);
+    if(onFire) debugPrintf("On fire %f\n", onFire);
+    //float castTimer = *(float*)(pState + 0x85C); //always 0?
+    //if(castTimer) debugPrintf("Cast spell %f\n", castTimer);
+
     //most of these are unknown
     debugPrintf(DPRINT_FIXED "%02X %08X %08X %08X %08X ",
-        *(u16*)(pState + 0x274),
-        *(u32*)(pState + 0x310),
-        *(u32*)(pState + 0x314),
-        *(u32*)(pState + 0x318),
-        *(u32*)(pState + 0x31C));
+        *(u16*)(pState + 0x274),  //state number
+        *(u32*)(pState + 0x310),  //various flags
+        *(u32*)(pState + 0x314),  //various flags
+        *(u32*)(pState + 0x318),  //various flags
+        *(u32*)(pState + 0x31C)); //various flags
 
     debugPrintf("%08X %08X %08X %04X %02X" DPRINT_NOFIXED "\n",
         *(u32*)(pState + 0x360),

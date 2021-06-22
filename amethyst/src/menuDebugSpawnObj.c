@@ -34,31 +34,182 @@ struct {
 } spawnObjDef;
 s32 spawnCoords[3];
 u32 spawnFlags     =  5;
-s16 spawnObjNo     = -1;
+s16 spawnObjNo     = -1; //ObjNo, not spawnObjDef.def.objType (ObjDefEnum)
 u16 spawnActs      =  4; //copied to mapActs1 and mapActs2, easier to edit this way
 s8  spawnMapId     = -1;
 s8  spawnNumparams =  0;
 u8  spawnCursorX   =  0;
 bool spawnMenuIsInit = false;
 
-/* typedef struct PACKED ObjDef {
-	s16   objType;       //0x00 ObjDefEnum
-	byte  allocatedSize; //0x02
-	byte  mapActs1;      //0x03
-	u8    loadFlags;     //0x04 RomListObjLoadFlags
-	byte  mapActs2;      //0x05
-	byte  bound;         //0x06
-	byte  unk7;          //0x07
-	vec3f pos;           //0x08
-	u32   id;            //0x14 ObjUniqueId
-} ObjDef;
+enum {
+    ObjSpawnListSortType,
+    ObjSpawnListSortName,
+    ObjSpawnListSortCategory,
+    NumObjSpawnListSortMethods
+} ObjSpawnListSortMethods;
+static const char *sortModeNames[] = {"DefNo", "Name", "Category"};
+static u8 sortMode = ObjSpawnListSortType;
+static int *objIdList = NULL;
 
-typedef enum { //type:u32
-	ObjSpawnFlags_KeepLoaded         = 0x1,
-	ObjSpawnFlags_DontUseObjIndexBin = 0x2,
-	ObjSpawnFlags_DontSave           = 0x4,
-} ObjSpawnFlags;
-*/
+//XXX there are probably functions already in the game for some of these.
+int getRealId(int defNo) {
+    s16 *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
+    s16 realId = objIndex[defNo];
+    if(realId == -1) realId = defNo;
+    return realId;
+}
+
+ObjectFileStruct* getObjFile(int defNo) {
+    s16  *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
+    u32  *objsTab  = dataFileBuffers[FILE_OBJECTS_TAB];
+    void *objsBin  = dataFileBuffers[FILE_OBJECTS_BIN];
+    if(defNo < 0) defNo = -defNo;
+    else if(objIndex[defNo] >= 0) defNo = objIndex[defNo];
+    u32 offs = objsTab[defNo];
+    if(offs >= dataFileSize[FILE_OBJECTS_BIN]) return NULL;
+    return (ObjectFileStruct*)(objsBin + offs);
+}
+
+void spawnList_draw(Menu *self) {
+    //Draw function for Spawn Object list
+    char str[256];
+    menuAnimFrame++;
+
+    drawMenuBox(SPAWN_MENU_XPOS, SPAWN_MENU_YPOS, SPAWN_MENU_WIDTH, SPAWN_MENU_HEIGHT);
+    gameTextSetColor(255, 255, 255, 255);
+
+    int x = SPAWN_MENU_XPOS + MENU_PADDING, y = SPAWN_MENU_YPOS + MENU_PADDING;
+    int iObj    = MAX(0, self->selected - (SPAWN_MENU_NUM_LINES-2));
+    int nLines  = 0;
+
+    if(!objIdList) {
+        gameTextShowStr("Sorting...", MENU_TEXTBOX_ID, x, y);
+        return;
+    }
+
+    while(nLines < (SPAWN_MENU_NUM_LINES-1) && iObj < NUM_OBJECTS) {
+        char name[12];
+        int defNo = objIdList[iObj];
+        int realId = getRealId(defNo);
+        ObjectFileStruct *file = getObjFile(defNo);
+        if(!file) break;
+        getObjName(name, file);
+        sprintf(str, "%04X %04X %s", defNo & 0xFFFF, realId & 0xFFFF, name);
+
+        bool selected = iObj == self->selected;
+        if(selected) {
+            u8  r = menuAnimFrame * 8, g = 255 - r;
+            gameTextSetColor(r, g, 255, 255);
+        }
+        else gameTextSetColor(255, 255, 255, 255);
+        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        y += MENU_LINE_HEIGHT;
+        nLines++;
+        iObj++;
+    }
+
+    gameTextSetColor(255, 255, 255, 255);
+    sprintf(str, "Z:Sort:%s", sortModeNames[sortMode]);
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x+30, y);
+}
+
+int compareFilesByName(const void *fileA, const void *fileB) {
+    char nameA[12], nameB[12];
+    getObjName(nameA, getObjFile((int)fileA));
+    getObjName(nameB, getObjFile((int)fileB));
+    return strcmpi(nameA, nameB);
+}
+int compareFilesByCategory(const void *fileA, const void *fileB) {
+    ObjectFileStruct *A = getObjFile((int)fileA);
+    ObjectFileStruct *B = getObjFile((int)fileB);
+    if(A && B) return (int)(A->clsId) - (int)(B->clsId);
+    else if(A) return -1;
+    else return 1;
+}
+
+void rebuildList() {
+    //copy ObjectFileStruct pointers to list in order
+    s16  *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
+    u32  *objsTab  = dataFileBuffers[FILE_OBJECTS_TAB];
+    void *objsBin  = dataFileBuffers[FILE_OBJECTS_BIN];
+    for(int i=0; i<NUM_OBJECTS; i++) {
+        objIdList[i] = i;
+        //XXX filter out duplicates (eg Tricky is both 0x4 and 0x24 because objindex)
+    }
+
+    //sort the list
+    CompareFunc func = NULL;
+    switch(sortMode) {
+        case ObjSpawnListSortName: func = compareFilesByName; break;
+        case ObjSpawnListSortCategory: func = compareFilesByCategory; break;
+        default: return; //list is already sorted by defNo
+    }
+    quicksort((const void**)objIdList, 0, NUM_OBJECTS - 1, func);
+}
+
+void changeSort() {
+    sortMode++;
+    if(sortMode >= NumObjSpawnListSortMethods) sortMode = 0;
+    rebuildList();    
+}
+
+void spawnList_run(Menu *self) {
+    //Run function for Spawn Object list
+
+    if(!objIdList) {
+        objIdList = (int*)allocTagged(NUM_OBJECTS * sizeof(ObjectFileStruct*), 
+            ALLOC_TAG_LISTS_COL, "debug:objIds");
+        if(!objIdList) { //out of memory
+            if(buttonsJustPressed == PAD_BUTTON_A || buttonsJustPressed == PAD_BUTTON_B) {
+                menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
+                curMenu->close(curMenu);
+            }
+            return;
+        }
+        else rebuildList();
+    }
+
+    if(buttonsJustPressed == PAD_BUTTON_A || buttonsJustPressed == PAD_BUTTON_B) {
+        menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
+        curMenu->close(curMenu);
+
+        //find selected defNo
+        spawnObjDef.def.objType = objIdList[self->selected];
+        if(objIdList) free(objIdList);
+        objIdList = NULL;
+    }
+    else if(buttonsJustPressed == PAD_TRIGGER_Z) changeSort();
+    else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
+    ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
+        menuInputDelayTimer =
+            (controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD)
+            ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
+        self->selected -= 1;
+    }
+    else if(controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD
+    ||      controllerStates[0].substickY < -MENU_CSTICK_THRESHOLD) { //down
+        menuInputDelayTimer = (controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD)
+            ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
+        self->selected += 1;
+    }
+    else if(controllerStates[0].triggerLeft > MENU_TRIGGER_THRESHOLD) { //L
+        self->selected -= 0x100;
+        menuInputDelayTimer = MENU_INPUT_DELAY_MOVE;
+    }
+    else if(controllerStates[0].triggerRight > MENU_TRIGGER_THRESHOLD) { //R
+        self->selected += 0x100;
+        menuInputDelayTimer = MENU_INPUT_DELAY_MOVE;
+    }
+
+    if(self->selected < 0) self->selected = NUM_OBJECTS - 1;
+    if(self->selected >= NUM_OBJECTS) self->selected = 0;
+}
+
+void spawnList_close(const Menu *self) {
+    //Close function for Spawn Object list
+    curMenu = &menuDebugSpawnObj;
+    audioPlaySound(NULL, MENU_CLOSE_SOUND);
+}
 
 void spawnMenu_draw(Menu *self) {
     //Draw function for Spawn Object menu
@@ -83,16 +234,7 @@ void spawnMenu_draw(Menu *self) {
 
     //copy the name, filtering out any control codes.
     char name[12];
-    if(file) {
-        int p = 0;
-        for(int i=0; i<11; i++) {
-            char c = file->name[i];
-            if(c == 0) break;
-            else if(c >= 0x20 && c <= 0x7E) name[p++] = c;
-        }
-        name[p] = 0;
-    }
-    else strcpy(name, "N/A");
+    getObjName(name, file);
 
 
     sprintf(str, "Object:      %04X (%04X) %s",
@@ -158,7 +300,7 @@ void spawnMenu_draw(Menu *self) {
         y += MENU_LINE_HEIGHT;
     }
 
-    gameTextShowStr("Start:Spawn B:Exit X:+ Y:- Z:Player Coords",
+    gameTextShowStr("Start:Spawn A:List B:Exit X:+ Y:- Z:Player Coords",
         MENU_TEXTBOX_ID, x, SPAWN_MENU_YPOS + SPAWN_MENU_HEIGHT -
         (MENU_LINE_HEIGHT + MENU_PADDING));
 
@@ -275,6 +417,11 @@ void spawnMenu_run(Menu *self) {
         menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
         self->close(curMenu);
     }
+    else if(buttonsJustPressed == PAD_BUTTON_A) { //open obj list
+        menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+        curMenu = &menuDebugSpawnObjList;
+        audioPlaySound(NULL, MENU_OPEN_SOUND);
+    }
     else if(buttonsJustPressed == PAD_BUTTON_X
     ||      buttonsJustPressed == PAD_BUTTON_Y) {
         menuInputDelayTimer = MENU_INPUT_DELAY_ADJUST;
@@ -339,6 +486,12 @@ void spawnMenu_run(Menu *self) {
         spawnCursorX = (spawnCursorX + 1) & 7;
     }
 }
+
+Menu menuDebugSpawnObjList = {
+    "Objects", 0,
+    spawnList_run, spawnList_draw, spawnList_close,
+    NULL,
+};
 
 Menu menuDebugSpawnObj = {
     "Spawn Object", 0,

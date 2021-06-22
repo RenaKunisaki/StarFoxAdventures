@@ -50,11 +50,76 @@ void menuObjSelMovePlayer_select(const MenuItem *self, int amount) {
     }
     cameraUpdate(1);
 }
-
-void menuObjSelSetPlayer_select(const MenuItem *self, int amount) {
+void menuObjSelSummon_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+    if(pPlayer) {
+        objDisableHitbox(objMenuSelected); //only for next tick
+        objMenuSelected->pos.pos = pPlayer->pos.pos;
+        //try to override hit detection...
+        objMenuSelected->prevPos = pPlayer->pos.pos;
+    }
+    cameraUpdate(1);
+}
+/* void menuObjSelSetPlayer_select(const MenuItem *self, int amount) {
+    //this will just crash 99% of the time
     if(amount) return;
     menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
     pPlayer = objMenuSelected;
+} */
+/* void menuObjSelRide_select(const MenuItem *self, int amount) {
+    //this will also crash 99% of the time
+    if(amount) return;
+    menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+    void *pState = pPlayer ? pPlayer->state : NULL;
+    (*(ObjInstance**)(pState + 0x7F0)) = objMenuSelected;
+    (*(u16*)(pState + 0x274)) = PlayerStateEnum_RideBike;
+} */
+/* void menuObjSelHold_select(const MenuItem *self, int amount) {
+    //doesn't always crash but not very useful
+    if(amount) return;
+    menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
+    playerSetHeldObject(pPlayer, objMenuSelected);
+} */
+void menuObjSelEditObj_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    hexEditPrevMenu = curMenu;
+    hexEditAddr = objMenuSelected;
+    curMenu = &menuDebugHexEdit;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+void menuObjSelEditDef_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    if(!objMenuSelected->objDef) {
+        audioPlaySound(NULL, MENU_FAIL_SOUND);
+        return;
+    }
+    hexEditPrevMenu = curMenu;
+    hexEditAddr = objMenuSelected->objDef;
+    curMenu = &menuDebugHexEdit;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+void menuObjSelEditFile_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    if(!objMenuSelected->file) {
+        audioPlaySound(NULL, MENU_FAIL_SOUND);
+        return;
+    }
+    hexEditPrevMenu = curMenu;
+    hexEditAddr = objMenuSelected->file;
+    curMenu = &menuDebugHexEdit;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+void menuObjSelEditState_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    if(!objMenuSelected->state) {
+        audioPlaySound(NULL, MENU_FAIL_SOUND);
+        return;
+    }
+    hexEditPrevMenu = curMenu;
+    hexEditAddr = objMenuSelected->state;
+    curMenu = &menuDebugHexEdit;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
 Menu menuDebugObjSelected = {
@@ -62,7 +127,14 @@ Menu menuDebugObjSelected = {
     genericMenu_run, objSelMenu_draw, objListSubmenu_close,
     "Set Camera Focus", genericMenuItem_draw, menuObjSelFocus_select,
     "Go To",            genericMenuItem_draw, menuObjSelMovePlayer_select,
+    "Bring To Player",  genericMenuItem_draw, menuObjSelSummon_select,
     "Delete",           genericMenuItem_draw, menuObjSelDelete_select,
-    "Set as Player",    genericMenuItem_draw, menuObjSelSetPlayer_select,
+    //"Set as Player",    genericMenuItem_draw, menuObjSelSetPlayer_select,
+    //"Ride",             genericMenuItem_draw, menuObjSelRide_select,
+    //"Hold",             genericMenuItem_draw, menuObjSelHold_select,
+    "Edit",             genericMenuItem_draw, menuObjSelEditObj_select,
+    "Edit ObjDef",      genericMenuItem_draw, menuObjSelEditDef_select,
+    "Edit File",        genericMenuItem_draw, menuObjSelEditFile_select,
+    "Edit State",       genericMenuItem_draw, menuObjSelEditState_select,
     NULL,
 };

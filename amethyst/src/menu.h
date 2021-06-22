@@ -114,6 +114,7 @@ extern Menu menuDebugObjList;
 extern Menu menuDebugObjSelected;
 extern Menu menuDebugRender;
 extern Menu menuDebugSpawnObj;
+extern Menu menuDebugSpawnObjList;
 extern Menu menuDebugText;
 extern Menu menuDebugTextureView;
 extern Menu menuDebugWarp;
@@ -128,3 +129,7 @@ extern u8  menuAnimFrame;
 extern u8  menuInputDelayTimer;
 extern u8  menuPrevTimerFlags;
 extern u8  menuPrevGameFlags;
+
+extern u32 hexEditAddr;
+extern u32 hexEditPrevAddr;
+extern Menu *hexEditPrevMenu;

@@ -31,6 +31,22 @@ int roundTo(int num, int target) {
     else return num - val; //round down
 }
 
+void getObjName(char *dest, ObjectFileStruct *file) {
+    //get name of object from file
+    //dest must be at least 12 bytes
+    
+    //copy the name, filtering out any control codes.
+    if(file) {
+        int p = 0;
+        for(int i=0; i<11; i++) {
+            char c = file->name[i];
+            if(c == 0) break;
+            else if(c >= 0x20 && c <= 0x7E) dest[p++] = c;
+        }
+        dest[p] = 0;
+    }
+    else strcpy(dest, "N/A");
+}
 
 int strcmpi(const char *sa, const char *sb) {
     while(*sa && *sb) {
@@ -42,7 +58,6 @@ int strcmpi(const char *sa, const char *sb) {
     }
     return *sa - *sb;
 }
-
 
 //compare functions for sorting object lists
 int compareObjsByType(const void *objA, const void *objB) {

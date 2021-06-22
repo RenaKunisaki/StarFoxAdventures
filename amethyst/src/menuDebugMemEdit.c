@@ -10,6 +10,20 @@
 static u8 cursorX = 0;
 u32 hexEditAddr = RAM_START;
 u32 hexEditPrevAddr = RAM_START;
+Menu *hexEditPrevMenu = NULL;
+
+void hexEdit_close(const Menu *self) {
+    //Close function for memory editor
+    if(hexEditPrevMenu) {
+        curMenu = hexEditPrevMenu;
+        hexEditPrevMenu = NULL;
+    }
+    else {
+        OSReport("hexEditPrevMenu is NULL!");
+        curMenu = &menuDebugMisc;
+    }
+    audioPlaySound(NULL, MENU_CLOSE_SOUND);
+}
 
 void hexEdit_draw(Menu *self) {
     //Draw function for memory editor
@@ -154,6 +168,6 @@ void hexEdit_run(Menu *self) {
 
 Menu menuDebugHexEdit = {
     "Edit Memory", 0,
-    hexEdit_run, hexEdit_draw, debugMiscSubMenu_close,
+    hexEdit_run, hexEdit_draw, hexEdit_close,
     NULL,
 };
