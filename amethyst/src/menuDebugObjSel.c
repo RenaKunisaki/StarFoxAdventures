@@ -47,6 +47,9 @@ void menuObjSelMovePlayer_select(const MenuItem *self, int amount) {
         pPlayer->pos.pos = objMenuSelected->pos.pos;
         //try to override hit detection...
         pPlayer->prevPos = objMenuSelected->pos.pos;
+        freeMoveCoords.x = objMenuSelected->pos.pos.x;
+        freeMoveCoords.y = objMenuSelected->pos.pos.y;
+        freeMoveCoords.z = objMenuSelected->pos.pos.z;
     }
     cameraUpdate(1);
 }
