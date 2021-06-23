@@ -108,6 +108,7 @@ extern Menu menuDebugGameState;
 extern Menu menuDebugHexEdit;
 extern Menu menuDebugMap;
 extern Menu menuDebugMapEnv;
+extern Menu menuDebugMapEnvLights;
 extern Menu menuDebugMapStates;
 extern Menu menuDebugMisc;
 extern Menu menuDebugObjList;

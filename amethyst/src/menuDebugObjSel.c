@@ -87,7 +87,7 @@ void menuObjSelSummon_select(const MenuItem *self, int amount) {
 void menuObjSelEditObj_select(const MenuItem *self, int amount) {
     if(amount) return;
     hexEditPrevMenu = curMenu;
-    hexEditAddr = objMenuSelected;
+    hexEditAddr = (u32)objMenuSelected;
     curMenu = &menuDebugHexEdit;
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
@@ -98,7 +98,7 @@ void menuObjSelEditDef_select(const MenuItem *self, int amount) {
         return;
     }
     hexEditPrevMenu = curMenu;
-    hexEditAddr = objMenuSelected->objDef;
+    hexEditAddr = (u32)objMenuSelected->objDef;
     curMenu = &menuDebugHexEdit;
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
@@ -109,7 +109,7 @@ void menuObjSelEditFile_select(const MenuItem *self, int amount) {
         return;
     }
     hexEditPrevMenu = curMenu;
-    hexEditAddr = objMenuSelected->file;
+    hexEditAddr = (u32)objMenuSelected->file;
     curMenu = &menuDebugHexEdit;
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
@@ -120,7 +120,7 @@ void menuObjSelEditState_select(const MenuItem *self, int amount) {
         return;
     }
     hexEditPrevMenu = curMenu;
-    hexEditAddr = objMenuSelected->state;
+    hexEditAddr = (u32)objMenuSelected->state;
     curMenu = &menuDebugHexEdit;
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
