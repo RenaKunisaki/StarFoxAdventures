@@ -93,7 +93,7 @@ void spawnList_draw(Menu *self) {
         int realId = getRealId(defNo);
         ObjectFileStruct *file = getObjFile(defNo);
         if(!file) break;
-        getObjName(name, file);
+        getObjFileName(name, file);
         sprintf(str, "%04X %04X %s", defNo & 0xFFFF, realId & 0xFFFF, name);
 
         bool selected = iObj == self->selected;
@@ -115,8 +115,8 @@ void spawnList_draw(Menu *self) {
 
 int compareFilesByName(const void *fileA, const void *fileB) {
     char nameA[12], nameB[12];
-    getObjName(nameA, getObjFile((int)fileA));
-    getObjName(nameB, getObjFile((int)fileB));
+    getObjFileName(nameA, getObjFile((int)fileA));
+    getObjFileName(nameB, getObjFile((int)fileB));
     return strcmpi(nameA, nameB);
 }
 int compareFilesByCategory(const void *fileA, const void *fileB) {
@@ -234,7 +234,7 @@ void spawnMenu_draw(Menu *self) {
 
     //copy the name, filtering out any control codes.
     char name[12];
-    getObjName(name, file);
+    getObjFileName(name, file);
 
 
     sprintf(str, "Object:      %04X (%04X) %s",

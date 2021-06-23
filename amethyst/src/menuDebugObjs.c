@@ -247,7 +247,7 @@ static void objMenuShow(Menu *self) {
     //manually setting camera position doesn't work no matter how
     //aggressively. we can either bypass it entirely and modify the
     //view matrix and do the math ourselves, or this.
-    ObjDef_Override *obj = objAlloc(9*4, ObjDefEnum_Override);
+    ObjDef_Override *obj = (ObjDef_Override*)objAlloc(9*4, ObjDefEnum_Override);
     if(!obj) {
         OSReport("Failed to alloc object");
         return;

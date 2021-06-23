@@ -31,7 +31,7 @@ int roundTo(int num, int target) {
     else return num - val; //round down
 }
 
-void getObjName(char *dest, ObjectFileStruct *file) {
+void getObjFileName(char *dest, ObjectFileStruct *file) {
     //get name of object from file
     //dest must be at least 12 bytes
     
@@ -45,6 +45,11 @@ void getObjName(char *dest, ObjectFileStruct *file) {
         }
         dest[p] = 0;
     }
+    else strcpy(dest, "N/A");
+}
+
+void getObjName(char *dest, ObjInstance *obj) {
+    if(obj) getObjFileName(dest, obj->file);
     else strcpy(dest, "N/A");
 }
 
