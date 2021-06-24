@@ -34,6 +34,7 @@ GLOBALFN void debugPrintDraw(void);
 GLOBALFN void debugPrintf(const char*, ...);
 GLOBALFN void debugPrintfxy(int x, int y, const char*, ...);
 GLOBALFN void dll_MCUpgradeMa_init(ObjInstance *obj);
+GLOBALFN void doQueuedLoads(void);
 GLOBALFN void doRumble(float time);
 GLOBALFN void drawScaledTexture(float x,float y,Texture *texture,uint opacity,uint scale,int width,int height,uint flags);
 GLOBALFN void drawTexture(float x,float y,Texture *texture,uint opacity,uint scale);
@@ -59,6 +60,7 @@ GLOBALFN void gplayRestartPoint(vec3f *pos, s16 rot, byte layer, int bSaveWithOn
 GLOBALFN void gplaySetAct(u32 map, u32 act); //XXX which type of map ID?
 GLOBALFN void gplaySetObjGroupStatus(MapDirIdx32 map,uint group,int set);
 GLOBALFN void gxBeginVtxs(GXOpcode opcode,uint vat,uint nVtxs);
+GLOBALFN void GXFlush_(int, int); //real GXFlush takes no params...
 GLOBALFN void gxGetVtxDescr(int bit, int *out);
 GLOBALFN void gxGetVtxDescrs(u32 *out);
 GLOBALFN void gxResetVtxDescr(void);
@@ -81,6 +83,7 @@ GLOBALFN void* loadFileByPath(char *path,uint *outSize);
 GLOBALFN void loadMapForCurrentSaveGame(void);
 GLOBALFN void logSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN u32 mainGetBit(GameBit bit);
+GLOBALFN void mainLoopDoQueuedSounds(void);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
 GLOBALFN int mapCoordsToId(int x, int z, int layer); //MapId32
 GLOBALFN int mapGetDirIdx(int id); //MapId32 -> MapDirIdx32
@@ -117,6 +120,7 @@ GLOBALFN s8 padGetCY(int pad);
 GLOBALFN s8 padGetStickX(int pad);
 GLOBALFN s8 padGetStickY(int pad);
 GLOBALFN void padReadControllers(PADStatus*);
+GLOBALFN void padUpdate(void);
 GLOBALFN void pauseMenuDraw(int,int,int); //XXX params
 GLOBALFN void pauseMenuDrawText(void);
 GLOBALFN void playerDie(ObjInstance *player); //immediately kill player

@@ -101,6 +101,16 @@ void minimapMainLoopHook();
 //pdahook.c
 void pdaHookInit();
 
+//perf.c
+extern u64 tLoopStart;   //start time of main loop
+extern u64 tLoopEnd;     //end   time of main loop
+extern u64 tLogicStart;  //start time of game logic section
+extern u64 tLogicEnd;    //end   time of game logic section
+extern u64 tRenderStart; //start time of render section
+extern u64 tRenderEnd;   //end   time of render section
+extern u64 tLoop, tLogic, tRender; //durations
+void perfMonInit();
+
 //player.c
 extern PlayerStateFunc origClimbWallFn;
 void initPlayerStatesHook(void);

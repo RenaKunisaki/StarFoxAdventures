@@ -3,18 +3,18 @@
 typedef struct PACKED {
     ObjInstance *obj;             //0x00
     vec3f        unk04;           //0x04
-    vec3f        lightVec;        //0x10
-    vec3f        unk1C;           //0x1c
+    vec3f        vLight;          //0x10
+    vec3f        vPos;            //0x1c
     vec3f        vIn;             //0x28
     vec3f        vOut;            //0x34 =F(obj, vIn)
-    vec3f        vCamera;         //0x40
-    bool         unk4C;           //0x4c
+    vec3f        vSpec;           //0x40 specular direction
+    bool         bOn;             //0x4c is light on?
     byte         unk4D;           //0x4d
     u8           unk4E;           //0x4e
     u8           unk4F;           //0x4f
-    uint         unk50;           //0x50
+    uint         mode;            //0x50
     u8          *unk54;           //0x54
-    u32          unk58;           //0x58
+    u32          state;           //0x58
     u32          unk5C;           //0x5c
     void        *unk60;           //0x60
     byte         lightFlags_0x64; //0x64
@@ -58,9 +58,9 @@ typedef struct PACKED {
     float        distAttenA2;     //0x12c
     float        colorVal_0x130;  //0x130 relates to lightAmount; maybe distance? capped to range (0, 1000)
     float        lightAmount;     //0x134 R, G, B are multiplied by this
-    float        unk138;          //0x138
-    float        unk13C;          //0x13c
-    float        unk140;          //0x140
+    float        fadeTarget;      //0x138
+    float        fadeSpeed;       //0x13c
+    float        refDistance;     //0x140
     float        unk144;          //0x144
     u8           unk148;          //0x148
     u8           unk149;          //0x149
@@ -346,7 +346,7 @@ typedef struct PACKED {
     u8           unk2D7;          //0x2d7
     int          unk2D8;          //0x2d8
     float        unk2DC;          //0x2dc
-    float        unk2E0;          //0x2e0
+    float        rand2E0;         //0x2e0
     float        unk2E4;          //0x2e4
     Texture     *texture;         //0x2e8
     u8           unk2EC;          //0x2ec

@@ -46,7 +46,9 @@ extern s16 dllRefCount[NUM_DLLS];
 extern bool enableDebugText;
 extern bool enableRumble;
 extern u32 frameCount;
+extern u8 framesThisStep;
 extern float fovY;
+extern u8 gpuHangTimer;
 extern SfaHeap heaps[NUM_HEAPS];
 extern int heatEffectIntensity; //0-255
 extern bool hudHidden;

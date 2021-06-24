@@ -1,6 +1,6 @@
 #include "main.h"
 
-#if 1 //currently no way to toggle in-game and it causes bugs, so disabled for now
+#if 1
 
 //the Magic Cave doesn't set a culling distance for some objects.
 //normally it's no problem because they're invisble, but, when making them

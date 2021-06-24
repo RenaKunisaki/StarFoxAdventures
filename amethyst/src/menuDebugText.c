@@ -110,6 +110,17 @@ void menuDebugTextTricky_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
+
+void menuDebugTextPerf_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_PERFORMANCE) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugTextPerf_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_PERFORMANCE;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
@@ -123,5 +134,6 @@ Menu menuDebugText = {
     "GameBit Changes: %s", menuDebugTextBits_draw,         menuDebugTextBits_select,
     "Memory Stats: %s",    menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
     "Heap Details: %s",    menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
+    "Performance: %s",     menuDebugTextPerf_draw,         menuDebugTextPerf_select,
     NULL,
 };

@@ -12,6 +12,7 @@ u32 debugTextFlags =
     //DEBUGTEXT_HEAP_STATE |
     DEBUGTEXT_GAMEBIT_LOG |
     //DEBUGTEXT_PLAYER_STATE |
+    DEBUGTEXT_PERFORMANCE |
     0;
 u32 debugRenderFlags =
     //DEBUGRENDER_WORLD_MAP |
@@ -229,11 +230,82 @@ static void printPlayerState() {
     printPlayerObj("Hold obj",    *(ObjInstance**)(pState + 0x7F8));
 }
 
+double u64toDouble(u64 val) {
+    //this is necessary to make gcc not try to use soft float.
+    //XXX is 8028656c the same as this?
+    u32 hi = val >> 32LL;
+    u32 lo = val & 0xFFFFFFFFLL;
+    return (double)lo + (double)(hi * 4294967296.0);
+}
+
+double ticksToSecs(u64 ticks) {
+    double fTicks = u64toDouble(ticks);
+
+    //everything says this should be / 4 but I only get anything
+    //sensible with / 2.
+    return fTicks / (__OSBusClock / 4);
+}
+
+static void printPerformance() {
+    double dTotal    = u64toDouble(tLoop);
+    double dLogic    = u64toDouble(tLogic);
+    double dRender   = u64toDouble(tRender);
+    double pctLogic  = dLogic  / dTotal;
+    double pctRender = dRender / dTotal;
+    double pctTotal  = pctLogic + pctRender;
+    double totalSecs = ticksToSecs(tLoop);
+    
+    debugPrintf(DPRINT_FIXED "L%3d R%3d T%3d Q%d S%d %3d FPS\n" DPRINT_NOFIXED,
+        (int)(pctLogic  * 100.0),
+        (int)(pctRender * 100.0),
+        (int)(pctTotal  * 100.0),
+        *(u16*)(0x8035f730), //gx number of queued frames
+        framesThisStep,
+        (int)(1.0 / totalSecs));
+        //(int)(1000.0 / msecsThisFrame));
+        //msecsThisFrame goes very low sometimes when it's lagging... frameskip?
+
+    debugPrintf(DPRINT_FIXED "L%3dms R%3dms T%3dms\n" DPRINT_NOFIXED,
+        (int)(ticksToSecs(tLogic) * 1000.0),
+        (int)(ticksToSecs(tRender) * 1000.0),
+        (int)(totalSecs * 1000.0));
+
+    //draw meters
+    Color4b colLogic  = {  0, 255,   0, 128};
+    Color4b colRender = {255,   0,   0, 128};
+    Color4b colIdle   = {  0,   0,   0, 128};
+    int x = 40;
+    int y = SCREEN_HEIGHT - 50;
+    int w = SCREEN_WIDTH - (x * 2);
+    int h = 4;
+    hudDrawRect(x, y, x+(w*pctLogic), y+h, &colLogic);
+    x += (w * pctLogic);
+    if(x < w) hudDrawRect(x, y, x+(w*pctRender), y+h, &colRender);
+    x += (w * pctRender);
+    if(x < w) hudDrawRect(x, y, w, y+h, &colIdle);
+
+    //draw scale
+    //colors can't be const because hudDrawRect is insane and changes them
+    Color4b colScale[] = {
+        {  0, 255, 255, 128}, // 0- 24%
+        {  0, 255,   0, 128}, //25- 49%
+        {255, 255,   0, 128}, //50- 74%
+        {255,   0,   0, 128}, //75-100%
+    };
+    x = 40;
+    y += h;
+    hudDrawRect(x,          y, x + (w*0.25), y+h, &colScale[0]);
+    hudDrawRect(x+(w*0.25), y, x + (w*0.50), y+h, &colScale[1]);
+    hudDrawRect(x+(w*0.50), y, x + (w*0.75), y+h, &colScale[2]);
+    hudDrawRect(x+(w*0.75), y, x + w,        y+h, &colScale[3]);
+}
+
 void mainLoopDebugPrint() {
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"
         DPRINT_BGCOLOR "\x01\x01\x01\x3F"); //reset color
 
     drawHeaps();
+    if(debugTextFlags & DEBUGTEXT_PERFORMANCE) printPerformance();
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
     if(debugTextFlags & DEBUGTEXT_RESTART_POINT) printRestartPoint();
