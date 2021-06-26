@@ -33,6 +33,7 @@ GLOBALFN void* dCacheStore(void*, uint);
 GLOBALFN void debugPrintDraw(void);
 GLOBALFN void debugPrintf(const char*, ...);
 GLOBALFN void debugPrintfxy(int x, int y, const char*, ...);
+GLOBALFN void debugPrintSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN void dll_MCUpgradeMa_init(ObjInstance *obj);
 GLOBALFN void doQueuedLoads(void);
 GLOBALFN void doRumble(float time);
@@ -81,7 +82,6 @@ GLOBALFN void* loadFileByPath(char *path,uint *outSize);
     // Returns pointer to allocated buffer of contents.
     // outSize: if not NULL, receives file size.
 GLOBALFN void loadMapForCurrentSaveGame(void);
-GLOBALFN void logSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN u32 mainGetBit(GameBit bit);
 GLOBALFN void mainLoopDoQueuedSounds(void);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
@@ -97,6 +97,7 @@ GLOBALFN void mm_free(void*); // wrapper for free()
 GLOBALFN ModelFileHeader* modelLoad(
     int modelNum,ModelFlags_loadCharacter flags,uint *outSize);
     // if modelNum is negative, don't use MODELIND.bin
+GLOBALFN void multByObjMtx(double x, double y, double z, float *outX, float *outY, float *outZ, ObjInstance *obj);
 GLOBALFN float multVectorByObjMtx(float x, float y, float z, float *outX, float *outY, float *outZ, ObjInstance*);
 GLOBALFN void musicTestPlaySong(int song);
 GLOBALFN ObjDef* objAlloc(int size, int type);
@@ -156,6 +157,7 @@ GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);
 GLOBALFN void updateViewMatrix(void);
 GLOBALFN float vec3f_distance(vec3f *a, vec3f *b);
 GLOBALFN void vec3f_scale(double scale, vec3f *in, vec3f *out);
+GLOBALFN float vec3f_xzDistance(vec3f *a, vec3f *b);
 GLOBALFN void videoSetBufferSwapCb(void*);
 GLOBALFN void videoSetCallback_80256460(void*);
 GLOBALFN void viFn_8024d554(void);

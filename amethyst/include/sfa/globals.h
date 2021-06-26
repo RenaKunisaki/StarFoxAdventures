@@ -38,6 +38,8 @@ extern u32 dataFileSize[NUM_FILES];
 extern char debugLogBuffer[1000];
 extern void *debugFrameBuffer[2];
 extern char *debugLogEnd;
+extern s16 debugPrintXpos;
+extern s16 debugPrintYpos;
 extern float distortionFilterAngle1; //distortion filter angle
 extern float distortionFilterAngle2; //distortion filter angle 2
 extern Color4b distortionFilterColor; //distortion filter color

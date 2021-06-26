@@ -13,11 +13,30 @@ u32 debugTextFlags =
     DEBUGTEXT_GAMEBIT_LOG |
     //DEBUGTEXT_PLAYER_STATE |
     DEBUGTEXT_PERFORMANCE |
+    DEBUGTEXT_FPS |
     0;
 u32 debugRenderFlags =
     //DEBUGRENDER_WORLD_MAP |
     //DEBUGRENDER_DEBUG_OBJS |
     0;
+
+
+void debugPrintSetPos(s16 x, s16 y) {
+    *(debugLogEnd++) = 0x82;
+    *(debugLogEnd++) = x & 0xFF;
+    *(debugLogEnd++) = x >> 8;
+    *(debugLogEnd++) = y & 0xFF;
+    *(debugLogEnd++) = y >> 8;
+    *debugLogEnd = 0;
+}
+void debugPrintSetBgColor(u8 r, u8 g, u8 b, u8 a) {
+    *(debugLogEnd++) = 0x85;
+    *(debugLogEnd++) = r;
+    *(debugLogEnd++) = g;
+    *(debugLogEnd++) = b;
+    *(debugLogEnd++) = a;
+    *debugLogEnd = 0;
+}
 
 static void printObjName(const char *fmt, ObjInstance *obj) {
     //print object's name, with sanity checking
@@ -43,16 +62,16 @@ static void printCoords() {
     //debugPrintf doesn't support eg '%+7.2f' so we'll just convert
     //to int to get rid of excess digits
     if(pPlayer) {
-        debugPrintf("P:" DPRINT_FIXED "%6d %6d %6d %08X" DPRINT_NOFIXED,
-            (int)pPlayer->pos.pos.x, (int)pPlayer->pos.pos.y, (int)pPlayer->pos.pos.z,
-            pPlayer);
+        debugPrintf("P:" DPRINT_FIXED "%6d %6d %6d" DPRINT_NOFIXED,
+            (int)pPlayer->pos.pos.x, (int)pPlayer->pos.pos.y, (int)pPlayer->pos.pos.z);
     }
 
     //Display map coords
     int mapNo = curMapId;
     if(mapNo >= NUM_MAP_DIRS) mapNo = mapActLut[mapNo];
     debugPrintf(" M:" DPRINT_FIXED "%3d,%3d,%d #%02X T%X %08X" DPRINT_NOFIXED,
-        mapCoords.mapX, mapCoords.mapZ, curMapLayer, curMapId,
+        (int)(mapCoords.mapX / MAP_CELL_SCALE), (int)(mapCoords.mapZ / MAP_CELL_SCALE),
+        curMapLayer, curMapId,
         mainGetBit(mapActBitIdx[mapNo]),
         mainGetBit(mapObjGroupBit[mapNo]));
 
@@ -62,6 +81,37 @@ static void printCoords() {
         loadedFileMapIds[FILE_BLOCKS_BIN2] & 0xFF,
         //buckets are int, but we really only need lowest byte.
         levelLockBuckets[0] & 0xFF, levelLockBuckets[1] & 0xFF);
+
+    //display velocity and angle
+    if(pPlayer) {
+        //not entirely sure what the velocity is relative to.
+        //seems to be something involving both world and camera space.
+        //in any case it's not that important since we only care about XZ distance.
+        vec3f vel = pPlayer->vel;
+        /* float fwdX, fwdZ, sideX, sideZ;
+        angleToVec2(pCamera->pos.rotation.x,          &fwdX,  &fwdZ);
+        angleToVec2(pCamera->pos.rotation.x + 0x4000, &sideX, &sideZ);
+        
+        float mx = (vel.x * sideX) + (vel.z * fwdX);
+        float mz = (vel.z * fwdZ ) + (vel.x * sideZ);
+        vel.x = mx; vel.z = mz; */
+        vec3f zero = {0, 0, 0};
+        vel.z = vec3f_xzDistance(&vel, &zero);
+
+        s16 rxAdj = 0x8000 - pPlayer->pos.rotation.x; //for consistency with viewfinder
+        float rx = ((float)rxAdj) * (360.0 / 65536.0);
+        float ry = ((float)pPlayer->pos.rotation.y) * (360.0 / 65536.0);
+        float rz = ((float)pPlayer->pos.rotation.z) * (360.0 / 65536.0);
+        if(rx < 0.0) rx += 360.0;
+        if(ry < 0.0) ry += 360.0;
+        if(rz < 0.0) rz += 360.0;
+        
+        //debugPrintf doesn't support these precision modifiers but sprintf does
+        char buf[256];
+        sprintf(buf, "V:" DPRINT_FIXED "%+7.3f %+7.3f R:%5.1f %5.1f %5.1f\n" DPRINT_NOFIXED,
+            vel.z, vel.y, rx, ry, rz);
+        debugPrintf("%s", buf);
+    }
 }
 
 static int restartPointFrameCount[2] = {0, 0};
@@ -230,82 +280,38 @@ static void printPlayerState() {
     printPlayerObj("Hold obj",    *(ObjInstance**)(pState + 0x7F8));
 }
 
-double u64toDouble(u64 val) {
-    //this is necessary to make gcc not try to use soft float.
-    //XXX is 8028656c the same as this?
-    u32 hi = val >> 32LL;
-    u32 lo = val & 0xFFFFFFFFLL;
-    return (double)lo + (double)(hi * 4294967296.0);
-}
-
-double ticksToSecs(u64 ticks) {
-    double fTicks = u64toDouble(ticks);
-
-    //everything says this should be / 4 but I only get anything
-    //sensible with / 2.
-    return fTicks / (__OSBusClock / 4);
-}
-
 static void printPerformance() {
-    double dTotal    = u64toDouble(tLoop);
-    double dLogic    = u64toDouble(tLogic);
-    double dRender   = u64toDouble(tRender);
-    double pctLogic  = dLogic  / dTotal;
-    double pctRender = dRender / dTotal;
-    double pctTotal  = pctLogic + pctRender;
-    double totalSecs = ticksToSecs(tLoop);
+    debugPrintf(DPRINT_FIXED "L%3d%% %3dms R%3d%% %3dms T%3d%% %3dms \n" DPRINT_NOFIXED,
+        (int)(pctLogic  * 100.0), (int)(ticksToSecs(tLogic) * 1000.0),
+        (int)(pctRender * 100.0), (int)(ticksToSecs(tRender) * 1000.0),
+        (int)(pctTotal  * 100.0), (int)(ticksToSecs(tLogic+tRender) * 1000.0));
+}
+
+static void printFPS() {
+    char color[] = {0x81, 255, (gxFrameQueue.nPending > 1) ? 1 : 255, 255, 255, 0};
     
-    debugPrintf(DPRINT_FIXED "L%3d R%3d T%3d Q%d S%d %3d FPS\n" DPRINT_NOFIXED,
-        (int)(pctLogic  * 100.0),
-        (int)(pctRender * 100.0),
-        (int)(pctTotal  * 100.0),
-        *(u16*)(0x8035f730), //gx number of queued frames
-        framesThisStep,
-        (int)(1.0 / totalSecs));
-        //(int)(1000.0 / msecsThisFrame));
-        //msecsThisFrame goes very low sometimes when it's lagging... frameskip?
+    //msecsThisFrame goes very low sometimes when it's lagging... frameskip?
+    //or more like it's only measuring a partial frame
 
-    debugPrintf(DPRINT_FIXED "L%3dms R%3dms T%3dms\n" DPRINT_NOFIXED,
-        (int)(ticksToSecs(tLogic) * 1000.0),
-        (int)(ticksToSecs(tRender) * 1000.0),
-        (int)(totalSecs * 1000.0));
-
-    //draw meters
-    Color4b colLogic  = {  0, 255,   0, 128};
-    Color4b colRender = {255,   0,   0, 128};
-    Color4b colIdle   = {  0,   0,   0, 128};
-    int x = 40;
-    int y = SCREEN_HEIGHT - 50;
-    int w = SCREEN_WIDTH - (x * 2);
-    int h = 4;
-    hudDrawRect(x, y, x+(w*pctLogic), y+h, &colLogic);
-    x += (w * pctLogic);
-    if(x < w) hudDrawRect(x, y, x+(w*pctRender), y+h, &colRender);
-    x += (w * pctRender);
-    if(x < w) hudDrawRect(x, y, w, y+h, &colIdle);
-
-    //draw scale
-    //colors can't be const because hudDrawRect is insane and changes them
-    Color4b colScale[] = {
-        {  0, 255, 255, 128}, // 0- 24%
-        {  0, 255,   0, 128}, //25- 49%
-        {255, 255,   0, 128}, //50- 74%
-        {255,   0,   0, 128}, //75-100%
-    };
-    x = 40;
-    y += h;
-    hudDrawRect(x,          y, x + (w*0.25), y+h, &colScale[0]);
-    hudDrawRect(x+(w*0.25), y, x + (w*0.50), y+h, &colScale[1]);
-    hudDrawRect(x+(w*0.50), y, x + (w*0.75), y+h, &colScale[2]);
-    hudDrawRect(x+(w*0.75), y, x + w,        y+h, &colScale[3]);
+    //XXX will these positions need changing for console?
+    debugPrintSetPos(480, 0); //wtf is this coordinate system
+    debugPrintf(DPRINT_FIXED "%s%3d" DPRINT_NOFIXED
+        DPRINT_COLOR "\xFF\xFF\xFF\xFF", color,
+        //(int)((frame / totalSecs) * 60.0));
+        (int)(1000.0 / msecsThisFrame)
+    );
+    debugPrintSetPos(0, 0);
 }
 
 void mainLoopDebugPrint() {
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"
         DPRINT_BGCOLOR "\x01\x01\x01\x3F"); //reset color
 
+    //do this first because it changes text position
+    //and trying to restore it is a pain
+    if(debugTextFlags & DEBUGTEXT_FPS) printFPS();
     drawHeaps();
-    if(debugTextFlags & DEBUGTEXT_PERFORMANCE) printPerformance();
+    if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
     if(debugTextFlags & DEBUGTEXT_RESTART_POINT) printRestartPoint();
@@ -314,7 +320,8 @@ void mainLoopDebugPrint() {
         printObjCount();
         printMemory();
     }
-    if(debugTextFlags & DEBUGTEXT_HEAP_STATE) printHeapInfo();
+    if(debugTextFlags & DEBUGTEXT_PERFORMANCE)       printPerformance();
+    if(debugTextFlags & DEBUGTEXT_HEAP_STATE)        printHeapInfo();
     if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
 
     debugPrintf("\n"); //for game's own messages

@@ -12,11 +12,13 @@ typedef enum {
     DEBUGTEXT_GAMEBIT_LOG       = (1 <<  7),
     DEBUGTEXT_PLAYER_STATE      = (1 <<  8),
     DEBUGTEXT_PERFORMANCE       = (1 <<  9),
+    DEBUGTEXT_FPS               = (1 << 10),
 } DebugTextFlags;
 
 typedef enum {
-    DEBUGRENDER_WORLD_MAP  = (1 <<  0),
-    DEBUGRENDER_DEBUG_OBJS = (1 <<  1),
+    DEBUGRENDER_WORLD_MAP   = (1 <<  0),
+    DEBUGRENDER_DEBUG_OBJS  = (1 <<  1),
+    DEBUGRENDER_PERF_METERS = (1 <<  2),
 } DebugRenderFlags;
 
 typedef enum {
@@ -37,6 +39,9 @@ void debugObjsInit();
 //debugprint.c
 extern u32 debugTextFlags;
 extern u32 debugRenderFlags;
+//debugPrintSetColor is already in the game
+void debugPrintSetPos(s16 x, s16 y);
+void debugPrintSetBgColor(u8 r, u8 g, u8 b, u8 a);
 void mainLoopDebugPrint();
 
 //drawheap.c

@@ -52,3 +52,23 @@ typedef enum {
     RenderFlag_ChangeDrawDistance_10000 = 0x10000,
     RenderFlag_Overcast                 = 0x40000,
 } RenderFlags;
+
+typedef struct {
+    void *cmdBuf;   //commands to execute
+    void *unk04;    //always NULL?
+    void *frameBuf; //frame buffer to render into
+} GxPendingFrame;
+
+typedef struct {
+    short           nPending;   //number of pending frames
+    short           queueSize;  //max pending frames
+    short           entrySize;  //sizeof(GxPendingFrame)
+    u8              unk06;
+    u8              unk07;
+    short           next;       //idx of next queue entry to write
+    u8              unk0A;
+    u8              unk0B;
+    GxPendingFrame *frame;
+} GxFrameQueue;
+
+extern GxFrameQueue gxFrameQueue;

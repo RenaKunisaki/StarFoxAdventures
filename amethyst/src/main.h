@@ -109,6 +109,10 @@ extern u64 tLogicEnd;    //end   time of game logic section
 extern u64 tRenderStart; //start time of render section
 extern u64 tRenderEnd;   //end   time of render section
 extern u64 tLoop, tLogic, tRender; //durations
+extern float pctLogic;
+extern float pctRender;
+extern float pctTotal;
+void renderPerfMeters();
 void perfMonInit();
 
 //player.c
@@ -161,6 +165,8 @@ int compareObjsByType(const void *objA, const void *objB);
 int compareObjsById(const void *objA, const void *objB);
 int compareObjsByName(const void *objA, const void *objB);
 int compareObjsByDistance(const void *objA, const void *objB);
+double u64toDouble(u64 val);
+double ticksToSecs(u64 ticks);
 
 //worldmap.c
 void worldMapHook();

@@ -103,3 +103,15 @@ int compareObjsByDistance(const void *objA, const void *objB) {
     if(dA > dB) return  1;
     return 0;
 }
+
+double u64toDouble(u64 val) {
+    //this is necessary to make gcc not try to use soft float.
+    //XXX is 8028656c the same as this?
+    u32 hi = val >> 32LL;
+    u32 lo = val & 0xFFFFFFFFLL;
+    return (double)lo + (double)(hi * 4294967296.0);
+}
+
+double ticksToSecs(u64 ticks) {
+    return u64toDouble(ticks) / (__OSBusClock / 4);
+}

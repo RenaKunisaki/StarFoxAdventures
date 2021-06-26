@@ -93,6 +93,17 @@ void menuDebugRenderMapGrid_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugRenderPerf_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_PERF_METERS) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugRenderPerf_select(const MenuItem *self, int amount) {
+    debugRenderFlags ^= DEBUGRENDER_PERF_METERS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
 void menuDebugRenderDebugObjs_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_DEBUG_OBJS) ? "On" : "Off");
@@ -115,6 +126,7 @@ Menu menuDebugRender = {
     "Color Filters",     genericMenuItem_draw,         menuDebugRenderFilter_select,
     "View Textures",     genericMenuItem_draw,         menuDebugRenderTextures_select,
     "Map Grid: %s",      menuDebugRenderMapGrid_draw,  menuDebugRenderMapGrid_select,
+    "Perf Meters: %s",   menuDebugRenderPerf_draw,     menuDebugRenderPerf_select,
     "Debug Objects: %s", menuDebugRenderDebugObjs_draw,menuDebugRenderDebugObjs_select,
     NULL,
 };
