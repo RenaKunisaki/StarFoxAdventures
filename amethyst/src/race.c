@@ -6,7 +6,7 @@ void IM_ToggleRaceTimer(bool start) {
         gameTimerInit(GAME_TIMER_FLAG_RUNNING | GAME_TIMER_FLAG_VISIBLE, 
             (99*60*60) + (59*60) + 59); //min:sec:frames
         OSReport("Started IM race timer!");
-        WRITE32(0x803DE8B8, 0x3F600000); //turbo mode
+        //WRITE32(0x803DE8B8, 0x3F600000); //turbo mode
     }
     else {
         gameTimerStop();
