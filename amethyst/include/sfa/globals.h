@@ -8,6 +8,7 @@ extern bool bEnableMonochromeFilter; //monochrome
 extern bool bEnableMotionBlur; //motion blur
 extern bool bEnableSpiritVision; //spirit vision filter
 extern bool bEnableViewFinderHud; //viewfinder
+extern float bikeMoveScale;
 extern vec3f blurFilterArea; //blur filter area
 extern OSContext *bsodCtx;
 extern u16 bsodErrorCode;
