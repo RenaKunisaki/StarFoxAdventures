@@ -1,3 +1,6 @@
+/** Renders a timer and speedometer during Ice Mountain bike sequence.
+ *  XXX do it for other bike sequences too.
+ */
 #include "main.h"
 static float disappearTimer = 0;
 
@@ -7,6 +10,7 @@ void IM_ToggleRaceTimer(bool start) {
             (99*60*60) + (59*60) + 59); //min:sec:frames
         OSReport("Started IM race timer!");
         //bikeMoveScale = 0.875; //turbo mode
+        //XXX add a switch or something to the map to toggle this
     }
     else {
         gameTimerStop();
@@ -22,7 +26,8 @@ static void drawTimer() {
         ((int)secs) % 60, // seconds
         ((int)(secs * 100.0)) % 100); // 1/100 seconds
 
-    //the timer code does this, but slightly different
+    //the timer code does this, but slightly different.
+    //XXX does this break other timers after the race?
     GameTextBox *box = gameTextGetBox(0xD);
     box->y = 400;
     box->height = 400;
@@ -32,7 +37,6 @@ static void drawTimer() {
     u8 alpha = MIN((int)(disappearTimer * 8.0), 255);
     drawHudBox(50, 346, 120, 40, alpha, true);
     gameTextSetColor(0xFF, 0xFF, 0xFF, alpha);
-    //gameTextShowStr(str, 0, 0, 300);
     gameTextShowStr(str, 0xD, 10, 90);
 }
 
