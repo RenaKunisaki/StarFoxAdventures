@@ -38,7 +38,7 @@ void drawRNG() {
 void printRNG() {
     //print RNG call rate and next few values
     u32 start = randomNumber;
-    debugPrintf("RNG" DPRINT_FIXED "%6d/f %08X %08X %08X %08X\n" DPRINT_NOFIXED, rngCalls,
+    debugPrintf("RNG" DPRINT_FIXED "%6d %08X %08X %08X %08X\n" DPRINT_NOFIXED, rngCalls,
         randomGetNext(), randomGetNext(), randomGetNext(), randomGetNext());
     randomNumber = start; //reset seed
 }
