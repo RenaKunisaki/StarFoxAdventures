@@ -121,6 +121,17 @@ void menuDebugTextPerf_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
+
+void menuDebugTextFPS_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_FPS) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugTextFPS_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_FPS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
@@ -135,5 +146,6 @@ Menu menuDebugText = {
     "Memory Stats: %s",    menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
     "Heap Details: %s",    menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
     "Performance: %s",     menuDebugTextPerf_draw,         menuDebugTextPerf_select,
+    "FPS Meter: %s",       menuDebugTextFPS_draw,          menuDebugTextFPS_select,
     NULL,
 };

@@ -129,6 +129,9 @@ GLOBALFN ObjInstance* playerGetNearestObject(int idx,ObjInstance *obj,float *out
 GLOBALFN ObjInstance** playerGetObject(int idx, int *outIdx);
 GLOBALFN void playerInitFuncPtrs(void);
 GLOBALFN BOOL playerSetHeldObject(ObjInstance *player, ObjInstance *obj);
+GLOBALFN u32 randomGetNext(void);
+GLOBALFN u32 randomGetRange(u32 min, u32 max);
+GLOBALFN void randomSetSeed(u32);
 GLOBALFN void reset(int, int, int);
 GLOBALFN PlayerCharState* SaveGame_getCurCharacterState(void);
 GLOBALFN void saveGame_save(void);

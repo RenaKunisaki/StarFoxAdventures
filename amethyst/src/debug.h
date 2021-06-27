@@ -13,12 +13,14 @@ typedef enum {
     DEBUGTEXT_PLAYER_STATE      = (1 <<  8),
     DEBUGTEXT_PERFORMANCE       = (1 <<  9),
     DEBUGTEXT_FPS               = (1 << 10),
+    DEBUGTEXT_RNG               = (1 << 11),
 } DebugTextFlags;
 
 typedef enum {
     DEBUGRENDER_WORLD_MAP   = (1 <<  0),
     DEBUGRENDER_DEBUG_OBJS  = (1 <<  1),
     DEBUGRENDER_PERF_METERS = (1 <<  2),
+    DEBUGRENDER_RNG         = (1 <<  3),
 } DebugRenderFlags;
 
 typedef enum {

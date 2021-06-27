@@ -14,6 +14,7 @@ u32 debugTextFlags =
     //DEBUGTEXT_PLAYER_STATE |
     DEBUGTEXT_PERFORMANCE |
     DEBUGTEXT_FPS |
+    DEBUGTEXT_RNG |
     0;
 u32 debugRenderFlags =
     //DEBUGRENDER_WORLD_MAP |
@@ -99,7 +100,7 @@ static void printCoords() {
         vel.z = vec3f_xzDistance(&vel, &zero);
 
         s16 rxAdj = 0x8000 - pPlayer->pos.rotation.x; //for consistency with viewfinder
-        float rx = ((float)rxAdj) * (360.0 / 65536.0);
+        float rx = ((float)rxAdj)                   * (360.0 / 65536.0);
         float ry = ((float)pPlayer->pos.rotation.y) * (360.0 / 65536.0);
         float rz = ((float)pPlayer->pos.rotation.z) * (360.0 / 65536.0);
         if(rx < 0.0) rx += 360.0;
@@ -312,6 +313,7 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_FPS) printFPS();
     drawHeaps();
     if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
+    if(debugRenderFlags & DEBUGRENDER_RNG) drawRNG();
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
     if(debugTextFlags & DEBUGTEXT_RESTART_POINT) printRestartPoint();
@@ -323,6 +325,8 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_PERFORMANCE)       printPerformance();
     if(debugTextFlags & DEBUGTEXT_HEAP_STATE)        printHeapInfo();
     if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
+    if(debugTextFlags & DEBUGTEXT_RNG)               printRNG();
+    rngCalls = 0;
 
     debugPrintf("\n"); //for game's own messages
 

@@ -103,6 +103,7 @@ extern struct {
 extern ObjInstance *pPlayer;
 extern SaveGame *pRestartPoint;
 extern ObjInstance *pTricky;
+extern u32 randomNumber;
 extern u32 renderFlags;
 extern float rumbleTimer;
 extern SaveData saveData;

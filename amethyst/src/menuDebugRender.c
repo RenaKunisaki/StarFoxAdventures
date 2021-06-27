@@ -115,6 +115,17 @@ void menuDebugRenderDebugObjs_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugRenderRNG_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_RNG) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugRenderRNG_select(const MenuItem *self, int amount) {
+    debugRenderFlags ^= DEBUGRENDER_RNG;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
 Menu menuDebugRender = {
     "Render", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
@@ -128,5 +139,6 @@ Menu menuDebugRender = {
     "Map Grid: %s",      menuDebugRenderMapGrid_draw,  menuDebugRenderMapGrid_select,
     "Perf Meters: %s",   menuDebugRenderPerf_draw,     menuDebugRenderPerf_select,
     "Debug Objects: %s", menuDebugRenderDebugObjs_draw,menuDebugRenderDebugObjs_select,
+    "RNG: %s",           menuDebugRenderRNG_draw,      menuDebugRenderRNG_select,
     NULL,
 };

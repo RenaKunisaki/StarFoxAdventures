@@ -106,4 +106,5 @@ void perfMonInit() {
     hookBranch(0x80020c6c, gameLogicEndHook, 1);   
     hookBranch(0x80020c74, renderStartHook, 1);   
     hookBranch(0x80020d60, renderEndHook, 1);   
+    hookBranch(0x80292dc0, rngHook, 0);
 }

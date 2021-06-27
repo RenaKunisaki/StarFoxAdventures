@@ -122,6 +122,12 @@ PlayerStateEnum playerStateClimbWallHook(double dT, ObjInstance *player, void *s
 void playerMainLoopHook();
 void firstPersonHook(void *param1, void *param2);
 
+//random.c
+extern u32 rngCalls;
+u32 rngHook();
+void drawRNG();
+void printRNG();
+
 //save.c
 extern bool bAutoSave;
 void saveLoadHook();
