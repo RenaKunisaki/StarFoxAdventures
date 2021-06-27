@@ -122,6 +122,10 @@ PlayerStateEnum playerStateClimbWallHook(double dT, ObjInstance *player, void *s
 void playerMainLoopHook();
 void firstPersonHook(void *param1, void *param2);
 
+//race.c
+void IM_ToggleRaceTimer(bool start);
+void IM_UpdateRaceTimer();
+
 //random.c
 extern u32 rngCalls;
 u32 rngHook();
@@ -171,6 +175,7 @@ int compareObjsByType(const void *objA, const void *objB);
 int compareObjsById(const void *objA, const void *objB);
 int compareObjsByName(const void *objA, const void *objB);
 int compareObjsByDistance(const void *objA, const void *objB);
+int compareObjsByAddr(const void *objA, const void *objB);
 double u64toDouble(u64 val);
 double ticksToSecs(u64 ticks);
 

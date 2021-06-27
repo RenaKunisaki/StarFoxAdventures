@@ -165,6 +165,8 @@ void mainLoopHook() {
     }
 
     if(overrideColorScale >= 0) colorScale = overrideColorScale;
+
+    IM_UpdateRaceTimer();
 }
 
 

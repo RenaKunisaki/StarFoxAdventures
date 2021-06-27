@@ -48,6 +48,9 @@ GLOBALFN gametextStruct* gameTextGet(GameTextId32);
 GLOBALFN char* gameTextGetStr(GameTextId32);
 GLOBALFN void gameTextSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN void gameTextShowStr(const char*, int window, int x, int y);
+GLOBALFN void gameTimerInit(GameTimerFlags flags, int max);
+GLOBALFN void gameTimerRun(void); //takes a param but doesn't use it
+GLOBALFN void gameTimerStop(void);
 GLOBALFN void GameUI_hudDraw(int,int,int);
 GLOBALFN ObjInstance* getArwing(void);
 GLOBALFN u16 getButtonsHeld(int padNo);

@@ -104,6 +104,10 @@ int compareObjsByDistance(const void *objA, const void *objB) {
     return 0;
 }
 
+int compareObjsByAddr(const void *objA, const void *objB) {
+    return objA - objB;
+}
+
 double u64toDouble(u64 val) {
     //this is necessary to make gcc not try to use soft float.
     //XXX is 8028656c the same as this?

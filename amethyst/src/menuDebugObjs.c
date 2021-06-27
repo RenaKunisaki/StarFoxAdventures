@@ -13,10 +13,11 @@ enum {
     ObjListSortType,
     ObjListSortName,
     ObjListSortDistance,
+    ObjListSortAddr,
     NumObjListSortMethods
 } ObjListSortMethods;
 static const char *sortModeNames[] = {
-    "None", "UniqueID", "DefNo", "Name", "Distance",
+    "None", "UniqueID", "DefNo", "Name", "Distance", "Address",
 };
 
 static u8 sortMode = ObjListSortNone;
@@ -46,6 +47,10 @@ static void sortObjs(int method) {
 
         case ObjListSortDistance:
             quicksort((const void**)objList, 0, numLoadedObjs-1, compareObjsByDistance);
+            break;
+        
+        case ObjListSortAddr:
+            quicksort((const void**)objList, 0, numLoadedObjs-1, compareObjsByAddr);
             break;
 
         default: break;

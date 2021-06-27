@@ -64,5 +64,6 @@ typedef s32 PlayerStateEnum32;
 #include "game/cheats.h"
 #include "game/player/playerstate.h"
 #include "game/save/savegame.h"
+#include "game/timer.h"
 #include "ui/pda.h"
 #include "ui/hud.h"
