@@ -63,6 +63,17 @@ void bitMenu_draw(Menu *self) {
             u8  r = menuAnimFrame * 8, g = 255 - r;
             gameTextSetColor(r, g, 255, 255);
             cursorY = y;
+
+            //display offset and address
+            void *tblAddr;
+            switch(tbl) {
+                case 0: default: tblAddr = tempGameBits; break;
+                case 1: tblAddr = pLastSavedGame->gameBits1; break;
+                case 2: tblAddr = pLastSavedGame->gameBits2; break;
+                case 3: tblAddr = pLastSavedGame->gameBits3; break;
+            }
+            debugPrintf("Bit " DPRINT_FIXED "T=%d offs=%04X -> %08X\n" DPRINT_NOFIXED,
+                tbl, entry->offset, tblAddr + (entry->offset >> 3));
         }
         else gameTextSetColor(255, 255, 255, 255);
 

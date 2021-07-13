@@ -139,6 +139,7 @@ GLOBALFN u32 randomGetRange(u32 min, u32 max);
 GLOBALFN void randomSetSeed(u32);
 GLOBALFN void reset(int, int, int);
 GLOBALFN PlayerCharState* SaveGame_getCurCharacterState(void);
+GLOBALFN int saveGame_load(s8 slot);
 GLOBALFN void saveGame_save(void);
 GLOBALFN void sceneRender(void);
 GLOBALFN void setGpuErrorHandler(void*);

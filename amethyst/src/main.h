@@ -161,6 +161,9 @@ void textDrawHook();
 //texthook.c
 void textHookInit();
 
+//title.c
+void titleHooksInit();
+
 //ui.c
 bool motionBlurHook();
 void hudDrawHook(int p1, int p2, int p3);
