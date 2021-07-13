@@ -6,7 +6,7 @@ static float disappearTimer = 0;
 
 void IM_ToggleRaceTimer(bool start) {
     if(start) {
-        gameTimerInit(GAME_TIMER_FLAG_RUNNING | GAME_TIMER_FLAG_VISIBLE, 
+        gameTimerInit(GAME_TIMER_FLAG_RUNNING | GAME_TIMER_FLAG_VISIBLE,
             (99*60*60) + (59*60) + 59); //min:sec:frames
         OSReport("Started IM race timer!");
         //bikeMoveScale = 0.875; //turbo mode
@@ -50,7 +50,7 @@ void IM_UpdateRaceTimer() {
         gameTimerValue += timeDelta;
         disappearTimer = 300.0; //frames, ie 5 seconds
         drawTimer();
-        
+
         vec3f vel = pPlayer->vel;
         vec3f zero = {0, 0, 0};
         double vxz = vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 20.0;
