@@ -9,6 +9,7 @@ typedef enum {
     CAM_MODE_NORMAL = 0,
     CAM_MODE_STAY,
     CAM_MODE_FREE,
+    CAM_MODE_BIRD,
     NUM_CAM_MODES,
 } CameraMode;
 

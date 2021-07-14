@@ -11,7 +11,7 @@ int titleHook() {
 
     //debugPrintf("saveStatus = %d frameCount = %d\n", saveStatus, frameCount);
     //doing it too soon will crash
-    if(frameCount > 10 && titleScreen_panAwayFromMovieTimer > 0 && buttons & PAD_TRIGGER_L) {
+    if(frameCount > 20 && titleScreen_panAwayFromMovieTimer > 0 && buttons & PAD_TRIGGER_L) {
         //OSReport("Loading save 1\n");
         titleScreenActive = false;
         titleScreen_panAwayFromMovieTimer = 0;

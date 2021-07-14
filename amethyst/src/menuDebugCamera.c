@@ -1,7 +1,7 @@
 #include "main.h"
 
 
-static const char *camModeNames[] = {"Normal", "Stay", "Free"};
+static const char *camModeNames[] = {"Normal", "Stay", "Free", "Bird's Eye"};
 void menuDebugCamMode_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, camModeNames[debugCameraMode]);
