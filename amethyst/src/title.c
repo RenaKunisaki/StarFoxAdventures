@@ -1,6 +1,7 @@
 /** Title screen improvements.
  */
 #include "main.h"
+#include "revolution/os.h"
 
 static int (*oldTitleHook)();
 
@@ -8,8 +9,10 @@ int titleHook() {
     //check current and previous frame
     u16 buttons = controllerStates[0].button | controllerStates[4].button;
 
-    debugPrintf("saveStatus = %d\n", saveStatus);
-    if(saveStatus < 0 && buttons & PAD_TRIGGER_L) {
+    //debugPrintf("saveStatus = %d frameCount = %d\n", saveStatus, frameCount);
+    //doing it too soon will crash
+    if(frameCount > 10 && titleScreen_panAwayFromMovieTimer > 0 && buttons & PAD_TRIGGER_L) {
+        //OSReport("Loading save 1\n");
         titleScreenActive = false;
         titleScreen_panAwayFromMovieTimer = 0;
         saveGame_load(0);
@@ -22,6 +25,7 @@ int titleHook() {
 
 void titleHooksInit() {
     //hook into the run method of the title screen DLL
+    OSReport("Install title hook...\n");
     oldTitleHook = *(u32*)0x8031a320;
     WRITE32(0x8031a320, titleHook);
 }
