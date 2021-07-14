@@ -11,6 +11,7 @@ int titleHook() {
     debugPrintf("saveStatus = %d\n", saveStatus);
     if(saveStatus < 0 && buttons & PAD_TRIGGER_L) {
         titleScreenActive = false;
+        titleScreen_panAwayFromMovieTimer = 0;
         saveGame_load(0);
         //interesting: calling this during the game still works, and replaces your current save
         //data, so things like your items are reset, but you don't reload or respawn...

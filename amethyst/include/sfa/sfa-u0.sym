@@ -384,6 +384,7 @@ timeDelta = 0x803db414;
 timeListDraw = 0x80128e70;
 timeListVisible = 0x803dd75b;
 timeStop = 0x803dca3c;
+titleScreen_panAwayFromMovieTimer = 0x803dd648;
 titleScreenActive = 0x803dd61a;
 unloadMap = 0x80056f7c;
 unlockLevel = 0x8004350c;
