@@ -111,6 +111,7 @@ GLOBALFN void objFree(ObjInstance*);
 GLOBALFN void objFreeAll(void);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
+GLOBALFN void objRunSeq(uint seqIdx, ObjInstance *obj, u32 flags);
 GLOBALFN void objSetModel(ObjInstance *obj, int modelIdx);
 GLOBALFN void objStopSound_(ObjInstance *obj, int id);
 GLOBALFN bool objUpdateOpacity(ObjInstance *obj);

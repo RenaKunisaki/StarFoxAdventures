@@ -1,7 +1,8 @@
-/** Debug Object List submenu.
+/** Debug Object List submenu for selected object.
  */
 #include "main.h"
 #include "menuDebugObjs.h"
+static s8 selectedSeq = 0;
 
 void objSelMenu_draw(Menu *self) {
     //Draw function for Object List selected object submenu
@@ -64,26 +65,26 @@ void menuObjSelSummon_select(const MenuItem *self, int amount) {
     }
     cameraUpdate(1);
 }
-/* void menuObjSelSetPlayer_select(const MenuItem *self, int amount) {
+void menuObjSelSetPlayer_select(const MenuItem *self, int amount) {
     //this will just crash 99% of the time
     if(amount) return;
     menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
     pPlayer = objMenuSelected;
-} */
-/* void menuObjSelRide_select(const MenuItem *self, int amount) {
+}
+void menuObjSelRide_select(const MenuItem *self, int amount) {
     //this will also crash 99% of the time
     if(amount) return;
     menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
     void *pState = pPlayer ? pPlayer->state : NULL;
     (*(ObjInstance**)(pState + 0x7F0)) = objMenuSelected;
     (*(u16*)(pState + 0x274)) = PlayerStateEnum_RideBike;
-} */
-/* void menuObjSelHold_select(const MenuItem *self, int amount) {
+}
+void menuObjSelHold_select(const MenuItem *self, int amount) {
     //doesn't always crash but not very useful
     if(amount) return;
     menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
     playerSetHeldObject(pPlayer, objMenuSelected);
-} */
+}
 void menuObjSelEditObj_select(const MenuItem *self, int amount) {
     if(amount) return;
     hexEditPrevMenu = curMenu;
@@ -125,19 +126,36 @@ void menuObjSelEditState_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuObjSelCallSeq_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, selectedSeq);
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuObjSelCallSeq_select(const MenuItem *self, int amount) {
+    if(amount) {
+        selectedSeq += amount;
+        audioPlaySound(NULL, MENU_ADJUST_SOUND);
+        return;
+    }
+    objRunSeq(selectedSeq, objMenuSelected, 0xFFFFFFFF);
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
 Menu menuDebugObjSelected = {
     "", 0,
     genericMenu_run, objSelMenu_draw, objListSubmenu_close,
-    "Set Camera Focus", genericMenuItem_draw, menuObjSelFocus_select,
-    "Go To",            genericMenuItem_draw, menuObjSelMovePlayer_select,
-    "Bring To Player",  genericMenuItem_draw, menuObjSelSummon_select,
-    "Delete",           genericMenuItem_draw, menuObjSelDelete_select,
-    //"Set as Player",    genericMenuItem_draw, menuObjSelSetPlayer_select,
-    //"Ride",             genericMenuItem_draw, menuObjSelRide_select,
-    //"Hold",             genericMenuItem_draw, menuObjSelHold_select,
-    "Edit",             genericMenuItem_draw, menuObjSelEditObj_select,
-    "Edit ObjDef",      genericMenuItem_draw, menuObjSelEditDef_select,
-    "Edit File",        genericMenuItem_draw, menuObjSelEditFile_select,
-    "Edit State",       genericMenuItem_draw, menuObjSelEditState_select,
+    "Set Camera Focus",   genericMenuItem_draw, menuObjSelFocus_select,
+    "Go To",              genericMenuItem_draw, menuObjSelMovePlayer_select,
+    "Bring To Player",    genericMenuItem_draw, menuObjSelSummon_select,
+    "Delete",             genericMenuItem_draw, menuObjSelDelete_select,
+    "Edit",               genericMenuItem_draw, menuObjSelEditObj_select,
+    "Edit ObjDef",        genericMenuItem_draw, menuObjSelEditDef_select,
+    "Edit File",          genericMenuItem_draw, menuObjSelEditFile_select,
+    "Edit State",         genericMenuItem_draw, menuObjSelEditState_select,
+    "Run Seq %d",         menuObjSelCallSeq_draw, menuObjSelCallSeq_select,
+    //these will probably crash, so add a little warning icon
+    "[!] Set as Player",  genericMenuItem_draw, menuObjSelSetPlayer_select,
+    "[!] Ride",           genericMenuItem_draw, menuObjSelRide_select,
+    "[!] Hold",           genericMenuItem_draw, menuObjSelHold_select,
     NULL,
 };

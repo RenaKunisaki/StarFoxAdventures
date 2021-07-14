@@ -293,6 +293,7 @@ objFreeAll = 0x8002e294;
 objFreeMode = 0x803db448;
 objInstantiateCharacter = 0x8002df90;
 objLoadPlayerFromSave = 0x802b6ad4;
+objRunSeq = 0x80080de8;
 objSetModel = 0x8002b884;
 objSeqBool = 0x8039a45c;
 objSeqFlags = 0x80399e50;
