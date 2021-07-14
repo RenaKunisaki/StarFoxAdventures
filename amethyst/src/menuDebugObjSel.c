@@ -128,7 +128,18 @@ void menuObjSelEditState_select(const MenuItem *self, int amount) {
 
 void menuObjSelCallSeq_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, selectedSeq);
+
+    //do this here so it applies when a different object is selected
+    if(selectedSeq < 0) selectedSeq = objMenuSelected->file->numSeqs - 1;
+    if(selectedSeq >= objMenuSelected->file->numSeqs) selectedSeq = 0;
+
+    u16 seqNo = 0xFFFF;
+    if(selectedSeq < objMenuSelected->file->numSeqs) {
+        //if object has no sequences the selected seq will still be invalid.
+        //this doesn't matter for calling because it will just do nothing.
+        seqNo = objMenuSelected->file->pSeq[selectedSeq];
+    }
+    sprintf(str, self->name, selectedSeq, seqNo);
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
 void menuObjSelCallSeq_select(const MenuItem *self, int amount) {
@@ -152,7 +163,7 @@ Menu menuDebugObjSelected = {
     "Edit ObjDef",        genericMenuItem_draw, menuObjSelEditDef_select,
     "Edit File",          genericMenuItem_draw, menuObjSelEditFile_select,
     "Edit State",         genericMenuItem_draw, menuObjSelEditState_select,
-    "Run Seq %d",         menuObjSelCallSeq_draw, menuObjSelCallSeq_select,
+    "Run Seq %d: %04X",   menuObjSelCallSeq_draw, menuObjSelCallSeq_select,
     //these will probably crash, so add a little warning icon
     "[!] Set as Player",  genericMenuItem_draw, menuObjSelSetPlayer_select,
     "[!] Ride",           genericMenuItem_draw, menuObjSelRide_select,
