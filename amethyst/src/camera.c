@@ -18,7 +18,11 @@ void _camDoCStick() {
     if(cameraFlags & CAM_FLAG_INVERT_Y) stickY = -stickY;
 
     if(!bFreeMove) {
-        float scale = (debugCameraMode == CAM_MODE_BIRD ? 16 : 1);
+        float scale = 1;
+        if(debugCameraMode == CAM_MODE_BIRD
+        || debugCameraMode == CAM_MODE_FIRST_PERSON) {
+            scale = 8;
+        }
         pCamera->pos.rotation.x += stickX * 128 * scale;
         pCamera->pos.rotation.y += stickY *  16 * scale;
     }
@@ -124,9 +128,15 @@ void _doBird(u32 bHeld, u32 bPressed) {
         pCamera->pos.pos.x = pCamera->focus->pos.pos.x;
         pCamera->pos.pos.y = pCamera->focus->pos.pos.y + camOverrideDist;
         pCamera->pos.pos.z = pCamera->focus->pos.pos.z;
-        pCamera->pos.rotation.x = -0x8000 - pCamera->focus->pos.rotation.x;
-        pCamera->pos.rotation.y = 0x4000;
-        if(camOverrideDist < 0) pCamera->pos.rotation.y = -0x4000;
+        if(getArwing()) {
+            pCamera->pos.rotation.x = -pCamera->focus->pos.rotation.x;
+            pCamera->pos.rotation.y = 0x4000;
+        }
+        else {
+            pCamera->pos.rotation.x = -0x8000 - pCamera->focus->pos.rotation.x;
+            pCamera->pos.rotation.y = 0x4000;
+        }
+        if(camOverrideDist < 0) pCamera->pos.rotation.y = -pCamera->pos.rotation.y;
     }
     _camDoCStick();
 
@@ -137,6 +147,30 @@ void _doBird(u32 bHeld, u32 bPressed) {
     if(tr < CAMERA_TRIGGER_DEADZONE) tr = 0;
     camOverrideDist += (tr - tl) * ((bHeld & PAD_TRIGGER_Z) ? 2 : 1) * 0.01;
     if(tl != tr) debugPrintf("Dist %f\n", camOverrideDist);
+}
+
+//handle camera in First Person mode
+void _doFirstPerson(u32 bHeld, u32 bPressed) {
+    if(pCamera->focus) {
+        float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
+        pCamera->pos.pos.x = pCamera->focus->pos.pos.x;
+        //fudge factor to be above character's head instead of inside it
+        pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + 8;
+        pCamera->pos.pos.z = pCamera->focus->pos.pos.z;
+        if(getArwing()) {
+            pCamera->pos.rotation.x = -pCamera->focus->pos.rotation.x;
+            pCamera->pos.rotation.y = pCamera->focus->pos.rotation.y;
+            pCamera->pos.rotation.z = pCamera->focus->pos.rotation.z;
+        }
+        else {
+            pCamera->pos.rotation.x = -0x8000 - pCamera->focus->pos.rotation.x;
+            pCamera->pos.rotation.y = -pCamera->focus->pos.rotation.y;
+            pCamera->pos.rotation.z = -pCamera->focus->pos.rotation.z;
+        }
+        //this works but doesn't undo when you exit
+        //if(pCamera->focus->newOpacity > 64) pCamera->focus->newOpacity = 64;
+    }
+    _camDoCStick();
 }
 
 //replaces a call to the update method of the current camera DLL.
@@ -176,6 +210,7 @@ void cameraUpdateHook() {
             _doStayOrFree(bHeld, bPressed);
             break;
         case CAM_MODE_BIRD: _doBird(bHeld, bPressed); break;
+        case CAM_MODE_FIRST_PERSON: _doFirstPerson(bHeld, bPressed); break;
         default: break;
     }
 
