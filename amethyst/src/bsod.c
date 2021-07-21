@@ -73,7 +73,7 @@ static void drawPageGeneral() {
     sp = (u32*)bsodCtx->gpr[1];
     int y = 133;
     while(PTR_VALID(sp) && y < 480 - BSOD_LINE_HEIGHT) {
-        debugPrintfxy(440, y, "%08X", *sp);
+        debugPrintfxy(440, y, "%08X", sp[1]);
         sp = (u32*)*sp;
         y += BSOD_LINE_HEIGHT;
     }
