@@ -23,6 +23,7 @@ u32 debugRenderFlags =
 
 
 void debugPrintSetPos(s16 x, s16 y) {
+    if(!enableDebugText) return; //or else game hangs
     *(debugLogEnd++) = 0x82;
     *(debugLogEnd++) = x & 0xFF;
     *(debugLogEnd++) = x >> 8;
@@ -31,6 +32,7 @@ void debugPrintSetPos(s16 x, s16 y) {
     *debugLogEnd = 0;
 }
 void debugPrintSetBgColor(u8 r, u8 g, u8 b, u8 a) {
+    if(!enableDebugText) return; //or else game hangs
     *(debugLogEnd++) = 0x85;
     *(debugLogEnd++) = r;
     *(debugLogEnd++) = g;
@@ -92,7 +94,7 @@ static void printCoords() {
         /* float fwdX, fwdZ, sideX, sideZ;
         angleToVec2(pCamera->pos.rotation.x,          &fwdX,  &fwdZ);
         angleToVec2(pCamera->pos.rotation.x + 0x4000, &sideX, &sideZ);
-        
+
         float mx = (vel.x * sideX) + (vel.z * fwdX);
         float mz = (vel.z * fwdZ ) + (vel.x * sideZ);
         vel.x = mx; vel.z = mz; */
@@ -106,7 +108,7 @@ static void printCoords() {
         if(rx < 0.0) rx += 360.0;
         if(ry < 0.0) ry += 360.0;
         if(rz < 0.0) rz += 360.0;
-        
+
         //debugPrintf doesn't support these precision modifiers but sprintf does
         char buf[256];
         sprintf(buf, "V:" DPRINT_FIXED "%+7.3f %+7.3f R:%5.1f %5.1f %5.1f\n" DPRINT_NOFIXED,
@@ -290,7 +292,7 @@ static void printPerformance() {
 
 static void printFPS() {
     char color[] = {0x81, 255, (gxFrameQueue.nPending > 1) ? 1 : 255, 255, 255, 0};
-    
+
     //msecsThisFrame goes very low sometimes when it's lagging... frameskip?
     //or more like it's only measuring a partial frame
 
@@ -305,6 +307,7 @@ static void printFPS() {
 }
 
 void mainLoopDebugPrint() {
+    if(!enableDebugText) return; //or else game hangs
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"
         DPRINT_BGCOLOR "\x01\x01\x01\x3F"); //reset color
 
@@ -331,4 +334,5 @@ void mainLoopDebugPrint() {
     debugPrintf("\n"); //for game's own messages
 
     if(debugRenderFlags & DEBUGRENDER_WORLD_MAP) drawMapGrid();
+    printHits();
 }
