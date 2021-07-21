@@ -1,4 +1,5 @@
 #include "main.h"
+#include "revolution/os.h"
 
 #define BSOD_LINE_HEIGHT 11
 
@@ -12,6 +13,20 @@ static void clearFrameBuffer(void *buf) {
     }
 }
 
+static const char* getErrMsg(int code) {
+    switch(code) {
+        //save a bit of memory by reusing existing strings in the game
+        case 0x1: return (const char*)0x8031d1d0; break; //"machine check"
+        case 0x2: return (const char*)0x803dbc18; break; //"DSI"
+        case 0x3: return (const char*)0x803dbc1c; break; //"ISI"
+        case 0x5: return (const char*)0x8031d1e0; break; //"alignment"
+        case 0xB: return (const char*)0x8031d1ec; break; //"performance monitor"
+        case 0xD: return (const char*)0x8031d200; break; //"system management interrupt"
+        case 0xF: return (const char*)0x8031d21c; break; //"memory protection error"
+        default:  return (const char*)0x8031d234; break; //"unknown error";
+    }
+}
+
 static void drawPageGeneral() {
     debugPrintfxy(16, 30,
         "       --- FLAGRANT SYSTEM ERROR ---\n"
@@ -20,18 +35,7 @@ static void drawPageGeneral() {
         "    along with your save file if possible.");
 
     //show error code and PC
-    const char *errMsg = "";
-    switch(bsodErrorCode) {
-        //save a bit of memory by reusing existing strings in the game
-        case 0x1: errMsg = (const char*)0x8031d1d0; break; //"machine check"
-        case 0x2: errMsg = (const char*)0x803dbc18; break; //"DSI"
-        case 0x3: errMsg = (const char*)0x803dbc1c; break; //"ISI"
-        case 0x5: errMsg = (const char*)0x8031d1e0; break; //"alignment"
-        case 0xB: errMsg = (const char*)0x8031d1ec; break; //"performance monitor"
-        case 0xD: errMsg = (const char*)0x8031d200; break; //"system management interrupt"
-        case 0xF: errMsg = (const char*)0x8031d21c; break; //"memory protection error"
-        default:  errMsg = (const char*)0x8031d234; break; //"unknown error";
-    }
+    const char *errMsg = getErrMsg(bsodErrorCode);
     debugPrintfxy(26, 85, "PC %08X ERR %X %s", bsodCtx->srr0,
         bsodErrorCode, errMsg);
 
@@ -167,11 +171,58 @@ static void drawPageBits2() { //too big for other page
     drawHexDump(pLastSavedGame->gameBits2, 324, 26, 31);
 }
 
+static void outputToConsole() {
+    const char *errMsg = getErrMsg(bsodErrorCode);
+    OSReport("  *** OH NO ***  PC %08X ERR %X %s\n", bsodCtx->srr0,
+        bsodErrorCode, errMsg);
+
+    if(PTR_VALID(pPlayer)) {
+        OSReport("P %08X %08X %08X %08X", pPlayer,
+            (int)pPlayer->pos.pos.x, (int)pPlayer->pos.pos.y,
+            (int)pPlayer->pos.pos.z);
+    }
+
+    //show map and camera info
+    OSReport("CM %02X ACT %02X OBJ %04X MAPS %02X %02X %02X %02X",
+        cameraMode, curMapAct, numLoadedObjs,
+        loadedFileMapIds[FILE_MODELS_BIN]  & 0xFF,
+        loadedFileMapIds[FILE_MODELS_BIN2] & 0xFF,
+        //buckets are int, but we really only need lowest byte.
+        levelLockBuckets[0] & 0xFF, levelLockBuckets[1] & 0xFF);
+
+    //show GPRs
+    OSReport((const char*)0x8031d270); //"General purpose registers"
+    for(int i=0; i<32; i += 4) {
+        OSReport("  %08X %08X %08X %08X",
+            bsodCtx->gpr[i  ], bsodCtx->gpr[i+1],
+            bsodCtx->gpr[i+2], bsodCtx->gpr[i+3]);
+    }
+
+    //show stack dump
+    OSReport("STACK DUMP");
+    u32 *sp = (u32*)bsodCtx->gpr[1];
+    for(int i=0; i<16; i++) {
+        if(!PTR_VALID(sp)) break;
+        OSReport("  %08X %08X %08X %08X", sp[0], sp[-1], sp[-2], sp[-3]);
+        sp = &sp[-4];
+    }
+
+    //show stack trace
+    OSReport((const char*)0x8031d24A); //"trace"
+    sp = (u32*)bsodCtx->gpr[1];
+    while(PTR_VALID(sp)) {
+        OSReport("  %08X", sp[1]);
+        sp = (u32*)*sp;
+    }
+}
+
 void bsodHook(void) {
     //replace BSOD thread main function.
     //this thread only runs when the game crashes.
 
     OSInterruptMask msr = OSDisableInterrupts();
+    outputToConsole();
+
     debugFrameBuffer[0] = pFrameBuffer[0];
     debugFrameBuffer[1] = pFrameBuffer[1];
 
