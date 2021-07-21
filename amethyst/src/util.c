@@ -34,9 +34,9 @@ int roundTo(int num, int target) {
 void getObjFileName(char *dest, ObjectFileStruct *file) {
     //get name of object from file
     //dest must be at least 12 bytes
-    
+
     //copy the name, filtering out any control codes.
-    if(file) {
+    if(PTR_VALID(file)) {
         int p = 0;
         for(int i=0; i<11; i++) {
             char c = file->name[i];
@@ -49,7 +49,7 @@ void getObjFileName(char *dest, ObjectFileStruct *file) {
 }
 
 void getObjName(char *dest, ObjInstance *obj) {
-    if(obj) getObjFileName(dest, obj->file);
+    if(PTR_VALID(obj)) getObjFileName(dest, obj->file);
     else strcpy(dest, "N/A");
 }
 
