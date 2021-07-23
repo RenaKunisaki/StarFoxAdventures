@@ -166,6 +166,7 @@ void mainLoopHook() {
 
     if(overrideColorScale >= 0) colorScale = overrideColorScale;
 
+    doHudHacks();
     IM_UpdateRaceTimer();
 }
 
@@ -275,6 +276,15 @@ void _start(void) {
     //WRITE32(0x80023f18, 0x9085FFF8); //stw       size,-0x8(slots)
     //WRITE32(0x80023f1c, 0x9005FFFC); //stw       r0,-0x4(slots)
 
+    //kill some seemingly useless text init routines
+    //WRITE_NOP(0x8001a220); //actually, this loads the HUD text.
+
+    //make staff swipe effect use less memory. XXX investigate how much is actually needed.
+    //seems like it wants enough for 3000 swipes which is insane...
+    //but with this amount we get some glitching. maybe it really does need this!?
+    //but this is 60K x 3 = 180K, no way...
+    //WRITE32(0x8016ef4c, 0x38602710);
+
     //Install hooks
     hookBranch(0x80137df8, bsodHook, 1);
     runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c,
@@ -300,6 +310,7 @@ void _start(void) {
     gameBitHookInit();
     debugObjsInit();
     titleHooksInit();
+    hitboxHooksInit();
 
     //debug stuff
     WRITE_NOP(0x80119D90); //chapter select only needs Z button
@@ -317,6 +328,9 @@ void _start(void) {
     //with our fixed width hack.
     WRITE32(0x80017C70, 0x2816ACAB);
     textHookInit();
+
+    //kill Arwing health alarm. we can turn it back on from the menu if we really want.
+    WRITE_NOP(0x8022c2f0);
 
     //remove useless items from C menu
     //WRITE16(0x8031b1c0, 0x0096); //water spellstone 1

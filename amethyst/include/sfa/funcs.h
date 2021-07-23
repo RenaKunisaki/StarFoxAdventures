@@ -81,6 +81,7 @@ GLOBALFN void hudDrawButtons(int,int,int); //XXX params
 GLOBALFN void hudDrawRect(int x1,int y1,int x2,int y2,Color4b *color);
 GLOBALFN void hudDrawTriangle(float x1,float y1,float x2,float y2,float x3, float y3,Color4b *color); //WARNING: changes color->a
 GLOBALFN void* iCacheFlush(void* dest, uint size);
+GLOBALFN void initFn_800534f8(void);
 GLOBALFN bool isCheatActive(uint);
 GLOBALFN bool isCheatUnlocked(uint);
 GLOBALFN void* loadFileByPath(char *path,uint *outSize);
@@ -158,6 +159,7 @@ GLOBALFN void streamStopAll(void);
 GLOBALFN char* strcpy(char *dest, const char *src);
 GLOBALFN int strlen(const char*);
 GLOBALFN char* strncpy(char *dest, const char* src, int len);
+GLOBALFN void texRestructRefs(void);
 GLOBALFN void textRenderChar(s16 x1, s16 y1, s16 x2, s16 y2, double s1, double t1, double s2, double t2);
 GLOBALFN void textRenderSetup(void);
 GLOBALFN Texture* textureIdxToPtr(int);

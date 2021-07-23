@@ -54,6 +54,7 @@ extern float fovY;
 extern u8 gpuHangTimer;
 extern SfaHeap heaps[NUM_HEAPS];
 extern int heatEffectIntensity; //0-255
+extern float hudHealthBlinkTimer; //default: -30
 extern bool hudHidden;
 extern Texture *hudTextures[102];
 extern int initFrameCount;
@@ -103,6 +104,7 @@ extern struct {
 } playerPrevPositions[PLAYER_POS_LOG_SIZE];
 extern ObjInstance *pPlayer;
 extern SaveGame *pRestartPoint;
+extern ObjInstance *pStaff;
 extern ObjInstance *pTricky;
 extern u32 randomNumber;
 extern u32 renderFlags;

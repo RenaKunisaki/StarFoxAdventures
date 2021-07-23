@@ -52,6 +52,11 @@ typedef enum {
     DBGCHT_INF_TRICKY   = (1 << 5),
 } DebugCheat;
 
+typedef enum {
+    HUD_LOW_HP_FLASH = (1 << 0), //flash hearts continuously when low HP
+    HUD_LOW_HP_BEEP  = (1 << 1), //for players who hate themselves
+} HudFlag;
+
 //bsod.c
 void bsodHook(void);
 
@@ -73,8 +78,16 @@ void doFreeMove();
 void gameBitHookInit();
 void gameBitHookUpdate();
 
+//hitbox.c
+void printHits();
+void hitboxHooksInit();
+
 //hook.c
 uint32_t hookBranch(uint32_t addr, void *target, int isBl);
+
+//hud.c
+extern uint8_t hudFlags;
+void doHudHacks();
 
 //main.c
 extern u32 debugCheats;

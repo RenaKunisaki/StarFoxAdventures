@@ -22,3 +22,4 @@ extern s8 overridePlayerNo;
 extern s8 backpackMode;
 void krystalInit();
 void krystalMainLoop();
+void krystal_loadAssets();

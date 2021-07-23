@@ -168,6 +168,7 @@ void _doFirstPerson(u32 bHeld, u32 bPressed) {
             pCamera->pos.rotation.z = -pCamera->focus->pos.rotation.z;
         }
         //this works but doesn't undo when you exit
+        //XXX how does it work when you do the actual first person view?
         //if(pCamera->focus->newOpacity > 64) pCamera->focus->newOpacity = 64;
     }
     _camDoCStick();

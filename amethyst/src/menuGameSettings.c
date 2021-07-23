@@ -55,6 +55,26 @@ void menuLanguage_select(const MenuItem *self, int amount) {
 } */
 
 
+void menuHpFlash_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (hudFlags & HUD_LOW_HP_FLASH) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuHpFlash_select(const MenuItem *self, int amount) {
+    hudFlags ^= HUD_LOW_HP_FLASH;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+void menuHpSound_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (hudFlags & HUD_LOW_HP_BEEP) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuHpSound_select(const MenuItem *self, int amount) {
+    hudFlags ^= HUD_LOW_HP_BEEP;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
 Menu menuGameSettings = {
     "Game Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
@@ -62,5 +82,7 @@ Menu menuGameSettings = {
     "Autosave: %s",     menuAutoSave_draw,  menuAutoSave_select,
     "Subtitles: %s",    menuSubtitles_draw, menuSubtitles_select,
     //"Language: %s",     menuLanguage_draw,  menuLanguage_select,
+    "Low HP Flash: %s", menuHpFlash_draw,   menuHpFlash_select,
+    "Low HP Sound: %s", menuHpSound_draw,   menuHpSound_select,
     NULL,
 };
