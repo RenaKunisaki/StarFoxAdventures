@@ -56,6 +56,13 @@ void saveLoadHook() {
     bAutoSave    = (save->unlockedCheats >> 31) & 1;
     hudFlags     = save->unk18;
 
+    //load language setting and get the appropriate text
+    curLanguage = save->unk19;
+    if(curLanguage < 0 || curLanguage >= NUM_LANGUAGES) curLanguage = 0;
+    GameTextDir32 dir = curGameTextDir;
+    gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
+    gameTextLoadDir(dir); //then load current map's texts
+
     DPRINT("Savedata loaded!");
 }
 
@@ -76,6 +83,7 @@ void saveUpdateHook() {
     save->unused01 = (bRumbleBlur ? 0x01 : 0x00);
     save->unusedHudSetting = cameraFlags;
     save->unk18 = hudFlags;
+    save->unk19 = curLanguage;
 
     //we also need to update these
     //but don't save the volume settings here because they can change during
