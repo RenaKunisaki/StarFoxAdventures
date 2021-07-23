@@ -31,6 +31,9 @@ SFAModelsBin/**
 saves/**
 v1.01/**
 SFA.rep.zip
+compile_commands.json
+**/.vscode/*
+**/.cache/*
 
 # from https://github.com/github/gitignore
 # Object files
