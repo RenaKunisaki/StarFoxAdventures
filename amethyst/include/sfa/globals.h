@@ -24,7 +24,7 @@ extern struct {
     int chr;
     int len; //bytes / 2
 } controlCharLength[46];
-extern PADStatus controllerStates[4];
+extern PADStatus controllerStates[8]; //two sets of 4, alternating
 extern s32 curLanguage;
 extern s16 curGameText;
 extern u8 curMapAct;

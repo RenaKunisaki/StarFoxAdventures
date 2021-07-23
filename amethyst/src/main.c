@@ -24,7 +24,7 @@ static inline void checkTime() {
     //note timestamp here is seconds since 2000-01-01
     //everything says this should be / 4 but I only get anything
     //sensible with / 2.
-    float secs = fTicks / (__OSBusClock / 2);
+    float secs = fTicks / ((double)__OSBusClock / 2.0);
     int days  = secs / 86400.0f; //non-leap days
     curYear = secs / 31556908.8f; //approximate average
     dayOfYear = days % 365 - (curYear / 4);
