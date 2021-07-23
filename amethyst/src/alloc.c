@@ -1,4 +1,5 @@
 #include "main.h"
+#include "revolution/os.h"
 
 u32 allocFailCount = 0;
 u32 emergFreeCount = 0;
@@ -65,7 +66,18 @@ u32 *outUsedBlocks, u32 *outUsedBytes, int *outBlocksPct, int *outBytesPct) {
 
 bool doEmergencyFree(int attempt) {
     emergFreeCount++;
+
+    //I have no idea why these exist.
+    //Our code is now big enough to cause memory outage at the title screen.
+    //This seems to fix it...
     if(attempt == 0) {
+        OSReport("Emergency free: retry with other heaps");
+        bOnlyUseHeap3 = 0;
+        bOnlyUseHeaps1and2 = -1;
+        return true;
+    }
+
+    if(attempt == 1) {
         OSReport("Emergency free: dumping expgfx");
         expgfxRemoveAll();
         return true;
@@ -187,6 +199,18 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
                 OSReport("Out of memory! size=0x%X tag=0x%X Used blocks %d/%d, bytes %d/%d K - initiating emergency free",
                     size, tag, usedBlocks, totalBlocks, usedBytes/1024,
                     totalBytes/1024);
+                OSReport("Trace: %08X < %08X < %08X < %08X < %08X\n",
+                    __builtin_return_address(0),
+                    __builtin_return_address(1),
+                    __builtin_return_address(2),
+                    __builtin_return_address(3),
+                    __builtin_return_address(4));
+                OSReport("force heaps 1/2=%d 3=%d\n", bOnlyUseHeaps1and2, bOnlyUseHeap3);
+                for(int i=0; i<NUM_HEAPS; i++) {
+                    OSReport("Heap %d used Blocks %5d/%5d KBytes %5d/%5d\n", i,
+                        heaps[i].used, heaps[i].avail,
+                        heaps[i].size / 1024, heaps[i].dataSize / 1024);
+                }
             }
             if(!doEmergencyFree(count)) break;
             //OSReport("Emergency free attempt %d OK", count);
