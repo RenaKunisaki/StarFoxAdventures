@@ -338,6 +338,9 @@ void _start(void) {
     //kill Arwing health alarm. we can turn it back on from the menu if we really want.
     WRITE_NOP(0x8022c2f0);
 
+    //make gold rings restore an entire heart
+    WRITE32(0x8022fc50, 0x38800004);
+
     //remove useless items from C menu
     //WRITE16(0x8031b1c0, 0x0096); //water spellstone 1
     //WRITE16(0x8031b1d0, 0x0096); //spellstone ?
