@@ -13,23 +13,36 @@ static void *krystalTexture       = NULL;
 static u32   krystalTextureSize   = 0;
 static u32   krystalTextureOffset = 0;
 
-void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
-    //replaces a call to allocTagged() when loading MODELS.BIN
-    //load the Krystal model if needed and copy it into the file
+void krystal_loadAssets() {
+    //load model
     if(!krystalModel) {
-        //load the model
-        char path[] = {'k', 'm', krystalModelNo+0x30, 0};
-        DPRINT("Loading %s", path);
-        krystalModel = loadFileByPath(path, &krystalModelSize);
+        char pathMod[] = {'k', 'm', krystalModelNo+0x30, 0};
+        DPRINT("Loading %s", pathMod);
+        krystalModel = loadFileByPath(pathMod, &krystalModelSize);
         if(krystalModel) {
-            DPRINT("Loaded %s @0x%08X size 0x%08X", path, krystalModel,
+            DPRINT("Loaded %s @0x%08X size 0x%08X", pathMod, krystalModel,
                 krystalModelSize);
         }
-        else {
-            DPRINT("LOAD FAILED(%s)", path);
-            return allocTagged(size, tag, name);
-        }
+        else DPRINT("LOAD FAILED(%s)", pathMod);
     }
+
+    //load texture
+    if(!krystalTexture) {
+        char pathTex[] = {'k', 't', krystalModelNo+0x30, 0};
+        DPRINT("Loading %s", pathTex);
+        krystalTexture = loadFileByPath(pathTex, &krystalTextureSize);
+        if(krystalTexture) {
+            DPRINT("Loaded %s @0x%08X size 0x%08X", pathTex, krystalTexture,
+                krystalTextureSize);
+        }
+        else DPRINT("LOAD FAILED(%s)", pathTex);
+    }
+}
+
+//replaces a call to allocTagged() when loading MODELS.BIN
+void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
+    //copy Krystal model into MODELS
+    if(!krystalModel) return allocTagged(size, tag, name);
 
     //do the original allocation, with the extra model's size added.
     void *buf = allocTagged(size+krystalModelSize, tag, name);
@@ -44,8 +57,9 @@ void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
     return buf;
 }
 
+//injected into mergeTableFiles() for MODELS.TAB
 void krystalHook_modelsTab() {
-    //injected into mergeTableFiles() for MODELS.TAB
+    if(!krystalModel) return;
     //update the table to reference the Krystal model
     void *pModelsBin = dataFileBuffers[FILE_MODELS_BIN];
     u32  *pModelsTab = dataFileBuffers[FILE_MODELS_TAB];
@@ -99,23 +113,10 @@ static const u32 textureData[] = {
     0x81015628, //072A
 };
 
+//replaces a call to allocTagged() when loading TEX1.BIN
 void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
-    //replaces a call to allocTagged() when loading TEX1.BIN
-    //load the Krystal textures if needed and copy them into the file
-    if(!krystalTexture) {
-        //load the model
-        char path[] = {'k', 't', krystalModelNo+0x30, 0};
-        DPRINT("Loading %s", path);
-        krystalTexture = loadFileByPath(path, &krystalTextureSize);
-        if(krystalTexture) {
-            DPRINT("Loaded %s @0x%08X size 0x%08X", path, krystalTexture,
-                krystalTextureSize);
-        }
-        else {
-            DPRINT("LOAD FAILED(%s)", path);
-            return allocTagged(size, tag, name);
-        }
-    }
+    //copy textures into TEX1
+    if(!krystalTexture) return allocTagged(size, tag, name);
 
     //do the original allocation, with the extra texture's size added.
     void *buf = allocTagged(size+krystalTextureSize, tag, name);
@@ -146,8 +147,9 @@ void _doTexPatch(void *texBin, u32 *texTab) {
     //else DPRINT("Texture not present");
 }
 
+//injected into mergeTableFiles() for TEX1.TAB
 void krystalHook_tex1Tab() {
-    //injected into mergeTableFiles() for TEX1.TAB
+    if(!krystalTexture) return;
     //update the table to reference the Krystal textures
     //DPRINT("Install TEX1 patch 1");
     _doTexPatch(dataFileBuffers[FILE_TEX1_BIN],  dataFileBuffers[FILE_TEX1_TAB]);
@@ -230,6 +232,8 @@ void krystalDoModelOverrides() {
 
 void krystalHook_loadSave() {
     objLoadPlayerFromSave(); //replaced
+    if(!(krystalModel && krystalTexture)) return;
+
     //switch to Krystal immediately to ensure animations init correctly.
     //the main loop patch won't do it soon enough.
     krystalDoModelOverrides();
@@ -245,17 +249,18 @@ void krystalHook_loadSave() {
     }
 }
 
+
 void krystalInit() {
     //Install hooks/patches at startup.
     WRITE32(0x802B08D8, 0x38000001); //Let Krystal use staff
     WRITE32(0x80295BE0, 0x38600001); //Let Krystal use map, PDA, etc.
     WRITE_NOP(0x802B6414); //Disable normal backpack handling
-    hookBranch(0x800453E0, krystalHook_modelsBin,  1);
-    hookBranch(0x80043D7C, _krystalHook_modelsTab, 0);
-    hookBranch(0x80046164, krystalHook_tex1Bin,    1);
-    hookBranch(0x80043DB8, _krystalHook_tex1Tab,   0);
-    hookBranch(0x80087050, _krystalHook_eyePatch,  0); //yarr.
-    hookBranch(0x8002cb20, krystalHook_loadSave,   1);
+    hookBranch(0x800453E0, krystalHook_modelsBin,   1);
+    hookBranch(0x80043D7C, _krystalHook_modelsTab,  0);
+    hookBranch(0x80046164, krystalHook_tex1Bin,     1);
+    hookBranch(0x80043DB8, _krystalHook_tex1Tab,    0);
+    hookBranch(0x80087050, _krystalHook_eyePatch,   0); //yarr.
+    hookBranch(0x8002cb20, krystalHook_loadSave,    1);
 }
 
 void krystalMainLoop() {
