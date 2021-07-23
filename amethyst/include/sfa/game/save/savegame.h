@@ -1,8 +1,8 @@
 typedef struct PACKED {
     float timeOfDay;
-    short envfxActIdx[5];
+    short envFxActIdx[5];
     short envFxActIdx2[3];
-    u8    unk14[0x2C];
+    u8    unk14[0x2C]; //maybe not an array
     u8    flags_0x40; //SaveGameEnvFxFlags40
 } SaveGameEnvState;
 CASSERT(sizeof(SaveGameEnvState) == 0x41, sizeof_SaveGameEnvState);
@@ -62,7 +62,10 @@ typedef struct PACKED {
     u8    unused0F;            //0xf
     u32   unlockedCheats;      //0x10
     u32   activeCheats;        //0x14
-    u32   unk18;               //0x18
+    u8    unk18;               //0x18 seems unused
+    u8    unk19;
+    u8    unk1A;
+    u8    unk1B;
 } SaveGameSettings;
 CASSERT(sizeof(SaveGameSettings) == 0x1C, sizeof_SaveGameSettings);
 

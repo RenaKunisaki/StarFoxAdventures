@@ -54,6 +54,8 @@ void saveLoadHook() {
     furFxMode    = (save->unused0D >> 4) & 3;
     backpackMode = (save->unused0D >> 6) & 3;
     bAutoSave    = (save->unlockedCheats >> 31) & 1;
+    hudFlags     = save->unk18;
+
     DPRINT("Savedata loaded!");
 }
 
@@ -73,6 +75,7 @@ void saveUpdateHook() {
 
     save->unused01 = (bRumbleBlur ? 0x01 : 0x00);
     save->unusedHudSetting = cameraFlags;
+    save->unk18 = hudFlags;
 
     //we also need to update these
     //but don't save the volume settings here because they can change during

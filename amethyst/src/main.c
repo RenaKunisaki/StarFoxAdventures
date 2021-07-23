@@ -276,9 +276,6 @@ void _start(void) {
     //WRITE32(0x80023f18, 0x9085FFF8); //stw       size,-0x8(slots)
     //WRITE32(0x80023f1c, 0x9005FFFC); //stw       r0,-0x4(slots)
 
-    //kill some seemingly useless text init routines
-    //WRITE_NOP(0x8001a220); //actually, this loads the HUD text.
-
     //make staff swipe effect use less memory. XXX investigate how much is actually needed.
     //seems like it wants enough for 3000 swipes which is insane...
     //but with this amount we get some glitching. maybe it really does need this!?

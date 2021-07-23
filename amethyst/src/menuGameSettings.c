@@ -36,8 +36,6 @@ void menuSubtitles_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
-
-/*
 static const char *languages[NUM_LANGUAGES] = {
     "English", "French", "German", "Italian", "Japanese", "Spanish"
 };
@@ -50,9 +48,11 @@ void menuLanguage_select(const MenuItem *self, int amount) {
     curLanguage += amount;
     if(curLanguage < 0) curLanguage = NUM_LANGUAGES - 1;
     if(curLanguage >= NUM_LANGUAGES) curLanguage = 0;
-    //XXX reload text
+    GameTextDir32 dir = curGameTextDir;
+    gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
+    gameTextLoadDir(dir); //then load current map's texts
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
-} */
+}
 
 
 void menuHpFlash_draw(const MenuItem *self, int x, int y, bool selected) {
@@ -81,7 +81,7 @@ Menu menuGameSettings = {
     "Game Speed: %d%%", menuGameSpeed_draw, menuGameSpeed_select,
     "Autosave: %s",     menuAutoSave_draw,  menuAutoSave_select,
     "Subtitles: %s",    menuSubtitles_draw, menuSubtitles_select,
-    //"Language: %s",     menuLanguage_draw,  menuLanguage_select,
+    "Language: %s",     menuLanguage_draw,  menuLanguage_select,
     "Low HP Flash: %s", menuHpFlash_draw,   menuHpFlash_select,
     "Low HP Sound: %s", menuHpSound_draw,   menuHpSound_select,
     NULL,

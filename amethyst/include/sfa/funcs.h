@@ -48,6 +48,7 @@ GLOBALFN void gameBitIncrement(GameBit bit);
 GLOBALFN gametextStruct* gameTextGet(GameTextId32);
 GLOBALFN GameTextBox* gameTextGetBox (int box);
 GLOBALFN char* gameTextGetStr(GameTextId32);
+GLOBALFN void gameTextLoadDir(GameTextDir32);
 GLOBALFN void gameTextSetColor(u8 r, u8 g, u8 b, u8 a);
 GLOBALFN void gameTextShowStr(const char*, int window, int x, int y);
 GLOBALFN void gameTimerInit(GameTimerFlags flags, int max);
