@@ -1,7 +1,7 @@
 #include "main.h"
 #include "revolution/os.h"
 
-#if 1 //this is unstable
+#if 0 //this is unstable and for some reason makes characters' eyes go wacky
 
 #define MAX_RECORDED_HITS 16
 typedef struct {
@@ -76,7 +76,7 @@ int getHitsHook(ObjInstance *obj, ObjInstance **outObj, int *outSphereIdx, uint 
                 lowest = thisHit->frameCount;
             }
         }
-        if(idx < 0) idx = 0;
+        if(idx < 0 || idx >= MAX_RECORDED_HITS) idx = 0;
         lastHitIdx = idx;
         pHit = &recordedHits[idx];
         hit.obj        = obj;
@@ -104,7 +104,7 @@ int getHitsHook(ObjInstance *obj, ObjInstance **outObj, int *outSphereIdx, uint 
         hit.hitType   = hitType;
         getObjName(hit.name1, hit.obj);
         getObjName(hit.name2, hit.outObj);
-        memcpy(pHit, &hit, sizeof(RecordedHit));
+        if(pHit) memcpy(pHit, &hit, sizeof(RecordedHit));
     }
     if(outObj)       *outObj       = r_outObj;
     if(outSphereIdx) *outSphereIdx = r_sphereIdx;
@@ -112,16 +112,10 @@ int getHitsHook(ObjInstance *obj, ObjInstance **outObj, int *outSphereIdx, uint 
     return hitType;
 }
 
-void _getHitsHook(void);
-__asm__(
-    "_getHitsHook:                \n"
-    "b      getHitsHook           \n"
-);
-
 void hitboxHooksInit() {
     //beginning of objGetHits()
     //XXX maybe also need to hook 80036770 objGetDamageType
-    hookBranch(0x8003687c, _getHitsHook, 0);
+    hookBranch(0x8003687c, getHitsHook, 0);
 }
 
 #else

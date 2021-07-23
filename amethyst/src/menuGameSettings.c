@@ -12,6 +12,7 @@ void menuGameSpeed_select(const MenuItem *self, int amount) {
     if(physicsTimeScale <  15) physicsTimeScale =  15;
     if(physicsTimeScale > 240) physicsTimeScale = 240;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -23,6 +24,7 @@ void menuAutoSave_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuAutoSave_select(const MenuItem *self, int amount) {
     bAutoSave = !bAutoSave;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -34,6 +36,7 @@ void menuSubtitles_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuSubtitles_select(const MenuItem *self, int amount) {
     bSubtitlesEnabled = !bSubtitlesEnabled;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 static const char *languages[NUM_LANGUAGES] = {
@@ -52,6 +55,7 @@ void menuLanguage_select(const MenuItem *self, int amount) {
     gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
     gameTextLoadDir(dir); //then load current map's texts
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -63,6 +67,7 @@ void menuHpFlash_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuHpFlash_select(const MenuItem *self, int amount) {
     hudFlags ^= HUD_LOW_HP_FLASH;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 void menuHpSound_draw(const MenuItem *self, int x, int y, bool selected) {
@@ -73,6 +78,7 @@ void menuHpSound_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuHpSound_select(const MenuItem *self, int amount) {
     hudFlags ^= HUD_LOW_HP_BEEP;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 Menu menuGameSettings = {

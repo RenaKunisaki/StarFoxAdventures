@@ -9,8 +9,8 @@ void menuWidescreen_draw(const MenuItem *self, int x, int y, bool selected) {
 }
 void menuWidescreen_select(const MenuItem *self, int amount) {
     setWidescreen(!(renderFlags & RenderFlag_Widescreen));
-    saveData.saveSettings.bWidescreen = (renderFlags & RenderFlag_Widescreen) ? 1 : 0;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -22,6 +22,7 @@ void menuParticleFx_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuParticleFx_select(const MenuItem *self, int amount) {
     bDisableParticleFx = !bDisableParticleFx;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -35,6 +36,7 @@ void menuFOV_select(const MenuItem *self, int amount) {
     if(overrideFov <   5) overrideFov =   5;
     if(overrideFov > 175) overrideFov = 175; //most the game can do
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -46,6 +48,7 @@ void menuHudOnOff_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuHudOnOff_select(const MenuItem *self, int amount) {
     cameraFlags ^= CAM_FLAG_NO_HUD;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 

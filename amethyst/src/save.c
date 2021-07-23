@@ -63,15 +63,23 @@ void saveLoadHook() {
     gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
     gameTextLoadDir(dir); //then load current map's texts
 
-    DPRINT("Savedata loaded!");
+    /* DPRINT("Savedata loaded!");
+    char str[1024];
+    u8 *data = (u8*)save;
+    for(int i=0; i<sizeof(SaveGameSettings); i++) {
+        sprintf(&str[i*3], "%02X ", data[i]);
+    }
+    DPRINT("Data: %s", str); */
+    DPRINT("Load savedata: player=%d FOV=%d alpha=%d map=%d lang=%d\n",
+        overridePlayerNo, overrideFov, overrideMinimapAlpha, minimapMode, curLanguage);
 }
 
-void saveUpdateHook() {
-    //called from main loop, stores our settings into save data
-    //so that they'll be preserved
+//Update the extra fields in the save data.
+void updateSaveData() {
     SaveGameSettings *save = &saveData.saveSettings;
     save->unused07 = overridePlayerNo;
     //XXX rumble blur
+    //XXX why are these sometimes not being saved/loaded?
     save->unused0E = overrideFov;
     save->unused0F = overrideMinimapAlpha;
 
@@ -86,15 +94,23 @@ void saveUpdateHook() {
     save->unk19 = curLanguage;
 
     //we also need to update these
-    //but don't save the volume settings here because they can change during
-    //the game. especially the music volume fades in at the title screen and
-    //we don't want to save it as zero there.
+    save->musicVolume    = (int)(volumeMusic * 127.0);
+    save->sfxVolume      = (int)(volumeSFX * 127.0);
+    save->cutsceneVolume = volumeCutScenes;
+    save->soundMode      = soundMode;
+    save->bRumbleEnabled = enableRumble;
     save->bWidescreen    = (renderFlags & RenderFlag_Widescreen) ? 1 : 0;
     save->bRumbleEnabled = enableRumble ? 1 : 0;
     save->bSubtitlesOn   = bSubtitlesEnabled ? 1 : 0;
     if(bAutoSave) save->unlockedCheats |= (1 << 31);
     else save->unlockedCheats &= ~(1 << 31);
 
+    DPRINT("Update savedata: player=%d FOV=%d alpha=%d map=%d lang=%d\n",
+        overridePlayerNo, overrideFov, overrideMinimapAlpha, minimapMode, curLanguage);
+}
+
+//Called from main loop.
+void saveUpdateHook() {
     if(autoSaveMsgTimer) {
         autoSaveMsgTimer--;
         gameTextSetColor(0xFF, 0xFF, 0xFF, 0xFF);

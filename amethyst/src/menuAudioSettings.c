@@ -11,7 +11,7 @@ void menuMusicVol_select(const MenuItem *self, int amount) {
     volumeMusic += (amount * 0.01);
     if(volumeMusic < 0) volumeMusic = 0;
     if(volumeMusic > 2) volumeMusic = 2;
-    saveData.saveSettings.musicVolume = (int)(volumeMusic * 127.0);
+    updateSaveData();
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
@@ -25,7 +25,7 @@ void menuSfxVol_select(const MenuItem *self, int amount) {
     volumeSFX += (amount * 0.01);
     if(volumeSFX < 0) volumeSFX = 0;
     if(volumeSFX > 2) volumeSFX = 2;
-    saveData.saveSettings.sfxVolume = (int)(volumeSFX * 127.0);
+    updateSaveData();
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
@@ -42,7 +42,7 @@ void menuSceneVol_select(const MenuItem *self, int amount) {
     if(vol <   0) vol =   0;
     if(vol > 255) vol = 255;
     volumeCutScenes = vol;
-    saveData.saveSettings.cutsceneVolume = volumeCutScenes;
+    updateSaveData();
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
     //XXX does setting this > 127 actually work?
 }
@@ -56,7 +56,7 @@ void menuSoundMode_draw(const MenuItem *self, int x, int y, bool selected) {
 }
 void menuSoundMode_select(const MenuItem *self, int amount) {
     soundMode = (soundMode + amount) & 3;
-    saveData.saveSettings.soundMode = soundMode;
+    updateSaveData();
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 

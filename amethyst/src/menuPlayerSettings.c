@@ -13,6 +13,7 @@ void menuPlayer_select(const MenuItem *self, int amount) {
     if(overridePlayerNo < 0) overridePlayerNo = NUM_PLAYER_IDS - 1;
     if(overridePlayerNo >= NUM_PLAYER_IDS) overridePlayerNo = 0;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -27,6 +28,7 @@ void menuBackpack_select(const MenuItem *self, int amount) {
     if(backpackMode < 0) backpackMode = NUM_BACKPACK_MODES - 1;
     if(backpackMode >= NUM_BACKPACK_MODES) backpackMode = 0;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -42,6 +44,7 @@ void menuFurFx_select(const MenuItem *self, int amount) {
     if(mode >= NUM_FURFX_MODES) mode = 0;
     furFxMode = mode;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 

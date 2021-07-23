@@ -25,6 +25,7 @@ void menuPdaMode_select(const MenuItem *self, int amount) {
         else minimapMode = 0;
     }
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -40,6 +41,7 @@ void menuPdaSize_select(const MenuItem *self, int amount) {
     if(size >= NUM_MINIMAP_SIZES) size = 0;
     overrideMinimapSize = size;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -55,6 +57,7 @@ void menuPdaOpacity_select(const MenuItem *self, int amount) {
     if(alpha > 255) alpha = 255;
     overrideMinimapAlpha = alpha;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -69,6 +72,7 @@ void menuPdaZoom_select(const MenuItem *self, int amount) {
     if(minimapZoom < 0.05) minimapZoom = 0.05;
     if(minimapZoom > 2.00) minimapZoom = 2.00;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 

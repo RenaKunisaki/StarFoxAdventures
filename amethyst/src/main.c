@@ -1,6 +1,7 @@
 /** Bootstrap, runs at startup and installs other hooks.
  */
 #include "main.h"
+#include "revolution/os.h"
 
 //hack to ensure nothing is at offset 0 because that makes relocation difficult.
 int fart __attribute__((section(".offsetzero"))) = 0x52656E61;
@@ -170,6 +171,11 @@ void mainLoopHook() {
     IM_UpdateRaceTimer();
 }
 
+static u32 oldSaveGameInitialise = 0;
+static void dll_SaveGame_initialise_hook(void *unused) {
+    OSReport("SaveGame initialise");
+    ((void (*)(void))oldSaveGameInitialise)();
+}
 
 static inline void _initSaveHacks() {
     hookBranch(0x800e7fb0, saveLoadHook, 1);
@@ -181,6 +187,9 @@ static inline void _initSaveHacks() {
     //way of fixing this.
     WRITE32(0x8007EF5C, 0x3B200000);
     WRITE32(0x8007F15C, 0x3B200000);
+
+    oldSaveGameInitialise = READ32(0x80311910);
+    WRITE32(0x80311910, dll_SaveGame_initialise_hook);
 }
 
 static inline void _initDebugPrintHacks() {

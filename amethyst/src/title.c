@@ -18,9 +18,19 @@ int titleHook() {
         //OSReport("Loading save 1\n");
         titleScreenActive = false;
         titleScreen_panAwayFromMovieTimer = 0;
+        DPRINT("Title: load card");
+        titleLoadSaveFiles();
+        DPRINT("Title: load file");
         saveGame_load(0);
+        DPRINT("Title: load settings");
+        loadSaveSettings();
+        DPRINT("Title: load OK");
         //interesting: calling this during the game still works, and replaces your current save
         //data, so things like your items are reset, but you don't reload or respawn...
+
+        //WRITE8(0x803dd5d1, 4);
+        //WRITE8(0x803dd5d2, 4);
+        mapUnload(0x3D, 0x2000);
     }
 
     return oldTitleHook();

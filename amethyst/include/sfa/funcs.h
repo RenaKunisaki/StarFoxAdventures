@@ -89,6 +89,7 @@ GLOBALFN void* loadFileByPath(char *path,uint *outSize);
     // Returns pointer to allocated buffer of contents.
     // outSize: if not NULL, receives file size.
 GLOBALFN void loadMapForCurrentSaveGame(void);
+GLOBALFN void loadSaveSettings(void);
 GLOBALFN u32 mainGetBit(GameBit bit);
 GLOBALFN void mainLoopDoQueuedSounds(void);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
@@ -164,6 +165,7 @@ GLOBALFN void texRestructRefs(void);
 GLOBALFN void textRenderChar(s16 x1, s16 y1, s16 x2, s16 y2, double s1, double t1, double s2, double t2);
 GLOBALFN void textRenderSetup(void);
 GLOBALFN Texture* textureIdxToPtr(int);
+GLOBALFN int titleLoadSaveFiles(void);
 GLOBALFN void timeListDraw(void);
 GLOBALFN void unloadMap(void);
 GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);

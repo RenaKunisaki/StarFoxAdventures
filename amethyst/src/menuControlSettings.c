@@ -9,9 +9,9 @@ void menuRumble_draw(const MenuItem *self, int x, int y, bool selected) {
 }
 void menuRumble_select(const MenuItem *self, int amount) {
     enableRumble = !enableRumble;
-    saveData.saveSettings.bRumbleEnabled = enableRumble;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
     if(enableRumble) doRumble(60);
+    updateSaveData();
 }
 
 
@@ -23,6 +23,7 @@ void menuRumbleBlur_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuRumbleBlur_select(const MenuItem *self, int amount) {
     bRumbleBlur = !bRumbleBlur;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -34,6 +35,7 @@ void menuCamCtrl_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuCamCtrl_select(const MenuItem *self, int amount) {
     cameraFlags ^= CAM_FLAG_PAD3;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -45,6 +47,7 @@ void menuCamInvX_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuCamInvX_select(const MenuItem *self, int amount) {
     cameraFlags ^= CAM_FLAG_INVERT_X;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
@@ -56,6 +59,7 @@ void menuCamInvY_draw(const MenuItem *self, int x, int y, bool selected) {
 void menuCamInvY_select(const MenuItem *self, int amount) {
     cameraFlags ^= CAM_FLAG_INVERT_Y;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
 }
 
 
