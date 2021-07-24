@@ -48,6 +48,20 @@ void menuDebugMapGotoRestart_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+//XXX is this any use?
+void menuDebugMapSetSavePos_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    PlayerCharPos *playerPos =
+        &saveData.curSaveGame.charPos[saveData.curSaveGame.character];
+    playerPos->pos.x = pPlayer->pos.pos.x;
+    playerPos->pos.y = pPlayer->pos.pos.y;
+    playerPos->pos.z = pPlayer->pos.pos.z;
+    playerPos->mapLayer = curMapLayer;
+    playerPos->mapId = curMapId;
+    playerPos->rotX  = pPlayer->pos.rotation.x >> 8;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
 void menuDebugMapGotoSave_select(const MenuItem *self, int amount) {
     if(amount) return;
     gplayGotoSavegame();
@@ -76,6 +90,7 @@ Menu menuDebugMap = {
     "Set Restart Point",   genericMenuItem_draw, menuDebugMapSetRestart_select,
     "Clear Restart Point", genericMenuItem_draw, menuDebugMapClearRestart_select,
     "Goto Restart Point",  genericMenuItem_draw, menuDebugMapGotoRestart_select,
+    "Set Saved Pos",       genericMenuItem_draw, menuDebugMapSetSavePos_select,
     "Goto Last Save",      genericMenuItem_draw, menuDebugMapGotoSave_select,
     "Map States",          genericMenuItem_draw, menuDebugMapStates_select,
     "Environment",         genericMenuItem_draw, menuDebugMapEnv_select,
