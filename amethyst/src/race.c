@@ -2,7 +2,9 @@
  *  XXX do it for other bike sequences too.
  */
 #include "main.h"
+#include "revolution/os.h"
 static float disappearTimer = 0;
+static bool active = false;
 
 void IM_ToggleRaceTimer(bool start) {
     if(start) {
@@ -26,37 +28,68 @@ static void drawTimer() {
         ((int)secs) % 60, // seconds
         ((int)(secs * 100.0)) % 100); // 1/100 seconds
 
-    //the timer code does this, but slightly different.
+    //the timer code does this, but slightly different. (and uses box 0xD)
     //XXX does this break other timers after the race?
-    GameTextBox *box = gameTextGetBox(0xD);
-    box->y = 400;
-    box->height = 400;
+    //or whatever else uses this box. should restore it after the race.
+    int boxId = 4, x = SCREEN_WIDTH - 210, y = SCREEN_HEIGHT - 233;
+    GameTextBox *box = gameTextGetBox(boxId);
+    //box->x = x;
+    //box->y = y;
+    box->height = SCREEN_HEIGHT;
+    box->width = SCREEN_WIDTH;
     box->textScale = 1.0;
     box->justify = GameTextJustify_Full;
 
     u8 alpha = MIN((int)(disappearTimer * 8.0), 255);
-    drawHudBox(50, 346, 120, 40, alpha, true);
+    drawHudBox(450, 346, 120, 40, alpha, true);
     gameTextSetColor(0xFF, 0xFF, 0xFF, alpha);
-    gameTextShowStr(str, 0xD, 10, 90);
+    gameTextShowStr(str, boxId, x+5, y);
+
+    //draw speed
+    vec3f vel;
+    if(pPlayer) vel = pPlayer->vel;
+    vec3f zero = {0, 0, 0};
+    //this scale gives a top speed of 64km/h which is nice.
+    double vxz = vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 21.5;
+    sprintf(str, "%3d km/h", (int)vxz);
+    gameTextSetColor(0xFF, 0xFF, 0xFF, 0xFF);
+    gameTextShowStr(str, boxId, x, y+18);
 }
 
 void IM_UpdateRaceTimer() {
     char str[64];
 
-    if(mainGetBit(0xC8)) {
+    void *pState = (pPlayer && pPlayer->catId == 1) ? pPlayer->state : NULL;
+    u16 stateId = pState ? *(u16*)((u32)pState + 0x274) : 0;
+
+    //if(pState) debugPrintf("STATE %02X\n", stateId);
+
+    bool start = false;
+    if(mainGetBit(0xC8)) { //IM race has actually started
+        start = true;
+    }
+    else if(stateId == 0x18 && curMapId != 0x17) { //on bike, not Ice Mountain
+        start = true;
+    }
+
+    //start = true; stateId = 0x18; //for testing
+    if(start && !active) { //start the timer
+        active = true;
+        gameTimerValue = -timeDelta; //start at 0 (we're about to add this again)
+    }
+
+    if(active && pState && stateId != 0x18) { //player warped or something; stop the timer
+        mainSetBits(0xC8, 0);
+        active = false;
+    }
+
+    if(active) {
         //we don't actually start the timer because then it makes a ticking noise.
         //and we don't use its own render function because we want to move the
         //text a bit to make room for the speedometer.
         gameTimerValue += timeDelta;
         disappearTimer = 300.0; //frames, ie 5 seconds
         drawTimer();
-
-        vec3f vel = pPlayer->vel;
-        vec3f zero = {0, 0, 0};
-        double vxz = vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 20.0;
-        sprintf(str, "%3d km/h", (int)vxz);
-        gameTextSetColor(0xFF, 0xFF, 0xFF, 0xFF);
-        gameTextShowStr(str, 0xD, 5, 111);
     }
     else if(disappearTimer - timeDelta > 0) {
         disappearTimer -= timeDelta;
