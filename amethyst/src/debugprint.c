@@ -121,9 +121,8 @@ static int restartPointFrameCount[3] = {0, 0, 0};
 static vec3f prevRestartPoint    [3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
 static u8 prevRestartPointLayer  [3] = {0, 0, 0};
 static u8 prevRestartPointMap    [3] = {0, 0, 0};
-static const char *restartPointNames = "RLS";
 
-static void printRestartPointForSave(SaveGame *save, int which) {
+static void printRestartPointForSave(SaveGame *save, int which, const char *name) {
     if(save) {
         //PlayerCharState *chrState = save->charState[save->character];
         PlayerCharPos   *chrPos   = &save->charPos  [save->character];
@@ -148,22 +147,21 @@ static void printRestartPointForSave(SaveGame *save, int which) {
         char sColor[6] = {0x81, 0xFF, color, 0xFF, 0xFF, 0};
 
         //map ID is 0xFF sometimes, no idea why
-        debugPrintf("%s%c:" DPRINT_FIXED "%6d %6d %6d %d ",
-            sColor, restartPointNames[which],
+        debugPrintf("%s" DPRINT_FIXED "%s:%6d %6d %6d %d ",
+            sColor, name,
             (int)chrPos->pos.x, (int)chrPos->pos.y, (int)chrPos->pos.z,
             chrPos->mapLayer);
         //after a certain number of params, it starts printing nonsense.
         debugPrintf("M%02X" DPRINT_NOFIXED DPRINT_COLOR "\xFF\xFF\xFF\xFF\n",
             chrPos->mapId & 0xFF);
     }
-    else debugPrintf(DPRINT_FIXED "%c: none" DPRINT_NOFIXED "\n", restartPointNames[which]);
+    else debugPrintf(DPRINT_FIXED "%s: none" DPRINT_NOFIXED "\n", name);
 }
 
 static void printRestartPoint() {
-    //Display restart point
-    printRestartPointForSave(pRestartPoint,  0); //used when voiding out
-    printRestartPointForSave(pLastSavedGame, 1); //is this used?
-    printRestartPointForSave(pCurSaveGame,   2); //where you respawn when loading the save
+    printRestartPointForSave(pRestartPoint,  0, "RST"); //used when voiding out
+    printRestartPointForSave(pLastSavedGame, 1, "LSV"); //is this used?
+    printRestartPointForSave(pCurSaveGame,   2, "CSV"); //where you respawn when loading the save
 }
 
 static void printCamera() {
