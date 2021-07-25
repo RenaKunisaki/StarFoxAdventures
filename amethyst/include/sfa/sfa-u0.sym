@@ -355,6 +355,7 @@ rumbleTimer = 0x803dc90c;
 saveData = 0x803a31c4;
 saveGame_load = 0x800e87cc;
 saveGame_save = 0x800e86d0;
+saveSelect_drawText = 0x80119dd4;
 saveStatus = 0x803db424;
 sceneRender = 0x8005c750;
 seqGlobal1 = 0x803dd06c;

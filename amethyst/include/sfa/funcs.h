@@ -145,6 +145,7 @@ GLOBALFN void reset(int, int, int);
 GLOBALFN PlayerCharState* SaveGame_getCurCharacterState(void);
 GLOBALFN int saveGame_load(s8 slot);
 GLOBALFN void saveGame_save(void);
+GLOBALFN void saveSelect_drawText(void *unused, u32 alpha);
 GLOBALFN void sceneRender(void);
 GLOBALFN void setGpuErrorHandler(void*);
 GLOBALFN void setSoundMode(u8 mode, bool force);

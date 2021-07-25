@@ -32,9 +32,27 @@ int titleHook() {
     return oldTitleHook();
 }
 
+/* void saveInfoHook(void *unused, u32 alpha) {
+    saveSelect_drawText(unused, alpha);
+
+    //we can try to show more info here, but we need to also patch saveGame_prepareAndWrite
+    //or some such to actually preserve that info.
+    SaveGame *save = &saveData.curSaveGame;
+    debugPrintf("%f %f %f %d: %02X (%02X)\n",
+        save->charPos->pos.x,
+        save->charPos->pos.y,
+        save->charPos->pos.z,
+        save->charPos->mapLayer,
+        save->charPos->mapId,
+        mapCoordsToId((int)save->charPos->pos.x / MAP_CELL_SCALE,
+            (int)save->charPos->pos.z / MAP_CELL_SCALE, save->charPos->mapLayer)
+    );
+} */
+
 void titleHooksInit() {
     //hook into the run method of the title screen DLL
     OSReport("Install title hook...\n");
     oldTitleHook = *(u32*)0x8031a320;
     WRITE32(0x8031a320, titleHook);
+    //hookBranch(0x8011ab74, saveInfoHook, 1);
 }

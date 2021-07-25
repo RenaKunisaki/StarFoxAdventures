@@ -117,11 +117,11 @@ static void printCoords() {
     }
 }
 
-static int restartPointFrameCount[2] = {0, 0};
-static vec3f prevRestartPoint[2] = {{0, 0, 0}, {0, 0, 0}};
-static u8 prevRestartPointLayer[2] = {0, 0};
-static u8 prevRestartPointMap[2] = {0, 0};
-static const char *restartPointNames = "RS";
+static int restartPointFrameCount[3] = {0, 0, 0};
+static vec3f prevRestartPoint    [3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
+static u8 prevRestartPointLayer  [3] = {0, 0, 0};
+static u8 prevRestartPointMap    [3] = {0, 0, 0};
+static const char *restartPointNames = "RLS";
 
 static void printRestartPointForSave(SaveGame *save, int which) {
     if(save) {
@@ -161,8 +161,9 @@ static void printRestartPointForSave(SaveGame *save, int which) {
 
 static void printRestartPoint() {
     //Display restart point
-    printRestartPointForSave(pRestartPoint,  0);
-    printRestartPointForSave(pLastSavedGame, 1);
+    printRestartPointForSave(pRestartPoint,  0); //used when voiding out
+    printRestartPointForSave(pLastSavedGame, 1); //is this used?
+    printRestartPointForSave(pCurSaveGame,   2); //where you respawn when loading the save
 }
 
 static void printCamera() {

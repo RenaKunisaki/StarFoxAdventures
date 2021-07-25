@@ -48,11 +48,16 @@ void menuDebugMapGotoRestart_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
-//XXX is this any use?
 void menuDebugMapSetSavePos_select(const MenuItem *self, int amount) {
     if(amount) return;
+    if(!pCurSaveGame) {
+        audioPlaySound(NULL, MENU_FAIL_SOUND);
+        return;
+    }
+    //these are the coords you'll actually spawn at when loading the save.
     PlayerCharPos *playerPos =
-        &saveData.curSaveGame.charPos[saveData.curSaveGame.character];
+        //&saveData.curSaveGame.charPos[saveData.curSaveGame.character];
+        &pCurSaveGame->charPos[pCurSaveGame->character];
     playerPos->pos.x = pPlayer->pos.pos.x;
     playerPos->pos.y = pPlayer->pos.pos.y;
     playerPos->pos.z = pPlayer->pos.pos.z;
