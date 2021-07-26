@@ -79,12 +79,6 @@ void drawAttachPoints(ObjInstance *obj) {
         AttachPoint *point = &obj->file->pAttachPoints[iAttach];
         Color4b color = {0, 255, 0, 128};
         vec3f pos = point->pos;
-        //OSReport("attach point %d on %s: %f, %f, %f r %d %d %d", iAttach, obj->file->name,
-        //    pos.x, pos.y, pos.z, point->rot.x, point->rot.y, point->rot.z);
-        //pos.x += obj->pos.pos.x - playerMapOffsetX;
-        //pos.y += obj->pos.pos.y;
-        //pos.z += obj->pos.pos.z - playerMapOffsetZ;
-        //multVectorByObjMtx(pos.x, pos.y, pos.z, &pos.x, &pos.y, &pos.z, obj);
         objGetAttachPointWorldPos(obj, iAttach, &pos.x, &pos.y, &pos.z, 0);
         pos.x -= playerMapOffsetX;
         pos.z -= playerMapOffsetZ;
@@ -128,6 +122,7 @@ void drawUnkPoints(ObjInstance *obj) {
 }
 
 void _renderObjHitboxes(ObjInstance *obj) {
+    //XXX this is still rendering ghosts
     if(obj->flags_0xb0 & (
         ObjInstance_FlagsB0_IsFreed |
         ObjInstance_FlagsB0_Invisible |
@@ -148,13 +143,14 @@ void _renderObjHitboxes(ObjInstance *obj) {
 
 void renderObjsHook(bool *visible) {
     renderObjects(visible);
-    //if(debugRenderFlags & (DEBUGRENDER_HITBOXES | DEBUGRENDER_ATTACH_POINTS)) {
+    if(debugRenderFlags & (DEBUGRENDER_HITBOXES | DEBUGRENDER_ATTACH_POINTS |
+        DEBUGRENDER_FOCUS_POINTS | DEBUGRENDER_UNK_POINTS)) {
         beginDrawHitboxes();
         for(int iObj=0; iObj < numLoadedObjs; iObj++) {
             _renderObjHitboxes(loadedObjects[iObj]);
         }
         finishDrawingHitboxes();
-    //}
+    }
 }
 
 void hitboxHooksInit() {
