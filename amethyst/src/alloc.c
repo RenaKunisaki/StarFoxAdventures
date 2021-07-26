@@ -108,7 +108,7 @@ bool doEmergencyFree(int attempt) {
             }
         }
         OSReport("%sdumped %d caches", eFree, count);
-        return true;
+        if(count) return true;
     }
 
     //I have no idea why these exist.

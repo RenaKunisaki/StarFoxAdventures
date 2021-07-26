@@ -1,9 +1,10 @@
 #include "main.h"
+#include "revolution/gx/GXEnum.h"
 
 const float pi = 3.14159;
 const float two_pi = 3.14159 * 2;
 
-void _drawVtx(vec3f pos, Color4b *color) {
+void drawSolidVtx(vec3f pos, Color4b *color) {
     static volatile float *fifoFloat = (volatile float*)GX_FIFO_BASE;
     static volatile u8 *fifoU8 = (volatile u8*)GX_FIFO_BASE;
     *fifoFloat = pos.x;
@@ -58,7 +59,7 @@ void _drawSphereVtx(vec3f *pos, float radius, Color4b *color, vec3f *vtx) {
     v.x = (v.x * radius) + pos->x;
     v.y = (v.y * radius) + pos->y;
     v.z = (v.z * radius) + pos->z;
-    _drawVtx(v, color);
+    drawSolidVtx(v, color);
 }
 
 /** Draw a sphere.
@@ -70,6 +71,8 @@ void _drawSphereVtx(vec3f *pos, float radius, Color4b *color, vec3f *vtx) {
 void drawSphere(vec3f pos, float radius, Color4b color) {
     vec3f *vtxs = _generateSphere();
     if(!vtxs) return;
+
+    gxSetTexEnvColor(0, &color);
 
     //draw strips around the perimeter.
     for(int iStack = 0; iStack < STACKS - 1; ++iStack) {
@@ -94,5 +97,21 @@ void drawSphere(vec3f pos, float radius, Color4b color) {
             _drawSphereVtx(&pos, radius, &color, v4);
         }
     }
-    //XXX must manually draw top and bottom.
+
+    //manually draw top and bottom
+    vec3f top = {0, 0, -1};
+    GXBegin(GX_TRIANGLEFAN, 2, SLICES+1);
+    _drawSphereVtx(&pos, radius, &color, &top);
+    for(int i=0; i<SLICES; i++) {
+        vec3f *v = &vtxs[i];
+        _drawSphereVtx(&pos, radius, &color, v);
+    }
+
+    vec3f bottom = {0, 0, 1};
+    GXBegin(GX_TRIANGLEFAN, 2, SLICES+1);
+    _drawSphereVtx(&pos, radius, &color, &bottom);
+    for(int i=0; i<SLICES; i++) {
+        vec3f *v = &vtxs[i + ((STACKS - 1) * SLICES)];
+        _drawSphereVtx(&pos, radius, &color, v);
+    }
 }

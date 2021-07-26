@@ -128,6 +128,7 @@ GLOBALFN Mtx44 * modelGetBoneMatrix (Model * model, int iBone);
 GLOBALFN ModelFileHeader* modelLoad(
     int modelNum,ModelFlags_loadCharacter flags,uint *outSize);
     // if modelNum is negative, don't use MODELIND.bin
+GLOBALFN void mtxRotateByVec3s(Mtx * mtx, vec3s * rot);
 GLOBALFN void multByObjMtx(double x, double y, double z, float *outX, float *outY, float *outZ, ObjInstance *obj);
 GLOBALFN float multVectorByObjMtx(float x, float y, float z, float *outX, float *outY, float *outZ, ObjInstance*);
 GLOBALFN void musicTestPlaySong(int song);
@@ -135,6 +136,7 @@ GLOBALFN ObjDef* objAlloc(int size, int type);
 GLOBALFN void objDisableHitbox(ObjInstance*); //only for next frame
 GLOBALFN void objFree(ObjInstance*);
 GLOBALFN void objFreeAll(void);
+GLOBALFN void objGetAttachPointWorldPos(ObjInstance * obj, int idx, float * outX, float * outY, float * outZ, int noRotate);
 GLOBALFN Model* objGetCurModelPtr(ObjInstance *obj);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
@@ -163,7 +165,8 @@ GLOBALFN ObjInstance* playerGetNearestObject(int idx,ObjInstance *obj,float *out
 GLOBALFN ObjInstance** playerGetObject(int idx, int *outIdx);
 GLOBALFN void playerInitFuncPtrs(void);
 GLOBALFN BOOL playerSetHeldObject(ObjInstance *player, ObjInstance *obj);
-GLOBALFN void PSMTXConcat (Mtx * Ma, Mtx * Mb, Mtx * out);
+GLOBALFN void PSMTXConcat(Mtx * Ma, Mtx * Mb, Mtx * out);
+GLOBALFN void PSMTXIdentiy(Mtx *M);
 GLOBALFN u32 randomGetNext(void);
 GLOBALFN u32 randomGetRange(u32 min, u32 max);
 GLOBALFN void randomSetSeed(u32);

@@ -65,6 +65,39 @@ void menuDebugRenderHitboxes_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugRenderAttachPoints_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_ATTACH_POINTS) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugRenderAttachPoints_select(const MenuItem *self, int amount) {
+    debugRenderFlags ^= DEBUGRENDER_ATTACH_POINTS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
+void menuDebugRenderFocusPoints_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_FOCUS_POINTS) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugRenderFocusPoints_select(const MenuItem *self, int amount) {
+    debugRenderFlags ^= DEBUGRENDER_FOCUS_POINTS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
+void menuDebugRenderUnkPoints_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_UNK_POINTS) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugRenderUnkPoints_select(const MenuItem *self, int amount) {
+    debugRenderFlags ^= DEBUGRENDER_UNK_POINTS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
 void menuDebugRenderRNG_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_RNG) ? "On" : "Off");
@@ -79,12 +112,15 @@ void menuDebugRenderRNG_select(const MenuItem *self, int amount) {
 Menu menuDebugRender = {
     "Render", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Effects",           genericMenuItem_draw,         menuDebugRenderEffects_select,
-    "View Textures",     genericMenuItem_draw,         menuDebugRenderTextures_select,
-    "Map Grid: %s",      menuDebugRenderMapGrid_draw,  menuDebugRenderMapGrid_select,
-    "Perf Meters: %s",   menuDebugRenderPerf_draw,     menuDebugRenderPerf_select,
-    "Debug Objects: %s", menuDebugRenderDebugObjs_draw,menuDebugRenderDebugObjs_select,
-    "Hitboxes: %s",      menuDebugRenderHitboxes_draw, menuDebugRenderHitboxes_select,
-    "RNG: %s",           menuDebugRenderRNG_draw,      menuDebugRenderRNG_select,
+    "Effects",            genericMenuItem_draw,             menuDebugRenderEffects_select,
+    "View Textures",      genericMenuItem_draw,             menuDebugRenderTextures_select,
+    "Map Grid: %s",       menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
+    "Perf Meters: %s",    menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
+    "RNG: %s",            menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,
+    "Debug Objects: %s",  menuDebugRenderDebugObjs_draw,    menuDebugRenderDebugObjs_select,
+    "Hitboxes: %s",       menuDebugRenderHitboxes_draw,     menuDebugRenderHitboxes_select,
+    "Attach Points: %s",  menuDebugRenderAttachPoints_draw, menuDebugRenderAttachPoints_select,
+    "Focus Points: %s",   menuDebugRenderFocusPoints_draw,  menuDebugRenderFocusPoints_select,
+    "Unknown Points: %s", menuDebugRenderUnkPoints_draw,    menuDebugRenderUnkPoints_select,
     NULL,
 };

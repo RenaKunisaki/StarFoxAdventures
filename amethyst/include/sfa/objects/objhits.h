@@ -12,6 +12,23 @@ typedef enum { //type:u8
     HitboxFlags62_UseModelField14 = 0x20,
 } HitboxFlags62;
 
+typedef enum { //type:u8
+	DAMAGE_None               = 0x00,
+	DAMAGE_InstantDeath       = 0x01,
+	DAMAGE_DIM2SnowBall       = 0x04,
+	DAMAGE_BombPlantExplosion = 0x05,
+	DAMAGE_MMP_CraterF        = 0x09,
+	DAMAGE_MMP_barrel         = 0x0a,
+	DAMAGE_Bomb               = 0x0d,
+	DAMAGE_projball           = 0x0e,
+	DAMAGE_IceBlast           = 0x10,
+	DAMAGE_Fire14             = 0x14,
+	DAMAGE_EnemyBike          = 0x15,
+	DAMAGE_TrickyFlame        = 0x1a,
+	DAMAGE_BikeFuelTank       = 0x1d,
+	DAMAGE_Fire               = 0x1f,
+} DamageTypeEnum;
+
 typedef struct PACKED ObjHitsEntry {
 	short animId;
 } ObjHitsEntry;
@@ -58,8 +75,8 @@ typedef struct PACKED HitState {
 	short         sizeZ2;            //0x68
 	byte          unk6A;             //0x6A
 	undefined1    unk6B;             //0x6B
-	byte          damage;            //0x6C
-	byte          unk6D;             //0x6D
+	byte          type;              //0x6C
+	byte          damage;            //0x6D
 	byte          unk6E;             //0x6E
 	byte          unk6F;             //0x6F
 	byte          unk70;             //0x70

@@ -60,6 +60,9 @@ typedef enum {
 //bsod.c
 void bsodHook(void);
 
+//drawarrow.c
+void drawArrow(vec3f pos, vec3s rot, float scale, Color4b color);
+
 //drawbox.c
 void drawBox(float x, float y, int w, int h, u8 opacity, bool fill);
 
@@ -72,6 +75,7 @@ void drawMapGrid();
 //drawsphere.c
 extern const float pi;
 extern const float two_pi;
+void drawSolidVtx(vec3f pos, Color4b *color);
 void drawSphere(vec3f pos, float radius, Color4b color);
 
 //freemove.c
@@ -203,6 +207,7 @@ int compareObjsByDistance(const void *objA, const void *objB);
 int compareObjsByAddr(const void *objA, const void *objB);
 double u64toDouble(u64 val);
 double ticksToSecs(u64 ticks);
+Color4b hsv2rgb(u8 h, u8 s, u8 v, u8 a);
 
 //worldmap.c
 void worldMapHook();

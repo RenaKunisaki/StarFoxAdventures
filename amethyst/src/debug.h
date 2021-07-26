@@ -17,11 +17,14 @@ typedef enum {
 } DebugTextFlags;
 
 typedef enum {
-    DEBUGRENDER_WORLD_MAP   = (1 <<  0),
-    DEBUGRENDER_DEBUG_OBJS  = (1 <<  1),
-    DEBUGRENDER_PERF_METERS = (1 <<  2),
-    DEBUGRENDER_RNG         = (1 <<  3),
-    DEBUGRENDER_HITBOXES    = (1 <<  4),
+    DEBUGRENDER_WORLD_MAP     = (1 <<  0),
+    DEBUGRENDER_DEBUG_OBJS    = (1 <<  1),
+    DEBUGRENDER_PERF_METERS   = (1 <<  2),
+    DEBUGRENDER_RNG           = (1 <<  3),
+    DEBUGRENDER_HITBOXES      = (1 <<  4),
+    DEBUGRENDER_ATTACH_POINTS = (1 <<  5),
+    DEBUGRENDER_FOCUS_POINTS  = (1 <<  6),
+    DEBUGRENDER_UNK_POINTS    = (1 <<  7),
 } DebugRenderFlags;
 
 typedef enum {
