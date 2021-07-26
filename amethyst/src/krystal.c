@@ -50,6 +50,7 @@ void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
         DPRINT("ALLOC FAILED for Krystal model");
         return allocTagged(size, tag, name); //try again with original size
     }
+    registerFreeablePtr((void**)&krystalModel);
 
     //copy the new model into the buffer.
     krystalModelOffset = size;
@@ -124,6 +125,7 @@ void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
         DPRINT("ALLOC FAILED for Krystal texture");
         return allocTagged(size, tag, name); //try again with original size
     }
+    registerFreeablePtr((void**)&krystalTexture);
 
     //copy the new texture into the buffer.
     krystalTextureOffset = size;

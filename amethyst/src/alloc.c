@@ -1,10 +1,13 @@
 #include "main.h"
 #include "revolution/os.h"
 
+static const char *eFree = "Emergency free: ";
 u32 allocFailCount = 0;
 u32 emergFreeCount = 0;
 u8 allocFailLogIdx = 0;
 AllocFailLogItem allocFailLog[ALLOC_FAIL_LOG_SIZE];
+
+void **freeablePtrs[MAX_FREEABLE_PTRS];
 
 //object category IDs
 //ordered roughly from least to most important as well as least to
@@ -64,21 +67,62 @@ u32 *outUsedBlocks, u32 *outUsedBytes, int *outBlocksPct, int *outBytesPct) {
     if(outBytesPct)  *outBytesPct  = (usedBytes  * 100) / totalBytes;
 }
 
+/** Register a pointer that can be freed when memory is low.
+ *  @param ptr Address of the pointer itself.
+ *  @return true if registered, false if not.
+ *  @note When memory is low, the pointer at this address will be freed if not NULL,
+ *   and NULL will be stored to the address.
+ */
+bool registerFreeablePtr(void **ptr) {
+    if(!ptr) {
+        OSReport("ERROR: Registering NULL freeable pointer at %08X",
+            __builtin_return_address(0));
+        return false;
+    }
+
+    //check if already registered
+    for(int i=0; i<MAX_FREEABLE_PTRS; i++) {
+        if(freeablePtrs[i] == ptr) return true;
+    }
+
+    for(int i=0; i<MAX_FREEABLE_PTRS; i++) {
+        if(!freeablePtrs[i]) {
+            freeablePtrs[i] = ptr;
+            return true;
+        }
+    }
+    return false;
+}
+
 bool doEmergencyFree(int attempt) {
     emergFreeCount++;
+
+    if(attempt == 0) {
+        OSReport("%sdump caches", eFree);
+        int count = 0;
+        for(int i=0; i<MAX_FREEABLE_PTRS; i++) {
+            if(freeablePtrs[i] && *freeablePtrs[i]) {
+                free(*freeablePtrs[i]);
+                *freeablePtrs[i] = NULL;
+                count++;
+            }
+        }
+        OSReport("%sdumped %d caches", eFree, count);
+        return true;
+    }
 
     //I have no idea why these exist.
     //Our code is now big enough to cause memory outage at the title screen.
     //This seems to fix it...
-    if(attempt == 0) {
-        OSReport("Emergency free: retry with other heaps");
+    if(attempt < 2) {
+        OSReport("%sretry with other heaps", eFree);
         bOnlyUseHeap3 = 0;
         bOnlyUseHeaps1and2 = -1;
         return true;
     }
 
-    if(attempt == 1) {
-        OSReport("Emergency free: dumping expgfx");
+    if(attempt == 2) {
+        OSReport("%sdumping expgfx", eFree);
         expgfxRemoveAll();
         return true;
     }
@@ -89,7 +133,7 @@ bool doEmergencyFree(int attempt) {
         if(obj) {
             for(int cat=0; objEmergFreeCats[cat] != 0xFF; cat++) {
                 if(obj->catId == objEmergFreeCats[cat]) {
-                    OSReport("Emergency free object 0x%08X \"%s\"",
+                    OSReport("%sobject 0x%08X \"%s\"", eFree,
                         obj, obj->file->name);
                     objFreeMode = OBJ_FREE_IMMEDIATE; //actually free it now
                     objFree(obj);
@@ -102,7 +146,7 @@ bool doEmergencyFree(int attempt) {
 
     u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
     getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes, NULL, NULL);
-    OSReport("Emergency free: didn't free any object. Used blocks %d/%d, bytes %d/%d K",
+    OSReport("%sdidn't free any object. Used blocks %d/%d, bytes %d/%d K", eFree,
         usedBlocks, totalBlocks, usedBytes/1024, totalBytes/1024);
     //XXX try more things
     return false;
@@ -232,5 +276,6 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
 }
 
 void allocInit() {
+    memset(freeablePtrs, 0, sizeof(void*) * MAX_FREEABLE_PTRS);
     hookBranch((u32)allocTagged, allocTaggedHook, 0);
 }

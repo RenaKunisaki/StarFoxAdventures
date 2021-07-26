@@ -54,7 +54,10 @@ int getHitsHook(ObjInstance *obj, ObjInstance **outObj, int *outSphereIdx, uint 
     if(!recordedHits) {
         recordedHits = allocTagged(sizeof(RecordedHit) * MAX_RECORDED_HITS,
             ALLOC_TAG_LISTS_COL, "debug:recordedHits");
-        if(recordedHits) memset(recordedHits, 0, sizeof(RecordedHit) * MAX_RECORDED_HITS);
+        if(recordedHits) {
+            registerFreeablePtr((void**)&recordedHits);
+            memset(recordedHits, 0, sizeof(RecordedHit) * MAX_RECORDED_HITS);
+        }
     }
     if(recordedHits) {
         //record the params since we don't have them by the end

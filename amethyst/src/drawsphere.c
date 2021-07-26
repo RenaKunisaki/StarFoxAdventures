@@ -30,6 +30,7 @@ vec3f* _generateSphere() {
     if(vtxs) return vtxs;
     vtxs = allocTagged(sizeof(vec3f) * NUM_VTXS, ALLOC_TAG_MODELS_COL, "debug:sphereVtxs");
     if(!vtxs) return NULL;
+    registerFreeablePtr((void**)&vtxs);
 
     for (int stack = 0; stack < STACKS; ++stack) {
         for (int slice = 0; slice < SLICES; ++slice) {
