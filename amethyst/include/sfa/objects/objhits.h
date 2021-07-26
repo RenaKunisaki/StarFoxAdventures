@@ -65,7 +65,7 @@ typedef struct PACKED HitState {
 	byte          unk70;             //0x70
 	byte          nHits;             //0x71
 	byte          sphereIdxs[3];     //0x72
-	byte          objField6C[3];     //0x75 XXX verify
+	byte          recordedHitType[3];//0x75
 	byte          recordedDamage[3]; //0x78
     byte          unk7B;             //0x7B probably padding
 	ObjInstance  *objs[3];           //0x7C

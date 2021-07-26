@@ -1,3 +1,5 @@
+#define GX_FIFO_BASE 0xCC008000 //XXX is this really not part of SDK?
+
 typedef struct {
     union {
         struct { u8 r; u8 g; u8 b; u8 a; };

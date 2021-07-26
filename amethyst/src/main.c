@@ -316,6 +316,7 @@ void _start(void) {
     gameBitHookInit();
     debugObjsInit();
     titleHooksInit();
+    logHitsInit();
     hitboxHooksInit();
 
     //debug stuff

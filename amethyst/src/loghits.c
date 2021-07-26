@@ -112,7 +112,7 @@ int getHitsHook(ObjInstance *obj, ObjInstance **outObj, int *outSphereIdx, uint 
     return hitType;
 }
 
-void hitboxHooksInit() {
+void logHitsInit() {
     //beginning of objGetHits()
     //XXX maybe also need to hook 80036770 objGetDamageType
     hookBranch(0x8003687c, getHitsHook, 0);
@@ -124,7 +124,7 @@ void printHits() {
     //do nothing
 }
 
-void hitboxHooksInit() {
+void logHitsInit() {
     //do nothing
 }
 

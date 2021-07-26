@@ -128,3 +128,5 @@ typedef struct ObjInstance {
 	void               *cbAfterUpdateBones; //0x108 objField108_func*
 } ObjInstance;
 CASSERT(sizeof(ObjInstance) == 0x10C, sizeof_ObjInstance);
+
+extern Mtx44 *curObjMtx;

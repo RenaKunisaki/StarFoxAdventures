@@ -69,6 +69,11 @@ void drawHeaps();
 //drawmap.c
 void drawMapGrid();
 
+//drawsphere.c
+extern const float pi;
+extern const float two_pi;
+void drawSphere(vec3f pos, float radius, Color4b color);
+
 //freemove.c
 extern bool bFreeMove;
 extern vec3f freeMoveCoords;
@@ -79,7 +84,6 @@ void gameBitHookInit();
 void gameBitHookUpdate();
 
 //hitbox.c
-void printHits();
 void hitboxHooksInit();
 
 //hook.c
@@ -88,6 +92,10 @@ uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 //hud.c
 extern uint8_t hudFlags;
 void doHudHacks();
+
+//loghits.c
+void printHits();
+void logHitsInit();
 
 //main.c
 extern u32 debugCheats;

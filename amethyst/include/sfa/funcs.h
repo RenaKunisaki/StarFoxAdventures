@@ -55,10 +55,12 @@ GLOBALFN void gameTimerInit(GameTimerFlags flags, int max);
 GLOBALFN void gameTimerRun(void); //takes a param but doesn't use it
 GLOBALFN void gameTimerStop(void);
 GLOBALFN void GameUI_hudDraw(int,int,int);
+GLOBALFN int getAngle (float param_1, float param_2);
 GLOBALFN ObjInstance* getArwing(void);
 GLOBALFN u16 getButtonsHeld(int padNo);
 GLOBALFN u16 getButtonsJustPressed(int padNo);
 GLOBALFN Texture* getLoadedTexture(int id);
+GLOBALFN Mtx44* getCameraMtxs(void);
 GLOBALFN ObjPos* getCameraPos(void);
 GLOBALFN void gplayClearRestartPoint(void);
 GLOBALFN void gplayGotoRestartPoint(void);
@@ -66,15 +68,35 @@ GLOBALFN void gplayGotoSavegame(void);
 GLOBALFN void gplayRestartPoint(vec3f *pos, s16 rot, byte layer, int bSaveWithOneLessHealth);
 GLOBALFN void gplaySetAct(u32 map, u32 act); //XXX which type of map ID?
 GLOBALFN void gplaySetObjGroupStatus(MapDirIdx32 map,uint group,int set);
-GLOBALFN void gxBeginVtxs(GXOpcode opcode,uint vat,uint nVtxs);
+GLOBALFN void GXBegin(GXPrimitive type, GXVtxFmt vtxfmt, u16 nverts);
 GLOBALFN void GXFlush_(int, int); //real GXFlush takes no params...
 GLOBALFN void gxGetVtxDescr(int bit, int *out);
 GLOBALFN void gxGetVtxDescrs(u32 *out);
+GLOBALFN void gxResetIndCmd(int);
 GLOBALFN void gxResetVtxDescr(void);
+GLOBALFN void gxSetBackfaceCulling(int); //0:none 1:neg 2:pos 3:all
 GLOBALFN void gxSetBlendMode(int, int, int, int);
+GLOBALFN void gxSetColorCtrl(int, int, int, int, int, int, int);
+GLOBALFN void gxSetKSel(int, int);
+GLOBALFN void gxSetMtx(Mtx *mtx, int idx);
+GLOBALFN void gxSetMtx43(Mtx * mtx, int idx);
+GLOBALFN void gxSetNumColors(uint);
+GLOBALFN void gxSetNumTextures(uint);
 GLOBALFN void gxSetPeControl_ZCompLoc_(byte);
+GLOBALFN void gxSetRasTref(int, int, int, int);
+GLOBALFN void GXSetTevAlphaIn(GXTevStageID stage, GXTevAlphaArg a, GXTevAlphaArg b, GXTevAlphaArg c, GXTevAlphaArg d );
+GLOBALFN void _gxSetTexColorEnv(int, int, int, int, int);
+GLOBALFN void gxSetTexColorEnv0(int, int, int, int, int);
+GLOBALFN void _gxSetTexColorEnv0(int, int, int, int, int, int);
+GLOBALFN void gxSetTexColorEnv1(int, int, int);
+GLOBALFN void _gxSetTexColorEnv1(int, int, int, int, int, int);
+GLOBALFN void gxSetTexEnvColor(int idx, Color4b *color);
+GLOBALFN void gxSetTevKsel(int, int);
 GLOBALFN void gxSetVtxDescr(int which, int val);
 GLOBALFN void gxSetVtxDescrs(u32*);
+GLOBALFN void gxSetZMode_(BOOL compareEnable, GXCompare compareFunc, BOOL updateEnable); //wrapper
+GLOBALFN void gxTextureFn_8025b6f0(int);
+GLOBALFN void gxTextureFn_8025c2a0(int);
 GLOBALFN void gxWaitFn_80258330(void);
 GLOBALFN void* heapAlloc(int region, uint size, AllocTag tag, const char* name); //don't use this, use allocTagged
 GLOBALFN void hudDrawAirMeter(void);
@@ -102,6 +124,7 @@ GLOBALFN void mapUnload(MapDirIdx32 map, uint flags);
 GLOBALFN void* memcpy(void *dest, void *src, int len); // clobbers: r0, r4, r5, r6
 GLOBALFN void* memset(void *dest, u8 val, int len); // clobbers: r0, r6, r7
 GLOBALFN void mm_free(void*); // wrapper for free()
+GLOBALFN Mtx44 * modelGetBoneMatrix (Model * model, int iBone);
 GLOBALFN ModelFileHeader* modelLoad(
     int modelNum,ModelFlags_loadCharacter flags,uint *outSize);
     // if modelNum is negative, don't use MODELIND.bin
@@ -112,8 +135,10 @@ GLOBALFN ObjDef* objAlloc(int size, int type);
 GLOBALFN void objDisableHitbox(ObjInstance*); //only for next frame
 GLOBALFN void objFree(ObjInstance*);
 GLOBALFN void objFreeAll(void);
+GLOBALFN Model* objGetCurModelPtr(ObjInstance *obj);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
+GLOBALFN void objMtxFn_8002b47c (ObjInstance * obj, Mtx44 * mtx, bool useScale);
 GLOBALFN void objRunSeq(uint seqIdx, ObjInstance *obj, u32 flags);
 GLOBALFN void objSetModel(ObjInstance *obj, int modelIdx);
 GLOBALFN void objStopSound_(ObjInstance *obj, int id);
@@ -138,9 +163,11 @@ GLOBALFN ObjInstance* playerGetNearestObject(int idx,ObjInstance *obj,float *out
 GLOBALFN ObjInstance** playerGetObject(int idx, int *outIdx);
 GLOBALFN void playerInitFuncPtrs(void);
 GLOBALFN BOOL playerSetHeldObject(ObjInstance *player, ObjInstance *obj);
+GLOBALFN void PSMTXConcat (Mtx * Ma, Mtx * Mb, Mtx * out);
 GLOBALFN u32 randomGetNext(void);
 GLOBALFN u32 randomGetRange(u32 min, u32 max);
 GLOBALFN void randomSetSeed(u32);
+GLOBALFN void renderObjects(bool *visible);
 GLOBALFN void reset(int, int, int);
 GLOBALFN PlayerCharState* SaveGame_getCurCharacterState(void);
 GLOBALFN int saveGame_load(s8 slot);
@@ -148,6 +175,7 @@ GLOBALFN void saveGame_save(void);
 GLOBALFN void saveSelect_drawText(void *unused, u32 alpha);
 GLOBALFN void sceneRender(void);
 GLOBALFN void setGpuErrorHandler(void*);
+GLOBALFN void setMatrixFromObjectTransposed (ObjPos * obj, Mtx * mtxOut);
 GLOBALFN void setSoundMode(u8 mode, bool force);
 GLOBALFN void setSubtitlesEnabled(bool);
 GLOBALFN int setWidescreen(bool); //always returns 0
@@ -155,6 +183,7 @@ GLOBALFN int shiftJisGetNextChar(char *text, int *outSize);
 GLOBALFN bool shouldForceMotionBlur(void);
 GLOBALFN float sinf(float);
 GLOBALFN char* sprintf(char *dest, const char* fmt, ...);
+GLOBALFN float sqrtf(float distance);
 GLOBALFN void streamPlay(int id, void (*callback)(void));
 GLOBALFN void streamPlay_defaultCallback();
 GLOBALFN void streamStop(void);
@@ -172,6 +201,8 @@ GLOBALFN void unloadMap(void);
 GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);
 GLOBALFN void updateViewMatrix(void);
 GLOBALFN float vec3f_distance(vec3f *a, vec3f *b);
+GLOBALFN void vec3f_multByMtx (Mtx * mtx, vec3f * vIn, vec3f * vOut);
+GLOBALFN void vec3f_multByMtx2(Mtx * mtx, vec3f * vIn, vec3f * vOut);
 GLOBALFN void vec3f_scale(double scale, vec3f *in, vec3f *out);
 GLOBALFN float vec3f_xzDistance(vec3f *a, vec3f *b);
 GLOBALFN void videoSetBufferSwapCb(void*);
