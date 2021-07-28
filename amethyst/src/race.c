@@ -3,20 +3,21 @@
  */
 #include "main.h"
 #include "revolution/os.h"
+#include "revolution/pad.h"
 static float disappearTimer = 0;
 static bool active = false;
 
-void IM_ToggleRaceTimer(bool start) {
+void raceTimerToggle(bool start) {
     if(start) {
         gameTimerInit(GAME_TIMER_FLAG_RUNNING | GAME_TIMER_FLAG_VISIBLE,
             (99*60*60) + (59*60) + 59); //min:sec:frames
-        OSReport("Started IM race timer!");
-        //bikeMoveScale = 0.875; //turbo mode
+        OSReport("Started race timer!");
+        if(getButtonsHeld(0) & PAD_TRIGGER_Z) bikeMoveScale = 0.875; //turbo mode
         //XXX add a switch or something to the map to toggle this
     }
     else {
         gameTimerStop();
-        OSReport("Stopped IM race timer!");
+        OSReport("Stopped race timer!");
     }
 }
 
@@ -31,7 +32,7 @@ static void drawTimer() {
     //the timer code does this, but slightly different. (and uses box 0xD)
     //XXX does this break other timers after the race?
     //or whatever else uses this box. should restore it after the race.
-    int boxId = 4, x = SCREEN_WIDTH - 210, y = SCREEN_HEIGHT - 233;
+    int boxId = 4, x = SCREEN_WIDTH - 210, y = SCREEN_HEIGHT - 173;
     GameTextBox *box = gameTextGetBox(boxId);
     //box->x = x;
     //box->y = y;
@@ -41,8 +42,8 @@ static void drawTimer() {
     box->justify = GameTextJustify_Full;
 
     u8 alpha = MIN((int)(disappearTimer * 8.0), 255);
-    drawHudBox(450, 346, 120, 40, alpha, true);
-    gameTextSetColor(0xFF, 0xFF, 0xFF, alpha);
+    drawHudBox(450, 406, 120, 40, alpha, true);
+    gameTextSetColor(0xFF, bikeMoveScale > 0.5 ? 0x3F : 0xFF, 0xFF, alpha);
     gameTextShowStr(str, boxId, x+5, y);
 
     //draw speed
@@ -56,7 +57,7 @@ static void drawTimer() {
     gameTextShowStr(str, boxId, x, y+18);
 }
 
-void IM_UpdateRaceTimer() {
+void raceTimerUpdate() {
     char str[64];
 
     void *pState = (pPlayer && pPlayer->catId == 1) ? pPlayer->state : NULL;
@@ -76,11 +77,15 @@ void IM_UpdateRaceTimer() {
     if(start && !active) { //start the timer
         active = true;
         gameTimerValue = -timeDelta; //start at 0 (we're about to add this again)
+        //hudHidden = true; //causes weird tail glitching
+        hudElementOpacity = 0;
     }
 
     if(active && pState && stateId != 0x18) { //player warped or something; stop the timer
         mainSetBits(0xC8, 0);
         active = false;
+        //hudHidden = false;
+        hudElementOpacity = 255;
     }
 
     if(active) {
@@ -91,8 +96,9 @@ void IM_UpdateRaceTimer() {
         disappearTimer = 300.0; //frames, ie 5 seconds
         drawTimer();
     }
-    else if(disappearTimer - timeDelta > 0) {
+    else if(disappearTimer > 0) {
         disappearTimer -= timeDelta;
         drawTimer();
+        if(disappearTimer <= 0) bikeMoveScale = 0.5; //reset to default
     }
 }

@@ -260,6 +260,7 @@ hudDrawAirMeter = 0x8011f7c4;
 hudDrawButtons = 0x80123204;
 hudDrawRect = 0x800753b8;
 hudDrawTriangle = 0x80075a1c;
+hudElementOpacity = 0x803e1ec0;
 hudHealthBlinkTimer = 0x803a92ec;
 hudHidden = 0x803dca3a;
 hudTextures = 0x803a89b0;

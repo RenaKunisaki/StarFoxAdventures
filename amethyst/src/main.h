@@ -148,8 +148,8 @@ void playerMainLoopHook();
 void firstPersonHook(void *param1, void *param2);
 
 //race.c
-void IM_ToggleRaceTimer(bool start);
-void IM_UpdateRaceTimer();
+void raceTimerToggle(bool start);
+void raceTimerUpdate();
 
 //random.c
 extern u32 rngCalls;

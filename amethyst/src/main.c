@@ -168,7 +168,7 @@ void mainLoopHook() {
     if(overrideColorScale >= 0) colorScale = overrideColorScale;
 
     doHudHacks();
-    IM_UpdateRaceTimer();
+    raceTimerUpdate();
 }
 
 static u32 oldSaveGameInitialise = 0;
