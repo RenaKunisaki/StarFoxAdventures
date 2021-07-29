@@ -24,10 +24,16 @@ void raceTimerToggle(bool start) {
         OSReport("Started race timer!");
         if(getButtonsHeld(0) & PAD_TRIGGER_Z) bikeMoveScale = 0.875; //turbo mode
         //XXX add a switch or something to the map to toggle this
+
+        gameTimerValue = -timeDelta; //start at 0 (we're about to add this again)
+        //hudHidden = true; //causes weird tail glitching, other issues
+        hudElementOpacity = 0;
     }
     else {
         gameTimerStop();
         OSReport("Stopped race timer!");
+        //hudHidden = false;
+        hudElementOpacity = 255;
     }
 }
 
@@ -91,17 +97,14 @@ void raceTimerUpdate() {
 
     //start = true; stateId = 0x18; //for testing
     if(start && !active) { //start the timer
+        raceTimerToggle(true);
         active = true;
-        gameTimerValue = -timeDelta; //start at 0 (we're about to add this again)
-        //hudHidden = true; //causes weird tail glitching, other issues
-        hudElementOpacity = 0;
     }
 
     if(active && pState && stateId != 0x18) { //player warped or something; stop the timer
-        mainSetBits(0xC8, 0);
+        //mainSetBits(0xC8, 0);
+        raceTimerToggle(false);
         active = false;
-        //hudHidden = false;
-        hudElementOpacity = 255;
     }
 
     if(active) {
@@ -114,7 +117,7 @@ void raceTimerUpdate() {
     }
     else if(disappearTimer > 0) {
         disappearTimer -= timeDelta;
-        if(disappearTimer < 0) disappearTimer = 0;
+        if(disappearTimer < 0) disappearTimer = 0; //don't flicker
         drawTimer();
         if(disappearTimer <= 0) {
             bikeMoveScale = 0.5; //reset to default
