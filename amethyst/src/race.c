@@ -4,8 +4,18 @@
 #include "main.h"
 #include "revolution/os.h"
 #include "revolution/pad.h"
+
+#define TEXTBOX_ID 4
+#define TEXT_XPOS (SCREEN_WIDTH - 210)
+#define TEXT_YPOS (SCREEN_HEIGHT - 173)
 static float disappearTimer = 0;
 static bool active = false;
+
+//backup for text window
+static float oldTextScale = 0;
+static s16 oldWidth;
+static s16 oldHeight;
+static u8 oldJustify;
 
 void raceTimerToggle(bool start) {
     if(start) {
@@ -30,21 +40,24 @@ static void drawTimer() {
         ((int)(secs * 100.0)) % 100); // 1/100 seconds
 
     //the timer code does this, but slightly different. (and uses box 0xD)
-    //XXX does this break other timers after the race?
-    //or whatever else uses this box. should restore it after the race.
-    int boxId = 4, x = SCREEN_WIDTH - 210, y = SCREEN_HEIGHT - 173;
-    GameTextBox *box = gameTextGetBox(boxId);
-    //box->x = x;
-    //box->y = y;
+    GameTextBox *box = gameTextGetBox(TEXTBOX_ID);
+    if(oldTextScale == 0) {
+        oldTextScale = box->textScale;
+        oldWidth     = box->width;
+        oldHeight    = box->height;
+        oldJustify   = box->justify;
+    }
+    //box->x = TEXT_XPOS;
+    //box->y = TEXT_YPOS;
     box->height = SCREEN_HEIGHT;
     box->width = SCREEN_WIDTH;
     box->textScale = 1.0;
     box->justify = GameTextJustify_Full;
 
     u8 alpha = MIN((int)(disappearTimer * 8.0), 255);
-    drawHudBox(x+20, y+99, 120, 40, alpha, true);
+    drawHudBox(TEXT_XPOS+20, TEXT_YPOS+99, 120, 40, alpha, true);
     gameTextSetColor(0xFF, bikeMoveScale > 0.5 ? 0x3F : 0xFF, 0xFF, alpha);
-    gameTextShowStr(str, boxId, x+5, y);
+    gameTextShowStr(str, TEXTBOX_ID, TEXT_XPOS+5, TEXT_YPOS);
 
     //draw speed
     vec3f vel;
@@ -54,7 +67,7 @@ static void drawTimer() {
     double vxz = vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 21.5;
     sprintf(str, "%3d km/h", (int)vxz);
     gameTextSetColor(0xFF, 0xFF, 0xFF, alpha);
-    gameTextShowStr(str, boxId, x, y+18);
+    gameTextShowStr(str, TEXTBOX_ID, TEXT_XPOS, TEXT_YPOS+18);
 }
 
 void raceTimerUpdate() {
@@ -70,6 +83,9 @@ void raceTimerUpdate() {
         start = true;
     }
     else if(stateId == 0x18 && curMapId != 0x17) { //on bike, not Ice Mountain
+        //this is a separate case so that we can make the timer not start until
+        //you actually gain control of the bike.
+        //XXX find how to do this for the other races.
         start = true;
     }
 
@@ -77,7 +93,7 @@ void raceTimerUpdate() {
     if(start && !active) { //start the timer
         active = true;
         gameTimerValue = -timeDelta; //start at 0 (we're about to add this again)
-        //hudHidden = true; //causes weird tail glitching
+        //hudHidden = true; //causes weird tail glitching, other issues
         hudElementOpacity = 0;
     }
 
@@ -98,7 +114,18 @@ void raceTimerUpdate() {
     }
     else if(disappearTimer > 0) {
         disappearTimer -= timeDelta;
+        if(disappearTimer < 0) disappearTimer = 0;
         drawTimer();
-        if(disappearTimer <= 0) bikeMoveScale = 0.5; //reset to default
+        if(disappearTimer <= 0) {
+            bikeMoveScale = 0.5; //reset to default
+            if(oldTextScale != 0) {
+                GameTextBox *box = gameTextGetBox(TEXTBOX_ID);
+                box->textScale   = oldTextScale;
+                box->width       = oldWidth;
+                box->height      = oldHeight;
+                box->justify     = oldJustify;
+                oldTextScale     = 0;
+            }
+        }
     }
 }
