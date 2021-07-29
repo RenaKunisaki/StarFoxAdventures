@@ -42,7 +42,7 @@ static void drawTimer() {
     box->justify = GameTextJustify_Full;
 
     u8 alpha = MIN((int)(disappearTimer * 8.0), 255);
-    drawHudBox(450, 406, 120, 40, alpha, true);
+    drawHudBox(x+20, y+99, 120, 40, alpha, true);
     gameTextSetColor(0xFF, bikeMoveScale > 0.5 ? 0x3F : 0xFF, 0xFF, alpha);
     gameTextShowStr(str, boxId, x+5, y);
 
@@ -53,7 +53,7 @@ static void drawTimer() {
     //this scale gives a top speed of 64km/h which is nice.
     double vxz = vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 21.5;
     sprintf(str, "%3d km/h", (int)vxz);
-    gameTextSetColor(0xFF, 0xFF, 0xFF, 0xFF);
+    gameTextSetColor(0xFF, 0xFF, 0xFF, alpha);
     gameTextShowStr(str, boxId, x, y+18);
 }
 
