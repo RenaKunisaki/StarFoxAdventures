@@ -108,6 +108,7 @@ const char* getBitName(int bit) {
         //try to load bitnames.dat
         bitNames = loadFileByPath("bitnames.dat", NULL);
         if(!bitNames) return "";
+        registerFreeablePtr((void**)&bitNames);
     }
 
     //this is hilariously inefficient time-wise, but saves a ton of memory.
