@@ -57,6 +57,13 @@ typedef enum {
     HUD_LOW_HP_BEEP  = (1 << 1), //for players who hate themselves
 } HudFlag;
 
+typedef enum { //for savedata (field unused01)
+    EXTRA_FEATURE_RUMBLE_BLUR   = (1 << 0),
+    EXTRA_FEATURE_NO_PARTICLEFX = (1 << 1),
+} ExtraFeatureFlag;
+
+//see also CameraFlags in camera.h
+
 //bsod.c
 void bsodHook(void);
 

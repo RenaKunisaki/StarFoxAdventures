@@ -34,7 +34,8 @@ void saveLoadHook() {
     overridePlayerNo = save->unused07;
 
     u8 extraFeatureFlags = save->unused01;
-    bRumbleBlur = extraFeatureFlags & 0x01;
+    bRumbleBlur = extraFeatureFlags & EXTRA_FEATURE_RUMBLE_BLUR;
+    bDisableParticleFx = extraFeatureFlags & EXTRA_FEATURE_NO_PARTICLEFX;
 
     cameraFlags = save->unusedHudSetting;
 
@@ -78,8 +79,6 @@ void saveLoadHook() {
 void updateSaveData() {
     SaveGameSettings *save = &saveData.saveSettings;
     save->unused07 = overridePlayerNo;
-    //XXX rumble blur
-    //XXX why are these sometimes not being saved/loaded?
     save->unused0E = overrideFov;
     save->unused0F = overrideMinimapAlpha;
 
@@ -88,7 +87,10 @@ void updateSaveData() {
     save->unused0D = overrideMinimapSize | (mapMode << 2) |
         (furFxMode << 4) | (backpackMode << 6);
 
-    save->unused01 = (bRumbleBlur ? 0x01 : 0x00);
+    save->unused01 = 0;
+    if(bRumbleBlur) save->unused01 |= EXTRA_FEATURE_RUMBLE_BLUR;
+    if(bDisableParticleFx) save->unused01 |= EXTRA_FEATURE_NO_PARTICLEFX;
+
     save->unusedHudSetting = cameraFlags;
     save->unk18 = hudFlags;
     save->unk19 = curLanguage;
