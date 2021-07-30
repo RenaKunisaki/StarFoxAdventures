@@ -22,7 +22,7 @@ void raceTimerToggle(bool start) {
         gameTimerInit(GAME_TIMER_FLAG_RUNNING | GAME_TIMER_FLAG_VISIBLE,
             (99*60*60) + (59*60) + 59); //min:sec:frames
         OSReport("Started race timer!");
-        if(getButtonsHeld(0) & PAD_TRIGGER_Z) bikeMoveScale = 0.875; //turbo mode
+        if(getButtonsHeld(0) & PAD_BUTTON_X) bikeMoveScale = 0.875; //turbo mode
         //XXX add a switch or something to the map to toggle this
 
         gameTimerValue = -timeDelta; //start at 0 (we're about to add this again)
