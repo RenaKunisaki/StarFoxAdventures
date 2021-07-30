@@ -234,8 +234,9 @@ static inline void _initCameraHacks() {
     hookBranch(0x80108758,        viewFinderZoomHook,       1);
 
     //viWidth fix
-    WRITE16(0x80049512, 704);
-    WRITE16(0x80049526, -32);
+    //XXX this makes things look all stretched in widescreen.
+    //WRITE16(0x80049512, 704);
+    //WRITE16(0x80049526, -32);
 }
 
 static inline void _initPlayerHacks() {
