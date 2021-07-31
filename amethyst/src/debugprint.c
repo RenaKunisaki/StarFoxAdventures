@@ -15,6 +15,8 @@ u32 debugTextFlags =
     //DEBUGTEXT_PERFORMANCE |
     DEBUGTEXT_FPS |
     //DEBUGTEXT_RNG |
+    DEBUGTEXT_AUDIO_STREAMS |
+    //DEBUGTEXT_AUDIO_SFX |
     0;
 u32 debugRenderFlags =
     //DEBUGRENDER_WORLD_MAP |
@@ -311,10 +313,17 @@ static void printFPS() {
     debugPrintSetPos(0, 0);
 }
 
-static void printAudio() {
+static void printStreams() {
     if(curStream) {
-        debugPrintf("Stream " DPRINT_FIXED "0x%03X %f\n" DPRINT_NOFIXED, curStream-1, streamPos);
+        StreamsBinEntry *stream = &pStreamsBin[curStream - 1];
+        debugPrintf("Stream #" DPRINT_FIXED "0x%03X ID 0x%04X %d,%d,%d pos %f" DPRINT_NOFIXED " %s\n",
+            curStream-1, stream->id,
+            stream->unk02, stream->unk03, stream->unk04,
+            streamPos, stream->name);
     }
+}
+
+static void printSFX() {
     for(s16 iObj=0; iObj < nObjsPlayingSounds; iObj++) {
         char name[12];
         getObjName(name, objsPlayingSounds[iObj]);
@@ -348,7 +357,8 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
     if(debugTextFlags & DEBUGTEXT_RNG)               printRNG();
     rngCalls = 0;
-    if(debugTextFlags & DEBUGTEXT_AUDIO)             printAudio();
+    if(debugTextFlags & DEBUGTEXT_AUDIO_STREAMS)     printStreams();
+    if(debugTextFlags & DEBUGTEXT_AUDIO_SFX)         printSFX();
 
     debugPrintf("\n"); //for game's own messages
 

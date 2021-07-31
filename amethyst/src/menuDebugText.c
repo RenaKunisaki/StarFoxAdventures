@@ -144,13 +144,24 @@ void menuDebugTextRNG_select(const MenuItem *self, int amount) {
 }
 
 
-void menuDebugTextAudio_draw(const MenuItem *self, int x, int y, bool selected) {
+void menuDebugTextAudioStreams_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_AUDIO) ? "On" : "Off");
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_AUDIO_STREAMS) ? "On" : "Off");
     gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
 }
-void menuDebugTextAudio_select(const MenuItem *self, int amount) {
-    debugTextFlags ^= DEBUGTEXT_AUDIO;
+void menuDebugTextAudioStreams_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_AUDIO_STREAMS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
+void menuDebugTextAudioSFX_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_AUDIO_SFX) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugTextAudioSFX_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_AUDIO_SFX;
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
@@ -170,6 +181,7 @@ Menu menuDebugText = {
     "Performance: %s",     menuDebugTextPerf_draw,         menuDebugTextPerf_select,
     "FPS Meter: %s",       menuDebugTextFPS_draw,          menuDebugTextFPS_select,
     "RNG: %s",             menuDebugTextRNG_draw,          menuDebugTextRNG_select,
-    "Audio: %s",           menuDebugTextAudio_draw,        menuDebugTextAudio_select,
+    "Audio Streams: %s",   menuDebugTextAudioStreams_draw, menuDebugTextAudioStreams_select,
+    "Audio SFX: %s",       menuDebugTextAudioSFX_draw,     menuDebugTextAudioSFX_select,
     NULL,
 };
