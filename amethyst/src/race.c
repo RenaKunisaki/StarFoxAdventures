@@ -88,7 +88,8 @@ void raceTimerUpdate() {
     if(mainGetBit(0xC8)) { //IM race has actually started
         start = true;
     }
-    else if(stateId == 0x18 && curMapId != 0x17) { //on bike, not Ice Mountain
+    else if(stateId == 0x18 //riding
+    && (curMapId == 0x13 || curMapId == 0x1B || curMapId == 0x2B)) { //in DIM/DIM Inside/CR Race
         //this is a separate case so that we can make the timer not start until
         //you actually gain control of the bike.
         //XXX find how to do this for the other races.
