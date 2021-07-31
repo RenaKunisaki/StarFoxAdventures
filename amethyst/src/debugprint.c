@@ -311,6 +311,19 @@ static void printFPS() {
     debugPrintSetPos(0, 0);
 }
 
+static void printAudio() {
+    if(curStream) {
+        debugPrintf("Stream " DPRINT_FIXED "0x%03X %f\n" DPRINT_NOFIXED, curStream-1, streamPos);
+    }
+    for(s16 iObj=0; iObj < nObjsPlayingSounds; iObj++) {
+        char name[12];
+        getObjName(name, objsPlayingSounds[iObj]);
+        debugPrintf(DPRINT_FIXED "%08X %-11s %04X %02X" DPRINT_NOFIXED "\n",
+            objsPlayingSounds[iObj], name,
+            objCurPlayingSounds[iObj], objSoundQueueFlags[iObj]);
+    }
+}
+
 void mainLoopDebugPrint() {
     if(!enableDebugText) return; //or else game hangs
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"
@@ -335,6 +348,7 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
     if(debugTextFlags & DEBUGTEXT_RNG)               printRNG();
     rngCalls = 0;
+    if(debugTextFlags & DEBUGTEXT_AUDIO)             printAudio();
 
     debugPrintf("\n"); //for game's own messages
 

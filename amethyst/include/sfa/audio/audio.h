@@ -367,3 +367,12 @@ typedef struct {
     char name[16]; //0x6
 } StreamsBinEntry;
 extern StreamsBinEntry *pStreamsBin;
+
+#define MAX_OBJS_PLAYING_SOUNDS 128
+extern ObjInstance *objsPlayingSounds[MAX_OBJS_PLAYING_SOUNDS];
+extern s16 objCurPlayingSounds[MAX_OBJS_PLAYING_SOUNDS]; //SoundId
+extern u8 objSoundQueueFlags[MAX_OBJS_PLAYING_SOUNDS];
+extern s16 nObjsPlayingSounds;
+
+extern int curStream; //stream ID +1
+extern float streamPos;

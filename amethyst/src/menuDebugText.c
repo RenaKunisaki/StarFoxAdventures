@@ -143,6 +143,17 @@ void menuDebugTextRNG_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
+
+void menuDebugTextAudio_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[64];
+    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_AUDIO) ? "On" : "Off");
+    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+}
+void menuDebugTextAudio_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_AUDIO;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
@@ -159,5 +170,6 @@ Menu menuDebugText = {
     "Performance: %s",     menuDebugTextPerf_draw,         menuDebugTextPerf_select,
     "FPS Meter: %s",       menuDebugTextFPS_draw,          menuDebugTextFPS_select,
     "RNG: %s",             menuDebugTextRNG_draw,          menuDebugTextRNG_select,
+    "Audio: %s",           menuDebugTextAudio_draw,        menuDebugTextAudio_select,
     NULL,
 };

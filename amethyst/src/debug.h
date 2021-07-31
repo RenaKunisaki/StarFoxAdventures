@@ -14,6 +14,7 @@ typedef enum {
     DEBUGTEXT_PERFORMANCE       = (1 <<  9),
     DEBUGTEXT_FPS               = (1 << 10),
     DEBUGTEXT_RNG               = (1 << 11),
+    DEBUGTEXT_AUDIO             = (1 << 12),
 } DebugTextFlags;
 
 typedef enum {
