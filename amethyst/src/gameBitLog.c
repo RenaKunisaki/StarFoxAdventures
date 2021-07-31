@@ -18,11 +18,11 @@ BOOL gameBitHook(int bit, int val) {
     //int bit, val;
     //GET_REGISTER(29, bit);
     //GET_REGISTER(30, val);
-    //DPRINT("GameBit 0x%04X set to %d", bit, val);
 
-    if(mainGetBit(bit) == val) {
+    if(mainGetBit(bit) == val) { //don't log if not changed
         return gameBitHook_replaced();
     }
+    DPRINT("GameBit 0x%04X (%s) set to %d", bit, getBitName(bit), val);
 
     //log the change
     bool found = false;

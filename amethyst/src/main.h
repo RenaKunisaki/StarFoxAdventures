@@ -117,6 +117,9 @@ extern u16 dayOfYear, curYear;
 extern bool bRumbleBlur;
 extern bool bDisableParticleFx;
 
+//map.c
+void initMapHacks();
+
 //menu.c
 void runMenu();
 

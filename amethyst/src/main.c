@@ -319,6 +319,7 @@ void _start(void) {
     titleHooksInit();
     logHitsInit();
     hitboxHooksInit();
+    initMapHacks();
 
     //debug stuff
     WRITE_NOP(0x80119D90); //chapter select only needs Z button

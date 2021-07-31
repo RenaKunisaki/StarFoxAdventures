@@ -1,6 +1,7 @@
 /** Display some debug information on-screen.
  */
 #include "main.h"
+#include "revolution/os.h"
 
 u32 debugTextFlags =
     //DEBUGTEXT_TRICKY |
@@ -162,6 +163,13 @@ static void printRestartPointForSave(SaveGame *save, int which, const char *name
         //after a certain number of params, it starts printing nonsense.
         debugPrintf("M%02X" DPRINT_NOFIXED DPRINT_COLOR "\xFF\xFF\xFF\xFF\n",
             chrPos->mapId & 0xFF);
+
+        if(restartPointFrameCount[which] >= 60) {
+            //log changes to console too
+            OSReport("%s: %6d %6d %6d %d %02X", name,
+                (int)chrPos->pos.x, (int)chrPos->pos.y, (int)chrPos->pos.z,
+                chrPos->mapLayer, chrPos->mapId & 0xFF);
+        }
     }
     else debugPrintf(DPRINT_FIXED "%s: none" DPRINT_NOFIXED "\n", name);
 }
@@ -314,12 +322,21 @@ static void printFPS() {
 }
 
 static void printStreams() {
+    static StreamsBinEntry *prevStream = NULL;
     if(curStream) {
         StreamsBinEntry *stream = &pStreamsBin[curStream - 1];
         debugPrintf("Stream #" DPRINT_FIXED "0x%03X ID 0x%04X %d,%d,%d pos %f" DPRINT_NOFIXED " %s\n",
             curStream-1, stream->id,
             stream->unk02, stream->unk03, stream->unk04,
             streamPos, stream->name);
+        if(stream != prevStream) {
+            prevStream = stream;
+            OSReport("Started stream: %s", stream->name);
+        }
+    }
+    else if(prevStream) {
+        OSReport("Stopped stream: %s", prevStream->name);
+        prevStream = NULL;
     }
 }
 

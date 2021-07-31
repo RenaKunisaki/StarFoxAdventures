@@ -125,3 +125,5 @@ typedef enum { //type:u32
 typedef enum { //type:u32
 	LoadingFlagsEnum_LOADING_LOCKED = 0x100000,
 } LoadingFlagsEnum;
+
+extern const char *dataFileNames[];

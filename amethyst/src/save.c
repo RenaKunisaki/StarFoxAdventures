@@ -1,4 +1,5 @@
 #include "main.h"
+#include "revolution/os.h"
 bool bAutoSave = false;
 static u8 autoSaveMsgTimer = 0;
 
@@ -64,15 +65,15 @@ void saveLoadHook() {
     gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
     gameTextLoadDir(dir); //then load current map's texts
 
-    /* DPRINT("Savedata loaded!");
-    char str[1024];
+    DPRINT("Savedata loaded!");
+    /* char str[1024];
     u8 *data = (u8*)save;
     for(int i=0; i<sizeof(SaveGameSettings); i++) {
         sprintf(&str[i*3], "%02X ", data[i]);
     }
     DPRINT("Data: %s", str); */
-    DPRINT("Load savedata: player=%d FOV=%d alpha=%d map=%d lang=%d\n",
-        overridePlayerNo, overrideFov, overrideMinimapAlpha, minimapMode, curLanguage);
+    //DPRINT("Load savedata: player=%d FOV=%d alpha=%d map=%d lang=%d\n",
+    //    overridePlayerNo, overrideFov, overrideMinimapAlpha, minimapMode, curLanguage);
 }
 
 //Update the extra fields in the save data.
@@ -107,8 +108,8 @@ void updateSaveData() {
     if(bAutoSave) save->unlockedCheats |= (1 << 31);
     else save->unlockedCheats &= ~(1 << 31);
 
-    DPRINT("Update savedata: player=%d FOV=%d alpha=%d map=%d lang=%d\n",
-        overridePlayerNo, overrideFov, overrideMinimapAlpha, minimapMode, curLanguage);
+    //DPRINT("Update savedata: player=%d FOV=%d alpha=%d map=%d lang=%d\n",
+    //    overridePlayerNo, overrideFov, overrideMinimapAlpha, minimapMode, curLanguage);
 }
 
 //Called from main loop.
@@ -132,7 +133,9 @@ void doAutoSave() {
     }
     if(curSaveSlot < 0) return; //no save slot
     if(saveStatus != 1) return; //can't save
+    OSReport("Saving...");
     saveGame_save();
+    OSReport("Save done.");
 
     //technically the message appears after we save, but oh well
     autoSaveMsgTimer = 60;
@@ -150,5 +153,5 @@ void saveShowMsgHook(int param) {
     //replaces a call to cardShowLoadingMsg
     //replace it with just the popup message at the bottom
     autoSaveMsgTimer = 60;
-    DPRINT("Saving!");
+    //DPRINT("Saving!");
 }

@@ -41,3 +41,5 @@ typedef struct {
     float timeOfDay; //0x20C
 } SkyStruct;
 extern SkyStruct *pSkyStruct;
+
+extern const char *mapDirNames[];
