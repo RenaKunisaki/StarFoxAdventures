@@ -67,6 +67,9 @@ typedef enum { //for savedata (field unused01)
 //bsod.c
 void bsodHook(void);
 
+//bugfixes.c
+void initBugFixes();
+
 //drawarrow.c
 void drawArrow(vec3f pos, vec3s rot, float scale, Color4b color);
 

@@ -294,6 +294,7 @@ void _start(void) {
 
     //Install hooks
     hookBranch(0x80137df8, bsodHook, 1);
+    initBugFixes();
     runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c,
         runLoadingScreens_hook, 1);
     startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250,
