@@ -361,22 +361,20 @@ void mainLoopDebugPrint() {
     drawHeaps();
     if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
     if(debugRenderFlags & DEBUGRENDER_RNG) drawRNG();
-    if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS) printCoords();
-    if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS) printCamera();
-    if(debugTextFlags & DEBUGTEXT_RESTART_POINT) printRestartPoint();
-    if(debugTextFlags & DEBUGTEXT_PLAYER_STATE)  printPlayerState();
-    if(debugTextFlags & DEBUGTEXT_MEMORY_INFO) {
-        printObjCount();
-        printMemory();
-    }
-    if(debugTextFlags & DEBUGTEXT_PERFORMANCE)       printPerformance();
+
+    if(debugTextFlags & DEBUGTEXT_PLAYER_STATE)      printPlayerState();
+    if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS)     printCoords();
+    if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS)     printCamera();
+    if(debugTextFlags & DEBUGTEXT_RESTART_POINT)     printRestartPoint();
+    if(debugTextFlags & DEBUGTEXT_MEMORY_INFO)     { printObjCount(); printMemory(); }
     if(debugTextFlags & DEBUGTEXT_HEAP_STATE)        printHeapInfo();
-    if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
+    if(debugTextFlags & DEBUGTEXT_PERFORMANCE)       printPerformance();
     if(debugTextFlags & DEBUGTEXT_RNG)               printRNG();
-    rngCalls = 0;
     if(debugTextFlags & DEBUGTEXT_AUDIO_STREAMS)     printStreams();
     if(debugTextFlags & DEBUGTEXT_AUDIO_SFX)         printSFX();
+    if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
 
+    rngCalls = 0; //reset logging
     debugPrintf("\n"); //for game's own messages
 
     if(debugRenderFlags & DEBUGRENDER_WORLD_MAP) drawMapGrid();

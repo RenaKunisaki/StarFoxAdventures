@@ -122,6 +122,8 @@ void saveUpdateHook() {
 }
 
 void doAutoSave() {
+    DPRINT("Autosave: enabled=%d cam=0x%X slot=%d stat=%d", bAutoSave,
+        cameraMode, curSaveSlot, saveStatus);
     if(!bAutoSave) return;
     //don't save during scripted events, or they can break.
     switch(cameraMode) {
@@ -133,9 +135,9 @@ void doAutoSave() {
     }
     if(curSaveSlot < 0) return; //no save slot
     if(saveStatus != 1) return; //can't save
-    OSReport("Saving...");
+    DPRINT("Saving...");
     saveGame_save();
-    OSReport("Save done.");
+    DPRINT("Save done.");
 
     //technically the message appears after we save, but oh well
     autoSaveMsgTimer = 60;
@@ -153,5 +155,5 @@ void saveShowMsgHook(int param) {
     //replaces a call to cardShowLoadingMsg
     //replace it with just the popup message at the bottom
     autoSaveMsgTimer = 60;
-    //DPRINT("Saving!");
+    DPRINT("Trigger save msg");
 }

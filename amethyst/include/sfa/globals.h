@@ -72,6 +72,14 @@ extern struct {
 extern const char *mapNames[NUM_MAPS];
 extern u16 minimapAlpha;
 extern int minimapHeight;
+extern GameTextId16 minimapInfoGameText;
+extern u16 minimapInfoTextAlpha;
+typedef enum { //u8
+    MINIMAP_MAP = 0,
+    MINIMAP_COMPASS = 1,
+    MINIMAP_INFO = 2,
+    NUM_MINIMAP_MODES
+} MinimapMode;
 extern u8 minimapMode; //0=map 1=compass 2=info
 extern int minimapWidth;
 extern float motionBlurIntensity; //32=high, 256=unnoticeable
