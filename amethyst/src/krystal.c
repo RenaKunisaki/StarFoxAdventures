@@ -42,6 +42,7 @@ void krystal_loadAssets() {
 //replaces a call to allocTagged() when loading MODELS.BIN
 void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
     //copy Krystal model into MODELS
+    krystal_loadAssets();
     if(!krystalModel) return allocTagged(size, tag, name);
 
     //do the original allocation, with the extra model's size added.
@@ -60,6 +61,7 @@ void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
 
 //injected into mergeTableFiles() for MODELS.TAB
 void krystalHook_modelsTab() {
+    krystal_loadAssets();
     if(!krystalModel) return;
     //update the table to reference the Krystal model
     void *pModelsBin = dataFileBuffers[FILE_MODELS_BIN];
@@ -117,6 +119,7 @@ static const u32 textureData[] = {
 //replaces a call to allocTagged() when loading TEX1.BIN
 void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
     //copy textures into TEX1
+    krystal_loadAssets();
     if(!krystalTexture) return allocTagged(size, tag, name);
 
     //do the original allocation, with the extra texture's size added.
@@ -151,6 +154,7 @@ void _doTexPatch(void *texBin, u32 *texTab) {
 
 //injected into mergeTableFiles() for TEX1.TAB
 void krystalHook_tex1Tab() {
+    krystal_loadAssets();
     if(!krystalTexture) return;
     //update the table to reference the Krystal textures
     //DPRINT("Install TEX1 patch 1");
