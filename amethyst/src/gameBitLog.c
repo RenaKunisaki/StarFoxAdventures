@@ -10,7 +10,7 @@ struct {
 
 
 static BOOL (*gameBitHook_replaced)();
-BOOL gameBitHook(int bit, int val) {
+BOOL gameBitHook(uint bit, int val) {
     //this doesn't work because the regs are overwritten by the compiler's
     //boilerplate code. we can probably work around that by using something
     //like attribute naked, but we don't need to, because r3 and r4 are still
@@ -19,9 +19,10 @@ BOOL gameBitHook(int bit, int val) {
     //GET_REGISTER(29, bit);
     //GET_REGISTER(30, val);
 
-    if(mainGetBit(bit) == val) { //don't log if not changed
+    if(mainGetBit(bit) == val || bit >= 0x7FFF) { //don't log if not changed
         return gameBitHook_replaced();
     }
+
     DPRINT("GameBit 0x%04X (%s) set to %d", bit, getBitName(bit), val);
 
     //log the change
