@@ -21,7 +21,7 @@ void raceTimerToggle(bool start) {
     if(start) {
         gameTimerInit(GAME_TIMER_FLAG_RUNNING | GAME_TIMER_FLAG_VISIBLE,
             (99*60*60) + (59*60) + 59); //min:sec:frames
-        OSReport("Started race timer!");
+        //OSReport("Started race timer!");
         if(getButtonsHeld(0) & PAD_BUTTON_X) bikeMoveScale = 0.875; //turbo mode
         //XXX add a switch or something to the map to toggle this
 
@@ -31,7 +31,7 @@ void raceTimerToggle(bool start) {
     }
     else {
         gameTimerStop();
-        OSReport("Stopped race timer!");
+        //OSReport("Stopped race timer!");
         //hudHidden = false;
         hudElementOpacity = 255;
     }
@@ -112,7 +112,7 @@ void raceTimerUpdate() {
         //we don't actually start the timer because then it makes a ticking noise.
         //and we don't use its own render function because we want to move the
         //text a bit to make room for the speedometer.
-        gameTimerValue += timeDelta;
+        if(!timeStop) gameTimerValue += timeDelta;
         disappearTimer = 300.0; //frames, ie 5 seconds
         drawTimer();
     }
