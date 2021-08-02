@@ -6,6 +6,8 @@ u32 allocFailCount = 0;
 u32 emergFreeCount = 0;
 u8 allocFailLogIdx = 0;
 AllocFailLogItem allocFailLog[ALLOC_FAIL_LOG_SIZE];
+u32 maxMemUsed = 0; //highest total bytes used
+u32 maxBlocksUsed = 0;
 
 void **freeablePtrs[MAX_FREEABLE_PTRS];
 const char *freeablePtrNames[MAX_FREEABLE_PTRS];
@@ -245,6 +247,14 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
                 //it's set, but not read.
                 entry->unk14 = lr;
             }
+
+            //update max stats
+            u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
+            getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes,
+                NULL, NULL);
+            maxBlocksUsed = MAX(maxBlocksUsed, usedBlocks);
+            maxMemUsed = MAX(maxMemUsed, usedBytes);
+
             return buf;
         }
         else {
