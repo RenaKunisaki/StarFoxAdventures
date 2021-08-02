@@ -214,8 +214,12 @@ __asm__(
 );
 
 void krystalDoModelOverrides() {
+    if(!pPlayer) return;
+    if(pPlayer->catId    != 1) return; //don't apply to title screen Fox, Arwing, etc
+    if(pPlayer->curModel == 2) return; //don't override SharpClaw disguise
+
     //patch some objects
-    /* u32  *pObjsTab = dataFileBuffers[FILE_OBJECTS_TAB];
+    u32  *pObjsTab = dataFileBuffers[FILE_OBJECTS_TAB];
     void *pObjsBin = dataFileBuffers[FILE_OBJECTS_BIN];
     if(PTR_VALID(pObjsTab) && PTR_VALID(pObjsBin)) {
         //0x487 (AnimFox): for Drakor scene
@@ -224,19 +228,14 @@ void krystalDoModelOverrides() {
             ObjectFileStruct *obj = (ObjectFileStruct*)(pObjsBin + pObjsTab[iObj]);
             //OSReport("Got ptr 0x%08X, offs 0x%08X for obj 0x%04X", obj, pObjsTab[iObj], iObj);
             if(PTR_VALID(obj)) {
-                s16 *pModelList = obj->pModelList;
+                u32 *pModelList = obj->pModelList;
                 if((u32)pModelList < 0x80000000) pModelList = (s16*)((u32)pModelList + (u32)obj);
                 //OSReport("pModelList=%08X", pModelList);
                 //OSReport("*pModelList=%08X", pModelList[0]);
                 pModelList[0] = 0x4E8; //pPlayer->models[pPlayer->curModel]->header->modelId;
             }
         }
-    } */
-
-    if(!pPlayer) return;
-    if(pPlayer->catId    != 1) return; //don't apply to title screen Fox, Arwing, etc
-    if(pPlayer->curModel == 2) return; //don't override SharpClaw disguise
-
+    }
 
     int playerNo = overridePlayerNo;
     if(playerNo == PLAYER_ID_AUTO) {
