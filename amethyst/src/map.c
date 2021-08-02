@@ -3,7 +3,8 @@
 void* mapLoadDataFileHook(MapDirIdx32 map, DataFileEnum file) {
     //replaces the first call to mapLoadDataFile() in mapLoadDataFiles().
     OSReport("LOAD MAP DIR %02X %s", map, mapDirNames[map]);
-    return mapLoadDataFile(map, file);
+    return saveMapLoadHook(map, file);
+    //return mapLoadDataFile(map, file);
 }
 
 void initMapHacks() {
