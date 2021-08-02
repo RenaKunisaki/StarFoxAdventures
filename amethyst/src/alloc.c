@@ -217,9 +217,9 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
             if(buf == NULL) buf = _doAlloc(1, size, tag, name, &entry);
         }
         if(buf) {
-            //DPRINT("alloc success, %08X, entry %08X (unk %04X %08X ID %08X stack %04X %04X)", buf, entry,
-            //    entry->unk08, entry->unk14, entry->mmUniqueIdent,
-            //    entry->stack, entry->stack2);
+            //DPRINT("alloc success, %08X, entry %08X (type=%d prev=%04X stack=%04X next=%04X id=%08X)",
+            //    buf, entry, entry->type, entry->prev, entry->stack, entry->next,
+            //    entry->mmUniqueIdent);
             if((!PTR_VALID(entry)) || (entry->type > 1)) {
                 //sanity check, in case our patch to return the heap entry
                 //doesn't work. XXX why does this happen?
@@ -267,6 +267,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes, NULL, NULL);
     OSReport("ALLOC FAIL size=0x%X tag=0x%X Used blocks %d/%d, bytes %d/%d K",
         size, tag, usedBlocks, totalBlocks, usedBytes/1024, totalBytes/1024);
+    OSReport("Heap Flags %d, %d", bOnlyUseHeaps1and2, bOnlyUseHeap3);
     allocFailLog[allocFailLogIdx].size = size;
     allocFailLog[allocFailLogIdx].tag  = tag;
     allocFailLog[allocFailLogIdx].lr   = lr;

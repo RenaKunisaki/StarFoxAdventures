@@ -180,10 +180,10 @@ MESA-INTEL: warning: Haswell Vulkan support is incomplete
 07:54:554 Core/PowerPC/Interpreter/Interpreter_SystemRegisters.cpp:435 I[PowerPC]: DBAT updated 540 0 810000ff
 07:54:556 Core/PowerPC/Interpreter/Interpreter_SystemRegisters.cpp:458 I[PowerPC]: IBAT updated 533 0 1000002
 07:54:557 Core/PowerPC/Interpreter/Interpreter_SystemRegisters.cpp:458 I[PowerPC]: IBAT updated 532 0 810000ff
-07:54:560 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 8024076c->80240760| 
+07:54:560 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 8024076c->80240760|
 Dolphin OS $Revision: 54 $.
 07:54:561 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 80240780->8024076c| Kernel built : Jun  5 2002 02:09:12
-07:54:561 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 8024078c->80240780| Console Type : 
+07:54:561 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 8024078c->80240780| Console Type :
 07:54:562 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 80240854->80240840| Development HW3
 07:54:562 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 8024086c->80240854| Memory 24 MB
 07:54:562 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 8024088c->80240878| Arena : 0x803f8480 - 0x817ea1a0
@@ -227,12 +227,12 @@ Dolphin OS $Revision: 54 $.
 07:54:707 Core/HW/SI/SI_DeviceGCController.cpp:322 I[SI]: PAD 3 set to mode 3
 07:54:707 Core/HW/SI/SI_DeviceGCController.cpp:81 I[SI]: PAD - Get Origin
 07:54:707 Core/HW/SI/SI_DeviceGCController.cpp:322 I[SI]: PAD 3 set to mode 3
-07:54:711 Core/HW/DVD/FileMonitor.cpp:87 W[FileMon]:      90 kB debug.bin
+07:54:711 Core/HW/DVD/FileMonitor.cpp:87 W[FileMon]:      90 kB boot.bin
 07:54:720 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 81396df8->8007d6dc| Patch running!
 07:54:722 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 813971b4->8007d6dc| Hooks installed!
 07:54:727 Core/HLE/HLE_OS.cpp:85 N[OSREPORT_HLE]: 800237e4->80023734| mem 0k/12604896k 0k/1835008k 288k/655264k 92512k/4587424k
-	slot 4/250 1/850 2/850 4/580	
- 
+	slot 4/250 1/850 2/850 4/580
+
 Can't locate Net/DBus.pm in @INC (you may need to install the Net::DBus module) (@INC contains: /usr/lib/perl5/5.34/site_perl /usr/share/perl5/site_perl /usr/lib/perl5/5.34/vendor_perl /usr/share/perl5/vendor_perl /usr/lib/perl5/5.34/core_perl /usr/share/perl5/core_perl) at -e line 6.
 BEGIN failed--compilation aborted at -e line 6.
 07:54:739 Core/PowerPC/PPCCache.cpp:192 I[PowerPC]: ICache read at 00023cc8 returned stale data: CACHED: 9421ffe0 vs. RAM: 4936cf94

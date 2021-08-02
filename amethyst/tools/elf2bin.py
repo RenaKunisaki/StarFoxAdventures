@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read boot.bin and src.elf and produce debug.bin."""
+"""Read bootstrap.bin and src.elf and produce boot.bin."""
 import os
 import sys
 import struct
@@ -333,9 +333,9 @@ def main():
 
     inPath  = args.pop(0)
     outPath = args.pop(0)
-    outBin  = open(os.path.join(outPath, 'debug.bin'), 'wb')
-    inBin   = open(os.path.join(inPath,  'boot.bin'),  'rb')
-    inElf   = open(os.path.join(inPath,  'src.elf'),   'rb')
+    outBin  = open(os.path.join(outPath, 'boot.bin'),     'wb')
+    inBin   = open(os.path.join(inPath,  'bootstrap.bin'),'rb')
+    inElf   = open(os.path.join(inPath,  'src.elf'),      'rb')
     elf     = ELF(inElf)
 
     # copy bootstrap

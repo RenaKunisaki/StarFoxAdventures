@@ -9,7 +9,7 @@ __OSCoreClock = 0x800000FC;
 /* next are referenced by code compiled with -Os
  * the topmost are also named __save_gpr and __restore_gpr
  */
-_restgpr_14 = 0x802860f4;
+/* _restgpr_14 = 0x802860f4;
 _restgpr_15 = 0x802860f8;
 _restgpr_16 = 0x802860fc;
 _restgpr_17 = 0x80286100;
@@ -83,7 +83,7 @@ _restfpr_27 = 0x80286090;
 _restfpr_28 = 0x80286094;
 _restfpr_29 = 0x80286098;
 _restfpr_30 = 0x8028609c;
-_restfpr_31 = 0x802860a0;
+_restfpr_31 = 0x802860a0; */
 
 /* rest are game symbols */
 activeTimerFlags = 0x803dc8f8;

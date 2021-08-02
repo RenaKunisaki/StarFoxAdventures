@@ -18,6 +18,7 @@ typedef enum {
 
 //krystal.c
 extern s8 krystalModelNo;
+extern s8 enableKrystal;
 extern s8 overridePlayerNo;
 extern s8 backpackMode;
 void krystalInit();

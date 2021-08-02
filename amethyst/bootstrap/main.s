@@ -1,8 +1,9 @@
-# Contents of debug.bin.
+# Contents of boot.bin.
 # This file is loaded at startup by our modified main.dol and executed, as a
 # sort of "second-stage bootloader". It must be position-independent code.
 # The build process appends the other patches' binary to this file's, and fills
 # in the header to tell it how to load that code.
+# It exppects r3 to be the address it's loaded at.
 
 .set DEBUG,0
 .text
@@ -20,7 +21,7 @@ _start:
     # entry point of this file.
     b      _start2
 
-    # header, to be filled in by build script.
+# header, to be filled in by build script.
 offsGOT:   .int 0 # offset of GOT (-4 for lwzu)
 sizeGOT:   .int 0 # size of GOT in words
 offsEntry: .int 0 # entry point of ELF
@@ -28,6 +29,7 @@ sizeBoot:  .int 0 # size of this bootstrap code
 
 _start2:
     mr      r14, r3 # save address of this code
+    mr      r15, r4 # and the size
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
     stmw    r3,  SP_GPR_SAVE(r1)
     mflr    r3
@@ -36,6 +38,8 @@ _start2:
     # say something to show we're alive.
     .if DEBUG
         addi    r3,  r14, s_hello - _start
+        mr      r4,  r14  # address
+        mr      r5,  r15  # size
         CALL    OSReport
 
         lwz     r4,  (offsGOT - _start)(r14)
@@ -118,9 +122,9 @@ panic: # r5 = msg
 s_patchesBin: .string "PATCHES.BIN"
 s_patchesTab: .string "PATCHES.TAB"
 s_noMem:      .string "Out of memory"
-s_file:       .string "debug.bin" # for OSPanic
+s_file:       .string "boot.bin" # for OSPanic
 .if DEBUG
-    s_hello:        .string "hello, cruel world"
+    s_hello:        .string "hello, cruel world. addr 0x%X size 0x%X"
     s_gotOffs:      .string "GOT Offs=0x%08X (0x%08X) size=0x%04X"
     s_doReloc:      .string "Reloc %08X -> %08X"
     s_aboutToExec:  .string "Executing at 0x%08X"

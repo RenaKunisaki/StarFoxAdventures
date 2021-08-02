@@ -1,9 +1,11 @@
 /** Restore Krystal as a playable character throughout the game.
  */
 #include "main.h"
+#include "revolution/os.h"
 
 
 s8 krystalModelNo = 0;
+s8 enableKrystal = 0; //delay loading due to memory stuff
 s8 overridePlayerNo = PLAYER_ID_KRYSTAL; //OverridePlayerId
 s8 backpackMode = BACKPACK_NORMAL; //BackpackMode
 static void *krystalModel         = NULL;
@@ -14,6 +16,9 @@ static u32   krystalTextureSize   = 0;
 static u32   krystalTextureOffset = 0;
 
 void krystal_loadAssets() {
+    //do not load on title screen due to memory starvation
+    if(!enableKrystal) return;
+
     //load model
     if(!krystalModel) {
         char pathMod[] = {'k', 'm', krystalModelNo+0x30, 0};
@@ -199,9 +204,29 @@ __asm__(
 );
 
 void krystalDoModelOverrides() {
+    //patch some objects
+    /* u32  *pObjsTab = dataFileBuffers[FILE_OBJECTS_TAB];
+    void *pObjsBin = dataFileBuffers[FILE_OBJECTS_BIN];
+    if(PTR_VALID(pObjsTab) && PTR_VALID(pObjsBin)) {
+        //0x487 (AnimFox): for Drakor scene
+        //0x488 (AnimFoxLink): for WarpStone scene
+        for(int iObj=0x487; iObj <= 0x488; iObj++) {
+            ObjectFileStruct *obj = (ObjectFileStruct*)(pObjsBin + pObjsTab[iObj]);
+            //OSReport("Got ptr 0x%08X, offs 0x%08X for obj 0x%04X", obj, pObjsTab[iObj], iObj);
+            if(PTR_VALID(obj)) {
+                s16 *pModelList = obj->pModelList;
+                if((u32)pModelList < 0x80000000) pModelList = (s16*)((u32)pModelList + (u32)obj);
+                //OSReport("pModelList=%08X", pModelList);
+                //OSReport("*pModelList=%08X", pModelList[0]);
+                pModelList[0] = 0x4E8; //pPlayer->models[pPlayer->curModel]->header->modelId;
+            }
+        }
+    } */
+
     if(!pPlayer) return;
-    if(pPlayer->catId    != 1) return; //don't apply to title screen Fox
+    if(pPlayer->catId    != 1) return; //don't apply to title screen Fox, Arwing, etc
     if(pPlayer->curModel == 2) return; //don't override SharpClaw disguise
+
 
     int playerNo = overridePlayerNo;
     if(playerNo == PLAYER_ID_AUTO) {

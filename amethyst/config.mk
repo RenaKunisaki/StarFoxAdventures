@@ -20,7 +20,7 @@ DELETE=@rm -rf
 MKDIR=@mkdir -p
 
 GLOBALSYMS = include/$(GAME)/$(GAME)-$(VERSION).sym
-CFLAGS += -mcpu=750 -mhard-float -ffast-math -fno-math-errno -fsingle-precision-constant -shared -fpic -fno-exceptions -fno-asynchronous-unwind-tables -mrelocatable -fno-builtin -G0 -O3 -I$(GCBASE) -Iinclude -Iinclude/gc -I$(BUILDDIR)
+CFLAGS += -mcpu=750 -mhard-float -ffast-math -fno-math-errno -fsingle-precision-constant -shared -fpic -fno-exceptions -fno-asynchronous-unwind-tables -mrelocatable -fno-builtin -G0 -Os -I$(GCBASE) -Iinclude -Iinclude/gc -I$(BUILDDIR)
 ASFLAGS += -I include -mbroadway -mregnames -mrelocatable --fatal-warnings
 #LDFLAGS += -nostdlib -Wl,--strip-all -export-dynamic $(LINKSCRIPTS) -Wl,--nmagic -Wl,--no-gc-sections -Wl,--just-symbols=$(GLOBALSYMS)
 LDFLAGS += -nostdlib -mhard-float $(LINKSCRIPTS) -Wl,--nmagic -Wl,--just-symbols=$(GLOBALSYMS)

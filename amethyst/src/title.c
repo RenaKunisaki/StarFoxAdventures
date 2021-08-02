@@ -7,7 +7,8 @@ static int (*oldTitleHook)();
 
 int titleHook() {
     //do this here due to memory starvation at startup
-    krystal_loadAssets();
+    enableKrystal = 1;
+    //krystal_loadAssets();
 
     //check current and previous frame
     u16 buttons = controllerStates[0].button | controllerStates[4].button;
