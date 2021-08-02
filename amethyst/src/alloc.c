@@ -8,6 +8,7 @@ u8 allocFailLogIdx = 0;
 AllocFailLogItem allocFailLog[ALLOC_FAIL_LOG_SIZE];
 
 void **freeablePtrs[MAX_FREEABLE_PTRS];
+const char *freeablePtrNames[MAX_FREEABLE_PTRS];
 
 //object category IDs
 //ordered roughly from least to most important as well as least to
@@ -69,14 +70,15 @@ u32 *outUsedBlocks, u32 *outUsedBytes, int *outBlocksPct, int *outBytesPct) {
 
 /** Register a pointer that can be freed when memory is low.
  *  @param ptr Address of the pointer itself.
+ *  @param name A constant string to identify the pointer in debug messages.
  *  @return true if registered, false if not.
  *  @note When memory is low, the pointer at this address will be freed if not NULL,
  *   and NULL will be stored to the address.
  */
-bool registerFreeablePtr(void **ptr) {
+bool registerFreeablePtr(void **ptr, const char *name) {
     if(!ptr) {
-        OSReport("ERROR: Registering NULL freeable pointer at %08X",
-            __builtin_return_address(0));
+        OSReport("ERROR: Registering NULL freeable pointer %s at %08X",
+            name, __builtin_return_address(0));
         return false;
     }
 
@@ -88,6 +90,7 @@ bool registerFreeablePtr(void **ptr) {
     for(int i=0; i<MAX_FREEABLE_PTRS; i++) {
         if(!freeablePtrs[i]) {
             freeablePtrs[i] = ptr;
+            freeablePtrNames[i] = name;
             return true;
         }
     }
@@ -98,17 +101,27 @@ bool doEmergencyFree(int attempt) {
     emergFreeCount++;
 
     if(attempt == 0) {
-        OSReport("%sdump caches", eFree);
+        u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
+        getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes, NULL, NULL);
+        OSReport("%sdump caches; free blocks %d, KBytes %d", eFree,
+            totalBlocks - usedBlocks, (totalBytes - usedBytes) / 1024);
         int count = 0;
         for(int i=0; i<MAX_FREEABLE_PTRS; i++) {
             if(freeablePtrs[i] && *freeablePtrs[i]) {
+                OSReport("%sdump cache: %08X -> %08X: %s", eFree,
+                    freeablePtrs[i], *freeablePtrs[i], freeablePtrNames[i]);
                 free(*freeablePtrs[i]);
                 *freeablePtrs[i] = NULL;
                 count++;
             }
         }
         OSReport("%sdumped %d caches", eFree, count);
-        if(count) return true;
+        if(count) {
+            getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes, NULL, NULL);
+            OSReport("now free blocks %d, KBytes %d",
+                totalBlocks - usedBlocks, (totalBytes - usedBytes) / 1024);
+            return true;
+        }
     }
 
     //I have no idea why these exist.
@@ -146,8 +159,8 @@ bool doEmergencyFree(int attempt) {
 
     u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
     getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes, NULL, NULL);
-    OSReport("%sdidn't free any object. Used blocks %d/%d, bytes %d/%d K", eFree,
-        usedBlocks, totalBlocks, usedBytes/1024, totalBytes/1024);
+    OSReport("%sdidn't free any object. Free blocks %d, Kbytes %d", eFree,
+        totalBlocks - usedBlocks, (totalBytes - usedBytes) / 1024);
     //XXX try more things
     return false;
 }
@@ -186,7 +199,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
 
     //name is almost never set and isn't stored
     u32 lr = (u32)__builtin_return_address(0);
-    //DPRINT("alloc size=%8X tag=%08X lr=%08X", size, tag, lr);
+    //DPRINT("alloc size=%8X tag=%08X lr=%08X name=%s", size, tag, lr, name);
 
     //mostly copied game code
     if (size == 0) return NULL;
@@ -240,9 +253,8 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
                 u32 totalBlocks, totalBytes, usedBlocks, usedBytes;
                 getFreeMemory(&totalBlocks, &totalBytes, &usedBlocks, &usedBytes,
                     NULL, NULL);
-                OSReport("Out of memory! size=0x%X tag=0x%X Used blocks %d/%d, bytes %d/%d K - initiating emergency free",
-                    size, tag, usedBlocks, totalBlocks, usedBytes/1024,
-                    totalBytes/1024);
+                OSReport("Out of memory! size=0x%X tag=0x%X Free blocks %d Kbytes %d - initiating emergency free",
+                    size, tag, totalBlocks - usedBlocks, (totalBytes - usedBytes)/1024);
                 OSReport("Trace: %08X < %08X < %08X < %08X < %08X\n",
                     __builtin_return_address(0),
                     __builtin_return_address(1),
@@ -251,9 +263,9 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
                     __builtin_return_address(4));
                 OSReport("force heaps 1/2=%d 3=%d\n", bOnlyUseHeaps1and2, bOnlyUseHeap3);
                 for(int i=0; i<NUM_HEAPS; i++) {
-                    OSReport("Heap %d used Blocks %5d/%5d KBytes %5d/%5d\n", i,
-                        heaps[i].used, heaps[i].avail,
-                        heaps[i].size / 1024, heaps[i].dataSize / 1024);
+                    OSReport("Heap %d free Blocks %5d/%5d KBytes %5d/%5d\n", i,
+                        heaps[i].avail - heaps[i].used, heaps[i].avail,
+                        (heaps[i].dataSize - heaps[i].size) / 1024, heaps[i].dataSize / 1024);
                 }
             }
             if(!doEmergencyFree(count)) break;
@@ -268,6 +280,7 @@ void* allocTaggedHook(u32 size, AllocTag tag, const char *name) {
     OSReport("ALLOC FAIL size=0x%X tag=0x%X Used blocks %d/%d, bytes %d/%d K",
         size, tag, usedBlocks, totalBlocks, usedBytes/1024, totalBytes/1024);
     OSReport("Heap Flags %d, %d", bOnlyUseHeaps1and2, bOnlyUseHeap3);
+    //printHeaps();
     allocFailLog[allocFailLogIdx].size = size;
     allocFailLog[allocFailLogIdx].tag  = tag;
     allocFailLog[allocFailLogIdx].lr   = lr;

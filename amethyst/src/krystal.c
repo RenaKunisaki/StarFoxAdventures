@@ -48,17 +48,22 @@ void krystal_loadAssets() {
 void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
     //copy Krystal model into MODELS
     krystal_loadAssets();
-    if(!krystalModel) return allocTagged(size, tag, name);
+    if(!krystalModel) {
+        DPRINT("Krystal model not loaded");
+        return allocTagged(size, tag, name);
+    }
 
     //do the original allocation, with the extra model's size added.
+    DPRINT("MODELS.BIN size=%d + %d = %d", size, krystalModelSize, size+krystalModelSize);
     void *buf = allocTagged(size+krystalModelSize, tag, name);
     if(!buf) {
         DPRINT("ALLOC FAILED for Krystal model");
         return allocTagged(size, tag, name); //try again with original size
     }
-    registerFreeablePtr((void**)&krystalModel);
+    registerFreeablePtr((void**)&krystalModel, "krystalModel");
 
     //copy the new model into the buffer.
+    DPRINT("Inject Krystal model at 0x%08X", buf+size);
     krystalModelOffset = size;
     memcpy(buf + size, krystalModel, krystalModelSize);
     return buf;
@@ -125,17 +130,22 @@ static const u32 textureData[] = {
 void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
     //copy textures into TEX1
     krystal_loadAssets();
-    if(!krystalTexture) return allocTagged(size, tag, name);
+    if(!krystalTexture) {
+        DPRINT("Krystal texture not loaded");
+        return allocTagged(size, tag, name);
+    }
 
     //do the original allocation, with the extra texture's size added.
+    DPRINT("TEX1.BIN size=%d + %d = %d", size, krystalTextureSize, size+krystalTextureSize);
     void *buf = allocTagged(size+krystalTextureSize, tag, name);
     if(!buf) {
         DPRINT("ALLOC FAILED for Krystal texture");
         return allocTagged(size, tag, name); //try again with original size
     }
-    registerFreeablePtr((void**)&krystalTexture);
+    registerFreeablePtr((void**)&krystalTexture, "krystalTexture");
 
     //copy the new texture into the buffer.
+    DPRINT("Inject Krystal texture at 0x%08X", buf+size);
     krystalTextureOffset = size;
     memcpy(buf + size, krystalTexture, krystalTextureSize);
     return buf;

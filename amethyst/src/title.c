@@ -8,7 +8,7 @@ static int (*oldTitleHook)();
 int titleHook() {
     //do this here due to memory starvation at startup
     enableKrystal = 1;
-    //krystal_loadAssets();
+    krystal_loadAssets();
 
     //check current and previous frame
     u16 buttons = controllerStates[0].button | controllerStates[4].button;
@@ -16,7 +16,7 @@ int titleHook() {
     //debugPrintf("saveStatus = %d frameCount = %d\n", saveStatus, frameCount);
     //doing it too soon will crash
     if(frameCount > 20 && frameCount < 300
-    && titleScreen_panAwayFromMovieTimer > 0 && buttons & PAD_TRIGGER_L) {
+    && titleScreen_panAwayFromMovieTimer > 0 && buttons & PAD_TRIGGER_R) {
         //OSReport("Loading save 1\n");
         titleScreenActive = false; //load into the game
         titleScreen_panAwayFromMovieTimer = 0;
