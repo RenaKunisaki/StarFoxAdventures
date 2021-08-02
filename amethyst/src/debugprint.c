@@ -128,7 +128,7 @@ static void printCoords() {
 
 static int restartPointFrameCount[3] = {0, 0, 0};
 static vec3f prevRestartPoint    [3] = {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}};
-static u8 prevRestartPointLayer  [3] = {0, 0, 0};
+static s8 prevRestartPointLayer  [3] = {0, 0, 0};
 static u8 prevRestartPointMap    [3] = {0, 0, 0};
 
 static void printRestartPointForSave(SaveGame *save, int which, const char *name) {
@@ -234,6 +234,14 @@ static void printHeapInfo() {
         }
         debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF");
     }
+
+    u32 totalBlocks=0, totalBytes=0;
+    for(int i=0; i<NUM_HEAPS; i++) {
+        totalBytes  += heaps[i].dataSize;
+        totalBlocks += heaps[i].avail;
+    }
+    debugPrintf("Max blocks=%d/%d KBytes=%d/%d\n", maxBlocksUsed, totalBlocks,
+        maxMemUsed / 1024, totalBytes / 1024);
 }
 
 static void printTarget() {
