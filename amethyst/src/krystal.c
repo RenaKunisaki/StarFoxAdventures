@@ -3,6 +3,9 @@
 #include "main.h"
 #include "revolution/os.h"
 
+//use an experimental memory saving technique which avoids keeping copies
+//of the assets in memory, but might be unstable.
+#define USE_EXPERIMENTAL 1
 
 s8 krystalModelNo = 0;
 s8 enableKrystal = 0; //delay loading due to memory stuff
@@ -55,17 +58,25 @@ void* krystalHook_modelsBin(uint size,AllocTag tag,const char *name) {
 
     //do the original allocation, with the extra model's size added.
     DPRINT("MODELS.BIN size=%d + %d = %d", size, krystalModelSize, size+krystalModelSize);
-    void *buf = allocTagged(size+krystalModelSize, tag, name);
+    #if USE_EXPERIMENTAL
+        void *buf = allocTagged(size, tag, name);
+    #else
+        void *buf = allocTagged(size+krystalModelSize, tag, name);
+    #endif
     if(!buf) {
         DPRINT("ALLOC FAILED for Krystal model");
         return allocTagged(size, tag, name); //try again with original size
     }
-    registerFreeablePtr((void**)&krystalModel, "krystalModel");
+    #if !USE_EXPERIMENTAL
+        registerFreeablePtr((void**)&krystalModel, "krystalModel");
+    #endif
 
     //copy the new model into the buffer.
-    DPRINT("Inject Krystal model at 0x%08X", buf+size);
     krystalModelOffset = size;
-    memcpy(buf + size, krystalModel, krystalModelSize);
+    #if !USE_EXPERIMENTAL
+        DPRINT("Inject Krystal model at 0x%08X", buf+size);
+        memcpy(buf + size, krystalModel, krystalModelSize);
+    #endif
     return buf;
 }
 
@@ -77,19 +88,27 @@ void krystalHook_modelsTab() {
     void *pModelsBin = dataFileBuffers[FILE_MODELS_BIN];
     u32  *pModelsTab = dataFileBuffers[FILE_MODELS_TAB];
     if(pModelsBin && pModelsTab) {
+        #if USE_EXPERIMENTAL
+        pModelsTab[KRYSTAL_MODEL_ID] = ((krystalModel - pModelsBin) & 0x0FFFFFFF) | 0x80000000;
+        #else
         if((*(u32*)(pModelsBin + krystalModelOffset)) == 0xFACEFEED) {
             //there is a model here, so update the table to point to it
             pModelsTab[KRYSTAL_MODEL_ID] = krystalModelOffset | 0x80000000;
         }
+        #endif
     }
 
     //patch secondary slot
     pModelsBin = dataFileBuffers[FILE_MODELS_BIN2];
     pModelsTab = dataFileBuffers[FILE_MODELS_TAB2];
     if(pModelsBin && pModelsTab) {
+        #if USE_EXPERIMENTAL
+        pModelsTab[KRYSTAL_MODEL_ID] = ((krystalModel - pModelsBin) & 0x0FFFFFFF) | 0x80000000;
+        #else
         if((*(u32*)(pModelsBin + krystalModelOffset)) == 0xFACEFEED) {
             pModelsTab[KRYSTAL_MODEL_ID] = krystalModelOffset | 0x80000000;
         }
+        #endif
     }
 }
 
@@ -136,35 +155,53 @@ void* krystalHook_tex1Bin(uint size,AllocTag tag,const char *name) {
     }
 
     //do the original allocation, with the extra texture's size added.
-    DPRINT("TEX1.BIN size=%d + %d = %d", size, krystalTextureSize, size+krystalTextureSize);
-    void *buf = allocTagged(size+krystalTextureSize, tag, name);
+    #if USE_EXPERIMENTAL
+        void *buf = allocTagged(size, tag, name);
+    #else
+        DPRINT("TEX1.BIN size=%d + %d = %d", size, krystalTextureSize, size+krystalTextureSize);
+        void *buf = allocTagged(size+krystalTextureSize, tag, name);
+    #endif
     if(!buf) {
         DPRINT("ALLOC FAILED for Krystal texture");
         return allocTagged(size, tag, name); //try again with original size
     }
-    registerFreeablePtr((void**)&krystalTexture, "krystalTexture");
+    #if !USE_EXPERIMENTAL
+        registerFreeablePtr((void**)&krystalTexture, "krystalTexture");
+    #endif
 
     //copy the new texture into the buffer.
-    DPRINT("Inject Krystal texture at 0x%08X", buf+size);
     krystalTextureOffset = size;
-    memcpy(buf + size, krystalTexture, krystalTextureSize);
+    #if !USE_EXPERIMENTAL
+        DPRINT("Inject Krystal texture at 0x%08X", buf+size);
+        memcpy(buf + size, krystalTexture, krystalTextureSize);
+    #endif
     return buf;
 }
 
 void _doTexPatch(void *texBin, u32 *texTab) {
     //DPRINT("tex bin=%08X tab=%08X", texBin, texTab);
     if(!(texBin && texTab)) return;
-    if((*(u32*)(texBin + krystalTextureOffset)) == 0x1C) {
-        //our texture is here
-        //DPRINT("Patching TEX1.tab: %08X", offs);
+    #if USE_EXPERIMENTAL
         for(int i=0; i<KRYSTAL_NUM_TEXTURES; i++) {
-            u32 data = textureData[(krystalModelNo*KRYSTAL_NUM_TEXTURES)+i];
-            if(data & 0x80000000) {
-                texTab[KRYSTAL_TEXTURE_ID+i] = data + (krystalTextureOffset >> 1);
+                u32 data = textureData[(krystalModelNo*KRYSTAL_NUM_TEXTURES)+i];
+                if(data & 0x80000000) {
+                    u32 offs = (krystalTexture - texBin) & 0x0FFFFFFF;
+                    texTab[KRYSTAL_TEXTURE_ID+i] = data + (offs >> 1);
+                }
+            }
+    #else
+        if((*(u32*)(texBin + krystalTextureOffset)) == 0x1C) {
+            //our texture is here
+            //DPRINT("Patching TEX1.tab: %08X", offs);
+            for(int i=0; i<KRYSTAL_NUM_TEXTURES; i++) {
+                u32 data = textureData[(krystalModelNo*KRYSTAL_NUM_TEXTURES)+i];
+                if(data & 0x80000000) {
+                    texTab[KRYSTAL_TEXTURE_ID+i] = data + (krystalTextureOffset >> 1);
+                }
             }
         }
-    }
-    //else DPRINT("Texture not present");
+        //else DPRINT("Texture not present");
+    #endif
 }
 
 //injected into mergeTableFiles() for TEX1.TAB
