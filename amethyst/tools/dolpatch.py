@@ -45,7 +45,7 @@ def main():
                     dataOffsets[i] + dataSizes[i],
                     dataAddrs[i]   + dataSizes[i])
             printf("BSS     ------ %08X %06X ------ %08X\n", bssAddr, bssSize, bssAddr + bssSize)
-            printf("Entry   ------ %08X ------ --------\n", entryPoint)
+            printf("Entry   ------ %08X ------ ------ --------\n", entryPoint)
 
             # find an unused text section
             textIdx = None
