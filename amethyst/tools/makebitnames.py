@@ -13,7 +13,7 @@ for bit in gameBits.findall('./bit'):
     id = int(bit.get('id'), 0)
     MAX_ID = max(MAX_ID, id)
     name = bit.get('name')
-    if name in seenName:
+    if name is not None and name in seenName:
         print("WARNING: Duplicate GameBit name:", name)
     seenName.add(name)
     names[id] = name
