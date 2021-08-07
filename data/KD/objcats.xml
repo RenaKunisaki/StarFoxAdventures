@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<categories>
+    <cat id="0x00" name="Core Gameplay" />
+    <cat id="0x01" name="Staff Gameplay" />
+    <cat id="0x02" name="GamePlay" />
+    <cat id="0x03" name="Container" />
+    <cat id="0x04" name="Collectables" />
+    <cat id="0x05" name="Triggers" />
+    <cat id="0x06" name="Graphic" />
+    <cat id="0x07" name="GraphicEffect" />
+    <cat id="0x08" name="Curves" />
+    <cat id="0x09" name="Cameras" />
+    <cat id="0x0A" name="Weapons" />
+    <cat id="0x0B" name="Characters" />
+    <cat id="0x0C" name="Baddies" />
+    <cat id="0x0D" name="Simple Baddies" />
+    <cat id="0x0E" name="Sharpclaws" />
+    <cat id="0x0F" name="Animation objects" />
+    <cat id="0x10" name="Sidekick objects" />
+    <cat id="0x11" name="Anim-Test" />
+    <cat id="0x12" name="CapeClaw" />
+    <cat id="0x13" name="CR-Fortress" />
+    <cat id="0x14" name="CR - Race " />
+    <cat id="0x15" name="Dark-Ice-Mines" />
+    <cat id="0x16" name="Dark-Ice-Mines-2" />
+    <cat id="0x17" name="Dark Ice Boss" />
+    <cat id="0x18" name="Moon Mountain Pass" />
+    <cat id="0x19" name="Ice-Mountain" />
+    <cat id="0x1A" name="Northern Wastes" />
+    <cat id="0x1B" name="Ship-Battle" />
+    <cat id="0x1C" name="SwapStone Circle" />
+    <cat id="0x1D" name="SwapStone-Hollow" />
+    <cat id="0x1E" name="Warlock-Mountain" />
+    <cat id="0x1F" name="Diamond Bay" />
+    <cat id="0x20" name="Drakor Dragon Boss" />
+    <cat id="0x21" name="T-Rex Boss" />
+    <cat id="0x22" name="Dragon Rock" />
+    <cat id="0x23" name="Walled City" />
+    <cat id="0x24" name="Front-End" />
+    <cat id="0x25" name="DFalls_Shrine" />
+    <cat id="0x26" name="MMount_Shrine" />
+    <cat id="0x27" name="ECaves_Shrine" />
+    <cat id="0x28" name="GPlains_Shrine" />
+    <cat id="0x29" name="DBay_Shrine" />
+    <cat id="0x2A" name="NWastes_Shrine" />
+    <cat id="0x2B" name="CClaw_Shrine" />
+    <cat id="0x2C" name="WGrove_Shrine" />
+    <cat id="0x2D" name="VForce_Point" />
+    <cat id="0x2E" name="Intro_Sequence" />
+    <cat id="0x2F" name="Shop" />
+    <cat id="0x30" name="DForce_Point" />
+    <cat id="0x31" name="Runtime" />
+    <cat id="0x32" name="Other" />
+    <cat id="0x33" name="Krazoa Palace" />
+    <cat id="0x34" name="A.I." />
+    <cat id="0x35" name="World Map" />
+    <cat id="0x36" name="Arwing" />
+    <cat id="0x37" name="Light" />
+    <cat id="0x38" name="Props" />
+    <cat id="0x39" name="Unused" />
+</categories>

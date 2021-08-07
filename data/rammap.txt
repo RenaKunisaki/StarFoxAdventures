@@ -1,0 +1,26 @@
+80000000 OS globals
+80003100 .text0 start
+80005620 .text0 end
+         gap?
+800066E0 .text1 start
+	80005620 .data0 start
+	80005CC0 .data1 start, .data0 end
+	800066E0 .data1 end
+	.text1 continues
+802C1880 .data2 start, .text1 end  pre_init_funcs
+802C18A0 .data3 start, .data2 end  atexit_funcs
+802C18C0 .data4 start, .data3 end
+802C2D60 .data5 start, .data4 end
+80335840 BSS0 start, .data5 end - not the same as the .bss section in the DOL
+803DB1E0 BSS0 end, .data6 start
+803DC7A0 BSS1 start, .data6 end
+803DE4E4 BSS1 end
+	small gap
+803DE500 .data7 start, .bss start
+803E8440 BSS2 start, .data7 end
+803E8478 BSS2 end, .bss end
+	DEADBABE again; a few other values near end
+	not empty, but large empty chunks, possibly audio stuff?
+805244A0 real arena start
+817EA240 real arena end; FST start
+817FFFFF RAM end

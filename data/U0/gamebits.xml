@@ -3,15 +3,16 @@
   <!-- bytes 0x50-0x5C of tempGameBits are idxs of task texts -->
   <bit id="0x0000" table="0" hint="0x00" hasHint="0" max="1">
     <objref map="wgshrine" obj="Transporter" objId="0x00000C5D" param="enabled"/>
+    <description>Set when collecting an apple</description>
   </bit>
   <bit id="0x0001" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0002" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0003" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0004" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0005" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop1" />
+  <bit id="0x0005" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop1" />
   <bit id="0x0006" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0007" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0008" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop2"/>
+  <bit id="0x0008" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop2"/>
   <bit id="0x0009" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x000A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x000B" table="2" hint="0x00" hasHint="0" max="1" name="SH_TalkedToPepper">
@@ -24,8 +25,8 @@
   <bit id="0x0010" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0011" table="2" hint="0x00" hasHint="0" max="1" name="SH_StaffTutorialRunning"/>
   <bit id="0x0012" table="0" hint="0x00" hasHint="0" max="1" name="AndrossRelated0012"/>
-  <bit id="0x0013" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop3"/>
-  <bit id="0x0014" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop4"/>
+  <bit id="0x0013" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop3"/>
+  <bit id="0x0014" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop4"/>
   <bit id="0x0015" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0016" table="1" hint="0x00" hasHint="0" max="1">
     <objref map="snowmines" obj="HitAnimator" objId="0x0004B0C2" param="target"/>
@@ -57,8 +58,8 @@
     <objref map="hollow" obj="SH_BombWall" objId="0x00044A9F" param="exploded"/>
   </bit>
   <bit id="0x0024" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0025" table="2" hint="0x00" hasHint="0" max="1" name="BoughtTrickysBall">
-    <description>separate from HaveTrickysBall</description>
+  <bit id="0x0025" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_TrickysBall_Bought">
+    <description>separate from ITEM_TrickysBall_Got?</description>
   </bit>
   <bit id="0x0026" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0027" table="2" hint="0x28" hasHint="1" max="1" name="DIM_FoundInjuredSnowHorn"/>
@@ -67,13 +68,13 @@
   <bit id="0x002A" table="2" hint="0x27" hasHint="1" max="1" name="DIM_ReleasedSnowHorn">
     <objref map="snowmines" obj="DIMSnowHornShackle" objId="0x00001A57" param="open"/>
   </bit>
-  <bit id="0x002B" table="2" hint="0x00" hasHint="0" max="1" name="DIM_HaveShackleKey">
+  <bit id="0x002B" table="2" hint="0x00" hasHint="0" max="1" name="DIM_ShackleKey_Got">
     <objref map="snowmines" obj="DIMSnowHornShackle" objId="0x00001A57" param="key"/>
     <objref map="snowmines" obj="DIMSnowHornShackle" objId="0x00001A57" param="0x22"/>
     <objref map="snowmines" obj="TreasureChe" objId="0x0004542B" param="item"/>
   </bit>
   <bit id="0x002C" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x002D" table="2" hint="0x0B" hasHint="1" max="1" name="HaveFireballSpell">
+  <bit id="0x002D" table="2" hint="0x0B" hasHint="1" max="1" name="ITEM_FireBlaster_Got">
     <objref map="hollow" obj="MagicCaveTo" objId="0x00043D7F" param="Collected"/>
   </bit>
   <bit id="0x002E" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -95,7 +96,7 @@
   <bit id="0x0037" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0038" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0039" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x003A" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x003A" table="2" hint="0x00" hasHint="0" max="1" name="DIMRelated003A"/>
   <bit id="0x003B" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x003C" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x003D" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -103,10 +104,10 @@
     <objref map="fortress" obj="HitAnimator" objId="0x00043CF1" param="target"/>
   </bit>
   <bit id="0x003F" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0040" table="2" hint="0x00" hasHint="0" max="1" name="HaveSharpClawDisguise"/>
-  <bit id="0x0041" table="1" hint="0x52" hasHint="1" max="1" name="EnteredCloudRunnerFort"/>
+  <bit id="0x0040" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SharpClawDisguise_Got"/>
+  <bit id="0x0041" table="1" hint="0x52" hasHint="1" max="1" name="CF_EnteredFort"/>
   <bit id="0x0042" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0043" table="2" hint="0x55" hasHint="1" max="1" name="SavedQueenCloudRunner">
+  <bit id="0x0043" table="2" hint="0x55" hasHint="1" max="1" name="CF_SavedQueen">
     <objref map="fortress" obj="CFExplodeFl" objId="0x00002918" param="onExplode"/>
   </bit>
   <bit id="0x0044" table="1" hint="0x00" hasHint="0" max="1" name="HavePrisonKey"/>
@@ -136,11 +137,11 @@
     <objref map="clouddungeon" obj="StaffLeverO" objId="0x00043FAA" param="activated"/>
   </bit>
   <bit id="0x0050" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0051" table="2" hint="0x00" hasHint="0" max="1" name="CF_HaveRedCrystal">
+  <bit id="0x0051" table="2" hint="0x00" hasHint="0" max="1" name="CF_RedCrystal_Got">
     <description>power gems in CloudRunner Fortress</description>
   </bit>
-  <bit id="0x0052" table="2" hint="0x00" hasHint="0" max="1" name="CF_HaveGreenCrystal"/>
-  <bit id="0x0053" table="2" hint="0x00" hasHint="0" max="1" name="CF_HaveBlueCrystal"/>
+  <bit id="0x0052" table="2" hint="0x00" hasHint="0" max="1" name="CF_GreenCrystal_Got"/>
+  <bit id="0x0053" table="2" hint="0x00" hasHint="0" max="1" name="CF_BlueCrystal_Got"/>
   <bit id="0x0054" table="2" hint="0x00" hasHint="0" max="1" name="CF_CrystalRelated0054"/>
   <bit id="0x0055" table="2" hint="0x00" hasHint="0" max="1" name="CF_CrystalRelated0055" />
   <bit id="0x0056" table="2" hint="0x00" hasHint="0" max="1" name="CF_CrystalRelated0056" />
@@ -174,11 +175,11 @@
     <objref map="fortress" obj="StaffLeverT" objId="0x000476C8" param="activated"/>
   </bit>
   <bit id="0x005E" table="0" hint="0x00" hasHint="0" max="0xFFFFFF"/>
-  <bit id="0x005F" table="2" hint="0x00" hasHint="0" max="1" name="CF_PowerLockOpen">
+  <bit id="0x005F" table="2" hint="0x00" hasHint="0" max="1" name="CF_PowerKey_Used">
     <objref map="fortress" obj="HitAnimator" objId="0x00032391" param="target"/>
     <objref map="fortress" obj="CFPowerLock" objId="0x000324AF" param="open"/>
   </bit>
-  <bit id="0x0060" table="2" hint="0x00" hasHint="0" max="1" name="CF_HavePowerKey">
+  <bit id="0x0060" table="2" hint="0x00" hasHint="0" max="1" name="CF_PowerKey_Got">
     <objref map="fortress" obj="CFPowerLock" objId="0x000324AF" param="key"/>
     <objref map="fortress" obj="CFPowerLock" objId="0x000324AF" param="0x22"/>
   </bit>
@@ -210,7 +211,7 @@
   </bit>
   <bit id="0x0073" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0074" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0075" table="1" hint="0x00" hasHint="0" max="1" name="HaveStaff">
+  <bit id="0x0075" table="1" hint="0x00" hasHint="0" max="1" name="ITEM_Staff_Got">
     <description>clearing on Galleon restarts ship battle</description>
   </bit>
   <bit id="0x0076" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -268,8 +269,8 @@
     <objref map="hollow" obj="HitAnimator" objId="0x0004BBDE" param="target"/>
   </bit>
   <bit id="0x0091" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0092" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop5"/>
-  <bit id="0x0093" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop6"/>
+  <bit id="0x0092" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop5"/>
+  <bit id="0x0093" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop6"/>
   <bit id="0x0094" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0095" table="0" hint="0x00" hasHint="0" max="1" name="Always1">
     <description>used for always-available shop items</description>
@@ -282,7 +283,7 @@
     <objref map="hollow" obj="SH_BombWall" objId="0x00044AA1" param="exploded"/>
   </bit>
   <bit id="0x0098" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0099" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop7"/>
+  <bit id="0x0099" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop7"/>
   <bit id="0x009A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x009B" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x009C" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -311,18 +312,18 @@
   <bit id="0x00A8" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="wastes" obj="HitAnimator" objId="0x00043CA6" param="target"/>
   </bit>
-  <bit id="0x00A9" table="2" hint="0x00" hasHint="0" max="3" name="NumFireGems"/>
+  <bit id="0x00A9" table="2" hint="0x00" hasHint="0" max="3" name="ITEM_FireGem_Count"/>
   <bit id="0x00AA" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00AB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00AC" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00AD" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00AE" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop8"/>
-  <bit id="0x00AF" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop9"/>
-  <bit id="0x00B0" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop10"/>
+  <bit id="0x00AE" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop8"/>
+  <bit id="0x00AF" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop9"/>
+  <bit id="0x00B0" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop10"/>
   <bit id="0x00B1" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00B2" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00B3" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00B4" table="2" hint="0x00" hasHint="0" max="1" name="UsedUnknownItem">
+  <bit id="0x00B4" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Unknown_Used">
     <description>Item name is "Unknown"</description>
   </bit>
   <bit id="0x00B5" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -334,22 +335,22 @@
   <bit id="0x00BB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00BC" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00BD" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00BE" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop11"/>
+  <bit id="0x00BE" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop11"/>
   <bit id="0x00BF" table="2" hint="0x1A" hasHint="1" max="1" name="SH_ReturnedToQueen">
     <description>Talked to queen after bringing Tricky back from Ice Mountain</description>
   </bit>
   <bit id="0x00C0" table="0" hint="0x00" hasHint="0" max="1" name="SH_Entered00C0">
     <description>also toggled when leaving queen cave, and in CRFort</description>
   </bit>
-  <bit id="0x00C1" table="2" hint="0x00" hasHint="0" max="0xF" name="NumTrickyFoods">
+  <bit id="0x00C1" table="2" hint="0x00" hasHint="0" max="0xF" name="ITEM_TrickyFood_Count">
     <description>Number of Tricky foods (GrubTub Fungus)</description>
   </bit>
-  <bit id="0x00C2" table="2" hint="0x00" hasHint="0" max="7" name="SH_NumMushroomsFedToQueen"/>
-  <bit id="0x00C3" table="2" hint="0x17" hasHint="1" max="1" name="ReturnedToHollow"/>
-  <bit id="0x00C4" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop13"/>
-  <bit id="0x00C5" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop14"/>
-  <bit id="0x00C6" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop15"/>
-  <bit id="0x00C7" table="2" hint="0x00" hasHint="0" max="1" name="HaveUnknownItem">
+  <bit id="0x00C2" table="2" hint="0x00" hasHint="0" max="7" name="SH_WhiteGrubTub_Used"/>
+  <bit id="0x00C3" table="2" hint="0x17" hasHint="1" max="1" name="SH_ReturnedToHollow"/>
+  <bit id="0x00C4" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop13"/>
+  <bit id="0x00C5" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop14"/>
+  <bit id="0x00C6" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop15"/>
+  <bit id="0x00C7" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Unknown_Got">
     <description>Item name is "Unknown"</description>
   </bit>
   <bit id="0x00C8" table="1" hint="0x00" hasHint="0" max="1" name="IM_BikeRelated00C8">
@@ -377,7 +378,7 @@
   <bit id="0x00DA" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00DB" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00DC" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00DD" table="2" hint="0x14" hasHint="1" max="1" name="HaveCallTricky"/>
+  <bit id="0x00DD" table="2" hint="0x14" hasHint="1" max="1" name="ITEM_TrickyCall_Got"/>
   <bit id="0x00DE" table="2" hint="0x00" hasHint="0" max="1" name="SHBOT_MagicCaveVisible">
     <objref map="hollow2" obj="HitAnimator" objId="0x0004AA35" param="target"/>
     <objref map="hollow2" obj="MagicCaveTo" objId="0x0004414D" param="Visible"/>
@@ -435,7 +436,7 @@
   <bit id="0x00F2" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00F3" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00F4" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00F5" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop16"/>
+  <bit id="0x00F5" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop16"/>
   <bit id="0x00F6" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00F7" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00F8" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -445,17 +446,17 @@
   <bit id="0x00FC" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00FD" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00FE" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00FF" table="2" hint="0x6F" hasHint="1" max="1" name="HaveTestFearSpirit">
+  <bit id="0x00FF" table="2" hint="0x6F" hasHint="1" max="1" name="ITEM_TestFearSpirit_Got">
     <description>have the Krazoa Spirit from Test of Fear (and haven't released it)</description>
   </bit>
   <bit id="0x0100" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0101" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0102" table="2" hint="0x23" hasHint="1" max="1" name="RescuedSnowHornGateKeeper"/>
+  <bit id="0x0102" table="2" hint="0x23" hasHint="1" max="1" name="NW_RescuedSnowHornGateKeeper"/>
   <bit id="0x0103" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0104" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop17"/>
+  <bit id="0x0104" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop17"/>
   <bit id="0x0105" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0106" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0107" table="2" hint="0x40" hasHint="1" max="1" name="HaveGroundQuake">
+  <bit id="0x0107" table="2" hint="0x40" hasHint="1" max="1" name="ITEM_GroundQuake_Got">
     <objref map="moonpass" obj="MagicCaveTo" objId="0x00049196" param="Collected"/>
   </bit>
   <bit id="0x0108" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -473,7 +474,7 @@
     <objref map="wastes" obj="MagicCaveTo" objId="0x00043FD5" param="Visible"/>
   </bit>
   <bit id="0x0114" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0115" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop18"/>
+  <bit id="0x0115" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop18"/>
   <bit id="0x0116" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0117" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0118" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -492,7 +493,7 @@
   <bit id="0x0120" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0121" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0122" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0123" table="2" hint="0x35" hasHint="1" max="1" name="HaveFireSpellStone1">
+  <bit id="0x0123" table="2" hint="0x35" hasHint="1" max="1" name="ITEM_FireSpellStone1_Got">
     <objref map="temple" obj="VFP_PodiumP" objId="0x00031CB8" param="key"/>
     <objref map="temple" obj="VFP_PodiumP" objId="0x00031CB8" param="0x22"/>
     <objref map="temple" obj="VFP_PodiumP" objId="0x0004B291" param="key"/>
@@ -531,9 +532,9 @@
   <bit id="0x013A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x013B" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x013C" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x013D" table="2" hint="0x00" hasHint="0" max="0x1F" name="NumFireflies"/>
+  <bit id="0x013D" table="2" hint="0x00" hasHint="0" max="0x1F" name="ITEM_Firefly_Count"/>
   <bit id="0x013E" table="2" hint="0x1D" hasHint="1" max="1" name="HaveFireflyLantern"/>
-  <bit id="0x013F" table="1" hint="0x83" hasHint="1" max="1" name="GotBigScarabBag">
+  <bit id="0x013F" table="1" hint="0x83" hasHint="1" max="1" name="ITEM_BigScarabBag_Got">
     <description>From rescuing ThornTails from Bloops</description>
   </bit>
   <bit id="0x0140" table="2" hint="0x00" hasHint="0" max="1" name="SH_FirstMagicCaveFound">
@@ -590,7 +591,7 @@
   <bit id="0x015F" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0160" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0161" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0162" table="2" hint="0x5E" hasHint="1" max="1" name="OpenedOceanForcePoint">
+  <bit id="0x0162" table="2" hint="0x5E" hasHint="1" max="1" name="OFP_Opened">
     <objref map="capeclaw" obj="HitAnimator" objId="0x0004B7F8" param="target"/>
   </bit>
   <bit id="0x0163" table="2" hint="0x00" hasHint="0" max="1">
@@ -616,13 +617,13 @@
   <bit id="0x016F" table="2" hint="0x00" hasHint="0" max="1" name="AlpineRoot_16F">
     <objref map="snowmines" obj="CNTColideOb" objId="0x0004A177" param="0x1E"/>
   </bit>
-  <bit id="0x0170" table="2" hint="0x00" hasHint="0" max="3" name="NumAlpineRoots170">
+  <bit id="0x0170" table="2" hint="0x00" hasHint="0" max="3" name="ITEM_AlpineRoots170_Count">
     <description>two separate counters?</description>
   </bit>
   <bit id="0x0171" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0172" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0173" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0174" table="2" hint="0xB2" hasHint="1" max="1" name="HaveKrazoaSpirit6"/>
+  <bit id="0x0174" table="2" hint="0xB2" hasHint="1" max="1" name="ITEM_Spirit6_Got"/>
   <bit id="0x0175" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0176" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0177" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related0177"/>
@@ -631,7 +632,7 @@
   <bit id="0x017A" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="snowmines" obj="DIMLever" objId="0x00001B15" param="open"/>
   </bit>
-  <bit id="0x017B" table="2" hint="0x00" hasHint="0" max="1" name="DIM_HaveCog1">
+  <bit id="0x017B" table="2" hint="0x00" hasHint="0" max="1" name="DIM_Cog1_Got">
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001B13" param="key"/>
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001B13" param="0x22"/>
   </bit>
@@ -640,57 +641,57 @@
     <objref map="snowmines" obj="HitAnimator" objId="0x0004A1CB" param="target"/>
     <objref map="snowmines" obj="HitAnimator" objId="0x00030C0B" param="target"/>
   </bit>
-  <bit id="0x017E" table="2" hint="0x00" hasHint="0" max="1" name="DIM_HaveCog2">
+  <bit id="0x017E" table="2" hint="0x00" hasHint="0" max="1" name="DIM_Cog2_Got">
     <objref map="snowmines" obj="TreasureChe" objId="0x00045BA2" param="item"/>
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE3" param="key"/>
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE3" param="0x22"/>
   </bit>
-  <bit id="0x017F" table="2" hint="0x00" hasHint="0" max="1" name="DIM_HaveCog3">
+  <bit id="0x017F" table="2" hint="0x00" hasHint="0" max="1" name="DIM_Cog3_Got">
     <objref map="snowmines" obj="TreasureChe" objId="0x00045C71" param="item"/>
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE2" param="key"/>
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE2" param="0x22"/>
   </bit>
-  <bit id="0x0180" table="2" hint="0x00" hasHint="0" max="1" name="DIM_HaveCog4">
+  <bit id="0x0180" table="2" hint="0x00" hasHint="0" max="1" name="DIM_Cog4_Got">
     <objref map="snowmines" obj="TreasureChe" objId="0x00045BC9" param="item"/>
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE4" param="key"/>
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE4" param="0x22"/>
   </bit>
-  <bit id="0x0181" table="2" hint="0x00" hasHint="0" max="1" name="DIM_PlacedCog1">
+  <bit id="0x0181" table="2" hint="0x00" hasHint="0" max="1" name="DIM_Cog1_Used">
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001B13" param="open"/>
   </bit>
-  <bit id="0x0182" table="2" hint="0x00" hasHint="0" max="1" name="DIM_PlacedCog2">
+  <bit id="0x0182" table="2" hint="0x00" hasHint="0" max="1" name="DIM_Cog2_Used">
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE3" param="open"/>
   </bit>
-  <bit id="0x0183" table="2" hint="0x00" hasHint="0" max="1" name="DIM_PlacedCog3">
+  <bit id="0x0183" table="2" hint="0x00" hasHint="0" max="1" name="DIM_Cog3_Used">
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE2" param="open"/>
   </bit>
-  <bit id="0x0184" table="2" hint="0x00" hasHint="0" max="1" name="DIM_PlacedCog4">
+  <bit id="0x0184" table="2" hint="0x00" hasHint="0" max="1" name="DIM_Cog4_Used">
     <objref map="snowmines" obj="DIMUseObjec" objId="0x00001DE4" param="open"/>
   </bit>
   <bit id="0x0185" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0186" table="2" hint="0x00" hasHint="0" max="1" name="LoadTrickyBadge"/>
+  <bit id="0x0186" table="2" hint="0x00" hasHint="0" max="1" name="Tricky_LoadBadge"/>
   <bit id="0x0187" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0188" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0189" table="2" hint="0x00" hasHint="0" max="1" name="DidSeeBombPlant"/>
+  <bit id="0x0189" table="2" hint="0x00" hasHint="0" max="1" name="SawBombPlant"/>
   <bit id="0x018A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x018B" table="2" hint="0x0A" hasHint="1" max="1" name="FoxFoundStaff"/>
   <bit id="0x018C" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x018D" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x018E" table="2" hint="0x00" hasHint="0" max="1" name="DidCollectBombSpore"/>
+  <bit id="0x018E" table="2" hint="0x00" hasHint="0" max="1" name="SawBombSpore"/>
   <bit id="0x018F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0190" table="2" hint="0x00" hasHint="0" max="1" name="SH_FireWeed_190"/>
   <bit id="0x0191" table="2" hint="0x00" hasHint="0" max="1" name="SH_FireWeed_191"/>
   <bit id="0x0192" table="2" hint="0x00" hasHint="0" max="1" name="SH_FireWeed_192"/>
-  <bit id="0x0193" table="2" hint="0x36" hasHint="1" max="1" name="SH_GotMoonPassKey"/>
+  <bit id="0x0193" table="2" hint="0x36" hasHint="1" max="1" name="ITEM_MoonPassKey_Got"/>
   <bit id="0x0194" table="2" hint="0x00" hasHint="0" max="3" name="NumFireWeeds"/>
   <bit id="0x0195" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0196" table="2" hint="0x00" hasHint="0" max="1" name="DidSeeBombPlantPatch"/>
+  <bit id="0x0196" table="2" hint="0x00" hasHint="0" max="1" name="SawBombPlantPatch"/>
   <bit id="0x0197" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0198" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0199" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x019A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x019B" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x019C" table="2" hint="0xA4" hasHint="1" max="1" name="ReturnedToHollowAfter4thStone"/>
+  <bit id="0x019C" table="2" hint="0xA4" hasHint="1" max="1" name="SH_ReturnedAfter4thStone"/>
   <bit id="0x019D" table="2" hint="0x00" hasHint="0" max="1" name="SnowHornArtifact19D">
     <description>set when using artifact</description>
   </bit>
@@ -701,9 +702,9 @@
   <bit id="0x01A0" table="2" hint="0x00" hasHint="0" max="1" name="SH_ThornTailRelated01A0">
     <description>related to ThornTail</description>
   </bit>
-  <bit id="0x01A1" table="1" hint="0x00" hasHint="0" max="1" name="KilledBloop12"/>
-  <bit id="0x01A2" table="2" hint="0x85" hasHint="1" max="1" name="BoughtSnowHornArtifact"/>
-  <bit id="0x01A3" table="2" hint="0x86" hasHint="1" max="1" name="UsedSnowHownArtifact"/>
+  <bit id="0x01A1" table="1" hint="0x00" hasHint="0" max="1" name="SH_KilledBloop12"/>
+  <bit id="0x01A2" table="2" hint="0x85" hasHint="1" max="1" name="NW_SnowHornArtifact_Got"/>
+  <bit id="0x01A3" table="2" hint="0x86" hasHint="1" max="1" name="NW_SnowHownArtifact_Used"/>
   <bit id="0x01A4" table="2" hint="0x00" hasHint="0" max="1" name="SH_OpenedPathToMagicCave2">
     <objref map="hollow" obj="HitAnimator" objId="0x00044A66" param="target"/>
     <objref map="hollow" obj="SH_BombWall" objId="0x00044A9D" param="exploded"/>
@@ -770,7 +771,7 @@
   </bit>
   <bit id="0x01BC" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01BD" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x01BE" table="2" hint="0x00" hasHint="0" max="0xFF" name="MoneyGiveScarabs">
+  <bit id="0x01BE" table="2" hint="0x00" hasHint="0" max="0xFF" name="ITEM_GiveScarabs_Count">
     <description>Money (in Give Scarabs option)</description>
   </bit>
   <bit id="0x01BF" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -779,8 +780,8 @@
     <objref map="capeclaw" obj="HitAnimator" objId="0x00045FA4" param="target"/>
   </bit>
   <bit id="0x01C2" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x01C3" table="2" hint="0x4E" hasHint="1" max="1" name="RescuedQueenCloudRunner"/>
-  <bit id="0x01C4" table="2" hint="0x49" hasHint="1" max="1" name="LocatedCapeClaw"/>
+  <bit id="0x01C3" table="2" hint="0x4E" hasHint="1" max="1" name="NW_Key_Got"/>
+  <bit id="0x01C4" table="2" hint="0x49" hasHint="1" max="1" name="CC_Located"/>
   <bit id="0x01C5" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01C6" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01C7" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -813,7 +814,7 @@
     <objref map="snowmines3" obj="HitAnimator" objId="0x00032524" param="target"/>
   </bit>
   <bit id="0x01DE" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x01DF" table="1" hint="0x30" hasHint="1" max="1" name="ReachedDarkIceBoss"/>
+  <bit id="0x01DF" table="1" hint="0x30" hasHint="1" max="1" name="DIM_ReachedBoss"/>
   <bit id="0x01E0" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="snowmines" obj="HitAnimator" objId="0x0004807E" param="target"/>
   </bit>
@@ -841,19 +842,19 @@
   <bit id="0x01ED" table="3" hint="0x00" hasHint="0" max="1" name="IM_TrickyRelated01ED">
     <description>set when warping to Ice Mountain, cleared when starting Tricky landing scene</description>
   </bit>
-  <bit id="0x01EE" table="2" hint="0x2C" hasHint="1" max="1" name="HaveDinosaurHorn">
+  <bit id="0x01EE" table="2" hint="0x2C" hasHint="1" max="1" name="ITEM_DinoHorn_Got">
     <objref map="snowmines" obj="DIMUseObjec" objId="0x0004B13A" param="key"/>
     <objref map="snowmines" obj="DIMUseObjec" objId="0x0004B13A" param="0x22"/>
   </bit>
   <bit id="0x01EF" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01F0" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x01F1" table="2" hint="0x00" hasHint="0" max="1" name="DIM_HaveGoldKey">
+  <bit id="0x01F1" table="2" hint="0x00" hasHint="0" max="1" name="DIM_GoldKey_Got">
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002182" param="key"/>
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002182" param="0x22"/>
     <objref map="snowmines2" obj="TreasureChe" objId="0x0004CC6D" param="item"/>
   </bit>
   <bit id="0x01F2" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x01F3" table="2" hint="0x00" hasHint="0" max="1" name="DIM_HaveSilverKey">
+  <bit id="0x01F3" table="2" hint="0x00" hasHint="0" max="1" name="DIM_SilverKey_Got">
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002181" param="key"/>
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002181" param="0x22"/>
     <objref map="snowmines2" obj="TreasureChe" objId="0x00045BE2" param="item"/>
@@ -864,7 +865,7 @@
   <bit id="0x01F7" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01F8" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01F9" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x01FA" table="2" hint="0x2D" hasHint="1" max="1" name="CrossedBlizzard"/>
+  <bit id="0x01FA" table="2" hint="0x2D" hasHint="1" max="1" name="DIM_CrossedBlizzard"/>
   <bit id="0x01FB" table="2" hint="0x00" hasHint="0" max="1" name="SnowBikeRelated01FB"/>
   <bit id="0x01FC" table="2" hint="0x47" hasHint="1" max="1" name="WM_FoundKrystal">
     <description>Reached top of Krazoa Palace</description>
@@ -875,8 +876,8 @@
   <bit id="0x01FE" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01FF" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0200" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0201" table="2" hint="0x00" hasHint="0" max="1" name="WC_HaveSunStone"/>
-  <bit id="0x0202" table="2" hint="0x00" hasHint="0" max="1" name="WC_UsedSunStone"/>
+  <bit id="0x0201" table="2" hint="0x00" hasHint="0" max="1" name="WC_SunStone_Got"/>
+  <bit id="0x0202" table="2" hint="0x00" hasHint="0" max="1" name="WC_SunStone_Used"/>
   <bit id="0x0203" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0204" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0205" table="2" hint="0x00" hasHint="0" max="1">
@@ -900,7 +901,7 @@
   <bit id="0x020F" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0210" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0211" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0212" table="1" hint="0x50" hasHint="1" max="1" name="FlewToCRFort"/>
+  <bit id="0x0212" table="1" hint="0x50" hasHint="1" max="1" name="CF_FlewTo"/>
   <bit id="0x0213" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0214" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0215" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -910,8 +911,8 @@
     <objref map="snowmines2" obj="HitAnimator" objId="0x00002DDE" param="target"/>
     <objref map="snowmines2" obj="HitAnimator" objId="0x0004650E" param="target"/>
   </bit>
-  <bit id="0x0219" table="2" hint="0x00" hasHint="0" max="1" name="DIM_UsedGoldKey"/>
-  <bit id="0x021A" table="2" hint="0x00" hasHint="0" max="1" name="DIM_UsedSilverKey"/>
+  <bit id="0x0219" table="2" hint="0x00" hasHint="0" max="1" name="DIM_GoldKey_Used"/>
+  <bit id="0x021A" table="2" hint="0x00" hasHint="0" max="1" name="DIM_SilverKey_Used"/>
   <bit id="0x021B" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x021C" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x021D" table="1" hint="0x00" hasHint="0" max="1" name="WM_SpiritHead1Fired">
@@ -940,7 +941,7 @@
     <description>snowmines3 (unused?)</description>
   </bit>
   <bit id="0x022A" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x022B" table="2" hint="0x00" hasHint="0" max="1" name="UsedFireSpellStone1"/>
+  <bit id="0x022B" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_FireSpellStone1_Used"/>
   <bit id="0x022C" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x022D" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="capeclaw" obj="HitAnimator" objId="0x0004B506" param="target"/>
@@ -979,11 +980,11 @@
   <bit id="0x023E" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x023F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0240" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0241" table="0" hint="0x00" hasHint="0" max="1" name="HaveSilverKey241"/>
-  <bit id="0x0242" table="2" hint="0x00" hasHint="0" max="1" name="UsedSilverKey241"/>
-  <bit id="0x0243" table="2" hint="0x00" hasHint="0" max="1" name="WC_UsedMoonStone"/>
+  <bit id="0x0241" table="0" hint="0x00" hasHint="0" max="1" name="Item_SilverKey241_Got"/>
+  <bit id="0x0242" table="2" hint="0x00" hasHint="0" max="1" name="Item_SilverKey241_Used"/>
+  <bit id="0x0243" table="2" hint="0x00" hasHint="0" max="1" name="WC_MoonStone_Used"/>
   <bit id="0x0244" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0245" table="2" hint="0x00" hasHint="0" max="1" name="HaveTrickyFlame"/>
+  <bit id="0x0245" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_TrickyFlame_Got"/>
   <bit id="0x0246" table="2" hint="0x00" hasHint="0" max="1" name="MagicCaveDoorClosed">
     <description>controls iron gate and switches in 1st cave</description>
   </bit>
@@ -1008,8 +1009,8 @@
   <bit id="0x0257" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0258" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0259" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x025A" table="2" hint="0x00" hasHint="0" max="1" name="WC_UsedGoldTooth"/>
-  <bit id="0x025B" table="2" hint="0x00" hasHint="0" max="1" name="WC_UsedSilverTooth"/>
+  <bit id="0x025A" table="2" hint="0x00" hasHint="0" max="1" name="WC_GoldTooth_Useds"/>
+  <bit id="0x025B" table="2" hint="0x00" hasHint="0" max="1" name="WC_SilverTooth_Used"/>
   <bit id="0x025C" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x025D" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x025E" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -1021,7 +1022,7 @@
   <bit id="0x0261" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0262" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0263" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0264" table="2" hint="0x00" hasHint="0" max="1" name="WC_HaveMoonStone"/>
+  <bit id="0x0264" table="2" hint="0x00" hasHint="0" max="1" name="WC_MoonStone_Got"/>
   <bit id="0x0265" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="wallcity" obj="StaffLeverO" objId="0x0004CAD9" param="activated"/>
   </bit>
@@ -1047,7 +1048,7 @@
   </bit>
   <bit id="0x0275" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0276" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0277" table="1" hint="0x00" hasHint="0" max="1" name="WM_ReleasedSpirit1"/>
+  <bit id="0x0277" table="1" hint="0x00" hasHint="0" max="1" name="ITEM_Spirit1_Used"/>
   <bit id="0x0278" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="snowmines2" obj="StaffLeverO" objId="0x00048279" param="activated"/>
   </bit>
@@ -1060,8 +1061,8 @@
   <bit id="0x027F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0280" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0281" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0282" table="2" hint="0x00" hasHint="0" max="1" name="HaveSilverKey282"/>
-  <bit id="0x0283" table="2" hint="0x00" hasHint="0" max="1" name="UsedSilverKey282"/>
+  <bit id="0x0282" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SilverKey282_Got"/>
+  <bit id="0x0283" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SilverKey282_Used"/>
   <bit id="0x0284" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0285" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0286" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -1086,7 +1087,7 @@
   <bit id="0x0297" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0298" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0299" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x029A" table="2" hint="0x48" hasHint="1" max="1" name="ReleasedSpirit2"/>
+  <bit id="0x029A" table="2" hint="0x48" hasHint="1" max="1" name="ITEM_Spirit2_Used"/>
   <bit id="0x029B" table="2" hint="0x00" hasHint="0" max="1" name="TransporterRelated029B"/>
   <bit id="0x029C" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x029D" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -1123,9 +1124,9 @@
   <bit id="0x02B4" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="hollow" obj="MagicCaveTo" objId="0x0004C2EB" param="Visible"/>
   </bit>
-  <bit id="0x02B5" table="2" hint="0x66" hasHint="1" max="1" name="CapturedByLightFoot"/>
-  <bit id="0x02B6" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="TestOfStrengthBestTime1"/>
-  <bit id="0x02B7" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="TrackingTestBestTime1"/>
+  <bit id="0x02B5" table="2" hint="0x66" hasHint="1" max="1" name="LV_CapturedByLightFoot"/>
+  <bit id="0x02B6" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="LV_TestStrengthBestTime1"/>
+  <bit id="0x02B7" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="LV_TestTrackingBestTime1"/>
   <bit id="0x02B8" table="0" hint="0x00" hasHint="0" max="1">
     <objref map="swapcircle" obj="StaffLeverO" objId="0x00044A5A" param="enabled"/>
     <objref map="swapcircle" obj="StaffLeverO" objId="0x00044A5B" param="enabled"/>
@@ -1148,7 +1149,7 @@
     <description>set when starting tricky landing scene</description>
   </bit>
   <bit id="0x02C2" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02C3" table="2" hint="0x2F" hasHint="1" max="1" name="ReachedBottomOfMine"/>
+  <bit id="0x02C3" table="2" hint="0x2F" hasHint="1" max="1" name="DIM_ReachedBottom"/>
   <bit id="0x02C4" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02C5" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02C6" table="2" hint="0x00" hasHint="0" max="1">
@@ -1158,14 +1159,14 @@
   <bit id="0x02C8" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02C9" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02CA" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02CB" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="TrackingTestBestTime2"/>
-  <bit id="0x02CC" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="TrackingTestBestTime3"/>
+  <bit id="0x02CB" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="LV_TestTrackingBestTime2"/>
+  <bit id="0x02CC" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="LV_TestTrackingBestTime3"/>
   <bit id="0x02CD" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02CE" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02CF" table="2" hint="0x00" hasHint="0" max="1" name="SH_StaffTutorialStarted02CF">
     <description>actually fighting</description>
   </bit>
-  <bit id="0x02D0" table="2" hint="0x67" hasHint="1" max="1" name="EscapedFromLightFootPole"/>
+  <bit id="0x02D0" table="2" hint="0x67" hasHint="1" max="1" name="LV_EscapedFromPole"/>
   <bit id="0x02D1" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02D2" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02D3" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -1177,9 +1178,9 @@
     <objref map="wallcity" obj="HitAnimator" objId="0x00047FE2" param="target"/>
     <objref map="wallcity" obj="HitAnimator" objId="0x0004CB27" param="target"/>
   </bit>
-  <bit id="0x02D6" table="1" hint="0x00" hasHint="0" max="1" name="HaveFireGem"/>
-  <bit id="0x02D7" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="TestOfStrengthBestTime2"/>
-  <bit id="0x02D8" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="TestOfStrengthBestTime3"/>
+  <bit id="0x02D6" table="1" hint="0x00" hasHint="0" max="1" name="ITEM_FireGem_Got"/>
+  <bit id="0x02D7" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="LV_TestStrengthBestTime2"/>
+  <bit id="0x02D8" table="2" hint="0x00" hasHint="0" max="0xFFFF" name="LV_TestStrengthBestTime3"/>
   <bit id="0x02D9" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02DA" table="2" hint="0x00" hasHint="0" max="1" name="SH_StaffTutorialDone">
     <description>makes button appear, plays "message will only play if..."</description>
@@ -1199,8 +1200,8 @@
   <bit id="0x02E4" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02E5" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x02E6" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02E7" table="2" hint="0x68" hasHint="1" max="1" name="ChiefLightFootStartedTest"/>
-  <bit id="0x02E8" table="2" hint="0x5C" hasHint="1" max="1" name="HaveWaterSpellStone1">
+  <bit id="0x02E7" table="2" hint="0x68" hasHint="1" max="1" name="LV_ChiefStartedTest"/>
+  <bit id="0x02E8" table="2" hint="0x5C" hasHint="1" max="1" name="ITEM_WaterSpellStone1_Got">
     <objref map="dfptop" obj="VFP_PodiumP" objId="0x0004B5D0" param="key"/>
     <objref map="dfptop" obj="VFP_PodiumP" objId="0x0004B5D0" param="0x22"/>
   </bit>
@@ -1253,7 +1254,7 @@
   <bit id="0x0313" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0314" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0315" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0316" table="2" hint="0x08" hasHint="1" max="1" name="ReleasedSpirit1">
+  <bit id="0x0316" table="2" hint="0x08" hasHint="1" max="1" name="ITEM_Spirit1_Used">
     <note>Setting this immediately starts the sequence.</note>
   </bit>
   <bit id="0x0317" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -1287,7 +1288,7 @@
   <bit id="0x0333" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0334" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0335" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0336" table="1" hint="0x00" hasHint="0" max="1" name="HaveKey336">
+  <bit id="0x0336" table="1" hint="0x00" hasHint="0" max="1" name="ITEM_Key336_Got">
     <description>XXX where is this key from?</description>
   </bit>
   <bit id="0x0337" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -1499,7 +1500,9 @@
     <description>frontend, galleonship, Ship Battle</description>
   </bit>
   <bit id="0x03E1" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x03E2" table="0" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x03E2" table="0" hint="0x00" hasHint="0" max="1" name="DIM_TriggerLostInBlizzard">
+    <description>Trigger scene where Fox walks off into blizzard and comes back</description>
+  </bit>
   <bit id="0x03E3" table="0" hint="0x00" hasHint="0" max="1" name="NW_SnowHorn03E3">
     <description>related to riding SnowHorn</description>
   </bit>
@@ -1507,7 +1510,9 @@
   <bit id="0x03E5" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03E6" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03E7" table="2" hint="0x00" hasHint="0" max="1" name="SH_StaffTutorialSawLastMsg"/>
-  <bit id="0x03E8" table="0" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x03E8" table="0" hint="0x00" hasHint="0" max="1" name="DIM_LostInBlizzard">
+    <description>Triggered by 0x3E2, actually starts the scene</description>
+  </bit>
   <bit id="0x03E9" table="0" hint="0x00" hasHint="0" max="1" name="CollectedObj319">
     <description>did collect something (defNo 0x319)</description>
   </bit>
@@ -1527,10 +1532,10 @@
   <bit id="0x03F2" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03F3" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03F4" table="2" hint="0x4B" hasHint="1" max="1" name="FoundHighTopGold"/>
-  <bit id="0x03F5" table="2" hint="0x00" hasHint="0" max="0xFF" name="NumFuelCells"/>
+  <bit id="0x03F5" table="2" hint="0x00" hasHint="0" max="0xFF" name="ITEM_FuelCell_Count"/>
   <bit id="0x03F6" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03F7" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x03F8" table="2" hint="0x00" hasHint="0" max="1" name="CanThrowBall">
+  <bit id="0x03F8" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_TrickyBall_Usable">
     <description>set after throwing and you can throw multiple balls!</description>
   </bit>
   <bit id="0x03F9" table="2" hint="0x24" hasHint="1" max="1" name="WorldMapDarkIce">
@@ -1578,19 +1583,19 @@
   <bit id="0x0413" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0414" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0415" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0416" table="2" hint="0x00" hasHint="0" max="1" name="SH_GotQueenCaveFuelCell">
+  <bit id="0x0416" table="2" hint="0x00" hasHint="0" max="1" name="SH_FuelCell_QueenCave">
     <objref map="hollow" obj="fuelCell" objId="0x0004819A" param="Collected"/>
   </bit>
   <bit id="0x0417" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="hollow" obj="fuelCell" objId="0x000499E0" param="Collected"/>
   </bit>
-  <bit id="0x0418" table="2" hint="0x00" hasHint="0" max="1" name="SH_GotFuelCellBesideWarpStone1">
+  <bit id="0x0418" table="2" hint="0x00" hasHint="0" max="1" name="SH_FuelCell_BesideWarpStone1">
     <objref map="hollow" obj="fuelCell" objId="0x000499E7" param="Collected"/>
   </bit>
   <bit id="0x0419" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="hollow" obj="fuelCell" objId="0x000499E8" param="Collected"/>
   </bit>
-  <bit id="0x041A" table="2" hint="0x00" hasHint="0" max="1" name="SH_GotFuelCellBesideWarpStone2">
+  <bit id="0x041A" table="2" hint="0x00" hasHint="0" max="1" name="SH_FuelCell_BesideWarpStone2">
     <objref map="hollow" obj="fuelCell" objId="0x000499E9" param="Collected"/>
   </bit>
   <bit id="0x041B" table="2" hint="0x00" hasHint="0" max="1">
@@ -1740,7 +1745,7 @@
   <bit id="0x0481" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0482" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0483" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0484" table="2" hint="0x00" hasHint="0" max="1" name="IM_GotCheatCaveFuelCell">
+  <bit id="0x0484" table="2" hint="0x00" hasHint="0" max="1" name="IM_FuelCell_CheatCave">
     <objref map="newicemount" obj="fuelCell" objId="0x00049F29" param="Collected"/>
   </bit>
   <bit id="0x0485" table="2" hint="0x00" hasHint="0" max="1">
@@ -1801,7 +1806,7 @@
   <bit id="0x04A0" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04A1" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04A2" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x04A3" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="CR_ObjGroups"/>
+  <bit id="0x04A3" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="CF_ObjGroups"/>
   <bit id="0x04A4" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04A5" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04A6" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="LV_ObjGroups"/>
@@ -1894,14 +1899,14 @@
   <bit id="0x04E3" table="0" hint="0x00" hasHint="0" max="0xFF" name="TrickyTalk">
     <description>if &lt; FF, can talk to Tricky, but he won't say anything</description>
   </bit>
-  <bit id="0x04E4" table="2" hint="0x00" hasHint="0" max="1" name="CanUseTricky">
+  <bit id="0x04E4" table="2" hint="0x00" hasHint="0" max="1" name="Tricky_Usable">
     <description>can use Tricky commands</description>
   </bit>
   <bit id="0x04E5" table="2" hint="0x00" hasHint="0" max="1" name="IM_FinishedRace04E5"/>
   <bit id="0x04E6" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04E7" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04E8" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x04E9" table="2" hint="0x3D" hasHint="1" max="1" name="PlacedSpellStone1"/>
+  <bit id="0x04E9" table="2" hint="0x3D" hasHint="1" max="1" name="ITEM_SpellStone1_Used"/>
   <bit id="0x04EA" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04EB" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04EC" table="2" hint="0x00" hasHint="0" max="1">
@@ -2029,11 +2034,11 @@
   <bit id="0x053D" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x053E" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x053F" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0540" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0540" table="1" hint="0x00" hasHint="0" max="1" name="DIM_Entered540"/>
   <bit id="0x0541" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0542" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0543" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0544" table="2" hint="0x13" hasHint="1" max="1" name="HaveTrickyStayFind"/>
+  <bit id="0x0544" table="2" hint="0x13" hasHint="1" max="1" name="ITEM_TrickyStayFind_Got"/>
   <bit id="0x0545" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0546" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0547" table="1" hint="0x00" hasHint="0" max="0xF" name="TREX_ActNo"/>
@@ -2083,11 +2088,9 @@
   <bit id="0x0573" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0574" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0575" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0576" table="2" hint="0x00" hasHint="0" max="7" name="NumAlpineRoots576"/>
+  <bit id="0x0576" table="2" hint="0x00" hasHint="0" max="7" name="ITEM_AlpineRoots576_Count"/>
   <bit id="0x0577" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0578" table="2" hint="0x00" hasHint="0" max="7" name="NumAlpineRootsUsed">
-    <description>or "used at least one root"</description>
-  </bit>
+  <bit id="0x0578" table="2" hint="0x00" hasHint="0" max="7" name="ITEM_AlpineRoots_Used" />
   <bit id="0x0579" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x057A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x057B" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2130,23 +2133,23 @@
   <bit id="0x059A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x059B" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x059C" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x059D" table="2" hint="0x00" hasHint="0" max="1" name="VFP_HaveMap">
+  <bit id="0x059D" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapVFP_Got">
     <description>Have Volcano Force Point Map</description>
   </bit>
-  <bit id="0x059E" table="2" hint="0x00" hasHint="0" max="1" name="DIM_HaveMap">
+  <bit id="0x059E" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapDIM_Got">
     <description>Have DarkIce Mines Map</description>
   </bit>
   <bit id="0x059F" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x05A0" table="2" hint="0x00" hasHint="0" max="1" name="NW_HaveMap">
+  <bit id="0x05A0" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapNW_Got">
     <description>Have SnowHorn Wastes Map</description>
   </bit>
-  <bit id="0x05A1" table="2" hint="0x00" hasHint="0" max="1" name="CF_HaveMap">
+  <bit id="0x05A1" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapCF_Got">
     <description>Have CloudRunner Fortress Map</description>
   </bit>
-  <bit id="0x05A2" table="2" hint="0x00" hasHint="0" max="1" name="LV_HaveMap">
+  <bit id="0x05A2" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapLV_Got">
     <description>Have LightFoot Village Map</description>
   </bit>
-  <bit id="0x05A3" table="2" hint="0x00" hasHint="0" max="1" name="SH_HaveMap">
+  <bit id="0x05A3" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapSH_Got">
     <description>Have ThornTail Hollow Map</description>
   </bit>
   <bit id="0x05A4" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -2184,7 +2187,7 @@
     <description>related to riding SnowHorn</description>
   </bit>
   <bit id="0x05BC" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x05BD" table="2" hint="0x00" hasHint="0" max="1" name="HaveOpenPortal">
+  <bit id="0x05BD" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_OpenPortal_Got">
     <objref map="hollow" obj="MagicCaveTo" objId="0x0004659A" param="Collected"/>
   </bit>
   <bit id="0x05BE" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2209,7 +2212,7 @@
   <bit id="0x05CB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05CC" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05CD" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x05CE" table="2" hint="0x3A" hasHint="1" max="1" name="HaveIceBlast">
+  <bit id="0x05CE" table="2" hint="0x3A" hasHint="1" max="1" name="ITEM_IceBlast_Got">
     <objref map="temple" obj="MagicCaveTo" objId="0x0004A84B" param="Collected"/>
   </bit>
   <bit id="0x05CF" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2229,7 +2232,7 @@
     <objref map="linkh" obj="fuelCell" objId="0x0004CE0C" param="Collected"/>
   </bit>
   <bit id="0x05D5" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x05D6" table="2" hint="0x00" hasHint="0" max="0x1F" name="NumFirefliesNotShown"/>
+  <bit id="0x05D6" table="2" hint="0x00" hasHint="0" max="0x1F" name="ITEM_FireflyNotShown_Count"/>
   <bit id="0x05D7" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05D8" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05D9" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2261,8 +2264,8 @@
   <bit id="0x05F0" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05F1" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05F2" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x05F3" table="2" hint="0x62" hasHint="1" max="1" name="PlacedSpellStone2"/>
-  <bit id="0x05F4" table="2" hint="0xA1" hasHint="1" max="1" name="PlacedSpellStone4"/>
+  <bit id="0x05F3" table="2" hint="0x62" hasHint="1" max="1" name="ITEM_SpellStone2_Used"/>
+  <bit id="0x05F4" table="2" hint="0xA1" hasHint="1" max="1" name="ITEM_SpellStone4_Used"/>
   <bit id="0x05F5" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05F6" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05F7" table="2" hint="0x00" hasHint="0" max="1">
@@ -2274,7 +2277,7 @@
   <bit id="0x05F9" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05FA" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x05FB" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x05FC" table="2" hint="0x00" hasHint="0" max="1" name="DeletedSpell5FC">
+  <bit id="0x05FC" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_DeletedSpell5FC_Got">
     <description>in spell bits table but does nothing</description>
   </bit>
   <bit id="0x05FD" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2314,7 +2317,7 @@
   <bit id="0x060E" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x060F" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0610" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0611" table="2" hint="0x00" hasHint="0" max="1" name="MMP_HaveKey">
+  <bit id="0x0611" table="2" hint="0x00" hasHint="0" max="1" name="MMP_Key_Got">
     <objref map="moonpass" obj="MMP_padlock" objId="0x0003084B" param="key"/>
     <objref map="moonpass" obj="MMP_padlock" objId="0x0003084B" param="0x22"/>
   </bit>
@@ -2336,7 +2339,7 @@
   <bit id="0x0619" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x061A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x061B" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x061C" table="2" hint="0x69" hasHint="1" max="1" name="CompletedLightFootTests"/>
+  <bit id="0x061C" table="2" hint="0x69" hasHint="1" max="1" name="LV_DoneTests"/>
   <bit id="0x061D" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x061E" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x061F" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -2374,7 +2377,7 @@
   <bit id="0x0639" table="2" hint="0x00" hasHint="0" max="1" name="SC_totempuzzle_running"/>
   <bit id="0x063A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x063B" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x063C" table="2" hint="0x81" hasHint="1" max="1" name="PlacedSpellStone3"/>
+  <bit id="0x063C" table="2" hint="0x81" hasHint="1" max="1" name="ITEM_SpellStone3_Got"/>
   <bit id="0x063D" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x063E" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x063F" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -2385,7 +2388,7 @@
   <bit id="0x0644" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0645" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0646" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0647" table="2" hint="0x00" hasHint="0" max="1" name="LV_UsedBlock2">
+  <bit id="0x0647" table="2" hint="0x00" hasHint="0" max="1" name="LV_Block2_Used">
     <objref map="swapcircle" obj="SC_blockpla" objId="0x00049759" param="open"/>
   </bit>
   <bit id="0x0648" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2399,7 +2402,7 @@
   <bit id="0x064E" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x064F" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0650" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0651" table="2" hint="0x00" hasHint="0" max="1" name="DinoHorn_651"/>
+  <bit id="0x0651" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_DinoHorn_651"/>
   <bit id="0x0652" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0653" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0654" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2426,8 +2429,8 @@
   <bit id="0x0669" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x066A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x066B" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x066C" table="2" hint="0x00" hasHint="0" max="7" name="NumBombSpores"/>
-  <bit id="0x066D" table="2" hint="0x00" hasHint="0" max="7" name="SH_NumWhiteMushrooms"/>
+  <bit id="0x066C" table="2" hint="0x00" hasHint="0" max="7" name="ITEM_ombSpore_Count"/>
+  <bit id="0x066D" table="2" hint="0x00" hasHint="0" max="7" name="SH_WhiteShroom_Count"/>
   <bit id="0x066E" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x066F" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0670" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2649,7 +2652,7 @@
   <bit id="0x0700" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0701" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0702" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0703" table="2" hint="0x00" hasHint="0" max="1" name="WM_GotBafomdad1">
+  <bit id="0x0703" table="2" hint="0x00" hasHint="0" max="1" name="WM_Bafomdad1_Got">
     <description>hidden passage at start</description>
     <objref map="warlock" obj="Duster" objId="0x0004A058" param="collected"/>
   </bit>
@@ -2809,7 +2812,7 @@
   <bit id="0x0774" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0775" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0776" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0777" table="2" hint="0x00" hasHint="0" max="1" name="DeletedSpell777">
+  <bit id="0x0777" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_DeletedSpell777_Got">
     <description>in spell bits table but does nothing</description>
   </bit>
   <bit id="0x0778" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -2886,17 +2889,17 @@
   <bit id="0x07BA" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07BB" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07BC" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x07BD" table="2" hint="0x00" hasHint="0" max="1" name="HaveSpellStone7BD">
+  <bit id="0x07BD" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SpellStone7BD_Got">
     <description>unused?</description>
   </bit>
   <bit id="0x07BE" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="kraztest" obj="StaffLeverO" objId="0x00049B6B" param="activated"/>
     <objref map="kraztest" obj="HitAnimator" objId="0x0004C99F" param="target"/>
   </bit>
-  <bit id="0x07BF" table="1" hint="0x00" hasHint="0" max="1" name="HaveSpellStone7BF"/>
+  <bit id="0x07BF" table="1" hint="0x00" hasHint="0" max="1" name="ITEM_SpellStone7BF_Got"/>
   <bit id="0x07C0" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07C1" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x07C2" table="2" hint="0x9F" hasHint="1" max="1" name="ReopenedOceanForcePoint">
+  <bit id="0x07C2" table="2" hint="0x9F" hasHint="1" max="1" name="OFP_Reopened">
     <objref map="dfptop" obj="HitAnimator" objId="0x0004C8FA" param="target"/>
     <objref map="dfptop" obj="VFP_PodiumP" objId="0x0004C8F6" param="open"/>
   </bit>
@@ -2926,7 +2929,7 @@
   <bit id="0x07DA" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07DB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07DC" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x07DD" table="2" hint="0x00" hasHint="0" max="1" name="DR_HaveMap"/>
+  <bit id="0x07DD" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapDR_Got"/>
   <bit id="0x07DE" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07DF" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07E0" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -2934,11 +2937,11 @@
   <bit id="0x07E2" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07E3" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07E4" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x07E5" table="2" hint="0x00" hasHint="0" max="1" name="WM_HaveMap"/>
+  <bit id="0x07E5" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapWM_Got"/>
   <bit id="0x07E6" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07E7" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07E8" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x07E9" table="2" hint="0x00" hasHint="0" max="1" name="OFP_HaveMap"/>
+  <bit id="0x07E9" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapOFP_Got"/>
   <bit id="0x07EA" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07EB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x07EC" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -2993,7 +2996,7 @@
   <bit id="0x0817" table="2" hint="0xA6" hasHint="1" max="1" name="WC_OpenedSunMoonAreas">
     <objref map="wallcity" obj="HitAnimator" objId="0x00049B4B" param="target"/>
   </bit>
-  <bit id="0x0818" table="2" hint="0x74" hasHint="1" max="1" name="FlewToWalledCity">
+  <bit id="0x0818" table="2" hint="0x74" hasHint="1" max="1" name="WC_FlewTo">
     <objref map="wallcity" obj="Landed_Arwi" objId="0x000451B9" param="Visible"/>
   </bit>
   <bit id="0x0819" table="2" hint="0x79" hasHint="1" max="1" name="WC_OpenedBossDoor">
@@ -3003,10 +3006,10 @@
   <bit id="0x081A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x081B" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x081C" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x081D" table="2" hint="0x00" hasHint="0" max="1" name="WC_HaveSilverTooth">
+  <bit id="0x081D" table="2" hint="0x00" hasHint="0" max="1" name="WC_SilverTooth_Got">
     <objref map="wallcity" obj="TreasureChe" objId="0x00048DB2" param="item"/>
   </bit>
-  <bit id="0x081E" table="2" hint="0x00" hasHint="0" max="1" name="WC_HaveGoldTooth">
+  <bit id="0x081E" table="2" hint="0x00" hasHint="0" max="1" name="WC_GoldTooth_Got">
     <objref map="wallcity" obj="TreasureChe" objId="0x00049937" param="item"/>
   </bit>
   <bit id="0x081F" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -3024,29 +3027,29 @@
   <bit id="0x082B" table="1" hint="0x00" hasHint="0" max="0xF"/>
   <bit id="0x082C" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x082D" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x082E" table="2" hint="0x00" hasHint="0" max="1" name="WC_HaveMap"/>
-  <bit id="0x082F" table="2" hint="0x00" hasHint="0" max="1" name="CC_HaveMap"/>
+  <bit id="0x082E" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapWC_Got"/>
+  <bit id="0x082F" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapCC_Got"/>
   <bit id="0x0830" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0831" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0832" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0833" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0834" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0835" table="2" hint="0x00" hasHint="0" max="1" name="MMP_HaveMap"/>
+  <bit id="0x0835" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MapMMP_Got"/>
   <bit id="0x0836" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0837" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0838" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0839" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x083A" table="2" hint="0x00" hasHint="0" max="1" name="HaveSpellStone83A">
+  <bit id="0x083A" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SpellStone83A_Got">
     <description>unused?</description>
   </bit>
-  <bit id="0x083B" table="2" hint="0x7D" hasHint="1" max="1" name="HaveFireSpellStone2">
+  <bit id="0x083B" table="2" hint="0x7D" hasHint="1" max="1" name="ITEM_FireSpellStone2_Got">
     <objref map="temple" obj="VFP_PodiumP" objId="0x000417CD" param="key"/>
     <objref map="temple" obj="VFP_PodiumP" objId="0x000417CD" param="0x22"/>
     <objref map="temple" obj="VFP_PodiumP" objId="0x0004C0A0" param="key"/>
     <objref map="temple" obj="VFP_PodiumP" objId="0x0004C0A1" param="key"/>
     <objref map="temple" obj="VFP_PodiumP" objId="0x00049BE3" param="key"/>
   </bit>
-  <bit id="0x083C" table="2" hint="0x9D" hasHint="1" max="1" name="HaveWaterSpellStone2">
+  <bit id="0x083C" table="2" hint="0x9D" hasHint="1" max="1" name="ITEM_WaterSpellStone2_Got">
     <objref map="dfptop" obj="VFP_PodiumP" objId="0x0004C8F6" param="key"/>
     <objref map="dfptop" obj="VFP_PodiumP" objId="0x0004C8F6" param="0x22"/>
   </bit>
@@ -3105,7 +3108,7 @@
   <bit id="0x0867" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0868" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0869" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x086A" table="2" hint="0x00" hasHint="0" max="7" name="NumMoonSeeds"/>
+  <bit id="0x086A" table="2" hint="0x00" hasHint="0" max="7" name="ITEM_MoonSeed_Count"/>
   <bit id="0x086B" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x086C" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x086D" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -3166,13 +3169,13 @@
   <bit id="0x089D" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x089E" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x089F" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x08A0" table="2" hint="0x71" hasHint="1" max="1" name="HaveUnknownItem8A0">
+  <bit id="0x08A0" table="2" hint="0x71" hasHint="1" max="1" name="ITEM_Unknown8A0_Got">
     <description>Hint text is "Released Third Krazoa Spirit"</description>
   </bit>
   <bit id="0x08A1" table="2" hint="0x00" hasHint="0" max="1" name="WM_Warp1Enabled">
     <objref map="warlock" obj="Transporter" objId="0x000025BD" param="enabled"/>
   </bit>
-  <bit id="0x08A2" table="2" hint="0x00" hasHint="0" max="1" name="UsedUnknownItem8A0">
+  <bit id="0x08A2" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Unknown8A0_Used">
     <description>set at chapter 4</description>
   </bit>
   <bit id="0x08A3" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -3289,7 +3292,7 @@
   <bit id="0x08FF" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0900" table="1" hint="0x00" hasHint="0" max="7"/>
   <bit id="0x0901" table="1" hint="0x00" hasHint="0" max="7"/>
-  <bit id="0x0902" table="1" hint="0x00" hasHint="0" max="1" name="WaterSpellStone1_902"/>
+  <bit id="0x0902" table="1" hint="0x00" hasHint="0" max="1" name="ITEM_WaterSpellStone1_902"/>
   <bit id="0x0903" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0904" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0905" table="2" hint="0x00" hasHint="0" max="1" name="WM_SwitchCamActive">
@@ -3302,16 +3305,16 @@
   <bit id="0x090A" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x090B" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x090C" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x090D" table="2" hint="0x00" hasHint="0" max="1" name="DidCollectMagic">
+  <bit id="0x090D" table="2" hint="0x00" hasHint="0" max="1" name="SawMagic">
     <description>Have collected a Staff Energy Gem (if 0, explain it when you collect one)</description>
   </bit>
-  <bit id="0x090E" table="2" hint="0x00" hasHint="0" max="1" name="DidCollectBigHealth"/>
-  <bit id="0x090F" table="2" hint="0x00" hasHint="0" max="1" name="DidCollectApple">
+  <bit id="0x090E" table="2" hint="0x00" hasHint="0" max="1" name="SawBigHealth"/>
+  <bit id="0x090F" table="2" hint="0x00" hasHint="0" max="1" name="SawApple">
     <description>small health pickup</description>
   </bit>
-  <bit id="0x0910" table="2" hint="0x00" hasHint="0" max="1" name="DidCollectScarab"/>
+  <bit id="0x0910" table="2" hint="0x00" hasHint="0" max="1" name="SawScarab"/>
   <bit id="0x0911" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0912" table="2" hint="0x00" hasHint="0" max="1" name="DidSeeWarpPad">
+  <bit id="0x0912" table="2" hint="0x00" hasHint="0" max="1" name="SawWarpPad">
     <description>if not, explains what it is when touching one</description>
   </bit>
   <bit id="0x0913" table="2" hint="0x00" hasHint="0" max="1" name="PushableRelated0913"/>
@@ -3320,9 +3323,9 @@
   <bit id="0x0916" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0917" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0918" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0919" table="2" hint="0x00" hasHint="0" max="1" name="Have50ScarabBag"/>
-  <bit id="0x091A" table="2" hint="0x00" hasHint="0" max="1" name="Have100ScarabBag"/>
-  <bit id="0x091B" table="2" hint="0x00" hasHint="0" max="1" name="Have200ScarabBag"/>
+  <bit id="0x0919" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_50ScarabBag_Got"/>
+  <bit id="0x091A" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_100ScarabBag_Got"/>
+  <bit id="0x091B" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_200ScarabBag_Got"/>
   <bit id="0x091C" table="1" hint="0x00" hasHint="0" max="1" name="WM_HaveGoldKey">
     <description>opens door to barrel at start as Krystal</description>
     <objref map="warlock" obj="WM_padlock" objId="0x00047F1A" param="0x1E"/>
@@ -3344,8 +3347,8 @@
   <bit id="0x0927" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0928" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0929" table="2" hint="0x00" hasHint="0" max="7"/>
-  <bit id="0x092A" table="2" hint="0x00" hasHint="0" max="1" name="SB_DidTalkToCagedKyte">
-    <description>or did learn to press A?</description>
+  <bit id="0x092A" table="2" hint="0x00" hasHint="0" max="1" name="LearnedToSpeak">
+    <description>Told how to speak to NPCs</description>
   </bit>
   <bit id="0x092B" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x092C" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -3354,7 +3357,7 @@
     <objref map="swapcircle" obj="HitAnimator" objId="0x00045CEF" param="target"/>
   </bit>
   <bit id="0x092F" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0930" table="2" hint="0x00" hasHint="0" max="1" name="DidSeeCMenuExplanation"/>
+  <bit id="0x0930" table="2" hint="0x00" hasHint="0" max="1" name="SawCMenuExplanation"/>
   <bit id="0x0931" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0932" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0933" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -3363,7 +3366,7 @@
   <bit id="0x0936" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0937" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0938" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0939" table="2" hint="0x53" hasHint="1" max="1" name="EscapedCloudDungeon">
+  <bit id="0x0939" table="2" hint="0x53" hasHint="1" max="1" name="CF_EscapedDungeon">
     <description>Exploded dungeon ceiling to be able to get disguise</description>
     <objref map="clouddungeon" obj="HitAnimator" objId="0x0004AF66" param="target"/>
   </bit>
@@ -3373,7 +3376,7 @@
   <bit id="0x093D" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x093E" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x093F" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0940" table="2" hint="0x56" hasHint="1" max="1" name="CF_RescuedBabyCloudRunners"/>
+  <bit id="0x0940" table="2" hint="0x56" hasHint="1" max="1" name="CF_RescuedBabies"/>
   <bit id="0x0941" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0942" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0943" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -3398,16 +3401,16 @@
   <bit id="0x0950" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0951" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0952" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0953" table="2" hint="0x00" hasHint="0" max="1" name="HaveFlute"/>
+  <bit id="0x0953" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Flute_Got"/>
   <bit id="0x0954" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0955" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0956" table="2" hint="0x09" hasHint="1" max="1" name="FlewToPlanet">
     <objref map="hollow" obj="Landed_Arwi" objId="0x00043775" param="Visible"/>
   </bit>
-  <bit id="0x0957" table="2" hint="0x1C" hasHint="1" max="1" name="HaveStaffBooster">
+  <bit id="0x0957" table="2" hint="0x1C" hasHint="1" max="1" name="ITEM_StaffBooster_Got">
     <objref map="hollow2" obj="MagicCaveTo" objId="0x0004414D" param="Collected"/>
   </bit>
-  <bit id="0x0958" table="2" hint="0x00" hasHint="0" max="1" name="HaveLaserSpell">
+  <bit id="0x0958" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_LaserSpell_Got">
     <description>Have Rapid Fire Laser Spell (unused)</description>
   </bit>
   <bit id="0x0959" table="1" hint="0x00" hasHint="0" max="1">
@@ -3419,29 +3422,29 @@
   <bit id="0x095D" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x095E" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x095F" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0960" table="2" hint="0x00" hasHint="0" max="1" name="CantUsePortalSpell"/>
-  <bit id="0x0961" table="2" hint="0x00" hasHint="0" max="1" name="CantUseSpell0961">
+  <bit id="0x0960" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_PortalSpell_Disabled"/>
+  <bit id="0x0961" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Spell0961_Disabled">
     <description>set when Krystal loses staff, cleared when Fox finds it</description>
   </bit>
   <bit id="0x0962" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0963" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0964" table="2" hint="0x00" hasHint="0" max="1" name="CantUseStaffBooster"/>
-  <bit id="0x0965" table="2" hint="0x00" hasHint="0" max="1" name="CantUseSpell0965">
+  <bit id="0x0964" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_StaffBooster_Disabled"/>
+  <bit id="0x0965" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Spell0965_Disabled">
     <description>set when Krystal loses staff, cleared when Fox finds it</description>
   </bit>
-  <bit id="0x0966" table="3" hint="0x00" hasHint="0" max="1" name="CantUseDinosaurHorn"/>
-  <bit id="0x0967" table="2" hint="0x00" hasHint="0" max="1" name="CantUseFireflies">
+  <bit id="0x0966" table="3" hint="0x00" hasHint="0" max="1" name="ITEM_DinoHorn_Disabled"/>
+  <bit id="0x0967" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Firefly_Disabled">
     <description>disables lantern in menu</description>
   </bit>
-  <bit id="0x0968" table="3" hint="0x00" hasHint="0" max="1" name="CantFeedTricky"/>
-  <bit id="0x0969" table="2" hint="0x00" hasHint="0" max="1" name="CantUseSharpClawDisguise"/>
+  <bit id="0x0968" table="3" hint="0x00" hasHint="0" max="1" name="Tricky_CantFeed"/>
+  <bit id="0x0969" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SharpClawDisguise_Disabled"/>
   <bit id="0x096A" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x096B" table="2" hint="0x00" hasHint="0" max="1" name="CantUseSuperQuake"/>
+  <bit id="0x096B" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SuperQuake_Disabled"/>
   <bit id="0x096C" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x096D" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x096E" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x096F" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0970" table="1" hint="0x00" hasHint="0" max="1" name="DoCFStandUpAnim">
+  <bit id="0x0970" table="1" hint="0x00" hasHint="0" max="1" name="CF_DoStandUpAnim">
     <description>triggers a falling and getting back up scene on map reload</description>
   </bit>
   <bit id="0x0971" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -3469,7 +3472,7 @@
   <bit id="0x0983" table="3" hint="0x00" hasHint="0" max="1" name="CFRelated0983"/>
   <bit id="0x0984" table="3" hint="0x00" hasHint="0" max="1" name="CFRelated0984"/>
   <bit id="0x0985" table="3" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0986" table="2" hint="0x00" hasHint="0" max="1" name="CantUseFireballSpell"/>
+  <bit id="0x0986" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_FireBlaster_Disabled"/>
   <bit id="0x0987" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0988" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0989" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -3596,7 +3599,7 @@
     <objref map="dragrock" obj="DR_TowerSwi" objId="0x00049B18" param="0x1E"/>
   </bit>
   <bit id="0x09E8" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x09E9" table="2" hint="0x8D" hasHint="1" max="1" name="FlewToDragonRock">
+  <bit id="0x09E9" table="2" hint="0x8D" hasHint="1" max="1" name="DR_FlewTo">
     <description>cleared when Arwing flies to Dragon Rock</description>
   </bit>
   <bit id="0x09EA" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -3610,7 +3613,7 @@
   <bit id="0x09F0" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x09F1" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x09F2" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x09F3" table="2" hint="0x96" hasHint="1" max="1" name="EnteredDrakorTower"/>
+  <bit id="0x09F3" table="2" hint="0x96" hasHint="1" max="1" name="DR_EnteredDrakorTower"/>
   <bit id="0x09F4" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x09F5" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x09F6" table="2" hint="0x29" hasHint="1" max="1" name="DIM_RodeSnowHornThroughGates">
@@ -3713,7 +3716,7 @@
   <bit id="0x0A42" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="temple" obj="VFP_PodiumP" objId="0x0004B253" param="open"/>
   </bit>
-  <bit id="0x0A43" table="2" hint="0x7E" hasHint="1" max="1" name="ReturnedToVolcanoWithSpellStone">
+  <bit id="0x0A43" table="2" hint="0x7E" hasHint="1" max="1" name="VFP_ReturnedWithSpellStone">
     <objref map="temple" obj="HitAnimator" objId="0x00046870" param="target"/>
     <objref map="temple" obj="VFP_PodiumP" objId="0x00049BE3" param="open"/>
   </bit>
@@ -3822,7 +3825,7 @@
     <objref map="snowmines2" obj="DIM2_WallEx" objId="0x0004B726" param="exploded"/>
   </bit>
   <bit id="0x0A81" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0A82" table="2" hint="0x25" hasHint="1" max="1" name="FlewToDarkIceMines">
+  <bit id="0x0A82" table="2" hint="0x25" hasHint="1" max="1" name="DIM_FlewTo">
     <objref map="snowmines" obj="Landed_Arwi" objId="0x00046EB7" param="Visible"/>
   </bit>
   <bit id="0x0A83" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -3944,11 +3947,10 @@
   <bit id="0x0AD7" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0AD8" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0AD9" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0ADA" table="2" hint="0x00" hasHint="0" max="1" name="WM_UsedGoldKey">
-    <description>in Krazoa Palace</description>
+  <bit id="0x0ADA" table="2" hint="0x00" hasHint="0" max="1" name="WM_GoldKey_Used">
     <objref map="warlock" obj="WM_padlock" objId="0x00047F1A" param="0x1C"/>
   </bit>
-  <bit id="0x0ADB" table="2" hint="0x00" hasHint="0" max="1" name="DidSeeBarrelGen"/>
+  <bit id="0x0ADB" table="2" hint="0x00" hasHint="0" max="1" name="SawBarrelGen"/>
   <bit id="0x0ADC" table="2" hint="0x00" hasHint="0" max="1" name="IM_CannonGuy1Dead"/>
   <bit id="0x0ADD" table="2" hint="0x00" hasHint="0" max="1" name="IM_CannonGuy2Dead"/>
   <bit id="0x0ADE" table="0" hint="0x00" hasHint="0" max="1" name="IM_SwitchVisible"/>
@@ -3978,7 +3980,7 @@
   <bit id="0x0AF4" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0AF5" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0AF6" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0AF7" table="2" hint="0x00" hasHint="0" max="7" name="CC_NumGoldBars"/>
+  <bit id="0x0AF7" table="2" hint="0x00" hasHint="0" max="7" name="CC_GoldBar_Count"/>
   <bit id="0x0AF8" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0AF9" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0AFA" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -4203,13 +4205,13 @@
   <bit id="0x0B97" table="1" hint="0x00" hasHint="0" max="1" name="CF_DeathGasActive">
     <objref map="fortress" obj="deathGasNoF" objId="0x000485FF" param="active"/>
   </bit>
-  <bit id="0x0B98" table="2" hint="0x00" hasHint="0" max="1" name="ShowBombCounter">
+  <bit id="0x0B98" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_BombSpore_ShowCount">
     <description>on HUD</description>
   </bit>
-  <bit id="0x0B99" table="2" hint="0x00" hasHint="0" max="1" name="ShowTrickyFoodCounter"/>
-  <bit id="0x0B9A" table="2" hint="0x00" hasHint="0" max="1" name="ShowFireflyCounter"/>
-  <bit id="0x0B9B" table="2" hint="0x00" hasHint="0" max="1" name="ShowMoonSeedCounter"/>
-  <bit id="0x0B9C" table="2" hint="0x00" hasHint="0" max="1" name="ShowScarabCounter"/>
+  <bit id="0x0B99" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_TrickyFood_ShowCount"/>
+  <bit id="0x0B9A" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Firefly_ShowCount"/>
+  <bit id="0x0B9B" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MoonSeed_ShowCount"/>
+  <bit id="0x0B9C" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Scarab_ShowCount"/>
   <bit id="0x0B9D" table="0" hint="0x00" hasHint="0" max="1" name="ECSH_TestOfObservationRunning">
     <objref map="ecshrine" obj="HitAnimator" objId="0x000486A1" param="target"/>
   </bit>
@@ -4228,7 +4230,7 @@
   </bit>
   <bit id="0x0BA6" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0BA7" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0BA8" table="2" hint="0x07" hasHint="1" max="1" name="HaveKrazoaSpirit1"/>
+  <bit id="0x0BA8" table="2" hint="0x07" hasHint="1" max="1" name="ITEM_Spirit1_Got"/>
   <bit id="0x0BA9" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0BAA" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0BAB" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -4356,7 +4358,7 @@
   <bit id="0x0BFA" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0BFB" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0BFC" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0BFD" table="2" hint="0x44" hasHint="1" max="1" name="HaveTestCombatSpirit"/>
+  <bit id="0x0BFD" table="2" hint="0x44" hasHint="1" max="1" name="ITEM_TestCombatSpirit_Got"/>
   <bit id="0x0BFE" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0BFF" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="snowmines2" obj="HitAnimator" objId="0x000496E1" param="target"/>
@@ -4414,16 +4416,15 @@
     <objref map="dragrock" obj="ExplodePlan" objId="0x00049B89" param="onExplode"/>
   </bit>
   <bit id="0x0C24" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0C25" table="2" hint="0x00" hasHint="0" max="1" name="LV_HaveBlock1">
-    <description>in LightFoot Village</description>
+  <bit id="0x0C25" table="2" hint="0x00" hasHint="0" max="1" name="LV_Block1_Got">
     <objref map="swapcircle" obj="SC_blockpla" objId="0x00049756" param="key"/>
     <objref map="swapcircle" obj="SC_blockpla" objId="0x00049756" param="0x22"/>
   </bit>
-  <bit id="0x0C26" table="2" hint="0x00" hasHint="0" max="1" name="LV_HaveBlock2">
+  <bit id="0x0C26" table="2" hint="0x00" hasHint="0" max="1" name="LV_Block2_Got">
     <objref map="swapcircle" obj="SC_blockpla" objId="0x00049759" param="key"/>
     <objref map="swapcircle" obj="SC_blockpla" objId="0x00049759" param="0x22"/>
   </bit>
-  <bit id="0x0C27" table="2" hint="0x00" hasHint="0" max="1" name="LV_HaveBlock3">
+  <bit id="0x0C27" table="2" hint="0x00" hasHint="0" max="1" name="LV_Block3_Got">
     <objref map="swapcircle" obj="SC_blockpla" objId="0x00049748" param="key"/>
     <objref map="swapcircle" obj="SC_blockpla" objId="0x00049748" param="0x22"/>
   </bit>
@@ -4478,7 +4479,7 @@
   <bit id="0x0C52" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C53" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C54" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0C55" table="2" hint="0x78" hasHint="1" max="1" name="HaveSuperQuake">
+  <bit id="0x0C55" table="2" hint="0x78" hasHint="1" max="1" name="ITEM_SuperQuake_Got">
     <objref map="wallcity" obj="MagicCaveTo" objId="0x00049A19" param="Collected"/>
   </bit>
   <bit id="0x0C56" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -4495,7 +4496,7 @@
   <bit id="0x0C61" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C62" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C63" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0C64" table="2" hint="0xA5" hasHint="1" max="1" name="HaveViewfinder">
+  <bit id="0x0C64" table="2" hint="0xA5" hasHint="1" max="1" name="ITEM_Viewfinder_Got">
     <description>aka High-Defnition Display Device or Zoom Goggles</description>
   </bit>
   <bit id="0x0C65" table="2" hint="0x00" hasHint="0" max="1">
@@ -4515,9 +4516,9 @@
   <bit id="0x0C6B" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C6C" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C6D" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0C6E" table="2" hint="0x88" hasHint="1" max="1" name="HaveTestStrengthSpirit"/>
+  <bit id="0x0C6E" table="2" hint="0x88" hasHint="1" max="1" name="ITEM_TestStrengthSpirit_Got"/>
   <bit id="0x0C6F" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0C70" table="2" hint="0x8A" hasHint="1" max="1" name="ReleasedSpirit4"/>
+  <bit id="0x0C70" table="2" hint="0x8A" hasHint="1" max="1" name="ITEM_Spirit4_Used"/>
   <bit id="0x0C71" table="2" hint="0x00" hasHint="0" max="1" name="TransportedRelated07C1"/>
   <bit id="0x0C72" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C73" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -4535,8 +4536,8 @@
     <objref map="linkj" obj="HitAnimator" objId="0x00049CD1" param="target"/>
   </bit>
   <bit id="0x0C7B" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0C7C" table="2" hint="0x00" hasHint="0" max="1" name="SH_BoughtRockCandy"/>
-  <bit id="0x0C7D" table="2" hint="0x0E" hasHint="1" max="1" name="SH_UsedRockCandy"/>
+  <bit id="0x0C7C" table="2" hint="0x00" hasHint="0" max="1" name="SH_RockCandy_Got"/>
+  <bit id="0x0C7D" table="2" hint="0x0E" hasHint="1" max="1" name="SH_RockCandy_Used"/>
   <bit id="0x0C7E" table="2" hint="0x00" hasHint="0" max="1" name="SH_WarpStoneComplainingAboutGifts">
     <description>triggers "nobody brings me gifts" scene</description>
   </bit>
@@ -4569,7 +4570,7 @@
   <bit id="0x0C8F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C90" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C91" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0C92" table="2" hint="0xAE" hasHint="1" max="1" name="SaidGoodByeToTricky"/>
+  <bit id="0x0C92" table="2" hint="0xAE" hasHint="1" max="1" name="Tricky_SaidGoodBye"/>
   <bit id="0x0C93" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="hollow2" obj="HitAnimator" objId="0x0004A05D" param="target"/>
     <objref map="hollow2" obj="HitAnimator" objId="0x0004A060" param="target"/>
@@ -4647,13 +4648,13 @@
   <bit id="0x0CBB" table="3" hint="0x00" hasHint="0" max="1">
     <description>related to transporter; set to -1 when stepping on one for first time; toggled constantly in Krazoa Test 1; checked in CRFort</description>
   </bit>
-  <bit id="0x0CBC" table="2" hint="0x00" hasHint="0" max="1" name="CantUseSpellStone">
+  <bit id="0x0CBC" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SpellStone_Disabled">
     <description>dims them in the menu</description>
   </bit>
   <bit id="0x0CBD" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0CBE" table="2" hint="0x00" hasHint="0" max="1" name="DidCollectFuelCell"/>
+  <bit id="0x0CBE" table="2" hint="0x00" hasHint="0" max="1" name="SawFuelCell"/>
   <bit id="0x0CBF" table="0" hint="0x01" hasHint="1" max="1" name="SB_KrystalBoardedGalleon"/>
-  <bit id="0x0CC0" table="2" hint="0x00" hasHint="0" max="1" name="DidCollectBafomdad"/>
+  <bit id="0x0CC0" table="2" hint="0x00" hasHint="0" max="1" name="SawBafomdad"/>
   <bit id="0x0CC1" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0CC2" table="1" hint="0x00" hasHint="0" max="0xF" name="GF_ActNo"/>
   <bit id="0x0CC3" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -4703,7 +4704,7 @@
   <bit id="0x0CDE" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0CDF" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0CE0" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0CE1" table="2" hint="0x21" hasHint="1" max="1" name="ReturnedToSnowHornWastes"/>
+  <bit id="0x0CE1" table="2" hint="0x21" hasHint="1" max="1" name="NW_ReturnedTo"/>
   <bit id="0x0CE2" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="temple" obj="HitAnimator" objId="0x0004ABEF" param="target"/>
   </bit>
@@ -4775,8 +4776,7 @@
     <objref map="snowmines" obj="HitAnimator" objId="0x0004AE04" param="target"/>
   </bit>
   <bit id="0x0D15" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0D16" table="2" hint="0x00" hasHint="0" max="1" name="DIM2_UsedCellKey">
-    <description>XXX which?</description>
+  <bit id="0x0D16" table="2" hint="0x00" hasHint="0" max="1" name="NW_Key_Used">
     <objref map="wastes" obj="HitAnimator" objId="0x0004CA60" param="target"/>
     <objref map="wastes" obj="DIM2CellKey" objId="0x0004B56C" param="open"/>
   </bit>
@@ -4794,7 +4794,7 @@
   <bit id="0x0D1D" table="1" hint="0x00" hasHint="0" max="1" name="WMRelated0D1D"/>
   <bit id="0x0D1E" table="1" hint="0x00" hasHint="0" max="1" name="WMRelated0D1E"/>
   <bit id="0x0D1F" table="1" hint="0x00" hasHint="0" max="1" name="WMRelated0D1F"/>
-  <bit id="0x0D20" table="2" hint="0x1F" hasHint="1" max="1" name="DIM2_HaveCellKey">
+  <bit id="0x0D20" table="2" hint="0x1F" hasHint="1" max="1" name="NW_Key_Got">
     <description>XXX which? hint is "Saved Queen EarthWalker"</description>
     <objref map="wastes" obj="DIM2CellKey" objId="0x0004B56C" param="key"/>
     <objref map="wastes" obj="DIM2CellKey" objId="0x0004B56C" param="0x22"/>
@@ -4836,7 +4836,7 @@
   <bit id="0x0D34" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D35" table="3" hint="0x00" hasHint="0" max="1" name="SH_Related0D35"/>
   <bit id="0x0D36" table="3" hint="0x00" hasHint="0" max="1" name="SH_Related0D36"/>
-  <bit id="0x0D37" table="1" hint="0xAF" hasHint="1" max="1" name="FlewToKrazoaPalace">
+  <bit id="0x0D37" table="1" hint="0xAF" hasHint="1" max="1" name="WM_FlewTo">
     <objref map="warlock" obj="HitAnimator" objId="0x0004C587" param="target"/>
     <objref map="warlock" obj="HitAnimator" objId="0x0004C589" param="target"/>
     <objref map="warlock" obj="HitAnimator" objId="0x0004C58A" param="target"/>
@@ -4913,14 +4913,14 @@
   <bit id="0x0D64" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D65" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D66" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0D67" table="2" hint="0x5F" hasHint="1" max="1" name="EnteredOceanForcePoint">
+  <bit id="0x0D67" table="2" hint="0x5F" hasHint="1" max="1" name="OFP_Entered">
     <objref map="dfptop" obj="HitAnimator" objId="0x0004B5DC" param="target"/>
     <objref map="dfptop" obj="VFP_PodiumP" objId="0x0004B5D0" param="open"/>
   </bit>
   <bit id="0x0D68" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="dfptop" obj="HitAnimator" objId="0x0004B630" param="target"/>
   </bit>
-  <bit id="0x0D69" table="2" hint="0x3B" hasHint="1" max="1" name="OpenedVolcanoDoor"/>
+  <bit id="0x0D69" table="2" hint="0x3B" hasHint="1" max="1" name="VFP_Opened"/>
   <bit id="0x0D6A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D6B" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D6C" table="2" hint="0x60" hasHint="1" max="1" name="OFPTOP_WarpEnabled">
@@ -4955,7 +4955,7 @@
   <bit id="0x0D80" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D81" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D82" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0D83" table="2" hint="0x16" hasHint="1" max="1" name="GotPastBribeClaw"/>
+  <bit id="0x0D83" table="2" hint="0x16" hasHint="1" max="1" name="NW_GotPastBribeClaw"/>
   <bit id="0x0D84" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D85" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D86" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -4975,7 +4975,7 @@
   <bit id="0x0D94" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D95" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D96" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0D97" table="2" hint="0x00" hasHint="0" max="1" name="ShowFuelCellCounter">
+  <bit id="0x0D97" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_FuelCell_ShowCount">
     <description>on HUD</description>
   </bit>
   <bit id="0x0D98" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -5049,7 +5049,7 @@
   </bit>
   <bit id="0x0DBD" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0DBE" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0DBF" table="2" hint="0x38" hasHint="1" max="1" name="OpenedPathToVolcano">
+  <bit id="0x0DBF" table="2" hint="0x38" hasHint="1" max="1" name="VFP_OpenedPathTo">
     <objref map="moonpass" obj="HitAnimator" objId="0x0004BAD3" param="target"/>
   </bit>
   <bit id="0x0DC0" table="2" hint="0x00" hasHint="0" max="1">
@@ -5092,42 +5092,42 @@
     <objref map="capeclaw" obj="fuelCell" objId="0x0004B248" param="Visible"/>
   </bit>
   <bit id="0x0DDB" table="0" hint="0x00" hasHint="0" max="0xF"/>
-  <bit id="0x0DDC" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken0">
+  <bit id="0x0DDC" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken0_Got">
     <description>Display Credits</description>
   </bit>
-  <bit id="0x0DDD" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken3">
+  <bit id="0x0DDD" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken3_Got">
     <description>Dino Language</description>
   </bit>
-  <bit id="0x0DDE" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken2">
+  <bit id="0x0DDE" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken2_Got">
     <description>Music Test</description>
   </bit>
-  <bit id="0x0DDF" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken6"/>
-  <bit id="0x0DE0" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken4"/>
-  <bit id="0x0DE1" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken7"/>
-  <bit id="0x0DE2" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken1">
+  <bit id="0x0DDF" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken6_Got"/>
+  <bit id="0x0DE0" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken4_Got"/>
+  <bit id="0x0DE1" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken7_Got"/>
+  <bit id="0x0DE2" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken1_Got">
     <description>Sepia Mode</description>
   </bit>
-  <bit id="0x0DE3" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken5"/>
-  <bit id="0x0DE4" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheatToken8">
+  <bit id="0x0DE3" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken5_Got"/>
+  <bit id="0x0DE4" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken8_Got">
     <description>No corresponding UsedCheatToken8? doesn't show up in C menu</description>
   </bit>
-  <bit id="0x0DE5" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat0_Credits">
+  <bit id="0x0DE5" table="2" hint="0x00" hasHint="0" max="1" name="Cheat0_Credits_Unlocked">
     <description>Display Credits</description>
   </bit>
-  <bit id="0x0DE6" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat3_Dino">
+  <bit id="0x0DE6" table="2" hint="0x00" hasHint="0" max="1" name="Cheat3_Dino_Unlocked">
     <description>Dino Language</description>
   </bit>
-  <bit id="0x0DE7" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat2_MusicTest">
+  <bit id="0x0DE7" table="2" hint="0x00" hasHint="0" max="1" name="Cheat2_MusicTest_Unlocked">
     <description>Music Test</description>
   </bit>
-  <bit id="0x0DE8" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat6"/>
-  <bit id="0x0DE9" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat4"/>
-  <bit id="0x0DEA" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat7"/>
-  <bit id="0x0DEB" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat1_Sepia">
+  <bit id="0x0DE8" table="2" hint="0x00" hasHint="0" max="1" name="Cheat6_Unlocked"/>
+  <bit id="0x0DE9" table="2" hint="0x00" hasHint="0" max="1" name="Cheat4_Unlocked"/>
+  <bit id="0x0DEA" table="2" hint="0x00" hasHint="0" max="1" name="Cheat7_Unlocked"/>
+  <bit id="0x0DEB" table="2" hint="0x00" hasHint="0" max="1" name="Cheat1_Sepia_Unlocked">
     <description>Sepia Mode</description>
   </bit>
-  <bit id="0x0DEC" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat5"/>
-  <bit id="0x0DED" table="2" hint="0x00" hasHint="0" max="1" name="HaveCheat8"/>
+  <bit id="0x0DEC" table="2" hint="0x00" hasHint="0" max="1" name="Cheat5_Unlocked"/>
+  <bit id="0x0DED" table="2" hint="0x00" hasHint="0" max="1" name="Cheat8_Unlocked"/>
   <bit id="0x0DEE" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0DEF" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0DF0" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -5298,7 +5298,7 @@
   <bit id="0x0E5A" table="1" hint="0x00" hasHint="0" max="1">
     <objref map="dfptop" obj="LGTDirectio" objId="0x0004C5DC" param="0x1E"/>
   </bit>
-  <bit id="0x0E5B" table="2" hint="0x1E" hasHint="1" max="1" name="Collected6WhiteGrubTub"/>
+  <bit id="0x0E5B" table="2" hint="0x1E" hasHint="1" max="1" name="SH_Got6WhiteShrooms"/>
   <bit id="0x0E5C" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E5D" table="2" hint="0x00" hasHint="0" max="1" name="IM_DestroyedBox1">
     <description>blocking cannon</description>
@@ -5327,7 +5327,7 @@
     <objref map="wallcity" obj="StaffLeverO" objId="0x0004CB3E" param="enabled"/>
   </bit>
   <bit id="0x0E6E" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0E6F" table="0" hint="0x45" hasHint="1" max="1" name="ReturnedToWarpStone">
+  <bit id="0x0E6F" table="0" hint="0x45" hasHint="1" max="1" name="SH_ReturnedToWarpStone">
     <description>Fox returned with first spirit</description>
   </bit>
   <bit id="0x0E70" table="0" hint="0x43" hasHint="1" max="1" name="MMP_EnteredKrazoaShrine"/>
@@ -5382,7 +5382,7 @@
   <bit id="0x0E94" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E95" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0E96" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0E97" table="0" hint="0x00" hasHint="0" max="1" name="CantCollectFuelCells">
+  <bit id="0x0E97" table="0" hint="0x00" hasHint="0" max="1" name="ITEM_FuelCell_CantGet">
     <description>Used when currently collecting one</description>
   </bit>
   <bit id="0x0E98" table="2" hint="0x00" hasHint="0" max="1">
@@ -5405,7 +5405,7 @@
   </bit>
   <bit id="0x0EA0" table="2" hint="0x00" hasHint="0" max="1" name="WM_DestroyedBox6"/>
   <bit id="0x0EA1" table="0" hint="0xA9" hasHint="1" max="1" name="WC_EnteredShrine"/>
-  <bit id="0x0EA2" table="0" hint="0xB1" hasHint="1" max="1" name="EnteredFinalKrazoaShrine"/>
+  <bit id="0x0EA2" table="0" hint="0xB1" hasHint="1" max="1" name="K6_Entered"/>
   <bit id="0x0EA3" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EA4" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EA5" table="2" hint="0x00" hasHint="0" max="1" name="OFPBOT_StaffBoostEnabled">
@@ -5413,10 +5413,10 @@
   </bit>
   <bit id="0x0EA6" table="0" hint="0x00" hasHint="0" max="1" name="ToldGetSnowHornArtifact"/>
   <bit id="0x0EA7" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0EA8" table="2" hint="0x00" hasHint="0" max="1" name="DidGet200ScarabBag">
+  <bit id="0x0EA8" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_200ScarabBag_Got">
     <description>Triggers a respawn point save</description>
   </bit>
-  <bit id="0x0EA9" table="2" hint="0x00" hasHint="0" max="1" name="DidGetMoonPassKey">
+  <bit id="0x0EA9" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MoonPassKey_Got">
     <description>Triggers a respawn point save</description>
   </bit>
   <bit id="0x0EAA" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -5425,14 +5425,14 @@
   <bit id="0x0EAD" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EAE" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EAF" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0EB0" table="2" hint="0x00" hasHint="0" max="1" name="BoughtBadGuyAlert">
+  <bit id="0x0EB0" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_BadGuyAlert_Got">
     <description>unused shop item</description>
   </bit>
-  <bit id="0x0EB1" table="2" hint="0x00" hasHint="0" max="1" name="HaveMagic"/>
-  <bit id="0x0EB2" table="2" hint="0x00" hasHint="0" max="1" name="HaveBafomdadHolder"/>
+  <bit id="0x0EB1" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Magic_Got"/>
+  <bit id="0x0EB2" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_BafomdadHolder_Got"/>
   <bit id="0x0EB3" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related0EB3"/>
   <bit id="0x0EB4" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0EB5" table="2" hint="0x00" hasHint="0" max="1" name="CantUseFlute"/>
+  <bit id="0x0EB5" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Flute_Disabled"/>
   <bit id="0x0EB6" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EB7" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0EB8" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -5461,9 +5461,9 @@
   <bit id="0x0ECB" table="2" hint="0x00" hasHint="0" max="1" name="ECSH_KilledMetroid">
     <description>opens door</description>
   </bit>
-  <bit id="0x0ECC" table="0" hint="0x15" hasHint="1" max="1" name="EscapedFromSnowClearing"/>
+  <bit id="0x0ECC" table="0" hint="0x15" hasHint="1" max="1" name="NW_EscapedFromSnowClearing"/>
   <bit id="0x0ECD" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0ECE" table="0" hint="0x39" hasHint="1" max="1" name="EnteredVolcanoForcePoint"/>
+  <bit id="0x0ECE" table="0" hint="0x39" hasHint="1" max="1" name="VFP_Entered"/>
   <bit id="0x0ECF" table="0" hint="0x3C" hasHint="1" max="1" name="FoundSpellStoneWarpPad_0ECF"/>
   <bit id="0x0ED0" table="0" hint="0x61" hasHint="1" max="1" name="OFP_FoundSpellStoneWarpPad"/>
   <bit id="0x0ED1" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -5591,22 +5591,22 @@
   <bit id="0x0F31" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0F32" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0F33" table="3" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0F34" table="2" hint="0x00" hasHint="0" max="1" name="UsedCheatToken0">
+  <bit id="0x0F34" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken0_Used">
     <description>Display Credits</description>
   </bit>
-  <bit id="0x0F35" table="2" hint="0x00" hasHint="0" max="1" name="UsedCheatToken3">
+  <bit id="0x0F35" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken3_Used">
     <description>Dino Language</description>
   </bit>
-  <bit id="0x0F36" table="2" hint="0x00" hasHint="0" max="1" name="UsedCheatToken2">
+  <bit id="0x0F36" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken2_Used">
     <description>Music Test</description>
   </bit>
-  <bit id="0x0F37" table="2" hint="0x00" hasHint="0" max="1" name="UsedCheatToken6"/>
-  <bit id="0x0F38" table="2" hint="0x00" hasHint="0" max="1" name="UsedCheatToken4"/>
-  <bit id="0x0F39" table="2" hint="0x00" hasHint="0" max="1" name="UsedCheatToken7"/>
-  <bit id="0x0F3A" table="2" hint="0x00" hasHint="0" max="1" name="UsedCheatToken1">
+  <bit id="0x0F37" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken6_Used"/>
+  <bit id="0x0F38" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken4_Used"/>
+  <bit id="0x0F39" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken7_Used"/>
+  <bit id="0x0F3A" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken1_Used">
     <description>Sepia Mode</description>
   </bit>
-  <bit id="0x0F3B" table="2" hint="0x00" hasHint="0" max="1" name="UsedCheatToken5"/>
+  <bit id="0x0F3B" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_CheatToken5_Used"/>
   <bit id="0x0F3C" table="0" hint="0x00" hasHint="0" max="1">
     <description>should be UsedCheatToken8, but that doesn't exist?</description>
   </bit>

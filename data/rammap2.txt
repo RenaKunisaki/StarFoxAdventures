@@ -1,0 +1,66 @@
+Start     End          Size   Size  DolOfs  DolEnd  Section  Description
+80000000  80003100     3100    12K  ------  ------  -------  OS globals
+80003100  80005614     2514  9492   000100  002614  text0 \  Data0 (init code)
+80005614  80005620        C    12   002614  002620  text0 /  padding?
+80005620  80005CB8      698  1688   2BD7C0  2BDE58  data0 \  Data1
+80005CB8  80005CC0        8     8   2BDE58  2BDE60  data0 /  padding?
+80005CC0  800066E0      A20  2592   2BDE60  2BE880  data1    audio related?
+800066E0  802C1880   2BB1A0  2796K  002620  2BD7C0  text1    main code
+802C1880  802C18A0       20    32   2BE880  2BE8A0  data2    pre_init_funcs
+802C18A0  802C18C0       20    32   2BE8A0  2BE8C0  data3    atexit_funcs
+802C18C0  802C2D60     14A0  5280   2BE8C0  2BFD60  data4    model related?
+802C2D60  802CC6A0     9940    38K  2BFD60  2C96A0  data5 \  model related?
+802CC6A0  8030C6A0    40000   256K  2C96A0  3096A0  data5 |  gxFifoBuf
+8030C6A0  80335840    291A0   164K  3096A0  332840  data5 /  DLLs?
+80335840  803DB1E0    A59A0   662K  ------  ------  bss   \  internal BSS0
+803DB1E0  803DC7A0     15C0  5568   332840  333E00  bss   |  .data6 (mostly text)
+803DC7A0  803DE4E4     1D44  7492   ------  ------  bss   |  internal BSS1
+803DE4E4  803DE500       1C    28   ------  ------  bss   |  padding?
+803DE500  803E8440     9F40    39K  333E00  33DD40  bss   |  .data7 (audio?)
+803E8440  803E8478       38    56   ------  ------  bss   /  internal BSS2
+803E8478              10008    64K  ------  ------  -------  ? DEADBABE
+803F8480              96000   600K  ------  ------  -------  framebuffer0
+8048E480              96000   600K  ------  ------  -------  framebuffer1
+80524480  805244A0       20    32   ------  ------  -------  padding?
+805244A0  817EA240  12C5DA0    18M  ------  ------  -------  arena
+817EA240  81800000    15DC0    87K  ------  ------  -------  FST
+
+Internal data sections:
+# SrcAddr  DestAddr Length   EndAddr  Label
+0 80003100 80003100 00002514 80005613 __check_pad3
+1 80005620 80005620 00000698 80005CB7 DAT_80005620
+2 80005CC0 80005CC0 00000A04 800066C3 someExceptionArray
+3 800066E0 800066E0 002BB19C 802C187B getLActions
+4 802C1880 802C1880 0000000C 802C188B pre_init_funcs
+5 802C18A0 802C18A0 00000010 802C18AF atexit_funcs
+6 802C18C0 802C18C0 0000148C 802C2D4B INT_ARRAY_802c18c0
+7 802C2D60 802C2D60 00072ADD 8033583C DAT_802c2d60
+8 803DB1E0 803DB1E0 000015BE 803DC79D PTR_mtx44_803db1e0
+9 803DE500 803DE500 00009F28 803E8427 zero
+(all have src = dest, so no copy is done)
+
+DOL sections:
+Section Offset  MemAddr   Size EndOfs  EndAddr                                                              |
+text0   000100 80003100 002520 002620 80005620
+text1   002620 800066E0 2BB1A0 2BD7C0 802C1880
+data00  2BD7C0 80005620 0006A0 2BDE60 80005CC0
+data01  2BDE60 80005CC0 000A20 2BE880 800066E0
+data02  2BE880 802C1880 000020 2BE8A0 802C18A0
+data03  2BE8A0 802C18A0 000020 2BE8C0 802C18C0
+data04  2BE8C0 802C18C0 0014A0 2BFD60 802C2D60
+data05  2BFD60 802C2D60 072AE0 332840 80335840
+data06  332840 803DB1E0 0015C0 333E00 803DC7A0
+data07  333E00 803DE500 009F40 33DD40 803E8440
+BSS     ------ 80335840 0B2C38 ------ 803E8478
+Entry   ------ 80003140 ------ ------ --------
+
+
+
+
+
+
+
+
+
+
+

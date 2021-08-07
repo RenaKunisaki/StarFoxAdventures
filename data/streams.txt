@@ -1,0 +1,50 @@
+ARW/2planet     Fly through 1 gold ring...
+ARW/gp_force    The force field is open!
+ARW/pe_keepon   Keep going!
+ARW/sl_mine     Watch out for mines!
+ARW/win         You did it Fox, the force field is down...
+CR/shop1n       Throw in 20 scarabs and I'll give you a cheat token
+CR/shop1o       Feeding cheat token well
+GB/Bird         Talking to caged Kyte
+GB/Board        When boarding the ship
+GB/Defeated     When defeating the ship
+GB/Intro        New game sequence
+GB/Meeting      Scales intro sequence
+GF/intro        First scene with Fox
+GNR/gnr63       MP upgrade animation
+GNR/gnrdeath    Death scene (GNR = general?)
+GNR/gnrlife     Use 1up
+IM/iamfox       Enter Tricky cave
+IM/landing      Tricky landing
+IM/winrace      Win first race
+KP/EWDie        Dino explaining Krazoa to Krystal
+KP/EWDieHarder  Dino after getting K1
+KP/failed       Fail Krazoa test
+KP/getspirit    Succeed Krazoa test
+KP/placespirit  Release K1
+LV/pay_inst     60 scarabs to enter Cape Claw
+LV/pay_no       You don't have enough scarabs
+MAP/brief1      Pepper explaining flight to planet
+MC/MCaveIn      Entering magic cave
+MC/MCaveOut     Leaving magic cave
+SK/shop1f       You pay this much
+SK/shop1g       OK I'll sell it to you
+SK/shop1h       Nope, that's too low
+SK/shopintro    First time entering shop
+SSH/nowarp      You can't warp to KP without a spirit
+SSH/readyto     Are you ready to warp?
+SW/tree2        Knocking over tree
+TTH/communic    Pepper talking after first landing
+TTH/fighttra    Staff tutorial
+TTH/findcave    Finished staff tutorial
+TTH/GetStaff    Fox finding staff
+TTH/landing     First landing in TTH
+TTH/NoGift      Nobody ever brings me gifts anymore
+TTH/pickup      When picking up any new item
+TTH/QueenHT     First meeting Queen EarthWalker
+TTH/qtalk22D    Queen needs more shrooms
+TTH/staffup     Get new spell
+TTH/talkbel     Talk to first dino
+TTH/tth507      Exiting maze well cave
+TTH/tth1422     Deposit cheat token for credits
+TTH/WarpSton    WarpStone intro
