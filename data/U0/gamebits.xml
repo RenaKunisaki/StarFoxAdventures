@@ -780,7 +780,7 @@
     <objref map="capeclaw" obj="HitAnimator" objId="0x00045FA4" param="target"/>
   </bit>
   <bit id="0x01C2" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x01C3" table="2" hint="0x4E" hasHint="1" max="1" name="NW_Key_Got"/>
+  <bit id="0x01C3" table="2" hint="0x4E" hasHint="1" max="1" name="NW_Key_Got2"/>
   <bit id="0x01C4" table="2" hint="0x49" hasHint="1" max="1" name="CC_Located"/>
   <bit id="0x01C5" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01C6" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -1254,7 +1254,7 @@
   <bit id="0x0313" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0314" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0315" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0316" table="2" hint="0x08" hasHint="1" max="1" name="ITEM_Spirit1_Used">
+  <bit id="0x0316" table="2" hint="0x08" hasHint="1" max="1" name="ITEM_Spirit1_Releasing">
     <note>Setting this immediately starts the sequence.</note>
   </bit>
   <bit id="0x0317" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -1806,7 +1806,7 @@
   <bit id="0x04A0" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04A1" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04A2" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x04A3" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="CF_ObjGroups"/>
+  <bit id="0x04A3" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="CF_ObjGroups2"/>
   <bit id="0x04A4" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04A5" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04A6" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="LV_ObjGroups"/>
@@ -5413,10 +5413,10 @@
   </bit>
   <bit id="0x0EA6" table="0" hint="0x00" hasHint="0" max="1" name="ToldGetSnowHornArtifact"/>
   <bit id="0x0EA7" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0EA8" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_200ScarabBag_Got">
+  <bit id="0x0EA8" table="2" hint="0x00" hasHint="0" max="1" name="SH_Give200ScarabBag">
     <description>Triggers a respawn point save</description>
   </bit>
-  <bit id="0x0EA9" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_MoonPassKey_Got">
+  <bit id="0x0EA9" table="2" hint="0x00" hasHint="0" max="1" name="SH_GiveMoonPassKey">
     <description>Triggers a respawn point save</description>
   </bit>
   <bit id="0x0EAA" table="0" hint="0x00" hasHint="0" max="1"/>
