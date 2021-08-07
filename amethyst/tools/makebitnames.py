@@ -7,11 +7,16 @@ ENTRY_LEN = 24
 MAX_ID = 0
 
 names = {}
+seenName = set()
 gameBits = ET.parse(sys.argv[1]).getroot()
 for bit in gameBits.findall('./bit'):
     id = int(bit.get('id'), 0)
     MAX_ID = max(MAX_ID, id)
-    names[id] = bit.get('name')
+    name = bit.get('name')
+    if name in seenName:
+        print("WARNING: Duplicate GameBit name:", name)
+    seenName.add(name)
+    names[id] = name
 
 with open(sys.argv[2], 'wb') as outFile:
     for i in range(MAX_ID+1):
