@@ -16,7 +16,7 @@ u32 debugTextFlags =
     //DEBUGTEXT_PERFORMANCE |
     DEBUGTEXT_FPS |
     //DEBUGTEXT_RNG |
-    DEBUGTEXT_AUDIO_STREAMS |
+    //DEBUGTEXT_AUDIO_STREAMS |
     //DEBUGTEXT_AUDIO_SFX |
     0;
 u32 debugRenderFlags =
@@ -297,6 +297,7 @@ static void printPlayerState() {
         cState ? cState->field_0B : 0);
 
     printPlayerObj("Death obj",   *(ObjInstance**)(pState + 0x46C));
+    //printPlayerObj("Staff obj",   *(ObjInstance**)(pState + 0x4B8)); //just target?
     printPlayerObj("Obj4C4",      *(ObjInstance**)(pState + 0x4C4));
     printPlayerObj("Collect obj", *(ObjInstance**)(pState + 0x684));
     printPlayerObj("Obj7B0",      *(ObjInstance**)(pState + 0x7B0));
@@ -370,17 +371,17 @@ void mainLoopDebugPrint() {
     if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
     if(debugRenderFlags & DEBUGRENDER_RNG) drawRNG();
 
-    if(debugTextFlags & DEBUGTEXT_PLAYER_STATE)      printPlayerState();
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS)     printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS)     printCamera();
     if(debugTextFlags & DEBUGTEXT_RESTART_POINT)     printRestartPoint();
     if(debugTextFlags & DEBUGTEXT_MEMORY_INFO)     { printObjCount(); printMemory(); }
     if(debugTextFlags & DEBUGTEXT_HEAP_STATE)        printHeapInfo();
     if(debugTextFlags & DEBUGTEXT_PERFORMANCE)       printPerformance();
+    if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
     if(debugTextFlags & DEBUGTEXT_RNG)               printRNG();
+    if(debugTextFlags & DEBUGTEXT_PLAYER_STATE)      printPlayerState();
     if(debugTextFlags & DEBUGTEXT_AUDIO_STREAMS)     printStreams();
     if(debugTextFlags & DEBUGTEXT_AUDIO_SFX)         printSFX();
-    if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
 
     rngCalls = 0; //reset logging
     debugPrintf("\n"); //for game's own messages
