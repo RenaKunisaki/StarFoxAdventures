@@ -141,8 +141,9 @@ void _renderObjHitboxes(ObjInstance *obj) {
     }
 }
 
-void renderObjsHook(bool *visible) {
-    renderObjects(visible);
+void renderObjsHook(u8 param) {
+    //renderObjects(visible);
+    WRITE8(0x803db658, param); //replaced call just does this
     if(debugRenderFlags & (DEBUGRENDER_HITBOXES | DEBUGRENDER_ATTACH_POINTS |
         DEBUGRENDER_FOCUS_POINTS | DEBUGRENDER_UNK_POINTS)) {
         beginDrawHitboxes();
@@ -154,5 +155,6 @@ void renderObjsHook(bool *visible) {
 }
 
 void hitboxHooksInit() {
-    hookBranch(0x8005c458, renderObjsHook, 1);
+    //hookBranch(0x8005c458, renderObjsHook, 1);
+    hookBranch(0x8005c72c, renderObjsHook, 1);
 }
