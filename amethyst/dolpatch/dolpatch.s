@@ -13,19 +13,17 @@
 # 80021038 is text1, which should start at 0x2620, and 800066E0
 # the proper offset is 1cf78
 
-# for now I'm gonna be lazy and just hardcode the jump
-# eventually a script should use these ints to know where to patch.
-.int 0x80020E98 #, 0x4BFE2FD5 # where to patch the jump
+.int 0x80020E98 # where to patch the jump
 .int 0x80003E6C # where to insert the code
+# the jump opcode should be 0x4BFE2FD5
 
 constants:
-    .set STACK_SIZE,0x100 # how much to reserve
-    .set SP_LR_SAVE,0x104
-    .set SP_R0_SAVE,0x14
-    .set SP_HEAP1_SAVE,0x18
-    .set SP_HEAP3_SAVE,0x1C
-    .set SP_FILE_SIZE,0x20
-    .set SP_GPR_SAVE,0x24
+    .set STACK_SIZE,    0x68 # how much to reserve
+    .set SP_LR_SAVE,    STACK_SIZE+4
+    .set SP_HEAP1_SAVE, 0x10
+    .set SP_HEAP3_SAVE, 0x14
+    .set SP_FILE_SIZE,  0x18
+    .set SP_GPR_SAVE,   0x1C
 
 _start:
     stwu    r1, -STACK_SIZE(r1) # get some stack space
@@ -104,6 +102,8 @@ vars:
     .int 0x803db434 #bOnlyUseHeaps1and2
     .int 0x803dcb08 #bOnlyUseHeap3
 filePath: .string "boot.bin"
-s_start:   .string "Bootstrap..."
-s_loading: .string "Load patch..."
-s_done: .string "Loaded patch OK"
+.if DEBUG
+    s_start:   .string "Bootstrap..."
+    s_loading: .string "Load patch..."
+    s_done: .string "Loaded patch OK"
+.endif

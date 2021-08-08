@@ -183,8 +183,6 @@ static inline void _initSaveHacks() {
     hookBranch(0x8007db50, saveShowMsgHook, 1);
     //disable "not same memory card you last saved with" check,
     //since save states trigger that.
-    //XXX look into how this check works and find a less invasive
-    //way of fixing this.
     WRITE32(0x8007EF5C, 0x3B200000);
     WRITE32(0x8007F15C, 0x3B200000);
 
@@ -295,10 +293,14 @@ void _start(void) {
     //Install hooks
     hookBranch(0x80137df8, bsodHook, 1);
     initBugFixes();
-    runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c,
-        runLoadingScreens_hook, 1);
-    startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250,
-        startMsg_initDoneHook, 1);
+    if(!runLoadingScreens_replaced) {
+        runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c,
+            runLoadingScreens_hook, 1);
+    }
+    if(!startMsg_initDoneHook_replaced) {
+        startMsg_initDoneHook_replaced = (void(*)())hookBranch(0x80021250,
+            startMsg_initDoneHook, 1);
+    }
     hookBranch(0x80020D4C, mainLoopHook, 1);
     hookBranch(0x8005c45c, motionBlurHook, 1);
     hookBranch(0x800d9e2c, hudDrawHook, 1);

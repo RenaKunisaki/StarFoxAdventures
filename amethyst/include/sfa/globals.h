@@ -86,6 +86,8 @@ extern float motionBlurIntensity; //32=high, 256=unnoticeable
 extern float msecsThisFrame;
 extern int numLoadedObjs;
 extern int numLoadedTextures;
+extern u32 objRenderList[1000];
+extern u16 objRenderListLen;
 extern bool objSeqBool [OBJ_SEQ_MAX];
 extern u8   objSeqFlags[OBJ_SEQ_MAX];
 extern u8   objSeqVar1 [OBJ_SEQ_MAX];

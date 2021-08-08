@@ -2,7 +2,7 @@
  */
 #include "main.h"
 
-void (*runLoadingScreens_replaced)();
+void (*runLoadingScreens_replaced)() = NULL;
 void runLoadingScreens_hook() {
     /** Runs every frame during the loading screens at the start of the game.
      */
@@ -29,7 +29,7 @@ void runLoadingScreens_hook() {
 }
 
 
-void (*startMsg_initDoneHook_replaced)();
+void (*startMsg_initDoneHook_replaced)() = NULL;
 void startMsg_initDoneHook() {
     /** Runs after loading screens.
      *  Turns off debug text if Z isn't held.

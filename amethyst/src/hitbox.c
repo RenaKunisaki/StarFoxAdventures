@@ -46,7 +46,13 @@ void drawHitbox(ObjInstance *obj) {
     Model *model = objGetCurModelPtr(obj);
     Color4b color;
 
+    /* XXX this renders "ghosts" - hitboxes for objects that are actually
+    somewhere else. It seems the hitboxes actually are moving when you
+    move between map cells. Something else prevents them from being used,
+    but I can't find what. */
+
     HitState *hits = obj->hitstate;
+    //if(!hits || hits->unk70) return;
     for(int iSphere=0; iSphere < model->header->nHitSpheres; iSphere++) {
         HitSpherePos *pos = &model->curHitSpherePos[iSphere];
         HitSphere *sphere = &model->header->hitSpheres[iSphere];
@@ -127,6 +133,7 @@ void _renderObjHitboxes(ObjInstance *obj) {
         ObjInstance_FlagsB0_IsFreed |
         ObjInstance_FlagsB0_Invisible |
         ObjInstance_FlagsB0_DontUpdate)) return;
+    if(obj->flags_0xaf & 0x28) return;
     if(obj->pos.flags & ObjInstance_Flags06_Invisible) return;
     if(debugRenderFlags & DEBUGRENDER_HITBOXES) drawHitbox(obj);
     if(debugRenderFlags & DEBUGRENDER_ATTACH_POINTS) drawAttachPoints(obj);
@@ -150,6 +157,14 @@ void renderObjsHook(u8 param) {
         for(int iObj=0; iObj < numLoadedObjs; iObj++) {
             _renderObjHitboxes(loadedObjects[iObj]);
         }
+
+        //this misses some objects
+        /* for(int iObj=0; iObj < objRenderListLen; iObj++) {
+            u32 idx = objRenderList[iObj] & 0x3FF; //no idea what the other bits are...
+            if(loadedObjects[idx]) {
+                _renderObjHitboxes(loadedObjects[idx]);
+            }
+        } */
         finishDrawingHitboxes();
     }
 }

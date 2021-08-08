@@ -10,8 +10,8 @@
 .include "common.s"
 
 constants:
-    .set STACK_SIZE,   0xC0 # how much to reserve
-    .set SP_LR_SAVE,   0xC4
+    .set STACK_SIZE,   0x68 # how much to reserve
+    .set SP_LR_SAVE,   STACK_SIZE+4
     .set SP_TMP1,      0x10
     .set SP_PATCH_ADDR,0x14
     .set SP_FLAGS_ADDR,0x18

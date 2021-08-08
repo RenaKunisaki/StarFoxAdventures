@@ -3,7 +3,7 @@
 #include "main.h"
 #include "revolution/os.h"
 
-//use an experimental memory saving technique which avoids keeping copies
+//use an experimental memory saving technique which avoids keeping extra copies
 //of the assets in memory, but might be unstable.
 #define USE_EXPERIMENTAL 1
 
