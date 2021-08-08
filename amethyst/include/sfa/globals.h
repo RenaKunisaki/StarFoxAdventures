@@ -1,3 +1,5 @@
+#define MAX_LOADED_OBJECTS 600
+
 extern u16 aButtonIcon;
 extern bool bBiggerBlurFilter; //bigger blur filter
 extern bool bBlurFilterUseArea; //constrain effect by blurFilterArea

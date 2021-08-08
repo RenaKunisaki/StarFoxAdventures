@@ -74,7 +74,7 @@ void drawHitbox(ObjInstance *obj) {
                     break;
                 }
             }
-            color = hsv2rgb(MIN(hits->type * 8, 255), s, v, 128);
+            color = hsv2rgb(MIN((int)hits->type * 8, 255), s, v, 128);
         }
         drawSphere(pos->pos, pos->radius, color);
     }

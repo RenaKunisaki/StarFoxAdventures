@@ -250,29 +250,24 @@ __asm__(
     ".krystalEyePatch_offs: .int overridePlayerNo"
 );
 
+ObjectFileStruct* loadObjFileHook(int id) {
+    ObjectFileStruct *result = loadObjectFile(id);
+    //char name[12];
+    //getObjFileName(name, result);
+    //DPRINT("Loaded obj file %04X (%s) at %08X", id, name, result);
+    if(id == 0x487 || id == 0x488) { //AnimFox, AnimFoxLink
+        if(pPlayer && pPlayer->catId == ObjCatId_Player) {
+            result->pModelList[0] = pPlayer->models[pPlayer->curModel]->header->modelId;
+        }
+        else result->pModelList[0] = 0x4E8;
+    }
+    return result;
+}
+
 void krystalDoModelOverrides() {
     if(!pPlayer) return;
-    if(pPlayer->catId    != 1) return; //don't apply to title screen Fox, Arwing, etc
+    if(pPlayer->catId != ObjCatId_Player) return; //don't apply to title screen Fox, Arwing, etc
     if(pPlayer->curModel == 2) return; //don't override SharpClaw disguise
-
-    //patch some objects
-    u32  *pObjsTab = dataFileBuffers[FILE_OBJECTS_TAB];
-    void *pObjsBin = dataFileBuffers[FILE_OBJECTS_BIN];
-    if(PTR_VALID(pObjsTab) && PTR_VALID(pObjsBin)) {
-        //0x487 (AnimFox): for Drakor scene
-        //0x488 (AnimFoxLink): for WarpStone scene
-        for(int iObj=0x487; iObj <= 0x488; iObj++) {
-            ObjectFileStruct *obj = (ObjectFileStruct*)(pObjsBin + pObjsTab[iObj]);
-            //OSReport("Got ptr 0x%08X, offs 0x%08X for obj 0x%04X", obj, pObjsTab[iObj], iObj);
-            if(PTR_VALID(obj)) {
-                u32 *pModelList = obj->pModelList;
-                if((u32)pModelList < 0x80000000) pModelList = (s16*)((u32)pModelList + (u32)obj);
-                //OSReport("pModelList=%08X", pModelList);
-                //OSReport("*pModelList=%08X", pModelList[0]);
-                pModelList[0] = 0x4E8; //pPlayer->models[pPlayer->curModel]->header->modelId;
-            }
-        }
-    }
 
     int playerNo = overridePlayerNo;
     if(playerNo == PLAYER_ID_AUTO) {
@@ -338,6 +333,7 @@ void krystalInit() {
     hookBranch(0x80043DB8, _krystalHook_tex1Tab,    0);
     hookBranch(0x80087050, _krystalHook_eyePatch,   0); //yarr.
     hookBranch(0x8002cb20, krystalHook_loadSave,    1);
+    hookBranch(0x8002d5dc, loadObjFileHook,         1);
 }
 
 void krystalMainLoop() {

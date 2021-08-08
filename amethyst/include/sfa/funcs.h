@@ -110,6 +110,7 @@ GLOBALFN bool isCheatUnlocked(uint);
 GLOBALFN void* loadFileByPath(char *path,uint *outSize);
     // Returns pointer to allocated buffer of contents.
     // outSize: if not NULL, receives file size.
+GLOBALFN ObjectFileStruct* loadObjectFile(int id);
 GLOBALFN void loadMapForCurrentSaveGame(void);
 GLOBALFN void loadSaveSettings(void);
 GLOBALFN u32 mainGetBit(GameBit bit);
