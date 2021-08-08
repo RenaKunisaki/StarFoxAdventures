@@ -2,6 +2,8 @@
 import sys
 import struct
 
+USE_ADD_SECTION = False
+
 def printf(fmt, *args, **kw):
     print(fmt % args, end='', **kw)
 
@@ -47,15 +49,6 @@ def main():
             printf("BSS     ------ %08X %06X ------ %08X\n", bssAddr, bssSize, bssAddr + bssSize)
             printf("Entry   ------ %08X ------ ------ --------\n", entryPoint)
 
-            # find an unused text section
-            textIdx = None
-            for i in range(7):
-                if textSizes[i] == 0:
-                    textIdx = i
-                    break
-            assert textIdx is not None, "Can't find a free text section"
-            printf("Adding patch as section %d\n", textIdx)
-
             # read the jump address and load address from the patch file
             jumpAddr = readStruct(inFile, '>I')
             loadAddr = readStruct(inFile, '>I')
@@ -70,26 +63,64 @@ def main():
             assert patchSection is not None, "Jump address not in text section"
 
             jumpOffs = textOffsets[patchSection] + (jumpAddr - textAddrs[patchSection])
-            printf("Jump is at offset 0x%06X, section %d\n", jumpOffs, patchSection)
+            printf("Jump is at offset 0x%06X, section .text%d\n", jumpOffs, patchSection)
 
-            # read the rest of the patch file and append to the dol file
             dolFile.seek(0, 2)
             dolSize = dolFile.tell()
-            patchSize = 0
 
-            while True:
-                data = inFile.read(8192)
-                if len(data) == 0: break
-                dolFile.write(data)
-                patchSize += len(data)
+            if USE_ADD_SECTION:
+                # find an unused text section
+                textIdx = None
+                for i in range(7):
+                    if textSizes[i] == 0:
+                        textIdx = i
+                        break
+                assert textIdx is not None, "Can't find a free text section"
+                printf("Adding patch as section %d\n", textIdx)
 
-            # add this to the section list
-            dolFile.seek(textIdx * 4)
-            dolFile.write(struct.pack('>I', dolSize)) # offset
-            dolFile.seek((textIdx * 4) + (18*4))
-            dolFile.write(struct.pack('>I', loadAddr)) # address
-            dolFile.seek((textIdx * 4) + (18*4*2))
-            dolFile.write(struct.pack('>I', patchSize)) # size
+                # read the rest of the patch file and append to the dol file
+                patchSize = 0
+
+                while True:
+                    data = inFile.read(8192)
+                    if len(data) == 0: break
+                    dolFile.write(data)
+                    patchSize += len(data)
+
+                # add this to the section list
+                dolFile.seek(textIdx * 4)
+                dolFile.write(struct.pack('>I', dolSize)) # offset
+                dolFile.seek((textIdx * 4) + (18*4))
+                dolFile.write(struct.pack('>I', loadAddr)) # address
+                dolFile.seek((textIdx * 4) + (18*4*2))
+                dolFile.write(struct.pack('>I', patchSize)) # size
+            else:
+                # that method seems to have a strange issue where on reset, the
+                # code gets moved around, corrupting it. so use this instead...
+
+                # find the offset of the patch address
+                loadSection = None
+                loadOffset  = None
+                for i in range(7):
+                    if textAddrs[i] <= loadAddr and (textAddrs[i]+textSizes[i] > loadAddr):
+                        loadSection = '.text%d' % i
+                        loadOffset = (loadAddr - textAddrs[i]) + textOffsets[i]
+                        break
+                if loadSection is None: # we can use data section, it doesn't matter
+                    for i in range(11):
+                        if dataAddrs[i] <= loadAddr and (dataAddrs[i]+dataSizes[i] > loadAddr):
+                            loadSection = '.data%d' % i
+                            loadOffset = (loadAddr - dataAddrs[i]) + dataOffsets[i]
+                            break
+                assert loadSection is not None, "Load address not in text or data section"
+                printf("Load offset 0x%06X (section %s)\n", loadOffset, loadSection)
+
+                # read the patch file and insert into the DOL
+                dolFile.seek(loadOffset, 0)
+                while True:
+                    data = inFile.read(8192)
+                    if len(data) == 0: break
+                    dolFile.write(data)
 
             # build the branch instruction
             branchRel = (loadAddr - jumpAddr)

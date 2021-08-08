@@ -28,10 +28,10 @@ offsEntry: .int 0 # entry point of ELF
 sizeBoot:  .int 0 # size of this bootstrap code
 
 _start2:
-    mr      r14, r3 # save address of this code
-    mr      r15, r4 # and the size
     stwu    r1,  -STACK_SIZE(r1) # get some stack space
     stmw    r3,  SP_GPR_SAVE(r1)
+    mr      r14, r3 # save address of this code
+    mr      r15, r4 # and the size
     mflr    r3
     stw     r3,  SP_LR_SAVE(r1)
 
