@@ -39,6 +39,7 @@ void raceTimerToggle(bool start) {
 
 static void drawTimer() {
     char str[64];
+    if(gameTimerValue < 0) gameTimerValue = 0;
     double secs = gameTimerValue / 60.0;
     sprintf(str, "%02d:%02d:%02d",
         ((int)secs) / 60, // minutes
@@ -93,7 +94,10 @@ void raceTimerUpdate() {
         //this is a separate case so that we can make the timer not start until
         //you actually gain control of the bike.
         //XXX find how to do this for the other races.
-        start = true;
+        void *pState = pPlayer ? pPlayer->state : NULL;
+        ObjInstance *ride = pState ? (*(ObjInstance**)(pState + 0x7F0)) : NULL;
+        //don't start for SnowHorn
+        start = ride && ride->catId == ObjCatId_bike;
     }
 
     //start = true; stateId = 0x18; //for testing
