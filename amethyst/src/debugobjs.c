@@ -2,6 +2,35 @@
 
 #if 1
 
+/** These objects' render methods do nothing, but have more than just a blr instruction.
+ *  Usually they look something like: if(shouldRender) {}
+ *  The DLLs listed here will have the render method changed to an actual blr stub
+ *  so that they appear when debug objects are enabled.
+ */
+static const u16 overrideDlls[] = {
+    0x00E0, //SwarmBaddie
+    0x00E1, //WispBaddie
+    0x00F0, //WarpPoint
+    0x012B, //FXEmit
+    0x0130, //AreaFXEmit
+    0x0181, //MMP_trenchFX
+    0x018E, //MMSH_WaterSpike
+    0x01BD, //PaymentKiosk
+    0x01E6, //DIMbosscrackpar
+    0x01E7, //DIMbossfire
+    0x01F2, //SB_CageKyte
+    0x0204, //WM_Torch
+    0x0207, //WM_Worm
+    0x020C, //WM_spiritplace
+    0x0217, //VFP_ObjCreator
+    0x0224, //?
+    0x022A, //DFP_ObjCreator
+    0x0236, //Laser
+    0x023A, //Platform1
+    0x0254, //KT_Fallingrocks
+    0x02B2, //DustMoteSou
+    0};
+
 //the Magic Cave doesn't set a culling distance for some objects.
 //normally it's no problem because they're invisble, but, when making them
 //visible, they use this field, making it impossible to interact with them.
@@ -24,7 +53,6 @@ void dll_MCUpgradeMa_init_hook(ObjInstance *obj) {
 //This isn't perfect since there could still be some whose render method isn't
 //a one-instruction stub but still does nothing.
 //This hook has no effect if debug objects aren't enabled.
-//XXX we still need a way to toggle them.
 void _debugObjsHook(void);
 __asm__(
     "_debugObjsHook:               \n"
@@ -50,6 +78,11 @@ __asm__(
     "mtctr   9                     \n"
     "bctr                          \n" //jump to default render method
 );
+
+//XXX need a list of objects to force, where the render method isn't a stub
+//but still does nothing. list is:
+
+//could just drop a blr at the start of each
 
 static bool isInList_u16(u16 val, u16 *list) {
     for(int i=0; list[i] != 0xFFFF; i++) {
@@ -157,6 +190,12 @@ void debugObjsInit() {
     WRITE32(0x80321cb4, dll_MagicCaveBottom_init_hook);
     WRITE32(0x8032bf94, dll_MCUpgradeMa_init_hook);
     //XXX 0x8032BF40 DLL MCUpgrade (new spells) - verify this doesn't need patching
+
+    //override some more complex stubs
+    for(int i=0; overrideDlls[i]; i++) {
+        DPRINT("Patch render of DLL %04X", overrideDlls[i]);
+        WRITE_BLR(dlls[overrideDlls[i]]->functions[4]);
+    }
 }
 
 #else
