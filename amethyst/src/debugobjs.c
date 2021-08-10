@@ -53,6 +53,7 @@ void dll_MCUpgradeMa_init_hook(ObjInstance *obj) {
 //This isn't perfect since there could still be some whose render method isn't
 //a one-instruction stub but still does nothing.
 //This hook has no effect if debug objects aren't enabled.
+//XXX are some objects maybe using wrong models?
 void _debugObjsHook(void);
 __asm__(
     "_debugObjsHook:               \n"

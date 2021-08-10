@@ -216,6 +216,11 @@ static void outputToConsole() {
     }
 }
 
+u16 _getButtons() {
+    padReadControllers(controllerStates);
+    return controllerStates[0].button | controllerStates[4].button;
+}
+
 void bsodHook(void) {
     //replace BSOD thread main function.
     //this thread only runs when the game crashes.
@@ -223,6 +228,7 @@ void bsodHook(void) {
     OSInterruptMask msr = OSDisableInterrupts();
     outputToConsole();
 
+    enableDebugText = true;
     debugFrameBuffer[0] = pFrameBuffer[0];
     debugFrameBuffer[1] = pFrameBuffer[1];
 
@@ -233,17 +239,25 @@ void bsodHook(void) {
     gxWaitFn_80258330();
     OSRestoreInterrupts(msr);
 
+    //wait for no buttons to be held
+    while(true) {
+        u16 buttons = _getButtons();
+        if(!buttons) break;
+        viFn_8024d554();
+        VIWaitForRetrace();
+    }
+
     int page = 0;
-    int padDelay = 60;
+    int padDelay = 10;
     while(true) {
         if(padDelay) padDelay--;
         else {
             //padReadControllers returns all zeros if done too often
             padDelay = 20;
-            padReadControllers(controllerStates);
-            if(controllerStates[0].button & PAD_BUTTON_A) page++;
-            if(controllerStates[0].button & PAD_BUTTON_B) page--;
-            if(controllerStates[0].button & PAD_BUTTON_MENU) {
+            u16 buttons = _getButtons();
+            if(buttons & PAD_BUTTON_A) { page++; padDelay = 20; }
+            if(buttons & PAD_BUTTON_B) { page--; padDelay = 20; }
+            if(buttons & PAD_BUTTON_MENU) {
                 reset(0, 0x80000000, 0);
             }
         }
