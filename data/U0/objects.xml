@@ -6186,7 +6186,7 @@
     <seq id="0x0580"/>
   </object>
   <object id="0x0345" name="DFP_Lightni" def="0x082A" dll="0x023B" cat="0x0030">
-    <description/>
+    <description>Lightning shown when failing switch puzzle</description>
     <map id="0x32" count="15"/>
     <params length="0x24"/>
     <exampleParams>0A022AAA 071BFFFF FFFF0000</exampleParams>

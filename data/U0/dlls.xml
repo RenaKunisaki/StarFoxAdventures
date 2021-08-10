@@ -2508,7 +2508,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x8031ADD0" dolOffs="0x317DD0" id="0x0039" interface="UI" unk08="0x00000000" unk0E="0x0000">
-    <description>related to world map</description>
+    <description>sets a timer, warps to world map</description>
     <functions>
       <function address="0x8011D8F4" idx="0x0" name="initialise">
         <return type="void"/>
@@ -4651,7 +4651,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319378" dolOffs="0x316378" id="0x00AB" name="projdummy" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100584" idx="0x0" stub="1"/>
       <function address="0x80100580" idx="0x1" stub="1"/>
@@ -4662,7 +4662,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803193C0" dolOffs="0x3163C0" id="0x00AC" name="projmagicstream" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x801005BC" idx="0x0" stub="1"/>
       <function address="0x801005B8" idx="0x1" stub="1"/>
@@ -4673,7 +4673,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319410" dolOffs="0x316410" id="0x00AD" name="projmagicemmit1" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x801005F4" idx="0x0" stub="1"/>
       <function address="0x801005F0" idx="0x1" stub="1"/>
@@ -4684,7 +4684,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319460" dolOffs="0x316460" id="0x00AE" name="projroombeam" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x8010062C" idx="0x0" stub="1"/>
       <function address="0x80100628" idx="0x1" stub="1"/>
@@ -4695,7 +4695,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803194A8" dolOffs="0x3164A8" id="0x00AF" name="projlightning1" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100664" idx="0x0" stub="1"/>
       <function address="0x80100660" idx="0x1" stub="1"/>
@@ -4706,7 +4706,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803194F8" dolOffs="0x3164F8" id="0x00B0" name="projlightning2" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x8010069C" idx="0x0" stub="1"/>
       <function address="0x80100698" idx="0x1" stub="1"/>
@@ -4717,7 +4717,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319548" dolOffs="0x316548" id="0x00B1" name="projlightning3" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x801006D4" idx="0x0" stub="1"/>
       <function address="0x801006D0" idx="0x1" stub="1"/>
@@ -4728,7 +4728,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319768" dolOffs="0x316768" id="0x00B2" name="projrobotfire" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x8010085C" idx="0x0" stub="1"/>
       <function address="0x80100858" idx="0x1" stub="1"/>
@@ -4739,7 +4739,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319598" dolOffs="0x316598" id="0x00B3" name="projlightning4" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x8010070C" idx="0x0" stub="1"/>
       <function address="0x80100708" idx="0x1" stub="1"/>
@@ -4750,7 +4750,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803196D8" dolOffs="0x3166D8" id="0x00B4" name="projenergise1" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x801007EC" idx="0x0" stub="1"/>
       <function address="0x801007E8" idx="0x1" stub="1"/>
@@ -4761,7 +4761,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319720" dolOffs="0x316720" id="0x00B5" name="projenergise2" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100824" idx="0x0" stub="1"/>
       <function address="0x80100820" idx="0x1" stub="1"/>
@@ -4772,7 +4772,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803197B0" dolOffs="0x3167B0" id="0x00B6" name="projsquirt1" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100894" idx="0x0" stub="1"/>
       <function address="0x80100890" idx="0x1" stub="1"/>
@@ -4783,7 +4783,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803197F8" dolOffs="0x3167F8" id="0x00B7" name="projship1" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x801008CC" idx="0x0" stub="1"/>
       <function address="0x801008C8" idx="0x1" stub="1"/>
@@ -4794,7 +4794,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803195E8" dolOffs="0x3165E8" id="0x00B8" name="projlightning5" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100744" idx="0x0" stub="1"/>
       <function address="0x80100740" idx="0x1" stub="1"/>
@@ -4805,7 +4805,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319638" dolOffs="0x316638" id="0x00B9" name="projlightning7" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x8010077C" idx="0x0" stub="1"/>
       <function address="0x80100778" idx="0x1" stub="1"/>
@@ -4816,7 +4816,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319688" dolOffs="0x316688" id="0x00BA" name="projlightning6" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x801007B4" idx="0x0" stub="1"/>
       <function address="0x801007B0" idx="0x1" stub="1"/>
@@ -4827,7 +4827,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319840" dolOffs="0x316840" id="0x00BB" name="projwallpower" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100904" idx="0x0" stub="1"/>
       <function address="0x80100900" idx="0x1" stub="1"/>
@@ -4838,7 +4838,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319888" dolOffs="0x316888" id="0x00BC" name="projquakeshock" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x8010093C" idx="0x0" stub="1"/>
       <function address="0x80100938" idx="0x1" stub="1"/>
@@ -4849,7 +4849,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803198D8" dolOffs="0x3168D8" id="0x00BD" name="projsunshock" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100974" idx="0x0" stub="1"/>
       <function address="0x80100970" idx="0x1" stub="1"/>
@@ -4860,7 +4860,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319920" dolOffs="0x316920" id="0x00BE" name="projtesla" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x801009AC" idx="0x0" stub="1"/>
       <function address="0x801009A8" idx="0x1" stub="1"/>
@@ -4871,7 +4871,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319968" dolOffs="0x316968" id="0x00BF" name="projcore1" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x801009E4" idx="0x0" stub="1"/>
       <function address="0x801009E0" idx="0x1" stub="1"/>
@@ -4882,7 +4882,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803199B0" dolOffs="0x3169B0" id="0x00C0" name="projcore2" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100A1C" idx="0x0" stub="1"/>
       <function address="0x80100A18" idx="0x1" stub="1"/>
@@ -4893,7 +4893,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803199F8" dolOffs="0x3169F8" id="0x00C1" name="projcore3" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100A54" idx="0x0" stub="1"/>
       <function address="0x80100A50" idx="0x1" stub="1"/>
@@ -4904,7 +4904,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319A40" dolOffs="0x316A40" id="0x00C2" name="projdfp1r" unk08="0x00000000" unk0E="0x0000">
-    <description/>
+    <description>Prints "no longer supported"</description>
     <functions>
       <function address="0x80100A8C" idx="0x0" stub="1"/>
       <function address="0x80100A88" idx="0x1" stub="1"/>
@@ -5818,8 +5818,9 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
     <objparams>
-      <param offset="0x1C" type="float">
-        <description>normally set to 64</description>
+      <oaran offset="0x1B" type="byte" />
+      <param offset="0x1C" type="float" name="minDist">
+        <description>Despawn if player is further away than this</description>
       </param>
     </objparams>
   </dll>
@@ -7641,7 +7642,15 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
     <objparams>
+      <param offset="0x18" type="s8" name="rotX" />
       <param offset="0x1A" type="WarpEnum8" name="warpIdx" />
+      <param offset="0x1B" type="s8" />
+      <param offset="0x1D0" type="s8" />
+      <param offset="0x1E" type="u8" name="range" />
+      <param offset="0x1F" type="s8">
+        <description>Modified by init function</description>
+      </param>
+      <param offset="0x20" type="GameBit16" name="doWarp" />
     </objparams>
   </dll>
   <dll address="0x80320DF0" dolOffs="0x31DDF0" id="0x00F1" interface="object" name="InvHit" unk08="0x00000000" unk0E="0x0000">
@@ -8677,6 +8686,14 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams>
+      <param offset="0x18" type="s8" name="rotX" />
+      <param offset="0x19" type="s8" />
+      <param offset="0x1A" type="s16" />
+      <param offset="0x1C" type="s16" />
+      <param offset="0x1E" type="GameBit16" name="noHitbox" />
+      <param offset="0x20" type="s16" />
+    </objparams>
   </dll>
   <dll address="0x803216F0" dolOffs="0x31E6F0" id="0x0105" interface="object" name="LargeCrate" unk08="0x00000000" unk0E="0x0000">
     <description/>

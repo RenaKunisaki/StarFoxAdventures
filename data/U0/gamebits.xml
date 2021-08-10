@@ -2383,7 +2383,7 @@
   <bit id="0x063F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0640" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0641" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0642" table="0" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0642" table="0" hint="0x00" hasHint="0" max="1" name="TumbleweedRelated642"/>
   <bit id="0x0643" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0644" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0645" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -4885,7 +4885,7 @@
   <bit id="0x0D52" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="moonpass" obj="HitAnimator" objId="0x0004B451" param="target"/>
   </bit>
-  <bit id="0x0D53" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0D53" table="1" hint="0x00" hasHint="0" max="1" name="WarpPointRelatedD53"/>
   <bit id="0x0D54" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D55" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0D56" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -5141,7 +5141,7 @@
     <objref map="snowmines2" obj="LGTDirectio" objId="0x0004BC6D" param="0x1E"/>
   </bit>
   <bit id="0x0DF6" table="0" hint="0x00" hasHint="0" max="1" name="CreditsRelated0DF6">
-    <description>Set on title screen when showing credits</description>
+    <description>Set on title screen when showing credits (maybe "should run credits"?)</description>
   </bit>
   <bit id="0x0DF7" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0DF8" table="2" hint="0x00" hasHint="0" max="1">
