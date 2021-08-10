@@ -79,11 +79,6 @@ __asm__(
     "bctr                          \n" //jump to default render method
 );
 
-//XXX need a list of objects to force, where the render method isn't a stub
-//but still does nothing. list is:
-
-//could just drop a blr at the start of each
-
 static bool isInList_u16(u16 val, u16 *list) {
     for(int i=0; list[i] != 0xFFFF; i++) {
         if(list[i] == val) return true;
