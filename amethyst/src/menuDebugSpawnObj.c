@@ -53,24 +53,6 @@ static u8 sortMode = ObjSpawnListSortType;
 static int *objIdList = NULL;
 static int numItems = 0;
 
-//XXX there are probably functions already in the game for some of these.
-int getRealId(int defNo) {
-    s16 *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
-    s16 realId = objIndex[defNo];
-    if(realId == -1) realId = defNo;
-    return realId;
-}
-
-ObjectFileStruct* getObjFile(int defNo) {
-    s16  *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
-    u32  *objsTab  = dataFileBuffers[FILE_OBJECTS_TAB];
-    void *objsBin  = dataFileBuffers[FILE_OBJECTS_BIN];
-    if(defNo < 0) defNo = -defNo;
-    else if(objIndex[defNo] >= 0) defNo = objIndex[defNo];
-    u32 offs = objsTab[defNo];
-    if(offs >= dataFileSize[FILE_OBJECTS_BIN]) return NULL;
-    return (ObjectFileStruct*)(objsBin + offs);
-}
 
 void spawnList_draw(Menu *self) {
     //Draw function for Spawn Object list
@@ -92,7 +74,7 @@ void spawnList_draw(Menu *self) {
     while(nLines < (SPAWN_MENU_NUM_LINES-1) && iObj < numItems) {
         char name[12];
         int defNo = objIdList[iObj];
-        int realId = getRealId(defNo);
+        int realId = getObjRealId(defNo);
         ObjectFileStruct *file = getObjFile(defNo);
         if(!file) break;
         getObjFileName(name, file);

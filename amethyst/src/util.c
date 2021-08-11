@@ -31,7 +31,46 @@ int roundTo(int num, int target) {
     else return num - val; //round down
 }
 
-void getObjFileName(char *dest, ObjectFileStruct *file) {
+//XXX there are probably functions already in the game for some of these.
+
+/** @description Given object defNo, get the "real" ID from OBJINDEX.BIN.
+ *  @param defNo the object defNo.
+ *  @return the real ID.
+ *  @note Like the original game code, if a negative defNo is used, this
+ *   function returns its absolute value instead of using OBJINDEX.BIN.
+ */
+int getObjRealId(int defNo) {
+    s16 *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
+    s16 realId = objIndex[defNo];
+    if(realId == -1) realId = defNo;
+    return realId;
+}
+
+/** @description Get the ObjectFileStruct for a given object defNo.
+ *  @param defNo the object defNo.
+ *  @return the ObjectFileStruct or NULL.
+ *  @note A negative defNo can be used to bypass OBJINDEX.BIN.
+ */
+ObjectFileStruct* getObjFile(int defNo) {
+    s16  *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
+    u32  *objsTab  = dataFileBuffers[FILE_OBJECTS_TAB];
+    void *objsBin  = dataFileBuffers[FILE_OBJECTS_BIN];
+    if(defNo < 0) defNo = -defNo;
+    else if(objIndex[defNo] >= 0) defNo = objIndex[defNo];
+    u32 offs = objsTab[defNo];
+    if(offs >= dataFileSize[FILE_OBJECTS_BIN]) return NULL;
+    return (ObjectFileStruct*)(objsBin + offs);
+}
+
+/** @description Get the name from an ObjectFileStruct, stripping control codes.
+ *  @param dest buffer to store name into. Must be at least 12 bytes.
+ *  @param file ObjectFileStruct to read from.
+ *  @return true if file is valid, false if not.
+ *  @note If the `file` parameter is not valid or the name is empty,
+ *   the returned name is "N/A".
+ *  @note All control/non-ASCII characters are skipped when copying the name.
+ */
+bool getObjFileName(char *dest, ObjectFileStruct *file) {
     //get name of object from file
     //dest must be at least 12 bytes
 
@@ -44,13 +83,26 @@ void getObjFileName(char *dest, ObjectFileStruct *file) {
             else if(c >= 0x20 && c <= 0x7E) dest[p++] = c;
         }
         dest[p] = 0;
+        if(p) return true;
     }
-    else strcpy(dest, "N/A");
+    strcpy(dest, "N/A");
+    return false;
 }
 
-void getObjName(char *dest, ObjInstance *obj) {
-    if(PTR_VALID(obj)) getObjFileName(dest, obj->file);
-    else strcpy(dest, "N/A");
+/** @description Get the name from an ObjInstance, stripping control codes.
+ *  @param dest buffer to store name into. Must be at least 12 bytes.
+ *  @param obj ObjInstance to read from.
+ *  @return true if obj is valid, false if not.
+ *  @note If the `obj` parameter is not valid or the name is empty,
+ *   the returned name is "N/A".
+ *  @note All control/non-ASCII characters are skipped when copying the name.
+ */
+bool getObjName(char *dest, ObjInstance *obj) {
+    if(PTR_VALID(obj)) return getObjFileName(dest, obj->file);
+    else {
+        strcpy(dest, "N/A");
+        return false;
+    }
 }
 
 int strcmpi(const char *sa, const char *sb) {
