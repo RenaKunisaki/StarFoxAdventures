@@ -41,6 +41,7 @@ int roundTo(int num, int target) {
  */
 int getObjRealId(int defNo) {
     s16 *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
+    if(defNo < 0) return -defNo;
     s16 realId = objIndex[defNo];
     if(realId == -1) realId = defNo;
     return realId;
@@ -57,6 +58,7 @@ ObjectFileStruct* getObjFile(int defNo) {
     void *objsBin  = dataFileBuffers[FILE_OBJECTS_BIN];
     if(defNo < 0) defNo = -defNo;
     else if(objIndex[defNo] >= 0) defNo = objIndex[defNo];
+    if(defNo >= NUM_OBJECTS) return NULL;
     u32 offs = objsTab[defNo];
     if(offs >= dataFileSize[FILE_OBJECTS_BIN]) return NULL;
     return (ObjectFileStruct*)(objsBin + offs);
