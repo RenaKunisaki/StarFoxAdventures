@@ -218,7 +218,7 @@ static void outputToConsole() {
 
 u16 _getButtons() {
     padReadControllers(controllerStates);
-    return controllerStates[0].button | controllerStates[4].button;
+    return controllerStates[0].button; //| controllerStates[4].button;
 }
 
 void bsodHook(void) {
@@ -239,24 +239,16 @@ void bsodHook(void) {
     gxWaitFn_80258330();
     OSRestoreInterrupts(msr);
 
-    //wait for no buttons to be held
-    while(true) {
-        u16 buttons = _getButtons();
-        if(!buttons) break;
-        viFn_8024d554();
-        VIWaitForRetrace();
-    }
-
     int page = 0;
-    int padDelay = 10;
+    int padDelay = 60;
     while(true) {
         if(padDelay) padDelay--;
         else {
             //padReadControllers returns all zeros if done too often
-            padDelay = 20;
+            padDelay = 30;
             u16 buttons = _getButtons();
-            if(buttons & PAD_BUTTON_A) { page++; padDelay = 20; }
-            if(buttons & PAD_BUTTON_B) { page--; padDelay = 20; }
+            if(buttons & PAD_BUTTON_A) page++;
+            if(buttons & PAD_BUTTON_B) page--;
             if(buttons & PAD_BUTTON_MENU) {
                 reset(0, 0x80000000, 0);
             }
