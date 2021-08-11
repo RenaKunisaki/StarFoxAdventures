@@ -1,6 +1,7 @@
 /** Debug Spawn Object submenu.
  */
 #include "main.h"
+#include "revolution/os.h"
 #define SPAWN_MENU_XPOS 15
 #define SPAWN_MENU_YPOS 50
 #define SPAWN_MENU_WIDTH  600
@@ -50,6 +51,7 @@ enum {
 static const char *sortModeNames[] = {"DefNo", "Name", "Category"};
 static u8 sortMode = ObjSpawnListSortType;
 static int *objIdList = NULL;
+static int numItems = 0;
 
 //XXX there are probably functions already in the game for some of these.
 int getRealId(int defNo) {
@@ -87,7 +89,7 @@ void spawnList_draw(Menu *self) {
         return;
     }
 
-    while(nLines < (SPAWN_MENU_NUM_LINES-1) && iObj < NUM_OBJECTS) {
+    while(nLines < (SPAWN_MENU_NUM_LINES-1) && iObj < numItems) {
         char name[12];
         int defNo = objIdList[iObj];
         int realId = getRealId(defNo);
@@ -132,10 +134,22 @@ void rebuildList() {
     s16  *objIndex = dataFileBuffers[FILE_OBJINDEX_BIN];
     u32  *objsTab  = dataFileBuffers[FILE_OBJECTS_TAB];
     void *objsBin  = dataFileBuffers[FILE_OBJECTS_BIN];
-    for(int i=0; i<NUM_OBJECTS; i++) {
-        objIdList[i] = i;
-        //XXX filter out duplicates (eg Tricky is both 0x4 and 0x24 because objindex)
+
+    //build list, skipping objindex duplicates
+    u8 seenId[objIndexCount]; //XXX there must be a better way
+    memset(seenId, 0, objIndexCount);
+    numItems = 0;
+    for(int i=0; i<objIndexCount; i++) {
+        int id = objIndex[i];
+        if(id < 0) id = i;
+        if(PTR_VALID(getObjFile(id))) {
+            if(!seenId[id]) {
+                objIdList[numItems++] = i;
+                seenId[id] = 1;
+            }
+        }
     }
+    numItems--;
 
     //sort the list
     CompareFunc func = NULL;
@@ -144,20 +158,20 @@ void rebuildList() {
         case ObjSpawnListSortCategory: func = compareFilesByCategory; break;
         default: return; //list is already sorted by defNo
     }
-    quicksort((const void**)objIdList, 0, NUM_OBJECTS - 1, func);
+    quicksort((const void**)objIdList, 0, numItems, func);
 }
 
 void changeSort() {
     sortMode++;
     if(sortMode >= NumObjSpawnListSortMethods) sortMode = 0;
-    rebuildList();    
+    rebuildList();
 }
 
 void spawnList_run(Menu *self) {
     //Run function for Spawn Object list
 
     if(!objIdList) {
-        objIdList = (int*)allocTagged(NUM_OBJECTS * sizeof(ObjectFileStruct*), 
+        objIdList = (int*)allocTagged(NUM_OBJECTS * sizeof(ObjectFileStruct*),
             ALLOC_TAG_LISTS_COL, "debug:objIds");
         if(!objIdList) { //out of memory
             if(buttonsJustPressed == PAD_BUTTON_A || buttonsJustPressed == PAD_BUTTON_B) {
@@ -201,8 +215,8 @@ void spawnList_run(Menu *self) {
         menuInputDelayTimer = MENU_INPUT_DELAY_MOVE;
     }
 
-    if(self->selected < 0) self->selected = NUM_OBJECTS - 1;
-    if(self->selected >= NUM_OBJECTS) self->selected = 0;
+    if(self->selected < 0) self->selected = numItems - 1;
+    if(self->selected >= numItems) self->selected = 0;
 }
 
 void spawnList_close(const Menu *self) {
