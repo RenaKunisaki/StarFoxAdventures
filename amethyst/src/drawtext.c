@@ -178,6 +178,15 @@ Color4b color, float scale) {
     //1: none
     //2: error text, none, none, none
     //3: text, none, none, none
+    //icons:
+    //A: A button
+    //B: B button
+    //D: German flag
+    //F: French flag (reversed)
+    //I: Italian flag
+    //J: joystick
+    //S: Spanish flag
+    //There don't seem to be icons for the English or Japanese flags in this version.
     int iFont = 3; //can be changed by control codes
     int startX = x, startY = y;
     int lineHeight = 0;

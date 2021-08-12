@@ -39,8 +39,14 @@ void menuSubtitles_select(const MenuItem *self, int amount) {
     updateSaveData();
 }
 
+//could add flags here but the EN,JP flags are missing (and French is reversed)
 static const char *languages[NUM_LANGUAGES] = {
-    "English", "French", "German", "Italian", "Japanese", "Spanish"
+    "English", //English
+    "français", //French
+    "Deutsch", //German
+    "Italiano", //Italian
+    "日本", //Japanese
+    "Español" //Spanish
 };
 void menuLanguage_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
