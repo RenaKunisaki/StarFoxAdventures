@@ -174,6 +174,11 @@ double ticksToSecs(u64 ticks) {
     return u64toDouble(ticks) / (__OSBusClock / 4);
 }
 
+//is this really not in the game?
+double fmod(double x, double y) {
+    return x - ((int)(x/y)) * y;
+}
+
 /** Convert HSV color to RGB.
  *  @param h Hue (0..255 = 0..359 degrees)
  *  @param s Saturation (0..255 = 0..100%)
@@ -186,17 +191,17 @@ Color4b hsv2rgb(u8 h, u8 s, u8 v, u8 a) {
     float vf = v / 255.0;
     float c = vf * sf;
     int h2 = h / 43; //h / 60 degrees
-    int n = (h2 % 2 - 1);
+    float n = (fmod((h / 43.0), 2) - 1);
     if(n < 0) n = -n;
-    float x = c * (1 - n);
+    float x = c * (1.0 - (float)n);
     float r=0, g=0, b=0;
     switch(h2) {
-        case 0: r=c; g=x, b=0; break;
-        case 1: r=x; g=c, b=0; break;
-        case 2: r=0; g=c, b=x; break;
-        case 3: r=0; g=x, b=c; break;
-        case 4: r=x; g=0, b=c; break;
-        case 5: r=c; g=0, b=x; break;
+        case 0: r=c; g=x; b=0; break;
+        case 1: r=x; g=c; b=0; break;
+        case 2: r=0; g=c; b=x; break;
+        case 3: r=0; g=x; b=c; break;
+        case 4: r=x; g=0; b=c; break;
+        case 5: r=c; g=0; b=x; break;
     }
     float m = vf - c;
     Color4b res = {.r = (r+m)*255, .g = (g+m)*255, .b = (b+m)*255, .a = a};
