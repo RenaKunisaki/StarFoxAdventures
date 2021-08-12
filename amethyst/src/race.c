@@ -6,16 +6,10 @@
 #include "revolution/pad.h"
 
 #define TEXTBOX_ID 4
-#define TEXT_XPOS (SCREEN_WIDTH - 210)
-#define TEXT_YPOS (SCREEN_HEIGHT - 173)
+#define TEXT_XPOS (SCREEN_WIDTH - 150)
+#define TEXT_YPOS (SCREEN_HEIGHT - 83)
 static float disappearTimer = 0;
 static bool active = false;
-
-//backup for text window
-static float oldTextScale = 0;
-static s16 oldWidth;
-static s16 oldHeight;
-static u8 oldJustify;
 
 void raceTimerToggle(bool start) {
     if(start) {
@@ -41,40 +35,23 @@ static void drawTimer() {
     char str[64];
     if(gameTimerValue < 0) gameTimerValue = 0;
     double secs = gameTimerValue / 60.0;
-    sprintf(str, "%02d:%02d:%02d",
-        ((int)secs) / 60, // minutes
-        ((int)secs) % 60, // seconds
-        ((int)(secs * 100.0)) % 100); // 1/100 seconds
 
-    //the timer code does this, but slightly different. (and uses box 0xD)
-    GameTextBox *box = gameTextGetBox(TEXTBOX_ID);
-    if(oldTextScale == 0) {
-        oldTextScale = box->textScale;
-        oldWidth     = box->width;
-        oldHeight    = box->height;
-        oldJustify   = box->justify;
-    }
-    //box->x = TEXT_XPOS;
-    //box->y = TEXT_YPOS;
-    box->height = SCREEN_HEIGHT;
-    box->width = SCREEN_WIDTH;
-    box->textScale = 1.0;
-    box->justify = GameTextJustify_Full;
-
-    u8 alpha = MIN((int)(disappearTimer * 8.0), 255);
-    drawHudBox(TEXT_XPOS+20, TEXT_YPOS+99, 120, 40, alpha, true);
-    gameTextSetColor(0xFF, bikeMoveScale > 0.5 ? 0x3F : 0xFF, 0xFF, alpha);
-    gameTextShowStr(str, TEXTBOX_ID, TEXT_XPOS+5, TEXT_YPOS);
-
-    //draw speed
     vec3f vel;
     if(pPlayer) vel = pPlayer->vel;
     vec3f zero = {0, 0, 0};
     //this scale gives a top speed of 64km/h which is nice.
     double vxz = vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 21.5;
-    sprintf(str, "%3d km/h", (int)vxz);
-    gameTextSetColor(0xFF, 0xFF, 0xFF, alpha);
-    gameTextShowStr(str, TEXTBOX_ID, TEXT_XPOS, TEXT_YPOS+18);
+
+    sprintf(str, "\eF%02d:%02d:%02d\n%3d km/h",
+        ((int)secs) / 60, // minutes
+        ((int)secs) % 60, // seconds
+        ((int)(secs * 100.0)) % 100, // 1/100 seconds
+        (int)vxz);
+
+    u8 alpha = MIN((int)(disappearTimer * 8.0), 255);
+    drawHudBox(TEXT_XPOS, TEXT_YPOS, 100, 40, alpha, true);
+    Color4b color = {.r = 0xC0, .g = bikeMoveScale > 0.5 ? 0x3F : 0xC0, .b = 0xC0, .a = alpha};
+    drawColorText(str, TEXT_XPOS+5, TEXT_YPOS, color);
 }
 
 void raceTimerUpdate() {
@@ -126,14 +103,6 @@ void raceTimerUpdate() {
         drawTimer();
         if(disappearTimer <= 0) {
             bikeMoveScale = 0.5; //reset to default
-            if(oldTextScale != 0) {
-                GameTextBox *box = gameTextGetBox(TEXTBOX_ID);
-                box->textScale   = oldTextScale;
-                box->width       = oldWidth;
-                box->height      = oldHeight;
-                box->justify     = oldJustify;
-                oldTextScale     = 0;
-            }
         }
     }
 }

@@ -192,8 +192,8 @@ Color4b color, float scale) {
 
         if(chr < 0x20) {
             switch(chr) {
-                case '\n': y += (flags & TEXT_FIXED) ? MENU_FIXED_WIDTH :
-                    MAX(lineHeight, MENU_FIXED_WIDTH); //fall thru
+                case '\n': y += (flags & TEXT_FIXED) ? 16 :
+                    MAX(lineHeight, 16); //fall thru
                 case '\r': x = startX; break;
                 case '\t': {
                     int p = x % 64;
