@@ -35,7 +35,7 @@ void hexEdit_draw(Menu *self) {
 
     int x = HEXEDIT_XPOS + MENU_PADDING, y = HEXEDIT_YPOS + MENU_PADDING;
     sprintf(str, "Addr %08X", hexEditAddr);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
 
     if(!PTR_VALID(hexEditAddr)) hexEditAddr = RAM_START;
 
@@ -54,7 +54,7 @@ void hexEdit_draw(Menu *self) {
             str[idx+j+1] = 0;
         }
 
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         addr += HEXEDIT_NUM_COLS;
     }
 

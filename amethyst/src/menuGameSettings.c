@@ -5,7 +5,7 @@
 void menuGameSpeed_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (int)((physicsTimeScale * 100) / 60));
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuGameSpeed_select(const MenuItem *self, int amount) {
     physicsTimeScale += amount * 15;
@@ -19,7 +19,7 @@ void menuGameSpeed_select(const MenuItem *self, int amount) {
 void menuAutoSave_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bAutoSave ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuAutoSave_select(const MenuItem *self, int amount) {
     bAutoSave = !bAutoSave;
@@ -31,7 +31,7 @@ void menuAutoSave_select(const MenuItem *self, int amount) {
 void menuSubtitles_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bSubtitlesEnabled ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuSubtitles_select(const MenuItem *self, int amount) {
     bSubtitlesEnabled = !bSubtitlesEnabled;
@@ -45,7 +45,7 @@ static const char *languages[NUM_LANGUAGES] = {
 void menuLanguage_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, languages[curLanguage]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuLanguage_select(const MenuItem *self, int amount) {
     curLanguage += amount;
@@ -62,7 +62,7 @@ void menuLanguage_select(const MenuItem *self, int amount) {
 void menuHpFlash_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (hudFlags & HUD_LOW_HP_FLASH) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuHpFlash_select(const MenuItem *self, int amount) {
     hudFlags ^= HUD_LOW_HP_FLASH;
@@ -73,7 +73,7 @@ void menuHpFlash_select(const MenuItem *self, int amount) {
 void menuHpSound_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (hudFlags & HUD_LOW_HP_BEEP) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuHpSound_select(const MenuItem *self, int amount) {
     hudFlags ^= HUD_LOW_HP_BEEP;

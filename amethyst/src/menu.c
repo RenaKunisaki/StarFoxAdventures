@@ -3,6 +3,7 @@
 #include "main.h"
 #include "revolution/os.h"
 #include "revolution/pad.h"
+#include <stdarg.h>
 
 Menu *curMenu = NULL;
 u8  menuState = MENU_NOT_OPEN;
@@ -158,7 +159,7 @@ void menuDrawText(const char *str, int x, int y, bool selected) {
     //gameTextShowStr(self->name, MENU_TEXTBOX_ID, x, y);
     Color4b color = {.r=192, .g=192, .b=192, .a=255};
     if(selected) {
-        color = hsv2rgb(menuTextAnimFrame, 192, 192, 128);
+        color = hsv2rgb(menuTextAnimFrame*2, 192, 192, 128);
         //debugPrintf("H=%3d -> %02X %02X %02X\n", menuTextAnimFrame, color.r, color.g, color.b);
     }
     drawSimpleText(str, x, y, NULL, NULL, TEXT_SHADOW | TEXT_COLORED, color, 1.0);

@@ -5,7 +5,7 @@
 void menuMusicVol_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (int)(volumeMusic * 100.0));
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuMusicVol_select(const MenuItem *self, int amount) {
     volumeMusic += (amount * 0.01);
@@ -19,7 +19,7 @@ void menuMusicVol_select(const MenuItem *self, int amount) {
 void menuSfxVol_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (int)(volumeSFX * 100.0));
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuSfxVol_select(const MenuItem *self, int amount) {
     volumeSFX += (amount * 0.01);
@@ -34,7 +34,7 @@ void menuSceneVol_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     int v = (int)((volumeCutScenes / 127.0) * 100.0);
     sprintf(str, self->name, roundTo(v, 10));
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuSceneVol_select(const MenuItem *self, int amount) {
     int vol = volumeCutScenes + (amount * 13);
@@ -52,7 +52,7 @@ static const char *soundModeNames[] = {"Stereo", "Surround", "Mono", "Headphones
 void menuSoundMode_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, soundModeNames[soundMode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuSoundMode_select(const MenuItem *self, int amount) {
     soundMode = (soundMode + amount) & 3;
@@ -73,7 +73,7 @@ void menuMusicTest_draw(const MenuItem *self, int x, int y, bool selected) {
     //    songTable[musicTestIdx].unk08,
     //    songTable[musicTestIdx].unk0C,
     //    songTable[musicTestIdx].name);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuMusicTest_select(const MenuItem *self, int amount) {
     if(amount == 0) { //A button
@@ -94,7 +94,7 @@ void menuSfxTest_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     //sound effects don't have names
     sprintf(str, self->name, sfxTestIdx);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuSfxTest_select(const MenuItem *self, int amount) {
     if(amount == 0) { //A button
@@ -121,7 +121,7 @@ void menuStreamTest_draw(const MenuItem *self, int x, int y, bool selected) {
     //    pStreamsBin[streamTestIdx].unk03,
     //    pStreamsBin[streamTestIdx].unk04,
     //    pStreamsBin[streamTestIdx].name);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuStreamTest_select(const MenuItem *self, int amount) {
     if(amount == 0) { //A button

@@ -8,7 +8,7 @@ void menuEditPlayerWhich_draw(const MenuItem *self, int x, int y, bool selected)
     char str[64];
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, (editPlayerIdx == 0) ? "Krystal" : "Fox");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerWhich_select(const MenuItem *self, int amount) {
     editPlayerIdx ^= 1;
@@ -20,7 +20,7 @@ void menuEditPlayerCurHp_draw(const MenuItem *self, int x, int y, bool selected)
     char str[64];
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->curHealth);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerCurHp_select(const MenuItem *self, int amount) {
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
@@ -34,7 +34,7 @@ void menuEditPlayerMaxHp_draw(const MenuItem *self, int x, int y, bool selected)
     char str[64];
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->maxHealth);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerMaxHp_select(const MenuItem *self, int amount) {
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
@@ -47,7 +47,7 @@ void menuEditPlayerCurMp_draw(const MenuItem *self, int x, int y, bool selected)
     char str[64];
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->curMagic);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerCurMp_select(const MenuItem *self, int amount) {
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
@@ -61,7 +61,7 @@ void menuEditPlayerMaxMp_draw(const MenuItem *self, int x, int y, bool selected)
     char str[64];
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->maxMagic);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerMaxMp_select(const MenuItem *self, int amount) {
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
@@ -74,7 +74,7 @@ void menuEditPlayerCurLives_draw(const MenuItem *self, int x, int y, bool select
     char str[64];
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->curBafomDads);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerCurLives_select(const MenuItem *self, int amount) {
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
@@ -88,7 +88,7 @@ void menuEditPlayerMaxLives_draw(const MenuItem *self, int x, int y, bool select
     char str[64];
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->maxBafomDads);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerMaxLives_select(const MenuItem *self, int amount) {
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
@@ -101,7 +101,7 @@ void menuEditPlayerMoney_draw(const MenuItem *self, int x, int y, bool selected)
     char str[64];
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
     sprintf(str, self->name, playerState->money);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerMoney_select(const MenuItem *self, int amount) {
     PlayerCharState *playerState = &saveData.curSaveGame.charState[editPlayerIdx];
@@ -114,7 +114,7 @@ void menuEditPlayerMoney_select(const MenuItem *self, int amount) {
 void menuEditPlayerFood_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, saveData.curSaveGame.trickyEnergy);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuEditPlayerFood_select(const MenuItem *self, int amount) {
     if(amount) saveData.curSaveGame.trickyEnergy += amount;

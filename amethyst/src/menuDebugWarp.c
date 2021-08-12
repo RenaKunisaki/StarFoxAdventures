@@ -241,7 +241,7 @@ void warpMenu_draw(Menu *self) {
             else *(dst++) = c;
         }
         *dst = 0;
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, selected);
     }
 }
 

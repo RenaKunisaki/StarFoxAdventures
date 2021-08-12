@@ -140,7 +140,7 @@ void menuObjSelCallSeq_draw(const MenuItem *self, int x, int y, bool selected) {
         seqNo = objMenuSelected->file->pSeq[selectedSeq];
     }
     sprintf(str, self->name, selectedSeq, seqNo);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuObjSelCallSeq_select(const MenuItem *self, int amount) {
     if(amount) {

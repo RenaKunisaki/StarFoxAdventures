@@ -3,7 +3,7 @@
 void menuDebugRenderEffectsBlur_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bEnableBlurFilter ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsBlur_select(const MenuItem *self, int amount) {
     bEnableBlurFilter = !bEnableBlurFilter;
@@ -14,7 +14,7 @@ void menuDebugRenderEffectsBlur_select(const MenuItem *self, int amount) {
 void menuDebugRenderEffectsMotBlur_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (int)motionBlurIntensity);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsMotBlur_select(const MenuItem *self, int amount) {
     int val = motionBlurIntensity + amount;
@@ -29,7 +29,7 @@ void menuDebugRenderEffectsMotBlur_select(const MenuItem *self, int amount) {
 void menuDebugRenderEffectsHeatFx_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, heatEffectIntensity);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsHeatFx_select(const MenuItem *self, int amount) {
     int val = heatEffectIntensity + amount;
@@ -43,7 +43,7 @@ void menuDebugRenderEffectsHeatFx_select(const MenuItem *self, int amount) {
 void menuDebugRenderEffectsMono_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bEnableMonochromeFilter ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsMono_select(const MenuItem *self, int amount) {
     bEnableMonochromeFilter = !bEnableMonochromeFilter;
@@ -54,7 +54,7 @@ void menuDebugRenderEffectsMono_select(const MenuItem *self, int amount) {
 void menuDebugRenderEffectsSpirit_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bEnableSpiritVision ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsSpirit_select(const MenuItem *self, int amount) {
     bEnableSpiritVision = !bEnableSpiritVision;
@@ -65,7 +65,7 @@ void menuDebugRenderEffectsSpirit_select(const MenuItem *self, int amount) {
 void menuDebugRenderColFiltOn_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bEnableColorFilter ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColFiltOn_select(const MenuItem *self, int amount) {
     bEnableColorFilter = !bEnableColorFilter;
@@ -76,7 +76,7 @@ void menuDebugRenderColFiltOn_select(const MenuItem *self, int amount) {
 void menuDebugRenderColFiltR_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, colorFilterColor.r);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColFiltR_select(const MenuItem *self, int amount) {
     int val = colorFilterColor.r + amount;
@@ -90,7 +90,7 @@ void menuDebugRenderColFiltR_select(const MenuItem *self, int amount) {
 void menuDebugRenderColFiltG_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, colorFilterColor.g);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColFiltG_select(const MenuItem *self, int amount) {
     int val = colorFilterColor.g + amount;
@@ -104,7 +104,7 @@ void menuDebugRenderColFiltG_select(const MenuItem *self, int amount) {
 void menuDebugRenderColFiltB_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, colorFilterColor.b);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColFiltB_select(const MenuItem *self, int amount) {
     int val = colorFilterColor.b + amount;
@@ -121,7 +121,7 @@ void menuDebugRenderColScale_draw(const MenuItem *self, int x, int y, bool selec
         sprintf(str, "Color Scale: %d%%", (int)((overrideColorScale / 255.0) * 100.0));
     }
     else strcpy(str, "Color Scale: Normal");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColScale_select(const MenuItem *self, int amount) {
     int val = overrideColorScale + amount;

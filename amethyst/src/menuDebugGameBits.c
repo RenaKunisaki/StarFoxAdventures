@@ -172,14 +172,14 @@ void bitMenu_draw(Menu *self) {
         sprintf(str, "%04X %d %2d %08X %s", bit, tbl,
             (entry->flags & GameBitFlags_Size) + 1,
             mainGetBit(bit), sortedList[bitIdx].name);
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, selected);
     }
 
     //draw instructions
     y += MENU_LINE_HEIGHT;
     gameTextSetColor(255, 255, 255, 255);
     sprintf(str, "B:Exit X:+ Y:- L/R:Page Z:Sort:%s", sortModeNames[sortMode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
 
     //draw cursor
     drawBox(BIT_MENU_XPOS + 4 + ((bitMenuCursorX + 10) * MENU_FIXED_WIDTH),

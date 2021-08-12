@@ -9,7 +9,7 @@ void menuPdaMode_draw(const MenuItem *self, int x, int y, bool selected) {
     int mode = minimapMode;
     if(!pdaOn) mode = 3;
     sprintf(str, self->name, pdaModeNames[mode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuPdaMode_select(const MenuItem *self, int amount) {
     if(pdaOn) {
@@ -33,7 +33,7 @@ static const char *mapSizeNames[] = {"Small", "Normal", "Big"};
 void menuPdaSize_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, mapSizeNames[overrideMinimapSize]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuPdaSize_select(const MenuItem *self, int amount) {
     int size = overrideMinimapSize + amount;
@@ -49,7 +49,7 @@ void menuPdaOpacity_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     int v = (int)((overrideMinimapAlpha / 255.0) * 100);
     sprintf(str, self->name, roundTo(v, 10));
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuPdaOpacity_select(const MenuItem *self, int amount) {
     int alpha = overrideMinimapAlpha + (amount * 25);
@@ -65,7 +65,7 @@ void menuPdaZoom_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     int v = (int)(minimapZoom * 100);
     sprintf(str, self->name, roundTo(v, 5));
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuPdaZoom_select(const MenuItem *self, int amount) {
     minimapZoom += (amount * 0.05);

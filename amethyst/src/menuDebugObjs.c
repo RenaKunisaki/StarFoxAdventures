@@ -48,7 +48,7 @@ static void sortObjs(int method) {
         case ObjListSortDistance:
             quicksort((const void**)objList, 0, numLoadedObjs-1, compareObjsByDistance);
             break;
-        
+
         case ObjListSortAddr:
             quicksort((const void**)objList, 0, numLoadedObjs-1, compareObjsByAddr);
             break;
@@ -75,18 +75,18 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
 
     sprintf(str, "POS  %d, %d, %d",
         (int)obj->pos.pos.x, (int)obj->pos.pos.y, (int)obj->pos.pos.z);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     if(obj->objDef) {
         sprintf(str, "ORIG %d, %d, %d",
             (int)obj->objDef->pos.x, (int)obj->objDef->pos.y,
             (int)obj->objDef->pos.z);
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
 
         sprintf(str, "ADDR   %08X ID %08X", obj, obj->objDef->id);
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
     }
     else {
@@ -94,72 +94,72 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
         y += MENU_LINE_HEIGHT;
 
         sprintf(str, "ADDR   %08X ID --", obj);
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
     }
 
     sprintf(str, "FILE   %08X DEFNO %04X", obj->file, obj->defNo);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "CATID  %04X OBJNO %04X", obj->catId, obj->objNo);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "FLAG   %04X %02X %02X %02X %02X", obj->pos.flags,
         obj->flags_0xaf, obj->flags_0xb0, obj->flags_e3, obj->flags_0xf8);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "SLOT   %02X MAP %02X %02X", obj->slot, obj->mapId & 0xFF,
         obj->map & 0xFF);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "OBJDEF %08X SEQ %d", obj->objDef, obj->curSeq);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "EVENT  %08X", obj->pEventName);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     Model **models = obj->models = obj->models;
     Model  *model = models ? models[obj->curModel] : NULL;
     u16     mdlId = (model && model->header) ? model->header->modelId : 0xFFFF;
     sprintf(str, "MODEL  %08X(%X) %04X", obj->models, obj->curModel, mdlId);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "STATE  %08X", obj->state);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "HITS   %08X", obj->hitstate);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "DLL    %08X %04X", obj->dll,
         (obj->file ? obj->file->dll_id : -1) & 0xFFFF);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "MSGS   %08X %X/%X", obj->seqMsgs,
         obj->seqMsgs ? obj->seqMsgs->nMsgs : 0,
         obj->seqMsgs ? obj->seqMsgs->length : 0);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "PARENT %08X %s", obj->parent,
         (obj->parent && obj->parent->file) ? obj->parent->file->name : "-");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     for(int i=0; i<3; i++) {
         sprintf(str, "CHILD  %08X %s", obj->child[i],
             (obj->child[i] && obj->child[i]->file) ?
                 obj->child[i]->file->name : "-");
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
     }
 }
@@ -207,7 +207,7 @@ void objMenu_draw(Menu *self) {
             (obj->objDef ? obj->objDef->objType : -1) & 0xFFFF,
             (obj->objDef ? obj->objDef->id      : -1),
             (obj->file ? obj->file->name : "?"));
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
     }
 

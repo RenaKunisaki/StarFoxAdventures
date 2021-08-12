@@ -4,7 +4,7 @@
 void menuDebugCheatHP_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugCheats & DBGCHT_INF_HP) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatHP_select(const MenuItem *self, int amount) {
     debugCheats ^= DBGCHT_INF_HP;
@@ -15,7 +15,7 @@ void menuDebugCheatHP_select(const MenuItem *self, int amount) {
 void menuDebugCheatMP_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugCheats & DBGCHT_INF_MP) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatMP_select(const MenuItem *self, int amount) {
     debugCheats ^= DBGCHT_INF_MP;
@@ -26,7 +26,7 @@ void menuDebugCheatMP_select(const MenuItem *self, int amount) {
 void menuDebugCheatMoney_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugCheats & DBGCHT_INF_MONEY) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatMoney_select(const MenuItem *self, int amount) {
     debugCheats ^= DBGCHT_INF_MONEY;
@@ -37,7 +37,7 @@ void menuDebugCheatMoney_select(const MenuItem *self, int amount) {
 void menuDebugCheatLives_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugCheats & DBGCHT_INF_LIVES) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatLives_select(const MenuItem *self, int amount) {
     debugCheats ^= DBGCHT_INF_LIVES;
@@ -48,7 +48,7 @@ void menuDebugCheatLives_select(const MenuItem *self, int amount) {
 void menuDebugCheatFrozen_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugCheats & DBGCHT_ENEMY_FROZEN) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatFrozen_select(const MenuItem *self, int amount) {
     debugCheats ^= DBGCHT_ENEMY_FROZEN;
@@ -59,7 +59,7 @@ void menuDebugCheatFrozen_select(const MenuItem *self, int amount) {
 void menuDebugCheatTricky_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugCheats & DBGCHT_INF_TRICKY) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatTricky_select(const MenuItem *self, int amount) {
     debugCheats ^= DBGCHT_INF_TRICKY;

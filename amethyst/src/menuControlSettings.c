@@ -5,7 +5,7 @@
 void menuRumble_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, enableRumble ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuRumble_select(const MenuItem *self, int amount) {
     enableRumble = !enableRumble;
@@ -18,7 +18,7 @@ void menuRumble_select(const MenuItem *self, int amount) {
 void menuRumbleBlur_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bRumbleBlur ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuRumbleBlur_select(const MenuItem *self, int amount) {
     bRumbleBlur = !bRumbleBlur;
@@ -30,7 +30,7 @@ void menuRumbleBlur_select(const MenuItem *self, int amount) {
 void menuCamCtrl_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (cameraFlags & CAM_FLAG_PAD3) ? 3 : 1);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuCamCtrl_select(const MenuItem *self, int amount) {
     cameraFlags ^= CAM_FLAG_PAD3;
@@ -42,7 +42,7 @@ void menuCamCtrl_select(const MenuItem *self, int amount) {
 void menuCamInvX_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (cameraFlags & CAM_FLAG_INVERT_X) ? "Invert" : "Normal");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuCamInvX_select(const MenuItem *self, int amount) {
     cameraFlags ^= CAM_FLAG_INVERT_X;
@@ -54,7 +54,7 @@ void menuCamInvX_select(const MenuItem *self, int amount) {
 void menuCamInvY_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (cameraFlags & CAM_FLAG_INVERT_Y) ? "Invert" : "Normal");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuCamInvY_select(const MenuItem *self, int amount) {
     cameraFlags ^= CAM_FLAG_INVERT_Y;

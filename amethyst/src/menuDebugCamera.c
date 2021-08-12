@@ -5,7 +5,7 @@ static const char *camModeNames[] = {"Normal", "Stay", "Free", "Bird's Eye", "Fi
 void menuDebugCamMode_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, camModeNames[debugCameraMode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
     debugPrintf("pCamera = %08X\n", pCamera);
 }
 void menuDebugCamMode_select(const MenuItem *self, int amount) {

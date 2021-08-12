@@ -5,7 +5,7 @@
 void menuWidescreen_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (renderFlags & RenderFlag_Widescreen) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuWidescreen_select(const MenuItem *self, int amount) {
     setWidescreen(!(renderFlags & RenderFlag_Widescreen));
@@ -17,7 +17,7 @@ void menuWidescreen_select(const MenuItem *self, int amount) {
 void menuParticleFx_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bDisableParticleFx ? "Off" : "On");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuParticleFx_select(const MenuItem *self, int amount) {
     bDisableParticleFx = !bDisableParticleFx;
@@ -29,7 +29,7 @@ void menuParticleFx_select(const MenuItem *self, int amount) {
 void menuFOV_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (int)overrideFov);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuFOV_select(const MenuItem *self, int amount) {
     overrideFov += amount;
@@ -43,7 +43,7 @@ void menuFOV_select(const MenuItem *self, int amount) {
 void menuHudOnOff_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (cameraFlags & CAM_FLAG_NO_HUD) ? "Off" : "On");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuHudOnOff_select(const MenuItem *self, int amount) {
     cameraFlags ^= CAM_FLAG_NO_HUD;

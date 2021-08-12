@@ -86,7 +86,7 @@ void spawnList_draw(Menu *self) {
             gameTextSetColor(r, g, 255, 255);
         }
         else gameTextSetColor(255, 255, 255, 255);
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
         nLines++;
         iObj++;
@@ -235,56 +235,56 @@ void spawnMenu_draw(Menu *self) {
 
     sprintf(str, "Object:      %04X (%04X) %s",
         spawnObjDef.def.objType & 0xFFFF, realId & 0xFFFF, name);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Params:      %X", spawnNumparams);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Spawn Flags: %08X", spawnFlags);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Load  Flags: %02X ", spawnObjDef.def.loadFlags & 0xFF);
     bin2str(&str[strlen(str)], spawnObjDef.def.loadFlags, 8);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Map Acts:    %04X", spawnActs & 0xFFFF);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Bounds:      %02X", spawnObjDef.def.bound & 0xFF);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Unk07:       %02X", spawnObjDef.def.unk7 & 0xFF);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Obj ID:      %08X", spawnObjDef.def.id);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Map ID:      %02X", spawnMapId & 0xFF);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Obj No.:     %04X", spawnObjNo & 0xFFFF);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "X Position:  %08X", spawnCoords[0]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Y Position:  %08X", spawnCoords[1]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "Z Position:  %08X", spawnCoords[2]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     int start = MAX(0, self->selected - (SPAWN_MENU_NUM_LINES-1));
@@ -292,7 +292,7 @@ void spawnMenu_draw(Menu *self) {
         int pIdx = i + start;
         if(pIdx >= spawnNumparams) break;
         sprintf(str, "Param %02X:    %08X", pIdx*4, spawnObjDef.params[pIdx]);
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
     }
 

@@ -18,79 +18,79 @@ void lightMenu_draw(Menu *self) {
     sprintf(str, "#%2d/%2d %08X %s %d%%", self->selected, nLights, light,
         light && light->bOn ? "On " : "Off",
         (int)((light ? light->lightAmount : 0.0f) * 100.0f));
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
     if(!light) return;
 
     sprintf(str, "Mode %d State %d Flags %02X", light->mode, light->state, light->lightFlags_0x64);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "DAttn %5.2f %5.2f %5.2f", light->distAttenA0, light->distAttenA1, light->distAttenA2);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
-    
+
     sprintf(str, "RefDist %5.2f FadeTgt %5.2f Spd %5.2f", light->refDistance, light->fadeTarget, light->fadeSpeed);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     char name[12];
     getObjName(name, light->obj);
     sprintf(str, "Obj: %08X %s", light->obj, name);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     sprintf(str, "v004   %5.2f %5.2f %5.2f", light->unk04.x, light->unk04.y, light->unk04.z);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
-    
+
     sprintf(str, "vLight %5.2f %5.2f %5.2f", light->vLight.x, light->vLight.y, light->vLight.z);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
-    
+
     sprintf(str, "vPos   %5.2f %5.2f %5.2f", light->vPos.x, light->vPos.y, light->vPos.z);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
-    
+
     sprintf(str, "vIn    %5.2f %5.2f %5.2f", light->vIn.x, light->vIn.y, light->vIn.z);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
-    
+
     sprintf(str, "vOut   %5.2f %5.2f %5.2f", light->vOut.x, light->vOut.y, light->vOut.z);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
-    
+
     sprintf(str, "vSpec  %5.2f %5.2f %5.2f", light->vSpec.x, light->vSpec.y, light->vSpec.z);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
-    
-    sprintf(str, "C0A8 %02X %02X %02X %02X", light->lightColorA8.r, light->lightColorA8.g, 
+
+    sprintf(str, "C0A8 %02X %02X %02X %02X", light->lightColorA8.r, light->lightColorA8.g,
         light->lightColorA8.b, light->lightColorA8.a);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     gameTextSetColor(light->lightColorA8.r, light->lightColorA8.g,  light->lightColorA8.b, 255);
     gameTextShowStr("@@", MENU_TEXTBOX_ID, x+200, y);
     gameTextSetColor(255, 255, 255, 255);
     y += MENU_LINE_HEIGHT;
-    
-    sprintf(str, "C100 %02X %02X %02X %02X", light->lightColor.r, light->lightColor.g, 
+
+    sprintf(str, "C100 %02X %02X %02X %02X", light->lightColor.r, light->lightColor.g,
         light->lightColor.b, light->lightColor.a);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     gameTextSetColor(light->lightColor.r, light->lightColor.g,  light->lightColor.b, 255);
     gameTextShowStr("@@", MENU_TEXTBOX_ID, x+200, y);
     gameTextSetColor(255, 255, 255, 255);
     y += MENU_LINE_HEIGHT;
-    
-    sprintf(str, "C104 %02X %02X %02X %02X", light->unk104.r, light->unk104.g, 
+
+    sprintf(str, "C104 %02X %02X %02X %02X", light->unk104.r, light->unk104.g,
         light->unk104.b, light->unk104.a);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     gameTextSetColor(light->unk104.r, light->unk104.g,  light->unk104.b, 255);
     gameTextShowStr("@@", MENU_TEXTBOX_ID, x+200, y);
     gameTextSetColor(255, 255, 255, 255);
     y += MENU_LINE_HEIGHT;
-    
-    sprintf(str, "C108 %02X %02X %02X %02X", light->unk108.r, light->unk108.g, 
+
+    sprintf(str, "C108 %02X %02X %02X %02X", light->unk108.r, light->unk108.g,
         light->unk108.b, light->unk108.a);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     gameTextSetColor(light->unk108.r, light->unk108.g,  light->unk108.b, 255);
     gameTextShowStr("@@", MENU_TEXTBOX_ID, x+200, y);
     gameTextSetColor(255, 255, 255, 255);

@@ -6,7 +6,7 @@ static const char *playerNames[] = {"Krystal", "Fox", "Auto"};
 void menuPlayer_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, playerNames[overridePlayerNo]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuPlayer_select(const MenuItem *self, int amount) {
     overridePlayerNo += amount;
@@ -21,7 +21,7 @@ static const char *backpackModeNames[] = {"Normal", "Off", "On"};
 void menuBackpack_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, backpackModeNames[backpackMode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuBackpack_select(const MenuItem *self, int amount) {
     backpackMode += amount;
@@ -36,7 +36,7 @@ static const char *furFxModeNames[] = {"Normal", "Off", "On"};
 void menuFurFx_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, furFxModeNames[furFxMode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuFurFx_select(const MenuItem *self, int amount) {
     int mode = furFxMode + amount;

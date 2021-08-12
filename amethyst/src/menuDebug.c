@@ -11,7 +11,7 @@ void debugSubMenu_close(const Menu *self) {
 void menuDebugFreeMove_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, bFreeMove ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugFreeMove_select(const MenuItem *self, int amount) {
     bFreeMove = !bFreeMove;

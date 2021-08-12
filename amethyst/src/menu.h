@@ -71,6 +71,7 @@ void drawMenuBox(int cx, int cy, int width, int height);
 void genericMenu_drawAt(Menu *self, int x, int y, int width, int height);
 void genericMenu_draw(Menu *self);
 void genericMenu_run(Menu *self);
+void menuDrawText(const char *str, int x, int y, bool selected);
 void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected);
 
 //menuDebug.c

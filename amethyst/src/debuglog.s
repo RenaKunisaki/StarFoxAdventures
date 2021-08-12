@@ -51,6 +51,8 @@ LAB_80137970:
     lwz     r10, 0x20(r1)
     lwz     r11, 0x24(r1)
     CALL    sprintf
+    # XXX this is probably why it breaks when given too many params.
+    # we need to account for stack params too.
 
     # adjust debugLogEnd
     LOADWH  r4,  debugLogEnd

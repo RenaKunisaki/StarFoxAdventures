@@ -35,13 +35,13 @@ void textureMenu_draw(Menu *self) {
     sprintf(str, "Tex %04X.%02X: ID %c%04X Unk %02X @%08X",
         self->selected, textureMenuFrame, id >= 0 ? ' ' : '-',
         ABS(id), ltex->unk08, tex);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
     if(tex) {
         sprintf(str, "Flags: %08X RefCnt: %3d Fmt: %02X; %d x %d",
             tex->flags, tex->refCount, tex->format, tex->width, tex->height);
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
 
         //get frame

@@ -11,7 +11,7 @@ void menuDebugMapEnvTime_draw(const MenuItem *self, int x, int y, bool selected)
             (int)(now)        % 60);
     }
     else strcpy(str, "Time: N/A");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugMapEnvTime_select(const MenuItem *self, int amount) {
     if(pSkyStruct) {

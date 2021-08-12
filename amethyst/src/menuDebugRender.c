@@ -24,7 +24,7 @@ void menuDebugRenderEffects_select(const MenuItem *self, int amount) {
 void menuDebugRenderMapGrid_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_WORLD_MAP) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderMapGrid_select(const MenuItem *self, int amount) {
     debugRenderFlags ^= DEBUGRENDER_WORLD_MAP;
@@ -35,7 +35,7 @@ void menuDebugRenderMapGrid_select(const MenuItem *self, int amount) {
 void menuDebugRenderPerf_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_PERF_METERS) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderPerf_select(const MenuItem *self, int amount) {
     debugRenderFlags ^= DEBUGRENDER_PERF_METERS;
@@ -46,7 +46,7 @@ void menuDebugRenderPerf_select(const MenuItem *self, int amount) {
 void menuDebugRenderDebugObjs_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_DEBUG_OBJS) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderDebugObjs_select(const MenuItem *self, int amount) {
     debugRenderFlags ^= DEBUGRENDER_DEBUG_OBJS;
@@ -57,7 +57,7 @@ void menuDebugRenderDebugObjs_select(const MenuItem *self, int amount) {
 void menuDebugRenderHitboxes_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_HITBOXES) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderHitboxes_select(const MenuItem *self, int amount) {
     debugRenderFlags ^= DEBUGRENDER_HITBOXES;
@@ -68,7 +68,7 @@ void menuDebugRenderHitboxes_select(const MenuItem *self, int amount) {
 void menuDebugRenderAttachPoints_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_ATTACH_POINTS) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderAttachPoints_select(const MenuItem *self, int amount) {
     debugRenderFlags ^= DEBUGRENDER_ATTACH_POINTS;
@@ -79,7 +79,7 @@ void menuDebugRenderAttachPoints_select(const MenuItem *self, int amount) {
 void menuDebugRenderFocusPoints_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_FOCUS_POINTS) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderFocusPoints_select(const MenuItem *self, int amount) {
     debugRenderFlags ^= DEBUGRENDER_FOCUS_POINTS;
@@ -90,7 +90,7 @@ void menuDebugRenderFocusPoints_select(const MenuItem *self, int amount) {
 void menuDebugRenderUnkPoints_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_UNK_POINTS) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderUnkPoints_select(const MenuItem *self, int amount) {
     debugRenderFlags ^= DEBUGRENDER_UNK_POINTS;
@@ -101,7 +101,7 @@ void menuDebugRenderUnkPoints_select(const MenuItem *self, int amount) {
 void menuDebugRenderRNG_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
     sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_RNG) ? "On" : "Off");
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderRNG_select(const MenuItem *self, int amount) {
     debugRenderFlags ^= DEBUGRENDER_RNG;
