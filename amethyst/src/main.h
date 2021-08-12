@@ -89,7 +89,10 @@ void drawSolidVtx(vec3f pos, Color4b *color);
 void drawSphere(vec3f pos, float radius, Color4b color);
 
 //drawtext.c
-int drawSimpleText(const char *str, int x, int y, int xMax, int yMax, int *outX, int *outY, bool fixed);
+#define TEXT_FIXED   (1 << 0)
+#define TEXT_COLORED (1 << 1)
+#define TEXT_SHADOW  (1 << 2)
+int drawSimpleText(const char *str, int x, int y, int *outX, int *outY, u32 flags, Color4b color, float scale);
 
 //freemove.c
 extern bool bFreeMove;

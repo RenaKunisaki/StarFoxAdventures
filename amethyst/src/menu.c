@@ -36,7 +36,9 @@ void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
     drawMenuBox(xpos, ypos, width, height);
     //textRenderSetup(); //unnecessary
 
-    drawSimpleText("Howdy!\nWoah!\f0J\f3\vCool! Fixed Width!", 20, 50, 600, 400, NULL, NULL, false);
+    Color4b color = {.r=0x00, .g=0x9D, .b=0xF3, .a=0xFF};
+    drawSimpleText("Howdy!\nWoah!\f0J\f3\vCool! Fixed Width!\bFF0000FFColor!", 20, 50, NULL, NULL,
+        TEXT_SHADOW, color, 1.0);
 
     //Draw title
     //box type 0 is (center, y+40), no background

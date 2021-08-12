@@ -20,172 +20,172 @@
   Revision 1.1.1.1  2005/05/12 02:41:07  yasuh-to
   Ported from dolphin source tree.
 
-    
+
     40    2002/12/06 9:28 Hirose
     Added GX_TEV_KCSEL_n_8/GX_TEV_KASEL_n_8 (n=even).
-    
+
     39    2002/11/18 18:10 Hirose
     Workaround for GXAbortFrame() problem with PE copyout.
-    
+
     38    2002/10/17 15:11 Hirose
     Added new enums for orthographic fog support.
-    
+
     37    2002/07/24 9:06 Hirose
     Resolved version conflicts.
-    
+
     36    2001/12/11 4:31p Carl
     Fixed warning with GX_NO_LEGACY_HW1.
-    
+
     35    2001/11/27 2:39p Carl
     Added GX_NO_LEGACY_HW1 conditional.
-    
+
     34    2001/7/12 6:07p Carl
     Removed extra #ifdef's.
-    
+
     33    2001/05/10 9:43p Hirose
     Added tag for each enum definition
-    
+
     32    2001/04/27 1:19p Carl
     Changes for making DL context saving optional.
-    
+
     31    2001/04/09 3:43p Carl
     Changed GXXFFlushVal keywords.
-    
+
     30    2001/04/04 3:28p Carl
     Second round of XF flush fixes.
-    
+
     29    2001/03/16 7:22p Carl
     Changes for XF flush.
-    
+
     28    2001/01/16 7:59p Carl
     Added new CTF.
-    
+
     27    2000/11/08 6:48p Hirose
     Fixed the enum value of GX_CC_KONST
-    
+
     26     2000/11/06 4:06p Carl
     Added GXClipMode.
-    
+
     25    2000/11/02 4:37p Carl
     Made Z16 tex fmt same value for both revs.
-    
+
     24    2000/11/02 3:22p Carl
     Removed CCV bit from tex fmts.
-    
+
     23    2000/10/18 4:05p Carl
     Latest round of HW2 modifications and minor updates.
-    
+
     22    2000/10/11 6:25p Carl
     Made CCV, CTF, ZTF into visible symbols.
-    
+
     21     2000/10/03 7:55p Hirose
     Update for HW2(Rev.B) GX API extensions
-    
+
     20    2000/08/29 3:21p Carl
     allow perf counter api to work with draw sync callback [Rob]
-        
-    
+
+
     19    2000/06/14 4:50p Carl
     Removed inverted Z formats.
-    
+
     18    2000/06/08 1:58p Carl
     Added GXAlphaReadMode.
-    
+
     17     2000/06/06 6:57p Alligator
     added vcache mem and stall counters
-    
+
     16     2000/06/06 12:02p Alligator
     made changes to perf counter api
-    
+
     15    2000/04/26 4:08p Alligator
     Added GXCopyMode enumeration
-    
+
     14    2000/04/28 4:55p Carl
     Fixed GX_MAX_VTXATTRFMTLIST_SZ.
-    
+
     13    2000/04/17 4:24p Alligator
     integrate ArtX update.  Perf monitor api and indirect texture api
     added. Misc bug fixes.
-    
+
     12    2000/04/07 12:00p Alligator
     made vtx attr list size smaller (remove index attributes from list)
-    
+
     11    2000/04/04 11:17a Alligator
     moved constants from GXStruct.h to GXEnum.h since they are dependent on
     enumerated values.
-    
+
     10    2000/04/26 5:39p Alligator
     Latest integration with ArtX
-    
+
     9     2000/03/03 4:21p Alligator
     integrate with ArtX source
-    
+
     8     2000/02/12 5:16p Alligator
     Integrate ArtX source tree changes
-    
+
     7     2000/02/04 5:09p Alligator
     added GX_TF_A8 type to texture formats.  For tex copy from alpha
     channel.
-    
+
     6     2000/02/01 7:22p Alligator
     Second GX update from ArtX
-    
+
     5     2000/01/13 5:55p Alligator
     integrate with ArtX GX library code
-    
+
     4     1999/12/08 4:55p Alligator
     remove source alpha saturate blend source
-    
+
     3     1999/12/07 5:34p Hirose
     added GXTexCacheSize
-    
+
     2     1999/12/07 2:16p Alligator
     unlock
-    
+
     35    1999/11/15 5:56p Yasu
     Fixed GXPrimitive enum
-    
+
     34    1999/11/11 6:17p Yasu
     Delete GXTevSwap, not used anymore.
-    
+
     33    1999/11/05 6:49p Hirose
     validated GX_AF_SPEC
-    
+
     32    1999/10/26 1:34p Alligator
     change GXSetDefaultMatrix to GXSetDefaultMtx
-    
+
     31    1999/10/24 4:34p Yasu
     Add GX_LIGHT_NULL as 0x00
-    
+
     30    1999/10/20 2:39p Yasu
     Add TexMatrixIndex
-    
+
     29    1999/10/19 2:49p Alligator
-    
+
     28    1999/10/19 2:35p Alligator
     added GX_VA_NBT for 9-element normal to vcd
-    
+
     27    1999/10/13 5:17p Alligator
     added _NULL types to some enums
-    
+
     26    1999/10/06 10:38a Alligator
     changed enums for compressed Z format
     updated Init functions to make GX_ZC_LINEAR default
-    
+
     25    1999/10/04 6:47p Yasu
     Rename -Sz to -Size
-    
+
     24    1999/10/04 12:44p Yasu
-    
+
     21    1999/09/30 10:59p Yasu
     Add patch for renaming GXExtras.h temporary
-    
+
     20    1999/09/30 10:40p Yasu
     Renamed some GX functions and enums
-    
+
     19    1999/09/30 4:50p Yasu
     Return GX_TG_CLR* back to GX_TG_COLOR*
-    
+
     18    1999/09/30 4:26p Yasu
     Change GX_TG_COLOR* to GX_TG_CLR*
 
@@ -288,7 +288,7 @@ typedef enum _GXAttr
     GX_NRM_MTX_ARRAY,      // normal matrix array pointer
     GX_TEX_MTX_ARRAY,      // texture matrix array pointer
     GX_LIGHT_ARRAY,        // light parameter array pointer
-    GX_VA_NBT,             // normal, bi-normal, tangent 
+    GX_VA_NBT,             // normal, bi-normal, tangent
     GX_VA_MAX_ATTR,        // maximum number of vertex attributes
 
     GX_VA_NULL     = 0xff  // NULL attribute (to mark end of lists)
@@ -673,7 +673,7 @@ typedef enum _GXTexFmt
     GX_TF_RGB5A3 = 0x5,
     GX_TF_RGBA8  = 0x6,
     GX_TF_CMPR   = 0xE,
-    GX_TF_A8     = (0x20 | GX_TF_I8), 
+    GX_TF_A8     = (0x20 | GX_TF_I8),
     GX_TF_Z8     = (0x10 | GX_TF_I8),
     GX_TF_Z16    = (0x10 | GX_TF_IA8),
     GX_TF_Z24X8  = (0x10 | GX_TF_RGBA8)
@@ -814,7 +814,7 @@ typedef enum _GXIndTexFormat
 /********************************/
 typedef enum _GXIndTexBiasSel
 {
-    GX_ITB_NONE,	
+    GX_ITB_NONE,
     GX_ITB_S,
     GX_ITB_T,
     GX_ITB_ST,
@@ -940,7 +940,7 @@ typedef enum _GXTevOp
 #else // ( GX_REV >= 2 )
     GX_TEV_ADD = 0,
     GX_TEV_SUB = 1,
-    
+
     GX_TEV_COMP_R8_GT    = 8,
     GX_TEV_COMP_R8_EQ    = 9,
     GX_TEV_COMP_GR16_GT  = 10,
@@ -949,7 +949,7 @@ typedef enum _GXTevOp
     GX_TEV_COMP_BGR24_EQ = 13,
     GX_TEV_COMP_RGB8_GT  = 14,
     GX_TEV_COMP_RGB8_EQ  = 15,
-    
+
     GX_TEV_COMP_A8_GT = GX_TEV_COMP_RGB8_GT, // for alpha channel
     GX_TEV_COMP_A8_EQ = GX_TEV_COMP_RGB8_EQ  // for alpha channel
 
@@ -1513,7 +1513,7 @@ typedef enum _GXMiscToken
 {
     GX_MT_XF_FLUSH           = 1,
     GX_MT_DL_SAVE_CONTEXT    = 2,
-    GX_MT_ABORT_WAIT_COPYOUT = 3, 
+    GX_MT_ABORT_WAIT_COPYOUT = 3,
     GX_MT_NULL               = 0
 
 } GXMiscToken;
