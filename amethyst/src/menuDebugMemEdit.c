@@ -27,22 +27,20 @@ void hexEdit_close(const Menu *self) {
 
 void hexEdit_draw(Menu *self) {
     //Draw function for memory editor
-    menuAnimFrame++;
     char str[256];
 
     drawMenuBox(HEXEDIT_XPOS, HEXEDIT_YPOS, HEXEDIT_WIDTH, HEXEDIT_HEIGHT);
-    gameTextSetColor(255, 255, 255, 255);
 
     int x = HEXEDIT_XPOS + MENU_PADDING, y = HEXEDIT_YPOS + MENU_PADDING;
-    sprintf(str, "Addr %08X", hexEditAddr);
-    menuDrawText(str, x, y, false);
+    sprintf(str, "\eFAddr %08X", hexEditAddr);
+    drawSimpleText(str, x, y);
 
     if(!PTR_VALID(hexEditAddr)) hexEditAddr = RAM_START;
 
     u8 *addr = (u8*)hexEditAddr;
     for(int i=0; i < HEXEDIT_NUM_LINES; i++) {
         y += MENU_LINE_HEIGHT;
-        sprintf(str, "%04X ", addr);
+        sprintf(str, "\eF%04X ", addr);
 
         for(int j=0; j < HEXEDIT_NUM_COLS; j++) {
             sprintf(&str[strlen(str)], "%02X ", addr[j]);
@@ -54,15 +52,13 @@ void hexEdit_draw(Menu *self) {
             str[idx+j+1] = 0;
         }
 
-        menuDrawText(str, x, y, false);
+        drawSimpleText(str, x, y);
         addr += HEXEDIT_NUM_COLS;
     }
 
     //draw instructions
     y += MENU_LINE_HEIGHT;
-    gameTextSetColor(255, 255, 255, 255);
-    gameTextShowStr("J:Move C:Fast X:+ Y:- S:FollowPtr Z:Back B:Exit",
-        MENU_TEXTBOX_ID, x, y);
+    drawSimpleText("J:Move C:Fast X:+ Y:- S:FollowPtr Z:Back B:Exit", x, y);
 
     //draw cursor
     if(self->selected == 0) {
@@ -79,7 +75,6 @@ void hexEdit_draw(Menu *self) {
 
 void hexEdit_run(Menu *self) {
     //Run function for memory editor
-    textForceFixedWidth = MENU_FIXED_WIDTH;
     int sel = curMenu->selected;
     u32 addr = hexEditAddr + (MAX(0, (self->selected-1)) * HEXEDIT_NUM_COLS) +
         (cursorX / 2);

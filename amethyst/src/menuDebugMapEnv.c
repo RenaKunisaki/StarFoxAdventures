@@ -30,7 +30,7 @@ void menuDebugMapEnvLights_select(const MenuItem *self, int amount) {
 Menu menuDebugMapEnv = {
     "Environment", 0,
     genericMenu_run, genericMenu_draw, debugMapSubMenu_close,
-    "Time: %02d:%02d:%02d", menuDebugMapEnvTime_draw, menuDebugMapEnvTime_select,
+    "Time: \eF%02d:%02d:%02d", menuDebugMapEnvTime_draw, menuDebugMapEnvTime_select,
     "Lights", genericMenuItem_draw, menuDebugMapEnvLights_select,
     NULL,
 };

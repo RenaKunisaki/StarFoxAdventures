@@ -4,7 +4,6 @@ void debugGameSubMenu_close(const Menu *self) {
     //Close function for submenus of the debug game state menu
     curMenu = &menuDebugGameState;
     audioPlaySound(NULL, MENU_CLOSE_SOUND);
-    textForceFixedWidth = 0;
 }
 
 void menuDebugGameStateBits_select(const MenuItem *self, int amount) {

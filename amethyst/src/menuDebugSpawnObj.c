@@ -67,7 +67,7 @@ void spawnList_draw(Menu *self) {
     int nLines  = 0;
 
     if(!objIdList) {
-        gameTextShowStr("Sorting...", MENU_TEXTBOX_ID, x, y);
+        drawSimpleText("Sorting...", x, y);
         return;
     }
 
@@ -80,21 +80,14 @@ void spawnList_draw(Menu *self) {
         getObjFileName(name, file);
         sprintf(str, "%04X %04X %s", defNo & 0xFFFF, realId & 0xFFFF, name);
 
-        bool selected = iObj == self->selected;
-        if(selected) {
-            u8  r = menuAnimFrame * 8, g = 255 - r;
-            gameTextSetColor(r, g, 255, 255);
-        }
-        else gameTextSetColor(255, 255, 255, 255);
-        menuDrawText(str, x, y, false);
+        menuDrawText(str, x, y, iObj == self->selected);
         y += MENU_LINE_HEIGHT;
         nLines++;
         iObj++;
     }
 
-    gameTextSetColor(255, 255, 255, 255);
     sprintf(str, "Z:Sort:%s", sortModeNames[sortMode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID, x+30, y);
+    drawSimpleText(str, x+30, y);
 }
 
 int compareFilesByName(const void *fileA, const void *fileB) {
@@ -233,57 +226,57 @@ void spawnMenu_draw(Menu *self) {
     getObjFileName(name, file);
 
 
-    sprintf(str, "Object:      %04X (%04X) %s",
+    sprintf(str, "\eFObject:      %04X (%04X) %s",
         spawnObjDef.def.objType & 0xFFFF, realId & 0xFFFF, name);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Params:      %X", spawnNumparams);
+    sprintf(str, "\eFParams:      %X", spawnNumparams);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Spawn Flags: %08X", spawnFlags);
+    sprintf(str, "\eFSpawn Flags: %08X", spawnFlags);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Load  Flags: %02X ", spawnObjDef.def.loadFlags & 0xFF);
+    sprintf(str, "\eFLoad  Flags: %02X ", spawnObjDef.def.loadFlags & 0xFF);
     bin2str(&str[strlen(str)], spawnObjDef.def.loadFlags, 8);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Map Acts:    %04X", spawnActs & 0xFFFF);
+    sprintf(str, "\eFMap Acts:    %04X", spawnActs & 0xFFFF);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Bounds:      %02X", spawnObjDef.def.bound & 0xFF);
+    sprintf(str, "\eFBounds:      %02X", spawnObjDef.def.bound & 0xFF);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Unk07:       %02X", spawnObjDef.def.unk7 & 0xFF);
+    sprintf(str, "\eFUnk07:       %02X", spawnObjDef.def.unk7 & 0xFF);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Obj ID:      %08X", spawnObjDef.def.id);
+    sprintf(str, "\eFObj ID:      %08X", spawnObjDef.def.id);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Map ID:      %02X", spawnMapId & 0xFF);
+    sprintf(str, "\eFMap ID:      %02X", spawnMapId & 0xFF);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Obj No.:     %04X", spawnObjNo & 0xFFFF);
+    sprintf(str, "\eFObj No.:     %04X", spawnObjNo & 0xFFFF);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "X Position:  %08X", spawnCoords[0]);
+    sprintf(str, "\eFX Position:  %08X", spawnCoords[0]);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Y Position:  %08X", spawnCoords[1]);
+    sprintf(str, "\eFY Position:  %08X", spawnCoords[1]);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "Z Position:  %08X", spawnCoords[2]);
+    sprintf(str, "\eFZ Position:  %08X", spawnCoords[2]);
     menuDrawText(str, x, y, false);
     y += MENU_LINE_HEIGHT;
 
@@ -291,13 +284,13 @@ void spawnMenu_draw(Menu *self) {
     for(int i=0; i < (SPAWN_MENU_NUM_LINES - SPAWN_MENU_ITEM_PARAMS); i++) {
         int pIdx = i + start;
         if(pIdx >= spawnNumparams) break;
-        sprintf(str, "Param %02X:    %08X", pIdx*4, spawnObjDef.params[pIdx]);
+        sprintf(str, "\eFParam %02X:    %08X", pIdx*4, spawnObjDef.params[pIdx]);
         menuDrawText(str, x, y, false);
         y += MENU_LINE_HEIGHT;
     }
 
-    gameTextShowStr("Start:Spawn A:List B:Exit X:+ Y:- Z:Player Coords",
-        MENU_TEXTBOX_ID, x, SPAWN_MENU_YPOS + SPAWN_MENU_HEIGHT -
+    drawSimpleText("Start:Spawn A:List B:Exit X:+ Y:- Z:Player Coords",
+        x, SPAWN_MENU_YPOS + SPAWN_MENU_HEIGHT -
         (MENU_LINE_HEIGHT + MENU_PADDING));
 
     //draw cursor
@@ -390,8 +383,6 @@ static void doAdjust(Menu *self, int amount) {
 
 void spawnMenu_run(Menu *self) {
     //Run function for Spawn Object menu
-    textForceFixedWidth = MENU_FIXED_WIDTH;
-
     if(!spawnMenuIsInit) {
         spawnMenuIsInit = true;
         spawnObjDef.def.loadFlags = 0x08;

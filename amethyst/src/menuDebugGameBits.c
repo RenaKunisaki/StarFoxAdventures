@@ -134,7 +134,7 @@ void bitMenu_draw(Menu *self) {
     //box type 0 is (center, y+40), no background
     gameTextSetColor(255, 255, 255, 255);
     gameTextShowStr(self->title, 0, x, y-40);
-    gameTextShowStr("Bit  T Sz Value", MENU_TEXTBOX_ID, x, y);
+    menuDrawText("Bit  T Sz Value", x, y, false);
 
     int start   = MAX(0, self->selected - (BIT_MENU_NUM_LINES-1));
     int bitIdx  = start - 1;
@@ -152,8 +152,6 @@ void bitMenu_draw(Menu *self) {
 
         bool selected = bitIdx == self->selected;
         if(selected) {
-            u8  r = menuAnimFrame * 8, g = 255 - r;
-            gameTextSetColor(r, g, 255, 255);
             cursorY = y;
 
             //display offset and address
@@ -167,9 +165,8 @@ void bitMenu_draw(Menu *self) {
             debugPrintf("Bit " DPRINT_FIXED "T=%d offs=%04X -> %08X\n" DPRINT_NOFIXED,
                 tbl, entry->offset, tblAddr + (entry->offset >> 3));
         }
-        else gameTextSetColor(255, 255, 255, 255);
 
-        sprintf(str, "%04X %d %2d %08X %s", bit, tbl,
+        sprintf(str, "\eF%04X %d %2d %08X %s", bit, tbl,
             (entry->flags & GameBitFlags_Size) + 1,
             mainGetBit(bit), sortedList[bitIdx].name);
         menuDrawText(str, x, y, selected);
@@ -195,8 +192,6 @@ static void moveCursorY(Menu *self, int amount) {
 
 void bitMenu_run(Menu *self) {
     //Run function for GameBit menu
-    textForceFixedWidth = MENU_FIXED_WIDTH;
-
     if(!sortedList) sortList();
     if(!sortedList) { //out of memory
         gameTextSetColor(255, 0, 0, 255);

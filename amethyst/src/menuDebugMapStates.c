@@ -189,17 +189,16 @@ void mapStatesMenu_draw(Menu *self) {
 
     drawMenuBox(MAP_STATES_MENU_XPOS, MAP_STATES_MENU_YPOS,
         MAP_STATES_MENU_WIDTH, MAP_STATES_MENU_HEIGHT);
-    gameTextSetColor(255, 255, 255, 255);
 
     int x = MAP_STATES_MENU_XPOS + MENU_PADDING;
     int y = MAP_STATES_MENU_YPOS + MENU_PADDING;
-    gameTextShowStr("Map", MENU_TEXTBOX_ID, x, y);
-    gameTextShowStr("Act", MENU_TEXTBOX_ID, x+180, y);
-    gameTextShowStr("ObjGroups", MENU_TEXTBOX_ID, x+220, y);
+    drawSimpleText("Map",       x,     y);
+    drawSimpleText("Act",       x+180, y);
+    drawSimpleText("ObjGroups", x+220, y);
 
     if(cursorX > 0) {
         sprintf(str, "%2d", cursorX - 1);
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x+(MAP_STATES_MENU_WIDTH-35), y);
+        drawSimpleText(str, x+(MAP_STATES_MENU_WIDTH-35), y);
     }
 
     int start = MAX(0, self->selected - (MAP_STATES_MENU_NUM_LINES-1));
@@ -214,18 +213,15 @@ void mapStatesMenu_draw(Menu *self) {
         if(selected) {
             debugPrintf("ActBit=%04X ObjsBit=%04X\n",
                 mapActBitIdx[iMap], mapObjGroupBit[iMap]);
-            u8  r = menuAnimFrame * 8, g = 255 - r;
-            gameTextSetColor(r, g, 255, 255);
         }
-        else gameTextSetColor(255, 255, 255, 255);
 
         if(displayNames[iMap]) {
-            gameTextShowStr(displayNames[iMap], MENU_TEXTBOX_ID, x, y);
+            menuDrawText(displayNames[iMap], x, y, selected);
         }
 
         if(mapActBitIdx[iMap]) {
             sprintf(str, "%X", mainGetBit(mapActBitIdx[iMap]));
-            gameTextShowStr(str, MENU_TEXTBOX_ID, x + 200, y);
+            menuDrawText(str, x + 200, y, selected);
         }
         if(mapObjGroupBit[iMap]) {
             u32 groups = mainGetBit(mapObjGroupBit[iMap]);
@@ -233,7 +229,7 @@ void mapStatesMenu_draw(Menu *self) {
                 str[iBit] = ((groups >> (31 - iBit)) & 1) + 0x30;
                 str[iBit+1] = 0;
             }
-            gameTextShowStr(str, MENU_TEXTBOX_ID, x + 220, y);
+            menuDrawText(str, x + 220, y, selected);
         }
     }
 
@@ -248,8 +244,6 @@ void mapStatesMenu_draw(Menu *self) {
 
 void mapStatesMenu_run(Menu *self) {
     //Run function for map states menu
-    textForceFixedWidth = MENU_FIXED_WIDTH;
-
     int sel  = curMenu->selected;
     int iMap = listOrder[sel];
 

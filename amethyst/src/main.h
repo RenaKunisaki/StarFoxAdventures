@@ -92,7 +92,9 @@ void drawSphere(vec3f pos, float radius, Color4b color);
 #define TEXT_FIXED   (1 << 0)
 #define TEXT_COLORED (1 << 1)
 #define TEXT_SHADOW  (1 << 2)
-int drawSimpleText(const char *str, int x, int y, int *outX, int *outY, u32 flags, Color4b color, float scale);
+int drawText(const char *str, int x, int y, int *outX, int *outY, u32 flags, Color4b color, float scale);
+int drawColorText(const char *str, int x, int y, Color4b color);
+int drawSimpleText(const char *str, int x, int y);
 
 //freemove.c
 extern bool bFreeMove;
@@ -197,11 +199,6 @@ extern void (*runLoadingScreens_replaced)();
 extern void (*startMsg_initDoneHook_replaced)();
 void runLoadingScreens_hook();
 void startMsg_initDoneHook();
-
-//text.s
-extern u8 textForceFixedWidth;
-void textSizeHook();
-void textDrawHook();
 
 //texthook.c
 void textHookInit();

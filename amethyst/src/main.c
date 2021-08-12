@@ -332,13 +332,6 @@ void _start(void) {
     WRITE16(0x802A26BA, 0x1B70); //ladder climb (up)
     WRITE16(0x802A26A6, 0x1B70); //ladder climb (down)
 
-    hookBranch(0x80018414, textSizeHook, 0);
-    //hooks for fixed-width text
-    hookBranch(0x800183dc, textDrawHook, 1);
-    //disable special case for spaces in text.
-    //it's not necessary anyway and interferes
-    //with our fixed width hack.
-    WRITE32(0x80017C70, 0x2816ACAB);
     textHookInit();
 
     //kill Arwing health alarm. we can turn it back on from the menu if we really want.

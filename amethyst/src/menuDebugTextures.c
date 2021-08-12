@@ -77,7 +77,6 @@ void textureMenu_draw(Menu *self) {
 
 void textureMenu_run(Menu *self) {
     //Run function for Texture Viewer menu
-    textForceFixedWidth = MENU_FIXED_WIDTH;
     int sel = self->selected;
     LoadedTexture *ltex = &loadedTextures[sel];
 

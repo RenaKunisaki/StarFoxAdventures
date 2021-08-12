@@ -14,8 +14,8 @@ void objSelMenu_draw(Menu *self) {
     char title[16];
     sprintf(title, "<%s>", objMenuSelected->file->name);
     gameTextSetColor(0, 255, 255, 255);
-    gameTextShowStr(title, MENU_TEXTBOX_ID,
-        OBJ_MENU_XPOS+MENU_PADDING+8, OBJ_MENU_YPOS+MENU_PADDING);
+    Color4b color = {.r=0, .g=255, .b=255, .a=255};
+    drawColorText(title, OBJ_MENU_XPOS+MENU_PADDING+8, OBJ_MENU_YPOS+MENU_PADDING, color);
 }
 
 void menuObjSelFocus_select(const MenuItem *self, int amount) {

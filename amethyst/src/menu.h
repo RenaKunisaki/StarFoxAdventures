@@ -66,6 +66,7 @@ typedef struct Menu {
 } Menu;
 
 //menu.c
+extern u8 menuTextAnimFrame;
 void openMainMenu();
 void drawMenuBox(int cx, int cy, int width, int height);
 void genericMenu_drawAt(Menu *self, int x, int y, int width, int height);

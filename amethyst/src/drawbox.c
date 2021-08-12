@@ -9,7 +9,8 @@ void drawBox(float x, float y, int w, int h, u8 opacity, bool fill) {
 
     #if 1
     //oh look the game has this function already
-    drawHudBox(x, y, w, h, opacity, fill);
+    drawHudBox(x+BOX_BORDER_WIDTH, y+BOX_BORDER_HEIGHT,
+        w-(BOX_BORDER_WIDTH*2), h-(BOX_BORDER_HEIGHT*2), opacity, fill);
     #else
 
     if(fill) {

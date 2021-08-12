@@ -147,7 +147,8 @@ int findChar(int chr, GameTextFont *font, GameTextFont **outFont, GameTextCharac
     }
 
     //fall back to placeholder character
-    return _findCharInAnyFont('?', outFont, outChr);
+    //return _findCharInAnyFont('?', outFont, outChr);
+    return 0;
 }
 
 /** Draw some text on the screen using the GameText fonts.
@@ -171,7 +172,7 @@ int findChar(int chr, GameTextFont *font, GameTextFont **outFont, GameTextCharac
  *    S: Toggle shadow
  *  @note Rendering with color disabled is less pretty, but faster.
  */
-int drawSimpleText(const char *str, int x, int y, int *outX, int *outY, u32 flags,
+int drawText(const char *str, int x, int y, int *outX, int *outY, u32 flags,
 Color4b color, float scale) {
     //0: icons, text, none, none
     //1: none
@@ -191,7 +192,8 @@ Color4b color, float scale) {
 
         if(chr < 0x20) {
             switch(chr) {
-                case '\n': y += (flags & TEXT_FIXED) ? 11 : MAX(lineHeight, 11); //fall thru
+                case '\n': y += (flags & TEXT_FIXED) ? MENU_FIXED_WIDTH :
+                    MAX(lineHeight, MENU_FIXED_WIDTH); //fall thru
                 case '\r': x = startX; break;
                 case '\t': {
                     int p = x % 64;
@@ -226,14 +228,13 @@ Color4b color, float scale) {
             //get the character from the font
             GameTextFont *font = &gameTextFonts[iFont];
             GameTextCharacterStruct *cStruct = NULL;
-            findChar(chr, font, &font, &cStruct);
 
-            if(cStruct) {
+            if(findChar(chr, font, &font, &cStruct)) {
                 int cx = x, cy = y;
                 if(flags & TEXT_FIXED) { //correct some positions
                     switch(chr) {
-                        case 'i': case 'I': case 'l': cx += 5; break;
-                        case 'W': cx -= 3; break;
+                        case 'i': case 'I': case 'l': case ':': cx += 5; break;
+                        case 'M': case 'W': cx -= 3; break;
                     }
                 }
 
@@ -247,10 +248,12 @@ Color4b color, float scale) {
                 else _drawChar(cStruct, font, cx, cy, color.a, scale);
 
                 //update the cursor position
-                if(flags & TEXT_FIXED) x += 11;
+                if(flags & TEXT_FIXED) x += MENU_FIXED_WIDTH;
                 else x += cStruct->width + cStruct->right + cStruct->left;
                 lineHeight = MAX(lineHeight, cStruct->height + cStruct->top + cStruct->bottom);
             }
+            else if(flags & TEXT_FIXED) x += MENU_FIXED_WIDTH;
+            else x += 8;
         }
         else {
             //TODO handle control codes, Japanese...
@@ -266,4 +269,13 @@ Color4b color, float scale) {
     if(outX) *outX = x;
     if(outY) *outY = y;
     return iChr;
+}
+
+int drawColorText(const char *str, int x, int y, Color4b color) {
+    return drawText(str, x, y, NULL, NULL, TEXT_COLORED | TEXT_SHADOW, color, 1.0);
+}
+
+int drawSimpleText(const char *str, int x, int y) {
+    Color4b color = {.r=192, .g=192, .b=192, .a=255};
+    return drawText(str, x, y, NULL, NULL, TEXT_COLORED | TEXT_SHADOW, color, 1.0);
 }

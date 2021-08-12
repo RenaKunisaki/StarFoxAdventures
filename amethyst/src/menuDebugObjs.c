@@ -68,98 +68,97 @@ void objListSubmenu_close(const Menu *self) {
 void objMenu_drawObjInfo(ObjInstance *obj) {
     //Draw the right side pane (object info).
 
-    gameTextSetColor(255, 255, 255, 255);
     int x = OBJ_INFO_XPOS + MENU_PADDING;
     int y = OBJ_INFO_YPOS + MENU_PADDING;
     char str[256];
 
-    sprintf(str, "POS  %d, %d, %d",
+    sprintf(str, "\eFPOS  %d, %d, %d",
         (int)obj->pos.pos.x, (int)obj->pos.pos.y, (int)obj->pos.pos.z);
-    menuDrawText(str, x, y, false);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
     if(obj->objDef) {
-        sprintf(str, "ORIG %d, %d, %d",
+        sprintf(str, "\eFORIG %d, %d, %d",
             (int)obj->objDef->pos.x, (int)obj->objDef->pos.y,
             (int)obj->objDef->pos.z);
-        menuDrawText(str, x, y, false);
+        drawSimpleText(str, x, y);
         y += MENU_LINE_HEIGHT;
 
-        sprintf(str, "ADDR   %08X ID %08X", obj, obj->objDef->id);
-        menuDrawText(str, x, y, false);
+        sprintf(str, "\eFADDR   %08X ID %08X", obj, obj->objDef->id);
+        drawSimpleText(str, x, y);
         y += MENU_LINE_HEIGHT;
     }
     else {
-        gameTextShowStr("NO OBJDEF", MENU_TEXTBOX_ID, x, y);
+        gameTextShowStr("\eFNO OBJDEF", MENU_TEXTBOX_ID, x, y);
         y += MENU_LINE_HEIGHT;
 
-        sprintf(str, "ADDR   %08X ID --", obj);
-        menuDrawText(str, x, y, false);
+        sprintf(str, "\eFADDR   %08X ID --", obj);
+        drawSimpleText(str, x, y);
         y += MENU_LINE_HEIGHT;
     }
 
-    sprintf(str, "FILE   %08X DEFNO %04X", obj->file, obj->defNo);
-    menuDrawText(str, x, y, false);
+    sprintf(str, "\eFFILE   %08X DEFNO %04X", obj->file, obj->defNo);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "CATID  %04X OBJNO %04X", obj->catId, obj->objNo);
-    menuDrawText(str, x, y, false);
+    sprintf(str, "\eFCATID  %04X OBJNO %04X", obj->catId, obj->objNo);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "FLAG   %04X %02X %02X %02X %02X", obj->pos.flags,
+    sprintf(str, "\eFFLAG   %04X %02X %02X %02X %02X", obj->pos.flags,
         obj->flags_0xaf, obj->flags_0xb0, obj->flags_e3, obj->flags_0xf8);
-    menuDrawText(str, x, y, false);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "SLOT   %02X MAP %02X %02X", obj->slot, obj->mapId & 0xFF,
+    sprintf(str, "\eFSLOT   %02X MAP %02X %02X", obj->slot, obj->mapId & 0xFF,
         obj->map & 0xFF);
-    menuDrawText(str, x, y, false);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "OBJDEF %08X SEQ %d", obj->objDef, obj->curSeq);
-    menuDrawText(str, x, y, false);
+    sprintf(str, "\eFOBJDEF %08X SEQ %d", obj->objDef, obj->curSeq);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "EVENT  %08X", obj->pEventName);
-    menuDrawText(str, x, y, false);
+    sprintf(str, "\eFEVENT  %08X", obj->pEventName);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
     Model **models = obj->models = obj->models;
     Model  *model = models ? models[obj->curModel] : NULL;
     u16     mdlId = (model && model->header) ? model->header->modelId : 0xFFFF;
-    sprintf(str, "MODEL  %08X(%X) %04X", obj->models, obj->curModel, mdlId);
-    menuDrawText(str, x, y, false);
+    sprintf(str, "\eFMODEL  %08X(%X) %04X", obj->models, obj->curModel, mdlId);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "STATE  %08X", obj->state);
-    menuDrawText(str, x, y, false);
+    sprintf(str, "\eFSTATE  %08X", obj->state);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "HITS   %08X", obj->hitstate);
-    menuDrawText(str, x, y, false);
+    sprintf(str, "\eFHITS   %08X", obj->hitstate);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "DLL    %08X %04X", obj->dll,
+    sprintf(str, "\eFDLL    %08X %04X", obj->dll,
         (obj->file ? obj->file->dll_id : -1) & 0xFFFF);
-    menuDrawText(str, x, y, false);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "MSGS   %08X %X/%X", obj->seqMsgs,
+    sprintf(str, "\eFMSGS   %08X %X/%X", obj->seqMsgs,
         obj->seqMsgs ? obj->seqMsgs->nMsgs : 0,
         obj->seqMsgs ? obj->seqMsgs->length : 0);
-    menuDrawText(str, x, y, false);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "PARENT %08X %s", obj->parent,
+    sprintf(str, "\eFPARENT %08X %s", obj->parent,
         (obj->parent && obj->parent->file) ? obj->parent->file->name : "-");
-    menuDrawText(str, x, y, false);
+    drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
     for(int i=0; i<3; i++) {
-        sprintf(str, "CHILD  %08X %s", obj->child[i],
+        sprintf(str, "\eFCHILD  %08X %s", obj->child[i],
             (obj->child[i] && obj->child[i]->file) ?
                 obj->child[i]->file->name : "-");
-        menuDrawText(str, x, y, false);
+        drawSimpleText(str, x, y);
         y += MENU_LINE_HEIGHT;
     }
 }
@@ -170,7 +169,6 @@ void objMenu_draw(Menu *self) {
 
     drawMenuBox(OBJ_MENU_XPOS, OBJ_MENU_YPOS, OBJ_MENU_WIDTH, OBJ_MENU_HEIGHT);
     drawMenuBox(OBJ_INFO_XPOS, OBJ_INFO_YPOS, OBJ_INFO_WIDTH, OBJ_INFO_HEIGHT);
-    gameTextSetColor(255, 255, 255, 255);
 
     int x = OBJ_MENU_XPOS + MENU_PADDING, y = OBJ_MENU_YPOS + MENU_PADDING;
     int start = MAX(0, self->selected - (OBJ_MENU_NUM_LINES-1));
@@ -188,37 +186,34 @@ void objMenu_draw(Menu *self) {
         ObjInstance *obj = objList[objIdx];
         if(!PTR_VALID(obj)) break;
 
+        Color4b color = {.r=192, .g=192, .b=192, .a=255};
         bool selected = objIdx == self->selected;
         if(selected) {
-            gameTextSetColor(255, 255, 255, 255);
             objMenu_drawObjInfo(obj);
-            u8  r = menuAnimFrame * 8, g = 255 - r;
-            gameTextSetColor(r, g, 255, 255);
+            color = hsv2rgb(menuTextAnimFrame*2, 192, 192, 128);
         }
         else if(pCamera && pCamera->focus == obj) {
-            gameTextSetColor(255, 0, 255, 255); //pink
+            color.r=255; color.g=0; color.b=255; //pink
         }
         else if(pCamera && pCamera->target == obj) {
-            gameTextSetColor(255, 255, 0, 255); //yellow
+            color.r=255; color.g=255; color.b=0; //yellow
         }
-        else gameTextSetColor(255, 255, 255, 255);
 
-        sprintf(str, "%04X %08X %s",
+        sprintf(str, "\eF%04X %08X %s",
             (obj->objDef ? obj->objDef->objType : -1) & 0xFFFF,
             (obj->objDef ? obj->objDef->id      : -1),
             (obj->file ? obj->file->name : "?"));
-        menuDrawText(str, x, y, false);
+        drawColorText(str, x, y, color);
         y += MENU_LINE_HEIGHT;
     }
 
     //draw instructions in right pane
     //done here so they don't stay when submenu is open
-    gameTextSetColor(255, 255, 255, 255);
-    gameTextShowStr("S:Player  Y:Show", MENU_TEXTBOX_ID,
+    drawSimpleText("S:Player  Y:Show",
         OBJ_INFO_XPOS + MENU_PADDING,
         OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*2) - MENU_PADDING);
     sprintf(str, "Z:Sort: %s", sortModeNames[sortMode]);
-    gameTextShowStr(str, MENU_TEXTBOX_ID,
+    drawSimpleText(str,
         OBJ_INFO_XPOS + MENU_PADDING,
         OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*1) - MENU_PADDING);
 }
@@ -302,7 +297,6 @@ static void objMenuChangeSort(Menu *self) {
 
 void objMenu_run(Menu *self) {
     //Run function for Object List menu
-    textForceFixedWidth = MENU_FIXED_WIDTH;
     int sel = self->selected;
 
     objMenuSelected = NULL;
