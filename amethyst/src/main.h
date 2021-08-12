@@ -228,6 +228,7 @@ int compareObjsByDistance(const void *objA, const void *objB);
 int compareObjsByAddr(const void *objA, const void *objB);
 double u64toDouble(u64 val);
 double ticksToSecs(u64 ticks);
+double fmod(double x, double y);
 Color4b hsv2rgb(u8 h, u8 s, u8 v, u8 a);
 
 //worldmap.c

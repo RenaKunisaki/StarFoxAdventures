@@ -319,6 +319,7 @@ minimapWidth = 0x803dbbc0;
 minimapZoom = 0x803dbbb4;
 modelGetBoneMatrix = 0x8002856c;
 modelLoad = 0x80029570;
+modf = 0x80291bc0;
 motionBlurIntensity = 0x803db62c;
 msecsThisFrame = 0x803dccc0;
 mtxRotateByVec3s = 0x80021ba0;

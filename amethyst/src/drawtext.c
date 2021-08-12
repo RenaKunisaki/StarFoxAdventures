@@ -59,7 +59,8 @@ Color4b color, float scale) {
     s16 z = -8;
 
     //XXX is there any function in the game for this?
-    //this is just a combination of hudDrawColored and drawPartialTexture
+    //this is just a combination of hudDrawColored and drawPartialTexture,
+    //plus some settings pulled from textRenderStr.
     //and yes we need to do this for every single character
     gxResetVtxDescr();
     gxSetVtxDescr(GX_VA_PNMTXIDX, GX_DIRECT);
@@ -68,13 +69,15 @@ Color4b color, float scale) {
     gxSetTexEnvColor(0, &color);
     gxSetTevKsel(0, 0xc);
     gxSetKSel(0, 0x1c);
+
     gxSetRasTref(0, 0, 0, 0xff);
     gxResetIndCmd(0);
-    gxSetTexColorEnv0(0,0xf,0xf,0xf,0xe);
-    _gxSetTexColorEnv(0,7,4,6,7);
-    gxSetTexColorEnv1(0,0,0);
+    gxSetTexColorEnv0(0, GX_CC_C1, GX_CC_ZERO, GX_CC_ZERO, GX_CC_KONST);
+    _gxSetTexColorEnv(0,7,2,4,7); //XXX these names are wrong
+    gxSetTexColorEnv1(1,0,0);
     _gxSetTexColorEnv0(0,0,0,0,1,0);
     _gxSetTexColorEnv1(0,0,0,2,1,0);
+
     if (texture->unk50 == 0) {
         gxTextureFn_8025c2a0(1);
     }
@@ -101,6 +104,7 @@ Color4b color, float scale) {
     gxSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
 
     GXBegin(GX_DRAW_QUADS, 1, 4);
+    //PNMTXIDX     Vx             Vy             Vz          Vs              Vt
     *fifoU8=0x3C; *fifoS16=sx;   *fifoS16=sy;   *fifoS16=z; *fifoFloat=vs1; *fifoFloat=vt1;
     *fifoU8=0x3C; *fifoS16=sx+w; *fifoS16=sy;   *fifoS16=z; *fifoFloat=vs2; *fifoFloat=vt1;
     *fifoU8=0x3C; *fifoS16=sx+w; *fifoS16=sy+h; *fifoS16=z; *fifoFloat=vs2; *fifoFloat=vt2;
@@ -109,6 +113,64 @@ Color4b color, float scale) {
     resetPerspectiveMtxs();
 }
 
+int _returnFindChar(GameTextFont *font, GameTextCharacterStruct *cStruct,
+GameTextFont **outFont, GameTextCharacterStruct **outChr, int ret) {
+    if(outFont) *outFont = font;
+    if(outChr)  *outChr  = cStruct;
+    return ret;
+}
+
+int _findCharInAnyFont(int chr, GameTextFont **outFont, GameTextCharacterStruct **outChr) {
+    static s8 fontIdxs[] = {3, 2, -1};
+    for(int i=0; fontIdxs[i] >= 0; i++) {
+        GameTextFont *font = &gameTextFonts[i];
+        GameTextCharacterStruct *cStruct = _fontGetChar(font, chr);
+        if(font) cStruct = _fontGetChar(font, chr);
+        if(cStruct) return _returnFindChar(font, cStruct, outFont, outChr, 1);
+    }
+    return 0;
+}
+
+int findChar(int chr, GameTextFont *font, GameTextFont **outFont, GameTextCharacterStruct **outChr) {
+    //GameTextFont *font = &gameTextFonts[iFont];
+    GameTextCharacterStruct *cStruct = _fontGetChar(font, chr);
+    if(cStruct) return _returnFindChar(font, cStruct, outFont, outChr, 1);
+
+    //try alternate fonts
+    int r = _findCharInAnyFont(chr, outFont, outChr);
+    if(r) return r;
+
+    //try alternate case
+    if((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
+        r = _findCharInAnyFont(chr ^ 0x20, outFont, outChr);
+        if(r) return r;
+    }
+
+    //fall back to placeholder character
+    return _findCharInAnyFont('?', outFont, outChr);
+}
+
+/** Draw some text on the screen using the GameText fonts.
+ *  @param str The string to draw.
+ *  @param x X coord of top left pixel.
+ *  @param y Y coord of top left pixel.
+ *  @param outX Receives X coord that next character would draw at. (Can be NULL.)
+ *  @param outY Receives Y coord that next character would draw at. (Can be NULL.)
+ *  @param flags Flags:
+ *    TEXT_FIXED: Render fixed-width text.
+ *    TEXT_COLORED: Render colored, "soft-looking" text.
+ *    TEXT_SHADOW: Render a drop shadow under the text.
+ *  @param color Color, if enabled.
+ *  @param scale Text scale.
+ *  @return The number of bytes read from `str`.
+ *  @note Control codes can be used in the string, prefixed by byte 0x1B (ESC):
+ *    F: Toggle fixed width
+ *    fN: Select font N
+ *    cRRGGBBAA: Set text color (and enable color)
+ *    C: Disable color
+ *    S: Toggle shadow
+ *  @note Rendering with color disabled is less pretty, but faster.
+ */
 int drawSimpleText(const char *str, int x, int y, int *outX, int *outY, u32 flags,
 Color4b color, float scale) {
     //0: icons, text, none, none
@@ -119,7 +181,7 @@ Color4b color, float scale) {
     int startX = x, startY = y;
     int lineHeight = 0;
     int iChr = 0;
-    Color4b shadowColor = {.r=0, .g=0, .b=0, .a=0x7F};
+    Color4b shadowColor = {.r=0x20, .g=0x20, .b=0x20, .a=0x3F};
 
     while(true) {
         int cSize = 0;
@@ -163,8 +225,9 @@ Color4b color, float scale) {
         else if(chr < 0xE000 || chr > 0xF8FF) { //normal character
             //get the character from the font
             GameTextFont *font = &gameTextFonts[iFont];
-            GameTextCharacterStruct *cStruct = _fontGetChar(font, chr);
-            if(!cStruct) cStruct = _fontGetChar(font, '?');
+            GameTextCharacterStruct *cStruct = NULL;
+            findChar(chr, font, &font, &cStruct);
+
             if(cStruct) {
                 int cx = x, cy = y;
                 if(flags & TEXT_FIXED) { //correct some positions
@@ -175,7 +238,7 @@ Color4b color, float scale) {
                 }
 
                 if(flags & TEXT_SHADOW) { //render shadow
-                    _drawCharColored(cStruct, font, cx+1, cy+1, shadowColor, scale);
+                    _drawCharColored(cStruct, font, cx, cy, shadowColor, scale * 1.2);
                 }
                 //render the actual character
                 if(flags & TEXT_COLORED) {
@@ -190,7 +253,7 @@ Color4b color, float scale) {
             }
         }
         else {
-            //XXX handle control codes, Japanese...
+            //TODO handle control codes, Japanese...
             /* SetScale	0xf8f4
             SetFont	0xf8f7
             LeftJustify	0xf8f8

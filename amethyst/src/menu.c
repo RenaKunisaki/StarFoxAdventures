@@ -7,6 +7,7 @@
 Menu *curMenu = NULL;
 u8  menuState = MENU_NOT_OPEN;
 u8  menuAnimFrame = 0;
+u8  menuTextAnimFrame = 0;
 u8  menuInputDelayTimer = 0;
 u8  menuPrevTimerFlags; //for game timer
 u8  menuPrevGameFlags; //MenuGameStateFlags
@@ -28,6 +29,7 @@ void drawMenuBox(int xpos, int ypos, int width, int height) {
 
 void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
     menuAnimFrame++;
+    menuTextAnimFrame++;
 
     //debugPrintf("Menu flags %02X delay %d\n", menuPrevGameFlags, menuInputDelayTimer);
     //GameTextDrawFunc prevDrawFunc = menuGameTextDrawFunc;
@@ -36,14 +38,16 @@ void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
     drawMenuBox(xpos, ypos, width, height);
     //textRenderSetup(); //unnecessary
 
-    Color4b color = {.r=0x00, .g=0x9D, .b=0xF3, .a=0xFF};
-    drawSimpleText("Howdy!\nWoah!\f0J\f3\vCool! Fixed Width!\bFF0000FFColor!", 20, 50, NULL, NULL,
-        TEXT_SHADOW, color, 1.0);
+    //render test
+    //Color4b color = {.r=0x00, .g=0x9D, .b=0xF3, .a=0xFF};
+    //drawSimpleText("Howdy!\nWoah!\f0J\f3\vCool! Fixed Width!\bFF0000FFColor!", 20, 50, NULL, NULL,
+    //    TEXT_SHADOW, color, 1.0);
 
     //Draw title
     //box type 0 is (center, y+40), no background
     gameTextSetColor(255, 255, 255, 255);
     if(self->title && self->title[0]) {
+        //XXX use menuDrawText (needs centering)
         gameTextShowStr(self->title, 0, xpos, ypos+MENU_PADDING-40);
     }
 
@@ -67,11 +71,6 @@ void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
             drawBottomArrow = true;
             break;
         }
-        if(selected) {
-            u8  r = menuAnimFrame * 8, g = 255 - r;
-            gameTextSetColor(r, g, 255, 255);
-        }
-        else gameTextSetColor(255, 255, 255, 255);
         self->items[i].draw(&self->items[i],
             xpos+MENU_PADDING, y+MENU_PADDING, selected);
     }
@@ -155,9 +154,20 @@ void genericMenu_run(Menu *self) {
     } */
 }
 
+void menuDrawText(const char *str, int x, int y, bool selected) {
+    //gameTextShowStr(self->name, MENU_TEXTBOX_ID, x, y);
+    Color4b color = {.r=192, .g=192, .b=192, .a=255};
+    if(selected) {
+        color = hsv2rgb(menuTextAnimFrame, 192, 192, 128);
+        //debugPrintf("H=%3d -> %02X %02X %02X\n", menuTextAnimFrame, color.r, color.g, color.b);
+    }
+    drawSimpleText(str, x, y, NULL, NULL, TEXT_SHADOW | TEXT_COLORED, color, 1.0);
+}
+
 void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected) {
     //Draw function for menu items that are only text
-    gameTextShowStr(self->name, MENU_TEXTBOX_ID, x, y);
+    //gameTextShowStr(self->name, MENU_TEXTBOX_ID, x, y);
+    menuDrawText(self->name, x, y, selected);
 }
 
 
