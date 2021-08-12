@@ -88,6 +88,9 @@ extern const float two_pi;
 void drawSolidVtx(vec3f pos, Color4b *color);
 void drawSphere(vec3f pos, float radius, Color4b color);
 
+//drawtext.c
+int drawSimpleText(const char *str, int x, int y, int xMax, int yMax, int *outX, int *outY, bool fixed);
+
 //freemove.c
 extern bool bFreeMove;
 extern vec3f freeMoveCoords;

@@ -7,6 +7,11 @@ void drawBox(float x, float y, int w, int h, u8 opacity, bool fill) {
 
     //debugPrintf("Box %f, %f, %d, %d, op %d\n", x, y, w, h, opacity);
 
+    #if 1
+    //oh look the game has this function already
+    drawHudBox(x, y, w, h, opacity, fill);
+    #else
+
     if(fill) {
         //XXX find a way to make this go *behind* the things drawn after it.
         /* Texture *tex = getLoadedTexture(0x307);
@@ -68,4 +73,5 @@ void drawBox(float x, float y, int w, int h, u8 opacity, bool fill) {
         DRAW_SCALED_TEXTURE_SCALE_ONE,
         BOX_BORDER_WIDTH, BOX_BORDER_HEIGHT,
         DRAW_SCALED_TEXTURE_FLIP_H | DRAW_SCALED_TEXTURE_FLIP_V);
+    #endif
 }

@@ -178,6 +178,54 @@ typedef void (*GameTextDrawFunc)(
 );
 extern GameTextDrawFunc gameTextDrawFunc;
 
+typedef struct PACKED GameTextFileData {
+	u8 fileIdx;         //0x00
+	u8 language;        //0x01
+	u8 id;              //0x02
+	u8 unk03;           //0x03
+	u16 fileSize;       //0x04
+	u16 unk06;          //0x06
+	s8 leftPad;         //0x08
+	s8 size09;          //0x09 rightPad?
+	s8 topPad;          //0x0A
+	s8 unk0B;           //0x0B bottomPad?
+	u8 charW;           //0x0C pixels / 32
+	u8 charH;           //0x0D pixels / 32
+	u8 font;            //0x0E
+	u8 textureIdx;      //0x0F
+	u8 unk10;           //0x10
+	u8 unk11;           //0x11
+	u8 unk12;           //0x12
+	u8 unk13;           //0x13
+	int unk14;          //0x14
+	Texture *texture18; //0x18
+	int unk1C;          //0x1C
+	int unk20;          //0x20
+	u8 unk24;           //0x24
+	u8 unk25;           //0x25
+	u8 unk26;           //0x26
+	u8 unk27;           //0x27
+	void *callback28;   //0x28
+	u8 unk2C;           //0x2C
+	u8 unk2D;           //0x2D
+	u8 unk2E;           //0x2E
+	u8 unk2F;           //0x2F
+	u8 unk30;           //0x30
+	u8 unk31;           //0x31
+	u8 unk32;           //0x32
+	u8 unk33;           //0x33
+	int unk34;          //0x34
+	void *openCb;       //0x38
+	void *filePtr;      //0x3C
+	int fileSize40;     //0x40
+	int state;          //0x44
+	u8 dir;             //0x48
+	u8 lang;            //0x49
+	u8 refCount;        //0x4A
+	u8 fontNo;          //0x4B if not 1 or 3, uses 0
+} GameTextFileData;
+CASSERT(sizeof(GameTextFileData) == 0x4C, sizeof_GameTextFileData);
+
 typedef struct PACKED GameTextBox {
 	word  unk00;      //0x00
 	word  unk02;      //0x02
@@ -234,22 +282,32 @@ typedef struct PACKED gametextStruct {
 } gametextStruct;
 CASSERT(sizeof(gametextStruct) == 0xC, sizeof_gametextStruct);
 
+//almost the same as GameTextFont
 typedef struct PACKED GameTextCharset {
+	GameTextFileData *chars; //0x00
+	gametextStruct *texts;   //0x04
+	int numChars;            //0x08
+	int numTexts;            //0x0C
+	Texture *texture[3];     //0x10
+	int type;                //0x1C
+	GameTextFileData *unk20; //0x20
+} GameTextCharset;
+CASSERT(sizeof(GameTextCharset) == 0x24, sizeof_GameTextCharset);
+
+typedef struct GameTextFont {
     GameTextCharacterStruct *chars; //0x00
-    gametextStruct *texts;          //0x04
+    gametextStruct **texts;         //0x04
     int numChars;                   //0x08
     int numTexts;                   //0x0C
-    Texture *texture;               //0x10
-    Texture *unk14;                 //0x14
-    void *unk18;                    //0x18
+    Texture *texture[3];            //0x10
     int gameTextState;              //0x1C maybe pointer
     int unk20;                      //0x20
-    s8  unk24;                      //0x24
-    s8  unk25;                      //0x25
+    s8  file;                       //0x24
+    s8  lang;                       //0x25
     s8  unk26;                      //0x26
     s8  unk27;                      //0x27
-} GameTextCharset;
-CASSERT(sizeof(GameTextCharset) == 0x28, sizeof_GameTextCharset);
-extern GameTextCharset *gameTextCharsetPtrs;
+} GameTextFont;
+CASSERT(sizeof(GameTextFont) == 0x28, sizeof_GameTextFont);
+extern GameTextFont *gameTextFonts;
 
 extern GameTextDir32 curGameTextDir;

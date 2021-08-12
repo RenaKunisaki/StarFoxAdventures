@@ -1,6 +1,8 @@
 /** In-game menu engine.
  */
 #include "main.h"
+#include "revolution/os.h"
+#include "revolution/pad.h"
 
 Menu *curMenu = NULL;
 u8  menuState = MENU_NOT_OPEN;
@@ -32,6 +34,9 @@ void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
     //gameTextDrawFunc = menuGameTextDrawFunc;
 
     drawMenuBox(xpos, ypos, width, height);
+    //textRenderSetup(); //unnecessary
+
+    drawSimpleText("Howdy!\nWoah!\f0J\f3\vCool! Fixed Width!", 20, 50, 600, 400, NULL, NULL, false);
 
     //Draw title
     //box type 0 is (center, y+40), no background
