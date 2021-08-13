@@ -168,7 +168,7 @@ void menuDebugTextAudioSFX_select(const MenuItem *self, int amount) {
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Master: %s",        menuDebugTextMaster_draw,         menuDebugTextMaster_select,
+    "Master: %s",          menuDebugTextMaster_draw,         menuDebugTextMaster_select,
     "Player State: %s",    menuDebugTextPlayerState_draw,  menuDebugTextPlayerState_select,
     "Tricky: %s",          menuDebugTextTricky_draw,       menuDebugTextTricky_select,
     "Player Coords: %s",   menuDebugTextPlayerCoords_draw, menuDebugTextPlayerCoords_select,

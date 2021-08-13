@@ -134,7 +134,7 @@ void bitMenu_draw(Menu *self) {
     //box type 0 is (center, y+40), no background
     gameTextSetColor(255, 255, 255, 255);
     gameTextShowStr(self->title, 0, x, y-40);
-    menuDrawText("Bit  T Sz Value", x, y, false);
+    menuDrawText("\eFBit  T Sz Value", x, y, false);
 
     int start   = MAX(0, self->selected - (BIT_MENU_NUM_LINES-1));
     int bitIdx  = start - 1;

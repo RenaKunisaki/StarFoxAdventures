@@ -49,7 +49,7 @@ void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
     gameTextSetColor(255, 255, 255, 255);
     if(self->title && self->title[0]) {
         //XXX use menuDrawText (needs centering)
-        gameTextShowStr(self->title, 0, xpos, ypos+MENU_PADDING-40);
+        gameTextShowStr(T(self->title), 0, xpos, ypos+MENU_PADDING-40);
     }
 
     //find Y position of current item

@@ -200,6 +200,9 @@ extern void (*startMsg_initDoneHook_replaced)();
 void runLoadingScreens_hook();
 void startMsg_initDoneHook();
 
+//strings.c
+const char* T(const char *s);
+
 //texthook.c
 void textHookInit();
 

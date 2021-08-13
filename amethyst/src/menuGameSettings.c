@@ -18,7 +18,7 @@ void menuGameSpeed_select(const MenuItem *self, int amount) {
 
 void menuAutoSave_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, bAutoSave ? "On" : "Off");
+    sprintf(str, self->name, bAutoSave ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuAutoSave_select(const MenuItem *self, int amount) {
@@ -30,7 +30,7 @@ void menuAutoSave_select(const MenuItem *self, int amount) {
 
 void menuSubtitles_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, bSubtitlesEnabled ? "On" : "Off");
+    sprintf(str, self->name, bSubtitlesEnabled ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuSubtitles_select(const MenuItem *self, int amount) {
@@ -67,7 +67,7 @@ void menuLanguage_select(const MenuItem *self, int amount) {
 
 void menuHpFlash_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (hudFlags & HUD_LOW_HP_FLASH) ? "On" : "Off");
+    sprintf(str, self->name, (hudFlags & HUD_LOW_HP_FLASH) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuHpFlash_select(const MenuItem *self, int amount) {
@@ -78,7 +78,7 @@ void menuHpFlash_select(const MenuItem *self, int amount) {
 
 void menuHpSound_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[64];
-    sprintf(str, self->name, (hudFlags & HUD_LOW_HP_BEEP) ? "On" : "Off");
+    sprintf(str, self->name, (hudFlags & HUD_LOW_HP_BEEP) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuHpSound_select(const MenuItem *self, int amount) {
@@ -87,6 +87,12 @@ void menuHpSound_select(const MenuItem *self, int amount) {
     updateSaveData();
 }
 
+//maybe for options we split into two strings, like:
+//"Game Speed", "%s: %d%%", menuGameSpeed_draw, menuGameSpeed_select,
+//where the first is the string which gets looked up in translation table
+//and the second is the format string where the translated string is arg 0.
+//maybe need to use a special placeholder instead of %s, or just always concat
+//the format string to the end of it?
 Menu menuGameSettings = {
     "Game Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,

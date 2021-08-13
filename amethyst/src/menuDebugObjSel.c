@@ -153,7 +153,7 @@ void menuObjSelCallSeq_select(const MenuItem *self, int amount) {
 }
 
 Menu menuDebugObjSelected = {
-    "", 0,
+    "", 0, //blank title
     genericMenu_run, objSelMenu_draw, objListSubmenu_close,
     "Set Camera Focus",   genericMenuItem_draw, menuObjSelFocus_select,
     "Go To",              genericMenuItem_draw, menuObjSelMovePlayer_select,
