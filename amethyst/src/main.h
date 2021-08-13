@@ -201,6 +201,8 @@ void runLoadingScreens_hook();
 void startMsg_initDoneHook();
 
 //strings.c
+extern const char *strings_English[];
+extern const char *strings_Japanese[];
 const char* T(const char *s);
 
 //texthook.c

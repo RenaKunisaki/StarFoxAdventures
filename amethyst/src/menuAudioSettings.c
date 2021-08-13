@@ -145,7 +145,12 @@ void menuStopSounds_select(const MenuItem *self, int amount) {
     //XXX music
 }
 
-
+//maybe for options we split into two strings, like:
+//"Game Speed", "%s: %d%%", menuGameSpeed_draw, menuGameSpeed_select,
+//where the first is the string which gets looked up in translation table
+//and the second is the format string where the translated string is arg 0.
+//maybe need to use a special placeholder instead of %s, or just always concat
+//the format string to the end of it?
 Menu menuAudioSettings = {
     "Audio Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
