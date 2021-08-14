@@ -217,13 +217,15 @@ Color4b color, float scale) {
     int startX = x, startY = y;
     int lineHeight = 0;
     int iChr = 0;
-    Color4b shadowColor = {.r=0x20, .g=0x20, .b=0x20, .a=0x3F};
+    Color4b shadowColor = {.r=0x20, .g=0x20, .b=0x20, .a=0xFF};
     bool japanese = (curLanguage == LANG_JAPANESE);
     int FW = (japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
     int LH = japanese ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT;
 
     while(true) {
         int cSize = 0;
+        //this function is used for all languages. it returns the next character
+        //and sets cSize to the number of bytes long that character is.
         int chr = shiftJisGetNextChar((char*)&str[iChr], &cSize);
         if(!chr) break;
         iChr += cSize;
@@ -301,15 +303,45 @@ Color4b color, float scale) {
             else if(flags & TEXT_FIXED) x += FW * scale;
             else x += 8 * scale;
         }
-        else {
-            //TODO handle original game control codes
-            /* SetScale	0xf8f4
-            SetFont	0xf8f7
-            LeftJustify	0xf8f8
-            RightJustify	0xf8f9
-            Center	0xf8fa
-            FullJustify	0xf8fb
-            SetColor	0xf8ff */
+        else switch(chr) { //some control codes the original game uses.
+            //these aren't great because they have the parameters as binary,
+            //which means the strings can contain embedded nulls.
+            case 0xf8f4: { //SetScale
+                s16 s = str[iChr++] << 8;
+                s |= str[iChr++];
+                scale = s / 256.0;
+                break;
+            }
+
+            case 0xf8f7: { //SetFont
+                //why on earth is this 16-bit? how many fonts did you expect to have!?
+                s16 s = str[iChr++] << 8;
+                s |= str[iChr++];
+                iFont = s;
+                break;
+            }
+
+            //case 0xf8f8: //LeftJustify
+            //case 0xf8f9: //RightJustify
+            //case 0xf8fa: //Center
+            //case 0xf8fb: //FullJustify
+            //    break;
+
+            case 0xf8ff: { //SetColor
+                color.r = str[iChr++];
+                color.g = str[iChr++];
+                color.b = str[iChr++];
+                color.a = str[iChr++];
+                shadowColor.r = str[iChr++];
+                shadowColor.g = str[iChr++];
+                shadowColor.b = str[iChr++];
+                shadowColor.a = str[iChr++];
+                flags |= TEXT_COLORED; //enable color
+                break;
+            }
+
+            default:
+                OSReport("Warning: unsupported control code 0x%X", chr);
         }
     }
     if(outX) *outX = x;
