@@ -130,8 +130,8 @@ int _findCharInAnyFont(int chr, GameTextFont **outFont, GameTextCharacterStruct 
     //1: doesn't exist?
     //2: big letters
     //3: normal letters
-    static s8 fontIdxsE[] = {3, 2, 0, 1, -1};
-    static s8 fontIdxsJ[] = {3, 2, 1, 0, -1};
+    static s8 fontIdxsE[] = {3, 0, 2, 1, -1};
+    static s8 fontIdxsJ[] = {3, 0, 2, 1, -1};
     s8 *fontIdxs = (curLanguage == LANG_JAPANESE) ? fontIdxsJ : fontIdxsE;
     for(int i=0; fontIdxs[i] >= 0; i++) {
         //don't fall back to icons
