@@ -8,6 +8,7 @@
 #define FONT_MENU_HEIGHT (SCREEN_HEIGHT - (FONT_MENU_YPOS * 2))
 
 s16 lineNo = 0;
+GameLanguageEnum prevLanguage = -1;
 
 void fontMenu_draw(Menu *self) {
     //Draw function for font menu
@@ -82,10 +83,13 @@ void fontMenu_draw(Menu *self) {
 
 void fontMenu_run(Menu *self) {
     //Run function for font menu
+    if(prevLanguage == -1) prevLanguage = curLanguage;
+
     int sel = curMenu->selected;
     if(buttonsJustPressed == PAD_BUTTON_B) {
         menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;
         curMenu->close(curMenu);
+        setGameLanguage(prevLanguage);
     }
     else if(buttonsJustPressed == PAD_TRIGGER_Z) {
         menuInputDelayTimer = MENU_INPUT_DELAY_ADJUST;
@@ -129,6 +133,6 @@ void fontMenu_run(Menu *self) {
 
 Menu menuDebugFontTest = {
     "Font Test", 0,
-    fontMenu_run, fontMenu_draw, debugMapSubMenu_close,
+    fontMenu_run, fontMenu_draw, debugRenderSubMenu_close,
     NULL,
 };
