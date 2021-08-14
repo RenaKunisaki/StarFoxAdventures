@@ -51,6 +51,7 @@ void fontMenu_draw(Menu *self) {
             else {
                 y  += lineHeight + LH + 1;
                 y2 += lineHeight + LH + 1;
+                cy += lineHeight + LH + 1;
                 if(y2 >= FONT_MENU_YPOS + FONT_MENU_HEIGHT) break; //can't fit any more on screen
             }
             lineHeight = 0;
@@ -59,21 +60,21 @@ void fontMenu_draw(Menu *self) {
 
         if(!lineCount) {
             //draw the ID
-            drawText(str, x, y, &cx, &cy, TEXT_FIXED, col, idScale);
+            drawText(str, x, y, NULL, NULL, TEXT_FIXED, col, idScale);
 
-            //outline the character+padding region
+            //outline the padding region
             Color4b colPad = {.r=255, .g=255, .b=0, .a=128};
-            hudDrawRect(x, cy + 1, x2, y2, &colPad);
+            hudDrawRect(x, cy, x2, cy+th, &colPad);
 
             //outline the character region
             Color4b colChar = {.r=255, .g=0, .b=255, .a=128};
             hudDrawRect(x + chr->left, cy + chr->top,
-                x + chr->width + chr->left, cy + chr->height + chr->top, &colChar);
+                x + cw + chr->left, cy + ch + chr->top, &colChar);
 
             //draw the character
             drawPartialTexture(x + chr->left, cy + chr->top,
                 font->texture[chr->texture], 255, 256,
-                chr->width, chr->height, chr->xpos, chr->ypos);
+                cw, ch, chr->xpos, chr->ypos);
         }
         x += rw+1;
     }

@@ -370,7 +370,7 @@ const char *languageNames[NUM_LANGUAGES] = {
     "français", //French
     "Deutsch", //German
     "Italiano", //Italian
-    "日本", //Japanese
+    "日本語", //Japanese
     "Español" //Spanish
 };
 void setGameLanguage(GameLanguageEnum lang) {

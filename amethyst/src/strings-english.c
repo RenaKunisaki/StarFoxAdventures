@@ -1,5 +1,17 @@
 #include "main.h"
 
+/* Instructions for translating:
+ * 1. Copy this file, rename to the other language.
+ * 2. Rename the variable from `strings_English`.
+ * 3. Update `stringTables` in `strings.c`.
+ * 4. Translate each string.
+ * The strings must be in the same order as the English table.
+ * It's OK if some are repeated, or empty.
+ * Don't translate the comments.
+ * Some strings are abbreviated to fit on the screen, so check if
+ * your replacement fits as well.
+ */
+
 const char *strings_English[] = {
     "Address", //memory address
     "ADDR", //memory address
