@@ -1,16 +1,16 @@
 #include "main.h"
 
 void menuDebugMapEnvTime_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
+    char str[256];
     debugPrintf("pSkyStruct=%08X", pSkyStruct);
     if(pSkyStruct) {
         int now = (int)pSkyStruct->timeOfDay;
-        sprintf(str, self->name,
+        sprintf(str, self->fmt, T(self->name),
             (int)(now / 3600),
             (int)(now /   60) % 60,
             (int)(now)        % 60);
     }
-    else strcpy(str, "Time: N/A");
+    else sprintf(str, "%s: %s", T("Time"), T("N/A"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugMapEnvTime_select(const MenuItem *self, int amount) {
@@ -30,7 +30,7 @@ void menuDebugMapEnvLights_select(const MenuItem *self, int amount) {
 Menu menuDebugMapEnv = {
     "Environment", 0,
     genericMenu_run, genericMenu_draw, debugMapSubMenu_close,
-    "Time: \eF%02d:%02d:%02d", menuDebugMapEnvTime_draw, menuDebugMapEnvTime_select,
-    "Lights", genericMenuItem_draw, menuDebugMapEnvLights_select,
+    "Time",   "%s: \eF%02d:%02d:%02d", menuDebugMapEnvTime_draw, menuDebugMapEnvTime_select,
+    "Lights", "%s", genericMenuItem_draw, menuDebugMapEnvLights_select,
     NULL,
 };

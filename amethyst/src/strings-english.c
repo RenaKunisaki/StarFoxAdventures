@@ -204,8 +204,6 @@ const char *strings_English[] = {
     "View Textures", //show all textures
     "Warp", //warp to another map
     "Widescreen", //enable widescreen display
-    "X Position", //X coordinate
-    "Y Position", //Y coordinate
-    "Z Position", //Z coordinate
+    "Position", //coordinate
     NULL
 };

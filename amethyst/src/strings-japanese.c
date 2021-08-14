@@ -62,7 +62,7 @@ const char *strings_Japanese[] = {
     "フォーカスポイント", //show camera focus points
     "フォローポインタ", //follow pointer
     "FOV", //field of view
-    "Fox", //Fox player character
+    "フォックス", //Fox player character
     "FPSメーター", //Frames Per Second
     "自由に動く", //let camera move anywhere
     "フリームーブ", //move the player anywhere
@@ -204,8 +204,6 @@ const char *strings_Japanese[] = {
     "テクスチャ表示", //show all textures
     "ワープ", //warp to another map
     "ワイドスクリーン", //enable widescreen display
-    "X 位置", //X coordinate
-    "Y 位置", //Y coordinate
-    "Z 位置", //Z coordinate
+    "位置", //coordinate
     NULL
 };

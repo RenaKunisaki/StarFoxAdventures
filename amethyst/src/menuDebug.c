@@ -9,8 +9,8 @@ void debugSubMenu_close(const Menu *self) {
 }
 
 void menuDebugFreeMove_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, bFreeMove ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bFreeMove ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugFreeMove_select(const MenuItem *self, int amount) {
@@ -64,13 +64,13 @@ void menuDebugMisc_select(const MenuItem *self, int amount) {
 Menu menuDebug = {
     "Debug", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
-    "Free Move: %s",  menuDebugFreeMove_draw, menuDebugFreeMove_select,
-    "Debug Text",     genericMenuItem_draw,   menuDebugText_select,
-    "Map",            genericMenuItem_draw,   menuDebugMap_select,
-    "Camera",         genericMenuItem_draw,   menuDebugCam_select,
-    "Game State",     genericMenuItem_draw,   menuDebugGame_select,
-    "Cheats",         genericMenuItem_draw,   menuDebugCheat_select,
-    "Render",         genericMenuItem_draw,   menuDebugRender_select,
-    "Misc",           genericMenuItem_draw,   menuDebugMisc_select,
+    "Free Move",  "%s: %s", menuDebugFreeMove_draw, menuDebugFreeMove_select,
+    "Debug Text", "%s",     genericMenuItem_draw,   menuDebugText_select,
+    "Map",        "%s",     genericMenuItem_draw,   menuDebugMap_select,
+    "Camera",     "%s",     genericMenuItem_draw,   menuDebugCam_select,
+    "Game State", "%s",     genericMenuItem_draw,   menuDebugGame_select,
+    "Cheats",     "%s",     genericMenuItem_draw,   menuDebugCheat_select,
+    "Render",     "%s",     genericMenuItem_draw,   menuDebugRender_select,
+    "Misc",       "%s",     genericMenuItem_draw,   menuDebugMisc_select,
     NULL,
 };

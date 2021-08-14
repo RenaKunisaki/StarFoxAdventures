@@ -72,90 +72,91 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
     int y = OBJ_INFO_YPOS + MENU_PADDING;
     char str[256];
 
-    sprintf(str, "\eFPOS  %d, %d, %d",
+    sprintf(str, "\eF%s  %d, %d, %d", T("POS"),
         (int)obj->pos.pos.x, (int)obj->pos.pos.y, (int)obj->pos.pos.z);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
     if(obj->objDef) {
-        sprintf(str, "\eFORIG %d, %d, %d",
+        sprintf(str, "\eF%s %d, %d, %d", T("ORIG"),
             (int)obj->objDef->pos.x, (int)obj->objDef->pos.y,
             (int)obj->objDef->pos.z);
         drawSimpleText(str, x, y);
         y += MENU_LINE_HEIGHT;
 
-        sprintf(str, "\eFADDR   %08X ID %08X", obj, obj->objDef->id);
+        sprintf(str, "\eF%s   %08X %s %08X", T("ADDR"), obj, T("ID"), obj->objDef->id);
         drawSimpleText(str, x, y);
         y += MENU_LINE_HEIGHT;
     }
     else {
-        gameTextShowStr("\eFNO OBJDEF", MENU_TEXTBOX_ID, x, y);
+        sprintf(str, "\eF%s", T("NO OBJDEF"));
+        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
         y += MENU_LINE_HEIGHT;
 
-        sprintf(str, "\eFADDR   %08X ID --", obj);
+        sprintf(str, "\eF%s   %08X %s --", T("ADDR"), obj, T("ID"));
         drawSimpleText(str, x, y);
         y += MENU_LINE_HEIGHT;
     }
 
-    sprintf(str, "\eFFILE   %08X DEFNO %04X", obj->file, obj->defNo);
+    sprintf(str, "\eF%s   %08X %s %04X", T("FILE"), obj->file, T("DEFNO"), obj->defNo);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFCATID  %04X OBJNO %04X", obj->catId, obj->objNo);
+    sprintf(str, "\eF%s  %04X %s %04X", T("CATID"), obj->catId, T("OBJNO"), obj->objNo);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFFLAG   %04X %02X %02X %02X %02X", obj->pos.flags,
+    sprintf(str, "\eF%s   %04X %02X %02X %02X %02X", T("FLAG"), obj->pos.flags,
         obj->flags_0xaf, obj->flags_0xb0, obj->flags_e3, obj->flags_0xf8);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFSLOT   %02X MAP %02X %02X", obj->slot, obj->mapId & 0xFF,
+    sprintf(str, "\eF%s   %02X %s %02X %02X", T("SLOT"), obj->slot, T("MAP"), obj->mapId & 0xFF,
         obj->map & 0xFF);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFOBJDEF %08X SEQ %d", obj->objDef, obj->curSeq);
+    sprintf(str, "\eF%s %08X %s %d", T("OBJDEF"), obj->objDef, T("SEQ"), obj->curSeq);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFEVENT  %08X", obj->pEventName);
+    sprintf(str, "\eF%s  %08X", T("EVENT"), obj->pEventName);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
     Model **models = obj->models = obj->models;
     Model  *model = models ? models[obj->curModel] : NULL;
     u16     mdlId = (model && model->header) ? model->header->modelId : 0xFFFF;
-    sprintf(str, "\eFMODEL  %08X(%X) %04X", obj->models, obj->curModel, mdlId);
+    sprintf(str, "\eF%s  %08X(%X) %04X", T("MODEL"), obj->models, obj->curModel, mdlId);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFSTATE  %08X", obj->state);
+    sprintf(str, "\eF%s  %08X", T("STATE"), obj->state);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFHITS   %08X", obj->hitstate);
+    sprintf(str, "\eF%s   %08X", T("HITS"), obj->hitstate);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFDLL    %08X %04X", obj->dll,
+    sprintf(str, "\eF%s    %08X %04X", T("DLL"), obj->dll,
         (obj->file ? obj->file->dll_id : -1) & 0xFFFF);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFMSGS   %08X %X/%X", obj->seqMsgs,
+    sprintf(str, "\eF%s   %08X %X/%X", T("MSGS"), obj->seqMsgs,
         obj->seqMsgs ? obj->seqMsgs->nMsgs : 0,
         obj->seqMsgs ? obj->seqMsgs->length : 0);
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
-    sprintf(str, "\eFPARENT %08X %s", obj->parent,
+    sprintf(str, "\eF%s %08X %s", T("PARENT"), obj->parent,
         (obj->parent && obj->parent->file) ? obj->parent->file->name : "-");
     drawSimpleText(str, x, y);
     y += MENU_LINE_HEIGHT;
 
     for(int i=0; i<3; i++) {
-        sprintf(str, "\eFCHILD  %08X %s", obj->child[i],
+        sprintf(str, "\eF%s  %08X %s", T("CHILD"), obj->child[i],
             (obj->child[i] && obj->child[i]->file) ?
                 obj->child[i]->file->name : "-");
         drawSimpleText(str, x, y);
@@ -174,7 +175,7 @@ void objMenu_draw(Menu *self) {
     int start = MAX(0, self->selected - (OBJ_MENU_NUM_LINES-1));
 
     if(!objList) {
-        gameTextShowStr("Sorting...", MENU_TEXTBOX_ID, x, y);
+        gameTextShowStr(T("Sorting..."), MENU_TEXTBOX_ID, x, y);
         return;
     }
 
@@ -209,13 +210,10 @@ void objMenu_draw(Menu *self) {
 
     //draw instructions in right pane
     //done here so they don't stay when submenu is open
-    drawSimpleText("S:Player  Y:Show",
-        OBJ_INFO_XPOS + MENU_PADDING,
-        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*2) - MENU_PADDING);
-    sprintf(str, "Z:Sort: %s", sortModeNames[sortMode]);
+    sprintf(str, "S:%s  Y:%s\nZ:%s: %s", T("Player"), T("Show"), T("Sort"), sortModeNames[sortMode]);
     drawSimpleText(str,
         OBJ_INFO_XPOS + MENU_PADDING,
-        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*1) - MENU_PADDING);
+        OBJ_INFO_YPOS + OBJ_INFO_HEIGHT - (MENU_LINE_HEIGHT*2) - MENU_PADDING);
 }
 
 static bool objMenuCheckClose(Menu *self) {

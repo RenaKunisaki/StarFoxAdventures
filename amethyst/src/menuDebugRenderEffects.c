@@ -1,8 +1,8 @@
 #include "main.h"
 
 void menuDebugRenderEffectsBlur_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, bEnableBlurFilter ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bEnableBlurFilter ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsBlur_select(const MenuItem *self, int amount) {
@@ -12,8 +12,8 @@ void menuDebugRenderEffectsBlur_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderEffectsMotBlur_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (int)motionBlurIntensity);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (int)motionBlurIntensity);
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsMotBlur_select(const MenuItem *self, int amount) {
@@ -27,8 +27,8 @@ void menuDebugRenderEffectsMotBlur_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderEffectsHeatFx_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, heatEffectIntensity);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), heatEffectIntensity);
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsHeatFx_select(const MenuItem *self, int amount) {
@@ -41,8 +41,8 @@ void menuDebugRenderEffectsHeatFx_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderEffectsMono_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, bEnableMonochromeFilter ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bEnableMonochromeFilter ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsMono_select(const MenuItem *self, int amount) {
@@ -52,8 +52,8 @@ void menuDebugRenderEffectsMono_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderEffectsSpirit_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, bEnableSpiritVision ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bEnableSpiritVision ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderEffectsSpirit_select(const MenuItem *self, int amount) {
@@ -63,8 +63,8 @@ void menuDebugRenderEffectsSpirit_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderColFiltOn_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, bEnableColorFilter ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bEnableColorFilter ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColFiltOn_select(const MenuItem *self, int amount) {
@@ -74,8 +74,8 @@ void menuDebugRenderColFiltOn_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderColFiltR_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, colorFilterColor.r);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), colorFilterColor.r);
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColFiltR_select(const MenuItem *self, int amount) {
@@ -88,8 +88,8 @@ void menuDebugRenderColFiltR_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderColFiltG_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, colorFilterColor.g);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), colorFilterColor.g);
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColFiltG_select(const MenuItem *self, int amount) {
@@ -102,8 +102,8 @@ void menuDebugRenderColFiltG_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderColFiltB_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, colorFilterColor.b);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), colorFilterColor.b);
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColFiltB_select(const MenuItem *self, int amount) {
@@ -116,11 +116,11 @@ void menuDebugRenderColFiltB_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderColScale_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
+    char str[256];
     if(overrideColorScale >= 0){
-        sprintf(str, "Color Scale: %d%%", (int)((overrideColorScale / 255.0) * 100.0));
+        sprintf(str, "%s: %d%%", T("Color Scale"), (int)((overrideColorScale / 255.0) * 100.0));
     }
-    else strcpy(str, "Color Scale: Normal");
+    else sprintf(str, "%s: %s", T("Color Scale"), T("Normal"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColScale_select(const MenuItem *self, int amount) {
@@ -134,15 +134,15 @@ void menuDebugRenderColScale_select(const MenuItem *self, int amount) {
 Menu menuDebugRenderEffects = {
     "Effects", 0,
     genericMenu_run, genericMenu_draw, debugRenderSubMenu_close,
-    "Blur Filter: %s",   menuDebugRenderEffectsBlur_draw,     menuDebugRenderEffectsBlur_select,
-    "Motion Blur: %d",   menuDebugRenderEffectsMotBlur_draw,  menuDebugRenderEffectsMotBlur_select,
-    "Heat Effect: %d",   menuDebugRenderEffectsHeatFx_draw,   menuDebugRenderEffectsHeatFx_select,
-    "Monochrome: %s",    menuDebugRenderEffectsMono_draw,     menuDebugRenderEffectsMono_select,
-    "Spirit Vision: %s", menuDebugRenderEffectsSpirit_draw,   menuDebugRenderEffectsSpirit_select,
-    "Color Filter: %s",  menuDebugRenderColFiltOn_draw,       menuDebugRenderColFiltOn_select,
-    "Filter R: %d",      menuDebugRenderColFiltR_draw,        menuDebugRenderColFiltR_select,
-    "Filter G: %d",      menuDebugRenderColFiltG_draw,        menuDebugRenderColFiltG_select,
-    "Filter B: %d",      menuDebugRenderColFiltB_draw,        menuDebugRenderColFiltB_select,
-    "",                  menuDebugRenderColScale_draw,        menuDebugRenderColScale_select,
+    "Blur Filter",   "%s: %s", menuDebugRenderEffectsBlur_draw,     menuDebugRenderEffectsBlur_select,
+    "Motion Blur",   "%s: %d", menuDebugRenderEffectsMotBlur_draw,  menuDebugRenderEffectsMotBlur_select,
+    "Heat Effect",   "%s: %d", menuDebugRenderEffectsHeatFx_draw,   menuDebugRenderEffectsHeatFx_select,
+    "Monochrome",    "%s: %s", menuDebugRenderEffectsMono_draw,     menuDebugRenderEffectsMono_select,
+    "Spirit Vision", "%s: %s", menuDebugRenderEffectsSpirit_draw,   menuDebugRenderEffectsSpirit_select,
+    "Color Filter",  "%s: %s", menuDebugRenderColFiltOn_draw,       menuDebugRenderColFiltOn_select,
+    "Filter R",      "%s: %d", menuDebugRenderColFiltR_draw,        menuDebugRenderColFiltR_select,
+    "Filter G",      "%s: %d", menuDebugRenderColFiltG_draw,        menuDebugRenderColFiltG_select,
+    "Filter B",      "%s: %d", menuDebugRenderColFiltB_draw,        menuDebugRenderColFiltB_select,
+    "", "%s",                  menuDebugRenderColScale_draw,        menuDebugRenderColScale_select,
     NULL,
 };

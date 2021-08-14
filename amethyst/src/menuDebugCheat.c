@@ -2,8 +2,8 @@
 
 
 void menuDebugCheatHP_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugCheats & DBGCHT_INF_HP) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugCheats & DBGCHT_INF_HP) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatHP_select(const MenuItem *self, int amount) {
@@ -13,8 +13,8 @@ void menuDebugCheatHP_select(const MenuItem *self, int amount) {
 
 
 void menuDebugCheatMP_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugCheats & DBGCHT_INF_MP) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugCheats & DBGCHT_INF_MP) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatMP_select(const MenuItem *self, int amount) {
@@ -24,8 +24,8 @@ void menuDebugCheatMP_select(const MenuItem *self, int amount) {
 
 
 void menuDebugCheatMoney_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugCheats & DBGCHT_INF_MONEY) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugCheats & DBGCHT_INF_MONEY) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatMoney_select(const MenuItem *self, int amount) {
@@ -35,8 +35,8 @@ void menuDebugCheatMoney_select(const MenuItem *self, int amount) {
 
 
 void menuDebugCheatLives_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugCheats & DBGCHT_INF_LIVES) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugCheats & DBGCHT_INF_LIVES) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatLives_select(const MenuItem *self, int amount) {
@@ -46,8 +46,8 @@ void menuDebugCheatLives_select(const MenuItem *self, int amount) {
 
 
 void menuDebugCheatFrozen_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugCheats & DBGCHT_ENEMY_FROZEN) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugCheats & DBGCHT_ENEMY_FROZEN) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatFrozen_select(const MenuItem *self, int amount) {
@@ -57,8 +57,8 @@ void menuDebugCheatFrozen_select(const MenuItem *self, int amount) {
 
 
 void menuDebugCheatTricky_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugCheats & DBGCHT_INF_TRICKY) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugCheats & DBGCHT_INF_TRICKY) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugCheatTricky_select(const MenuItem *self, int amount) {
@@ -130,12 +130,12 @@ void menuDebugCheatUnlock_select(const MenuItem *self, int amount) {
 Menu menuDebugCheat = {
     "Cheats", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Infinite HP: %s",    menuDebugCheatHP_draw, menuDebugCheatHP_select,
-    "Infinite MP: %s",    menuDebugCheatMP_draw, menuDebugCheatMP_select,
-    "Infinite Money: %s", menuDebugCheatMoney_draw, menuDebugCheatMoney_select,
-    "Infinite Lives: %s", menuDebugCheatLives_draw, menuDebugCheatLives_select,
-    "Infinite Tricky Energy: %s", menuDebugCheatTricky_draw, menuDebugCheatTricky_select,
-    "Frozen Baddies: %s", menuDebugCheatFrozen_draw, menuDebugCheatFrozen_select,
-    "Unlock Everything", genericMenuItem_draw, menuDebugCheatUnlock_select,
+    "Infinite HP",            "%s: %s", menuDebugCheatHP_draw,     menuDebugCheatHP_select,
+    "Infinite MP",            "%s: %s", menuDebugCheatMP_draw,     menuDebugCheatMP_select,
+    "Infinite Money",         "%s: %s", menuDebugCheatMoney_draw,  menuDebugCheatMoney_select,
+    "Infinite Lives",         "%s: %s", menuDebugCheatLives_draw,  menuDebugCheatLives_select,
+    "Infinite Tricky Energy", "%s: %s", menuDebugCheatTricky_draw, menuDebugCheatTricky_select,
+    "Frozen Baddies",         "%s: %s", menuDebugCheatFrozen_draw, menuDebugCheatFrozen_select,
+    "Unlock Everything",      "%s",     genericMenuItem_draw,      menuDebugCheatUnlock_select,
     NULL,
 };

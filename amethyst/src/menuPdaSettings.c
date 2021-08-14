@@ -5,10 +5,10 @@
 static const char *pdaModeNames[] = {
     "Map", "Fuel Cell Compass", "Information", "Off"};
 void menuPdaMode_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
+    char str[256];
     int mode = minimapMode;
     if(!pdaOn) mode = 3;
-    sprintf(str, self->name, pdaModeNames[mode]);
+    sprintf(str, self->fmt, T(self->name), T(pdaModeNames[mode]));
     menuDrawText(str, x, y, selected);
 }
 void menuPdaMode_select(const MenuItem *self, int amount) {
@@ -31,8 +31,8 @@ void menuPdaMode_select(const MenuItem *self, int amount) {
 
 static const char *mapSizeNames[] = {"Small", "Normal", "Big"};
 void menuPdaSize_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, mapSizeNames[overrideMinimapSize]);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), T(mapSizeNames[overrideMinimapSize]));
     menuDrawText(str, x, y, selected);
 }
 void menuPdaSize_select(const MenuItem *self, int amount) {
@@ -46,9 +46,9 @@ void menuPdaSize_select(const MenuItem *self, int amount) {
 
 
 void menuPdaOpacity_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
+    char str[256];
     int v = (int)((overrideMinimapAlpha / 255.0) * 100);
-    sprintf(str, self->name, roundTo(v, 10));
+    sprintf(str, self->fmt, T(self->name), roundTo(v, 10));
     menuDrawText(str, x, y, selected);
 }
 void menuPdaOpacity_select(const MenuItem *self, int amount) {
@@ -62,9 +62,9 @@ void menuPdaOpacity_select(const MenuItem *self, int amount) {
 
 
 void menuPdaZoom_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
+    char str[256];
     int v = (int)(minimapZoom * 100);
-    sprintf(str, self->name, roundTo(v, 5));
+    sprintf(str, self->fmt, T(self->name), roundTo(v, 5));
     menuDrawText(str, x, y, selected);
 }
 void menuPdaZoom_select(const MenuItem *self, int amount) {
@@ -79,9 +79,9 @@ void menuPdaZoom_select(const MenuItem *self, int amount) {
 Menu menuPdaSettings = {
     "PDA Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
-    "Mode: %s",          menuPdaMode_draw,    menuPdaMode_select,
-    "Map Size: %s",      menuPdaSize_draw,    menuPdaSize_select,
-    "Map Opacity: %d%%", menuPdaOpacity_draw, menuPdaOpacity_select,
-    "Map Zoom: %d%%",    menuPdaZoom_draw,    menuPdaZoom_select,
+    "Mode",        "%s: %s",   menuPdaMode_draw,    menuPdaMode_select,
+    "Map Size",    "%s: %s",   menuPdaSize_draw,    menuPdaSize_select,
+    "Map Opacity", "%s: %d%%", menuPdaOpacity_draw, menuPdaOpacity_select,
+    "Map Zoom",    "%s: %d%%", menuPdaZoom_draw,    menuPdaZoom_select,
     NULL,
 };

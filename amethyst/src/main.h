@@ -1,7 +1,7 @@
 #include <sfa/sfa.h>
 
 #define MOD_VERSION_MAJOR 2
-#define MOD_VERSION_MINOR 1
+#define MOD_VERSION_MINOR 2
 #define MOD_VERSION_PATCH 0
 #define __STR(x) #x
 #define _STR(x) __STR(x)
@@ -9,6 +9,14 @@
 
 #define SCREEN_WIDTH  640
 #define SCREEN_HEIGHT 480
+
+//text sizing
+#define LINE_HEIGHT 16
+#define LINE_HEIGHT_JAPANESE 22
+#define TAB_WIDTH 64
+#define TAB_WIDTH_JAPANESE 64
+#define FIXED_CHR_WIDTH 11
+#define FIXED_CHR_WIDTH_JAPANESE 14
 
 #define MIN(a,b) \
     ({ __typeof__ (a) _a = (a); \

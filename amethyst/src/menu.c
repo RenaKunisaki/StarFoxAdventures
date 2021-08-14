@@ -31,6 +31,7 @@ void drawMenuBox(int xpos, int ypos, int width, int height) {
 void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
     menuAnimFrame++;
     menuTextAnimFrame++;
+    int lineHeight = (curLanguage == LANG_JAPANESE) ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT;
 
     //debugPrintf("Menu flags %02X delay %d\n", menuPrevGameFlags, menuInputDelayTimer);
     //GameTextDrawFunc prevDrawFunc = menuGameTextDrawFunc;
@@ -54,10 +55,10 @@ void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
 
     //find Y position of current item
     int iStart = 0;
-    int ySel = MENU_LINE_HEIGHT * (self->selected+2) + MENU_PADDING;
+    int ySel = lineHeight * (self->selected+2) + MENU_PADDING;
     //debugPrintf("ySel=%d/%d ", ySel, (int)height);
     while(ySel >= (int)(height-MENU_PADDING)) {
-        ySel -= MENU_LINE_HEIGHT;
+        ySel -= lineHeight;
         iStart++;
     }
     //debugPrintf("iStart=%d\n", iStart);
@@ -66,9 +67,9 @@ void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
     int y = ypos;
     bool drawBottomArrow = false;
     for(int i=iStart; self->items[i].name; i++) {
-        y += MENU_LINE_HEIGHT;
+        y += lineHeight;
         bool selected = i == self->selected;
-        if(y + MENU_LINE_HEIGHT >= ypos + (height-(MENU_PADDING*2))) {
+        if(y + lineHeight >= ypos + (height-(MENU_PADDING*2))) {
             drawBottomArrow = true;
             break;
         }
@@ -156,9 +157,9 @@ void genericMenu_run(Menu *self) {
 
 void menuDrawText(const char *str, int x, int y, bool selected) {
     //gameTextShowStr(self->name, MENU_TEXTBOX_ID, x, y);
-    Color4b color = {.r=192, .g=192, .b=192, .a=255};
+    Color4b color = {.r=255, .g=255, .b=255, .a=192};
     if(selected) {
-        color = hsv2rgb(menuTextAnimFrame*2, 192, 192, 128);
+        color = hsv2rgb(menuTextAnimFrame*2, 192, 192, 192);
         //debugPrintf("H=%3d -> %02X %02X %02X\n", menuTextAnimFrame, color.r, color.g, color.b);
     }
     drawText(str, x, y, NULL, NULL, TEXT_SHADOW | TEXT_COLORED, color, 1.0);
@@ -167,7 +168,9 @@ void menuDrawText(const char *str, int x, int y, bool selected) {
 void genericMenuItem_draw(const MenuItem *self, int x, int y, bool selected) {
     //Draw function for menu items that are only text
     //gameTextShowStr(self->name, MENU_TEXTBOX_ID, x, y);
-    menuDrawText(self->name, x, y, selected);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name));
+    menuDrawText(str, x, y, selected);
 }
 
 
@@ -182,6 +185,22 @@ static void drawMenu() {
     }
     OSReport("Draw menu %08X", curMenu); */
     curMenu->draw(curMenu);
+
+    //text test
+    #if 0
+    drawSimpleText("\eF\ef0\eC" //enable fixed width, font 0, disable color
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n"
+        "0123456789!@#$%^&*()-_=+[]{}`~,./<>?;:'\"\\", 10, 10);
+    drawSimpleText("\eF\ef1\eC" //font 1
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n"
+        "0123456789!@#$%^&*()-_=+[]{}`~,./<>?;:'\"\\", 10, 50);
+    drawSimpleText("\eF\ef2\eC" //font 2
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n"
+        "0123456789!@#$%^&*()-_=+[]{}`~,./<>?;:'\"\\", 10, 90);
+    drawSimpleText("\eF\ef3\eC" //font 3
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\n"
+        "0123456789!@#$%^&*()-_=+[]{}`~,./<>?;:'\"\\", 10, 130);
+    #endif
 }
 
 static void doMenuInputs() {

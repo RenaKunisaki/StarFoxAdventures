@@ -76,14 +76,14 @@ Color4b color, float scale) {
     _gxSetTexColorEnv(0,7,2,4,7); //XXX these names are wrong
     gxSetTexColorEnv1(1,0,0);
     _gxSetTexColorEnv0(0,0,0,0,1,0);
-    _gxSetTexColorEnv1(0,0,0,2,1,0);
+    _gxSetTexColorEnv1(0,0,0,0,1,0);
 
     if (texture->unk50 == 0) {
         gxTextureFn_8025c2a0(1);
     }
     else {
-        gxSetKSel(1,0x1c);
-        gxSetRasTref(0,0,1,0xff);
+        gxSetKSel(1, 0x1c);
+        gxSetRasTref(0, 0, 1, 0xff);
         gxSetTexColorEnv0(1,0xf,0xf,0xf,0);
         _gxSetTexColorEnv(1,7,4,6,7);
         gxSetTexColorEnv1(1,0,0);
@@ -94,7 +94,7 @@ Color4b color, float scale) {
     gxTextureFn_8025b6f0(0);
     gxSetColorCtrl(4,0,0,0,0,0,2);
     gxSetColorCtrl(5,0,0,0,0,0,2);
-    gxSetNumColors(0);
+    gxSetNumColors(1);
     gxSetNumTextures(1);
     gxSetTextureParams(0,1,4,0x3c,0,0x7d);
     textureFn_8004c264(texture,0);
@@ -102,6 +102,9 @@ Color4b color, float scale) {
     gxSetProjection(&hudMatrix, TRUE);
     gxSetZMode_(0, 7, 0);
     gxSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
+
+    _gxSetTevColor2(color.r, color.g, color.g, color.a);
+    _gxSetTevColor1(color.r, color.g, color.g, color.a);
 
     GXBegin(GX_DRAW_QUADS, 1, 4);
     //PNMTXIDX     Vx             Vy             Vz          Vs              Vt
@@ -121,10 +124,29 @@ GameTextFont **outFont, GameTextCharacterStruct **outChr, int ret) {
 }
 
 int _findCharInAnyFont(int chr, GameTextFont **outFont, GameTextCharacterStruct **outChr) {
-    static s8 fontIdxs[] = {3, 2, -1};
+    //fonts:
+    //0: icons/faces, some letters
+    //1: doesn't exist?
+    //2: big letters
+    //3: normal letters
+    static s8 fontIdxsE[] = {3, 2, 0, 1, -1};
+    static s8 fontIdxsJ[] = {3, 2, 1, 0, -1};
+    s8 *fontIdxs = (curLanguage == LANG_JAPANESE) ? fontIdxsJ : fontIdxsE;
     for(int i=0; fontIdxs[i] >= 0; i++) {
-        GameTextFont *font = &gameTextFonts[i];
-        GameTextCharacterStruct *cStruct = _fontGetChar(font, chr);
+        //don't fall back to icons
+        if(fontIdxs[i] == 0) {
+            bool ok = true;
+            static const char *icons = "ABCDFIJS";
+            for(int j=0; icons[j]; j++) {
+                if(icons[j] == chr) {
+                    ok = false;
+                    break;
+                }
+            }
+            if(!ok) continue; //skip font 0 for this character
+        }
+        GameTextFont *font = &gameTextFonts[fontIdxs[i]];
+        GameTextCharacterStruct *cStruct = NULL;
         if(font) cStruct = _fontGetChar(font, chr);
         if(cStruct) return _returnFindChar(font, cStruct, outFont, outChr, 1);
     }
@@ -141,13 +163,14 @@ int findChar(int chr, GameTextFont *font, GameTextFont **outFont, GameTextCharac
     if(r) return r;
 
     //try alternate case
-    if((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
-        r = _findCharInAnyFont(chr ^ 0x20, outFont, outChr);
-        if(r) return r;
-    }
+    //if((chr >= 'A' && chr <= 'Z') || (chr >= 'a' && chr <= 'z')) {
+    //    r = _findCharInAnyFont(chr ^ 0x20, outFont, outChr);
+    //    if(r) return r;
+    //}
 
     //fall back to placeholder character
-    //return _findCharInAnyFont('?', outFont, outChr);
+    return _findCharInAnyFont('.', outFont, outChr);
+    OSReport("Can't find char 0x%X (%c)", chr, chr);
     return 0;
 }
 
@@ -181,17 +204,20 @@ Color4b color, float scale) {
     //icons:
     //A: A button
     //B: B button
+    //C: C button
     //D: German flag
     //F: French flag (reversed)
     //I: Italian flag
     //J: joystick
-    //S: Spanish flag
+    //S: Spanish flag (or Start button, in French)
     //There don't seem to be icons for the English or Japanese flags in this version.
+    //Not all icons are available at all times.
     int iFont = 3; //can be changed by control codes
     int startX = x, startY = y;
     int lineHeight = 0;
     int iChr = 0;
     Color4b shadowColor = {.r=0x20, .g=0x20, .b=0x20, .a=0x3F};
+    bool japanese = (curLanguage == LANG_JAPANESE);
 
     while(true) {
         int cSize = 0;
@@ -202,11 +228,12 @@ Color4b color, float scale) {
         if(chr < 0x20) {
             switch(chr) {
                 case '\n': y += (flags & TEXT_FIXED) ? 16 :
-                    MAX(lineHeight, 16); //fall thru
+                    MAX(lineHeight, japanese ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT);
+                    //fall thru
                 case '\r': x = startX; break;
                 case '\t': {
-                    int p = x % 64;
-                    x += (64 - p);
+                    int p = x % (japanese ? TAB_WIDTH_JAPANESE : TAB_WIDTH);
+                    x += ((japanese ? TAB_WIDTH_JAPANESE : TAB_WIDTH) - p);
                     break;
                 }
 
@@ -240,7 +267,7 @@ Color4b color, float scale) {
 
             if(findChar(chr, font, &font, &cStruct)) {
                 int cx = x, cy = y;
-                if(flags & TEXT_FIXED) { //correct some positions
+                if(flags & TEXT_FIXED && curLanguage != LANG_JAPANESE) { //correct some positions
                     switch(chr) {
                         case 'i': case 'I': case 'l': case ':': cx += 5; break;
                         case 'M': case 'W': cx -= 3; break;
@@ -257,15 +284,15 @@ Color4b color, float scale) {
                 else _drawChar(cStruct, font, cx, cy, color.a, scale);
 
                 //update the cursor position
-                if(flags & TEXT_FIXED) x += MENU_FIXED_WIDTH;
+                if(flags & TEXT_FIXED) x += (japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
                 else x += cStruct->width + cStruct->right + cStruct->left;
                 lineHeight = MAX(lineHeight, cStruct->height + cStruct->top + cStruct->bottom);
             }
-            else if(flags & TEXT_FIXED) x += MENU_FIXED_WIDTH;
+            else if(flags & TEXT_FIXED) x += (japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
             else x += 8;
         }
         else {
-            //TODO handle control codes, Japanese...
+            //TODO handle original game control codes
             /* SetScale	0xf8f4
             SetFont	0xf8f7
             LeftJustify	0xf8f8

@@ -52,6 +52,7 @@ typedef struct Menu Menu;
 
 typedef struct MenuItem {
     const char *name; //displayed text
+    const char *fmt; //format string
     void (*draw)(const MenuItem *self, int x, int y, bool selected); //draw function
     void (*select)(const MenuItem *self, int amount); //select/adjust function
 } MenuItem;

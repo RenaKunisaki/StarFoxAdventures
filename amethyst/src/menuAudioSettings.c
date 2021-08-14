@@ -3,8 +3,8 @@
 #include "main.h"
 
 void menuMusicVol_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (int)(volumeMusic * 100.0));
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (int)(volumeMusic * 100.0));
     menuDrawText(str, x, y, selected);
 }
 void menuMusicVol_select(const MenuItem *self, int amount) {
@@ -17,8 +17,8 @@ void menuMusicVol_select(const MenuItem *self, int amount) {
 
 
 void menuSfxVol_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (int)(volumeSFX * 100.0));
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (int)(volumeSFX * 100.0));
     menuDrawText(str, x, y, selected);
 }
 void menuSfxVol_select(const MenuItem *self, int amount) {
@@ -31,9 +31,9 @@ void menuSfxVol_select(const MenuItem *self, int amount) {
 
 
 void menuSceneVol_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
+    char str[256];
     int v = (int)((volumeCutScenes / 127.0) * 100.0);
-    sprintf(str, self->name, roundTo(v, 10));
+    sprintf(str, self->fmt, T(self->name), roundTo(v, 10));
     menuDrawText(str, x, y, selected);
 }
 void menuSceneVol_select(const MenuItem *self, int amount) {
@@ -50,8 +50,8 @@ void menuSceneVol_select(const MenuItem *self, int amount) {
 
 static const char *soundModeNames[] = {"Stereo", "Surround", "Mono", "Headphones"};
 void menuSoundMode_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, soundModeNames[soundMode]);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), T(soundModeNames[soundMode]));
     menuDrawText(str, x, y, selected);
 }
 void menuSoundMode_select(const MenuItem *self, int amount) {
@@ -64,7 +64,7 @@ void menuSoundMode_select(const MenuItem *self, int amount) {
 static u8 musicTestIdx = 0;
 void menuMusicTest_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
-    sprintf(str, self->name, musicTestIdx, songTable[musicTestIdx].name);
+    sprintf(str, self->fmt, T(self->name), musicTestIdx, songTable[musicTestIdx].name);
     //sprintf(str, "Song %02X: %04X %02X %02X %08X %08X %s",
     //    musicTestIdx,
     //    songTable[musicTestIdx].unk00,
@@ -91,9 +91,9 @@ void menuMusicTest_select(const MenuItem *self, int amount) {
 
 static u16 sfxTestIdx = 0;
 void menuSfxTest_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
+    char str[256];
     //sound effects don't have names
-    sprintf(str, self->name, sfxTestIdx);
+    sprintf(str, self->fmt, T(self->name), sfxTestIdx);
     menuDrawText(str, x, y, selected);
 }
 void menuSfxTest_select(const MenuItem *self, int amount) {
@@ -114,7 +114,7 @@ void menuSfxTest_select(const MenuItem *self, int amount) {
 static s16 streamTestIdx = 0;
 void menuStreamTest_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
-    sprintf(str, self->name, streamTestIdx, pStreamsBin[streamTestIdx].name);
+    sprintf(str, self->fmt, T(self->name), streamTestIdx, pStreamsBin[streamTestIdx].name);
     //sprintf(str, "Stream %04X: %04X %02X %02X %04X %s", streamTestIdx,
     //    pStreamsBin[streamTestIdx].id,
     //    pStreamsBin[streamTestIdx].unk02,
@@ -145,22 +145,16 @@ void menuStopSounds_select(const MenuItem *self, int amount) {
     //XXX music
 }
 
-//maybe for options we split into two strings, like:
-//"Game Speed", "%s: %d%%", menuGameSpeed_draw, menuGameSpeed_select,
-//where the first is the string which gets looked up in translation table
-//and the second is the format string where the translated string is arg 0.
-//maybe need to use a special placeholder instead of %s, or just always concat
-//the format string to the end of it?
 Menu menuAudioSettings = {
     "Audio Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
-    "Music Volume: %d%%",    menuMusicVol_draw,    menuMusicVol_select,
-    "SFX Volume: %d%%",      menuSfxVol_draw,      menuSfxVol_select,
-    "CutScene Volume: %d%%", menuSceneVol_draw,    menuSceneVol_select,
-    "Sound Mode: %s",        menuSoundMode_draw,   menuSoundMode_select,
-    "Play Song: %02X %s",    menuMusicTest_draw,   menuMusicTest_select,
-    "Play SFX: %04X",        menuSfxTest_draw,     menuSfxTest_select,
-    "Play Stream: %02X %s",  menuStreamTest_draw,  menuStreamTest_select,
-    "Stop All Sounds",       genericMenuItem_draw, menuStopSounds_select,
+    "Music Volume",    "%s: %d%%",    menuMusicVol_draw,    menuMusicVol_select,
+    "SFX Volume",      "%s: %d%%",    menuSfxVol_draw,      menuSfxVol_select,
+    "CutScene Volume", "%s: %d%%",    menuSceneVol_draw,    menuSceneVol_select,
+    "Sound Mode",      "%s: %s",      menuSoundMode_draw,   menuSoundMode_select,
+    "Play Song",       "%s: %02X %s", menuMusicTest_draw,   menuMusicTest_select,
+    "Play SFX",        "%s: %04X",    menuSfxTest_draw,     menuSfxTest_select,
+    "Play Stream",     "%s: %02X %s", menuStreamTest_draw,  menuStreamTest_select,
+    "Stop All Sounds", "%s",          genericMenuItem_draw, menuStopSounds_select,
     NULL,
 };

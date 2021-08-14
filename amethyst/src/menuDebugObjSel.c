@@ -127,7 +127,7 @@ void menuObjSelEditState_select(const MenuItem *self, int amount) {
 }
 
 void menuObjSelCallSeq_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
+    char str[256];
 
     //do this here so it applies when a different object is selected
     if(selectedSeq < 0) selectedSeq = objMenuSelected->file->numSeqs - 1;
@@ -139,7 +139,7 @@ void menuObjSelCallSeq_draw(const MenuItem *self, int x, int y, bool selected) {
         //this doesn't matter for calling because it will just do nothing.
         seqNo = objMenuSelected->file->pSeq[selectedSeq];
     }
-    sprintf(str, self->name, selectedSeq, seqNo);
+    sprintf(str, self->fmt, T(self->name), selectedSeq, seqNo);
     menuDrawText(str, x, y, selected);
 }
 void menuObjSelCallSeq_select(const MenuItem *self, int amount) {
@@ -155,18 +155,18 @@ void menuObjSelCallSeq_select(const MenuItem *self, int amount) {
 Menu menuDebugObjSelected = {
     "", 0, //blank title
     genericMenu_run, objSelMenu_draw, objListSubmenu_close,
-    "Set Camera Focus",   genericMenuItem_draw, menuObjSelFocus_select,
-    "Go To",              genericMenuItem_draw, menuObjSelMovePlayer_select,
-    "Bring To Player",    genericMenuItem_draw, menuObjSelSummon_select,
-    "Delete",             genericMenuItem_draw, menuObjSelDelete_select,
-    "Edit",               genericMenuItem_draw, menuObjSelEditObj_select,
-    "Edit ObjDef",        genericMenuItem_draw, menuObjSelEditDef_select,
-    "Edit File",          genericMenuItem_draw, menuObjSelEditFile_select,
-    "Edit State",         genericMenuItem_draw, menuObjSelEditState_select,
-    "Run Seq %d: %04X",   menuObjSelCallSeq_draw, menuObjSelCallSeq_select,
+    "Set Camera Focus",   "%s", genericMenuItem_draw, menuObjSelFocus_select,
+    "Go To",              "%s", genericMenuItem_draw, menuObjSelMovePlayer_select,
+    "Bring To Player",    "%s", genericMenuItem_draw, menuObjSelSummon_select,
+    "Delete",             "%s", genericMenuItem_draw, menuObjSelDelete_select,
+    "Edit",               "%s", genericMenuItem_draw, menuObjSelEditObj_select,
+    "Edit ObjDef",        "%s", genericMenuItem_draw, menuObjSelEditDef_select,
+    "Edit File",          "%s", genericMenuItem_draw, menuObjSelEditFile_select,
+    "Edit State",         "%s", genericMenuItem_draw, menuObjSelEditState_select,
+    "Run Seq",   "%s %d: %04X", menuObjSelCallSeq_draw, menuObjSelCallSeq_select,
     //these will probably crash, so add a little warning icon
-    "[!] Set as Player",  genericMenuItem_draw, menuObjSelSetPlayer_select,
-    "[!] Ride",           genericMenuItem_draw, menuObjSelRide_select,
-    "[!] Hold",           genericMenuItem_draw, menuObjSelHold_select,
+    "Set as Player",  "[!] %s", genericMenuItem_draw, menuObjSelSetPlayer_select,
+    "Ride",           "[!] %s", genericMenuItem_draw, menuObjSelRide_select,
+    "Pick Up",        "[!] %s", genericMenuItem_draw, menuObjSelHold_select,
     NULL,
 };

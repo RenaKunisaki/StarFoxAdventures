@@ -2,8 +2,8 @@
 
 
 void menuDebugTextMaster_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, enableDebugText ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), enableDebugText ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextMaster_select(const MenuItem *self, int amount) {
@@ -13,8 +13,8 @@ void menuDebugTextMaster_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextPlayerCoords_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_PLAYER_COORDS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_PLAYER_COORDS) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextPlayerCoords_select(const MenuItem *self, int amount) {
@@ -24,8 +24,8 @@ void menuDebugTextPlayerCoords_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextCameraCoords_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_CAMERA_COORDS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_CAMERA_COORDS) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextCameraCoords_select(const MenuItem *self, int amount) {
@@ -35,8 +35,8 @@ void menuDebugTextCameraCoords_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextRestartPoint_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_RESTART_POINT) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_RESTART_POINT) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextRestartPoint_select(const MenuItem *self, int amount) {
@@ -46,8 +46,8 @@ void menuDebugTextRestartPoint_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextMemoryStats_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_MEMORY_INFO) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_MEMORY_INFO) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextMemoryStats_select(const MenuItem *self, int amount) {
@@ -57,8 +57,8 @@ void menuDebugTextMemoryStats_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextInteractObj_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextInteractObj_select(const MenuItem *self, int amount) {
@@ -68,8 +68,8 @@ void menuDebugTextInteractObj_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextHeaps_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_HEAP_STATE) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_HEAP_STATE) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextHeaps_select(const MenuItem *self, int amount) {
@@ -79,8 +79,8 @@ void menuDebugTextHeaps_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextBits_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_GAMEBIT_LOG) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_GAMEBIT_LOG) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextBits_select(const MenuItem *self, int amount) {
@@ -90,8 +90,8 @@ void menuDebugTextBits_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextPlayerState_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_PLAYER_STATE) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_PLAYER_STATE) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextPlayerState_select(const MenuItem *self, int amount) {
@@ -101,8 +101,8 @@ void menuDebugTextPlayerState_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextTricky_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_TRICKY) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_TRICKY) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextTricky_select(const MenuItem *self, int amount) {
@@ -112,8 +112,8 @@ void menuDebugTextTricky_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextPerf_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_PERFORMANCE) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_PERFORMANCE) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextPerf_select(const MenuItem *self, int amount) {
@@ -123,8 +123,8 @@ void menuDebugTextPerf_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextFPS_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_FPS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_FPS) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextFPS_select(const MenuItem *self, int amount) {
@@ -134,8 +134,8 @@ void menuDebugTextFPS_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextRNG_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_RNG) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_RNG) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextRNG_select(const MenuItem *self, int amount) {
@@ -145,8 +145,8 @@ void menuDebugTextRNG_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextAudioStreams_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_AUDIO_STREAMS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_AUDIO_STREAMS) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextAudioStreams_select(const MenuItem *self, int amount) {
@@ -156,8 +156,8 @@ void menuDebugTextAudioStreams_select(const MenuItem *self, int amount) {
 
 
 void menuDebugTextAudioSFX_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugTextFlags & DEBUGTEXT_AUDIO_SFX) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_AUDIO_SFX) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugTextAudioSFX_select(const MenuItem *self, int amount) {
@@ -168,20 +168,20 @@ void menuDebugTextAudioSFX_select(const MenuItem *self, int amount) {
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Master: %s",          menuDebugTextMaster_draw,         menuDebugTextMaster_select,
-    "Player State: %s",    menuDebugTextPlayerState_draw,  menuDebugTextPlayerState_select,
-    "Tricky: %s",          menuDebugTextTricky_draw,       menuDebugTextTricky_select,
-    "Player Coords: %s",   menuDebugTextPlayerCoords_draw, menuDebugTextPlayerCoords_select,
-    "Camera Coords: %s",   menuDebugTextCameraCoords_draw, menuDebugTextCameraCoords_select,
-    "Restart Point: %s",   menuDebugTextRestartPoint_draw, menuDebugTextRestartPoint_select,
-    "Interact Obj: %s",    menuDebugTextInteractObj_draw,  menuDebugTextInteractObj_select,
-    "GameBit Changes: %s", menuDebugTextBits_draw,         menuDebugTextBits_select,
-    "Memory Stats: %s",    menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
-    "Heap Details: %s",    menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
-    "Performance: %s",     menuDebugTextPerf_draw,         menuDebugTextPerf_select,
-    "FPS Meter: %s",       menuDebugTextFPS_draw,          menuDebugTextFPS_select,
-    "RNG: %s",             menuDebugTextRNG_draw,          menuDebugTextRNG_select,
-    "Audio Streams: %s",   menuDebugTextAudioStreams_draw, menuDebugTextAudioStreams_select,
-    "Audio SFX: %s",       menuDebugTextAudioSFX_draw,     menuDebugTextAudioSFX_select,
+    "Master",          "%s: %s", menuDebugTextMaster_draw,         menuDebugTextMaster_select,
+    "Player State",    "%s: %s", menuDebugTextPlayerState_draw,  menuDebugTextPlayerState_select,
+    "Tricky",          "%s: %s", menuDebugTextTricky_draw,       menuDebugTextTricky_select,
+    "Player Coords",   "%s: %s", menuDebugTextPlayerCoords_draw, menuDebugTextPlayerCoords_select,
+    "Camera Coords",   "%s: %s", menuDebugTextCameraCoords_draw, menuDebugTextCameraCoords_select,
+    "Restart Point",   "%s: %s", menuDebugTextRestartPoint_draw, menuDebugTextRestartPoint_select,
+    "Interact Obj",    "%s: %s", menuDebugTextInteractObj_draw,  menuDebugTextInteractObj_select,
+    "GameBit Changes", "%s: %s", menuDebugTextBits_draw,         menuDebugTextBits_select,
+    "Memory Stats",    "%s: %s", menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
+    "Heap Details",    "%s: %s", menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
+    "Performance",     "%s: %s", menuDebugTextPerf_draw,         menuDebugTextPerf_select,
+    "FPS Meter",       "%s: %s", menuDebugTextFPS_draw,          menuDebugTextFPS_select,
+    "RNG",             "%s: %s", menuDebugTextRNG_draw,          menuDebugTextRNG_select,
+    "Audio Streams",   "%s: %s", menuDebugTextAudioStreams_draw, menuDebugTextAudioStreams_select,
+    "Audio SFX",       "%s: %s", menuDebugTextAudioSFX_draw,     menuDebugTextAudioSFX_select,
     NULL,
 };

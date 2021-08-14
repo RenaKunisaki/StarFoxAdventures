@@ -4,8 +4,8 @@
 
 static const char *playerNames[] = {"Krystal", "Fox", "Auto"};
 void menuPlayer_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, playerNames[overridePlayerNo]);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), T(playerNames[overridePlayerNo]));
     menuDrawText(str, x, y, selected);
 }
 void menuPlayer_select(const MenuItem *self, int amount) {
@@ -19,8 +19,8 @@ void menuPlayer_select(const MenuItem *self, int amount) {
 
 static const char *backpackModeNames[] = {"Normal", "Off", "On"};
 void menuBackpack_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, backpackModeNames[backpackMode]);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), T(backpackModeNames[backpackMode]));
     menuDrawText(str, x, y, selected);
 }
 void menuBackpack_select(const MenuItem *self, int amount) {
@@ -34,8 +34,8 @@ void menuBackpack_select(const MenuItem *self, int amount) {
 
 static const char *furFxModeNames[] = {"Normal", "Off", "On"};
 void menuFurFx_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, furFxModeNames[furFxMode]);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), T(furFxModeNames[furFxMode]));
     menuDrawText(str, x, y, selected);
 }
 void menuFurFx_select(const MenuItem *self, int amount) {
@@ -51,8 +51,8 @@ void menuFurFx_select(const MenuItem *self, int amount) {
 Menu menuPlayerSettings = {
     "Player Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
-    "Player: %s",     menuPlayer_draw,   menuPlayer_select,
-    "Backpack: %s",   menuBackpack_draw, menuBackpack_select,
-    "Fur Effect: %s", menuFurFx_draw,    menuFurFx_select,
+    "Player",     "%s: %s", menuPlayer_draw,   menuPlayer_select,
+    "Backpack",   "%s: %s", menuBackpack_draw, menuBackpack_select,
+    "Fur Effect", "%s: %s", menuFurFx_draw,    menuFurFx_select,
     NULL,
 };

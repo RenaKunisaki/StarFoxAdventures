@@ -26,8 +26,8 @@ void menuDebugMiscCrash_select(const MenuItem *self, int amount) {
 Menu menuDebugMisc = {
     "Misc", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Edit Memory", genericMenuItem_draw, menuDebugMiscHexEdit_select,
-    "Kill Player", genericMenuItem_draw, menuDebugMiscDie_select,
-    "Crash Game",  genericMenuItem_draw, menuDebugMiscCrash_select,
+    "Edit Memory", "%s", genericMenuItem_draw, menuDebugMiscHexEdit_select,
+    "Kill Player", "%s", genericMenuItem_draw, menuDebugMiscDie_select,
+    "Crash Game",  "%s", genericMenuItem_draw, menuDebugMiscCrash_select,
     NULL,
 };

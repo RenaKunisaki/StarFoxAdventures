@@ -22,8 +22,9 @@ void menuDebugRenderEffects_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderMapGrid_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_WORLD_MAP) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_WORLD_MAP) ?
+        T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderMapGrid_select(const MenuItem *self, int amount) {
@@ -33,8 +34,9 @@ void menuDebugRenderMapGrid_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderPerf_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_PERF_METERS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_PERF_METERS) ?
+        T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderPerf_select(const MenuItem *self, int amount) {
@@ -44,8 +46,9 @@ void menuDebugRenderPerf_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderDebugObjs_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_DEBUG_OBJS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_DEBUG_OBJS) ?
+        T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderDebugObjs_select(const MenuItem *self, int amount) {
@@ -55,8 +58,9 @@ void menuDebugRenderDebugObjs_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderHitboxes_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_HITBOXES) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_HITBOXES) ?
+        T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderHitboxes_select(const MenuItem *self, int amount) {
@@ -66,8 +70,9 @@ void menuDebugRenderHitboxes_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderAttachPoints_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_ATTACH_POINTS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_ATTACH_POINTS) ?
+        T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderAttachPoints_select(const MenuItem *self, int amount) {
@@ -77,8 +82,9 @@ void menuDebugRenderAttachPoints_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderFocusPoints_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_FOCUS_POINTS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_FOCUS_POINTS) ?
+        T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderFocusPoints_select(const MenuItem *self, int amount) {
@@ -88,8 +94,9 @@ void menuDebugRenderFocusPoints_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderUnkPoints_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_UNK_POINTS) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_UNK_POINTS) ?
+        T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderUnkPoints_select(const MenuItem *self, int amount) {
@@ -99,8 +106,9 @@ void menuDebugRenderUnkPoints_select(const MenuItem *self, int amount) {
 
 
 void menuDebugRenderRNG_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (debugRenderFlags & DEBUGRENDER_RNG) ? "On" : "Off");
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_RNG) ?
+        T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderRNG_select(const MenuItem *self, int amount) {
@@ -112,15 +120,15 @@ void menuDebugRenderRNG_select(const MenuItem *self, int amount) {
 Menu menuDebugRender = {
     "Render", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Effects",            genericMenuItem_draw,             menuDebugRenderEffects_select,
-    "View Textures",      genericMenuItem_draw,             menuDebugRenderTextures_select,
-    "Map Grid: %s",       menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
-    "Perf Meters: %s",    menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
-    "RNG: %s",            menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,
-    "Debug Objects: %s",  menuDebugRenderDebugObjs_draw,    menuDebugRenderDebugObjs_select,
-    "Hitboxes: %s",       menuDebugRenderHitboxes_draw,     menuDebugRenderHitboxes_select,
-    "Attach Points: %s",  menuDebugRenderAttachPoints_draw, menuDebugRenderAttachPoints_select,
-    "Focus Points: %s",   menuDebugRenderFocusPoints_draw,  menuDebugRenderFocusPoints_select,
-    "Unknown Points: %s", menuDebugRenderUnkPoints_draw,    menuDebugRenderUnkPoints_select,
+    "Effects",        "%s",     genericMenuItem_draw,             menuDebugRenderEffects_select,
+    "View Textures",  "%s",     genericMenuItem_draw,             menuDebugRenderTextures_select,
+    "Map Grid",       "%s: %s", menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
+    "Perf Meters",    "%s: %s", menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
+    "RNG",            "%s: %s", menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,
+    "Debug Objects",  "%s: %s", menuDebugRenderDebugObjs_draw,    menuDebugRenderDebugObjs_select,
+    "Hitboxes",       "%s: %s", menuDebugRenderHitboxes_draw,     menuDebugRenderHitboxes_select,
+    "Attach Points",  "%s: %s", menuDebugRenderAttachPoints_draw, menuDebugRenderAttachPoints_select,
+    "Focus Points",   "%s: %s", menuDebugRenderFocusPoints_draw,  menuDebugRenderFocusPoints_select,
+    "Unknown Points", "%s: %s", menuDebugRenderUnkPoints_draw,    menuDebugRenderUnkPoints_select,
     NULL,
 };

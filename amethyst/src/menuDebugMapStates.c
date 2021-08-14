@@ -192,9 +192,9 @@ void mapStatesMenu_draw(Menu *self) {
 
     int x = MAP_STATES_MENU_XPOS + MENU_PADDING;
     int y = MAP_STATES_MENU_YPOS + MENU_PADDING;
-    drawSimpleText("Map",       x,     y);
-    drawSimpleText("Act",       x+180, y);
-    drawSimpleText("ObjGroups", x+220, y);
+    drawSimpleText(T("Map"),       x,     y);
+    drawSimpleText(T("Act"),       x+180, y);
+    drawSimpleText(T("ObjGroups"), x+220, y);
 
     if(cursorX > 0) {
         sprintf(str, "%2d", cursorX - 1);

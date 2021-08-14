@@ -134,7 +134,9 @@ void bitMenu_draw(Menu *self) {
     //box type 0 is (center, y+40), no background
     gameTextSetColor(255, 255, 255, 255);
     gameTextShowStr(self->title, 0, x, y-40);
-    menuDrawText("\eFBit  T Sz Value", x, y, false);
+
+    sprintf(str, "\eF%s %s\t%s\t%s", T("Bit"), T("T"), T("Sz"), T("Value"));
+    menuDrawText(str, x, y, false);
 
     int start   = MAX(0, self->selected - (BIT_MENU_NUM_LINES-1));
     int bitIdx  = start - 1;
@@ -175,7 +177,8 @@ void bitMenu_draw(Menu *self) {
     //draw instructions
     y += MENU_LINE_HEIGHT;
     gameTextSetColor(255, 255, 255, 255);
-    sprintf(str, "B:Exit X:+ Y:- L/R:Page Z:Sort:%s", sortModeNames[sortMode]);
+    sprintf(str, "B:%s X:+ Y:- L/R:%s Z:%s:%s",
+        T("Exit"), T("Page"), T("Sort"), T(sortModeNames[sortMode]));
     menuDrawText(str, x, y, false);
 
     //draw cursor
@@ -195,7 +198,7 @@ void bitMenu_run(Menu *self) {
     if(!sortedList) sortList();
     if(!sortedList) { //out of memory
         gameTextSetColor(255, 0, 0, 255);
-        gameTextShowStr("OUT OF MEMORY", MENU_TEXTBOX_ID,
+        gameTextShowStr(T("OUT OF MEMORY"), MENU_TEXTBOX_ID,
             BIT_MENU_XPOS + MENU_PADDING, BIT_MENU_YPOS + MENU_PADDING);
         if(buttonsJustPressed == PAD_BUTTON_B) {
             menuInputDelayTimer = MENU_INPUT_DELAY_CLOSE;

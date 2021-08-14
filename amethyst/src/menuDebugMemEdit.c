@@ -32,7 +32,7 @@ void hexEdit_draw(Menu *self) {
     drawMenuBox(HEXEDIT_XPOS, HEXEDIT_YPOS, HEXEDIT_WIDTH, HEXEDIT_HEIGHT);
 
     int x = HEXEDIT_XPOS + MENU_PADDING, y = HEXEDIT_YPOS + MENU_PADDING;
-    sprintf(str, "\eFAddr %08X", hexEditAddr);
+    sprintf(str, "\eF%s %08X", T("Addr"), hexEditAddr);
     drawSimpleText(str, x, y);
 
     if(!PTR_VALID(hexEditAddr)) hexEditAddr = RAM_START;
@@ -58,7 +58,9 @@ void hexEdit_draw(Menu *self) {
 
     //draw instructions
     y += MENU_LINE_HEIGHT;
-    drawSimpleText("J:Move C:Fast X:+ Y:- S:FollowPtr Z:Back B:Exit", x, y);
+    sprintf(str, "J:%s C:%s X:+ Y:- S:%s Z:%s B:%s",
+        T("Move"), T("Fast"), T("FollowPtr"), T("Back"), T("Exit"));
+    drawSimpleText(str, x, y);
 
     //draw cursor
     if(self->selected == 0) {

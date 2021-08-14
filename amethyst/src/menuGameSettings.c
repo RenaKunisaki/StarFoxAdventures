@@ -3,8 +3,8 @@
 #include "main.h"
 
 void menuGameSpeed_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (int)((physicsTimeScale * 100) / 60));
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (int)((physicsTimeScale * 100) / 60));
     menuDrawText(str, x, y, selected);
 }
 void menuGameSpeed_select(const MenuItem *self, int amount) {
@@ -17,8 +17,8 @@ void menuGameSpeed_select(const MenuItem *self, int amount) {
 
 
 void menuAutoSave_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, bAutoSave ? T("On") : T("Off"));
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bAutoSave ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuAutoSave_select(const MenuItem *self, int amount) {
@@ -29,8 +29,8 @@ void menuAutoSave_select(const MenuItem *self, int amount) {
 
 
 void menuSubtitles_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, bSubtitlesEnabled ? T("On") : T("Off"));
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bSubtitlesEnabled ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuSubtitles_select(const MenuItem *self, int amount) {
@@ -49,8 +49,8 @@ static const char *languages[NUM_LANGUAGES] = {
     "Español" //Spanish
 };
 void menuLanguage_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, languages[curLanguage]);
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), languages[curLanguage]);
     menuDrawText(str, x, y, selected);
 }
 void menuLanguage_select(const MenuItem *self, int amount) {
@@ -66,8 +66,8 @@ void menuLanguage_select(const MenuItem *self, int amount) {
 
 
 void menuHpFlash_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (hudFlags & HUD_LOW_HP_FLASH) ? T("On") : T("Off"));
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (hudFlags & HUD_LOW_HP_FLASH) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuHpFlash_select(const MenuItem *self, int amount) {
@@ -77,8 +77,8 @@ void menuHpFlash_select(const MenuItem *self, int amount) {
 }
 
 void menuHpSound_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[64];
-    sprintf(str, self->name, (hudFlags & HUD_LOW_HP_BEEP) ? T("On") : T("Off"));
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (hudFlags & HUD_LOW_HP_BEEP) ? T("On") : T("Off"));
     menuDrawText(str, x, y, selected);
 }
 void menuHpSound_select(const MenuItem *self, int amount) {
@@ -90,11 +90,11 @@ void menuHpSound_select(const MenuItem *self, int amount) {
 Menu menuGameSettings = {
     "Game Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
-    "Game Speed: %d%%", menuGameSpeed_draw, menuGameSpeed_select,
-    "Autosave: %s",     menuAutoSave_draw,  menuAutoSave_select,
-    "Subtitles: %s",    menuSubtitles_draw, menuSubtitles_select,
-    "Language: %s",     menuLanguage_draw,  menuLanguage_select,
-    "Low HP Flash: %s", menuHpFlash_draw,   menuHpFlash_select,
-    "Low HP Sound: %s", menuHpSound_draw,   menuHpSound_select,
+    "Game Speed",   "%s: %d%%", menuGameSpeed_draw, menuGameSpeed_select,
+    "Autosave",     "%s: %s",   menuAutoSave_draw,  menuAutoSave_select,
+    "Subtitles",    "%s: %s",   menuSubtitles_draw, menuSubtitles_select,
+    "Language",     "%s: %s",   menuLanguage_draw,  menuLanguage_select,
+    "Low HP Flash", "%s: %s",   menuHpFlash_draw,   menuHpFlash_select,
+    "Low HP Sound", "%s: %s",   menuHpSound_draw,   menuHpSound_select,
     NULL,
 };
