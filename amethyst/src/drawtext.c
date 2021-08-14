@@ -104,7 +104,8 @@ Color4b color, float scale) {
     gxSetBlendMode(GX_BM_BLEND, GX_BL_SRCALPHA, GX_BL_INVSRCALPHA, GX_LO_NOOP);
 
     _gxSetTevColor2(color.r, color.g, color.g, color.a);
-    _gxSetTevColor1(color.r, color.g, color.g, color.a);
+    //_gxSetTevColor1(color.r, color.g, color.g, color.a);
+    _gxSetTevColor1(255, 0, 0, color.a);
 
     GXBegin(GX_DRAW_QUADS, 1, 4);
     //PNMTXIDX     Vx             Vy             Vz          Vs              Vt
@@ -218,6 +219,8 @@ Color4b color, float scale) {
     int iChr = 0;
     Color4b shadowColor = {.r=0x20, .g=0x20, .b=0x20, .a=0x3F};
     bool japanese = (curLanguage == LANG_JAPANESE);
+    int FW = (japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
+    int LH = japanese ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT;
 
     while(true) {
         int cSize = 0;
@@ -227,10 +230,15 @@ Color4b color, float scale) {
 
         if(chr < 0x20) {
             switch(chr) {
-                case '\n': y += (flags & TEXT_FIXED) ? 16 :
-                    MAX(lineHeight, japanese ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT);
+                case '\n': y += (flags & TEXT_FIXED) ? 16 : MAX(lineHeight, LH);
                     //fall thru
                 case '\r': x = startX; break;
+
+                //this is not what \v is really supposed to do, but oh well.
+                //basically this is what \n is supposed to do, and what \n actually does here
+                //would be achieved using the sequence \r\n. but screw that
+                case '\v': y += (flags & TEXT_FIXED) ? 16 : MAX(lineHeight, LH); break;
+
                 case '\t': {
                     int p = x % (japanese ? TAB_WIDTH_JAPANESE : TAB_WIDTH);
                     x += ((japanese ? TAB_WIDTH_JAPANESE : TAB_WIDTH) - p);
@@ -274,22 +282,24 @@ Color4b color, float scale) {
                     }
                 }
 
-                if(flags & TEXT_SHADOW) { //render shadow
-                    _drawCharColored(cStruct, font, cx, cy, shadowColor, scale * 1.2);
+                if(!(flags & TEXT_MEASURE)) {
+                    if(flags & TEXT_SHADOW) { //render shadow
+                        _drawCharColored(cStruct, font, cx, cy, shadowColor, scale * 1.2);
+                    }
+                    //render the actual character
+                    if(flags & TEXT_COLORED) {
+                        _drawCharColored(cStruct, font, cx, cy, color, scale);
+                    }
+                    else _drawChar(cStruct, font, cx, cy, color.a, scale);
                 }
-                //render the actual character
-                if(flags & TEXT_COLORED) {
-                    _drawCharColored(cStruct, font, cx, cy, color, scale);
-                }
-                else _drawChar(cStruct, font, cx, cy, color.a, scale);
 
                 //update the cursor position
-                if(flags & TEXT_FIXED) x += (japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
+                if(flags & TEXT_FIXED) x += FW * scale;
                 else x += cStruct->width + cStruct->right + cStruct->left;
                 lineHeight = MAX(lineHeight, cStruct->height + cStruct->top + cStruct->bottom);
             }
-            else if(flags & TEXT_FIXED) x += (japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
-            else x += 8;
+            else if(flags & TEXT_FIXED) x += FW * scale;
+            else x += 8 * scale;
         }
         else {
             //TODO handle original game control codes

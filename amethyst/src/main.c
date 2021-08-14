@@ -364,3 +364,18 @@ void _start(void) {
 
     DPRINT("Hooks installed!");
 }
+
+const char *languageNames[NUM_LANGUAGES] = {
+    "English", //English
+    "français", //French
+    "Deutsch", //German
+    "Italiano", //Italian
+    "日本", //Japanese
+    "Español" //Spanish
+};
+void setGameLanguage(GameLanguageEnum lang) {
+    curLanguage = lang;
+    GameTextDir32 dir = curGameTextDir;
+    gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
+    gameTextLoadDir(dir); //then load current map's texts
+}

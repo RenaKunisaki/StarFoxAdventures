@@ -97,9 +97,10 @@ void drawSolidVtx(vec3f pos, Color4b *color);
 void drawSphere(vec3f pos, float radius, Color4b color);
 
 //drawtext.c
-#define TEXT_FIXED   (1 << 0)
-#define TEXT_COLORED (1 << 1)
-#define TEXT_SHADOW  (1 << 2)
+#define TEXT_FIXED   (1 << 0) //render fixed-width
+#define TEXT_COLORED (1 << 1) //enable color
+#define TEXT_SHADOW  (1 << 2) //enable drop shadow
+#define TEXT_MEASURE (1 << 3) //don't render, only measure
 int drawText(const char *str, int x, int y, int *outX, int *outY, u32 flags, Color4b color, float scale);
 int drawColorText(const char *str, int x, int y, Color4b color);
 int drawSimpleText(const char *str, int x, int y);
@@ -135,6 +136,8 @@ extern u8 furFxMode;
 extern u16 dayOfYear, curYear;
 extern bool bRumbleBlur;
 extern bool bDisableParticleFx;
+extern const char *languageNames[NUM_LANGUAGES];
+void setGameLanguage(GameLanguageEnum lang);
 
 //map.c
 void initMapHacks();

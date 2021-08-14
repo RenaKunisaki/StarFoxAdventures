@@ -40,26 +40,17 @@ void menuSubtitles_select(const MenuItem *self, int amount) {
 }
 
 //could add flags here but the EN,JP flags are missing (and French is reversed)
-static const char *languages[NUM_LANGUAGES] = {
-    "English", //English
-    "français", //French
-    "Deutsch", //German
-    "Italiano", //Italian
-    "日本", //Japanese
-    "Español" //Spanish
-};
+
 void menuLanguage_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
-    sprintf(str, self->fmt, T(self->name), languages[curLanguage]);
+    sprintf(str, self->fmt, T(self->name), languageNames[curLanguage]);
     menuDrawText(str, x, y, selected);
 }
 void menuLanguage_select(const MenuItem *self, int amount) {
     curLanguage += amount;
     if(curLanguage < 0) curLanguage = NUM_LANGUAGES - 1;
     if(curLanguage >= NUM_LANGUAGES) curLanguage = 0;
-    GameTextDir32 dir = curGameTextDir;
-    gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
-    gameTextLoadDir(dir); //then load current map's texts
+    setGameLanguage(curLanguage);
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
     updateSaveData();
 }
