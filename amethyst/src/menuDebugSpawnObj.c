@@ -6,10 +6,10 @@
 #define SPAWN_MENU_YPOS 50
 #define SPAWN_MENU_WIDTH  600
 #define SPAWN_MENU_HEIGHT 405
-#define SPAWN_MENU_NUM_LINES ((SPAWN_MENU_HEIGHT / MENU_LINE_HEIGHT) - 1)
+#define SPAWN_MENU_NUM_LINES ((SPAWN_MENU_HEIGHT / LINE_HEIGHT) - 1)
 #define SPAWN_MENU_MAX_PARAMS 15
 #define SPAWN_MENU_CURSOR_X_OFFS (SPAWN_MENU_XPOS + MENU_PADDING + \
-    (MENU_FIXED_WIDTH * 11))
+    (((curLanguage == LANG_JAPANESE) ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH) * 11))
 
 enum {
     SPAWN_MENU_ITEM_OBJECT = 0,
@@ -81,7 +81,7 @@ void spawnList_draw(Menu *self) {
         sprintf(str, "%04X %04X %s", defNo & 0xFFFF, realId & 0xFFFF, name);
 
         menuDrawText(str, x, y, iObj == self->selected);
-        y += MENU_LINE_HEIGHT;
+        y += LINE_HEIGHT;
         nLines++;
         iObj++;
     }
@@ -229,56 +229,56 @@ void spawnMenu_draw(Menu *self) {
     sprintf(str, "\eF%s:      %04X (%04X) %s", T("Object"),
         spawnObjDef.def.objType & 0xFFFF, realId & 0xFFFF, name);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s:      %X", T("Params"), spawnNumparams);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s: %08X", T("Spawn Flags"), spawnFlags);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s: %02X ", T("Load  Flags"), spawnObjDef.def.loadFlags & 0xFF);
     bin2str(&str[strlen(str)], spawnObjDef.def.loadFlags, 8);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s:    %04X", T("Map Acts"), spawnActs & 0xFFFF);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s:      %02X", T("Bounds"), spawnObjDef.def.bound & 0xFF);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s:       %02X", T("Unk07"), spawnObjDef.def.unk7 & 0xFF);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s:      %08X", T("Obj ID"), spawnObjDef.def.id);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s:      %02X", T("Map ID"), spawnMapId & 0xFF);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eF%s:     %04X", T("Obj No."), spawnObjNo & 0xFFFF);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eFX %s:  %08X", T("Position"), spawnCoords[0]);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eFY %s:  %08X", T("Position"), spawnCoords[1]);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     sprintf(str, "\eFZ %s:  %08X", T("Position"), spawnCoords[2]);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     int start = MAX(0, self->selected - (SPAWN_MENU_NUM_LINES-1));
     for(int i=0; i < (SPAWN_MENU_NUM_LINES - SPAWN_MENU_ITEM_PARAMS); i++) {
@@ -286,18 +286,19 @@ void spawnMenu_draw(Menu *self) {
         if(pIdx >= spawnNumparams) break;
         sprintf(str, "\eF%s %02X:    %08X", T("Param"), pIdx*4, spawnObjDef.params[pIdx]);
         menuDrawText(str, x, y, false);
-        y += MENU_LINE_HEIGHT;
+        y += LINE_HEIGHT;
     }
 
     sprintf(str, "Start:%s A:%s B:%s X:+ Y:- Z:%s",
         T("Spawn"), T("List"), T("Exit"), T("Player Coords"));
     drawSimpleText(str, x,
-        SPAWN_MENU_YPOS + SPAWN_MENU_HEIGHT - (MENU_LINE_HEIGHT + MENU_PADDING));
+        SPAWN_MENU_YPOS + SPAWN_MENU_HEIGHT - (LINE_HEIGHT + MENU_PADDING));
 
     //draw cursor
-    drawBox(SPAWN_MENU_XPOS + 4 + (spawnCursorX * MENU_FIXED_WIDTH) +
+    int w = (curLanguage == LANG_JAPANESE) ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH;
+    drawBox(SPAWN_MENU_XPOS + 4 + (spawnCursorX * w) +
         SPAWN_MENU_CURSOR_X_OFFS,
-        SPAWN_MENU_YPOS + 5 + (MENU_LINE_HEIGHT * (self->selected - start)),
+        SPAWN_MENU_YPOS + 5 + (LINE_HEIGHT * (self->selected - start)),
         20, 24, 255, false);
 }
 

@@ -61,6 +61,7 @@ const char *strings_English[] = {
     "FLAG", //FLAG (option)
     "Focus Points", //show camera focus points
     "FollowPtr", //follow pointer
+    "Font Test", //display all fonts
     "FOV", //field of view
     "Fox", //Fox player character
     "FPS Meter", //Frames Per Second
@@ -201,6 +202,7 @@ const char *strings_English[] = {
     "Unlock Everything", //give player all items, etc
     "Value", //value of a variable
     "Video Settings", //settings for display
+    "View Fonts", //show all fonts
     "View Textures", //show all textures
     "Warp", //warp to another map
     "Widescreen", //enable widescreen display

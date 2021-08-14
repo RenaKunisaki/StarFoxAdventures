@@ -5,7 +5,7 @@
 #define WARP_MENU_YPOS 32
 #define WARP_MENU_WIDTH  (SCREEN_WIDTH  - (WARP_MENU_XPOS * 2))
 #define WARP_MENU_HEIGHT (SCREEN_HEIGHT - (WARP_MENU_YPOS * 2))
-#define WARP_MENU_NUM_LINES ((WARP_MENU_HEIGHT / MENU_LINE_HEIGHT) - 2)
+#define WARP_MENU_NUM_LINES ((WARP_MENU_HEIGHT / LINE_HEIGHT) - 2)
 
 typedef struct {
     s16 x, y, z;
@@ -221,7 +221,7 @@ void warpMenu_draw(Menu *self) {
     for(int i=0; i < WARP_MENU_NUM_LINES; i++) {
         int warpIdx = i + start;
         if(!warpNames[warpIdx]) break;
-        y += MENU_LINE_HEIGHT;
+        y += LINE_HEIGHT;
         bool selected = warpIdx == self->selected;
         if(selected) {
             u8  r = menuAnimFrame * 8, g = 255 - r;

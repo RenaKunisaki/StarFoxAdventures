@@ -5,7 +5,6 @@
 #define MENU_XPOS ((SCREEN_WIDTH/2)  - (MENU_WIDTH  / 2))
 #define MENU_YPOS ((SCREEN_HEIGHT/2) - (MENU_HEIGHT / 2))
 #define MENU_TEXTBOX_ID 0x93 //same as game uses for HUD
-#define MENU_LINE_HEIGHT 18
 #define MENU_ADJUST_SOUND 0xF4 //generic adjustment sound effect ID
 #define MENU_MOVE_SOUND 0xF4 //sound ID for moving cursor
 #define MENU_OPEN_SOUND 0xFC //submenu open sound effect ID
@@ -22,7 +21,6 @@
 #define HUD_TEXTURE_BOX_TOP      13
 #define BOX_BORDER_WIDTH 5
 #define BOX_BORDER_HEIGHT 5
-#define MENU_FIXED_WIDTH 11 //pixels for fixed width mode
 
 #define MENU_INPUT_DELAY_CLOSE 8 //when closing menu
 #define MENU_INPUT_DELAY_SELECT 8 //when selecting an option
@@ -105,6 +103,7 @@ extern Menu menuDebug;
 extern Menu menuDebugCamera;
 extern Menu menuDebugCheat;
 extern Menu menuDebugEditPlayer;
+extern Menu menuDebugFontTest;
 extern Menu menuDebugGameBits;
 extern Menu menuDebugGameState;
 extern Menu menuDebugHexEdit;

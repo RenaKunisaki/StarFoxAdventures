@@ -14,6 +14,13 @@ void menuDebugRenderTextures_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugRenderFonts_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugFontTest;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
+
 void menuDebugRenderEffects_select(const MenuItem *self, int amount) {
     if(amount) return;
     curMenu = &menuDebugRenderEffects;
@@ -122,6 +129,7 @@ Menu menuDebugRender = {
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
     "Effects",        "%s",     genericMenuItem_draw,             menuDebugRenderEffects_select,
     "View Textures",  "%s",     genericMenuItem_draw,             menuDebugRenderTextures_select,
+    "View Fonts",     "%s",     genericMenuItem_draw,             menuDebugRenderFonts_select,
     "Map Grid",       "%s: %s", menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
     "Perf Meters",    "%s: %s", menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
     "RNG",            "%s: %s", menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,

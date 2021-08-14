@@ -61,6 +61,7 @@ const char *strings_Japanese[] = {
     "FLAG", //FLAG (option)
     "フォーカスポイント", //show camera focus points
     "フォローポインタ", //follow pointer
+    "Font Test", //display all fonts
     "FOV", //field of view
     "フォックス", //Fox player character
     "FPSメーター", //Frames Per Second
@@ -201,6 +202,7 @@ const char *strings_Japanese[] = {
     "すべてアンロック", //give player all items, etc
     "値", //value of a variable
     "ビデオ設定", //settings for display
+    "View Fonts", //show all fonts
     "テクスチャ表示", //show all textures
     "ワープ", //warp to another map
     "ワイドスクリーン", //enable widescreen display

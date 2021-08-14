@@ -36,13 +36,13 @@ void textureMenu_draw(Menu *self) {
         self->selected, textureMenuFrame, id >= 0 ? ' ' : '-',
         ABS(id), ltex->unk08, tex);
     menuDrawText(str, x, y, false);
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
 
     if(tex) {
         sprintf(str, "Flags: %08X RefCnt: %3d Fmt: %02X; %d x %d",
             tex->flags, tex->refCount, tex->format, tex->width, tex->height);
         menuDrawText(str, x, y, false);
-        y += MENU_LINE_HEIGHT;
+        y += LINE_HEIGHT;
 
         //get frame
         if(textureMenuAnimate) {

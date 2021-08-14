@@ -6,7 +6,7 @@
 #define BIT_MENU_YPOS 32
 #define BIT_MENU_WIDTH  (SCREEN_WIDTH  - (BIT_MENU_XPOS * 2))
 #define BIT_MENU_HEIGHT (SCREEN_HEIGHT - (BIT_MENU_YPOS * 2))
-#define BIT_MENU_NUM_LINES ((BIT_MENU_HEIGHT / MENU_LINE_HEIGHT) - 3)
+#define BIT_MENU_NUM_LINES ((BIT_MENU_HEIGHT / LINE_HEIGHT) - 3)
 s8 *bitNames = NULL;
 static u8 bitMenuCursorX = 7;
 
@@ -147,7 +147,7 @@ void bitMenu_draw(Menu *self) {
         int bit = sortedList[bitIdx].bit;
         BitTableEntry *entry = getBitTableEntry(bit);
         int tbl = (entry->flags >> 6) & 3;
-        y += MENU_LINE_HEIGHT;
+        y += LINE_HEIGHT;
         nLines++;
         //debugPrintf(DPRINT_FIXED "Bit %04X t %d sz %2d offs %04X\n" DPRINT_NOFIXED,
         //    bitIdx, tbl, entry->flags & GameBitFlags_Size, entry->offset);
@@ -175,14 +175,15 @@ void bitMenu_draw(Menu *self) {
     }
 
     //draw instructions
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
     gameTextSetColor(255, 255, 255, 255);
     sprintf(str, "B:%s X:+ Y:- L/R:%s Z:%s:%s",
         T("Exit"), T("Page"), T("Sort"), T(sortModeNames[sortMode]));
     menuDrawText(str, x, y, false);
 
     //draw cursor
-    drawBox(BIT_MENU_XPOS + 4 + ((bitMenuCursorX + 10) * MENU_FIXED_WIDTH),
+    int w = (curLanguage == LANG_JAPANESE) ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH;
+    drawBox(BIT_MENU_XPOS + 4 + ((bitMenuCursorX + 10) * w),
         cursorY - 4, 20, 24, 255, false);
 }
 

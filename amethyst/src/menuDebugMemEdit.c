@@ -5,7 +5,7 @@
 #define HEXEDIT_YPOS 100
 #define HEXEDIT_WIDTH  560
 #define HEXEDIT_HEIGHT 328
-#define HEXEDIT_NUM_LINES ((HEXEDIT_HEIGHT / MENU_LINE_HEIGHT) - 3)
+#define HEXEDIT_NUM_LINES ((HEXEDIT_HEIGHT / LINE_HEIGHT) - 3)
 #define HEXEDIT_NUM_COLS 8
 static u8 cursorX = 0;
 u32 hexEditAddr = RAM_START;
@@ -39,7 +39,7 @@ void hexEdit_draw(Menu *self) {
 
     u8 *addr = (u8*)hexEditAddr;
     for(int i=0; i < HEXEDIT_NUM_LINES; i++) {
-        y += MENU_LINE_HEIGHT;
+        y += LINE_HEIGHT;
         sprintf(str, "\eF%04X ", addr);
 
         for(int j=0; j < HEXEDIT_NUM_COLS; j++) {
@@ -57,21 +57,22 @@ void hexEdit_draw(Menu *self) {
     }
 
     //draw instructions
-    y += MENU_LINE_HEIGHT;
+    y += LINE_HEIGHT;
     sprintf(str, "J:%s C:%s X:+ Y:- S:%s Z:%s B:%s",
         T("Move"), T("Fast"), T("FollowPtr"), T("Back"), T("Exit"));
     drawSimpleText(str, x, y);
 
     //draw cursor
+    int w = (curLanguage == LANG_JAPANESE) ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH;
     if(self->selected == 0) {
-        x = HEXEDIT_XPOS + ((cursorX & 7) * MENU_FIXED_WIDTH) +
-            (MENU_FIXED_WIDTH * 5) + 4;
+        x = HEXEDIT_XPOS + ((cursorX & 7) * w) +
+            (w * 5) + 4;
     }
     else {
-        x = HEXEDIT_XPOS + (cursorX * MENU_FIXED_WIDTH) +
-            ((cursorX / 2) * MENU_FIXED_WIDTH) + (MENU_FIXED_WIDTH * 9) + 4;
+        x = HEXEDIT_XPOS + (cursorX * w) +
+            ((cursorX / 2) * w) + (w * 9) + 4;
     }
-    y = HEXEDIT_YPOS + 5 + (MENU_LINE_HEIGHT * self->selected);
+    y = HEXEDIT_YPOS + 5 + (LINE_HEIGHT * self->selected);
     drawBox(x, y, 20, 24, 255, false);
 }
 

@@ -3,7 +3,7 @@
 #define MAP_STATES_MENU_YPOS 64
 #define MAP_STATES_MENU_WIDTH  (SCREEN_WIDTH  - (MAP_STATES_MENU_XPOS * 2))
 #define MAP_STATES_MENU_HEIGHT (SCREEN_HEIGHT - (MAP_STATES_MENU_YPOS * 2))
-#define MAP_STATES_MENU_NUM_LINES ((MAP_STATES_MENU_HEIGHT / MENU_LINE_HEIGHT) - 2)
+#define MAP_STATES_MENU_NUM_LINES ((MAP_STATES_MENU_HEIGHT / LINE_HEIGHT) - 2)
 
 static u8 listOrder[] = {
     0x1d, //"Cape Claw",                    capeclaw
@@ -208,7 +208,7 @@ void mapStatesMenu_draw(Menu *self) {
         if(iMap == 0xFF) break;
         //if(!PTR_VALID(mapNames[iMap])) break;
 
-        y += MENU_LINE_HEIGHT;
+        y += LINE_HEIGHT;
         bool selected = (i+start) == self->selected;
         if(selected) {
             debugPrintf("ActBit=%04X ObjsBit=%04X\n",
@@ -234,10 +234,11 @@ void mapStatesMenu_draw(Menu *self) {
     }
 
     //draw cursor
+    int w = (curLanguage == LANG_JAPANESE) ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH;
     if(cursorX == 0) x = 203;
-    else x = (223 - MENU_FIXED_WIDTH) + (cursorX * MENU_FIXED_WIDTH);
+    else x = (223 - w) + (cursorX * w);
     x += MAP_STATES_MENU_XPOS;
-    y = MAP_STATES_MENU_YPOS + 5 + (MENU_LINE_HEIGHT * (self->selected - start+1));
+    y = MAP_STATES_MENU_YPOS + 5 + (LINE_HEIGHT * (self->selected - start+1));
     drawBox(x, y, 20, 24, 255, false);
 }
 
