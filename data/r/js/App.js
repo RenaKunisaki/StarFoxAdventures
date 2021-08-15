@@ -2,6 +2,7 @@ import Game from './Game.js';
 import Index from './Index.js';
 import DllInfo from './DllInfo.js';
 import DllList from './DllList.js';
+import FontList from './FontList.js';
 import ObjInfo from './ObjInfo.js';
 import ObjList from './ObjList.js';
 import GameTextList from './GameTextList.js';
@@ -30,6 +31,7 @@ export default class App {
         const pages = {
             dll:      DllInfo,
             dlls:     DllList,
+            fonts:    FontList,
             obj:      ObjInfo,
             objs:     ObjList,
             gametext: GameTextList,

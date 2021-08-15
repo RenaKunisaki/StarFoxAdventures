@@ -528,3 +528,26 @@ video {
 .hexview .byte00, .hexview .byteFF {
     color: #888;
 }
+
+.hex-view-main {
+    font-family: monospace;
+}
+
+.hex-view-main .null {
+    color: #888;
+}
+
+.hex-view-main .byte {
+    margin-right: 0.5em;
+}
+.hex-view-main .byte:nth-child(4n) {
+    margin-right: 1em;
+}
+
+.hex-view-main .address {
+    margin-right: 1em;
+}
+
+.hex-view-main .data {
+    margin-right: 0.5em;
+}

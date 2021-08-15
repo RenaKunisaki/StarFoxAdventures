@@ -147,10 +147,12 @@ export function makeCollapsibleList(items) {
     if(items.length == 0) return "-";
     if(items.length == 1) return items[0];
     const ul = E.ul();
-    for(const item of items) {
-        ul.append(E.li(null, item));
+    for(let i=1; i<items.length; i++) {
+        ul.append(E.li(null, items[i]));
     }
-    return E.details(E.summary('count', items.length.toString()), ul);
+    return E.details(E.summary('count',
+        `[${items.length}] ${items[0]}`
+    ), ul);
 }
 
 export async function getAssets(version) {

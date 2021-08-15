@@ -14,6 +14,7 @@ export default class Index {
                 E.td(E.a(null, "DLLs",     {href:`?v=${id}&p=dlls`})),
                 E.td(E.a(null, "GameBits", {href:`?v=${id}&p=gamebits`})),
                 E.td(E.a(null, "GameText", {href:`?v=${id}&p=gametext`})),
+                E.td(E.a(null, "Fonts",    {href:`?v=${id}&p=fonts`})),
                 E.td(E.a(null, "Maps",     {href:`?v=${id}&p=maps`})),
                 E.td(E.a(null, "Objects",  {href:`?v=${id}&p=objs`})),
             );
