@@ -86,6 +86,27 @@ class ZlibView(aiohttp.web.View):
             return await self.request.app.sendError(500, self.request, str(ex))
 
 
+class TextureDecoder:
+    def __init__(self):
+        pass
+
+    def decode(self, width, height, nFrames, fmtId, data):
+        format = ImageFormat(fmtId)
+        bpp = BITS_PER_PIXEL[format]
+        dataLen = width * height * bpp // 8
+        image = decode_image(data,
+            None, # palette_data
+            format, # image_format
+            None, # palette_format
+            0, # num_colors (for palettes)
+            width, height)
+
+        # convert to PNG
+        result = io.BytesIO()
+        image.save(result, 'PNG')
+        return result
+
+
 class TextureView(aiohttp.web.View):
     """A view that decodes textures.
 
@@ -122,35 +143,36 @@ class TextureView(aiohttp.web.View):
             with open(path, 'rb') as file:
                 offset = int(self.request.query.get('offset', 0))
                 file.seek(offset)
-                try:
-                    zlbHeader = file.read(16)
-                    sig, ver, compLen, rawLen = struct.unpack_from('>4I', zlbHeader)
-                    if sig in (0x44495200, 0x4449526E): # 'DIR\0', 'DIRn'
-                        data = file.read(compLen)
-                    else:
-                        if sig != 0x5A4C4200: # 'ZLB\0'
-                            log.error("Not ZLB: 0x%08X @ 0x%06X in %s",
-                                sig, offset, path)
-                            return await self.request.app.sendError(500, self.request, "Not ZLB")
-                        data = zlib.decompress(file.read(compLen))
-                    width, height = struct.unpack_from('>HH', data, 0x0A)
-                    nFrames = struct.unpack_from('>B', data, 0x19)[0] # grumble
-                    fmtId = struct.unpack_from('>B', data, 0x16)[0] # grumble
-                    format = ImageFormat(fmtId)
-                    bpp = BITS_PER_PIXEL[format]
-                    dataLen = width * height * bpp // 8
-                    log.debug("Texture %s: size=%dx%d frames=%d fmt=0x%02X",
-                        path, width, height, nFrames, fmtId)
-                    image = decode_image(data[0x60:],
-                        None, # palette_data
-                        format, # image_format
-                        None, # palette_format
-                        0, # num_colors (for palettes)
-                        width, height)
 
-                    # convert to PNG
-                    data = io.BytesIO()
-                    image.save(data, 'PNG')
+                try:
+                    fmtId = self.request.query.get('fmt', None)
+                    if fmtId is None:
+                        zlbHeader = file.read(16)
+                        sig, ver, compLen, rawLen = struct.unpack_from('>4I', zlbHeader)
+                        if sig in (0x44495200, 0x4449526E): # 'DIR\0', 'DIRn'
+                            data = file.read(compLen)
+                        else:
+                            if sig != 0x5A4C4200: # 'ZLB\0'
+                                log.error("Not ZLB: 0x%08X @ 0x%06X in %s",
+                                    sig, offset, path)
+                                return await self.request.app.sendError(500, self.request, "Not ZLB")
+                            data = zlib.decompress(file.read(compLen))
+                        width, height = struct.unpack_from('>HH', data, 0x0A)
+                        nFrames = struct.unpack_from('>B', data, 0x19)[0] # grumble
+                        fmtId   = struct.unpack_from('>B', data, 0x16)[0] # grumble
+                        log.debug("Texture %s: size=%dx%d frames=%d fmt=0x%02X",
+                            path, width, height, nFrames, fmtId)
+                        data = data[0x60:]
+                    else:
+                        fmtId   = int(fmtId)
+                        width   = int(self.request.query.get('width'))
+                        height  = int(self.request.query.get('height'))
+                        nFrames = int(self.request.query.get('nFrames', 0))
+                        rawLen  = int(self.request.query.get('length'))
+                        compLen = rawLen
+                        data = file.read(rawLen)
+                    data = TextureDecoder().decode(width, height, nFrames, fmtId, data)
+
 
                 except Exception as ex:
                     #return await self.request.app.sendError(400, self.request, str(ex))

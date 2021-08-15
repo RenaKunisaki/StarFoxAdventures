@@ -48,20 +48,40 @@ class GameTextStruct {
 
 /** Defines a font texture image.
  */
-class FontTexture {
-    constructor(app, data, offset) {
-        this.texFmt = data.getUint16(offset+0x00);
-        this.pixFmt = data.getUint16(offset+0x02);
-        this.width  = data.getUint16(offset+0x04);
-        this.height = data.getUint16(offset+0x06);
+class FontTexture extends Texture {
+    constructor(app, data, offset, path) {
+        let   texFmt = data.getUint16(offset+0x00);
+        const pixFmt = data.getUint16(offset+0x02);
+        const width  = data.getUint16(offset+0x04);
+        const height = data.getUint16(offset+0x06);
         offset += 8;
+
+        if(texFmt == 2) texFmt = 0; //game does this for some reason
+        else if(texFmt == 1) texFmt = 5;
+
+        super(app, width, height, texFmt);
+        this.pixFmt = pixFmt;
+
         if(this.width != 0 || this.height != 0) {
             //convert length for format
-            let texFmt = this.texFmt;
-            if(texFmt == 2) texFmt = 0; //game does this for some reason
-            else if(texFmt == 1) texFmt = 5;
             let length = Texture.calcSize(this.width, this.height, texFmt, false, 0);
+            //let length = this.width * this.height;
+            console.log(`TexFmt=${texFmt} PixFmt=${pixFmt} len=0x${hex(length)}`);
+
+            //read pixel data
             this.bytes = data.buffer.slice(offset, offset + length);
+            const dv = new DataView(this.bytes);
+            const img = this.ctx.createImageData(this.width, this.height);
+            for(let i=0; i<length; i++) {
+                let b = dv.getUint8(i);
+                img.data[(i*4) + 0] = b;   //r
+                img.data[(i*4) + 1] = b;   //g
+                img.data[(i*4) + 2] = b;   //b
+                img.data[(i*4) + 3] = 255; //a
+                //b = dv.getUint8(i+1);
+                //img.data[(i*4) + 3] = b; //a
+            }
+            this.ctx.putImageData(img, 0, 0);
         }
         else this.bytes = null;
     }
@@ -118,10 +138,10 @@ function readStr(data, offset) {
                             str += `<FONT ${font}>`;
                             break;
                         }
-                        case 0xB8: str += `<JUSTIFY LEFT>`; break;
-                        case 0xB9: str += `<JUSTIFY RIGHT>`; break;
+                        case 0xB8: str += `<JUSTIFY LEFT>`;   break;
+                        case 0xB9: str += `<JUSTIFY RIGHT>`;  break;
                         case 0xBA: str += `<JUSTIFY CENTER>`; break;
-                        case 0xBB: str += `<JUSTIFY FULL>`; break;
+                        case 0xBB: str += `<JUSTIFY FULL>`;   break;
                         case 0xBF: { //set color
                             let tr = data.getUint8(offset); offset++;
                             let tg = data.getUint8(offset); offset++;
@@ -165,7 +185,7 @@ export default class GameTextBin {
 
     async load() {
         this.rawData = (await get({
-            path:         `${this.game.version}/disc/gametext/SwapHol/English.bin`,
+            path:         `${this.game.version}/disc/${this.path}`,
             mimeType:     'application/octet-stream',
             responseType: 'arraybuffer',
         })).response;
@@ -205,7 +225,7 @@ export default class GameTextBin {
             offset = startOffs;
             let sOffs = offset - strOffs;
             [str, offset] = readStr(this.dataView, offset);
-            console.log(`Str @ ${hex(sOffs)}:`, str);
+            //console.log(`Str @ ${hex(sOffs)}:`, str);
             this.strings[sOffs] = str;
         }
         offset = strOffs + strDataLen; //account for padding, etc
@@ -218,7 +238,7 @@ export default class GameTextBin {
         //read texture images
         while(true) {
             console.log(`Texture ${this.textures.length} offset=${hex(offset)}`);
-            let tex = new FontTexture(this.app, this.dataView, offset);
+            let tex = new FontTexture(this.app, this.dataView, offset, this.path);
             if(tex.bytes == null) break;
             this.textures.push(tex);
             offset += tex.bytes.byteLength + 8; //8 for header
@@ -231,7 +251,7 @@ export default class GameTextBin {
             text.phrases = [];
             for(let i=0; i<text.numPhrases; i++) {
                 let offs = strOffsets[idx+i];
-                console.log(`Phrase ${i} idx = ${idx} offs = ${offs}: ${this.strings[offs]}`);
+                //console.log(`Phrase ${i} idx = ${idx} offs = ${offs}: ${this.strings[offs]}`);
                 text.phrases.push(this.strings[offs]);
             }
         }

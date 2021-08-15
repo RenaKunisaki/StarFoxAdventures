@@ -141,8 +141,8 @@ export function makeCollapsibleList(items) {
     /** Given a list of items, construct an HTML element.
      *  If the list is empty, the element contains just the text "-".
      *  If the list has one item, the element contains that item.
-     *  Otherwise, the element contains a count and an expander that can be
-     *  clicked to display the list of items.
+     *  Otherwise, the element contains a count, the first item, and
+     *  an expander that can be clicked to display the other items.
      */
     if(items.length == 0) return "-";
     if(items.length == 1) return items[0];

@@ -551,3 +551,7 @@ video {
 .hex-view-main .data {
     margin-right: 0.5em;
 }
+
+.fonts .texture .image {
+    width: 100%;
+}

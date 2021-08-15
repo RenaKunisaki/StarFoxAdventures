@@ -1,3 +1,5 @@
+import {E} from './Element.js';
+
 export const TexFmt = {
     I4:     0x00,
     I8:     0x01,
@@ -11,6 +13,9 @@ export const TexFmt = {
     C14X2:  0x0A,
     BC1:    0x0E, //aka CMPR
 };
+export const TexFmtName = Object.entries(TexFmt).reduce(
+    (obj, item) => (obj[item[1]] = item[0]) && obj, {}
+);
 
 /** A texture graphic read from the game.
  */
@@ -60,5 +65,39 @@ export class Texture {
         return result;
     }
 
-    //hoo boy I don't want to think about decoding textures in JS
+    constructor(app, width, height, format=null, data=null, offset=0) {
+        this.app    = app;
+        this.canvas = E.canvas({width:width, height:height});
+        this.ctx    = this.canvas.getContext('2d')
+        this.width  = width;
+        this.height = height;
+        this.format = format;
+        if(data) this.load(data, format, offset);
+    }
+
+    load(data, format, offset=0) {
+        switch(format) {
+            case TexFmt.I8: this._loadI8(data, format, offset); break;
+            default:
+                console.error("Unsupported texture format", format);
+        }
+    }
+
+    _loadI8(data, format, offset) {
+        const img = this.ctx.createImageData(this.width, this.height);
+        const blockSize = 8;
+        const h = this.height;
+        for(let i=0; i<this.width * this.height; i++) {
+            //totally wrong and I have no idea
+            let x =  (i       & 7) + ((i >> 6) * 8);
+            let y = ((i >> 3) & 7) + ((i >> 9) * 8);
+            let px = ((h * y) + x) * 4;
+            let b = data.getUint8(offset+i);
+            img.data[px + 0] = b;   //r
+            img.data[px + 1] = b;   //g
+            img.data[px + 2] = b;   //b
+            img.data[px + 3] = 255; //a
+        }
+        this.ctx.putImageData(img, 0, 0);
+    }
 };
