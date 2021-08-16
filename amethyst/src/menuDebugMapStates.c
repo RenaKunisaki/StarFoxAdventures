@@ -21,11 +21,11 @@ static u8 listOrder[] = {
     0x0b, //"Krazoa Palace",                warlock
     0x0e, //"LightFoot Village",            swapcircle
     0x42, //"LinkA - Warpstone to Others",  linka
-    0x38, //"LinkB - Ice2Wastes",           linkb
-    0x43, //"LinkC - Wastes to Hollow",     linkc
+    //0x38, //"LinkB - Ice2Wastes",           linkb
+    //0x43, //"LinkC - Wastes to Hollow",     linkc
     0x44, //"LinkD - Darkmines top 2 bot",  linkd
     0x46, //"LinkF - moonpass to volcano",  linkf
-    0x47, //"LinkG - hollow to lightfoot",  linkg
+    //0x47, //"LinkG - hollow to lightfoot",  linkg
     0x48, //"LinkH - lightfoot to capecl",  linkh
     0x4a, //"LinkI - CloudRunner2Race",     linki
     0x36, //"Magic Cave",                   magicave
@@ -50,8 +50,8 @@ static u8 listOrder[] = {
     0x23, //"(unused) Diamond Bay",         diamondbay
     0x06, //"(unused) Discovery Falls",     discovery
     0x34, //"(unused) Dragon Rock Bottom",  dragbot
-    0x01, //"(unused) Frontend 2",          frontend2
-    0x50, //"galleonship",                  galleonship
+    //0x01, //"(unused) Frontend 2",          frontend2
+    //0x50, //"galleonship",                  galleonship
     0x05, //"(unused) HighTop",             hightop
     //0x18, //"(unused) Ice Mountain 2",      newicemount2
     //0x19, //"(unused) Ice Mountain 3",      newicemount3
@@ -62,7 +62,7 @@ static u8 listOrder[] = {
 
 static const char *displayNames[] = {
     "Ship Battle",        //00 frontend
-    "(unused) Frontend2", //01 frontend2
+    NULL, //"(unused) Frontend2", //01 frontend2
     "Dragon Rock",        //02 dragrock
     "(unused) Old KP",    //03 krazoapalace
     "Volcano ForcePoint", //04 temple
@@ -117,7 +117,7 @@ static const char *displayNames[] = {
     NULL, //"(unused) Boss KamerianD",      //35 kamdrag
     "Magic Cave",         //36 magicave
     NULL, //"(unused) Duster Cave",         //37 duster
-    "LinkB Ice2Wastes",   //38 linkb
+    NULL, //"LinkB Ice2Wastes",   //38 linkb
     NULL, //"(unused) CloudRunner2Rac",     //39 cloudjoin
     NULL, //"Arwing to Planet",             //3a arwingtoplanet
     NULL, //"Arwing Darkice",               //3b arwingdarkice
@@ -128,11 +128,11 @@ static const char *displayNames[] = {
     NULL, //"(unused) LinkK - Nik Test",    //40 linklevel
     "Great Fox",          //41 greatfox
     "LinkA Warpstone",    //42 linka
-    "LinkC Wastes2TTH",   //43 linkc
+    NULL, //"LinkC Wastes2TTH",   //43 linkc
     "LinkD DIM top2bot",  //44 linkd
     NULL, //"LinkE - hollow to moon pass",  //45 linke
     "LinkF moonpass2VFP", //46 linkf
-    "LinkG TTH 2 LV",     //47 linkg
+    NULL, //"LinkG TTH 2 LV",     //47 linkg
     "LinkH LV 2 Cape",    //48 linkh
     NULL, //"LinkJ - capeclaw 2 ocean fo",  //49 linkj
     "LinkI CRF 2 Race",   //4a linki
@@ -141,7 +141,7 @@ static const char *displayNames[] = {
     NULL, //"dfcavehatch1",                 //4d dfcavehatch1
     NULL, //"dfcavehatch2",                 //4e dfcavehatch2
     NULL, //"scstatue",                     //4f scstatue
-    "(unused) galeonshp",                  //50 galleonship
+    NULL, //"(unused) galeonshp",                  //50 galleonship
     /* "cfgalleon",                    //51 cfgalleon
     "cfgangplank",                  //52 cfgangplank
     "nwtreebridge",                 //53 nwtreebridge
@@ -224,10 +224,11 @@ void mapStatesMenu_draw(Menu *self) {
             menuDrawText(str, x + 200, y, selected);
         }
         if(mapObjGroupBit[iMap]) {
+            str[0] = '\e'; str[1] = 'F'; //fixed width
             u32 groups = mainGetBit(mapObjGroupBit[iMap]);
             for(int iBit=0; iBit<32; iBit++) {
-                str[iBit] = ((groups >> (31 - iBit)) & 1) + 0x30;
-                str[iBit+1] = 0;
+                str[iBit+2] = ((groups >> (31 - iBit)) & 1) + 0x30;
+                str[iBit+3] = 0;
             }
             menuDrawText(str, x + 220, y, selected);
         }
