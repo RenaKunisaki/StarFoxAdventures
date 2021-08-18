@@ -29,8 +29,6 @@ void drawMenuBox(int xpos, int ypos, int width, int height) {
 }
 
 void genericMenu_drawAt(Menu *self, int xpos, int ypos, int width, int height) {
-    menuAnimFrame++;
-    menuTextAnimFrame++;
     int lineHeight = (curLanguage == LANG_JAPANESE) ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT;
 
     //debugPrintf("Menu flags %02X delay %d\n", menuPrevGameFlags, menuInputDelayTimer);
@@ -255,6 +253,8 @@ void runMenu() {
             break;
 
         case MENU_OPEN:
+            menuAnimFrame++;
+            menuTextAnimFrame++;
             drawMenu();
             doMenuInputs();
             shouldCloseCMenu = 1;
