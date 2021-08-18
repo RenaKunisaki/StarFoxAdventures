@@ -385,6 +385,16 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_AUDIO_STREAMS)     printStreams();
     if(debugTextFlags & DEBUGTEXT_AUDIO_SFX)         printSFX();
 
+    //not sure what these are, seem to never be used?
+    /* extern ObjInstance *objVar_802cada0[5];
+    for(int i=0; i<5; i++) {
+        ObjInstance *obj = objVar_802cada0[i];
+        if(obj) {
+            char name[12];
+            debugPrintf("Obj" DPRINT_FIXED "%d %08X" DPRINT_NOFIXED " %s\n", i, obj, name);
+        }
+    } */
+
     rngCalls = 0; //reset logging
     debugPrintf("\n"); //for game's own messages
     printHits();

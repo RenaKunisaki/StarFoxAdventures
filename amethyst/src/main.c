@@ -63,6 +63,7 @@ static inline void doPadMainLoop() {
         if(heapDrawMode >= NUM_HEAP_DRAW_MODES) heapDrawMode = 0;
     }
     if(bPressed3 & PAD_BUTTON_DOWN) printHeaps();
+    //if(bPressed3 & PAD_BUTTON_DOWN) mapLoadDataFiles(0xC);
 }
 
 void mainLoopHook() {

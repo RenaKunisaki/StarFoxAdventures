@@ -124,6 +124,7 @@ GLOBALFN void mainSetBits(GameBit bit, u32 val);
 GLOBALFN int mapCoordsToId(int x, int z, int layer); //MapId32
 GLOBALFN int mapGetDirIdx(int id); //MapId32 -> MapDirIdx32
 GLOBALFN void* mapLoadDataFile(MapDirIdx32 map, DataFileEnum file);
+GLOBALFN int mapLoadDataFiles(MapDirIdx32 mapNo);
 GLOBALFN void mapReload(void);
 GLOBALFN void mapScreenDrawHud(void);
 GLOBALFN void mapUnload(MapDirIdx32 map, uint flags);

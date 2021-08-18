@@ -78,7 +78,7 @@ void spawnList_draw(Menu *self) {
         ObjectFileStruct *file = getObjFile(defNo);
         if(!file) break;
         getObjFileName(name, file);
-        sprintf(str, "%04X %04X %s", defNo & 0xFFFF, realId & 0xFFFF, name);
+        sprintf(str, "\eF%04X %04X %s", defNo & 0xFFFF, realId & 0xFFFF, name);
 
         menuDrawText(str, x, y, iObj == self->selected);
         y += LINE_HEIGHT;
