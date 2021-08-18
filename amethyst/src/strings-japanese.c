@@ -99,6 +99,7 @@ const char *strings_Japanese[] = {
     "ライト", //debug: examine lights
     "名鑑", //open a list of objects
     "Load  Flags", //flags to use when loading (extra space for alignment)
+    "Load Map", //load a map's assets
     "HP低下 フラッシュ", //flash the HP meter when HP is low
     "HP低下 音", //play a sound when HP is low=
     "マップの行為番号", //"act numbers" of each map

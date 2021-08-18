@@ -256,7 +256,7 @@ void spawnMenu_draw(Menu *self) {
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
-    sprintf(str, "\eF%s:      %08X", T("Obj ID"), spawnObjDef.def.id);
+    sprintf(str, "\eF%s:      %08X %d", T("Obj ID"), spawnObjDef.def.id, spawnObjDef.def.id);
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
@@ -264,7 +264,7 @@ void spawnMenu_draw(Menu *self) {
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
-    sprintf(str, "\eF%s:     %04X", T("Obj No."), spawnObjNo & 0xFFFF);
+    sprintf(str, "\eF%s:     %04X %d", T("Obj No."), spawnObjNo & 0xFFFF, spawnObjNo);
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 

@@ -111,6 +111,7 @@ const char *strings_English[] = {
     "Lights", //debug: examine lights
     "List", //open a list of objects
     "Load  Flags", //flags to use when loading (extra space for alignment)
+    "Load Map", //load a map's assets
     "Low HP Flash", //flash the HP meter when HP is low
     "Low HP Sound", //play a sound when HP is low=
     "Map Acts", //"act numbers" of each map

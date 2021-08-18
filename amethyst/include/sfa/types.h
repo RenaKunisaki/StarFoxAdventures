@@ -8,7 +8,7 @@ typedef struct TextureHeader TextureHeader;
 #define NUM_FILES 0x5A
 #define NUM_HEAPS 4
 #define NUM_MAPS 120
-#define NUM_MAP_DIRS 80
+#define NUM_MAP_DIRS 73
 #define OBJ_SEQ_MAX 0x54
 #define PLAYER_POS_LOG_SIZE 60
 
