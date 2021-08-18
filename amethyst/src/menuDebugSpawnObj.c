@@ -268,15 +268,15 @@ void spawnMenu_draw(Menu *self) {
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
-    sprintf(str, "\eFX %s:  %08X", T("Position"), spawnCoords[0]);
+    sprintf(str, "\eFX %s:  %08X %d", T("Position"), spawnCoords[0], spawnCoords[0]);
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
-    sprintf(str, "\eFY %s:  %08X", T("Position"), spawnCoords[1]);
+    sprintf(str, "\eFY %s:  %08X %d", T("Position"), spawnCoords[1], spawnCoords[1]);
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
-    sprintf(str, "\eFZ %s:  %08X", T("Position"), spawnCoords[2]);
+    sprintf(str, "\eFZ %s:  %08X %d", T("Position"), spawnCoords[2], spawnCoords[2]);
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
@@ -444,7 +444,21 @@ void spawnMenu_run(Menu *self) {
             obj->flags_0xaf &= ~(ObjInstance_FlagsAF_ModelDisableFlag08 |
                 ObjInstance_FlagsAF_ModelDisableFlag20);
         }
-        else OSReport("Spawn failed");
+        else { //try again with flag 2 toggled
+            obj = objInstantiateCharacter((ObjDef*)&spawnObjDef,
+                spawnFlags ^ 0x2, spawnMapId, spawnObjNo, NULL);
+            if(obj) {
+                OSReport("Spawned obj %08X at %d, %d, %d: %s", obj,
+                    spawnCoords[0], spawnCoords[1], spawnCoords[2],
+                    obj->file->name);
+                //some objects like to spawn invisible
+                objSetModel(obj, 0);
+                obj->pos.flags &= ~ObjInstance_Flags06_Invisible;
+                obj->flags_0xaf &= ~(ObjInstance_FlagsAF_ModelDisableFlag08 |
+                    ObjInstance_FlagsAF_ModelDisableFlag20);
+            }
+            else OSReport("Spawn failed");
+        }
     }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
