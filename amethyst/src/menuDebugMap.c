@@ -1,4 +1,17 @@
 #include "main.h"
+static int8_t loadMapNo = 0;
+
+void debugMapMenu_run(Menu *self) {
+    //Run function for map menu
+    genericMenu_run(self);
+
+    if(buttonsJustPressed == PAD_TRIGGER_Z) {
+        if(self->selected == 11) { //Load Map
+            DPRINT("Unload map 0x%02X", loadMapNo);
+            mapUnload(loadMapNo, 0x20000000);
+        }
+    }
+}
 
 void debugMapSubMenu_close(const Menu *self) {
     //Close function for submenus of the debug map menu
@@ -85,9 +98,27 @@ void menuDebugMapEnv_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugMapLoad_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), loadMapNo, mapDirNames[loadMapNo]);
+    menuDrawText(str, x, y, selected);
+}
+void menuDebugMapLoad_select(const MenuItem *self, int amount) {
+    if(amount) {
+        loadMapNo += amount;
+        if(loadMapNo < 0) loadMapNo = NUM_MAP_DIRS - 1;
+        if(loadMapNo >= NUM_MAP_DIRS) loadMapNo = 0;
+        audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    }
+    else {
+        audioPlaySound(NULL, MENU_OPEN_SOUND);
+        mapLoadDataFiles(loadMapNo);
+    }
+}
+
 Menu menuDebugMap = {
     "Map", 0,
-    genericMenu_run, genericMenu_draw, debugSubMenu_close,
+    debugMapMenu_run, genericMenu_draw, debugSubMenu_close,
     "Warp",                "%s", genericMenuItem_draw, menuDebugMapWarp_select,
     "Objects",             "%s", genericMenuItem_draw, menuDebugMapObjs_select,
     "Spawn Object",        "%s", genericMenuItem_draw, menuDebugMapSpawnObj_select,
@@ -99,5 +130,6 @@ Menu menuDebugMap = {
     "Goto Last Save",      "%s", genericMenuItem_draw, menuDebugMapGotoSave_select,
     "Map States",          "%s", genericMenuItem_draw, menuDebugMapStates_select,
     "Environment",         "%s", genericMenuItem_draw, menuDebugMapEnv_select,
+    "Load Map",            "%s: %02X %s", menuDebugMapLoad_draw, menuDebugMapLoad_select,
     NULL,
 };
