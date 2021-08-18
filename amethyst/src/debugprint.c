@@ -360,6 +360,11 @@ static void printSFX() {
 }
 
 void mainLoopDebugPrint() {
+    drawHeaps();
+    if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
+    if(debugRenderFlags & DEBUGRENDER_RNG) drawRNG();
+    if(debugRenderFlags & DEBUGRENDER_WORLD_MAP) drawMapGrid();
+
     if(!enableDebugText) return; //or else game hangs
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"
         DPRINT_BGCOLOR "\x01\x01\x01\x3F"); //reset color
@@ -367,9 +372,6 @@ void mainLoopDebugPrint() {
     //do this first because it changes text position
     //and trying to restore it is a pain
     if(debugTextFlags & DEBUGTEXT_FPS) printFPS();
-    drawHeaps();
-    if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
-    if(debugRenderFlags & DEBUGRENDER_RNG) drawRNG();
 
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS)     printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS)     printCamera();
@@ -385,7 +387,5 @@ void mainLoopDebugPrint() {
 
     rngCalls = 0; //reset logging
     debugPrintf("\n"); //for game's own messages
-
-    if(debugRenderFlags & DEBUGRENDER_WORLD_MAP) drawMapGrid();
     printHits();
 }
