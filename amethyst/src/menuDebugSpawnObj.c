@@ -78,7 +78,8 @@ void spawnList_draw(Menu *self) {
         ObjectFileStruct *file = getObjFile(defNo);
         if(!file) break;
         getObjFileName(name, file);
-        sprintf(str, "\eF%04X %04X %s", defNo & 0xFFFF, realId & 0xFFFF, name);
+        sprintf(str, "\eF%04X %04X (%5d %5d) %s", defNo & 0xFFFF, realId & 0xFFFF,
+            defNo & 0xFFFF, realId & 0xFFFF, name);
 
         menuDrawText(str, x, y, iObj == self->selected);
         y += LINE_HEIGHT;
@@ -226,8 +227,10 @@ void spawnMenu_draw(Menu *self) {
     getObjFileName(name, file);
 
 
-    sprintf(str, "\eF%s:      %04X (%04X) %s", T("Object"),
-        spawnObjDef.def.objType & 0xFFFF, realId & 0xFFFF, name);
+    sprintf(str, "\eF%s:      %04X %04X (%5d %5d) %s", T("Object"),
+        spawnObjDef.def.objType & 0xFFFF, realId & 0xFFFF,
+        spawnObjDef.def.objType & 0xFFFF, realId & 0xFFFF,
+        name);
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
