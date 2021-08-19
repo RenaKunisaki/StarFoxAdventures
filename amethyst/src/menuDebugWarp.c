@@ -86,20 +86,21 @@ WarpMenuItem warps[] = {
     {-18870,      9,  28360,  0}, //"Cutscene: Title Screen",
     {     0,      0,  13440,  0}, //"Ship Battle",
     { -9495,   -127, -19015,  0}, //"Unused: AnimTest",
-    { 13440,   -127,  -5120,  0}, //"Unused: WGShrine",
+//  { 13440,   -127,  -5120,  0}, //"Unused: WGShrine",
 //  { -7040,   -127,  -8320,  0}, //"Unused: NikTest", //crashes
-    {  7680,   -127,  14080,  0}, //"Unused: Rolling Demo",
-    {-12800,   -127,  27520,  0}, //"Unused: Kamerian",
-    {-10240,   -127,  27520,  0}, //"Unused: Duster Cave",
-    { -7040,   -127,  29440,  0}, //"Unused: Diamond Bay",
-    {  -640,   -127,  28800,  0}, //"Unused: Discovery Falls",
-    {  3200,   -127,  28160,  0}, //"Unused: Willow Grove",
+//  {  7680,   -127,  14080,  0}, //"Unused: Rolling Demo",
+//  {-12800,   -127,  27520,  0}, //"Unused: Kamerian",
+//  {-10240,   -127,  27520,  0}, //"Unused: Duster Cave",
+//  { -7040,   -127,  29440,  0}, //"Unused: Diamond Bay",
+//  {  -640,   -127,  28800,  0}, //"Unused: Discovery Falls",
+//  {  3200,   -127,  28160,  0}, //"Unused: Willow Grove",
     { 12800,    973,  30080,  0}, //"Unused: Old Krazoa Palace",
 //  {  3693,    -37,    238,  0}, //"Unused: Old Krazoa Palace",
-    {-19200,   -127,  33920,  0}, //"Unused: CloudRunner Race 2",
+//  {-19200,   -127,  33920,  0}, //"Unused: CloudRunner Race 2", //XXX Z coord is outside range of s16
 };
 
 //employ some simple dictionary compression
+//XXX how do we translate these?
 const char *warpDict[] = {
     "ThornTail Hollow - ",     //0x80
     "Krazoa Palace - ",        //0x81
@@ -192,15 +193,15 @@ const char *warpNames[] = {
     "\x8F" "AnimTest",
     "\x8F" "WGShrine",
     //"\x8F" "NikTest",
-    "\x8F" "Rolling Demo",
-    "\x8F" "Kamerian",
-    "\x8F" "Duster Cave",
-    "\x8F" "Diamond Bay",
-    "\x8F" "Discovery Falls",
-    "\x8F" "Willow Grove",
+    //"\x8F" "Rolling Demo",
+    //"\x8F" "Kamerian",
+    //"\x8F" "Duster Cave",
+    //"\x8F" "Diamond Bay",
+    //"\x8F" "Discovery Falls",
+    //"\x8F" "Willow Grove",
     "\x8F" "Old Krazoa Palace",
     //"\x8F" "Old Krazoa Palace",
-    "\x8F" "CloudRunner Race 2",
+    //"\x8F" "CloudRunner Race 2",
     NULL
 };
 
