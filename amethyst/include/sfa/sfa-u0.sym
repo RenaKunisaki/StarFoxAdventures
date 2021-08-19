@@ -407,6 +407,7 @@ reset = 0x802448a8;
 resetPerspectiveMtxs = 0x8000fb00;
 rumbleTimer = 0x803dc90c;
 saveData = 0x803a31c4;
+SaveGame_getCurCharPos = 0x800e9b80;
 saveGame_load = 0x800e87cc;
 saveGame_save = 0x800e86d0;
 saveSelect_drawText = 0x80119dd4;

@@ -182,6 +182,7 @@ GLOBALFN void renderObjects(bool *visible);
 GLOBALFN void reset(int, int, int);
 GLOBALFN void resetPerspectiveMtxs(void);
 GLOBALFN PlayerCharState* SaveGame_getCurCharacterState(void);
+GLOBALFN PlayerCharPos* SaveGame_getCurCharPos(void);
 GLOBALFN int saveGame_load(s8 slot);
 GLOBALFN void saveGame_save(void);
 GLOBALFN void saveSelect_drawText(void *unused, u32 alpha);

@@ -2,6 +2,7 @@
  */
 #include "main.h"
 #include "revolution/os.h"
+#include "revolution/pad.h"
 
 static int (*oldTitleHook)();
 
@@ -51,10 +52,27 @@ int titleHook() {
     );
 } */
 
+int titleSaveLoadHook(int slot) {
+    //not sure about return type...
+    int res = saveGame_load(slot);
+    PlayerCharPos *pos = &pCurSaveGame->charPos[pCurSaveGame->character];
+    DPRINT("Loading char %d pos: %f, %f, %f", pCurSaveGame->character,
+        pos->pos.x, pos->pos.y, pos->pos.z);
+    if(getButtonsHeld(0) & PAD_BUTTON_START) {
+        //go to AnimTest, in case save file is buggered.
+        pos->pos.x =  -9495;
+        pos->pos.y =   -127;
+        pos->pos.z = -19015;
+        pos->mapLayer = 0;
+    }
+    return res;
+}
+
 void titleHooksInit() {
     //hook into the run method of the title screen DLL
     OSReport("Install title hook...\n");
     oldTitleHook = *(u32*)0x8031a320;
     WRITE32(0x8031a320, titleHook);
     //hookBranch(0x8011ab74, saveInfoHook, 1);
+    hookBranch(0x8011af00, titleSaveLoadHook, 1);
 }
