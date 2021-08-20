@@ -165,23 +165,25 @@ void menuDebugTextAudioSFX_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
+#define _FMT "%s:\eX300%s"
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Master",          "%s: %s", menuDebugTextMaster_draw,         menuDebugTextMaster_select,
-    "Player State",    "%s: %s", menuDebugTextPlayerState_draw,  menuDebugTextPlayerState_select,
-    "Tricky",          "%s: %s", menuDebugTextTricky_draw,       menuDebugTextTricky_select,
-    "Player Coords",   "%s: %s", menuDebugTextPlayerCoords_draw, menuDebugTextPlayerCoords_select,
-    "Camera Coords",   "%s: %s", menuDebugTextCameraCoords_draw, menuDebugTextCameraCoords_select,
-    "Restart Point",   "%s: %s", menuDebugTextRestartPoint_draw, menuDebugTextRestartPoint_select,
-    "Interact Obj",    "%s: %s", menuDebugTextInteractObj_draw,  menuDebugTextInteractObj_select,
-    "GameBit Changes", "%s: %s", menuDebugTextBits_draw,         menuDebugTextBits_select,
-    "Memory Stats",    "%s: %s", menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
-    "Heap Details",    "%s: %s", menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
-    "Performance",     "%s: %s", menuDebugTextPerf_draw,         menuDebugTextPerf_select,
-    "FPS Meter",       "%s: %s", menuDebugTextFPS_draw,          menuDebugTextFPS_select,
-    "RNG",             "%s: %s", menuDebugTextRNG_draw,          menuDebugTextRNG_select,
-    "Audio Streams",   "%s: %s", menuDebugTextAudioStreams_draw, menuDebugTextAudioStreams_select,
-    "Audio SFX",       "%s: %s", menuDebugTextAudioSFX_draw,     menuDebugTextAudioSFX_select,
+    "Master",          _FMT, menuDebugTextMaster_draw,         menuDebugTextMaster_select,
+    "Player State",    _FMT, menuDebugTextPlayerState_draw,  menuDebugTextPlayerState_select,
+    "Tricky",          _FMT, menuDebugTextTricky_draw,       menuDebugTextTricky_select,
+    "Player Coords",   _FMT, menuDebugTextPlayerCoords_draw, menuDebugTextPlayerCoords_select,
+    "Camera Coords",   _FMT, menuDebugTextCameraCoords_draw, menuDebugTextCameraCoords_select,
+    "Restart Point",   _FMT, menuDebugTextRestartPoint_draw, menuDebugTextRestartPoint_select,
+    "Interact Obj",    _FMT, menuDebugTextInteractObj_draw,  menuDebugTextInteractObj_select,
+    "GameBit Changes", _FMT, menuDebugTextBits_draw,         menuDebugTextBits_select,
+    "Memory Stats",    _FMT, menuDebugTextMemoryStats_draw,  menuDebugTextMemoryStats_select,
+    "Heap Details",    _FMT, menuDebugTextHeaps_draw,        menuDebugTextHeaps_select,
+    "Performance",     _FMT, menuDebugTextPerf_draw,         menuDebugTextPerf_select,
+    "FPS Meter",       _FMT, menuDebugTextFPS_draw,          menuDebugTextFPS_select,
+    "RNG",             _FMT, menuDebugTextRNG_draw,          menuDebugTextRNG_select,
+    "Audio Streams",   _FMT, menuDebugTextAudioStreams_draw, menuDebugTextAudioStreams_select,
+    "Audio SFX",       _FMT, menuDebugTextAudioSFX_draw,     menuDebugTextAudioSFX_select,
     NULL,
 };
+#undef _FMT

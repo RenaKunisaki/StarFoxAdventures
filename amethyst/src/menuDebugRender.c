@@ -123,20 +123,21 @@ void menuDebugRenderRNG_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
-
+#define _FMT "%s:\eX290%s"
 Menu menuDebugRender = {
     "Render", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Effects",        "%s",     genericMenuItem_draw,             menuDebugRenderEffects_select,
-    "View Textures",  "%s",     genericMenuItem_draw,             menuDebugRenderTextures_select,
-    "View Fonts",     "%s",     genericMenuItem_draw,             menuDebugRenderFonts_select,
-    "Map Grid",       "%s: %s", menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
-    "Perf Meters",    "%s: %s", menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
-    "RNG",            "%s: %s", menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,
-    "Debug Objects",  "%s: %s", menuDebugRenderDebugObjs_draw,    menuDebugRenderDebugObjs_select,
-    "Hitboxes",       "%s: %s", menuDebugRenderHitboxes_draw,     menuDebugRenderHitboxes_select,
-    "Attach Points",  "%s: %s", menuDebugRenderAttachPoints_draw, menuDebugRenderAttachPoints_select,
-    "Focus Points",   "%s: %s", menuDebugRenderFocusPoints_draw,  menuDebugRenderFocusPoints_select,
-    "Unknown Points", "%s: %s", menuDebugRenderUnkPoints_draw,    menuDebugRenderUnkPoints_select,
+    "Effects",        "%s", genericMenuItem_draw,             menuDebugRenderEffects_select,
+    "View Textures",  "%s", genericMenuItem_draw,             menuDebugRenderTextures_select,
+    "View Fonts",     "%s", genericMenuItem_draw,             menuDebugRenderFonts_select,
+    "Map Grid",       _FMT, menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
+    "Perf Meters",    _FMT, menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
+    "RNG",            _FMT, menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,
+    "Debug Objects",  _FMT, menuDebugRenderDebugObjs_draw,    menuDebugRenderDebugObjs_select,
+    "Hitboxes",       _FMT, menuDebugRenderHitboxes_draw,     menuDebugRenderHitboxes_select,
+    "Attach Points",  _FMT, menuDebugRenderAttachPoints_draw, menuDebugRenderAttachPoints_select,
+    "Focus Points",   _FMT, menuDebugRenderFocusPoints_draw,  menuDebugRenderFocusPoints_select,
+    "Unknown Points", _FMT, menuDebugRenderUnkPoints_draw,    menuDebugRenderUnkPoints_select,
     NULL,
 };
+#undef _FMT

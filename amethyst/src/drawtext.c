@@ -10,8 +10,28 @@ static int _readHex(const char *str, int len, const char **out) {
         else if(c >= '0' && c <= '9') n =  c - '0';
         else if(c >= 'A' && c <= 'F') n = (c - 'A') + 10;
         else if(c >= 'a' && c <= 'f') n = (c - 'a') + 10;
-        else break;
+        else {
+            str--;
+            break;
+        }
         result = (result << 4) | n;
+    }
+    if(out) *out = str;
+    return result;
+}
+
+static int _readDec(const char *str, int len, const char **out) {
+    int result = 0;
+    while(len--) {
+        int n = 0;
+        char c = *(str++);
+        if(!c) break;
+        else if(c >= '0' && c <= '9') n =  c - '0';
+        else {
+            str--;
+            break;
+        }
+        result = (result * 10) + n;
     }
     if(out) *out = str;
     return result;
@@ -194,6 +214,8 @@ int findChar(int chr, GameTextFont *font, GameTextFont **outFont, GameTextCharac
  *    cRRGGBBAA: Set text color (and enable color)
  *    C: Disable color
  *    S: Toggle shadow
+ *    Xn: Set X position
+ *    Yn: Set Y position
  *  @note Rendering with color disabled is less pretty, but faster.
  */
 int drawText(const char *str, int x, int y, int *outX, int *outY, u32 flags,
@@ -265,6 +287,18 @@ Color4b color, float scale) {
                         }
                         case 'C': flags &= ~TEXT_COLORED; break; //C: disable color
                         case 'S': flags ^= TEXT_SHADOW; break; //S: toggle shadow
+                        case 'X': { //Xnnn: set X position
+                            const char *s2 = &str[iChr];
+                            x = _readDec(s2, 4, &s2);
+                            iChr = s2 - str;
+                            break;
+                        }
+                        case 'Y': { //Ynnn: set Y position
+                            const char *s2 = &str[iChr];
+                            y = _readDec(s2, 4, &s2);
+                            iChr = s2 - str;
+                            break;
+                        }
                     }
                 }
                 default: break;

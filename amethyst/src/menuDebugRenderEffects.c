@@ -118,9 +118,9 @@ void menuDebugRenderColFiltB_select(const MenuItem *self, int amount) {
 void menuDebugRenderColScale_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
     if(overrideColorScale >= 0){
-        sprintf(str, "%s: %d%%", T("Color Scale"), (int)((overrideColorScale / 255.0) * 100.0));
+        sprintf(str, "%s:\eX0280\eF%3d%%", T("Color Scale"), (int)((overrideColorScale / 255.0) * 100.0));
     }
-    else sprintf(str, "%s: %s", T("Color Scale"), T("Normal"));
+    else sprintf(str, "%s:\eX0280%s", T("Color Scale"), T("Normal"));
     menuDrawText(str, x, y, selected);
 }
 void menuDebugRenderColScale_select(const MenuItem *self, int amount) {
@@ -131,18 +131,20 @@ void menuDebugRenderColScale_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
+#define _FMT "%s:\eX0280"
 Menu menuDebugRenderEffects = {
     "Effects", 0,
     genericMenu_run, genericMenu_draw, debugRenderSubMenu_close,
-    "Blur Filter",   "%s: %s", menuDebugRenderEffectsBlur_draw,     menuDebugRenderEffectsBlur_select,
-    "Motion Blur",   "%s: %d", menuDebugRenderEffectsMotBlur_draw,  menuDebugRenderEffectsMotBlur_select,
-    "Heat Effect",   "%s: %d", menuDebugRenderEffectsHeatFx_draw,   menuDebugRenderEffectsHeatFx_select,
-    "Monochrome",    "%s: %s", menuDebugRenderEffectsMono_draw,     menuDebugRenderEffectsMono_select,
-    "Spirit Vision", "%s: %s", menuDebugRenderEffectsSpirit_draw,   menuDebugRenderEffectsSpirit_select,
-    "Color Filter",  "%s: %s", menuDebugRenderColFiltOn_draw,       menuDebugRenderColFiltOn_select,
-    "Filter R",      "%s: %d", menuDebugRenderColFiltR_draw,        menuDebugRenderColFiltR_select,
-    "Filter G",      "%s: %d", menuDebugRenderColFiltG_draw,        menuDebugRenderColFiltG_select,
-    "Filter B",      "%s: %d", menuDebugRenderColFiltB_draw,        menuDebugRenderColFiltB_select,
-    "", "%s",                  menuDebugRenderColScale_draw,        menuDebugRenderColScale_select,
+    "Blur Filter",   _FMT "%s",     menuDebugRenderEffectsBlur_draw,     menuDebugRenderEffectsBlur_select,
+    "Motion Blur",   _FMT "\eF%3d", menuDebugRenderEffectsMotBlur_draw,  menuDebugRenderEffectsMotBlur_select,
+    "Heat Effect",   _FMT "\eF%3d", menuDebugRenderEffectsHeatFx_draw,   menuDebugRenderEffectsHeatFx_select,
+    "Monochrome",    _FMT "%s",     menuDebugRenderEffectsMono_draw,     menuDebugRenderEffectsMono_select,
+    "Spirit Vision", _FMT "%s",     menuDebugRenderEffectsSpirit_draw,   menuDebugRenderEffectsSpirit_select,
+    "Color Filter",  _FMT "%s",     menuDebugRenderColFiltOn_draw,       menuDebugRenderColFiltOn_select,
+    "Filter R",      _FMT "\eF%3d", menuDebugRenderColFiltR_draw,        menuDebugRenderColFiltR_select,
+    "Filter G",      _FMT "\eF%3d", menuDebugRenderColFiltG_draw,        menuDebugRenderColFiltG_select,
+    "Filter B",      _FMT "\eF%3d", menuDebugRenderColFiltB_draw,        menuDebugRenderColFiltB_select,
+    "",              _FMT "%s",     menuDebugRenderColScale_draw,        menuDebugRenderColScale_select,
     NULL,
 };
+#undef _FMT

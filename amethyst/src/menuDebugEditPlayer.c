@@ -123,17 +123,19 @@ void menuEditPlayerFood_select(const MenuItem *self, int amount) {
 }
 
 
+#define _FMT "%s:\eX250"
 Menu menuDebugEditPlayer = {
     "Edit Player State", 0,
     genericMenu_run, genericMenu_draw, debugGameSubMenu_close,
-    "Edit",        "%s: %s", menuEditPlayerWhich_draw,    menuEditPlayerWhich_select,
-    "Cur HP",      "%s: %d", menuEditPlayerCurHp_draw,    menuEditPlayerCurHp_select,
-    "Max HP",      "%s: %d", menuEditPlayerMaxHp_draw,    menuEditPlayerMaxHp_select,
-    "Cur MP",      "%s: %d", menuEditPlayerCurMp_draw,    menuEditPlayerCurMp_select,
-    "Max MP",      "%s: %d", menuEditPlayerMaxMp_draw,    menuEditPlayerMaxMp_select,
-    "Cur Lives",   "%s: %d", menuEditPlayerCurLives_draw, menuEditPlayerCurLives_select,
-    "Max Lives",   "%s: %d", menuEditPlayerMaxLives_draw, menuEditPlayerMaxLives_select,
-    "Money",       "%s: %d", menuEditPlayerMoney_draw,    menuEditPlayerMoney_select,
-    "Tricky Food", "%s: %d", menuEditPlayerFood_draw,     menuEditPlayerFood_select,
+    "Edit",        "%s: %s",      menuEditPlayerWhich_draw,    menuEditPlayerWhich_select,
+    "Cur HP",      _FMT "\eF%3d", menuEditPlayerCurHp_draw,    menuEditPlayerCurHp_select,
+    "Max HP",      _FMT "\eF%3d", menuEditPlayerMaxHp_draw,    menuEditPlayerMaxHp_select,
+    "Cur MP",      _FMT "\eF%3d", menuEditPlayerCurMp_draw,    menuEditPlayerCurMp_select,
+    "Max MP",      _FMT "\eF%3d", menuEditPlayerMaxMp_draw,    menuEditPlayerMaxMp_select,
+    "Cur Lives",   _FMT "\eF%3d", menuEditPlayerCurLives_draw, menuEditPlayerCurLives_select,
+    "Max Lives",   _FMT "\eF%3d", menuEditPlayerMaxLives_draw, menuEditPlayerMaxLives_select,
+    "Money",       _FMT "\eF%3d", menuEditPlayerMoney_draw,    menuEditPlayerMoney_select,
+    "Tricky Food", _FMT "\eF%3d", menuEditPlayerFood_draw,     menuEditPlayerFood_select,
     NULL,
 };
+#undef _FMT
