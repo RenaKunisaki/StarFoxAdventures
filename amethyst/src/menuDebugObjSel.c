@@ -165,8 +165,8 @@ Menu menuDebugObjSelected = {
     "Edit State",         "%s", genericMenuItem_draw, menuObjSelEditState_select,
     "Run Seq",   "%s %d: %04X", menuObjSelCallSeq_draw, menuObjSelCallSeq_select,
     //these will probably crash, so add a little warning icon
-    "Set as Player",  "[!] %s", genericMenuItem_draw, menuObjSelSetPlayer_select,
-    "Ride",           "[!] %s", genericMenuItem_draw, menuObjSelRide_select,
-    "Pick Up",        "[!] %s", genericMenuItem_draw, menuObjSelHold_select,
+    "Set as Player",  "/!\\ %s", genericMenuItem_draw, menuObjSelSetPlayer_select,
+    "Ride",           "/!\\ %s", genericMenuItem_draw, menuObjSelRide_select,
+    "Pick Up",        "/!\\ %s", genericMenuItem_draw, menuObjSelHold_select,
     NULL,
 };
