@@ -333,6 +333,12 @@ void _start(void) {
     WRITE16(0x802A26BA, 0x1B70); //ladder climb (up)
     WRITE16(0x802A26A6, 0x1B70); //ladder climb (down)
 
+    //increase block pushing speeds
+    WRITE16(0x8029df1a, 0x19E0); //moving left
+    WRITE16(0x8029def6, 0x1A90); //moving right
+    WRITE16(0x8029dec6, 0x1A90); //moving back 0.05 -> 0.98
+    WRITE16(0x8029de9a, 0x1EC8); //moving forward -0.05 -> -1
+
     textHookInit();
 
     //kill Arwing health alarm. we can turn it back on from the menu if we really want.
