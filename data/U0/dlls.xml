@@ -26653,6 +26653,17 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x801ECA60" idx="0x16" stub="1"/>
       <function address="0x801ECA5C" idx="0x17" stub="1"/>
     </functions>
+    <objparams>
+      <param offset="0x18" type="s8" name="rotation" />
+      <param offset="0x19" type="s8" name="cantRide" />
+      <param offset="0x1A" type="GameBit16" name="riding">
+        <description>Set when climbing on, for types other than 2</description>
+      </param>
+      <param offset="0x1A" type="s16" name="fuelEconomy">
+        <description>for type 2</description>
+      </param>
+      <param offset="0x1E" type="GameBit16" name="enableHitbox" />
+    </objparams>
   </dll>
   <dll address="0x80335138" dolOffs="0x332138" id="0x0256" interface="object" name="DIMSnowHorn1" unk08="0x00000000" unk0E="0x0000">
     <description/>
