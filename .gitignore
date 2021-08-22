@@ -35,6 +35,9 @@ compile_commands.json
 **/.vscode/*
 **/.cache/*
 
+# auto generated files
+amethyst/patchfiles/files/bitnames.dat
+
 # from https://github.com/github/gitignore
 # Object files
 *.o

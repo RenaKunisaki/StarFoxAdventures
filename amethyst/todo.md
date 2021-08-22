@@ -3,26 +3,32 @@ it's crashing because it's trying to do something with the staff but they don't 
 - what if we spawn a staff for them and attach it?
 
 # future versions
-- figure out how to get it working with Japanese text
 - keyboard stuff
-- Improve emergency free
-	- free more things than only objects and expgfx
-		- can we dump whichever map we're not currently in?
-	- display a warning on screen if low on memory
-		- maybe eg change the color of a HUD item?
-- fix stupid gametext texture generation thing (especially for uwu)
-- make Andross fight suck less
-	- be able to use your 1ups?
-	- be less tedious in general
-	- have other crew members (besides Falco) help by shooting and such?
-- save Y button equip (see ybutton.s)
-	- maybe we can just force the menu to be open and doing the equip?
-- fix Krystal animations:
+- improve memory usage
+	- does the staff swipe effect really need 180K!? really!?
+	- Improve emergency free
+		- free more things than only objects and expgfx
+			- can we dump whichever map we're not currently in?
+		- display a warning on screen if low on memory
+			- maybe eg change the color of a HUD item?
+- UI improvements
+	- save Y button equip (see ybutton.s)
+		- maybe we can just force the menu to be open and doing the equip?
+	- fix stupid gametext texture generation thing (especially for uwu)
+	- HUD improvements
+		- Banjo-Kazooie style HUD - don't show counters unless relevant, or while paused
+		- show more things (Tricky, enemies...) on minimap
+		- make the PDA HUD switch to info mode when an object that has info is nearby, otherwise remain in map/compass mode
+		- PDA info should show enemy HP and stats
+	- make the WarpStone just YEET you instead of really warping
+- Krystal stuff
 	- height difference from Fox
 		- fix camera placement in some scenes to look at her face
+			- shouldn't the "focus points" handle this? maybe they're not being used?
 	- staff impaling her on back
 		- it happens to Fox too, just hidden by backpack
 		- it's attach point #2 on the Sabre object, but just changing that isn't enough because it's actually split into two pieces when stored on the back.
+			- can we move them together to hide that?
 		- when entering first person mode the blend mode changes and it looks correct. can we mimic what's going on there?
 			-it's changing her opacity. we can set it to 254 which does fix that but makes her look like some kind of Lovecraft abomination.
 	- staff swipe animation (and hitbox?) when loaded actual Krystal object
@@ -33,23 +39,21 @@ it's crashing because it's trying to do something with the staff but they don't 
 	- some attack hitboxes (maybe broken as Fox too?)
 		- the sweeping kick to the head seems to not work, even though the hitboxes clearly connect...
 	- the eyes go a bit wacky when getting a spell
-- import extra Krystal voices from kiosk version
-- remove more pause menu voices
-	- see Cheats.md for some more addresses there
-- HUD improvements
-	- Banjo-Kazooie style HUD - don't show counters unless relevant, or while paused
-	- show more things (Tricky, enemies...) on minimap
-	- make the PDA HUD switch to info mode when an object that has info is nearby, otherwise remain in map/compass mode
-	- PDA info should show enemy HP and stats
-- make the fireball hitbox bigger and/or the switches
-- map tweaks
+	- import extra voices from kiosk version (are we sure these exist?)
+- make some things better
+	- Andross
+		- be able to use your 1ups?
+		- be less tedious in general
+		- have other crew members (besides Falco) help by shooting and such?
 	- move that one plant
 	- put some more warps around to/from the hollow
-- make the test of fear less dumb
-	- how much of the dumb is just input lag?
-- make Tricky less chatty
-	- make him attack badguys without being told
-- make the WarpStone just YEET you instead of really warping
+	- make the test of fear less dumb
+		- how much of the dumb is just input lag?
+	- make Tricky less chatty
+		- make him attack badguys without being told
+	- make the fireball hitbox bigger and/or the switches
+	- remove more pause menu voices
+		- see Cheats.md for some more addresses there
 - repack assets at higher compression ratio
 	- strip unneeded textures from eg gamefront
 	- might need to publish a script since this could result in a massive patch
@@ -59,15 +63,12 @@ it's crashing because it's trying to do something with the staff but they don't 
 	- the reflection texture just shows as garbage, dunno why
 	- we need 0x96000 bytes to copy the buffer into
 	- can we change it to a different graphic format and set up a new, smaller framebuffer?
-- improve memory usage
-	- find a way to avoid keeping 3 copies of Krystal assets loaded
-		- had tried just loading the file directly into the MODELS.BIN buffer, then copying it to the other as needed, but this fails in cases where both buffers get freed before a new one is loaded. would need to detect that somehow.
-		- ideally, hack the asset systems to avoid needing to copy at all.
-	- does the staff swipe effect really need 180K!? really!?
 
 # bugs
-- the race timer appears when riding SnowHorns
 - backpack disappears from Krystal during cutscenes
+- pushing block speed isn't affected by physics time scale
+	- it's at least fast enough now that it probably doesn't matter
+	- swimming behaves differently (currents seem to get stronger when speeding up time)
 - when fur effect is on and you jump, there's some polygon glitching.
 	- seems to be bone #8 that's not being set properly or something
 	- affects both characters; reducing fur intensity avoids it
@@ -94,6 +95,7 @@ it's crashing because it's trying to do something with the staff but they don't 
 	- show objects' names over the actual objects
 	- be able to browse the map's romlist and spawn objects from it, bypassing state checks
 	- toggle cheats: dino language, sepia...
+	- draw the map grid borders as transparent walls in the world
 - run in Wii mode?
 	- maybe can modify Nintendon't to let it have access to additional RAM, CPU speed, devices
 - if you're in the "stuck out of bounds" or "falling" state for a few seconds, warp back somewhere safe.
@@ -105,6 +107,7 @@ it's crashing because it's trying to do something with the staff but they don't 
 	- maybe just prevent it from moving back on its own?
 	- maybe even just have an option where the aiming is relative, ie the stick moves the crosshair around relatively instead of setting its angle absolutely
 	- if we had it able to do this we could also have debug things where you just point at objects.
+	- if you're locked on to something, your fireballs home in on it. very noticeable during Galdon fight. can we use this?
 - arbitrary aspect ratio setting
 - hook doRumble to adjust intensity
 - port Fox/Krystal's Assault outfits
@@ -123,6 +126,8 @@ it's crashing because it's trying to do something with the staff but they don't 
 # fun/silly things
 - Jesus Mode
 - rideable Tricky, and/or spawn snow bike
+	- you only need to load a map that has its assets, and spawn it with correct params. it's buggy (sometimes clipping into ground or getting stuck) but it works.
+	- no way to get off properly, though... and where should it be left?
 - change friction for various surfaces
 - put something funny on the screen of Fox's computer during the Great Fox scene.
 	- on the title screen it's the movie, but the "blank screen" texture behind it is also used in the other scenes.
