@@ -31,6 +31,7 @@ const char *strings_Japanese[] = {
     "コントローラー", //which gamepad
     "コントロール設定", //change controls
     "ゲームをクラッシュする", //cause a fatal error (for testing)
+    "現在ご飯", //current food/energy
     "現在HP", //current health
     "現在ライフ", //current extra lives
     "現在MP", //current magic power
@@ -47,6 +48,7 @@ const char *strings_Japanese[] = {
     "メモリエディット", //edit memory
     "オブジェクト定義を編集", //edit object definition
     "プレイヤー状態の編集", //edit player's state
+    "トリッキー状態の編集", //edit Tricky's state
     "状態編集", //edit object's state
     "エフェクト", //effects
     "環境", //environment (time, weather...)
@@ -111,6 +113,7 @@ const char *strings_Japanese[] = {
     "マップの状態", //state of each map
     "マップのズーム", //zoom level of PDA map
     "マスター", //master debug text enable
+    "最大ご飯", //maximum food/energy
     "最大HP", //maximum health
     "最大ライフ", //maximum extra lives
     "最大MP", //maximum magic power
@@ -155,6 +158,7 @@ const char *strings_Japanese[] = {
     "プレイヤー設定", //settings for player character
     "プレイヤーの状態", //player character's state
     "プレイヤー", //which player to use
+    "Play Count", //number of times played
     "SE再生", //play sound effect
     "曲再生", //play a song
     "ストリーム音源再生", //play audio stream
@@ -195,7 +199,6 @@ const char *strings_Japanese[] = {
     "源", //1-letter abbreviation for Table
     "目録", //database table
     "時間", //time of day
-    "トリッキーのご飯", //Tricky's food/energy meter
     "トリッキー", //the character named Tricky
     "一意のID", //unique ID
     "わからない07", //unknown field 7

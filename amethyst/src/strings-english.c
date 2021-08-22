@@ -43,6 +43,7 @@ const char *strings_English[] = {
     "Controller", //which gamepad
     "Control Settings", //change controls
     "Crash Game", //cause a fatal error (for testing)
+    "Cur Food", //current food/energy
     "Cur HP", //current health
     "Cur Lives", //current extra lives
     "Cur MP", //current magic power
@@ -59,6 +60,7 @@ const char *strings_English[] = {
     "Edit Memory", //edit memory
     "Edit ObjDef", //edit object definition
     "Edit Player State", //edit player's state
+    "Edit Tricky State", //edit Tricky's state
     "Edit State", //edit object's state
     "Effects", //effects
     "Environment", //environment (time, weather...)
@@ -123,6 +125,7 @@ const char *strings_English[] = {
     "Map States", //state of each map
     "Map Zoom", //zoom level of PDA map
     "Master", //master debug text enable
+    "Max Food", //maximum food/energy
     "Max HP", //maximum health
     "Max Lives", //maximum extra lives
     "Max MP", //maximum magic power
@@ -167,6 +170,7 @@ const char *strings_English[] = {
     "Player Settings", //settings for player character
     "Player State", //player character's state
     "Player", //which player to use
+    "Play Count", //number of times played
     "Play SFX", //play sound effect
     "Play Song", //play a song
     "Play Stream", //play audio stream
@@ -207,7 +211,6 @@ const char *strings_English[] = {
     "T", //1-letter abbreviation for Table
     "Table", //database table
     "Time", //time of day
-    "Tricky Food", //Tricky's food/energy meter
     "Tricky", //the character named Tricky
     "UniqueID", //unique ID
     "Unk07", //unknown field 7

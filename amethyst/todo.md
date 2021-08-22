@@ -141,16 +141,17 @@ it's crashing because it's trying to do something with the staff but they don't 
 - rip models with texture, skeleton, animation
 - examine md5.txt, see if any maps have different versions of files or unique, unused resources
 - there's some more leftover stuff re: Tricky and abilities
-  - the "decoy" voice clip exists, might be possible to call it
-    - we can change one of the items in the C menu to 2 but it seems to not do anything besides the voice clip
-  - according to old gametext, "bad guy alert" would make the staff glow red
-    - one of the colors available is a red/orange, but it doesn't look like it's ever set to that by any existing code.
-  - "hit protector" item in the demo version
-    - this does absolutely squat when purchased (not even an animation) but code might remain?
+	- the "decoy" voice clip exists, might be possible to call it
+		- we can change one of the items in the C menu to 2 but it seems to not do anything besides the voice clip
+	- according to old gametext, "bad guy alert" would make the staff glow red
+		- one of the colors available is a red/orange, but it doesn't look like it's ever set to that by any existing code.
+	- "hit protector" item in the demo version
+		- this does absolutely squat when purchased (not even an animation) but code might remain?
 - map debug - can we restore rendering the extra geometry?
 - what controls Tricky's color?
-
-
+	- there's a counter in the save data that increments when he retrieves the ball
+	- the color is just different shader settings
+	- still need to examine if there's actual behaviour changes
 
 # old notes
 - figure out how to spawn the jet bike without the camera going nuts

@@ -111,18 +111,6 @@ void menuEditPlayerMoney_select(const MenuItem *self, int amount) {
 }
 
 
-void menuEditPlayerFood_draw(const MenuItem *self, int x, int y, bool selected) {
-    char str[256];
-    sprintf(str, self->fmt, T(self->name), saveData.curSaveGame.trickyEnergy);
-    menuDrawText(str, x, y, selected);
-}
-void menuEditPlayerFood_select(const MenuItem *self, int amount) {
-    if(amount) saveData.curSaveGame.trickyEnergy += amount;
-    else saveData.curSaveGame.trickyEnergy = 127;
-    audioPlaySound(NULL, MENU_ADJUST_SOUND);
-}
-
-
 #define _FMT "%s:\eX250"
 Menu menuDebugEditPlayer = {
     "Edit Player State", 0,
@@ -135,7 +123,6 @@ Menu menuDebugEditPlayer = {
     "Cur Lives",   _FMT "\eF%3d", menuEditPlayerCurLives_draw, menuEditPlayerCurLives_select,
     "Max Lives",   _FMT "\eF%3d", menuEditPlayerMaxLives_draw, menuEditPlayerMaxLives_select,
     "Money",       _FMT "\eF%3d", menuEditPlayerMoney_draw,    menuEditPlayerMoney_select,
-    "Tricky Food", _FMT "\eF%3d", menuEditPlayerFood_draw,     menuEditPlayerFood_select,
     NULL,
 };
 #undef _FMT

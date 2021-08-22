@@ -16,8 +16,8 @@ typedef struct PACKED {
     PlayerCharState   charState[2];     //0x00
     u8                trickyEnergy;     //0x18
     u8                maxTrickyEnergy;  //0x19 HUD always shows 5 shrooms
-    byte              unk1A;            //0x1a
-    byte              unk1B;            //0x1b
+    u8                trickyPlayCount;  //0x1a
+    u8                unk1B;            //0x1b padding?
     char              saveFileName[4];  //0x1c null terminated
     u8          	  character;        //0x20 PlayerCharEnum
     u8	              flags21;          //0x21 SaveGameFlags21 80=erase me; 60=save slot

@@ -103,6 +103,7 @@ extern Menu menuDebug;
 extern Menu menuDebugCamera;
 extern Menu menuDebugCheat;
 extern Menu menuDebugEditPlayer;
+extern Menu menuDebugEditTricky;
 extern Menu menuDebugFontTest;
 extern Menu menuDebugGameBits;
 extern Menu menuDebugGameState;
