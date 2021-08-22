@@ -1,7 +1,13 @@
+# config variables used by main makefile as well as elf.mk
+# edit as needed
+
 GAME ?= sfa
 VERSION ?= u0
 
-TOOL=/opt/devkitpro/devkitPPC/bin/powerpc-eabi-
+#DISCROOT ?= /home/rena/projects/sfa/files
+DISCROOT ?= ./discroot/files
+
+TOOL=${DEVKITPRO}/devkitPPC/bin/powerpc-eabi-
 SRCDIR ?= .
 BUILDDIR ?= $(PWD)/build
 #BINDIR ?= bin

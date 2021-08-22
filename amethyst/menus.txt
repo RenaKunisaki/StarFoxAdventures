@@ -66,9 +66,9 @@ PDA Menu
 				Edit File
 				Edit State
 				Run Seq 0: x
-				[!] Set as Player
-				[!] Ride
-				[!] Pick Up
+				/!\ Set as Player
+				/!\ Ride
+				/!\ Pick Up
 			Spawn Object
 			Reload Map
 			Set Restart Point
