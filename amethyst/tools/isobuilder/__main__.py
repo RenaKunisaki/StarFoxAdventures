@@ -86,16 +86,20 @@ class App:
         self._doReplaceIsoFiles(iso, filePath, filePath)
         iso.readSystemFilesFromDir(os.path.join(files, 'sys'))
         # XXX do we need some way to delete files?
-        if self._overwrite: iso.writeToFile(BinaryFile(destPath, 'r+b'))
+        if self._overwrite:
+            try: out = BinaryFile(destPath, 'r+b')
+            except FileNotFoundError: out = BinaryFile(destPath, 'wb')
+            iso.writeToFile(out)
         else: iso.writeToFile(destPath)
 
 
     def _doReplaceIsoFiles(self, iso:GCISO, basePath:str, files:str, _depth=0):
         assert _depth < 10, "Maxmimum depth exceeded"
+        #print("replace files from", files)
         names = list(filter(lambda n: n not in ('.', '..'),
             os.listdir(files)))
         for name in names:
-            path = os.path.join(basePath, files, name)
+            path = os.path.join(files, name)
             isoPath = path
             if isoPath.startswith(basePath):
                 isoPath = isoPath[len(basePath):] # keep leading slash

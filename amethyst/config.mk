@@ -9,6 +9,7 @@ DISCROOT ?= ./discroot/files
 
 TOOL=${DEVKITPRO}/devkitPPC/bin/powerpc-eabi-
 SRCDIR ?= .
+# XXX can't move build dir because of symbols.s
 BUILDDIR ?= $(PWD)/build
 #BINDIR ?= bin
 GCBASE=$(PWD)/include/gc

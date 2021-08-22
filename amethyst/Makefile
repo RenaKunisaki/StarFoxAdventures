@@ -1,15 +1,16 @@
 PATCHES=bootstrap src
 include $(PWD)/config.mk
 
-.PHONY: all clean setup install run
+.PHONY: all clean setup install run iso patch
 
+ORIGISO ?= original.iso
+PATCHISO ?= patched.iso
 ORIGDOL = $(DISCROOT)/../sys/main.dol.orig
 
 all: $(BUILDDIR) $(BUILDDIR)/dolpatch.bin $(BUILDDIR)/bootstrap.bin $(patsubst %,$(BUILDDIR)/%.elf,$(PATCHES))
 	@echo "[*] Done."
 
 $(BUILDDIR): $(ORIGDOL)
-	@echo "build dir"
 	@mkdir -p $(BUILDDIR)
 	#./tools/genSymbols.py include/sfa/ build/
 
@@ -56,16 +57,32 @@ install: all
 	@./tools/makebitnames.py ../data/U0/gamebits.xml $(DISCROOT)/bitnames.dat
 
 # extract ISO
-$(ORIGDOL): original.iso
+$(ORIGDOL): $(ORIGISO)
 	@if test -z "$(DEVKITPRO)"; then echo "DEVKITPRO environment variable is not set"; exit 1; fi
 	@echo "[*] Verifying ISO..."
 	@md5sum --quiet -c checksums.md5 || (echo "Missing 'original.iso', wrong version, or corrupted file"; exit 1)
 	@mkdir -p $(DISCROOT)
 	@echo "[*] Extracting ISO..."
-	@./tools/isobuilder/__main__.py extractIso original.iso $(DISCROOT)/../
+	@./tools/isobuilder/__main__.py extractIso $(ORIGISO) $(DISCROOT)/../
 	@cp $(DISCROOT)/../sys/main.dol $(ORIGDOL)
 
 # build patch and run it
 # dolphin seems to only work with absolute paths for this
 run: install
 	dolphin-emu -d $(abspath $(DISCROOT)/../sys/main.dol)
+
+# build patched ISO
+# using bigger compression window is necessary to get a patch that's
+# ~700K instead of ~400M
+iso: install
+	@echo "[*] Preparing files..."
+	@find . -name \*debug.log -delete
+	@cp "$(DISCROOT)/boot.bin" patchfiles/files/
+	@cp "$(DISCROOT)/bitnames.dat" patchfiles/files/
+	@cp "$(DISCROOT)/../sys/main.dol" patchfiles/sys/
+	@echo "[*] Building ISO..."
+	./tools/isobuilder/__main__.py overwrite patchIso $(ORIGISO) $(PATCHISO) ./patchfiles
+
+patch: iso
+	@echo "[*] Creating patch..."
+	@xdelta3 -f -n -B 268435456 -s $(ORIGISO) $(PATCHISO) patch.xdelta
