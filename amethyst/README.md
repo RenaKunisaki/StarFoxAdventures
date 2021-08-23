@@ -4,7 +4,7 @@ This is the source code for the Star Fox Adventures: Amethyst Edition mod.
 - python3
 - devkitpro for GameCube
 - the Star Fox Adventures v1.0 USA ISO
-    - it should have the MD5 checksum `b2f3122a68101e9448c381dcb25f975f`
+    - it should have the MD5 checksum `afb0306454b581e37a62170fdfd1de09`
     - place it in this directory and name it `original.iso`
 - gnu make
 - xdelta3 if you want to build a patch file
