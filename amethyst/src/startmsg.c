@@ -21,11 +21,17 @@ void runLoadingScreens_hook() {
     }
 
     //let's show some console info too, for fun.
-    debugPrintfxy(30, 30, "CPU: PowerPC Gekko @ %dMHz type %08X\n"
+    static const char *tvModes[] = {"NTSC", "PAL", "DEBUG", "DEBUGPAL", "MPAL", "PAL60"};
+    debugPrintfxy(30, 30, "CPU: PowerPC Gekko @ %dMHz type %04X %04X\n"
         "RAM: %d / %dK @ %dMHz + %dK ARAM",
-        __OSCoreClock / 1000000, consoleType,
+        __OSCoreClock / 1000000, consoleType >> 16, consoleType & 0xFFFF,
         simMemSize / 1024, realMemSize / 1024,
         __OSBusClock / 1000000, aramSize / 1024);
+
+    u32 tvMode = READ32(0x800000CC);
+    debugPrintfxy(30, 54, "SYS: %s %s",
+        OSGetFontEncode() ? "JP" : "US",
+        (tvMode < 6) ? tvModes[tvMode] : "UNKNOWN");
 }
 
 

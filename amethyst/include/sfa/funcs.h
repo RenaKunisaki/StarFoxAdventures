@@ -155,6 +155,7 @@ GLOBALFN void objStopSound_(ObjInstance *obj, int id);
 GLOBALFN bool objUpdateOpacity(ObjInstance *obj);
 GLOBALFN BOOL OSDisableInterrupts(void);
 GLOBALFN BOOL OSEnableInterrupts(void);
+GLOBALFN u16 OSGetFontEncode(void);
 GLOBALFN OSInterruptMask OSGetInterruptMask(void);
 GLOBALFN u64 __OSGetSystemTime();
 GLOBALFN void OSReport(const char *fmt, ...);

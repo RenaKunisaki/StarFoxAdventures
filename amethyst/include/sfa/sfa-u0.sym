@@ -358,6 +358,7 @@ objStopSound_ = 0x8000b824;
 objUpdateOpacity = 0x8005a194;
 objVar_802cada0 = 0x802cada0;
 oneOverTimeDelta = 0x803db418;
+OSGetFontEncode = 0x80242f20;
 __OSGetSystemTime = 0x80246c70;
 padReadControllers = 0x8024e864;
 padUpdate = 0x80014f40;
