@@ -12,8 +12,8 @@ all: $(BUILDDIR) $(BUILDDIR)/dolpatch.bin $(BUILDDIR)/bootstrap.bin $(patsubst %
 
 $(BUILDDIR): $(ORIGDOL)
 	@mkdir -p $(BUILDDIR)
-	@Mkdir -p patchfiles/sys/
-	@Mkdir -p patchfiles/files/
+	@mkdir -p patchfiles/sys/
+	@mkdir -p patchfiles/files/
 	#./tools/genSymbols.py include/sfa/ build/
 
 # generate symbols.s for inclusion in assembler files.
