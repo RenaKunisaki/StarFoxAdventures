@@ -8,6 +8,13 @@ void runLoadingScreens_hook() {
      */
     runLoadingScreens_replaced();
 
+    if(initFrameCount < 3) {
+        //if we crashed while a stream was playing and hit Start to reset,
+        //the stream might still be playing. we don't stop it there because
+        //we don't know if the system is stable, so do it here instead.
+        streamStopAll();
+    }
+
     if(initFrameCount < 200) {
         enableDebugText = 1;
         debugPrintfxy(200, 420, "Amethyst Edition v" MOD_VERSION_STR);
