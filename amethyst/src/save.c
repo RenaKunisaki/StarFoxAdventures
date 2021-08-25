@@ -29,43 +29,46 @@ static u8 autoSaveMsgTimer = 0;
 .set SAVEDATA_OPTION_BACKPACK,0x60 */
 
 void saveLoadHook() {
+    DPRINT("Savedata loading");
     //replaces a call when loading saves that sets an unused variable.
     //we'll instead repurpose some unused fields for our own settings.
     SaveGameSettings *save = &saveData.saveSettings;
-    overridePlayerNo = save->unused07;
+    overrideFov = 60;
+    overrideMinimapAlpha = 255;
+    if(save->unused0E) { //if FOV is valid, apply saved settings.
+        //otherwise, assume fresh memory card and don't override defaults.
+        //especially, don't revert to English on Japanese consoles.
+        overridePlayerNo = save->unused07;
 
-    u8 extraFeatureFlags = save->unused01;
-    bRumbleBlur = extraFeatureFlags & EXTRA_FEATURE_RUMBLE_BLUR;
-    bDisableParticleFx = extraFeatureFlags & EXTRA_FEATURE_NO_PARTICLEFX;
+        u8 extraFeatureFlags = save->unused01;
+        bRumbleBlur = extraFeatureFlags & EXTRA_FEATURE_RUMBLE_BLUR;
+        bDisableParticleFx = extraFeatureFlags & EXTRA_FEATURE_NO_PARTICLEFX;
 
-    cameraFlags = save->unusedHudSetting;
+        cameraFlags = save->unusedHudSetting;
+        overrideFov = save->unused0E;
+        overrideMinimapAlpha = save->unused0F;
+        overrideMinimapSize = save->unused0D & 0x03;
+        minimapMode = (save->unused0D >> 2) & 0x03;
+        if(minimapMode == 3) { //off
+            minimapMode = 0;
+            pdaOn = false;
+        }
+        else pdaOn = true;
+        furFxMode    = (save->unused0D >> 4) & 3;
+        backpackMode = (save->unused0D >> 6) & 3;
+        bAutoSave    = (save->unlockedCheats >> 31) & 1;
+        hudFlags     = save->unk18;
 
-    overrideFov = save->unused0E;
-    if(!overrideFov) overrideFov = 60;
-
-    overrideMinimapAlpha = save->unused0F;
-    if(overrideMinimapAlpha == 0) overrideMinimapAlpha = 255;
-
-    overrideMinimapSize = save->unused0D & 0x03;
-    minimapMode = (save->unused0D >> 2) & 0x03;
-    if(minimapMode == 3) {
-        minimapMode = 0;
-        pdaOn = false;
+        //load language setting and get the appropriate text
+        curLanguage = save->unk19;
+        if(curLanguage < 0 || curLanguage >= NUM_LANGUAGES) curLanguage = 0;
+        DPRINT("Savedata loaded; setting language");
+        GameTextDir32 dir = curGameTextDir;
+        gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
+        gameTextLoadDir(dir); //then load current map's texts
     }
-    else pdaOn = true;
-    furFxMode    = (save->unused0D >> 4) & 3;
-    backpackMode = (save->unused0D >> 6) & 3;
-    bAutoSave    = (save->unlockedCheats >> 31) & 1;
-    hudFlags     = save->unk18;
+    else DPRINT("Savedata is clear");
 
-    //load language setting and get the appropriate text
-    curLanguage = save->unk19;
-    if(curLanguage < 0 || curLanguage >= NUM_LANGUAGES) curLanguage = 0;
-    GameTextDir32 dir = curGameTextDir;
-    gameTextLoadDir(GAMETEXT_DIR_Link); //load HUD texts
-    gameTextLoadDir(dir); //then load current map's texts
-
-    DPRINT("Savedata loaded!");
     /* char str[1024];
     u8 *data = (u8*)save;
     for(int i=0; i<sizeof(SaveGameSettings); i++) {
