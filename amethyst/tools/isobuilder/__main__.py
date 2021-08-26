@@ -7,6 +7,7 @@ import hashlib
 import tempfile
 from iso.gciso import GCISO
 from iso.binaryfile import BinaryFile
+from iso.openingbnr import OpeningBnr
 from apptest import AppTest
 
 
@@ -16,6 +17,7 @@ def printf(fmt, *args):
 class App:
     def __init__(self):
         self._overwrite = False # overwrite an existing target ISO file
+        self._gameName  = None # overwrite game name in ISO
 
     def help(self):
         """Display help text."""
@@ -53,6 +55,11 @@ class App:
         self._overwrite = True
 
 
+    def setName(self, name:str):
+        """Set the game title in the target ISO."""
+        self._gameName = name
+
+
     def readIso(self, path:str):
         """Read an ISO file and print information about it."""
         iso = GCISO().readFile(path)
@@ -69,6 +76,7 @@ class App:
         """Build ISO from files."""
         iso = GCISO()
         iso.readDir(filesPath)
+        if self._gameName is not None: iso.bootBin.setGameName(self._gameName)
         if self._overwrite: iso.writeToFile(BinaryFile(outPath, 'r+b'))
         else: iso.writeToFile(outPath)
 
@@ -82,6 +90,7 @@ class App:
         files:    path to directory containing replacement files.
         """
         iso = GCISO().readFile(isoPath)
+        if self._gameName is not None: iso.bootBin.setGameName(self._gameName)
         filePath = os.path.join(files, 'files')
         self._doReplaceIsoFiles(iso, filePath, filePath)
         iso.readSystemFilesFromDir(os.path.join(files, 'sys'))
@@ -110,6 +119,29 @@ class App:
                 self._doReplaceIsoFiles(iso, basePath, path, _depth=_depth+1)
             else:
                 iso.addOrReplaceFile(path, isoPath)
+
+    def extractBanner(self, banner:str, outImage:str, outText:str):
+        """Extract opening.bnr file.
+
+        banner:   path to banner file to extract.
+        outImage: path to write image to.
+        outText:  path to write text to.
+        """
+        bnr = OpeningBnr(0, banner)
+        if outImage != '': bnr.toImage().save(outImage)
+        if outText  != '': bnr.toXml(outText)
+
+    def buildBanner(self, banner:str, image:str, text:str):
+        """Create opening.bnr file.
+
+        banner:   path to banner file to write to.
+        image:    path to read image from.
+        text:     path to read text from.
+        """
+        bnr = OpeningBnr()
+        bnr.fromImage(image)
+        bnr.fromXml(text)
+        bnr.writeToFile(banner)
 
 
 def main(*args):

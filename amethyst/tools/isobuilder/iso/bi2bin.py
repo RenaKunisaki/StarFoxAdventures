@@ -8,6 +8,13 @@ BI2_BIN_SIZE = 0x2000
 class Bi2Bin(IsoFile):
     """bi2.bin file"""
 
+    CountryCodes = {
+        0x00: "Japan",
+        0x01: "Americas", # USA, Canada, others?
+        0x02: "Europe",
+        0x03: "All", # not valid on retail consoles
+    }
+
     def __init__(self, offset:int=0, file:BinaryFile=None):
         super().__init__("bi2.bin", isDir=False, offset=offset,
             size=BI2_BIN_SIZE, file=file, fileOffs=offset)
@@ -18,7 +25,10 @@ class Bi2Bin(IsoFile):
         self.trackLoc         = 0
         self.trackSize        = 0
         self.countryCode      = 0
-        self.unk1C            = 0
+        self.numDiscs         = 0
+        self.supportLFN       = False
+        self.padSpec          = 0
+        self.dolSizeLimit     = 0
         self.isSystem         = True
 
         if file is not None:
@@ -37,7 +47,10 @@ class Bi2Bin(IsoFile):
         self.trackLoc         = file.readu32()
         self.trackSize        = file.readu32()
         self.countryCode      = file.readu32()
-        self.unk1C            = file.readu32()
+        self.numDiscs         = file.readu32()
+        self.supportLFN       = file.readu32() # support long file names
+        self.padSpec          = file.readu32()
+        self.dolSizeLimit     = file.readu32()
 
         return self
 
@@ -55,5 +68,10 @@ class Bi2Bin(IsoFile):
         print(" Debug Flag:           0x%08X" % self.debugFlag)
         print(" Track Location:       0x%08X" % self.trackLoc)
         print(" Track Size:           0x%08X" % self.trackSize)
-        print(" Country Code:         0x%08X" % self.countryCode)
-        print(" Unknown 0x1C:         0x%08X" % self.unk1C)
+        print(" Country Code:         0x%08X (%s)" % (self.countryCode,
+            self.CountryCodes.get(self.countryCode, "Unknown")))
+        print(" Disc Count:           %d" % self.numDiscs)
+        print(" Long File Names:      %d (%s)" % (self.supportLFN,
+            "Supported" if self.supportLFN else "Not supported"))
+        print(" Pad Spec:             0x%08X" % self.padSpec)
+        print(" DOL Size Limit:       0x%08X" % self.dolSizeLimit)

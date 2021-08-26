@@ -126,7 +126,8 @@ class BinaryFile:
     def writeString(self, data, offset=None, encoding='utf-8', length=None, padding=b'\0'):
         r = []
         if offset is not None: self.seek(offset)
-        raw = bytes(data, encoding)
+        if type(data) is str: raw = bytes(data, encoding)
+        else: raw = data
         if length is not None:
             if len(raw) > length: raise ValueError("String too long for field (%d bytes, max is %d): %s" % (
                 len(raw), length, data))

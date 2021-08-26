@@ -24,9 +24,9 @@ class BootBin(IsoFile):
         self.fstOffs          = 0
         self.fstSize          = 0
         self.maxFstSize       = 0 # for multi-disc games
-        self.unk430           = 0
+        self.fstAddr           = 0
         self.fileOffset       = 0
-        self.unk438           = 0
+        self.fileLength           = 0
         self.magic            = DVD_MAGIC
         self.isSystem         = True
 
@@ -56,9 +56,9 @@ class BootBin(IsoFile):
         self.fstOffs          = file.readu32()
         self.fstSize          = file.readu32()
         self.maxFstSize       = file.readu32()
-        self.unk430           = file.readu32()
-        self.fileOffset       = file.readu32()
-        self.unk438           = file.readu32()
+        self.fstAddr          = file.readu32()
+        self.fileOffset       = file.readu32() # user area
+        self.fileLength       = file.readu32()
 
         if self.magic != DVD_MAGIC:
             raise ValueError("Incorrect/corrupt boot.bin file")
@@ -86,17 +86,10 @@ class BootBin(IsoFile):
         file.writeu32(self.fstOffs)
         file.writeu32(self.fstSize)
         file.writeu32(self.maxFstSize)
-        file.writeu32(self.unk430)
+        file.writeu32(self.fstAddr)
         file.writeu32(self.fileOffset)
-        file.writeu32(self.unk438)
+        file.writeu32(self.fileLength)
         file.padUntil(0x440)
-
-        # nobody seems to know what 0x430 and 0x438 are, but notably,
-        # 0x430 is the RAM address at which the FST is placed,
-        # minus 0x0140 0000. This might be a coincidence, and the
-        # game doesn't seem to care if it's incorrect.
-        # Note that 0x01400000 is the size of the GameCube's RAM
-        # minus 4MB...
 
 
 
@@ -116,8 +109,16 @@ class BootBin(IsoFile):
         print(" Debug Monitor Addr:   0x%08X" % self.debugMonitorAddr)
         print(" main.dol Offset:      0x%08X" % self.mainDolOffs)
         print(" FST Offset:           0x%08X" % self.fstOffs)
+        print(" FST Address:          0x%08X" % self.fstAddr)
         print(" FST Size:             0x%08X" % self.fstSize)
         print(" FST Max Size:         0x%08X" % self.maxFstSize)
         print(" File Offset:          0x%08X" % self.fileOffset)
-        print(" Unknown 0x430:        0x%08X" % self.unk430)
-        print(" Unknown 0x438:        0x%08X" % self.unk438)
+        print(" User Data Size:       0x%08X" % self.fileLength)
+
+
+    def setGameName(self, name:str):
+        """Set the game's name."""
+        # XXX is this correct encoding?
+        if len(bytes(name, 'shift-jis')) >= 0x3E0:
+            raise ValueError("Name too long")
+        self.gameName = name
