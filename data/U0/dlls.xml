@@ -10610,7 +10610,22 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
     <objparams>
-      <param offset="0x48" type="GameBit" />
+      <!-- note there are params specific to each trigger type as well -->
+      <param offset="0x18" type="u32" name="sound0">
+        <description>Some type of struct</description>
+      </param>
+      <param offset="0x1C" type="u32" name="sound1" />
+      <param offset="0x20" type="u32" name="sound2" />
+      <param offset="0x24" type="u32" name="sound3" />
+      <param offset="0x28" type="u32" name="sound4" />
+      <param offset="0x2C" type="u32" name="sound5" />
+      <param offset="0x30" type="u32" name="sound6" />
+      <param offset="0x34" type="u32" name="sound7" />
+      <param offset="0x38" type="s16" />
+      <param offset="0x43" type="byte">
+        <description>Index of some player-related object. 0=Player/Arwing/Mount; 1=Tricky; 2=Camera</description>
+      </param>
+      <param offset="0x44" type="GameBit16" />
     </objparams>
   </dll>
   <dll address="0x80321E58" dolOffs="0x31EE58" id="0x0127" interface="object" unk08="0x00000000" unk0E="0x0000">

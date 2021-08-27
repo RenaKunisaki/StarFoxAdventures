@@ -9940,7 +9940,7 @@
     <model id="0x045F"/>
   </object>
   <object id="0x051A" name="TrigPnt" def="0x004B" dll="0x0126" cat="0x0014">
-    <description/>
+    <description>Runs a sequence when player comes near</description>
     <map id="0x02" count="3"/>
     <map id="0x04" count="1"/>
     <map id="0x07" count="4"/>
@@ -9955,13 +9955,16 @@
     <map id="0x2A" count="2"/>
     <map id="0x33" count="1"/>
     <map id="0x34" count="3"/>
-    <params length="0x50"/>
+    <params length="0x50">
+      <param offset="0x3A" type="s8" name="size" />
+      <param offset="0x3D" type="s8" />
+    </params>
     <exampleParams>00060200 08124D3D 0A1B020C 0A0000FF 0A12494E 05000200 050300B0 05001801 00001864 64000000 00000000 FFFF0000 FFFFFFFF FFFFFFFF</exampleParams>
     <model id="0x0473"/>
     <model id="0x0461"/>
   </object>
   <object id="0x051B" name="TrigCyl" def="0x0230" dll="0x0126" cat="0x0016">
-    <description/>
+    <description>Runs a sequence when player comes within a cylindrical area</description>
     <map id="0x07" count="1"/>
     <map id="0x0B" count="8"/>
     <map id="0x0C" count="2"/>
@@ -9976,7 +9979,10 @@
     <map id="0x32" count="1"/>
     <map id="0x45" count="3"/>
     <map id="0x48" count="1"/>
-    <params length="0x50"/>
+    <params length="0x50">
+      <param offset="0x3A" type="s8" name="size" />
+      <param offset="0x3B" type="s8" name="height" />
+    </params>
     <exampleParams>05124B0B 0A120B0B 00000000 00000000 00000000 00000000 00000000 00000000 00001846 64000000 00000000 0B0B0000 FFFFFFFF FFFFFFFF</exampleParams>
     <model id="0x0473"/>
   </object>
@@ -10028,13 +10034,18 @@
     <map id="0x48" count="10"/>
     <map id="0x49" count="14"/>
     <map id="0x4A" count="13"/>
-    <params length="0x50"/>
+    <params length="0x50">
+      <param offset="0x3A" type="s8" name="size" />
+      <param offset="0x3D" type="s8" name="rotX" />
+      <param offset="0x3E" type="s8" name="rotY" />
+      <param offset="0x48" type="GameBit16" />
+    </params>
     <exampleParams>0F1F0100 C0000000 00000000 00000000 00000000 00000000 00000000 00000000 00000710 10200000 00000000 FFFF0000 FFFFFFFF FFFFFFFF</exampleParams>
     <model id="0x0472"/>
     <model id="0x045A"/>
   </object>
   <object id="0x051D" name="TrigArea" def="0x004D" dll="0x0126" cat="0x0017">
-    <description/>
+    <description>Runs a sequence when player touches it</description>
     <map id="0x02" count="3"/>
     <map id="0x07" count="1"/>
     <map id="0x0B" count="3"/>
@@ -10048,15 +10059,24 @@
     <map id="0x27" count="2"/>
     <map id="0x2A" count="7"/>
     <map id="0x43" count="2"/>
-    <params length="0x50"/>
+    <params length="0x50">
+      <param offset="0x3A" type="s8" name="size1" />
+      <param offset="0x3B" type="s8" name="size2" />
+      <param offset="0x3C" type="s8" name="size3" />
+      <param offset="0x3D" type="s8" name="rotX" />
+      <param offset="0x3E" type="s8" name="rotY" />
+    </params>
     <exampleParams>0506003D 0A060001 05000201 0A000201 00000000 00000000 00000000 00000000 00000B07 20400000 00000000 FFFFFFFF 0000FFFF FFFFFFFF</exampleParams>
     <model id="0x0474"/>
     <model id="0x0461"/>
   </object>
   <object id="0x051E" name="TrigTime" def="0x004E" dll="0x0126" cat="0x0018">
-    <description/>
+    <description>Runs a sequence after some time since spawning</description>
     <model id="0x0474"/>
     <model id="0x0461"/>
+    <params>
+      <param offset="0x46" type="u16" name="nFrames" />
+    </params>
   </object>
   <object id="0x051F" name="TrigButt" def="0x004F" dll="0x0126" cat="0x0019">
     <description/>
@@ -10067,7 +10087,7 @@
     <model id="0x0461"/>
   </object>
   <object id="0x0520" name="TriggSetp" def="0x0050" dll="0x0126" cat="0x001A">
-    <description/>
+    <description>Executes sequence 1 when touched(?) then disappears</description>
     <map id="0x12" count="1"/>
     <map id="0x2A" count="1"/>
     <params length="0x50"/>
@@ -10076,7 +10096,7 @@
     <model id="0x0461"/>
   </object>
   <object id="0x0521" name="TrigBits" def="0x0054" dll="0x0126" cat="0x001B">
-    <description/>
+    <description>Runs a seqwuence when touched(?) if all 4 bits aren't zer0</description>
     <map id="0x02" count="11"/>
     <map id="0x04" count="5"/>
     <map id="0x07" count="3"/>
@@ -10096,7 +10116,12 @@
     <map id="0x3C" count="1"/>
     <map id="0x49" count="5"/>
     <map id="0x4A" count="3"/>
-    <params length="0x50"/>
+    <params length="0x50">
+      <param offset="0x48" type="GameBit16" name="bit0" />
+      <param offset="0x4A" type="GameBit16" name="bit1" />
+      <param offset="0x4C" type="GameBit16" name="bit2" />
+      <param offset="0x4E" type="GameBit16" name="bit3" />
+    </params>
     <exampleParams>05120E89 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000064 64640000 00000000 0AD1FFFF 0212FFFF FFFFFFFF</exampleParams>
     <model id="0x0474"/>
     <model id="0x0461"/>
@@ -10105,6 +10130,11 @@
     <description/>
     <model id="0x0475"/>
     <model id="0x0461"/>
+    <params>
+      <param offset="0x38" type="u16" name="curve">
+        <description>Action param to romCurveFind</description>
+      </param>
+    </params>
   </object>
   <object id="0x0523" name="ARWArwing" def="0x0601" dll="0x029A" cat="0x0030">
     <description/>
