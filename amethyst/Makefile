@@ -83,7 +83,7 @@ iso: install
 	@cp "$(DISCROOT)/bitnames.dat" patchfiles/files/
 	@cp "$(DISCROOT)/../sys/main.dol" patchfiles/sys/
 	@echo "[*] Building ISO..."
-	./tools/isobuilder/__main__.py overwrite patchIso $(ORIGISO) $(PATCHISO) ./patchfiles
+	./tools/isobuilder/__main__.py overwrite setName "Star Fox Adventures: Amethyst Edition" patchIso $(ORIGISO) $(PATCHISO) ./patchfiles
 
 patch: iso
 	@echo "[*] Creating patch..."
