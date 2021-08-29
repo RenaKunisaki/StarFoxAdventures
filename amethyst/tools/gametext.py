@@ -5,7 +5,12 @@ import io
 import sys
 sys.path.append(".") # ugh
 import struct
+import inspect
+import xml.etree.ElementTree as ET
 from texconv.sfatexture import SfaTexture
+
+def printf(fmt, *args):
+    print(fmt % args, end='')
 
 def readStruct(file, fmt:str, offset:int=None):
     """Read a struct from a file."""
@@ -16,8 +21,22 @@ def readStruct(file, fmt:str, offset:int=None):
     return res
 
 controlCharLength = {
-    0xF8F2:2, 0xF8F3:0, 0xF8F4:1, 0xF8F5:1, 0xF8F6:1, 0xF8F7:1, 0xF8F8:0, 0xF8F9:0,
-    0xF8FA:0, 0xF8FB:0, 0xF8FC:0, 0xF8FD:0, 0xF8FE:0, 0xF8FF:4, 0xE000:1, 0xE018:3,
+    0xF8F2:2,
+    0xF8F3:0,
+    0xF8F4:1, # set scale
+    0xF8F5:1,
+    0xF8F6:1,
+    0xF8F7:1, # select font
+    0xF8F8:0, # left justify
+    0xF8F9:0, # right justify
+    0xF8FA:0, # center justify
+    0xF8FB:0, # full justify
+    0xF8FC:0,
+    0xF8FD:0,
+    0xF8FE:0,
+    0xF8FF:4,
+    0xE000:1, # sequence ID (no idea what this is actually used for)
+    0xE018:3, # sequence timing (params: time, ?, ?)
     0xE020:1,
 }
 
@@ -28,45 +47,32 @@ def readStr(file:io.IOBase, offset:int=None):
     while True:
         b = file.read(1)[0]
         if b == 0: break
-        if b >= 0x80: b = (b << 8) | file.read(1)[0]
+        if b >= 0x80: # UTF-8 more bytes
+            if   b >= 0xF0: n, b = 3, b & 0x07
+            elif b >= 0xE0: n, b = 2, b & 0x0F
+            else: n, b = 1, 0x1F
+            for _ in range(n):
+                b = (b << 6) | (file.read(1)[0] & 0x3F)
 
+        params = []
         if b in controlCharLength: # XXX what's this table used for?
-            res = '<%04X' % b
             for _ in range(controlCharLength[b]):
-                b  = (file.read(1)[0] << 8)
-                b |=  file.read(1)[0]
-                res += ' %04X' % b
-            res += '>'
+                params.append(readStruct(file, '>H'))
 
-        elif b >= 0x80:
-            if b == 0xEE80: #sequence commands
-                b2 = file.read(1)[0]
-                if b2 == 0x80: #sequence ID
-                    res += '<SEQ #0x%04X>' % readStruct(file, '>H')
-                elif b2 == 0x98: #sequence timing
-                    b3, b4, b5 = readStruct(file, '>3H')
-                    res += '<SEQ TIME 0x%04X 0x%04X 0x%04X>' % (b3, b4, b5)
-                else:
-                    res += '<SEQ UNK%02X>' % b2
-
-            elif b == 0xEFA3: #render commands
-                b2 = file.read(1)[0]
-                if b2 == 0xB4: # set scale
-                    res += '<SCALE %1.2f%%>' % (readStruct(file, '>H') / 2.56)
-
-                elif b2 == 0xB7: # set font
-                    res += '<FONT %d>' % readStruct(file, '>H')
-
-                elif b2 == 0xB8: res += '<JUSTIFY LEFT>'
-                elif b2 == 0xB9: res += '<JUSTIFY RIGHT>'
-                elif b2 == 0xBA: res += '<JUSTIFY CENTER>'
-                elif b2 == 0xBB: res += '<JUSTIFY FULL>'
-                elif b2 == 0xBF: # set color
-                    res += '<COLOR #%02X%02X%02X%02X, #%02X%02X%02X%02X>' % readStruct(file, '>8B')
-                else: res += '<UNK EF A3 %02X>' % b2
-
-            else: res += chr(b)
-        else: res += chr(b)
+        if   b == 0xE000: res += '\\seq{%d}' % params[0]
+        elif b == 0xE018: res += '\\time{%d,%d,%d}' % (params[0], params[1], params[2])
+        elif b == 0xF8F4: res += '\\scale{%d}' % params[0]
+        elif b == 0xF8F7: res += '\\font{%d}' % params[0]
+        elif b == 0xF8F8: res += '\\ljust'
+        elif b == 0xF8F9: res += '\\rjust'
+        elif b == 0xF8FA: res += '\\cjust'
+        elif b == 0xF8FB: res += '\\fjust'
+        elif b == 0xF8FF: res += '\\color{%04X%04X,%04X%04X}' % (params[0], params[1], params[2], params[3])
+        else:
+            #res += chr(b)
+            #for p in params: res += chr(p)
+            res += '\\u%04X' % b
+            for p in params: res += '\\u%04X' % p
     return res, file.tell() - offset
 
 class CharacterStruct:
@@ -186,11 +192,103 @@ class GameTextBin:
                 text.phrases.append(self.strings[offs])
 
 
-def main(*args):
-    g = GameTextBin(args[0])
-    for text in g.texts:
-        print(text.phrases)
+class App:
+    def __init__(self):
+        pass
 
+    def help(self):
+        """Display help text."""
+        methods = [
+            (func, getattr(self, func))
+            for func in dir(self)
+            if callable(getattr(self, func))
+            and not func.startswith('_')
+        ]
+        for name, method in sorted(methods, key = lambda it: it[0]):
+            doc = method.__doc__.split('\n')
+            printf("%s: %s\n", name, doc[0])
+            for line in doc[1:]:
+                line = line.strip()
+                if line != '': print('    '+line)
+
+    def extract(self, inPath:str, outPath:str):
+        """Extract GameText bin file to directory."""
+        file = GameTextBin(inPath)
+        root = ET.Element('gametext')
+
+        eChars = ET.SubElement(root, 'chars')
+        for char in file.chars:
+            eChar = ET.SubElement(eChars, 'char', {
+                'character': chr(char.character),
+                #'character': str(char.character),
+                'xpos':      str(char.xpos),
+                'ypos':      str(char.ypos),
+                'left':      str(char.left),
+                'right':     str(char.right),
+                'top':       str(char.top),
+                'bottom':    str(char.bottom),
+                'width':     str(char.width),
+                'height':    str(char.height),
+                'fontNo':    str(char.fontNo),
+                'textureNo': str(char.textureNo),
+            })
+
+        eTexts = ET.SubElement(root, 'texts')
+        for text in file.texts:
+            eText = ET.SubElement(eTexts, 'text', {
+                'identifier': str(text.identifier),
+                'numPhrases': str(text.numPhrases),
+                'window':     str(text.window),
+                'alignH':     str(text.alignH),
+                'alignV':     str(text.alignV),
+                'language':   str(text.language),
+            })
+            for phrase in text.phrases:
+                ePhrase = ET.SubElement(eText, 'phrase')
+                ePhrase.text = phrase
+
+        ET.ElementTree(root).write(os.path.join(outPath, 'gametext.xml'),
+            encoding='utf-8', xml_declaration=True)
+
+        for b in file.unkData:
+            if b != 0xEE:
+                with open(os.path.join(outPath, 'unknown.bin'), 'wb') as outFile:
+                    outFile.write(file.unkData)
+                break
+
+        for i, tex in enumerate(file.textures):
+            tex.image.save(os.path.join(outPath, '%d.png' % i))
+
+
+def main(*args):
+    app = App()
+    if len(args) < 1:
+        app.help()
+        return 0
+
+    while len(args) > 0:
+        method = args[0]
+        if method.startswith('--'): method = method[2:]
+
+        func = getattr(app, method, None)
+        if func is None or not callable(func):
+            print("Unknown operation:",method)
+            return 1
+
+        sig   = inspect.signature(func)
+        nArg  = len(sig.parameters)
+        fArgs = args[1:nArg+1]
+        args  = args[nArg+1:]
+
+        if len(fArgs) < nArg:
+            msg = [method]
+            for name in sig.parameters:
+                msg.append(name)
+            print("Usage:", ' '.join(msg))
+            return 1
+
+        func(*fArgs)
+    return 0
 
 if __name__ == '__main__':
-    main(*sys.argv[1:])
+    sys.exit(main(*sys.argv[1:]))
