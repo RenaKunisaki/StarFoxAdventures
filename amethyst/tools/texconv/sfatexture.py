@@ -132,7 +132,12 @@ class SfaTexture:
     def writeToFile(self, file:io.RawIOBase) -> None:
         """Write this texture to SFA-format file."""
         header = self._makeHeader()
-        imageData, paletteData, colors = encode_image(
-            self.image, self.format, None, mipmap_count=self.numMipMaps)
         file.write(header)
+        self._writeData(file)
+
+    def _writeData(self, file:io.RawIOBase) -> None:
+        fmt = self.format
+        if isinstance(fmt, enum.Enum): fmt = fmt.value
+        imageData, paletteData, colors = encode_image(
+            self.image, fmt, None, mipmap_count=self.numMipMaps)
         file.write(imageData.getbuffer())
