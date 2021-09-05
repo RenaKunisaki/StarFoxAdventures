@@ -11,6 +11,7 @@ import struct
 import inspect
 import xml.etree.ElementTree as ET
 from PIL import Image
+import hashlib
 sys.path.append(".") # ugh
 from texconv.sfatexture import SfaTexture, TexFmt, ImageFormat
 from texconv.texture import BITS_PER_PIXEL, convert_color_to_rgb5a3
@@ -80,6 +81,14 @@ class GameString:
         0xE020:                 1,
     }
 
+    escapeChars = {
+        '\\': '\\',
+        't':  '\t',
+        'n':  '\n',
+        'r':  '\r',
+        '{':  '{',
+    }
+
     def __init__(self, value:str = None):
         self.str = value
 
@@ -129,18 +138,21 @@ class GameString:
             if   b == 0x0009:       res += '\\t'
             elif b == 0x000A:       res += '\\n'
             elif b == 0x000D:       res += '\\r'
-            elif b == 0x0040:       res += '\\@'
             elif b == 0x005C:       res += '\\\\'
-            elif b == C.SeqId:      res += '@seq(%d)' % params[0]
-            elif b == C.SeqTime:    res += '@time(%d,%d,%d)' % (params[0], params[1], params[2])
-            elif b == C.Scale:      res += '@scale(%d)' % params[0]
-            elif b == C.Font:       res += '@font(%d)' % params[0]
-            elif b == C.JustLeft:   res += '@ljust'
-            elif b == C.JustRight:  res += '@rjust'
-            elif b == C.JustCenter: res += '@cjust'
-            elif b == C.JustFull:   res += '@fjust'
-            elif b == C.Color:      res += '@color(%04X%04X,%04X%04X)' % (
-                params[0], params[1], params[2], params[3])
+            elif b == 0x007B:       res += '\\{'
+            elif b == C.SeqId:      res += '{seq %d}' % params[0]
+            elif b == C.SeqTime:    res += '{time %d %d %d}' % (params[0], params[1], params[2])
+            elif b == C.Scale:      res += '{scale %d}' % params[0]
+            elif b == C.Font:       res += '{font %d}' % params[0]
+            elif b == C.JustLeft:   res += '{ljust}'
+            elif b == C.JustRight:  res += '{rjust}'
+            elif b == C.JustCenter: res += '{cjust}'
+            elif b == C.JustFull:   res += '{fjust}'
+            elif b == C.Color:
+                c = (params[0], params[1], params[2], params[3])
+                if c[0] > 0xFF or c[1] > 0xFF or c[2] > 0xFF or c[3] > 0xFF:
+                    print("Color:", c)
+                res += '{color %02X%02X%02X%02X}' % c
             elif (b >= 0xE000 and b <= 0xF8FF) or b < 0x20:
                 res += '\\u%04X' % b
                 for p in params: res += '\\u%04X' % p
@@ -149,28 +161,35 @@ class GameString:
 
     def _parseControlCode(self, string:str) -> bytes:
         C = GameString.ControlCode
-        res, sLen = b'', 0
-        if string.startswith(('seq', 'time', 'scale', 'font', 'color')):
-            p1 = string.find('(')
-            p2 = string.find(')')
-            sLen = p2 # skip entire code
-            params = []
-            paramStr = string[p1+1:p2].split(',')
-            if string.startswith('color'): # hex params
-                params.append(int(paramStr[0][0:4], 16)) # text   r, g
-                params.append(int(paramStr[0][4: ], 16)) # text   b, a
-                params.append(int(paramStr[1][0:4], 16)) # shadow r, g
-                params.append(int(paramStr[1][4: ], 16)) # shadow b, a
-            else: # decimal params
-                for s in paramStr: params.append(int(s))
-            res += bytes(chr(GameString.ControlCodeChars[string[0:p1]]), 'utf-8') + \
-                struct.pack('>%dH' % len(params), *params)
-        elif string.startswith(('ljust', 'rjust', 'cjust', 'fjust')):
-            sLen = 5
-            res += bytes(chr(GameString.ControlCodeChars[string[0:sLen]]), 'utf-8')
+        res = b''
+        end = string.find('}')
+        params = string[0:end].split(' ')
+        cmd = params.pop(0)
+        try: cmdId = GameString.ControlCodeChars[cmd]
+        except KeyError: raise ValueError("Unrecognized control code: "+cmd)
+
+        paramData = []
+        if cmd == 'color': # hex params
+            # color is 4 params (r, g, b, a) with high byte ignored.
+            # XXX but in some case it's also rrgg bbaa (text) rrgg bbaa (shadow)?
+            # is that actually used somewhere?
+            paramData.append(int(params[0][0:2], 16))
+            paramData.append(int(params[0][2:4], 16))
+            paramData.append(int(params[0][4:6], 16))
+            paramData.append(int(params[0][6:8], 16))
         else:
-            raise ValueError("Unrecognized control code: " + string[0:64])
-        return res, sLen
+            for p in params:
+                paramData.append(int(p, 0))
+        res += bytes(chr(cmdId), 'utf-8') + struct.pack('>%dH' % len(paramData), *paramData)
+        return res, end
+
+    def _parseEscape(self, string:str) -> (str,int):
+        # expects string to be the substring following the backslash
+        c = string[0]
+        if c in GameString.escapeChars: return GameString.escapeChars[c], 1
+        elif c == 'x': return chr(int(string[1:3], 16)), 3
+        elif c == 'u': return chr(int(string[1:5], 16)), 5
+        else: return '\\' + c, 1
 
     def toBytes(self) -> bytes:
         """Encode to binary string."""
@@ -178,19 +197,38 @@ class GameString:
         while i < len(self.str):
             c = self.str[i]
             if c == '\\':
-                i += 1
-                c = self.str[i]
-                if   c == '\\': res += b'\\'
-                elif c == 't':  res += b'\t'
-                elif c == 'n':  res += b'\n'
-                elif c == 'r':  res += b'\r'
-                elif c == '@':  res += b'@'
-                else: res += '\\' + c
-            elif c == '@': # control code
+                s, l = self._parseEscape(self.str[i+1:])
+                res += bytes(s, 'utf-8')
+                i += l
+            elif c == '{': # control code
                 i += 1
                 rs, ln = self._parseControlCode(self.str[i:])
                 res, i = res+rs, i+ln
             else: res += bytes(c, 'utf-8')
+            i += 1
+        return res
+
+    def getUsedChars(self) -> set:
+        """Return set of characters used in this string.
+
+        The entries are (font, character).
+        """
+        font = 0
+        res, i = set(), 0
+        while i < len(self.str):
+            c = self.str[i]
+            if c == '\\':
+                s, l = self._parseEscape(self.str[i+1:])
+                for ch in s: res.add((font, ch))
+                i += l
+            elif c == '{': # control code
+                i += 1
+                s = self.str[i:]
+                end = s.find('}')
+                code = s[0:end].split(' ')
+                if code[0] == 'font': font = int(code[1], 0)
+                i += end+1
+            else: res.add((font,c))
             i += 1
         return res
 
@@ -356,7 +394,6 @@ class GameTextReader:
         offset = file.tell()
         #print('unkDataLen=0x%X, offset=0x%X' % (self.unkDataLen, offset))
         self.unkData = file.read(self.unkDataLen)
-        # XXX any simpler way?
         for i, b in enumerate(self.unkData):
             if b != 0xEE:
                 print("non-EE byte in unkdata at 0x%X" % (i + offset))
@@ -425,17 +462,14 @@ class GameTextWriter:
 
         # iterate all texts; build set of needed characters, string table,
         # and string offset table.
-        # XXX parse formatting
-        usedChars  = set()
+        usedChars  = set() # (font,character)
         strings    = []
         strOffsets = [] # strIdx => offset relative to start of str table
         nextOffs   = 0
         for text in self.texts:
             for phrase in text.phrases:
+                usedChars = usedChars.union(phrase.getUsedChars())
                 string = phrase.toBytes()
-                # XXX this will add the control codes as used characters...
-                # but this isn't used right now anyway
-                for c in str(phrase): usedChars.add(c)
                 strOffsets.append(nextOffs)
                 data = string + b'\0'
                 nextOffs += len(data)
@@ -477,6 +511,7 @@ class GameTextWriter:
         file.write(padding)
 
         # write unknown data
+        #self.unkDataLen = 0 # the game doesn't seem to actually need this...
         #print("write unkLen =", self.unkDataLen, "at", hex(file.tell()))
         writeStruct(file, '>I', self.unkDataLen)
         file.write(b'\xEE' * self.unkDataLen)
@@ -602,6 +637,7 @@ class App:
 
     def extract(self, inPath:str, outPath:str):
         """Extract GameText bin file to directory."""
+        #print("Extract", inPath)
         file = GameTextReader(inPath)
         xml = GameTextXml().write(file)
         xml.write(os.path.join(outPath, 'gametext.xml'),
@@ -630,6 +666,79 @@ class App:
             except FileNotFoundError: break
         GameTextXml().read(inPath, file)
         file.write(outPath)
+
+    def extractAllChars(self, inPath:str, outPath:str):
+        """Extract all font character graphics."""
+        xml = ET.Element('chars')
+        charHashes = {} # char => [hash, hash...]
+        nChars = 0 # for reporting status
+        def _extractDir(path, out, _depth=0):
+            nonlocal nChars
+            assert _depth < 10, 'Maximum depth exceeded'
+            for name in os.listdir(path):
+                p = os.path.join(path, name)
+                if os.path.isdir(p): _extractDir(p, out, _depth+1)
+                elif name.endswith('.bin'):
+                    pShort = '/'.join((p.split('/')[-2:]))
+                    print("\rChars: %6d File: %s   " % (nChars, pShort), end='')
+                    try:
+                        file = GameTextReader(p)
+                        for char in file.chars:
+                            c = char.character
+                            if c not in charHashes: charHashes[c] = []
+
+                            # extract this character graphic
+                            img = file.textures[char.textureNo].image
+                            x1, y1 = char.xpos, char.ypos
+                            x2, y2 = x1+char.width+1, y1+char.height+1
+                            #print(c, x1, y1, x2, y2)
+                            cImg = img.crop((x1, y1, x2, y2))
+
+                            # hash it
+                            md5 = hashlib.md5()
+                            md5.update(cImg.tobytes())
+                            hash = md5.digest()
+
+                            if hash not in charHashes[c]: # not seen this one before
+                                # so extract it
+                                name = chr(c)
+                                if name in ' !#$%&*()/\\?:\'"`~<>.':
+                                    name = '%04X' % c
+                                name = os.path.join(str(char.fontNo), '%s.png' % name)
+                                os.makedirs(os.path.join(out, str(char.fontNo)), exist_ok=True)
+                                dest = os.path.join(out, name)
+                                idx = 0
+                                while os.path.exists(dest):
+                                    idx += 1
+                                    name = os.path.join(str(char.fontNo), '%s.%d.png' % (idx, name))
+                                    dest = os.path.join(out, name)
+                                #print("save:", name)
+                                cImg.save(dest)
+                                charHashes[c].append(hash)
+
+                                # and add it to the XML
+                                ET.SubElement(xml, 'char', {
+                                    'character': chr(c),
+                                    'xpos':      str(char.xpos),
+                                    'ypos':      str(char.ypos),
+                                    'left':      str(char.left),
+                                    'right':     str(char.right),
+                                    'top':       str(char.top),
+                                    'bottom':    str(char.bottom),
+                                    'width':     str(char.width),
+                                    'height':    str(char.height),
+                                    'fontNo':    str(char.fontNo),
+                                    'textureNo': str(char.textureNo),
+                                })
+
+                                nChars += 1
+                    except Exception as ex:
+                        print("Error extracting", p)
+                        raise
+
+        _extractDir(inPath, outPath)
+        ET.ElementTree(xml).write(os.path.join(outPath, 'chars.xml'),
+            encoding='utf-8', xml_declaration=True)
 
 
 def main(*args):
