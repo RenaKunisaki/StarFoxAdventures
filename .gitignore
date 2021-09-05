@@ -22,6 +22,7 @@ __pycache__
 **/dump/*
 **/discroot/*
 **/junk/*
+**/tmp/*
 dp/rom
 dp/decomp/**
 root/**
