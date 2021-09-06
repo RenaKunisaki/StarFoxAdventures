@@ -14,7 +14,12 @@ from PIL import Image
 import hashlib
 sys.path.append(".") # ugh
 from texconv.sfatexture import SfaTexture, TexFmt, ImageFormat
-from texconv.texture import BITS_PER_PIXEL, convert_color_to_rgb5a3
+from texconv.texture import BITS_PER_PIXEL, BLOCK_WIDTHS, BLOCK_HEIGHTS, convert_color_to_rgb5a3
+
+# chars we don't want to put in filenames.
+# some of these might not actually be disallowed anywhere
+# but are still troublesome.
+BAD_DIR_CHARS = ' !#$%&*()/\\?:\'"`~<>.'
 
 def printf(fmt, *args):
     print(fmt % args, end='')
@@ -86,7 +91,7 @@ class GameString:
         't':  '\t',
         'n':  '\n',
         'r':  '\r',
-        '{':  '{',
+        '{':  '{', # we use { to start a control code
     }
 
     def __init__(self, value:str = None):
@@ -227,7 +232,7 @@ class GameString:
                 end = s.find('}')
                 code = s[0:end].split(' ')
                 if code[0] == 'font': font = int(code[1], 0)
-                i += end+1
+                i += end
             else: res.add((font,c))
             i += 1
         return res
@@ -319,8 +324,10 @@ class FontTexture(SfaTexture):
         if self.format == 2: self.format = 0 #game does this for some reason
         elif self.format == 1: self.format = 5
         self.numMipMaps = 0
-        #print('TexFmt=0x%X PixFmt=0x%X size=%dx%d' % (
-        #    self.format, self.bitsPerPx, self.width, self.height))
+        dataSize = self.width * self.height * (self.bitsPerPx // 8)
+        printf('READ TexFmt=0x%X %dBPP size=%dx%d (0x%X) @ 0x%X ~ 0x%X\n',
+            self.format, self.bitsPerPx, self.width, self.height, dataSize,
+            file.tell(), file.tell() + dataSize)
         self._readData(file, self.format)
 
     # XXX do we need this? it's basically the same as the SfaTexture method.
@@ -340,10 +347,89 @@ class FontTexture(SfaTexture):
     def writeFile(self, file:io.FileIO, format:TexFmt=TexFmt.RGB5A3) -> None:
         """Write to binary file."""
         self.format = format
-        #print("write tex fmt", self.format, hex(self.bitsPerPx),
-        #    "size", self.width, self.height, "at", hex(file.tell()))
         writeStruct(file, '>4H', self.format.value, self.bitsPerPx, self.width, self.height)
+        dataSize = self.width * self.height * (self.bitsPerPx // 8)
+        startOffs = file.tell()
+        printf('WRITE TexFmt=%s (0x%X) %dBPP size=%dx%d (0x%X) @ 0x%X ~ 0x%X\n',
+            self.format, self.format.value, self.bitsPerPx, self.width, self.height, dataSize,
+            startOffs, startOffs + dataSize)
         self._writeData(file)
+        printf("actual size = 0x%X end = 0x%X\n", file.tell() - startOffs, file.tell())
+
+class FontTextuerBuilder:
+    """Packs characters into a font texture."""
+
+    # max dimensions of font texture
+    MAX_WIDTH  = 512
+    MAX_HEIGHT = 512
+
+    def __init__(self, imgDir:str, fmt:ImageFormat=ImageFormat.RGB5A3):
+        self.imgDir = imgDir
+        self.images = {}
+        self.format = fmt
+        self.width, self.height = BLOCK_WIDTHS[fmt], BLOCK_HEIGHTS[fmt]
+        self.lastX, self.lastY  = 0, 0
+
+    def mapFontId(self, chr:str, fontNo:int):
+        # map fontNo to texture
+        if fontNo == 2:
+            if chr in 'ABCJLRSXYZ': fontNo = 2
+            elif chr in 'DFIJST': fontNo = 3 # game bug: J used in both 2 and 3
+            else: fontNo = 5
+        elif fontNo == 4: fontNo = 0
+        return fontNo
+
+    def add(self, chr:str, fontNo:int=0):
+        """Add character to font."""
+
+        fontId = self.mapFontId(chr, fontNo)
+        name = chr
+        if name in BAD_DIR_CHARS: name = '%04X' % ord(chr)
+        try: imgChr = Image.open(os.path.join(self.imgDir, str(fontId), name+'.png'))
+        except FileNotFoundError:
+            raise KeyError("No graphic for character '%s' in font %d (%d)" % (
+                chr, fontId, fontNo))
+
+        cw, ch = imgChr.size
+        x1, y1 = self.lastX, self.lastY
+        x2, y2 = x1+cw, y1+ch
+        if y2 >= self.height:
+            self.height = y2
+
+        if x2 >= self.MAX_WIDTH:
+            self.width = self.MAX_WIDTH # ensure power of two
+            x1, x2 = 0, cw
+            y1 = self.height
+            self.height += ch
+            y2 = self.height
+
+        if self.height >= self.MAX_HEIGHT:
+            raise ValueError("No texture space left for character '%s' in font %d" % (
+                chr, fontNo))
+        if x2 > self.width: self.width = x2
+        chrDef = {'x1':x1, 'x2':x2, 'y1':y1, 'y2':y2, 'image':imgChr}
+        printf("Added chr '%s' font %d: %s\n", chr, fontNo, chrDef)
+        self.images[(fontNo,chr)] = chrDef
+        self.lastX, self.lastY = x2, y1 # not y2
+
+    def build(self) -> Image:
+        """Generate the texture image."""
+        # round up to block size
+        fmt = self.format
+        padX, padY = self.width % BLOCK_WIDTHS[fmt], self.height % BLOCK_HEIGHTS[fmt]
+        w, h = self.width, self.height
+        if padX: self.width  += BLOCK_WIDTHS [fmt] - padX
+        if padY: self.height += BLOCK_HEIGHTS[fmt] - padY
+        printf("tex size %dx%d pad %dx%d to %dx%d\n", w, h, padX, padY, self.width, self.height)
+        assert self.width <= self.MAX_WIDTH, "Texture max width exceeded"
+        assert self.height <= self.MAX_HEIGHT, "Texture max height exceeded"
+
+        img = Image.new('RGBA', (self.width, self.height))
+        for k, chrDef in self.images.items():
+            #fontNo, chr = k
+            img.paste(chrDef['image'], (chrDef['x1'], chrDef['y1']))
+        return img
+
 
 class GameTextReader:
     """Represents the contents of a .bin file under gametext directory."""
@@ -441,6 +527,8 @@ class GameTextWriter:
         self.strings    = {} # offset:int => string:str
         self.textures   = [] # FontTexture
         self.unkDataLen = 0
+        self.charDir    = 'tmp/chars/' # XXX
+        self.texBuilder = {} # fontId => FontTextuerBuilder
 
     def addFont(self, font:(Image,io.FileIO,str)) -> None:
         """Add a font texture."""
@@ -468,6 +556,7 @@ class GameTextWriter:
         nextOffs   = 0
         for text in self.texts:
             for phrase in text.phrases:
+                #print(phrase, phrase.getUsedChars())
                 usedChars = usedChars.union(phrase.getUsedChars())
                 string = phrase.toBytes()
                 strOffsets.append(nextOffs)
@@ -482,6 +571,69 @@ class GameTextWriter:
         pad = strDataLen & 3
         if pad: padding += (b'\0' * (4 - pad))
         strDataLen += len(padding)
+
+        # generate character structs and textures
+        usedFonts = set(map(lambda it: it[0], usedChars))
+        for f in usedFonts:
+            self.texBuilder[f] = FontTextuerBuilder(self.charDir)
+
+        usedChars = sorted(usedChars, key=lambda it: ord(it[1]) + (it[0] * 10000))
+        for (fontNo, chr) in usedChars:
+            self.texBuilder[fontNo].add(chr, fontNo)
+
+        fontTextures = {} # fontId => texIdx
+        self.textures = []
+        for f in usedFonts:
+            fontTextures[f] = len(self.textures)
+            self.textures.append(FontTexture.readImage(self.texBuilder[f].build()))
+            self.textures[-1].image.save('tmp/built%d.png' % f)
+
+        eChars = ET.parse(os.path.join(self.charDir, 'chars.xml')).getroot()
+        self.chars = []
+        for (fontNo, chr) in usedChars:
+            # find char element
+            fontId = self.texBuilder[fontNo].mapFontId(chr, fontNo)
+            eChar = None
+            for e in eChars:
+                #print(e.attrib['character'], e.attrib['fontNo'])
+                if e.attrib['character'] == chr and int(e.attrib['fontNo'], 0) == fontId:
+                    eChar = e
+                    break
+            if eChar is None:
+                raise KeyError("No definition found for character '%s' (0x%X) in font %d (%d)" % (
+                    chr, ord(chr), fontId, fontNo))
+                #printf("No definition found for character '%s' (0x%X) in font %d (%d)\n",
+                #    chr, ord(chr), fontId, fontNo)
+                # try other fonts
+                #for e in eChars:
+                #    if e.attrib['character'] == chr:
+                #        eChar = e
+                #        fontNo = int(e.attrib['fontNo'])
+                #        break
+                #if eChar is None:
+                #    raise KeyError("No definition found for character '%s' (0x%X)" % (
+                #    chr, ord(chr)))
+
+            wtf = fontNo
+            if wtf == 4: wtf = 0
+            elif wtf == 0: wtf = 4
+            chr = eChar.attrib['character']
+            chrDef = self.texBuilder[fontNo].images[(fontNo, chr)]
+            cs = CharacterStruct(
+                character = chr,
+                xpos      = chrDef['x1'],
+                ypos      = chrDef['y1'],
+                width     = chrDef['x2'] - chrDef['x1'],
+                height    = chrDef['y2'] - chrDef['y1'],
+                left      = int(eChar.attrib['left']),
+                right     = int(eChar.attrib['right']),
+                top       = int(eChar.attrib['top']),
+                bottom    = int(eChar.attrib['bottom']),
+                fontNo    = wtf,
+                #fontNo    = fontId,
+                textureNo = fontTextures[fontNo],
+            )
+            self.chars.append(cs)
 
         # character structs define the position of each character in the font texture.
         # XXX generate these from the usedChars set.
@@ -517,10 +669,12 @@ class GameTextWriter:
         file.write(b'\xEE' * self.unkDataLen)
 
         # write texture graphics
-        for tex in self.textures:
+        for i, tex in enumerate(self.textures):
+            printf("Write texture %d at 0x%X\n", i, file.tell())
             tex.writeFile(file)
 
         # write end-of-file marker
+        printf("Write EOF at 0x%X\n", file.tell())
         file.write(b'\0' * 8)
 
 
@@ -702,7 +856,7 @@ class App:
                             if hash not in charHashes[c]: # not seen this one before
                                 # so extract it
                                 name = chr(c)
-                                if name in ' !#$%&*()/\\?:\'"`~<>.':
+                                if name in BAD_DIR_CHARS:
                                     name = '%04X' % c
                                 name = os.path.join(str(char.fontNo), '%s.png' % name)
                                 os.makedirs(os.path.join(out, str(char.fontNo)), exist_ok=True)

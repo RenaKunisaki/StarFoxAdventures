@@ -91,6 +91,7 @@ class SfaTexture:
         self.format = ImageFormat(fmtId)
         bpp = BITS_PER_PIXEL[self.format]
         dataLen = self.width * self.height * bpp // 8
+        #print("dataLen =", hex(dataLen))
         data = file.read(dataLen)
         self.image = decode_image(data,
             None, # palette_data
@@ -140,4 +141,5 @@ class SfaTexture:
         if isinstance(fmt, enum.Enum): fmt = fmt.value
         imageData, paletteData, colors = encode_image(
             self.image, fmt, None, mipmap_count=self.numMipMaps)
+        #print("tex size =", hex(len(imageData.getbuffer())))
         file.write(imageData.getbuffer())
