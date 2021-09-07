@@ -9,7 +9,7 @@ from .LangEnum import LangEnum, LangCodes
 from texconv.sfatexture import SfaTexture, TexFmt, ImageFormat
 from texconv.texture import BITS_PER_PIXEL, BLOCK_WIDTHS, BLOCK_HEIGHTS, convert_color_to_rgb5a3
 
-class FontNames(enum.IntEnum):
+class FontEnum(enum.IntEnum):
     Japanese = 0
     Unused   = 1 # doesn't actually exist
     Buttons  = 2
@@ -17,10 +17,13 @@ class FontNames(enum.IntEnum):
     English  = 4
     Faces    = 5
 
-ICON_FONTS = (2, 3, 5) # which font IDs are icons
+ICON_FONTS = (FontEnum.Buttons, FontEnum.Flags, FontEnum.Faces) # which font IDs are icons
 LANG_FONTS = { # LangEnum => (font name, size)
+    # can pretty much just put any font you want in here...
+    # very large size might not render nicely.
+    # you can put absolute paths here too...
     LangEnum.English:  ('EurostileBQ-Regular.otf', 20),
-    #LangEnum.English:  ('Z003-MediumItalic.otf', 20), # lol
+    #LangEnum.English:  ('Z003-MediumItalic.otf', 23), # lol
     LangEnum.French:   ('EurostileBQ-Regular.otf', 20),
     LangEnum.German:   ('EurostileBQ-Regular.otf', 20),
     LangEnum.Italian:  ('EurostileBQ-Regular.otf', 20),
@@ -58,11 +61,11 @@ class FontTextureBuilder:
             if fontNo in ICON_FONTS:
                 name = char
                 if name in BAD_DIR_CHARS: name = '%04X' % ord(char)
-                path = os.path.join(self.fontPath, FontNames(fontNo).name, name + '.png')
+                path = os.path.join(self.fontPath, FontEnum(fontNo).name, name + '.png')
                 try: self._imgCache[cacheKey] = Image.open(path)
                 except FileNotFoundError:
                     raise KeyError("No graphic for character '%s' in font '%s' (not found at: %s)" % (
-                        char, FontNames(fontNo).name, path))
+                        char, FontEnum(fontNo).name, path))
             else:
                 size = self.font.getsize(char, language=LangCodes[self.language])
                 imgChr = Image.new('RGBA', size)
@@ -71,7 +74,7 @@ class FontTextureBuilder:
                 self._imgCache[cacheKey] = imgChr
         return self._imgCache[cacheKey]
 
-    def measure(self, text:str, fontNo:int=4) -> tuple:
+    def measure(self, text:str, fontNo:FontEnum=FontEnum.English) -> tuple:
         """Measure string."""
         if fontNo in ICON_FONTS:
             w, h = 0, 0
@@ -82,7 +85,7 @@ class FontTextureBuilder:
         else:
             return self.font.getsize(text, language=LangCodes[self.language])
 
-    def add(self, char:str, fontNo:int=4) -> None:
+    def add(self, char:str, fontNo:FontEnum=FontEnum.English) -> None:
         """Add character to font."""
         if type(char) is int: char = chr(char)
         if (fontNo,char) in self.images: return # already have this

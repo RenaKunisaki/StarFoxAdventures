@@ -3,6 +3,7 @@ import struct
 import enum
 import io
 from .util import printf, readStruct, writeStruct
+from .FontTextureBuilder import FontEnum
 
 class GameString:
     """A string from the gametext files."""
@@ -184,7 +185,7 @@ class GameString:
 
         The entries are (font, character).
         """
-        font = 4
+        font = FontEnum.English
         res, i = set(), 0
         while i < len(self.str):
             c = self.str[i]
@@ -197,7 +198,7 @@ class GameString:
                 s = self.str[i:]
                 end = s.find('}')
                 code = s[0:end].split(' ')
-                if code[0] == 'font': font = int(code[1], 0)
+                if code[0] == 'font': font = FontEnum(int(code[1], 0))
                 i += end
             else: res.add((font,c))
             i += 1

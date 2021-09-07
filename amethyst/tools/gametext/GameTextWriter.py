@@ -3,14 +3,13 @@ import struct
 import enum
 import os
 import io
-import xml.etree.ElementTree as ET
 from PIL import Image
 from .util import printf, readStruct, writeStruct
 from texconv.sfatexture import SfaTexture, TexFmt, ImageFormat
 from texconv.texture import BITS_PER_PIXEL, BLOCK_WIDTHS, BLOCK_HEIGHTS, convert_color_to_rgb5a3
 from .CharacterStruct import CharacterStruct
 from .FontTexture import FontTexture
-from .FontTextureBuilder import FontTextureBuilder
+from .FontTextureBuilder import FontTextureBuilder, FontEnum
 
 # file structure:
 # u32 numCharStructs; characterStruct[numCharStructs];
@@ -24,12 +23,12 @@ class GameTextWriter:
 
     MAX_TEXTURES = 2 # max textures allowed in a bin file
     FONT_MAP = { # font ID => texture ID
-        0: 1, # JP text
-        1: 0, # nonexistent?
-        2: 0, # icons
-        3: 0, # flags
-        4: 1, # EN text
-        5: 0, # faces (XXX requires some kind of special handling)
+        FontEnum.Japanese: 1,
+        FontEnum.Unused:   0,
+        FontEnum.Buttons:  0,
+        FontEnum.Flags:    0,
+        FontEnum.English:  1,
+        FontEnum.Faces:    0, # XXX requires some kind of special handling
     }
 
     def __init__(self):
@@ -101,31 +100,30 @@ class GameTextWriter:
         """Generate the CharacterStruct table."""
         # character structs define the position of each character in the font texture.
         # read chars.xml to get the spacing and padding of each character.
-        eChars = ET.parse(os.path.join(self.charDir, 'chars.xml')).getroot()
+        #eChars = ET.parse(os.path.join(self.charDir, 'chars.xml')).getroot()
 
         self.chars = []
         for (fontNo, chr) in self.usedChars:
             texNo = self.FONT_MAP[fontNo]
 
             # find char element
-            eChar = None
-            for e in eChars:
-                #print(e.attrib['character'], e.attrib['fontNo'])
-                if e.attrib['character'] == chr and int(e.attrib['fontNo'], 0) == fontNo:
-                    eChar = e
-                    break
-            if eChar is None:
-                raise KeyError("No definition found for character '%s' (0x%X) in font %d (%d)" % (
-                    chr, ord(chr), texNo, fontNo))
+            #eChar = None
+            #for e in eChars:
+            #    #print(e.attrib['character'], e.attrib['fontNo'])
+            #    if e.attrib['character'] == chr and int(e.attrib['fontNo'], 0) == fontNo:
+            #        eChar = e
+            #        break
+            #if eChar is None:
+            #    raise KeyError("No definition found for character '%s' (0x%X) in font %d (%d)" % (
+            #        chr, ord(chr), texNo, fontNo))
 
-            # XXX we should be able to generate all of this from the OTF.
-            # ImageFont.getmetrics() gives us the distance of the baseline which would
-            # allow us to compute top and bottom spacing.
-            # Image.getbbox() gives us the amount of whitespace in an image
-            # which should be enough to compute all padding values.
+            # the original game packs the font graphics into the textures without
+            # accounting for baseline, then uses these spacing values to place them
+            # correcftly. our script packs them so that every character's baseline is
+            # at the same height of the texture, so we don't need spacing.
+            # (maybe this is less efficient use of space? not sure)
 
-            # read it and combine with generated info
-            chr = eChar.attrib['character']
+            #chr = eChar.attrib['character']
             chrDef = self.texBuilder[texNo].images[(fontNo, chr)]
             cs = CharacterStruct(
                 character = chr,
@@ -133,10 +131,10 @@ class GameTextWriter:
                 ypos      = chrDef['y1'],
                 width     = chrDef['x2'] - chrDef['x1'],
                 height    = chrDef['y2'] - chrDef['y1'],
-                left      = int(eChar.attrib['left']),
-                right     = int(eChar.attrib['right']),
-                top       = int(eChar.attrib['top']),
-                bottom    = int(eChar.attrib['bottom']),
+                left      = 0, # int(eChar.attrib['left']),
+                right     = 0, # int(eChar.attrib['right']),
+                top       = 0, # int(eChar.attrib['top']),
+                bottom    = 0, # int(eChar.attrib['bottom']),
                 fontNo    = fontNo,
                 textureNo = texNo,
             )
