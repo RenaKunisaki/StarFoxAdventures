@@ -20,6 +20,7 @@ class FontNames(enum.IntEnum):
 ICON_FONTS = (2, 3, 5) # which font IDs are icons
 LANG_FONTS = { # LangEnum => (font name, size)
     LangEnum.English:  ('EurostileBQ-Regular.otf', 20),
+    #LangEnum.English:  ('Z003-MediumItalic.otf', 20), # lol
     LangEnum.French:   ('EurostileBQ-Regular.otf', 20),
     LangEnum.German:   ('EurostileBQ-Regular.otf', 20),
     LangEnum.Italian:  ('EurostileBQ-Regular.otf', 20),
@@ -30,7 +31,8 @@ LANG_FONTS = { # LangEnum => (font name, size)
 class FontTextureBuilder:
     """Packs characters into a font texture."""
 
-    # max dimensions of font texture
+    # max dimensions of font texture (XXX confirm)
+    # the game never seems to exceed this, but, can it?
     MAX_WIDTH, MAX_HEIGHT= 512, 512
 
     def __init__(self, imgDir:str, fmt:ImageFormat=ImageFormat.RGB5A3,

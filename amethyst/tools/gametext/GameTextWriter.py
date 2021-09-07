@@ -118,6 +118,12 @@ class GameTextWriter:
                 raise KeyError("No definition found for character '%s' (0x%X) in font %d (%d)" % (
                     chr, ord(chr), texNo, fontNo))
 
+            # XXX we should be able to generate all of this from the OTF.
+            # ImageFont.getmetrics() gives us the distance of the baseline which would
+            # allow us to compute top and bottom spacing.
+            # Image.getbbox() gives us the amount of whitespace in an image
+            # which should be enough to compute all padding values.
+
             # read it and combine with generated info
             chr = eChar.attrib['character']
             chrDef = self.texBuilder[texNo].images[(fontNo, chr)]

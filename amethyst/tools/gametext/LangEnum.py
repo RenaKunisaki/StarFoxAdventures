@@ -9,6 +9,7 @@ class LangEnum(enum.IntEnum):
     Japanese = 4,
     Spanish  = 5,
 
+# mainly for passing to font render engine.
 LangCodes = {
     LangEnum.English:  'en',
     LangEnum.French:   'fr',
