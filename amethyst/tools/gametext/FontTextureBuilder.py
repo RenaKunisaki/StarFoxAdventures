@@ -3,46 +3,92 @@ import struct
 import enum
 import io
 import os
-from PIL import Image
+from PIL import Image, ImageFont, ImageDraw
 from .util import printf, readStruct, writeStruct, BAD_DIR_CHARS
+from .LangEnum import LangEnum, LangCodes
 from texconv.sfatexture import SfaTexture, TexFmt, ImageFormat
 from texconv.texture import BITS_PER_PIXEL, BLOCK_WIDTHS, BLOCK_HEIGHTS, convert_color_to_rgb5a3
+
+class FontNames(enum.IntEnum):
+    Japanese = 0
+    Unused   = 1 # doesn't actually exist
+    Buttons  = 2
+    Flags    = 3
+    English  = 4
+    Faces    = 5
+
+ICON_FONTS = (2, 3, 5) # which font IDs are icons
+LANG_FONTS = { # LangEnum => (font name, size)
+    LangEnum.English:  ('EurostileBQ-Regular.otf', 20),
+    LangEnum.French:   ('EurostileBQ-Regular.otf', 20),
+    LangEnum.German:   ('EurostileBQ-Regular.otf', 20),
+    LangEnum.Italian:  ('EurostileBQ-Regular.otf', 20),
+    LangEnum.Japanese: ('FOT-RodinNTLG Pro B.otf', 20),
+    LangEnum.Spanish:  ('EurostileBQ-Regular.otf', 20),
+}
 
 class FontTextureBuilder:
     """Packs characters into a font texture."""
 
     # max dimensions of font texture
-    MAX_WIDTH  = 512
-    MAX_HEIGHT = 512
+    MAX_WIDTH, MAX_HEIGHT= 512, 512
 
-    def __init__(self, imgDir:str, fmt:ImageFormat=ImageFormat.RGB5A3):
-        self.imgDir = imgDir
-        self.images = {}
-        self.format = fmt
+    def __init__(self, imgDir:str, fmt:ImageFormat=ImageFormat.RGB5A3,
+    lang:LangEnum=LangEnum.English):
+        self.imgDir   = imgDir
+        self.images   = {}
+        self.format   = fmt
+        self.language = lang
         self.width, self.height = BLOCK_WIDTHS[fmt], BLOCK_HEIGHTS[fmt]
         self.lastX, self.lastY  = 0, 0
+        self._imgCache = {} # (fontNo,char) => Image
 
-    def mapFontId(self, chr:str, fontNo:int):
-        # map fontNo to texture
-        if fontNo == 2:
-            if chr in 'ABCJLRSXYZ': fontNo = 2
-            elif chr in 'DFIJST': fontNo = 3 # game bug: J used in both 2 and 3
-            else: fontNo = 5
-        elif fontNo == 4: fontNo = 0
-        return fontNo
+        # load the font for this language
+        fontName, fontSize = LANG_FONTS[lang]
+        self.fontPath = os.path.join(os.path.dirname(__file__), 'fonts')
+        self.font = ImageFont.truetype(os.path.join(self.fontPath, fontName),
+            size=fontSize)
 
-    def add(self, chr:str, fontNo:int=4, lang:str="English"):
+    def getChrImg(self, char:str, fontNo:int) -> Image:
+        """Get Image for one character."""
+        cacheKey = (fontNo,char)
+        if cacheKey not in self._imgCache:
+            if fontNo in ICON_FONTS:
+                name = char
+                if name in BAD_DIR_CHARS: name = '%04X' % ord(char)
+                path = os.path.join(self.fontPath, FontNames(fontNo).name, name + '.png')
+                try: self._imgCache[cacheKey] = Image.open(path)
+                except FileNotFoundError:
+                    raise KeyError("No graphic for character '%s' in font '%s' (not found at: %s)" % (
+                        char, FontNames(fontNo).name, path))
+            else:
+                size = self.font.getsize(char, language=LangCodes[self.language])
+                imgChr = Image.new('RGBA', size)
+                draw = ImageDraw.Draw(imgChr)
+                draw.text((0, 0), char, font=self.font)
+                self._imgCache[cacheKey] = imgChr
+        return self._imgCache[cacheKey]
+
+    def measure(self, text:str, fontNo:int=4) -> tuple:
+        """Measure string."""
+        if fontNo in ICON_FONTS:
+            w, h = 0, 0
+            for c in text:
+                cw, ch = self.getChrImg(c, fontNo).size
+                w, h = max(w, cw), max(h, ch)
+            return w, h
+        else:
+            return self.font.getsize(text, language=LangCodes[self.language])
+
+    def add(self, char:str, fontNo:int=4) -> None:
         """Add character to font."""
+        if type(char) is int: char = chr(char)
+        if (fontNo,char) in self.images: return # already have this
 
-        #fontId = self.mapFontId(chr, fontNo)
-        fontId = fontNo
-        name = chr
-        if name in BAD_DIR_CHARS: name = '%04X' % ord(chr)
-        try: imgChr = Image.open(os.path.join(self.imgDir, lang, str(fontId), name+'.png'))
-        except FileNotFoundError:
-            raise KeyError("No graphic for character '%s' in font %d (%d)" % (
-                chr, fontId, fontNo))
+        name = char
+        if name in BAD_DIR_CHARS: name = '%04X' % ord(char)
 
+        imgChr = self.getChrImg(char, fontNo)
         cw, ch = imgChr.size
         x1, y1 = self.lastX, self.lastY
         x2, y2 = x1+cw, y1+ch
@@ -61,11 +107,11 @@ class FontTextureBuilder:
         if self.height >= self.MAX_HEIGHT:
             self.height = self.MAX_HEIGHT # can handle exception and try again
             raise ValueError("No texture space left for character '%s' in font %d" % (
-                chr, fontNo))
+                char, fontNo))
         if newW > self.width: self.width = newW
         chrDef = {'x1':x1, 'x2':x2, 'y1':y1, 'y2':y2, 'image':imgChr}
         #printf("Added chr '%s' font %d: %s\n", chr, fontNo, chrDef)
-        self.images[(fontNo,chr)] = chrDef
+        self.images[(fontNo,char)] = chrDef
         self.lastX, self.lastY = newW, y1 # top left of next character
 
     def build(self) -> Image:

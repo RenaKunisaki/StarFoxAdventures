@@ -8,3 +8,12 @@ class LangEnum(enum.IntEnum):
     Italian  = 3,
     Japanese = 4,
     Spanish  = 5,
+
+LangCodes = {
+    LangEnum.English:  'en',
+    LangEnum.French:   'fr',
+    LangEnum.German:   'de',
+    LangEnum.Italian:  'it',
+    LangEnum.Japanese: 'jp',
+    LangEnum.Spanish:  'es',
+}
