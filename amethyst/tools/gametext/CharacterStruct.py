@@ -2,6 +2,7 @@ from __future__ import annotations
 from .util import printf, readStruct, writeStruct
 import struct
 import io
+import xml.etree.ElementTree as ET
 
 class CharacterStruct:
     """Identifies the location of one character in the font textures."""
@@ -42,3 +43,18 @@ class CharacterStruct:
         return struct.pack('>IHHbbbbBBBB', self.character, self.xpos, self.ypos,
             self.left, self.right, self.top, self.bottom, self.width,
             self.height, self.fontNo, self.textureNo)
+
+    def toXml(self) -> ET.Element:
+        return ET.Element('char', {
+            'character': chr(self.character),
+            'xpos':      str(self.xpos),
+            'ypos':      str(self.ypos),
+            'left':      str(self.left),
+            'right':     str(self.right),
+            'top':       str(self.top),
+            'bottom':    str(self.bottom),
+            'width':     str(self.width),
+            'height':    str(self.height),
+            'fontNo':    str(self.fontNo),
+            'textureNo': str(self.textureNo),
+        })

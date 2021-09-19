@@ -21,3 +21,10 @@ def writeStruct(file, fmt:str, *items, offset:int=None) -> None:
     """Write a struct to a file."""
     if offset is not None: file.seek(offset, 0)
     file.write(struct.pack(fmt, *items))
+
+def makeCharFilename(name:str) -> str:
+    """Turn `name` (one character) into a valid string to use in a file name."""
+    cName = chr(name)
+    if cName in BAD_DIR_CHARS:
+        cName = '%04X' % name
+    return cName

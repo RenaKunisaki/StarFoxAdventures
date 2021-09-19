@@ -11,6 +11,7 @@ class GameString:
     class ControlCode(enum.IntEnum):
         SeqId      = 0xE000 # sequence ID (param: ID) (no idea what this is actually used for)
         SeqTime    = 0xE018 # sequence timing (params: time, ?, ?)
+        Hint       = 0xE020 # comes before hint text title
         Scale      = 0xF8F4 # set scale (param: scale; 256 = 100%)
         Font       = 0xF8F7 # select font (param: font ID)
         JustLeft   = 0xF8F8 # left justify
@@ -23,6 +24,7 @@ class GameString:
         'seq':   ControlCode.SeqId,
         'time':  ControlCode.SeqTime,
         'scale': ControlCode.SeqTime,
+        'hint':  ControlCode.Hint,
         'font':  ControlCode.Font,
         'ljust': ControlCode.JustLeft,
         'rjust': ControlCode.JustRight,
@@ -51,7 +53,7 @@ class GameString:
         ControlCode.Color:      4,
         ControlCode.SeqId:      1,
         ControlCode.SeqTime:    3,
-        0xE020:                 1,
+        ControlCode.Hint:       1,
     }
 
     escapeChars = {
@@ -115,6 +117,7 @@ class GameString:
             elif b == 0x007B:       res += '\\{'
             elif b == C.SeqId:      res += '{seq %d}' % params[0]
             elif b == C.SeqTime:    res += '{time %d %d %d}' % (params[0], params[1], params[2])
+            elif b == C.Hint:       res += '{hint %d}' % params[0] # no idea what param is...
             elif b == C.Scale:      res += '{scale %d}' % params[0]
             elif b == C.Font:       res += '{font %d}' % params[0]
             elif b == C.JustLeft:   res += '{ljust}'

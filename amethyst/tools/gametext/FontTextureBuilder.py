@@ -34,9 +34,11 @@ LANG_FONTS = { # LangEnum => (font name, size)
 class FontTextureBuilder:
     """Packs characters into a font texture."""
 
-    # max dimensions of font texture (XXX confirm)
-    # the game never seems to exceed this, but, can it?
-    MAX_WIDTH, MAX_HEIGHT= 512, 512
+    # max dimensions of font texture
+    # the game never exceeds 512x512 but the console should be able
+    # to do 1024x1024 and the game seems to accept that fine.
+    # XXX test on console.
+    MAX_WIDTH, MAX_HEIGHT= 1024, 1024
 
     def __init__(self, imgDir:str, fmt:ImageFormat=ImageFormat.RGB5A3,
     lang:LangEnum=LangEnum.English):
@@ -56,6 +58,7 @@ class FontTextureBuilder:
 
     def getChrImg(self, char:str, fontNo:int) -> Image:
         """Get Image for one character."""
+        fontNo = int(fontNo)
         cacheKey = (fontNo,char)
         if cacheKey not in self._imgCache:
             if fontNo in ICON_FONTS:
@@ -111,8 +114,8 @@ class FontTextureBuilder:
 
         if self.height >= self.MAX_HEIGHT:
             self.height = self.MAX_HEIGHT # can handle exception and try again
-            raise ValueError("No texture space left for character '%s' in font %d" % (
-                char, fontNo))
+            raise ValueError("No texture space left for character '%s' in font %s" % (
+                char, str(fontNo)))
         if newW > self.width: self.width = newW
         chrDef = {'x1':x1, 'x2':x2, 'y1':y1, 'y2':y2, 'image':imgChr}
         #printf("Added chr '%s' font %d: %s\n", chr, fontNo, chrDef)

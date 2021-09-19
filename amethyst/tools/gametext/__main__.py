@@ -21,14 +21,16 @@ if not __package__:
 
 from .CharacterStruct import CharacterStruct
 from .FontTexture import FontTexture
-from .FontTextureBuilder import FontTextureBuilder
+from .FontTextureBuilder import FontTextureBuilder, FontEnum, ICON_FONTS
 from .GameString import GameString
 from .GameTextReader import GameTextReader
 from .GameTextStruct import GameTextStruct
 from .GameTextWriter import GameTextWriter
 from .GameTextXml import GameTextXml
 from .LangEnum import LangEnum
-from .util import printf, readStruct, writeStruct, BAD_DIR_CHARS
+from .util import printf, readStruct, writeStruct, makeCharFilename
+
+CLEAR_LINE = '\r\x1B[2K' # ANSI control code
 
 class App:
     def help(self):
@@ -65,8 +67,85 @@ class App:
         for i, tex in enumerate(file.textures):
             tex.image.save(os.path.join(outPath, '%d.png' % i))
 
+    def extractAll(self, inPath:str, outPath:str):
+        """Recursively extract GameText bin files to directory."""
+        nTexts, nChars = 0, 0 # for reporting progress
+
+        languages = {}
+        for l in LangEnum:
+            languages[l] = {
+                'chars': {}, # (fontId, character) => {
+                    # 'char': CharacterStruct,
+                    # 'img': Image,
+                #}
+                'texts': {}, # identifier => GameTextStruct
+            }
+
+        def _extractDir(path, _depth=0):
+            nonlocal languages, nTexts, nChars
+            for name in os.listdir(path):
+                p = os.path.join(path, name)
+                if os.path.isdir(p): _extractDir(p, _depth+1)
+                elif name.endswith('.bin'):
+                    try:
+                        lang = name.split('.')[0]
+                        if '_' in lang: lang = lang.split('_')[1]
+                        langId = LangEnum[lang]
+
+                        # print status
+                        pShort = '/'.join((p.split('/')[-2:]))
+                        print(CLEAR_LINE + "Chars: %6d Texts: %6d File: %s   " % (
+                            nChars, nTexts, pShort), end='')
+
+                        # read file
+                        file = GameTextReader(p)
+                        nChars += len(file.chars)
+                        nTexts += len(file.texts)
+
+                        # grab texts
+                        texts = languages[langId]['texts']
+                        for t in file.texts:
+                            texts[t.identifier] = t
+
+                        # grab icon characters
+                        chars = languages[langId]['chars']
+                        for c in file.chars:
+                            chars[(c.fontNo, c.character)] = {
+                                'char': c,
+                                'img': file.getChrImg(c),
+                            }
+                    except:
+                        print("Error extracting", p)
+                        raise
+
+        _extractDir(inPath)
+
+        # output results to an XML file and image files
+        for lang, it in languages.items():
+            lPath = os.path.join(outPath, lang.name)
+            os.makedirs(lPath, exist_ok=True)
+
+            xml = GameTextXml()
+            for text in sorted(it['texts'].values(), key=lambda t: t.identifier):
+                xml.addText(text)
+
+            # write texture images and add char info
+            for k, v in it['chars'].items():
+                fontId, char = k
+                xml.addChar(v['char'])
+                if fontId in ICON_FONTS:
+                    img = v['img']
+                    cPath = os.path.join(lPath, FontEnum(fontId).name)
+                    os.makedirs(cPath, exist_ok=True)
+
+                    name = '%s.png' % makeCharFilename(char)
+                    img.save(os.path.join(cPath, name))
+
+            xml.build().write(os.path.join(lPath, 'gametext.xml'),
+                encoding='utf-8', xml_declaration=True)
+
     def build(self, inPath:str, outPath:str):
-        """Create GameTexr bin file from directory."""
+        """Create GameText bin file from directory."""
         file = GameTextWriter()
         i = 0
         while True:
@@ -78,11 +157,74 @@ class App:
         GameTextXml().read(inPath, file)
         file.write(outPath)
 
+    def merge(self, inPath:str, outPath:str):
+        """Read GameText bin files from directory and combine into one per language."""
+        nChars    = 0 # for reporting status
+        usedChars = set() # (fontNo, langId)
+
+        # instead of this we should be reading all XML files (extractAll)
+        # this function probably doesn't work...
+
+        def _extractDir(path, out, _depth=0):
+            nonlocal nChars
+            for name in os.listdir(path):
+                p = os.path.join(path, name)
+                if os.path.isdir(p): _extractDir(p, out, _depth+1)
+                elif name.endswith('.bin'):
+                    try:
+                        lang = name.split('.')[0]
+                        if '_' in lang: lang = lang.split('_')[1]
+
+                        pShort = '/'.join((p.split('/')[-2:]))
+                        print(CLEAR_LINE + "Chars: %6d File: %s   " % (nChars, pShort), end='')
+
+                        file = GameTextReader(p)
+                        for char in file.chars:
+                            c = char.character
+                            fontNo = int(char.fontNo)
+                            nChars += 1
+
+                            if fontNo in ICON_FONTS: langId = LangEnum.English
+                            elif lang == 'Japanese': langId = LangEnum.Japanese
+                            else: LangEnum.English
+                            bk = (fontNo, langId)
+                            if bk not in usedChars:
+                                usedChars.add(bk)
+                    except:
+                        print("Error extracting", p)
+                        raise
+        _extractDir(inPath, outPath)
+
+    def _extractChar(self, char, outDir, lang, cImg):
+        c = char.character
+        cName = makeCharFilename(c)
+        dName = os.path.join(outDir, lang, str(char.fontNo))
+        os.makedirs(dName, exist_ok=True)
+        fName = os.path.join(dName, cName + '.png')
+        idx = 0
+        while os.path.exists(fName):
+            idx += 1
+            fName = os.path.join(dName, '%s.%d.png' % (cName, idx))
+        #print("save:", fName, lang, hash.hex())
+        cImg.save(fName)
+
     def extractAllChars(self, inPath:str, outPath:str):
         """Extract all font character graphics."""
-        xml = ET.Element('chars')
+        # XXX running this multiple times will create multiple copies of each...
+        # also there's a lot of repetition here.
+        # do we even still need this?
+        xml = {
+            FontEnum.Japanese: ET.Element('chars'),
+            FontEnum.Buttons:  ET.Element('chars'),
+            FontEnum.Flags:    ET.Element('chars'),
+            FontEnum.English:  ET.Element('chars'),
+            FontEnum.Faces:    ET.Element('chars'),
+        }
         charHashes = {} # lang => {font => {char => [hash, hash...]}}
-        nChars = 0 # for reporting status
+        xmlHashes  = set()
+        nChars     = 0 # for reporting status
+        usedChars  = {} # (fontNo,langId) => set(char)
+
         def _extractDir(path, out, _depth=0):
             nonlocal nChars
             assert _depth < 10, 'Maximum depth exceeded'
@@ -94,69 +236,61 @@ class App:
                     if '_' in lang: lang = lang.split('_')[1]
 
                     pShort = '/'.join((p.split('/')[-2:]))
-                    print("\rChars: %6d File: %s   " % (nChars, pShort), end='')
+                    print(CLEAR_LINE + "Chars: %6d File: %s   " % (nChars, pShort), end='')
                     try:
                         file = GameTextReader(p)
                         for char in file.chars:
                             c = char.character
-                            fontNo = str(char.fontNo)
+                            fontNo = int(char.fontNo)
                             if lang not in charHashes: charHashes[lang] = {}
                             if fontNo not in charHashes[lang]: charHashes[lang][fontNo] = {}
                             if c not in charHashes[lang][fontNo]: charHashes[lang][fontNo][c] = []
 
-                            # extract this character graphic
-                            img = file.textures[char.textureNo].image
-                            x1, y1 = char.xpos, char.ypos
-                            x2, y2 = x1+char.width, y1+char.height
-                            if x1 == x2: x2 += 1
-                            if y1 == y2: y2 += 1
-                            #print(c, x1, y1, x2, y2)
-                            cImg = img.crop((x1, y1, x2, y2))
-
-                            # hash it
-                            md5 = hashlib.md5()
+                            cImg = file.getChrImg(char) # extract this character graphic
+                            md5 = hashlib.md5() # hash it
                             md5.update(cImg.tobytes())
                             hash = md5.digest()
 
                             if hash not in charHashes[lang][fontNo][c]: # not seen this one before
                                 # so extract it
-                                cName = chr(c)
-                                if cName in BAD_DIR_CHARS:
-                                    cName = '%04X' % c
-                                dName = os.path.join(out, lang, str(char.fontNo))
-                                os.makedirs(dName, exist_ok=True)
-                                fName = os.path.join(dName, cName + '.png')
-                                idx = 0
-                                while os.path.exists(fName):
-                                    idx += 1
-                                    fName = os.path.join(dName, '%s.%d.png' % (cName, idx))
-                                #print("save:", fName, lang, hash.hex())
-                                cImg.save(fName)
+                                self._extractChar(char, out, lang, cImg)
                                 charHashes[lang][fontNo][c].append(hash)
 
+                                # add it to the used char set
+                                # we want to merge all Latin characters into one image,
+                                # and all icons into their own images.
+                                if fontNo in ICON_FONTS: langId = LangEnum.English
+                                elif lang == 'Japanese': langId = LangEnum.Japanese
+                                else: LangEnum.English
+                                bk = (fontNo, langId)
+                                if bk not in usedChars: usedChars[bk] = set()
+                                usedChars[bk].add(chr(c))
+
                                 # and add it to the XML
-                                ET.SubElement(xml, 'char', {
-                                    'character': chr(c),
-                                    'xpos':      str(char.xpos),
-                                    'ypos':      str(char.ypos),
-                                    'left':      str(char.left),
-                                    'right':     str(char.right),
-                                    'top':       str(char.top),
-                                    'bottom':    str(char.bottom),
-                                    'width':     str(char.width),
-                                    'height':    str(char.height),
-                                    'fontNo':    str(char.fontNo),
-                                    'textureNo': str(char.textureNo),
-                                })
+                                if hash not in xmlHashes:
+                                    xmlHashes.add(hash)
+                                    ET.SubElement(xml[fontNo], char.toXml())
 
                                 nChars += 1
-                    except Exception:
+                    except:
                         print("Error extracting", p)
                         raise
 
+        # iterate input
         _extractDir(inPath, outPath)
-        ET.ElementTree(xml).write(os.path.join(outPath, 'chars.xml'),
-            encoding='utf-8', xml_declaration=True)
+
+        # write XML
+        for font, tree in xml.items():
+            ET.ElementTree(tree).write(os.path.join(outPath, '%s.xml' % font.name),
+                encoding='utf-8', xml_declaration=True)
+
+        # write master images
+        for (fontNo, langId), chars in usedChars.items():
+            builder = FontTextureBuilder(outPath, lang=langId)
+            for c in sorted(chars):
+                builder.add(c, fontNo)
+            builder.build().save(os.path.join(outPath, '%s%d.png' % (
+                LangEnum(langId).name, int(fontNo))))
 
 
 def main(*args):

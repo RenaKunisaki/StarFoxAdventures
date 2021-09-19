@@ -16,6 +16,11 @@ from .FontTexture import FontTexture
 class GameTextXml:
     """Helper class for reading/writing XML files for GameText."""
 
+    def __init__(self):
+        self.root = ET.Element('gametext')
+        self.eChars = ET.SubElement(self.root, 'chars')
+        self.eTexts = ET.SubElement(self.root, 'texts')
+
     def _charFromXml(self, eChar:ET.Element) -> CharacterStruct:
         """Create CharacterStruct from XML element."""
         return CharacterStruct(
@@ -48,62 +53,62 @@ class GameTextXml:
             text.phrases.append(GameString(phrase))
         return text
 
-    def _writeXmlChars(self, file:GameTextReader, root:ET.Element) -> None:
-        """Create 'char' elements in XML for CharacterStructs."""
-        eChars = ET.SubElement(root, 'chars')
-        for char in file.chars:
-            eChar = ET.SubElement(eChars, 'char', {
-                'character': chr(char.character),
-                'xpos':      str(char.xpos),
-                'ypos':      str(char.ypos),
-                'left':      str(char.left),
-                'right':     str(char.right),
-                'top':       str(char.top),
-                'bottom':    str(char.bottom),
-                'width':     str(char.width),
-                'height':    str(char.height),
-                'fontNo':    str(char.fontNo),
-                'textureNo': str(char.textureNo),
-            })
+    def addChar(self, char:CharacterStruct) -> ET.Element:
+        """Add character to document."""
+        return ET.SubElement(self.eChars, 'char', {
+            'character': chr(char.character),
+            'xpos':      str(char.xpos),
+            'ypos':      str(char.ypos),
+            'left':      str(char.left),
+            'right':     str(char.right),
+            'top':       str(char.top),
+            'bottom':    str(char.bottom),
+            'width':     str(char.width),
+            'height':    str(char.height),
+            'fontNo':    str(char.fontNo),
+            'textureNo': str(char.textureNo),
+        })
 
-    def _writeXmlTexts(self, file:GameTextReader, root:ET.Element) -> None:
-        """Create 'text' elements in XML for GameTextStructs."""
-        eTexts = ET.SubElement(root, 'texts')
-        for text in file.texts:
-            eText = ET.SubElement(eTexts, 'text', {
-                'identifier': str(text.identifier),
-                'window':     str(text.window),
-                'alignH':     str(text.alignH),
-                'alignV':     str(text.alignV),
-                'language':   str(text.language),
-            })
-            for phrase in text.phrases:
-                ePhrase = ET.SubElement(eText, 'phrase')
-                ePhrase.text = str(phrase)
+    def addText(self, text:GameTextStruct) -> ET.Element:
+        """Add text to document."""
+        eText = ET.SubElement(self.eTexts, 'text', {
+            'identifier': str(text.identifier),
+            'window':     str(text.window),
+            'alignH':     str(text.alignH),
+            'alignV':     str(text.alignV),
+            'language':   str(text.language),
+        })
+        for phrase in text.phrases:
+            ePhrase = ET.SubElement(eText, 'phrase')
+            ePhrase.text = str(phrase)
+        return eText
 
     def read(self, inPath:str, file:GameTextWriter) -> None:
         """Read definitions from gametext.xml file."""
         root = ET.parse(os.path.join(inPath, 'gametext.xml')).getroot()
         if root.tag != 'gametext': raise TypeError("Incorrect XML file")
-        file.unkDataLen = int(root.attrib['unklen'], 0)
+        file.unkDataLen = int(root.attrib.get('unklen', '0'), 0)
 
         # read character structs (XXX build from text)
         eChars = root.find('chars')
         for eChar in eChars.iter('char'):
-            file.chars.append(self._charFromXml(eChar))
+            c = self._charFromXml(eChar)
+            file.addChar(c)
 
         # read texts
         eTexts = root.find('texts')
         for eText in eTexts.iter('text'):
-            file.texts.append(self._textFromXml(eText))
+            file.addText(self._textFromXml(eText))
+
+    def build(self) -> ET.ElementTree:
+        """Build the document."""
+        return ET.ElementTree(self.root)
 
     def write(self, file:GameTextReader) -> ET.ElementTree:
         """Create elements for gametext.xml file."""
-        root = ET.Element('gametext', {
-            'unklen': str(len(file.unkData)),
-        })
+        self.root.set('unklen', str(len(file.unkData)))
 
         # write XML
-        self._writeXmlChars(file, root)
-        self._writeXmlTexts(file, root)
-        return ET.ElementTree(root)
+        for char in file.chars: self.addChar(char)
+        for text in file.texts: self.addText(text)
+        return self.build()

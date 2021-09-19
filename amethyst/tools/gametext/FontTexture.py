@@ -3,6 +3,7 @@ import struct
 import enum
 import io
 from PIL import Image
+import hashlib
 from .util import printf, readStruct, writeStruct
 from texconv.sfatexture import SfaTexture, TexFmt, ImageFormat
 from texconv.texture import BITS_PER_PIXEL, BLOCK_WIDTHS, BLOCK_HEIGHTS, convert_color_to_rgb5a3
@@ -13,6 +14,11 @@ class FontTexture(SfaTexture):
     def __init__(self, file:io.FileIO=None):
         super().__init__()
         if file: self.readFile(file)
+
+    def __hash__(self):
+        md5 = hashlib.md5() # hash it
+        md5.update(self.image.tobytes())
+        return hash(md5.digest())
 
     def readFile(self, file:io.FileIO) -> None:
         """Read from binary file."""

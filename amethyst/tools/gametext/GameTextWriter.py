@@ -8,6 +8,7 @@ from .util import printf, readStruct, writeStruct
 from texconv.sfatexture import SfaTexture, TexFmt, ImageFormat
 from texconv.texture import BITS_PER_PIXEL, BLOCK_WIDTHS, BLOCK_HEIGHTS, convert_color_to_rgb5a3
 from .CharacterStruct import CharacterStruct
+from .GameTextStruct import GameTextStruct
 from .FontTexture import FontTexture
 from .FontTextureBuilder import FontTextureBuilder, FontEnum
 
@@ -38,14 +39,29 @@ class GameTextWriter:
         self.textures   = [] # FontTexture
         self.unkDataLen = 0
         self.charDir    = 'tmp/chars/' # XXX
+        self._haveChars = set() # (fontNo, character)
+        self._haveTexts = set() # phrase texts concated
 
     def addFont(self, font:(Image,io.FileIO,str)) -> None:
         """Add a font texture."""
-        # XXX still used/needed?
         if type(font) is not Image:
             font = Image.open(font)
         font = FontTexture.readImage(font)
         self.textures.append(font)
+
+    def addChar(self, char:CharacterStruct) -> None:
+        """Add a character."""
+        k = (char.fontNo, char.character)
+        if k not in self._haveChars:
+            self._haveChars.add(k)
+            self.chars.append(char)
+
+    def addText(self, text:GameTextStruct) -> None:
+        """Add a text."""
+        k = '\x1E'.join(map(str, text.phrases)) # ASCII record separator
+        if k not in self._haveTexts:
+            self._haveTexts.add(k)
+            self.texts.append(text)
 
     def _buildStringTable(self):
         """Iterate all texts and build the set of used characters,
@@ -151,6 +167,11 @@ class GameTextWriter:
         """Write the GameTextStruct table to a file."""
         #print("write numTexts =", len(self.texts), "strDataLen =", hex(self.strDataLen),
         #    "at", hex(file.tell()))
+        if len(self.texts) > 65535:
+            raise ValueError("Too many texts (%d, max 65535)" % len(self.texts))
+        if self.strDataLen > 65535:
+            raise ValueError("Too much text data (%d bytes, max 65535)" % self.strDataLen)
+
         writeStruct(file, '>HH', len(self.texts), self.strDataLen)
         strIdx = 0
         for text in self.texts:

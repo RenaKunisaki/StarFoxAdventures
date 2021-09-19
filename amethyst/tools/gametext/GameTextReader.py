@@ -2,6 +2,7 @@ from __future__ import annotations
 import struct
 import enum
 import io
+from PIL import Image
 from .util import printf, readStruct, writeStruct
 from .CharacterStruct import CharacterStruct
 from .GameTextStruct import GameTextStruct
@@ -94,3 +95,12 @@ class GameTextReader:
         self._readUnkData(file)
         self._readTextures(file)
         self._setPhraseData()
+
+    def getChrImg(self, char:CharacterStruct) -> Image:
+        """Get Image for one character."""
+        img = self.textures[char.textureNo].image
+        x1, y1 = char.xpos, char.ypos
+        x2, y2 = x1+char.width, y1+char.height
+        if x1 == x2: x2 += 1
+        if y1 == y2: y2 += 1
+        return img.crop((x1, y1, x2, y2))
