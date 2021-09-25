@@ -121,6 +121,7 @@ extern Menu menuDebugSpawnObj;
 extern Menu menuDebugSpawnObjList;
 extern Menu menuDebugText;
 extern Menu menuDebugTextureView;
+extern Menu menuDebugViewText;
 extern Menu menuDebugWarp;
 extern Menu menuGameSettings;
 extern Menu menuMain;

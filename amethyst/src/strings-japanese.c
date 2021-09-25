@@ -206,7 +206,8 @@ const char *strings_Japanese[] = {
     "すべてアンロック", //give player all items, etc
     "値", //value of a variable
     "ビデオ設定", //settings for display
-    "View Fonts", //show all fonts
+    "フォント表示", //show all fonts
+    "文章表示", //show all GameTexts
     "テクスチャ表示", //show all textures
     "ワープ", //warp to another map
     "ワイドスクリーン", //enable widescreen display

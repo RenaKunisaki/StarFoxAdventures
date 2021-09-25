@@ -38,16 +38,21 @@ static int _readDec(const char *str, int len, const char **out) {
 }
 
 static GameTextCharacterStruct* _fontGetChar(GameTextFont *font, int chr) {
+    if(!PTR_VALID(font)) return NULL;
+    if(!PTR_VALID(font->chars)) return NULL;
     for(int i=0; i<font->numChars; i++) {
         if(font->chars[i].character == chr) {
             return &font->chars[i];
         }
     }
+    //OSReport("Not found char 0x%X in font", chr);
     return NULL;
 }
 
 void _drawChar(GameTextCharacterStruct *chr, GameTextFont *font, int x, int y,
 u8 alpha, float scale) {
+    if(!PTR_VALID(chr)) return;
+    if(!PTR_VALID(font)) return;
     drawPartialTexture(x + chr->left, y + chr->top, font->texture[chr->texture],
         alpha, (int)(scale * 256), chr->width, chr->height, chr->xpos, chr->ypos);
 }
@@ -57,6 +62,9 @@ Color4b color, float scale) {
     static volatile float *fifoFloat = (volatile float*)GX_FIFO_BASE;
     static volatile u8    *fifoU8    = (volatile u8*)   GX_FIFO_BASE;
     static volatile s16   *fifoS16   = (volatile s16*)  GX_FIFO_BASE;
+
+    if(!PTR_VALID(chr)) return;
+    if(!PTR_VALID(font)) return;
 
     int cx      = chr->xpos;
     int cy      = chr->ypos;
@@ -244,6 +252,7 @@ Color4b color, float scale) {
     int FW = (japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
     int LH = japanese ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT;
 
+    //OSReport("Draw text: %08X %s", str, str);
     while(true) {
         int cSize = 0;
         //this function is used for all languages. it returns the next character
@@ -252,6 +261,7 @@ Color4b color, float scale) {
         if(!chr) break;
         iChr += cSize;
 
+        //OSReport("Drawing char %04X", chr);
         if(chr < 0x20) {
             switch(chr) {
                 case '\n': y += (flags & TEXT_FIXED) ? 16 : MAX(lineHeight, LH);
@@ -340,37 +350,46 @@ Color4b color, float scale) {
         else switch(chr) { //some control codes the original game uses.
             //these aren't great because they have the parameters as binary,
             //which means the strings can contain embedded nulls.
+            //all params are 16-bit values (but can be zero or more params)
             case 0xf8f4: { //SetScale
                 s16 s = str[iChr++] << 8;
                 s |= str[iChr++];
+                //OSReport("Set scale 0x%X", s);
                 scale = s / 256.0;
                 break;
             }
 
             case 0xf8f7: { //SetFont
-                //why on earth is this 16-bit? how many fonts did you expect to have!?
                 s16 s = str[iChr++] << 8;
                 s |= str[iChr++];
                 iFont = s;
+                //OSReport("Switch to font %X, next: %08X %s", iFont, &str[iChr], &str[iChr]);
                 break;
             }
 
-            //case 0xf8f8: //LeftJustify
-            //case 0xf8f9: //RightJustify
-            //case 0xf8fa: //Center
-            //case 0xf8fb: //FullJustify
-            //    break;
+            case 0xf8f8: //LeftJustify
+            case 0xf8f9: //RightJustify
+            case 0xf8fa: //Center
+            case 0xf8fb: //FullJustify
+                //OSReport("Skip justify code %02X", chr);
+                break;
 
             case 0xf8ff: { //SetColor
-                color.r = str[iChr++];
+                //XXX is this method ever used?
+                /* color.r = str[iChr++];
                 color.g = str[iChr++];
                 color.b = str[iChr++];
                 color.a = str[iChr++];
                 shadowColor.r = str[iChr++];
                 shadowColor.g = str[iChr++];
                 shadowColor.b = str[iChr++];
-                shadowColor.a = str[iChr++];
+                shadowColor.a = str[iChr++]; */
+                iChr++; color.r = str[iChr++];
+                iChr++; color.g = str[iChr++];
+                iChr++; color.b = str[iChr++];
+                iChr++; color.a = str[iChr++];
                 flags |= TEXT_COLORED; //enable color
+                //OSReport("Set text color %02X%02X%02X%02X", color.r, color.g, color.b, color.a);
                 break;
             }
 
@@ -378,6 +397,7 @@ Color4b color, float scale) {
                 OSReport("Warning: unsupported control code 0x%X", chr);
         }
     }
+    //OSReport("Done drawing");
     if(outX) *outX = x;
     if(outY) *outY = y;
     return iChr;

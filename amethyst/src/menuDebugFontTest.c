@@ -7,8 +7,8 @@
 #define FONT_MENU_WIDTH  (SCREEN_WIDTH  - (FONT_MENU_XPOS * 2))
 #define FONT_MENU_HEIGHT (SCREEN_HEIGHT - (FONT_MENU_YPOS * 2))
 
-s16 lineNo = 0;
-GameLanguageEnum prevLanguage = -1;
+s16 textNo = 0;
+extern GameLanguageEnum prevLanguage;
 
 void fontMenu_draw(Menu *self) {
     //Draw function for font menu
@@ -23,7 +23,7 @@ void fontMenu_draw(Menu *self) {
     sprintf(str, "%s %d", languageNames[curLanguage], self->selected);
     drawSimpleText(str, x, y - (LH * 2));
 
-    int lineCount = lineNo;
+    int lineCount = textNo;
     int lineHeight = 0;
     GameTextFont *font = &gameTextFonts[self->selected];
     for(int iChr=0; iChr<font->numChars; iChr++) {
@@ -102,14 +102,14 @@ void fontMenu_run(Menu *self) {
         menuInputDelayTimer =
             (controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD)
             ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
-        lineNo--;
-        if(lineNo < 0) lineNo = 0;
+        textNo--;
+        if(textNo < 0) textNo = 0;
     }
     else if(controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY < -MENU_CSTICK_THRESHOLD) { //down
         menuInputDelayTimer = (controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD)
             ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
-        lineNo++;
+        textNo++;
     }
     else if(controllerStates[0].stickX > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickX > MENU_CSTICK_THRESHOLD) { //right
@@ -119,15 +119,15 @@ void fontMenu_run(Menu *self) {
         sel++;
         if(sel > 3) sel = 0;
         curMenu->selected = sel;
-        lineNo = 0;
+        textNo = 0;
     }
     else if(controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickX < -MENU_CSTICK_THRESHOLD) { //left
         menuInputDelayTimer = (controllerStates[0].stickX < -MENU_ANALOG_STICK_THRESHOLD)
             ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
-        if(sel == 0) sel = 3;
+        if(sel == 0) sel = 4;
         curMenu->selected = sel - 1;
-        lineNo = 0;
+        textNo = 0;
     }
 }
 

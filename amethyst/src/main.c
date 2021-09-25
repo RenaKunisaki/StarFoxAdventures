@@ -380,6 +380,14 @@ const char *languageNames[NUM_LANGUAGES] = {
     "日本語", //Japanese
     "Español" //Spanish
 };
+const char *languageNamesShort[NUM_LANGUAGES] = {
+    "EN", //English
+    "FR", //French
+    "DE", //German
+    "IT", //Italian
+    "JP", //Japanese
+    "ES" //Spanish
+};
 void setGameLanguage(GameLanguageEnum lang) {
     curLanguage = lang;
     GameTextDir32 dir = curGameTextDir;

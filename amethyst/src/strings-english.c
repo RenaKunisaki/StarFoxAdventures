@@ -219,6 +219,7 @@ const char *strings_English[] = {
     "Value", //value of a variable
     "Video Settings", //settings for display
     "View Fonts", //show all fonts
+    "View Texts", //show all GameTexts
     "View Textures", //show all textures
     "Warp", //warp to another map
     "Widescreen", //enable widescreen display

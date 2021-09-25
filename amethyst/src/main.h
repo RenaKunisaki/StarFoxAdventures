@@ -137,6 +137,7 @@ extern u16 dayOfYear, curYear;
 extern bool bRumbleBlur;
 extern bool bDisableParticleFx;
 extern const char *languageNames[NUM_LANGUAGES];
+extern const char *languageNamesShort[NUM_LANGUAGES];
 void setGameLanguage(GameLanguageEnum lang);
 
 //map.c
