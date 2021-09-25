@@ -143,6 +143,8 @@ class GameString:
         try: cmdId = GameString.ControlCodeChars[cmd]
         except KeyError: raise ValueError("Unrecognized control code: "+cmd)
 
+        # TODO should add shorthands like {face Tricky}{button B}
+
         paramData = []
         if cmd == 'color': # hex params
             # color is 4 params (r, g, b, a) with high byte ignored.

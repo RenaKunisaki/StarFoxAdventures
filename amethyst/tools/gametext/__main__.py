@@ -69,6 +69,8 @@ class App:
 
     def extractAll(self, inPath:str, outPath:str):
         """Recursively extract GameText bin files to directory."""
+        # this produces an XML file which has too much text to convert
+        # back into a bin file...
         nTexts, nChars = 0, 0 # for reporting progress
 
         languages = {}
@@ -156,44 +158,6 @@ class App:
             except FileNotFoundError: break
         GameTextXml().read(inPath, file)
         file.write(outPath)
-
-    def merge(self, inPath:str, outPath:str):
-        """Read GameText bin files from directory and combine into one per language."""
-        nChars    = 0 # for reporting status
-        usedChars = set() # (fontNo, langId)
-
-        # instead of this we should be reading all XML files (extractAll)
-        # this function probably doesn't work...
-
-        def _extractDir(path, out, _depth=0):
-            nonlocal nChars
-            for name in os.listdir(path):
-                p = os.path.join(path, name)
-                if os.path.isdir(p): _extractDir(p, out, _depth+1)
-                elif name.endswith('.bin'):
-                    try:
-                        lang = name.split('.')[0]
-                        if '_' in lang: lang = lang.split('_')[1]
-
-                        pShort = '/'.join((p.split('/')[-2:]))
-                        print(CLEAR_LINE + "Chars: %6d File: %s   " % (nChars, pShort), end='')
-
-                        file = GameTextReader(p)
-                        for char in file.chars:
-                            c = char.character
-                            fontNo = int(char.fontNo)
-                            nChars += 1
-
-                            if fontNo in ICON_FONTS: langId = LangEnum.English
-                            elif lang == 'Japanese': langId = LangEnum.Japanese
-                            else: LangEnum.English
-                            bk = (fontNo, langId)
-                            if bk not in usedChars:
-                                usedChars.add(bk)
-                    except:
-                        print("Error extracting", p)
-                        raise
-        _extractDir(inPath, outPath)
 
     def _extractChar(self, char, outDir, lang, cImg):
         c = char.character
