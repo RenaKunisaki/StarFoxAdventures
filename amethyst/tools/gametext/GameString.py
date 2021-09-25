@@ -101,6 +101,9 @@ class GameString:
                 for _ in range(n):
                     b = (b << 6) | (file.read(1)[0] & 0x3F)
 
+            if b == 0x7E9: b = 0xA9 # no idea why this happens
+            # best guess is their original tools encoded this character wrong.
+
             params = []
             try:
                 code = GameString.ControlCode(b)

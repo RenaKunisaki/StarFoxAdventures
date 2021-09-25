@@ -12,6 +12,7 @@ import inspect
 import xml.etree.ElementTree as ET
 from PIL import Image
 import hashlib
+import string
 
 if not __package__:
     from pathlib import Path
@@ -70,7 +71,8 @@ class App:
     def extractAll(self, inPath:str, outPath:str):
         """Recursively extract GameText bin files to directory."""
         # this produces an XML file which has too much text to convert
-        # back into a bin file...
+        # back into a bin file... max is 64K of text, file is about twice that
+        # for English, probably similar for others.
         nTexts, nChars = 0, 0 # for reporting progress
 
         languages = {}
@@ -145,6 +147,28 @@ class App:
 
             xml.build().write(os.path.join(lPath, 'gametext.xml'),
                 encoding='utf-8', xml_declaration=True)
+
+    def injectAllChars(self, path:str):
+        """Modify a GameText bin file, adding all font characters from a set."""
+        reader = GameTextReader(path)
+        writer = GameTextWriter()
+        for f in reader.textures: writer.addFont(f)
+        for c in reader.chars: writer.addChar(c)
+        for t in reader.texts: writer.addText(t)
+
+        # read the character set file
+        lang = os.path.basename(path).split('.')[0]
+        if '_' in lang: lang = lang.split('_')[1]
+
+        # XXX use whatever the method was to reference these by the import system
+        # instead of assuming a specific working directory.
+        with open('tools/gametext/fonts/Charsets/%s.txt' % lang, 'rt') as chrFile:
+            chars = GameString(chrFile.read().strip())
+
+        # add these characters to the file if not already present
+        text  = GameTextStruct(0xFFFF, 1, 0, 0, 0, LangEnum[lang], (chars,))
+        writer.addText(text)
+        writer.write(path)
 
     def build(self, inPath:str, outPath:str):
         """Create GameText bin file from directory."""

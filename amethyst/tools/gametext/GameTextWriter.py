@@ -42,11 +42,12 @@ class GameTextWriter:
         self._haveChars = set() # (fontNo, character)
         self._haveTexts = set() # phrase texts concated
 
-    def addFont(self, font:(Image,io.FileIO,str)) -> None:
+    def addFont(self, font:(Image, io.FileIO, str, FontTexture)) -> None:
         """Add a font texture."""
-        if type(font) is not Image:
-            font = Image.open(font)
-        font = FontTexture.readImage(font)
+        if type(font) is not FontTexture:
+            if type(font) is not Image:
+                font = Image.open(font)
+            font = FontTexture.readImage(font)
         self.textures.append(font)
 
     def addChar(self, char:CharacterStruct) -> None:
