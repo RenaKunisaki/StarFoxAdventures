@@ -23,7 +23,7 @@ class GameString:
     ControlCodeChars = {
         'seq':   ControlCode.SeqId,
         'time':  ControlCode.SeqTime,
-        'scale': ControlCode.SeqTime,
+        'scale': ControlCode.Scale,
         'hint':  ControlCode.Hint,
         'font':  ControlCode.Font,
         'ljust': ControlCode.JustLeft,

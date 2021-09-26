@@ -148,16 +148,16 @@ class App:
             xml.build().write(os.path.join(lPath, 'gametext.xml'),
                 encoding='utf-8', xml_declaration=True)
 
-    def injectAllChars(self, path:str):
+    def injectAllChars(self, inPath:str, outPath:str):
         """Modify a GameText bin file, adding all font characters from a set."""
-        reader = GameTextReader(path)
+        reader = GameTextReader(inPath)
         writer = GameTextWriter()
         for f in reader.textures: writer.addFont(f)
         for c in reader.chars: writer.addChar(c)
         for t in reader.texts: writer.addText(t)
 
         # read the character set file
-        lang = os.path.basename(path).split('.')[0]
+        lang = os.path.basename(inPath).split('.')[0]
         if '_' in lang: lang = lang.split('_')[1]
 
         # XXX use whatever the method was to reference these by the import system
@@ -168,7 +168,22 @@ class App:
         # add these characters to the file if not already present
         text  = GameTextStruct(0xFFFF, 1, 0, 0, 0, LangEnum[lang], (chars,))
         writer.addText(text)
-        writer.write(path)
+        writer.write(outPath)
+
+    def injectAllCharsRecursive(self, inPath:str, outPath:str):
+        """Modify GameText bin files, adding all font characters from a set."""
+        def _recurse(inPath:str, outPath:str, _depth:int=0):
+            assert _depth < 10, 'Maximum depth exceeded'
+            for name in os.listdir(inPath):
+                p = os.path.join(inPath, name)
+                if os.path.isdir(p):
+                    _recurse(p, os.path.join(outPath, name), _depth+1)
+                elif name.endswith('.bin'):
+                    pOut = os.path.join(outPath, name)
+                    print("Patching", pOut)
+                    os.makedirs(outPath, exist_ok=True)
+                    self.injectAllChars(p, pOut)
+        _recurse(inPath, outPath)
 
     def build(self, inPath:str, outPath:str):
         """Create GameText bin file from directory."""
