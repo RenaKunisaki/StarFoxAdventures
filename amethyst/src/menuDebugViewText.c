@@ -47,6 +47,28 @@ void textMenu_draw(Menu *self) {
                 Color4b color = {0xFF, 0xFF, 0xFF, 0xFF};
                 drawText(phrase, tx, ty, &rx, &ry, TEXT_COLORED | TEXT_SHADOW, color, 1.0f);
                 drawMenuBox(tx-4, ty-4, (rx-tx)+8, (ry-ty)+LH+8);
+
+                //draw hex
+                const char *c = phrase;
+                int cSize = 0, col = 0;
+                char hex[20];
+                ty += 8;
+                while(true) {
+                    if(!shiftJisGetNextChar((char*)c, &cSize)) break;
+                    for(int i=0; i<cSize; i++) {
+                        if(!col) {
+                            ty += LH;
+                            tx = x;
+                            sprintf(hex, "%04X ", c-phrase);
+                            drawText(hex, tx, ty, &tx, &ry, TEXT_SHADOW | TEXT_FIXED, color, 1.0f);
+                        }
+                        sprintf(hex, "%02X", c[i]);
+                        drawText(hex, tx, ty, &rx, &ry, TEXT_SHADOW | TEXT_FIXED, color, 1.0f);
+                        tx = rx + (((col & 3) == 3) ? 6 : 3);
+                        col = (col+1) & 0xF;
+                    }
+                    c += cSize;
+                }
             }
         }
         else drawSimpleText("(no text)", x+100, 32+LH);
