@@ -203,13 +203,12 @@ class GameString:
             i += 1
         return res
 
-    def getUsedChars(self) -> set:
+    def getUsedChars(self, font:FontEnum=FontEnum.English) -> set:
         """Return set of characters used in this string.
 
         The entries are (font, character).
         """
         res, i = set(), 0
-        font = FontEnum.English # XXX should be Japanese sometimes...
         while i < len(self.str):
             c = self.str[i]
             if c == '\\':

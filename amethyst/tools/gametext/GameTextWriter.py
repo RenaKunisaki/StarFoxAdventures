@@ -74,10 +74,11 @@ class GameTextWriter:
         self.strData    = []
         self.strOffsets = [] # strIdx => offset relative to start of str table
         nextOffs = 0
+        font = FontEnum.Japanese if self.language == LangEnum.Japanese else FontEnum.English
         for text in self.texts:
             for phrase in text.phrases:
-                #print(phrase, phrase.getUsedChars())
-                self.usedChars = self.usedChars.union(phrase.getUsedChars())
+                #print(phrase, phrase.getUsedChars(font))
+                self.usedChars = self.usedChars.union(phrase.getUsedChars(font))
                 string = phrase.toBytes()
                 self.strOffsets.append(nextOffs)
                 data = string + b'\0'
