@@ -150,23 +150,27 @@ class App:
 
     def injectAllChars(self, inPath:str, outPath:str):
         """Modify a GameText bin file, adding all font characters from a set."""
+        lang = os.path.basename(inPath).split('.')[0]
+        if '_' in lang: lang = lang.split('_')[1]
+        lang   = LangEnum[lang]
         reader = GameTextReader(inPath)
-        writer = GameTextWriter()
+        writer = GameTextWriter(lang)
         for f in reader.textures: writer.addFont(f)
         for c in reader.chars: writer.addChar(c)
         for t in reader.texts: writer.addText(t)
 
         # read the character set file
-        lang = os.path.basename(inPath).split('.')[0]
-        if '_' in lang: lang = lang.split('_')[1]
-
         # XXX use whatever the method was to reference these by the import system
         # instead of assuming a specific working directory.
-        with open('tools/gametext/fonts/Charsets/%s.txt' % lang, 'rt') as chrFile:
-            chars = GameString(chrFile.read().strip())
+        with open('tools/gametext/fonts/Charsets/%s.txt' % lang.name, 'rt') as chrFile:
+            s = chrFile.read().strip().replace('\r', '').replace('\n', '')
+            f = '{font %d}' % (0 if lang == LangEnum.Japanese else 4)
+            chars = GameString(f + s)
+
+        writer.unkDataLen = 0 # save memory. game doesn't use this.
 
         # add these characters to the file if not already present
-        text  = GameTextStruct(0xFFFF, 1, 0, 0, 0, LangEnum[lang], (chars,))
+        text  = GameTextStruct(0xFFFF, 1, 0, 0, 0, lang, (chars,))
         writer.addText(text)
         writer.write(outPath)
 

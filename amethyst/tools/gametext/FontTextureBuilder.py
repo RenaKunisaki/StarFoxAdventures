@@ -70,6 +70,7 @@ class FontTextureBuilder:
                     raise KeyError("No graphic for character '%s' in font '%s' (not found at: %s)" % (
                         char, FontEnum(fontNo).name, path))
             else:
+                #print("Generate image for char", self.language, char)
                 size = self.font.getsize(char, language=LangCodes[self.language])
                 imgChr = Image.new('RGBA', size)
                 draw = ImageDraw.Draw(imgChr)
@@ -130,7 +131,7 @@ class FontTextureBuilder:
         w, h = self.width, self.height
         if padX: self.width  += BLOCK_WIDTHS [fmt] - padX
         if padY: self.height += BLOCK_HEIGHTS[fmt] - padY
-        printf("tex size %dx%d pad %dx%d to %dx%d\n", w, h, padX, padY, self.width, self.height)
+        #printf("tex size %dx%d pad %dx%d to %dx%d\n", w, h, padX, padY, self.width, self.height)
         assert self.width <= self.MAX_WIDTH, "Texture max width exceeded"
         assert self.height <= self.MAX_HEIGHT, "Texture max height exceeded"
 

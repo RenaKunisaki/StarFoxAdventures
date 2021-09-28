@@ -66,6 +66,12 @@ Color4b color, float scale) {
     if(!PTR_VALID(chr)) return;
     if(!PTR_VALID(font)) return;
 
+    /* if(chr->character >= 0x3000) {
+        OSReport("Draw chr %04X pos %d,%d size %d,%d font %d tex %d",
+            chr->character, chr->xpos, chr->ypos, chr->width, chr->height,
+            chr->font, chr->texture);
+    } */
+
     int cx      = chr->xpos;
     int cy      = chr->ypos;
     int cw      = chr->width;
@@ -165,7 +171,7 @@ int _findCharInAnyFont(int chr, GameTextFont **outFont, GameTextCharacterStruct 
         //don't fall back to icons
         if(fontIdxs[i] == 0) {
             bool ok = true;
-            static const char *icons = "ABCDFIJS";
+            static const char *icons = "ABCDFIJLRSTcny";
             for(int j=0; icons[j]; j++) {
                 if(icons[j] == chr) {
                     ok = false;

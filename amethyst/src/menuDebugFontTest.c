@@ -7,6 +7,7 @@
 #define FONT_MENU_WIDTH  (SCREEN_WIDTH  - (FONT_MENU_XPOS * 2))
 #define FONT_MENU_HEIGHT (SCREEN_HEIGHT - (FONT_MENU_YPOS * 2))
 
+s8 showRawTexture = -1;
 s16 textNo = 0;
 extern GameLanguageEnum prevLanguage;
 
@@ -18,14 +19,21 @@ void fontMenu_draw(Menu *self) {
     int x = FONT_MENU_XPOS + MENU_PADDING;
     int y = FONT_MENU_YPOS + MENU_PADDING + (LH * 2);
     float idScale = curLanguage == LANG_JAPANESE ? 0.5 : 0.75;
+    GameTextFont *font = &gameTextFonts[self->selected];
 
     char str[256];
-    sprintf(str, "%s %d", languageNames[curLanguage], self->selected);
+    sprintf(str, "%s %d Texture %d", languageNames[curLanguage], self->selected, showRawTexture);
     drawSimpleText(str, x, y - (LH * 2));
+
+    if(showRawTexture >= 0) {
+        if(font->texture[showRawTexture]) {
+            drawTexture((float)x, (float)y, font->texture[showRawTexture], 255, 256);
+        }
+        return;
+    }
 
     int lineCount = textNo;
     int lineHeight = 0;
-    GameTextFont *font = &gameTextFonts[self->selected];
     for(int iChr=0; iChr<font->numChars; iChr++) {
         GameTextCharacterStruct *chr = &font->chars[iChr];
 
@@ -97,6 +105,11 @@ void fontMenu_run(Menu *self) {
         if(curLanguage >= NUM_LANGUAGES) curLanguage = 0;
         setGameLanguage(curLanguage);
     }
+    else if(buttonsJustPressed == PAD_BUTTON_MENU) {
+        menuInputDelayTimer = MENU_INPUT_DELAY_ADJUST;
+        showRawTexture++;
+        if(showRawTexture >= 3) showRawTexture = -1;
+    }
     else if(controllerStates[0].stickY > MENU_ANALOG_STICK_THRESHOLD
     ||      controllerStates[0].substickY > MENU_CSTICK_THRESHOLD) { //up
         menuInputDelayTimer =
@@ -132,7 +145,7 @@ void fontMenu_run(Menu *self) {
 }
 
 Menu menuDebugFontTest = {
-    "Font Test", 0,
+    "View Fonts", 0,
     fontMenu_run, fontMenu_draw, debugRenderSubMenu_close,
     NULL,
 };

@@ -11,6 +11,7 @@ from .CharacterStruct import CharacterStruct
 from .GameTextStruct import GameTextStruct
 from .FontTexture import FontTexture
 from .FontTextureBuilder import FontTextureBuilder, FontEnum
+from .LangEnum import LangEnum, LangCodes
 
 # file structure:
 # u32 numCharStructs; characterStruct[numCharStructs];
@@ -32,7 +33,8 @@ class GameTextWriter:
         FontEnum.Faces:    0, # XXX requires some kind of special handling
     }
 
-    def __init__(self):
+    def __init__(self, lang:LangEnum=LangEnum.English):
+        self.language   = lang
         self.chars      = [] # CharacterStruct
         self.texts      = [] # GameTextStruct
         self.strings    = {} # offset:int => string:str
@@ -97,8 +99,8 @@ class GameTextWriter:
         # typically one is used for letters (and is monochrome)
         # and the other is used for icons/flags/faces.
         # we'll use texture 0 for icons, 1 for text, like the game does.
-        self.iconFont = FontTextureBuilder(self.charDir, fmt=ImageFormat.RGB5A3)
-        self.monoFont = FontTextureBuilder(self.charDir, fmt=ImageFormat.I4)
+        self.iconFont = FontTextureBuilder(self.charDir, lang=self.language, fmt=ImageFormat.RGB5A3)
+        self.monoFont = FontTextureBuilder(self.charDir, lang=self.language, fmt=ImageFormat.I4)
         self.texBuilder = [self.iconFont, self.monoFont]
 
         # add needed characters to each texture
@@ -202,12 +204,12 @@ class GameTextWriter:
     def _writeTextures(self, file):
         """Write the texture graphics to a file."""
         for i, tex in enumerate(self.textures):
-            printf("Write texture %d at 0x%X\n", i, file.tell())
+            #printf("Write texture %d at 0x%X\n", i, file.tell())
             tex.writeFile(file)
 
     def _writeEOF(self, file):
         """Write the end-of-file marker."""
-        printf("Write EOF at 0x%X\n", file.tell())
+        #printf("Write EOF at 0x%X\n", file.tell())
         file.write(b'\0' * 8)
 
     def write(self, file:(str,io.FileIO)) -> None:

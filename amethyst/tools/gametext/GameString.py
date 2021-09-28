@@ -64,6 +64,19 @@ class GameString:
         '{':  '{', # we use { to start a control code
     }
 
+    replaceChars = { # replace some fullwidth chars with normal ones.
+        '０':'0',  '１':'1',  '２':'2',  '３':'3',  '４':'4',  '５':'5',  '６':'6',  '７':'7',
+        '８':'8',  '９':'9',  'Ａ':'A',  'Ｂ':'B',  'Ｃ':'C',  'Ｄ':'D',  'Ｅ':'E',  'Ｆ':'F',
+        'Ｇ':'G',  'Ｈ':'H',  'Ｉ':'I',  'Ｊ':'J',  'Ｋ':'K',  'Ｌ':'L',  'Ｍ':'M',  'Ｎ':'N',
+        'Ｏ':'O',  'Ｐ':'P',  'Ｑ':'Q',  'Ｒ':'R',  'Ｓ':'S',  'Ｔ':'T',  'Ｕ':'U',  'Ｖ':'V',
+        'Ｗ':'W',  'Ｘ':'X',  'Ｙ':'Y',  'Ｚ':'Z',  'ａ':'a',  'ｂ':'b',  'ｃ':'c',  'ｄ':'d',
+        'ｅ':'e',  'ｆ':'f',  'ｇ':'g',  'ｈ':'h',  'ｉ':'i',  'ｊ':'j',  'ｋ':'k',  'ｌ':'l',
+        'ｍ':'m',  'ｎ':'n',  'ｏ':'o',  'ｐ':'p',  'ｑ':'q',  'ｒ':'r',  'ｓ':'s',  'ｔ':'t',
+        'ｕ':'u',  'ｖ':'v',  'ｗ':'w',  'ｘ':'x',  'ｙ':'y',  'ｚ':'z',  '　':' ',  '！':'!',
+        '（':'(',  '）':')',  '＊':'*',  '－':'-',  '／':'/',  '：':':',  '＜':'<',  '＞':'>',
+        '？':'?',   '～':'~',  '＄':'$',  '＼':'\\',
+    }
+
     def __init__(self, value:str = None):
         self.str = value
 
@@ -97,12 +110,9 @@ class GameString:
             if b >= 0x80: # UTF-8 more bytes
                 if   b >= 0xF0: n, b = 3, b & 0x07
                 elif b >= 0xE0: n, b = 2, b & 0x0F
-                else: n, b = 1, 0x1F
+                else: n, b = 1, b & 0x1F
                 for _ in range(n):
                     b = (b << 6) | (file.read(1)[0] & 0x3F)
-
-            if b == 0x7E9: b = 0xA9 # no idea why this happens
-            # best guess is their original tools encoded this character wrong.
 
             params = []
             try:
@@ -129,13 +139,17 @@ class GameString:
             elif b == C.JustFull:   res += '{fjust}'
             elif b == C.Color:
                 c = (params[0], params[1], params[2], params[3])
-                if c[0] > 0xFF or c[1] > 0xFF or c[2] > 0xFF or c[3] > 0xFF:
-                    print("Color:", c)
+                #if c[0] > 0xFF or c[1] > 0xFF or c[2] > 0xFF or c[3] > 0xFF:
+                    #print("Color:", c)
                 res += '{color %02X%02X%02X%02X}' % c
             elif (b >= 0xE000 and b <= 0xF8FF) or b < 0x20:
                 res += '\\u%04X' % b
                 for p in params: res += '\\u%04X' % p
-            else: res += chr(b)
+            else:
+                c = chr(b)
+                res += GameString.replaceChars.get(c, c)
+                #res += c
+        #print("read str", res)
         return GameString(res)
 
     def _parseControlCode(self, string:str) -> bytes:
@@ -184,7 +198,8 @@ class GameString:
                 i += 1
                 rs, ln = self._parseControlCode(self.str[i:])
                 res, i = res+rs, i+ln
-            else: res += bytes(c, 'utf-8')
+            else:
+                res += bytes(c, 'utf-8')
             i += 1
         return res
 
@@ -193,8 +208,8 @@ class GameString:
 
         The entries are (font, character).
         """
-        font = FontEnum.English
         res, i = set(), 0
+        font = FontEnum.English # XXX should be Japanese sometimes...
         while i < len(self.str):
             c = self.str[i]
             if c == '\\':

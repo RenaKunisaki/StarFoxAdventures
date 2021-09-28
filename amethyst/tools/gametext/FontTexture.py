@@ -55,8 +55,8 @@ class FontTexture(SfaTexture):
         writeStruct(file, '>4H', self.format.value, self.bitsPerPx, self.width, self.height)
         dataSize = self.width * self.height * (self.bitsPerPx // 8)
         startOffs = file.tell()
-        printf('WRITE TexFmt=%s (0x%X) %dBPP size=%dx%d (0x%X) @ 0x%X ~ 0x%X\n',
-            self.format, self.format.value, self.bitsPerPx, self.width, self.height, dataSize,
-            startOffs, startOffs + dataSize)
+        #printf('WRITE TexFmt=%s (0x%X) %dBPP size=%dx%d (0x%X) @ 0x%X ~ 0x%X\n',
+        #    self.format, self.format.value, self.bitsPerPx, self.width, self.height, dataSize,
+        #    startOffs, startOffs + dataSize)
         self._writeData(file)
-        printf("actual size = 0x%X end = 0x%X\n", file.tell() - startOffs, file.tell())
+        #printf("actual size = 0x%X end = 0x%X\n", file.tell() - startOffs, file.tell())
