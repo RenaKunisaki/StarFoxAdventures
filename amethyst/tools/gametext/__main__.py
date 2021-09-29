@@ -159,6 +159,11 @@ class App:
         for c in reader.chars: writer.addChar(c)
         for t in reader.texts: writer.addText(t)
 
+        # seems some of the HUD texts aren't getting included in some places?
+        # eg "Give Gift"
+        # can we find which files are currently loaded to examine them?
+        # seems like curGameTexts[n].dir
+
         # read the character set file
         # XXX use whatever the method was to reference these by the import system
         # instead of assuming a specific working directory.

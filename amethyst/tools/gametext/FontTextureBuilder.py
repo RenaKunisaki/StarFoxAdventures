@@ -22,13 +22,13 @@ LANG_FONTS = { # LangEnum => (font name, size)
     # can pretty much just put any font you want in here...
     # very large size might not render nicely.
     # you can put absolute paths here too...
-    LangEnum.English:  ('EurostileBQ-Regular.otf', 20),
+    LangEnum.English:  ('EurostileBQ-Regular.otf', 18),
     #LangEnum.English:  ('Z003-MediumItalic.otf', 23), # lol
-    LangEnum.French:   ('EurostileBQ-Regular.otf', 20),
-    LangEnum.German:   ('EurostileBQ-Regular.otf', 20),
-    LangEnum.Italian:  ('EurostileBQ-Regular.otf', 20),
-    LangEnum.Japanese: ('FOT-RodinNTLG Pro B.otf', 20),
-    LangEnum.Spanish:  ('EurostileBQ-Regular.otf', 20),
+    LangEnum.French:   ('EurostileBQ-Regular.otf', 18),
+    LangEnum.German:   ('EurostileBQ-Regular.otf', 18),
+    LangEnum.Italian:  ('EurostileBQ-Regular.otf', 18),
+    LangEnum.Japanese: ('FOT-RodinNTLG Pro B.otf', 18),
+    LangEnum.Spanish:  ('EurostileBQ-Regular.otf', 18),
 }
 
 class FontTextureBuilder:
