@@ -263,7 +263,7 @@ Color4b color, float scale) {
         int cSize = 0;
         //this function is used for all languages. it returns the next character
         //and sets cSize to the number of bytes long that character is.
-        int chr = shiftJisGetNextChar((char*)&str[iChr], &cSize);
+        int chr = utf8GetNextChar((char*)&str[iChr], &cSize);
         if(!chr) break;
         iChr += cSize;
 
@@ -400,7 +400,8 @@ Color4b color, float scale) {
             }
 
             default:
-                OSReport("Warning: unsupported control code 0x%X", chr);
+                //OSReport("Warning: unsupported control code 0x%X", chr);
+                iChr += getControlCharLen(chr) * 2;
         }
     }
     //OSReport("Done drawing");

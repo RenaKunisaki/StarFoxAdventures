@@ -4,8 +4,9 @@
 #include "revolution/pad.h"
 
 #define TEXT_MENU_XPOS 16
-#define TEXT_MENU_YPOS (SCREEN_HEIGHT - 64)
-#define TEXT_MENU_WIDTH  (SCREEN_WIDTH  - (TEXT_MENU_XPOS * 2))
+#define TEXT_MENU_YPOS 48
+#define TEXT_MENU_WIDTH 128
+#define TEXT_MENU_HEIGHT 270
 
 GameLanguageEnum prevLanguage = -1;
 u8 curPhrase = 0;
@@ -25,25 +26,26 @@ void textMenu_draw(Menu *self) {
     int y = TEXT_MENU_YPOS + MENU_PADDING;
     float idScale = curLanguage == LANG_JAPANESE ? 0.5 : 0.75;
 
-    drawMenuBox(TEXT_MENU_XPOS, TEXT_MENU_YPOS, TEXT_MENU_WIDTH, LH*3);
+    drawMenuBox(TEXT_MENU_XPOS, TEXT_MENU_YPOS, TEXT_MENU_WIDTH, TEXT_MENU_HEIGHT);
 
     char str[256];
     gametextStruct *text = gameTextGet(self->selected);
     if(isTextValid(text)) {
         gameTextSetColor(255, 255, 255, 255);
-        sprintf(str, "Txt:\eF%04X (%5d)\eF Phr:\eF%2d/%2d\eF Win:%02X (%s) Lng:%d %s Alg:%d %d (%s)",
+        sprintf(str, "\eFTxt:%04X\n(%5d)\nPhr:%2d/%2d\nWin:%02X (%s)\nLng:%s\nCur:%s\nAlg:%d %d",
             self->selected & 0xFFFF, self->selected, curPhrase+1, text->numPhrases,
-            text->window, useWindow ? "On" : "Off", text->language,
+            text->window, useWindow ? "On" : "Off",
             text->language < NUM_LANGUAGES ? languageNamesShort[text->language] : "??",
-            text->alignH, text->alignV,
-            languageNamesShort[curLanguage]);
+            languageNamesShort[curLanguage],
+            text->alignH, text->alignV);
 
+        int sx = x+TEXT_MENU_WIDTH+MENU_PADDING;
         const char *phrase = NULL;
         if(curPhrase < text->numPhrases) phrase = text->phrases[curPhrase];
         if(PTR_VALID(phrase)) {
             if(useWindow) gameTextShowStr(phrase, text->window, 0, 0);
             else {
-                int tx=x, ty=32+LH, rx=0, ry=0;
+                int tx = sx, ty = TEXT_MENU_YPOS, rx = 0, ry = 0;
                 Color4b color = {0xFF, 0xFF, 0xFF, 0xFF};
                 drawText(phrase, tx, ty, &rx, &ry, TEXT_COLORED | TEXT_SHADOW, color, 1.0f);
                 drawMenuBox(tx-4, ty-4, (rx-tx)+8, (ry-ty)+LH+8);
@@ -54,32 +56,33 @@ void textMenu_draw(Menu *self) {
                 char hex[20];
                 ty += 8;
                 while(true) {
-                    if(!shiftJisGetNextChar((char*)c, &cSize)) break;
+                    int chr = utf8GetNextChar((char*)c, &cSize);
+                    if(!chr) break;
+                    cSize += getControlCharLen(chr) * 2;
                     for(int i=0; i<cSize; i++) {
                         if(!col) {
                             ty += LH;
-                            tx = x;
+                            tx = sx;
                             sprintf(hex, "%04X ", c-phrase);
                             drawText(hex, tx, ty, &tx, &ry, TEXT_SHADOW | TEXT_FIXED, color, 1.0f);
                         }
                         sprintf(hex, "%02X", c[i]);
                         drawText(hex, tx, ty, &rx, &ry, TEXT_SHADOW | TEXT_FIXED, color, 1.0f);
-                        tx = rx + (((col & 3) == 3) ? 6 : 3);
+                        tx = rx + (((col & 3) == 3) ? 9 : 5);
                         col = (col+1) & 0xF;
                     }
                     c += cSize;
                 }
             }
         }
-        else drawSimpleText("(no text)", x+100, 32+LH);
+        else drawSimpleText("(no text)", sx, TEXT_MENU_YPOS);
     }
-    else sprintf(str, "Txt:\eF%04X (%5d)\eF (not found) (%s)", self->selected & 0xFFFF,
-        self->selected, languageNamesShort[curLanguage]);
-    sprintf(str, "%s\nX:+ Y:- L:Prev R:Next S:Window Z:Lang", str); //we don't have strcat
+    else sprintf(str, "\eFTxt:%04X\n(%5d)\n(not found)", self->selected & 0xFFFF, self->selected);
+    sprintf(str, "%s\eF\n\nX:+ Y:-\nL:Prev\nR:Next\nS:Window\nZ:Lang", str); //we don't have strcat
     drawSimpleText(str, x, y);
 
     //draw cursor
-    drawMenuBox(x + (FW * 3) + (cursor * FW), y, FW*2, LH);
+    drawMenuBox(x + (FW * 3) + (cursor * FW) + MENU_PADDING - 2, y-2, (FW*2)+2, LH+4);
 }
 
 void textMenu_run(Menu *self) {
