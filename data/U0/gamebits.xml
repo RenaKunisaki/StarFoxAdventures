@@ -5569,7 +5569,7 @@
   <bit id="0x0F1B" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0F1C" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0F1D" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0F1E" table="0" hint="0x00" hasHint="0" max="1" name="SBPropellerRelated0F1E"/>
+  <bit id="0x0F1E" table="0" hint="0x00" hasHint="0" max="1" name="SB_CanShootPropeller"/>
   <bit id="0x0F1F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0F20" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0F21" table="2" hint="0x00" hasHint="0" max="1"/>
