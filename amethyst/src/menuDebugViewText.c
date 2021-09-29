@@ -51,7 +51,7 @@ void textMenu_draw(Menu *self) {
                 drawMenuBox(tx-4, ty-4, (rx-tx)+8, (ry-ty)+LH+8);
 
                 //draw hex
-                const char *c = phrase;
+                /* const char *c = phrase;
                 int cSize = 0, col = 0;
                 char hex[20];
                 ty += 8;
@@ -72,7 +72,7 @@ void textMenu_draw(Menu *self) {
                         col = (col+1) & 0xF;
                     }
                     c += cSize;
-                }
+                } */
             }
         }
         else drawSimpleText("(no text)", sx, TEXT_MENU_YPOS);

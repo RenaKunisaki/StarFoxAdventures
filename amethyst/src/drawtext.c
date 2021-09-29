@@ -369,6 +369,8 @@ Color4b color, float scale) {
                 s16 s = str[iChr++] << 8;
                 s |= str[iChr++];
                 iFont = s;
+                //if(iFont == 2 || iFont == 3 || iFont == 5) iFont = 1;
+                //else iFont = 0;
                 //OSReport("Switch to font %X, next: %08X %s", iFont, &str[iChr], &str[iChr]);
                 break;
             }

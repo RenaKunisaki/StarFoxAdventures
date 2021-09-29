@@ -1,3 +1,5 @@
+#define MAX_GAMETEXT_ID 0x5368
+
 typedef enum { //type:u8
 	LANG_ENGLISH  = 0x0,
     LANG_FRENCH   = 0x1,
