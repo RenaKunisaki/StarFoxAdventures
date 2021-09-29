@@ -89,8 +89,7 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
         y += LINE_HEIGHT;
     }
     else {
-        sprintf(str, "\eF%s", T("NO OBJDEF"));
-        gameTextShowStr(str, MENU_TEXTBOX_ID, x, y);
+        gameTextShowStr(T("NO OBJDEF"), MENU_TEXTBOX_ID, x, y);
         y += LINE_HEIGHT;
 
         sprintf(str, "\eF%s   %08X %s --", T("ADDR"), obj, T("ID"));
