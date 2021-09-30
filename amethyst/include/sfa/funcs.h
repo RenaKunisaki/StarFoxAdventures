@@ -199,7 +199,7 @@ GLOBALFN void setSubtitlesEnabled(bool);
 GLOBALFN int setWidescreen(bool); //always returns 0
 GLOBALFN bool shouldForceMotionBlur(void);
 GLOBALFN float sinf(float);
-GLOBALFN char* sprintf(char *dest, const char* fmt, ...);
+GLOBALFN int sprintf(char * restrict, const char * restrict, ...);
 GLOBALFN float sqrtf(float distance);
 GLOBALFN void streamPlay(int id, void (*callback)(void));
 GLOBALFN void streamPlay_defaultCallback();

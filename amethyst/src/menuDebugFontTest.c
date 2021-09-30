@@ -146,6 +146,6 @@ void fontMenu_run(Menu *self) {
 
 Menu menuDebugFontTest = {
     "View Fonts", 0,
-    fontMenu_run, fontMenu_draw, debugRenderSubMenu_close,
+    fontMenu_run, fontMenu_draw, debugTextSubMenu_close,
     NULL,
 };

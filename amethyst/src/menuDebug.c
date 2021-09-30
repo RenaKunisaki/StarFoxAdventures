@@ -54,6 +54,12 @@ void menuDebugRender_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
 
+void menuDebugGameText_select(const MenuItem *self, int amount) {
+    if(amount) return;
+    curMenu = &menuDebugGameText;
+    audioPlaySound(NULL, MENU_OPEN_SOUND);
+}
+
 void menuDebugMisc_select(const MenuItem *self, int amount) {
     if(amount) return;
     curMenu = &menuDebugMisc;
@@ -71,6 +77,7 @@ Menu menuDebug = {
     "Game State", "%s",     genericMenuItem_draw,   menuDebugGame_select,
     "Cheats",     "%s",     genericMenuItem_draw,   menuDebugCheat_select,
     "Render",     "%s",     genericMenuItem_draw,   menuDebugRender_select,
+    "GameText",   "%s",     genericMenuItem_draw,   menuDebugGameText_select,
     "Misc",       "%s",     genericMenuItem_draw,   menuDebugMisc_select,
     NULL,
 };

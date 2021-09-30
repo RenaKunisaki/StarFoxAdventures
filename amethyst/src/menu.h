@@ -83,6 +83,9 @@ extern u8 editPlayerIdx;
 //menuDebugGameState.c
 void debugGameSubMenu_close(const Menu *self);
 
+//menuDebugGameText.c
+void debugTextSubMenu_close(const Menu *self);
+
 //menuDebugMap.c
 void debugMapSubMenu_close(const Menu *self);
 
@@ -107,6 +110,7 @@ extern Menu menuDebugEditTricky;
 extern Menu menuDebugFontTest;
 extern Menu menuDebugGameBits;
 extern Menu menuDebugGameState;
+extern Menu menuDebugGameText;
 extern Menu menuDebugHexEdit;
 extern Menu menuDebugMap;
 extern Menu menuDebugMapEnv;
@@ -122,6 +126,7 @@ extern Menu menuDebugSpawnObjList;
 extern Menu menuDebugText;
 extern Menu menuDebugTextureView;
 extern Menu menuDebugViewText;
+extern Menu menuDebugViewTextFiles;
 extern Menu menuDebugWarp;
 extern Menu menuGameSettings;
 extern Menu menuMain;

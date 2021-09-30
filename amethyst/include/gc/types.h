@@ -20,7 +20,7 @@
 
 //for ghidra exports
 typedef void* pointer;
-typedef u32 uint;
+typedef unsigned int uint;
 typedef u16 ushort;
 typedef u8 uchar;
 typedef u8 ubyte;

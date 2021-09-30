@@ -6,27 +6,11 @@ void debugRenderSubMenu_close(const Menu *self) {
     audioPlaySound(NULL, MENU_CLOSE_SOUND);
 }
 
-
 void menuDebugRenderTextures_select(const MenuItem *self, int amount) {
     if(amount) return;
     curMenu = &menuDebugTextureView;
     audioPlaySound(NULL, MENU_OPEN_SOUND);
 }
-
-
-void menuDebugRenderTexts_select(const MenuItem *self, int amount) {
-    if(amount) return;
-    curMenu = &menuDebugViewText;
-    audioPlaySound(NULL, MENU_OPEN_SOUND);
-}
-
-
-void menuDebugRenderFonts_select(const MenuItem *self, int amount) {
-    if(amount) return;
-    curMenu = &menuDebugFontTest;
-    audioPlaySound(NULL, MENU_OPEN_SOUND);
-}
-
 
 void menuDebugRenderEffects_select(const MenuItem *self, int amount) {
     if(amount) return;
@@ -136,8 +120,6 @@ Menu menuDebugRender = {
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
     "Effects",        "%s", genericMenuItem_draw,             menuDebugRenderEffects_select,
     "View Textures",  "%s", genericMenuItem_draw,             menuDebugRenderTextures_select,
-    "View Texts",     "%s", genericMenuItem_draw,             menuDebugRenderTexts_select,
-    "View Fonts",     "%s", genericMenuItem_draw,             menuDebugRenderFonts_select,
     "Map Grid",       _FMT, menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
     "Perf Meters",    _FMT, menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
     "RNG",            _FMT, menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,

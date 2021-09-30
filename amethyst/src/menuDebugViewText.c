@@ -78,8 +78,10 @@ void textMenu_draw(Menu *self) {
         else drawSimpleText("(no text)", sx, TEXT_MENU_YPOS);
     }
     else sprintf(str, "\eFTxt:%04X\n(%5d)\n(not found)", self->selected & 0xFFFF, self->selected);
-    sprintf(str, "%s\eF\n\nX:+ Y:-\nL:Prev\nR:Next\nS:Window\nZ:Lang", str); //we don't have strcat
     drawSimpleText(str, x, y);
+
+    //draw instructions
+    drawSimpleText("X:+ Y:-\nL:Prev\nR:Next\nS:Window\nZ:Lang", x, y + TEXT_MENU_HEIGHT - (LH*6));
 
     //draw cursor
     drawMenuBox(x + (FW * 3) + (cursor * FW) + MENU_PADDING - 2, y-2, (FW*2)+2, LH+4);
@@ -167,6 +169,6 @@ void textMenu_run(Menu *self) {
 
 Menu menuDebugViewText = {
     "View Texts", 0,
-    textMenu_run, textMenu_draw, debugRenderSubMenu_close,
+    textMenu_run, textMenu_draw, debugTextSubMenu_close,
     NULL,
 };

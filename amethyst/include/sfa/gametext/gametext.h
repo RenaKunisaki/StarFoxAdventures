@@ -84,6 +84,7 @@ typedef enum {
 	GAMETEXT_DIR_WallCity      = 0x46,
 	GAMETEXT_DIR_Warlock       = 0x47,
 	GAMETEXT_DIR_WorldMap      = 0x48,
+	NUM_GAMETEXT_DIRS          = 0x49,
 } GameTextDir32;
 
 typedef enum { //type:u32
@@ -180,18 +181,34 @@ typedef void (*GameTextDrawFunc)(
 );
 extern GameTextDrawFunc gameTextDrawFunc;
 
+typedef enum {
+	Empty = 0x1,
+	NeedTextureGen = 0x2,
+	CanFree = 0x3,
+	Cancelling = 0x4,
+	Cancelled = 0x5,
+	NeedFree = 0x6,
+} GameTextFileState;
+
+typedef enum {
+	GENERAL = 0x0,
+	SEQUENCE = 0x1,
+	BOOT = 0x2,
+	LINK = 0x3,
+} GameTextFontSlotEnum;
+
 typedef struct PACKED GameTextFileData {
 	u8 fileIdx;         //0x00
-	u8 language;        //0x01
-	u8 id;              //0x02
+	u8 unk01;           //0x01
+	u8 unk02;           //0x02
 	u8 unk03;           //0x03
-	u16 fileSize;       //0x04
+	u16 unk04;          //0x04
 	u16 unk06;          //0x06
 	s8 leftPad;         //0x08
 	s8 size09;          //0x09 rightPad?
 	s8 topPad;          //0x0A
 	s8 unk0B;           //0x0B bottomPad?
-	u8 charW;           //0x0C pixels / 32
+	u8 charW;           //0x0C pixels / 32 (but always zero?)
 	u8 charH;           //0x0D pixels / 32
 	u8 font;            //0x0E
 	u8 textureIdx;      //0x0F
@@ -199,10 +216,10 @@ typedef struct PACKED GameTextFileData {
 	u8 unk11;           //0x11
 	u8 unk12;           //0x12
 	u8 unk13;           //0x13
-	int unk14;          //0x14
-	Texture *texture18; //0x18
-	int unk1C;          //0x1C
-	int unk20;          //0x20
+	u32 unk14;          //0x14 file size rounded up (80C4 -> 80E0)
+	void *textFile;     //0x18 -> GameText .bin file (sometimes?)
+	int unk1C;          //0x1C file size rounded up (80C4 -> 80E0)
+	int unk20;          //0x20 file size rounded up (80C4 -> 80E0)
 	u8 unk24;           //0x24
 	u8 unk25;           //0x25
 	u8 unk26;           //0x26
@@ -212,21 +229,24 @@ typedef struct PACKED GameTextFileData {
 	u8 unk2D;           //0x2D
 	u8 unk2E;           //0x2E
 	u8 unk2F;           //0x2F
-	u8 unk30;           //0x30
+	u8 unk30;           //0x30 same as 0x10
 	u8 unk31;           //0x31
 	u8 unk32;           //0x32
 	u8 unk33;           //0x33
-	int unk34;          //0x34
+	int fileSize;       //0x34
 	void *openCb;       //0x38
-	void *filePtr;      //0x3C
-	int fileSize40;     //0x40
-	int state;          //0x44
-	u8 dir;             //0x48
-	u8 lang;            //0x49
+	void *filePtr;      //0x3C -> GameText .bin file
+	int dataSize;       //0x40 file size again
+	int state;          //0x44 GameTextFileState
+	u8 dir;             //0x48 GameTextDir8
+	u8 lang;            //0x49 GameLanguageEnum
 	u8 refCount;        //0x4A
-	u8 fontNo;          //0x4B if not 1 or 3, uses 0
+	u8 fontNo;          //0x4B GameTextFontSlotEnum if not 1 or 3, uses 0
 } GameTextFileData;
 CASSERT(sizeof(GameTextFileData) == 0x4C, sizeof_GameTextFileData);
+
+#define MAX_LOADED_TEXTS 8
+extern GameTextFileData curGameTexts[MAX_LOADED_TEXTS];
 
 typedef struct PACKED GameTextBox {
 	word  unk00;      //0x00
@@ -313,3 +333,4 @@ CASSERT(sizeof(GameTextFont) == 0x28, sizeof_GameTextFont);
 extern GameTextFont *gameTextFonts;
 
 extern GameTextDir32 curGameTextDir;
+extern const char *gameTextMapNames[NUM_GAMETEXT_DIRS];
