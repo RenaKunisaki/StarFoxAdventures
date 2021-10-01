@@ -12,22 +12,23 @@ static float disappearTimer = 0;
 static bool active = false;
 
 void raceTimerToggle(bool start) {
-    if(start) {
+    if(start && !active) {
         gameTimerInit(GAME_TIMER_FLAG_RUNNING | GAME_TIMER_FLAG_VISIBLE,
             (99*60*60) + (59*60) + 59); //min:sec:frames
-        //OSReport("Started race timer!");
+        OSReport("Started race timer! bits %d %d", mainGetBit(0x72), mainGetBit(0xC8));
         if(getButtonsHeld(0) & PAD_BUTTON_X) bikeMoveScale = 0.875; //turbo mode
-        //XXX add a switch or something to the map to toggle this
 
         gameTimerValue = -timeDelta; //start at 0 (we're about to add this again)
         //hudHidden = true; //causes weird tail glitching, other issues
         hudElementOpacity = 0;
+        active = true;
     }
-    else {
+    else if(active && !start) {
         gameTimerStop();
-        //OSReport("Stopped race timer!");
+        OSReport("Stopped race timer! bits %d %d", mainGetBit(0x72), mainGetBit(0xC8));
         //hudHidden = false;
         hudElementOpacity = 255;
+        active = false;
     }
 }
 
@@ -58,36 +59,37 @@ void raceTimerUpdate() {
     char str[64];
 
     void *pState = (pPlayer && pPlayer->catId == 1) ? pPlayer->state : NULL;
+    ObjInstance *ride = pState ? (*(ObjInstance**)(pState + 0x7F0)) : NULL;
     u16 stateId = pState ? *(u16*)((u32)pState + 0x274) : 0;
+    bool start = false, stop = false;
 
     //if(pState) debugPrintf("STATE %02X\n", stateId);
 
-    bool start = false;
-    if(mainGetBit(0xC8)) { //IM race has actually started
-        start = true;
-    }
-    else if(stateId == 0x18 //riding
-    && (curMapId == 0x13 || curMapId == 0x1B || curMapId == 0x2B)) { //in DIM/DIM Inside/CR Race
-        //this is a separate case so that we can make the timer not start until
-        //you actually gain control of the bike.
-        //XXX find how to do this for the other races.
-        void *pState = pPlayer ? pPlayer->state : NULL;
-        ObjInstance *ride = pState ? (*(ObjInstance**)(pState + 0x7F0)) : NULL;
-        //don't start for SnowHorn
-        start = ride && ride->catId == ObjCatId_bike;
+    switch(curMapId) {
+        case 0x17: { //Ice Mountain
+            if(!mainGetBit(0x378)) stop = true;
+            else if(mainGetBit(0x72) && mainGetBit(0xC8)) start = true;
+            break;
+        }
+
+        case 0x13: //DarkIce Mines
+        case 0x1B: //DIM inside
+        case 0x2B: { //CloudRunner Fortress race
+            if(pState) {
+                //don't start for SnowHorn
+                if(stateId == 0x18 && ride && ride->catId == ObjCatId_bike) start = true;
+                else stop = true;
+            }
+            break;
+        }
+
+        default:
+            stop = true; //in case player warped out of race
     }
 
     //start = true; stateId = 0x18; //for testing
-    if(start && !active) { //start the timer
-        raceTimerToggle(true);
-        active = true;
-    }
-
-    if(active && pState && stateId != 0x18) { //player warped or something; stop the timer
-        //mainSetBits(0xC8, 0);
-        raceTimerToggle(false);
-        active = false;
-    }
+    if(start) raceTimerToggle(true);
+    else if(stop) raceTimerToggle(false);
 
     if(active) {
         //we don't actually start the timer because then it makes a ticking noise.

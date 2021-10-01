@@ -206,8 +206,8 @@
     <description>set at start of bike scene</description>
   </bit>
   <bit id="0x0071" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0072" table="2" hint="0x00" hasHint="0" max="1" name="IM_BikeRelated0072">
-    <description>set when gaining control of bike</description>
+  <bit id="0x0072" table="2" hint="0x00" hasHint="0" max="1" name="IM_RaceStarted">
+    <description>set when the race actually starts</description>
   </bit>
   <bit id="0x0073" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0074" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -217,8 +217,8 @@
   <bit id="0x0076" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0077" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0078" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0079" table="1" hint="0x00" hasHint="0" max="1" name="IM_BikeRelated0079">
-    <description>set when getting on bike, cleared at end of race</description>
+  <bit id="0x0079" table="1" hint="0x00" hasHint="0" max="1" name="IM_StartRace">
+    <description>setting starts the race scene</description>
   </bit>
   <bit id="0x007A" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x007B" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -353,8 +353,8 @@
   <bit id="0x00C7" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_Unknown_Got">
     <description>Item name is "Unknown"</description>
   </bit>
-  <bit id="0x00C8" table="1" hint="0x00" hasHint="0" max="1" name="IM_BikeRelated00C8">
-    <description>set when getting on bike, cleared at end of race</description>
+  <bit id="0x00C8" table="1" hint="0x00" hasHint="0" max="1" name="IM_OnBike">
+    <description>set when you can actually steer but also during the cutscene of "rescuing" Tricky</description>
   </bit>
   <bit id="0x00C9" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00CA" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -980,8 +980,8 @@
   <bit id="0x023E" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x023F" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0240" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0241" table="0" hint="0x00" hasHint="0" max="1" name="Item_SilverKey241_Got"/>
-  <bit id="0x0242" table="2" hint="0x00" hasHint="0" max="1" name="Item_SilverKey241_Used"/>
+  <bit id="0x0241" table="0" hint="0x00" hasHint="0" max="1" name="ITEM_SilverKey241_Got"/>
+  <bit id="0x0242" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_SilverKey241_Used"/>
   <bit id="0x0243" table="2" hint="0x00" hasHint="0" max="1" name="WC_MoonStone_Used"/>
   <bit id="0x0244" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0245" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_TrickyFlame_Got"/>
@@ -1902,7 +1902,9 @@
   <bit id="0x04E4" table="2" hint="0x00" hasHint="0" max="1" name="Tricky_Usable">
     <description>can use Tricky commands</description>
   </bit>
-  <bit id="0x04E5" table="2" hint="0x00" hasHint="0" max="1" name="IM_FinishedRace04E5"/>
+  <bit id="0x04E5" table="2" hint="0x00" hasHint="0" max="1" name="IM_DoneRace">
+    <description>Completed first race</description>
+  </bit>
   <bit id="0x04E6" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04E7" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x04E8" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -2429,7 +2431,7 @@
   <bit id="0x0669" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x066A" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x066B" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x066C" table="2" hint="0x00" hasHint="0" max="7" name="ITEM_ombSpore_Count"/>
+  <bit id="0x066C" table="2" hint="0x00" hasHint="0" max="7" name="ITEM_BombSpore_Count"/>
   <bit id="0x066D" table="2" hint="0x00" hasHint="0" max="7" name="SH_WhiteShroom_Count"/>
   <bit id="0x066E" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x066F" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -3139,7 +3141,7 @@
   <bit id="0x0883" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0884" table="2" hint="0x00" hasHint="0" max="1" name="SH_WarpStoneRelated0884"/>
   <bit id="0x0885" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0886" table="2" hint="0x00" hasHint="0" max="1" name="SH_RockCandyRelated0886">
+  <bit id="0x0886" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_RockCandyRelated0886">
     <description>related to rock candy</description>
   </bit>
   <bit id="0x0887" table="2" hint="0x00" hasHint="0" max="1" name="SH_SawWarpStoneIntro"/>
@@ -4536,8 +4538,8 @@
     <objref map="linkj" obj="HitAnimator" objId="0x00049CD1" param="target"/>
   </bit>
   <bit id="0x0C7B" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0C7C" table="2" hint="0x00" hasHint="0" max="1" name="SH_RockCandy_Got"/>
-  <bit id="0x0C7D" table="2" hint="0x0E" hasHint="1" max="1" name="SH_RockCandy_Used"/>
+  <bit id="0x0C7C" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_RockCandy_Got"/>
+  <bit id="0x0C7D" table="2" hint="0x0E" hasHint="1" max="1" name="ITEM_RockCandy_Used"/>
   <bit id="0x0C7E" table="2" hint="0x00" hasHint="0" max="1" name="SH_WarpStoneComplainingAboutGifts">
     <description>triggers "nobody brings me gifts" scene</description>
   </bit>
@@ -4551,7 +4553,7 @@
   </bit>
   <bit id="0x0C83" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C84" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="DFSH_ObjGroups"/>
-  <bit id="0x0C85" table="2" hint="0xAD" hasHint="1" max="1" name="HaveKrazoaSpirit5"/>
+  <bit id="0x0C85" table="2" hint="0xAD" hasHint="1" max="1" name="ITEM_Spirit5_Got"/>
   <bit id="0x0C86" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C87" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0C88" table="2" hint="0x00" hasHint="0" max="1"/>
