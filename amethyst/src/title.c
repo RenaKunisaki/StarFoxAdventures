@@ -18,6 +18,13 @@ int titleHook() {
     //doing it too soon will crash
     if(frameCount > 20 && frameCount < 300
     && titleScreen_panAwayFromMovieTimer > 0 && buttons & PAD_TRIGGER_R) {
+        //free some memory. XXX does this actually do any good?
+        mapUnload(0x3D, 0x2000);
+
+        //ensure text is loaded properly
+        gameTextLoadDir(GAMETEXT_DIR_Link);
+        while(isDvdDriveBusy) waitNextFrame();
+
         //OSReport("Loading save 1\n");
         titleScreenActive = false; //load into the game
         titleScreen_panAwayFromMovieTimer = 0;
@@ -27,9 +34,6 @@ int titleHook() {
         //data, so things like your items are reset, but you don't reload or respawn...
         saveGame_load(0); //load the actual save file
         loadSaveSettings(); //apply the settings
-
-        //free some memory. XXX does this actually do any good?
-        //mapUnload(0x3D, 0x2000);
     }
 
     return oldTitleHook();

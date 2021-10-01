@@ -197,6 +197,9 @@ typedef enum {
 	LINK = 0x3,
 } GameTextFontSlotEnum;
 
+//XXX rename; this is NOT the layout of the GameText .bin files.
+//(I don't think we can express that as a struct because it has multiple
+//variable-sized fields.)
 typedef struct PACKED GameTextFileData {
 	u8 fileIdx;         //0x00
 	u8 unk01;           //0x01
@@ -237,7 +240,7 @@ typedef struct PACKED GameTextFileData {
 	void *openCb;       //0x38
 	void *filePtr;      //0x3C -> GameText .bin file
 	int dataSize;       //0x40 file size again
-	int state;          //0x44 GameTextFileState
+	u32 state;          //0x44 GameTextFileState
 	u8 dir;             //0x48 GameTextDir8
 	u8 lang;            //0x49 GameLanguageEnum
 	u8 refCount;        //0x4A

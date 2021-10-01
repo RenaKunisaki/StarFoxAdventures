@@ -228,8 +228,8 @@ int findChar(int chr, GameTextFont *font, GameTextFont **outFont, GameTextCharac
  *    cRRGGBBAA: Set text color (and enable color)
  *    C: Disable color
  *    S: Toggle shadow
- *    Xn: Set X position
- *    Yn: Set Y position
+ *    Xnnnn: Set X position
+ *    Ynnnn: Set Y position
  *  @note Rendering with color disabled is less pretty, but faster.
  */
 int drawText(const char *str, int x, int y, int *outX, int *outY, u32 flags,
@@ -322,6 +322,7 @@ Color4b color, float scale) {
         }
         else if(chr < 0xE000 || chr > 0xF8FF) { //normal character
             //get the character from the font
+            if(iFont < 0 || iFont > 3) iFont = 0;
             GameTextFont *font = &gameTextFonts[iFont];
             GameTextCharacterStruct *cStruct = NULL;
 
@@ -329,8 +330,9 @@ Color4b color, float scale) {
                 int cx = x, cy = y;
                 if(flags & TEXT_FIXED && curLanguage != LANG_JAPANESE) { //correct some positions
                     switch(chr) {
-                        case 'i': case 'I': case 'l': case ':': cx += 5; break;
-                        case 'M': case 'W': cx -= 3; break;
+                        case 'i': case 'I': case 'l': case ':':
+                        case '(': case ')': case '|': cx += 5; break;
+                        case 'M': case 'W': case 'm': case 'w': cx -= 3; break;
                     }
                 }
 

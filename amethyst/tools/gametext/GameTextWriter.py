@@ -62,9 +62,12 @@ class GameTextWriter:
     def addText(self, text:GameTextStruct) -> None:
         """Add a text."""
         k = '\x1E'.join(map(str, text.phrases)) # ASCII record separator
-        if k not in self._haveTexts:
-            self._haveTexts.add(k)
-            self.texts.append(text)
+        #if k not in self._haveTexts:
+        # actually the game expects there to be a few duplicate texts.
+        # eg 1130, 1150 are both "Give Gift".
+        # checking here will result in missing texts.
+        self._haveTexts.add(k)
+        self.texts.append(text)
 
     def _buildStringTable(self):
         """Iterate all texts and build the set of used characters,
