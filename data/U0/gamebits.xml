@@ -617,9 +617,7 @@
   <bit id="0x016F" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_DIMAlpineRoot_16F">
     <objref map="snowmines" obj="CNTColideOb" objId="0x0004A177" param="0x1E"/>
   </bit>
-  <bit id="0x0170" table="2" hint="0x00" hasHint="0" max="3" name="ITEM_AlpineRoots170_Count">
-    <description>two separate counters?</description>
-  </bit>
+  <bit id="0x0170" table="2" hint="0x00" hasHint="0" max="3" name="ITEM_DIMAlpineRoot_Count" />
   <bit id="0x0171" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0172" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0173" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -890,10 +888,10 @@
   <bit id="0x0206" table="1" hint="0x00" hasHint="0" max="1">
     <objref map="wallcity" obj="HitAnimator" objId="0x00047FEF" param="target"/>
   </bit>
-  <bit id="0x0207" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x0207" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_DIMGoldKey_Used">
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002182" param="open"/>
   </bit>
-  <bit id="0x0208" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x0208" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_DIMSilverKey_Used">
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002181" param="open"/>
   </bit>
   <bit id="0x0209" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -1517,8 +1515,8 @@
   <bit id="0x03E8" table="0" hint="0x00" hasHint="0" max="1" name="DIM_LostInBlizzard">
     <description>Triggered by 0x3E2, actually starts the scene</description>
   </bit>
-  <bit id="0x03E9" table="0" hint="0x00" hasHint="0" max="1" name="ITEM_319_Got">
-    <description>did collect something (defNo 0x319)</description>
+  <bit id="0x03E9" table="0" hint="0x00" hasHint="0" max="1" name="ITEM_NWFood_Got">
+    <description>Alpine Root while riding SnowHorn through blizzard; collecting one sets this to 1, then 0 </description>
   </bit>
   <bit id="0x03EA" table="2" hint="0x00" hasHint="0" max="1" name="SH_QueenRelated03EA">
     <description>set when entering queen cave + when Krystal talks during staff tutorial</description>
