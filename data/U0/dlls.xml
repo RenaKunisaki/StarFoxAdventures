@@ -7456,6 +7456,9 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x1C" type="s16">
         <description>normally set to -1</description>
       </param>
+      <param offset="0x1E" type="s16">
+        <description>param for objmsg 0x7000A</description>
+      </param>
       <param offset="0x22" type="u8">
         <description>normally set to 0</description>
       </param>
