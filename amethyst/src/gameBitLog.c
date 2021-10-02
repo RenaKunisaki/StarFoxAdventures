@@ -24,6 +24,9 @@ BOOL gameBitHook(uint bit, int val) {
     }
 
     DPRINT("GameBit 0x%04X (%s) set to %d", bit, getBitName(bit), val);
+    //if(bit == 0xA7B) {
+    //    while(1) {}
+    //}
 
     //log the change
     bool found = false;

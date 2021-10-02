@@ -24,10 +24,14 @@ static const char *stateNames[] = {
 };
 
 static void _drawSlot(Menu *self) {
-    int LH = ((curLanguage == LANG_JAPANESE) ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT) + 3;
-    int FW = ((curLanguage == LANG_JAPANESE) ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
+    bool JP = curLanguage == LANG_JAPANESE;
+    int LH = (JP ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT) + 3;
+    int FW = (JP ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
     int x = TEXTFILE_MENU_XPOS + MENU_PADDING;
     int y = TEXTFILE_MENU_YPOS + MENU_PADDING;
+    Color4b color = {255, 255, 255, 255};
+    float scale = JP ? 0.7 : 1.0;
+    u32 flags = TEXT_FIXED | TEXT_SHADOW;
 
     char str[1024];
     GameTextFileData *file = &curGameTexts[self->selected-1];
@@ -50,24 +54,25 @@ static void _drawSlot(Menu *self) {
         file->textureIdx,
         file->state, (file->state < 7) ? stateNames[file->state] : "?",
         file->refCount);
-    drawSimpleText(str, x, y);
-    x += 300;
+    drawText(str, x, y, NULL, NULL, flags, color, scale);
+    x += JP ? 330 : 300;
 
     //hex dump
-    sprintf(str, "\eF%08X\n", file);
-    drawSimpleText(str, x, y);
+    sprintf(str, "%08X\n", file);
+    //drawSimpleText(str, x, y);
+    drawText(str, x, y, NULL, NULL, flags, color, scale);
     y += LH;
     u8 *data = (u8*)file;
     for(int offs=0; offs<sizeof(GameTextFileData); offs += 8) {
-        sprintf(str, "\eF%02X:  %02X %02X %02X %02X  %02X %02X %02X %02X\n", offs,
+        sprintf(str, "%02X:  %02X %02X %02X %02X  %02X %02X %02X %02X\n", offs,
             data[offs+0], data[offs+1], data[offs+2], data[offs+3],
             data[offs+4], data[offs+5], data[offs+6], data[offs+7]);
-        drawSimpleText(str, x, y);
+        drawText(str, x, y, NULL, NULL, flags, color, scale);
         y += LH-1;
     }
 
     //draw selected text
-    x -= 300;
+    x -= JP ? 330 : 300;
     y -= LH * 2;
     if(PTR_VALID(file) && PTR_VALID((file->textFile))) {
         u32 numCharStructs = *(u32*)file->textFile;
@@ -83,7 +88,8 @@ static void _drawSlot(Menu *self) {
                     text->language < NUM_LANGUAGES ? languageNamesShort[text->language] : "?",
                     text->numPhrases, text->phrases);
                 //OSReport("%s", str);
-                drawSimpleText(str, x, y); y += LH*2;
+                drawText(str, x, y, NULL, NULL, flags, color, scale);
+                y += LH*2;
 
                 //phrases can be 0 if it hasn't finished loading yet.
                 int nPhrases = PTR_VALID(text->phrases) ? text->numPhrases : 0;
@@ -92,7 +98,7 @@ static void _drawSlot(Menu *self) {
                         //OSReport("Phrase %d/%d: %08X", iPhrase, text->numPhrases, text->phrases[iPhrase]);
                         //OSReport("-> %s", text->phrases[iPhrase]);
                         drawMenuBox(x, y+11, 2, 2); //bullet point
-                        drawSimpleText(text->phrases[iPhrase], x+8, y);
+                        drawText(text->phrases[iPhrase], x+8, y, NULL, NULL, flags, color, scale);
                         y += LH;
                         if(y >= SCREEN_HEIGHT) break;
                     }
@@ -100,12 +106,12 @@ static void _drawSlot(Menu *self) {
             }
             else {
                 sprintf(str, "%sN/A", str);
-                drawSimpleText(str, x, y);
+                drawText(str, x, y, NULL, NULL, flags, color, scale);
             }
         }
         else {
             sprintf(str, "Text %d/%d: N/A ", curTextIdx, nTexts);
-            drawSimpleText(str, x, y);
+            drawText(str, x, y, NULL, NULL, flags, color, scale);
         }
     }
 }

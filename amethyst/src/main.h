@@ -12,7 +12,7 @@
 
 //text sizing
 #define LINE_HEIGHT 16
-#define LINE_HEIGHT_JAPANESE 22
+#define LINE_HEIGHT_JAPANESE 16
 #define TAB_WIDTH 64
 #define TAB_WIDTH_JAPANESE 64
 #define FIXED_CHR_WIDTH 10

@@ -219,6 +219,7 @@ int findChar(int chr, GameTextFont *font, GameTextFont **outFont, GameTextCharac
  *    TEXT_FIXED: Render fixed-width text.
  *    TEXT_COLORED: Render colored, "soft-looking" text.
  *    TEXT_SHADOW: Render a drop shadow under the text.
+ *    TEXT_MEASURE: Don't render, only measure.
  *  @param color Color, if enabled.
  *  @param scale Text scale.
  *  @return The number of bytes read from `str`.
@@ -255,7 +256,7 @@ Color4b color, float scale) {
     int iChr = 0;
     Color4b shadowColor = {.r=0x20, .g=0x20, .b=0x20, .a=0xFF};
     bool japanese = (curLanguage == LANG_JAPANESE);
-    int FW = (japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH);
+    int FW = japanese ? FIXED_CHR_WIDTH_JAPANESE : FIXED_CHR_WIDTH;
     int LH = japanese ? LINE_HEIGHT_JAPANESE : LINE_HEIGHT;
 
     //OSReport("Draw text: %08X %s", str, str);
@@ -270,14 +271,14 @@ Color4b color, float scale) {
         //OSReport("Drawing char %04X", chr);
         if(chr < 0x20) {
             switch(chr) {
-                case '\n': y += (flags & TEXT_FIXED) ? 16 : MAX(lineHeight, LH);
+                case '\n': y += (flags & TEXT_FIXED) ? LH : MAX(lineHeight, LH);
                     //fall thru
                 case '\r': x = startX; break;
 
                 //this is not what \v is really supposed to do, but oh well.
                 //basically this is what \n is supposed to do, and what \n actually does here
                 //would be achieved using the sequence \r\n. but screw that
-                case '\v': y += (flags & TEXT_FIXED) ? 16 : MAX(lineHeight, LH); break;
+                case '\v': y += (flags & TEXT_FIXED) ? LH : MAX(lineHeight, LH); break;
 
                 case '\t': {
                     int p = x % (japanese ? TAB_WIDTH_JAPANESE : TAB_WIDTH);
@@ -328,7 +329,7 @@ Color4b color, float scale) {
 
             if(findChar(chr, font, &font, &cStruct)) {
                 int cx = x, cy = y;
-                if(flags & TEXT_FIXED && curLanguage != LANG_JAPANESE) { //correct some positions
+                if(flags & TEXT_FIXED /*&& curLanguage != LANG_JAPANESE*/) { //correct some positions
                     switch(chr) {
                         case 'i': case 'I': case 'l': case ':':
                         case '(': case ')': case '|': cx += 5; break;
