@@ -74,10 +74,11 @@ void raceTimerUpdate() {
 
         case 0x13: //DarkIce Mines
         case 0x1B: //DIM inside
+        case 0x44: //DIM bike tunnel
         case 0x2B: { //CloudRunner Fortress race
             if(pState) {
                 //don't start for SnowHorn
-                if(stateId == 0x18 && ride && ride->catId == ObjCatId_bike) start = true;
+                if(cameraMode == 0x45 && ride && ride->catId == ObjCatId_bike) start = true;
                 else stop = true;
             }
             break;
