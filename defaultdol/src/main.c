@@ -70,6 +70,18 @@ void _start(void) {
     WRITE_BLR(0x800a72ec); //do not update environment
     WRITE32(0x800a7758, 0x38000001); //disable sky
 
+    WRITE32(0x80084a44, 0x38600000); //objGetControlNo return 0
+    WRITE_BLR(0x80084a48); //objGetControlNo return 0
+
+    //fix ObjData modline offset and size
+    WRITE32(0x800847e4, 0x881F005C); //lha r0,0x78(r31) -> lbz r0,0x5C(r31)
+    WRITE32(0x800847fc, 0x88BF005C); //lha r5,0x78(r31) -> lbz r5,0x5C(r31)
+    WRITE32(0x80084808, 0x887F005C); //lha r3,0x78(r31) -> lbz r3,0x5C(r31)
+    WRITE32(0x8008480c, 0x389F005D); //addi r4,r31,0x76 -> addi r4,r31,0x5D
+    WRITE32(0x800849e0, 0x9B630000); //sth r27,0x0(out) -> stb r27,0x0(out)
+
+    WRITE32(0x800847e4, 0x3800FFFF); //don't load modlines
+
     initCompressionHooks();
     initTextureHooks();
     initModelHooks();

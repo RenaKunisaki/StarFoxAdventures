@@ -304,7 +304,37 @@ zlib doesn't seem to handle it either
 seems like a difference in how gcc deals with shifting by negative amounts
 by ensuring we don't do that we now have some textures loading but they're garbled
 
-maybe it's easier to try to copy the assembly
+maybe it's easier to try to copy the assembly (lolno)
 
 so with some more fuckery I managed to get zlib working and now we're finally back to having a working menu, but without recompressing anything.
 except, disabling the sky removes the blue menu background. if we re-enable it, it shows the background but freezes with no menu.
+
+I tried copying over OBJECTS.bin2 as OBJECTS.bin, that didn't help anything.
+looks like it reads object's control number (whatever that is) from a bogus offset.
+the final version has this array but doesn't use it.
+I patched it to always return 0
+this seems to be an index into a list of preset ObjDefs
+
+if I copy DP's files (except textures) it crashes.
+
+it gets as far as loadCharacter but dies inside it
+in intersectModLineBuild
+loadModLine returns null
+MODLINES.tab is 0xC0 bytes
+
+old:
+	0x76 s16 modLineCount, modLineNo
+new:
+	0x5C s8 modLineCount, modLineNo
+changing this doesn't help
+I can change it to not load modlines at all but then it gets nonsense model data
+looks like it doesn't understand the FACEFEED header
+so I added that and a bunch of others to my decompresser and now it can try to load them
+then it's failing on the polygons and animation data, probably offsets changed again.
+
+OSPanic: models_dolphin.c: Failed assertion model->GCpolygons>=modelBase && model->GCpolygons<modelEnd
+OSPanic: models_dolphin.c: Failed assertion model->polygonGroups>=modelBase && model->polygonGroups<modelEnd
+Load model instance 0xFFFFD380 (0x2C80)
+OSPanic: models_dolphin.c: Failed assertion modelNum>=0 && modelNum<maxModelNum
+makeModelAnimation() size mismatch!! (0,-13)
+ANIMBANK overflow
