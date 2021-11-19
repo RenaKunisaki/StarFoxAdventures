@@ -1,0 +1,88 @@
+This build has a lot of functions that still generate N64 RSP display list commands
+In a background thread it parses these and sort-of high-level "emulates" (to use the term very loosely) the RSP
+
+It implements the vertex cache and segmented addressing the N64 uses, with 16 segments and 64 vertices.
+
+It seems to be F3DEX2 but with some extra commands:
+
+01.nn.cc aaaaaaaa store vtxs to cache
+	cc >> 1: cache idx
+	nn: number of vtxs
+	aa: RSP segmented source address
+
+05aaaaaa ........ draw triangle from vtx cache
+	same as 06 but second word is unused
+
+06aaaaaa bbbbbbbb draw 2 triangles from vtx cache
+	aa, bb each specify 3 7-bit vtx idxs:
+	..333333 32222222 1111111.
+
+BEEFDEAD xxxxxxxx matrix related
+
+D7...... xxxxyyyy set two floats that seem to never be used
+	xx, yy: value 0..65536 = 0.0..1.0
+
+D9...... xxxxxxxx set cull mode and Z params
+	00000001 enable Z update and compare
+	00000600 cull mode
+
+DAffffff xxxxxxxx load some mtxs from addr xx
+	ff: flags
+		0002: overwrite instead of concat dest mtx
+		0004: reset perspective mtx first
+	xx: RSP segmented addr
+	this clears the "force matrix" flag of command DB0C
+
+DBccxxxx yyyyzzzz some sub-commands by cc:
+	00: print "G_MW_MATRIX" and do nothing else
+	06: set segment (xxxx >> 2) base to yyyyzzzz | 0x80000000
+	08: set some floats using yyyy somehow
+	0C: load some matrix and force subsequent vtxs to be drawn with it (only those drawn from cache)
+
+DC....cc xxxxxxxx set some matrix by subcommand cc:
+	00: print "G_MVO_LOOKATX"
+	02: print "G_MV_MMTX"
+	06: print "G_MV_PMTX"
+	0E: set a mtx ptr to RSP segment addr xxxxxxxx
+	18: print "G_MVO_LOOKATY"
+
+DEADBEEF xxxxxxxx set texture mtx addr for FACEFEED
+	xx: address (NOT RSP segmented, just raw pointer)
+
+DEAFFADE xxxxxxxx init TEV
+
+DF...... ........ clear isTexMtxLoaded
+
+E4xxxyyy ..XXXYYY ........ sssstttt ........ SSSSTTTT
+	draw a texture over the screen
+	coords (xx,yy) to (XX,YY)
+	texcoords (ss,tt) to (SS,TT)
+
+ED G_SETSCISSOR
+
+EF...... xxxxxxxx G_RDP_SetOtherMode
+	xx is flags:
+	0010: compare enable
+	0020: update enable
+	0800: blend mode
+		if set, (flags & 0x03030000) must != 0,
+		(flags & 0x0C0C0000) must != 0,
+		sets blend mode 0, 1, 0, 5
+	if clear, sets blend mode 1, 4, 5, 5
+	presumably this is approximating some real N64 command
+
+F6aaaaaa ..bbbbbb G_FILLRECT
+	draw 2D rect using previously set color
+	x1 = (bb >> 10) & 0x03FFF
+	y1 = (bb >>  2) & 0x3FFFF
+	x2 = (aa >> 10) & 0x03FFF
+	y2 = (aa >>  2) & 0x3FFFF
+
+FACEFEED xxxxxxxx start using texture mtx given by DEADBEEF
+
+FB...... rrggbbaa G_SETENVCOLOR
+FC G_SETCOMBINE
+FD...... xxxxxxxx G_SETTIMG
+	xx is a pointer, not segmented
+
+FEEDFACE xxxxxxxx reset TEV

@@ -344,6 +344,9 @@ final code is:
 0x77d10 7C0802A6 => 4BF87E80
 0x510   0000...  => 7C 08 02 A6 54 66 46 3F 40 82 39 E4 48 07 81 78
 
+
+it looks like this version doesn't use map layers
+
 FULL BOOT LOG without OSPanic text:
 ================================================================================
 Dolphin OS $Revision: 36 $.

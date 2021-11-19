@@ -23,6 +23,9 @@
         _n < 0 ? -_n : _n; })
 
 #define CHARS_TO_U32(a, b, c, d) (((a) << 24) | ((b) << 16) | ((c) << 8) | (d))
+#define HALT() do { } while(1)
+
+typedef uint32_t size_t;
 
 //compression.c
 int decompress(byte *src, int compLen, byte *dest, int *outLen);
@@ -31,5 +34,14 @@ void initCompressionHooks();
 //hook.c
 uint32_t hookBranch(uint32_t addr, void *target, int isBl);
 
+//logging.c
+void initLoggingHooks();
+
+//models.c
+void initModelHooks();
+
+//texture.c
+void initTextureHooks();
+
 //zlb.c
-int zlbDecompress(void *data,uint compLen,void *out);
+int zlbDecompress(void *data, uint compLen, void *out, uint outLen);

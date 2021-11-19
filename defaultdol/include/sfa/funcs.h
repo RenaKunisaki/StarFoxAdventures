@@ -13,7 +13,21 @@
 GLOBALFN void* allocTagged(u32 size, u32 tag, const char *name);
 GLOBALFN void audioInit(void);
 GLOBALFN void* dCacheStore(void*, uint);
+GLOBALFN s32 DVDConvertPathToEntrynum(const char *path);
+GLOBALFN BOOL DVDGetCurrentDir(char *path, u32 maxlen);
 GLOBALFN void* dvdLoadFile(const char *path, int *outSize, BOOL bLog);
+GLOBALFN void free(void*);
+GLOBALFN void GXCopyDisp2 (void *frameBuf, u8 param2);
+GLOBALFN void* heapAlloc(int region, uint size, AllocTag tag, const char* name); //don't use this, use allocTagged
+GLOBALFN void* iCacheFlush(void *addr, int size);
 GLOBALFN int lzoDecompress(byte *src,int compLen,byte *dest,int *outLen);
 GLOBALFN void* memcpy(void *dest, void *src, int len);
+GLOBALFN void* memset(void *dest, u8 val, int len); // clobbers: r0, r6, r7
+GLOBALFN void* model_load(int id); //Model*
+GLOBALFN int model_lookupModelInd(int id);
 GLOBALFN void OSReport(const char *fmt, ...);
+GLOBALFN char* strcpy(char *dest, const char *src);
+GLOBALFN BOOL tex0count(u32 fileId);
+GLOBALFN void tex0GetMipmap(u32 offset, u32 mipIdx, u32* outSize, u32* outCompSize, int size, void *dest, int doWhat);
+GLOBALFN BOOL tex1count(u32 fileId);
+GLOBALFN void tex1GetMipmap(u32 offset, u32 mipIdx, u32* outSize, u32* outCompSize, int size, void *dest, int doWhat);
