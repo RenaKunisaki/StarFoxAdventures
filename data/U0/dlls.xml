@@ -2508,7 +2508,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x8031ADD0" dolOffs="0x317DD0" id="0x0039" interface="UI" unk08="0x00000000" unk0E="0x0000">
-    <description>sets a timer, warps to world map</description>
+    <description>sets a timer, warps to world map - seems same in default.dol</description>
     <functions>
       <function address="0x8011D8F4" idx="0x0" name="initialise">
         <return type="void"/>
@@ -2534,7 +2534,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x8031ADF8" dolOffs="0x317DF8" id="0x003A" interface="UI" name="Dummy3A" unk08="0x00000000" unk0E="0x0000">
-    <description>All functions stubbed</description>
+    <description>All functions stubbed - was a menu in default.dol</description>
     <functions>
       <function address="0x8011D914" idx="0x0" name="initialise" stub="1">
         <return type="void"/>
@@ -2768,7 +2768,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x8031C300" dolOffs="0x319300" id="0x003E" interface="common" name="Dummy3E" unk08="0x00000000" unk0E="0x0000">
-    <description>All functions stubbed</description>
+    <description>All functions stubbed - was a menu in default.dol</description>
     <functions>
       <function address="0x80132020" idx="0x0" name="initialise" stub="1">
         <return type="void"/>
