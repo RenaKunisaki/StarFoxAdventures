@@ -117,7 +117,6 @@ PDA Menu
 				Filter B: x
 				Color Scale: Normal
 			View Textures
-			View Fonts
 			Map Grid: Off
 			Perf Meters: Off
 			RNG: Off
@@ -126,6 +125,10 @@ PDA Menu
 			Attach Points: Off
 			Focus Points: Off
 			Unknown Points: Off
+		GameText
+			View Texts
+			View Fonts
+			View Loaded Text Files
 		Misc
 			Edit Memory
 			Kill Player

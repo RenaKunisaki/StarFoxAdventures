@@ -28,6 +28,7 @@ GLOBALFN void cameraUpdateViewMtx(Camera *camera);
 GLOBALFN void ClearArena(void);
 GLOBALFN void cardShowLoadingMsg(int);
 GLOBALFN float cosf(float);
+GLOBALFN void cutsceneExit(void);
 GLOBALFN void* dCacheFlush(void*, uint);
 GLOBALFN void* dCacheStore(void*, uint);
 GLOBALFN void debugPrintDraw(void);
@@ -126,6 +127,7 @@ GLOBALFN void mainLoopDoQueuedSounds(void);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
 GLOBALFN int mapCoordsToId(int x, int z, int layer); //MapId32
 GLOBALFN int mapGetDirIdx(int id); //MapId32 -> MapDirIdx32
+GLOBALFN void mapLoadByCoords(float x, float y, float z, int layer);
 GLOBALFN void* mapLoadDataFile(MapDirIdx32 map, DataFileEnum file);
 GLOBALFN int mapLoadDataFiles(MapDirIdx32 mapNo);
 GLOBALFN void mapReload(void);

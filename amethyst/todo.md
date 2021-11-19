@@ -2,6 +2,15 @@ to avoid crashing with multiple players, put a blr at 8016d9ec
 it's crashing because it's trying to do something with the staff but they don't have one
 - what if we spawn a staff for them and attach it?
 
+for text, it might be enough to hack gameTextLoadDir() to always use a specific dir.
+then we just need to pack all texts/chars into the language files in that dir.
+80019980 -> 3BE00000 to use animtest
+also need to add the function to merge all texts into one to the script.
+- turns out there's way too much text...
+- maybe we can just ensure all characters are added to all files
+	- done that, but it does waste a fair bit of memory, especially in Japanese. can we hack it so only one font slot is used? or have all slots refer to the same texture?
+should test what it does with files that contain 0 fonts, or 0 texts (or just small dummy ones). could maybe just have it load one font at startup/language switch.
+
 # future versions
 - keyboard stuff
 - improve memory usage
@@ -14,11 +23,11 @@ it's crashing because it's trying to do something with the staff but they don't 
 - UI improvements
 	- save Y button equip (see ybutton.s)
 		- maybe we can just force the menu to be open and doing the equip?
-	- fix stupid gametext texture generation thing (especially for uwu)
 	- HUD improvements
 		- Banjo-Kazooie style HUD - don't show counters unless relevant, or while paused
 		- show more things (Tricky, enemies...) on minimap
 		- make the PDA HUD switch to info mode when an object that has info is nearby, otherwise remain in map/compass mode
+			- compass mode could be an arrow on the edge of the box while still showing map/etc
 		- PDA info should show enemy HP and stats
 	- make the WarpStone just YEET you instead of really warping
 - Krystal stuff
@@ -54,6 +63,7 @@ it's crashing because it's trying to do something with the staff but they don't 
 	- make the fireball hitbox bigger and/or the switches
 	- remove more pause menu voices
 		- see Cheats.md for some more addresses there
+	- be able to prevent crosshair from snapping back
 - repack assets at higher compression ratio
 	- strip unneeded textures from eg gamefront
 	- might need to publish a script since this could result in a massive patch
@@ -69,6 +79,7 @@ it's crashing because it's trying to do something with the staff but they don't 
 - pushing block speed isn't affected by physics time scale
 	- it's at least fast enough now that it probably doesn't matter
 	- swimming behaves differently (currents seem to get stronger when speeding up time)
+	- cannons are weird (the turning speed is unaffected)
 - when fur effect is on and you jump, there's some polygon glitching.
 	- seems to be bone #8 that's not being set properly or something
 	- affects both characters; reducing fur intensity avoids it
@@ -80,8 +91,6 @@ it's crashing because it's trying to do something with the staff but they don't 
 	- ghost hitboxes
 		- looks like the hitboxes really ARE moving. something else prevents them from being used.
 - original game bugs
-	- uwu suffers from missing letters due to stupid gametext thing
-		- original Dino Language cheat is also affected by this
 	- reflections
 
 # ideas
@@ -90,6 +99,9 @@ it's crashing because it's trying to do something with the staff but they don't 
 	- to slot 3? but what if you're using it? especially since no copy function
 	- to another memory card file?
 		- probably simple enough by changing the game ID but how to load it? what if no room? etc
+	- might be able to implement a simple "save state" system that dumps the globals and heaps, skipping over copies of files from disc, then to load it, restores those dumps and loads the files that were loaded. then this could be dumped to memory card on crash.
+		- largest GC memory card is 8MB, might be enough...
+		- dump all crash info into a packed blob and make a QR code
 - PDA debug stuff
 	- somehow be able to examine objects that aren't in the main list, eg the staff
 	- show objects' names over the actual objects

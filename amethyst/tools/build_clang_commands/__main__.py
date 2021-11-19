@@ -23,8 +23,10 @@ def main():
 
     # look at each command
     for line in proc.stdout.decode('utf-8').splitlines():
+        #print(line)
         cmd = line.split(' ', maxsplit=1)[0]
-        if cmd.endswith(('-gcc', '-as')):
+        if cmd.startswith('-'): cmd = cmd[1:]
+        if cmd.endswith(('gcc', 'g++', 'as')):
             # if it's compiling or assembling a file, create an entry
             cmd = line.split()
 

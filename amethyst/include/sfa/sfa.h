@@ -1,6 +1,6 @@
 #ifndef _SFA_H_
 #define _SFA_H_
-#ifdef __cplusplus0
+#ifdef __cplusplus
 extern "C" {
 #endif
 

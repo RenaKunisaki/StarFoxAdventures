@@ -1,7 +1,7 @@
 PATCHES=bootstrap src
 include $(PWD)/config.mk
 
-.PHONY: all clean setup install run iso patch
+.PHONY: all clean setup install run iso patch setup
 
 ORIGISO ?= original.iso
 PATCHISO ?= patched.iso
@@ -74,8 +74,8 @@ run: install
 	dolphin-emu -d $(abspath $(DISCROOT)/../sys/main.dol)
 
 # build patched ISO
-# using bigger compression window is necessary to get a patch that's
-# ~700K instead of ~400M
+# using bigger compression window (1GB) is necessary to get a patch that's
+# ~4MB instead of ~400MB
 iso: install
 	@echo "[*] Preparing files..."
 	@find . -name \*debug.log -delete
@@ -85,6 +85,12 @@ iso: install
 	@echo "[*] Building ISO..."
 	./tools/isobuilder/__main__.py overwrite setName "Star Fox Adventures: Amethyst Edition" patchIso $(ORIGISO) $(PATCHISO) ./patchfiles
 
+# make patch file
 patch: iso
 	@echo "[*] Creating patch..."
-	@xdelta3 -f -n -B 268435456 -s $(ORIGISO) $(PATCHISO) patch.xdelta
+	@xdelta3 -f -n -B 1073741824 -s $(ORIGISO) $(PATCHISO) patch.xdelta
+
+# set up project (not tested)
+setup:
+	@mkdir -p patchfiles/files/gametext
+	@./tools/gametext/__main__.py injectAllCharsRecursive $(DISCROOT)/gametext patchfiles/files/gametext/

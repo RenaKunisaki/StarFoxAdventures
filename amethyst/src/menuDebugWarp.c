@@ -245,7 +245,6 @@ void warpMenu_draw(Menu *self) {
         menuDrawText(str, x, y, selected);
     }
 }
-
 void debugDoWarp(float x, float y, float z, int layer) {
     //calling warpToMap doesn't initialize the map correctly.
     //it's meant to be used from a sequence.
@@ -254,8 +253,8 @@ void debugDoWarp(float x, float y, float z, int layer) {
     //what we do now is create a restart point at the destination, respawn at
     //it, then restore the previous restart point (if any).
     int blocksPct=0, bytesPct=0;
-    getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
-    OSReport("Before unload: free = %d%%, %d%%", blocksPct, bytesPct);
+    //getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
+    //OSReport("Before unload: free = %d%%, %d%%", blocksPct, bytesPct);
 
     //objFreeAll(); //already done in unloadMap
     //not sure how much of this is necessary...
@@ -268,8 +267,8 @@ void debugDoWarp(float x, float y, float z, int layer) {
     waitNextFrame(); //but it doesn't hurt.
     objFreeMode = OBJ_FREE_DEFERRED; //back to normal
 
-    getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
-    OSReport("After unload: free = %d%%, %d%%", blocksPct, bytesPct);
+    //getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
+    //OSReport("After unload: free = %d%%, %d%%", blocksPct, bytesPct);
 
     //back up the current restart point
     //OSReport("restart=0x%08X save=0x%08X", pRestartPoint, pLastSavedGame);
@@ -284,6 +283,7 @@ void debugDoWarp(float x, float y, float z, int layer) {
     //replace the current restart point.
     vec3f pos; pos.x = x; pos.y = y; pos.z = z;
     gplayRestartPoint(&pos, 0, layer, false);
+    mapLoadByCoords(x, y, z, layer);
     waitNextFrame(); //probably unnecessary
     gplayGotoRestartPoint();
 
@@ -312,8 +312,8 @@ void debugDoWarp(float x, float y, float z, int layer) {
         gplayClearRestartPoint(); //wasn't one before, so don't have one now.
     }
 
-    getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
-    OSReport("After load: free = %d%%, %d%%", blocksPct, bytesPct);
+    //getFreeMemory(NULL, NULL, NULL, NULL, &blocksPct, &bytesPct);
+    //OSReport("After load: free = %d%%, %d%%", blocksPct, bytesPct);
 }
 
 void warpMenu_run(Menu *self) {

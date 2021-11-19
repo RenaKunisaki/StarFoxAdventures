@@ -2,6 +2,7 @@
  */
 #include "main.h"
 #include "revolution/os.h"
+#include "revolution/pad.h"
 
 //hack to ensure nothing is at offset 0 because that makes relocation difficult.
 int fart __attribute__((section(".offsetzero"))) = 0x52656E61;
@@ -35,10 +36,13 @@ static inline void checkTime() {
 
 
 static inline void doPadMainLoop() {
-    static u32 prevBtn3 = 0;
+    static u32 prevBtn3 = 0, prevBtn4 = 0;
     u32 bHeld3 = controllerStates[2].button;
+    u32 bHeld4 = controllerStates[3].button;
     u32 bPressed3 = bHeld3 & ~prevBtn3;
+    u32 bPressed4 = bHeld4 & ~prevBtn4;
     prevBtn3 = bHeld3;
+    prevBtn4 = bHeld4;
 
     //Pad 3 start: toggle time stop
     if(bPressed3 & PAD_BUTTON_START) timeStop = !timeStop;
@@ -56,7 +60,6 @@ static inline void doPadMainLoop() {
         isStep = false;
     }
 
-
     //Pad 3 Up: cycle heap displays
     if(bPressed3 & PAD_BUTTON_UP) {
         heapDrawMode++;
@@ -64,6 +67,9 @@ static inline void doPadMainLoop() {
     }
     if(bPressed3 & PAD_BUTTON_DOWN) printHeaps();
     //if(bPressed3 & PAD_BUTTON_DOWN) mapLoadDataFiles(0xC);
+
+    //Pad 4 Start: exit cutscene
+    if(bPressed4 & PAD_BUTTON_MENU) cutsceneExit();
 }
 
 void mainLoopHook() {
