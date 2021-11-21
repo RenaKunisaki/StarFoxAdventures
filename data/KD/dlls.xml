@@ -640,12 +640,18 @@
       <function address="0x8012D534" idx="0xF"/>
       <function address="0x8012D424" idx="0x10" name="loadOptions"/>
       <function address="0x8012D558" idx="0x11"/>
-      <function address="0x8012DFA8" idx="0x12"/>
+      <function address="0x8012DFA8" idx="0x12" name="getAct">
+        <params>
+          <param name="mapNo" reg="r3" type="int"/>
+        </params>
+        <return type="s8" />
+      </function>
       <function address="0x8012DECC" idx="0x13" name="setAct">
         <params>
-          <param name="mapNo" reg="r3" type="undefined4"/>
-          <param name="actNo" reg="r4" type="undefined4"/>
+          <param name="mapNo" reg="r3" type="int"/>
+          <param name="actNo" reg="r4" type="int"/>
         </params>
+        <return type="void" />
       </function>
       <function address="0x8012DEB8" idx="0x14"/>
       <function address="0x8012E068" idx="0x15" name="getObjGroupStatus"/>
@@ -670,8 +676,14 @@
       <function address="0x8012DE20" idx="0x22"/>
       <function address="0x8012DE30" idx="0x23"/>
       <function address="0x8012D994" idx="0x24"/>
-      <function address="0x8012DA08" idx="0x25"/>
-      <function address="0x8012DA28" idx="0x26"/>
+      <function address="0x8012DA08" idx="0x25" name="getCurCharacterState">
+        <params />
+        <return type="PlayerCharState *" />
+      </function>
+      <function address="0x8012DA28" idx="0x26" name="getCurCharPos">
+        <params />
+        <return type="CharPos *" />
+      </function>
       <function address="0x8012DA4C" idx="0x27"/>
       <function address="0x8012DA70" idx="0x28" name="getCurrentPlayerLactions"/>
       <function address="0x8012DAD0" idx="0x29" name="getCurrentPlayerEnvactions"/>
