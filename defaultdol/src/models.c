@@ -3,6 +3,11 @@
 int loadModelInstanceHook(int id) {
     int realId = model_lookupModelInd(id); //replaced
     OSReport("Load model instance 0x%X (0x%X)\n", id, realId);
+    if(realId < 0 || realId >= 0x4E9) {
+        OSReport("INVALID MODEL ID 0x%X\n", realId);
+        while(1);
+        realId = 0;
+    }
     return realId;
     //return 1;
 }
@@ -65,4 +70,32 @@ void initModelHooks() {
     WRITE16(0x800a711a, 0x0D48); //trk_tempbuf
     WRITE16(0x800abed2, 0x0D48); //trk_tempbuf size check
     //others are unchanged
+
+    //change Model struct layout
+    //GCpolygons
+    WRITE16(0x8007e6d2, 0x005c); //initPtrs
+    WRITE16(0x8007e6de, 0x005c); //initPtrs
+    WRITE16(0x8007e6e6, 0x005c); //initPtrs
+    WRITE16(0x8007e6ea, 0x005c); //initPtrs
+    WRITE16(0x8007e6f6, 0x005c); //initPtrs
+    WRITE16(0x800800ee, 0x005c); //modelGetGCPoly
+
+    //numGcPolygons (XXX)
+    //WRITE16(0x800800c6, 0x00B2); //modelGetGCPoly
+
+    //polygonGroups
+    WRITE16(0x8007e716, 0x0060); //initPtrs
+    WRITE16(0x8007e722, 0x0060); //initPtrs
+    WRITE16(0x8007e72a, 0x0060); //initPtrs
+    WRITE16(0x8007e72e, 0x0060); //initPtrs
+    WRITE16(0x8007e73a, 0x0060); //initPtrs
+    WRITE16(0x80080086, 0x0060); //modelGetPolyGroup
+
+    //numPolyGroups
+    WRITE16(0x80080066, 0x00F0); //modelGetPolyGroup
+
+    //ObjData
+    WRITE16(0x80082e8a, 0x0055); //nModels
+    WRITE16(0x8008301a, 0x0055); //nModels
+    WRITE16(0x800835a2, 0x0055); //nModels
 }

@@ -27,6 +27,9 @@
 
 typedef uint32_t size_t;
 
+//bsod.c
+void initBsodHooks();
+
 //compression.c
 int decompress(byte *src, int compLen, byte *dest, int *outLen);
 void initCompressionHooks();

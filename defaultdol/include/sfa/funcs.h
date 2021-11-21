@@ -16,6 +16,7 @@ GLOBALFN void* dCacheStore(void*, uint);
 GLOBALFN s32 DVDConvertPathToEntrynum(const char *path);
 GLOBALFN BOOL DVDGetCurrentDir(char *path, u32 maxlen);
 GLOBALFN void* dvdLoadFile(const char *path, int *outSize, BOOL bLog);
+GLOBALFN void __flush_cache(void *addr, u32 len);
 GLOBALFN void free(void*);
 GLOBALFN void GXCopyDisp2 (void *frameBuf, u8 param2);
 GLOBALFN void* heapAlloc(int region, uint size, AllocTag tag, const char* name); //don't use this, use allocTagged

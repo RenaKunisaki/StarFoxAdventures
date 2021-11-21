@@ -338,3 +338,14 @@ Load model instance 0xFFFFD380 (0x2C80)
 OSPanic: models_dolphin.c: Failed assertion modelNum>=0 && modelNum<maxModelNum
 makeModelAnimation() size mismatch!! (0,-13)
 ANIMBANK overflow
+
+old:
+  0x44	0x4	addr	undefined *	GCpolygons
+  0x48	0x4	PolygonGroup *	PolygonGroup *	polygonGroups
+new:
+  0x5c	0x4	addr	pointer
+  0x60	0x4	ModelHeaderField60 *	ModelHeaderField60 *
+
+next it's choking on animations; I got it loading correct model numbers and getting the polygons from them
+
+800889ec is another place that's accessing obviously wrong fields
