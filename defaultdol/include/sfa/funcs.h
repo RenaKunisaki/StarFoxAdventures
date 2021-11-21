@@ -26,8 +26,10 @@ GLOBALFN void* memcpy(void *dest, void *src, int len);
 GLOBALFN void* memset(void *dest, u8 val, int len); // clobbers: r0, r6, r7
 GLOBALFN void* model_load(int id); //Model*
 GLOBALFN int model_lookupModelInd(int id);
+GLOBALFN ObjData * objLoadData(int objType);
 GLOBALFN void OSReport(const char *fmt, ...);
 GLOBALFN char* strcpy(char *dest, const char *src);
+GLOBALFN char* strncpy(char * __dest, char * __src, uint __n);
 GLOBALFN BOOL tex0count(u32 fileId);
 GLOBALFN void tex0GetMipmap(u32 offset, u32 mipIdx, u32* outSize, u32* outCompSize, int size, void *dest, int doWhat);
 GLOBALFN BOOL tex1count(u32 fileId);

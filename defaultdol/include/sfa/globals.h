@@ -5,5 +5,6 @@ extern void *dataFileBuffers[NUM_FILES];
 extern const char *dataFileNames[NUM_FILES];
 extern u16 exceptionCode;
 extern int numTextures[2];
+extern s16 *objindex_bin;
 extern s16 *pTexTableBin;
 extern u32 *textureTables[2];

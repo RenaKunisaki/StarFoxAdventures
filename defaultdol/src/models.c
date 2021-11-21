@@ -28,15 +28,15 @@ void* loadModelHook(int id) {
 void _decompModelHook(int file, uint offset, void *dest) {
     offset &= 0xFFFFFF;
     u32 *src = dataFileBuffers[file] + offset;
-    OSReport("Decode model from file 0x%X offset 0x%X (0x%08X) to 0x%08X\n",
-        file, offset, src, dest);
+    //OSReport("Decode model from file 0x%X offset 0x%X (0x%08X) to 0x%08X\n",
+    //    file, offset, src, dest);
     u32 header = *src;
     u32 outLen = 0;
     int err;
 
     err = decompress(src, 0, dest, &outLen);
     if(!err) {
-        OSReport("Decompressed model: 0x%X bytes\n", outLen);
+        //OSReport("Decompressed model: 0x%X bytes\n", outLen);
     }
     else OSReport("Decompress model failed (%d)\n", err);
 }
@@ -95,7 +95,7 @@ void initModelHooks() {
     WRITE16(0x80080066, 0x00F0); //modelGetPolyGroup
 
     //ObjData
-    WRITE16(0x80082e8a, 0x0055); //nModels
-    WRITE16(0x8008301a, 0x0055); //nModels
-    WRITE16(0x800835a2, 0x0055); //nModels
+    //WRITE16(0x80082e8a, 0x0055); //nModels
+    //WRITE16(0x8008301a, 0x0055); //nModels
+    //WRITE16(0x800835a2, 0x0055); //nModels
 }

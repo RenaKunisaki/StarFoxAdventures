@@ -1,89 +1,5 @@
 #include "main.h"
 
-//XXX move these
-typedef struct ObjDef {
-	s16   objType;       //0x00 ObjDefEnum
-	byte  allocatedSize; //0x02
-	byte  mapActs1;      //0x03
-	u8    loadFlags;     //0x04 RomListObjLoadFlags
-	byte  mapActs2;      //0x05
-	byte  bound;         //0x06
-	byte  unk7;          //0x07
-	vec3f pos;           //0x08
-	u32   id;            //0x14 ObjUniqueId
-} ObjDef;
-CASSERT(sizeof(ObjDef) == 0x18, sizeof_ObjDef);
-
-typedef enum {
-    ASSET_TYPE_FILE = 0,
-    ASSET_TYPE_FILE_WITH_OFFSET,
-    ASSET_TYPE_FILE_WITH_ID_SIZE,
-    ASSET_TYPE_TEXTURE,
-    ASSET_TYPE_CHARACTER,
-    ASSET_TYPE_DLL,
-    ASSET_TYPE_MODEL_INSTANCE, //unused in final
-    ASSET_TYPE_ANIMATION,
-    NUM_ASSET_TYPES
-} AssetTypeEnum;
-
-typedef struct {
-    bool    unk00;
-    u8      type; //AssetTypeEnum
-    u8      unk02; //padding?
-    u8      unk03;
-    union {
-        struct {
-            u32    id;
-            void **buf;
-            u32    len;
-            u32    offset;
-        } file;
-
-        struct {
-            int    id;
-            Texture **buf;
-        } texture;
-
-        struct {
-            u32           unused04; //04
-            ObjInstance **buf;      //08
-            u32           unused0C; //0C
-            u32           unused10; //10
-            ObjInstance  *obj;      //14
-            ObjDef       *objDef;   //18
-            u32           flags;    //1C
-            u32           unused20; //20
-            int           mapId;    //24
-            u32           unk;      //28 unused param?
-        } character;
-
-        struct {
-            int    id;          //04
-            void **buf;         //08 DLL*
-            u32    exportCount; //0C
-        } dll;
-
-        struct {
-            int    id;    //04
-            void **buf;   //08 ModelInstance*
-            u32    flags; //0C
-        } modelInstance;
-
-        struct {
-            int    id;       //04
-            void **buf;      //08 Animation*
-            int    id2;      //0C
-            int    unused10; //10
-            int    unused14; //14
-            int    unused18; //18
-            int    unused1C; //1C
-            void  *dest;     //20
-            Model *model;    //24
-        } animation;
-    };
-} AssetDef;
-CASSERT(sizeof(AssetDef) == 0x2C, sizeof_AssetDef);
-
 void _assetLoadHook(AssetDef *def) {
     switch(def->type) {
         case ASSET_TYPE_FILE:
@@ -105,18 +21,31 @@ void _assetLoadHook(AssetDef *def) {
                 def->texture.id, def->texture.buf);
             break;
 
-        case ASSET_TYPE_CHARACTER:
+        case ASSET_TYPE_CHARACTER: {
             OSReport("LoadAsset char to %08X type %04X pos %f, %f, %f ID %08X map %02X obj %08X flags %08X\n",
                 *def->character.buf, def->character.objDef->objType,
                 def->character.objDef->pos.x, def->character.objDef->pos.y,
                 def->character.objDef->pos.z, def->character.objDef->id,
                 def->character.mapId, def->character.obj, def->character.flags);
             //OSReport doesn't handle more than a certain number of params
+            //(probably I don't handle the stack properly in my patch)
             OSReport("  unused %08X %08X %08X %08X %08X\n",
                 def->character.unused04, def->character.unused0C,
                 def->character.unused10, def->character.unused20,
                 def->character.unk);
+
+            char objName[16];
+            strcpy(objName, "???");
+            int id = def->character.objDef->objType;
+            if(id < 0) id = -id;
+            else id = objindex_bin[id];
+            ObjData *data = objLoadData(id);
+            if(data) strncpy(objName, data->name, OBJECT_NAME_LEN);
+            OSReport("  -> \"%s\"\n", objName);
+
+            //XXX if ID is invalid, change it.
             break;
+        }
 
         case ASSET_TYPE_DLL:
             OSReport("LoadAsset DLL %04X exportCount %08X to %08X\n",

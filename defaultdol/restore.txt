@@ -349,3 +349,13 @@ new:
 next it's choking on animations; I got it loading correct model numbers and getting the polygons from them
 
 800889ec is another place that's accessing obviously wrong fields
+if we can find somewhere that displays an object's name that would help
+looks like it's at field 0x5F, dunno length though
+that matches the kiosk version, where it's 15
+in fact we've been using the kiosk version files but the final version offsets...
+seems like it's been OK so far
+actually kiosk seems to use 0x58, but DP uses 0x5F
+so I'll put in the DP OBJECTS.bin/tab
+it doesn't like DP's MODELS.* though
+
+by disabling some animation-related functions the model viewer doesn't crash but also doesn't do anything
