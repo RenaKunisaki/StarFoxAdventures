@@ -48,6 +48,7 @@ const char *strings_English[] = {
     "Cur Lives", //current extra lives
     "Cur MP", //current magic power
     "CutScene Volume", //audio volume during scenes
+    "Day", //day of month
     "Debug", //debug menu
     "Debug Objects", //show objects that are normally hidden
     "Debug Text", //show debugging text
@@ -112,6 +113,7 @@ const char *strings_English[] = {
     "Language", //change text language
     "Lights", //debug: examine lights
     "List", //open a list of objects
+    "Load EnvFX", //load environment effects
     "Load  Flags", //flags to use when loading (extra space for alignment)
     "Load Map", //load a map's assets
     "Low HP Flash", //flash the HP meter when HP is low

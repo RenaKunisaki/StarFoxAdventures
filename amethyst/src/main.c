@@ -68,8 +68,8 @@ static inline void doPadMainLoop() {
     if(bPressed3 & PAD_BUTTON_DOWN) printHeaps();
     //if(bPressed3 & PAD_BUTTON_DOWN) mapLoadDataFiles(0xC);
 
-    //Pad 4 Start: exit cutscene
-    if(bPressed4 & PAD_BUTTON_MENU) cutsceneExit();
+    //Pad 4 Start: exit cutscene (does not work)
+    if(bPressed4 & PAD_BUTTON_MENU) seqNumBgCmds = 0;
 }
 
 void mainLoopHook() {

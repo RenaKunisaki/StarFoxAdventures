@@ -36,6 +36,7 @@ const char *strings_Japanese[] = {
     "現在ライフ", //current extra lives
     "現在MP", //current magic power
     "カットシーン音量", //audio volume during scenes
+    "Day", //day of month
     "デバッグ", //debug menu
     "デバックオブジェクト", //show objects that are normally hidden
     "デバックテキスト", //show debugging text
@@ -100,6 +101,7 @@ const char *strings_Japanese[] = {
     "言語", //change text language
     "ライト", //debug: examine lights
     "名鑑", //open a list of objects
+    "Load EnvFX", //load environment effects
     "Load  Flags", //flags to use when loading (extra space for alignment)
     "Load Map", //load a map's assets
     "HP低下 フラッシュ", //flash the HP meter when HP is low
