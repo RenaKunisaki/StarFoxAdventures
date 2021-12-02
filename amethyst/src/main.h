@@ -105,6 +105,9 @@ int drawText(const char *str, int x, int y, int *outX, int *outY, u32 flags, Col
 int drawColorText(const char *str, int x, int y, Color4b color);
 int drawSimpleText(const char *str, int x, int y);
 
+//env.c
+void envHooksInit();
+
 //freemove.c
 extern bool bFreeMove;
 extern vec3f freeMoveCoords;

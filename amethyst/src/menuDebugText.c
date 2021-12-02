@@ -165,6 +165,17 @@ void menuDebugTextAudioSFX_select(const MenuItem *self, int amount) {
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }
 
+
+void menuDebugTextEnvironment_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugTextFlags & DEBUGTEXT_ENVIRONMENT) ? T("On") : T("Off"));
+    menuDrawText(str, x, y, selected);
+}
+void menuDebugTextEnvironment_select(const MenuItem *self, int amount) {
+    debugTextFlags ^= DEBUGTEXT_ENVIRONMENT;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
 #define _FMT "%s:\eX300%s"
 Menu menuDebugText = {
     "Debug Text", 0,
@@ -184,6 +195,7 @@ Menu menuDebugText = {
     "RNG",             _FMT, menuDebugTextRNG_draw,          menuDebugTextRNG_select,
     "Audio Streams",   _FMT, menuDebugTextAudioStreams_draw, menuDebugTextAudioStreams_select,
     "Audio SFX",       _FMT, menuDebugTextAudioSFX_draw,     menuDebugTextAudioSFX_select,
+    "Environment",     _FMT, menuDebugTextEnvironment_draw,  menuDebugTextEnvironment_select,
     NULL,
 };
 #undef _FMT

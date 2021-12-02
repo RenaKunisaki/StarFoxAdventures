@@ -330,6 +330,7 @@ void _start(void) {
     logHitsInit();
     hitboxHooksInit();
     initMapHacks();
+    envHooksInit();
 
     //debug stuff
     WRITE_NOP(0x80119D90); //chapter select only needs Z button
@@ -352,6 +353,23 @@ void _start(void) {
 
     //make gold rings restore an entire heart
     WRITE32(0x8022fc50, 0x38800004);
+
+    //let it rain in Cape Claw sometimes
+    WRITE16(0x803235F0, 0x01A8);
+    WRITE16(0x80323600, 0x008A);
+    WRITE16(0x80323580, 0x01B8);
+    WRITE16(0x80323590, 0x01B8);
+    WRITE16(0x80323548, 0x01B9);
+    WRITE16(0x80323558, 0x01B9);
+    WRITE16(0x803235B8, 0x01BA);
+    WRITE16(0x803235C8, 0x01BA);
+
+    //make it snow more in SnowHorn Wastes sometimes
+    WRITE16(0x80326af8, 0x002A);
+    WRITE16(0x80326b0c, 0x0102);
+    WRITE16(0x80326b26, 0x002A);
+    //for other maps there's no weather table (or it's not as easy to find)
+    //so we'd have to add one...
 
     //remove useless items from C menu
     //WRITE16(0x8031b1c0, 0x0096); //water spellstone 1

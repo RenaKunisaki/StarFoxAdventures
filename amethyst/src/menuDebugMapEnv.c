@@ -16,7 +16,7 @@ void menuDebugMapEnvDay_select(const MenuItem *self, int amount) {
 
 void menuDebugMapEnvTime_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
-    debugPrintf("pSkyStruct=%08X", pSkyStruct);
+    debugPrintf("pSkyStruct=%08X\n", pSkyStruct);
     if(pSkyStruct) {
         int now = (int)pSkyStruct->timeOfDay;
         sprintf(str, self->fmt, T(self->name),
@@ -29,23 +29,51 @@ void menuDebugMapEnvTime_draw(const MenuItem *self, int x, int y, bool selected)
 }
 void menuDebugMapEnvTime_select(const MenuItem *self, int amount) {
     if(pSkyStruct) {
-        pSkyStruct->timeOfDay += amount * 60;
+        if(controllerStates[0].button & PAD_TRIGGER_Z) {
+            pSkyStruct->timeOfDay += amount * 3600;
+        }
+        else pSkyStruct->timeOfDay += amount * 60;
         audioPlaySound(NULL, MENU_ADJUST_SOUND);
     }
     else audioPlaySound(NULL, MENU_FAIL_SOUND);
 }
 
 static s16 envFxId = 0; //XXX find current ID?
+static const char *types[] = {"Rain", "?", "?", "Fog", "Snow", "Color", "Clouds"};
 void menuDebugMapEnvGet_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
     sprintf(str, "%s: \eF0x%04X", T("Load EnvFX"), envFxId);
     menuDrawText(str, x, y, selected);
+
+    //display envfx entry data
+    EnvFxActEntry *entry = (EnvFxActEntry*)dataFileBuffers[FILE_ENVFXACT_BIN];
+    if(entry) entry = &entry[envFxId];
+    else return;
+
+    debugPrintf("envfx=" DPRINT_FIXED "%08X" DPRINT_NOFIXED
+        ": %02X (%s), intensity %d, speed %f, fade %d\n",
+        entry, entry->type, entry->type < 7 ? types[entry->type] : "?",
+        entry->intensity, entry->skyMoveSpeed, entry->fadeTimer);
+    debugPrintf("cloud: " DPRINT_FIXED "%d %d vis %d" DPRINT_NOFIXED " flags "
+        DPRINT_FIXED "%02X %02X" DPRINT_NOFIXED "\nColors: " DPRINT_FIXED,
+        entry->cloudIdx, entry->cloudTimer2C, entry->visibility,
+        entry->cloudFlags, entry->flags59);
+    for(int i=0; i<8; i++) {
+        debugPrintf("%02X%02X%02X ", entry->red[i], entry->green[i], entry->blue[i]);
+    }
+    debugPrintf(DPRINT_NOFIXED "\nUnk: %f %f\n", entry->unk00, entry->unk04);
 }
 void menuDebugMapEnvGet_select(const MenuItem *self, int amount) {
-    if(amount) envFxId += amount;
+    if(amount) {
+        envFxId += amount;
+        if(envFxId < 0) envFxId += MAX_ENVFX_ID;
+        if(envFxId >= MAX_ENVFX_ID) envFxId -= MAX_ENVFX_ID;
+    }
     else {
-        //getEnvfxActImmediately(NULL, NULL, envFxId, 0);
-        getEnvfxAct(NULL, NULL, envFxId, 0);
+        if(controllerStates[0].button & PAD_TRIGGER_Z) {
+            getEnvfxActImmediately(pPlayer, pPlayer, envFxId, 0);
+        }
+        else getEnvfxAct(pPlayer, pPlayer, envFxId, 0);
     }
     audioPlaySound(NULL, MENU_ADJUST_SOUND);
 }

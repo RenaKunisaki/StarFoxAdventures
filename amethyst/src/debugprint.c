@@ -18,6 +18,7 @@ u32 debugTextFlags =
     //DEBUGTEXT_RNG |
     //DEBUGTEXT_AUDIO_STREAMS |
     //DEBUGTEXT_AUDIO_SFX |
+    DEBUGTEXT_ENVIRONMENT |
     0;
 u32 debugRenderFlags =
     //DEBUGRENDER_WORLD_MAP |
@@ -359,6 +360,36 @@ static void printSFX() {
     }
 }
 
+static void printEnvironment() {
+    debugPrintf("Day " DPRINT_FIXED "%2d, ", mainGetBit(0x2BA));
+    if(pSkyStruct) {
+        int now = (int)pSkyStruct->timeOfDay;
+        debugPrintf("%02d:%02d:%02d s %d %f" DPRINT_NOFIXED "\n",
+            (int)(now / 3600),
+            (int)(now /   60) % 60,
+            (int)(now)        % 60,
+            pSkyStruct->timeSpeed210, pSkyStruct->timeSpeed);
+    }
+    else debugPrintf(DPRINT_NOFIXED "no sky\n");
+    SaveGameEnvState *env = saveGame_getEnv();
+    if(env) {
+        debugPrintf("Saved FX: " DPRINT_FIXED);
+        for(int i=0; i<8; i++) {
+            //this is an array of 5 and another array of 3
+            //not sure why
+            debugPrintf("%04X ", env->envFxActIdx[i] & 0xFFFF);
+        }
+        debugPrintf(DPRINT_NOFIXED "flags=" DPRINT_FIXED "%02X"
+            DPRINT_NOFIXED "\nUnk: " DPRINT_FIXED, env->flags40);
+        u8 *data = (u8*)&env->unk38;
+        for(int i=0; i<8; i++) {
+            debugPrintf("%02X ", data[i]);
+        }
+        debugPrintf(DPRINT_NOFIXED "Objs " DPRINT_FIXED "%d %d %d" DPRINT_NOFIXED "\n",
+            env->skyObjIdx[0], env->skyObjIdx[1], env->skyObjIdx[2]);
+    }
+}
+
 void mainLoopDebugPrint() {
     drawHeaps();
     if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
@@ -384,6 +415,7 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_PLAYER_STATE)      printPlayerState();
     if(debugTextFlags & DEBUGTEXT_AUDIO_STREAMS)     printStreams();
     if(debugTextFlags & DEBUGTEXT_AUDIO_SFX)         printSFX();
+    if(debugTextFlags & DEBUGTEXT_ENVIRONMENT)       printEnvironment();
 
     //not sure what these are, seem to never be used?
     /* extern ObjInstance *objVar_802cada0[5];
