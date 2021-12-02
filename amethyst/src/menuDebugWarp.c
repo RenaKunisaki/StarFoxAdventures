@@ -42,7 +42,7 @@ WarpMenuItem warps[] = {
     { -1601,  -1216,   -960,  0}, //"LightFoot Village - Shrine Warp",
     { -1299,   -814,  -1932,  0}, //"LightFoot Village - Front",
     { -3150,   -895,  -1758,  0}, //"LightFoot Village - Back",
-    {  1845,  -1624,  -2330,  0}, //"Cape Claw",
+    {  1309,  -1201,  -4317,  0}, //"Cape Claw",
     {   829,   1302, -16477,  0}, //"CloudRunner Fortress - Dungeon",
     {  4125,   1464, -18232,  0}, //"CloudRunner Fortress - Entrance",
     {   233,   2196, -17591,  0}, //"CloudRunner Fortress - Queen Cage",
