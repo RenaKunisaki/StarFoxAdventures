@@ -39,7 +39,8 @@ void menuDebugMapEnvTime_select(const MenuItem *self, int amount) {
 }
 
 static s16 envFxId = 0; //XXX find current ID?
-static const char *types[] = {"Rain", "?", "?", "Fog", "Snow", "Color", "Clouds"};
+static const char *types[] = {
+    "Rain/Snow", "?", "?", "Fog", "Rain/Snow", "Color", "Clouds"};
 void menuDebugMapEnvGet_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
     sprintf(str, "%s: \eF0x%04X", T("Load EnvFX"), envFxId);

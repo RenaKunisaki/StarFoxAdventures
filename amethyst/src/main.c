@@ -68,8 +68,9 @@ static inline void doPadMainLoop() {
     if(bPressed3 & PAD_BUTTON_DOWN) printHeaps();
     //if(bPressed3 & PAD_BUTTON_DOWN) mapLoadDataFiles(0xC);
 
-    //Pad 4 Start: exit cutscene (does not work)
-    if(bPressed4 & PAD_BUTTON_MENU) seqNumBgCmds = 0;
+    //Pad 4 Start: abort cutscene
+    //XXX also stop dialogue
+    if(bPressed4 & PAD_BUTTON_MENU) endObjSequence(curSeqNo);
 }
 
 void mainLoopHook() {
@@ -355,10 +356,14 @@ void _start(void) {
     WRITE32(0x8022fc50, 0x38800004);
 
     //let it rain in Cape Claw sometimes
+    //XXX add some triggers to disable it when entering areas
+    //that have a roof.
+    //also, ensure the rain isn't disabled when we enter. (or don't?
+    //that just means it'll be foggy but not rainy sometimes.)
     WRITE16(0x803235F0, 0x01A8);
     WRITE16(0x80323600, 0x008A);
-    WRITE16(0x80323580, 0x01A8);
-    WRITE16(0x80323590, 0x008A);
+    WRITE16(0x80323580, 0x01B8);
+    WRITE16(0x80323590, 0x01B8);
     WRITE16(0x80323548, 0x01B9);
     WRITE16(0x80323558, 0x01B9);
     WRITE16(0x803235B8, 0x01BA);
@@ -368,8 +373,8 @@ void _start(void) {
     WRITE16(0x80326af8, 0x002A);
     WRITE16(0x80326b0c, 0x0102);
     WRITE16(0x80326b26, 0x002A);
-    //for other maps there's no weather table (or it's not as easy to find)
-    //so we'd have to add one...
+    //for other maps there's no weather table so we'd have to add one...
+    //(TTH has one but it's fine as it is)
 
     //remove useless items from C menu
     //WRITE16(0x8031b1c0, 0x0096); //water spellstone 1
