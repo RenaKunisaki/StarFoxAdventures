@@ -173,17 +173,18 @@ void mainLoopHook() {
         cameraUpdate(1);
     }
 
+    //XXX doesn't always work?
     if(overrideColorScale >= 0) colorScale = overrideColorScale;
 
     doHudHacks();
     raceTimerUpdate();
 }
 
-static u32 oldSaveGameInitialise = 0;
+/* static u32 oldSaveGameInitialise = 0;
 static void dll_SaveGame_initialise_hook(void *unused) {
     OSReport("SaveGame initialise");
     ((void (*)(void))oldSaveGameInitialise)();
-}
+} */
 
 static inline void _initSaveHacks() {
     hookBranch(0x800e7fb0, saveLoadHook, 1);
@@ -194,8 +195,8 @@ static inline void _initSaveHacks() {
     WRITE32(0x8007EF5C, 0x3B200000);
     WRITE32(0x8007F15C, 0x3B200000);
 
-    oldSaveGameInitialise = READ32(0x80311910);
-    WRITE32(0x80311910, dll_SaveGame_initialise_hook);
+    //oldSaveGameInitialise = READ32(0x80311910);
+    //WRITE32(0x80311910, dll_SaveGame_initialise_hook);
 }
 
 static inline void _initDebugPrintHacks() {
@@ -251,6 +252,7 @@ static inline void _initPlayerHacks() {
 
 static inline void _initControllerHacks() {
     //enable all four controllers, which enables at least one debug function
+    //(plus several more we added)
     WRITE8(0x80014B87, 4);
     WRITE8(0x80014BC7, 4);
     WRITE8(0x80014C1B, 4);
@@ -264,15 +266,16 @@ static inline void _initControllerHacks() {
     WRITE8(0x80014EEB, 4);
 }
 
-void pdaHook() {
+/* void pdaHook() {
     openMainMenu();
-}
+} */
 
 void _pdaHook(void);
 __asm__(
     "_pdaHook:                \n"
     ASM_FUNC_START(0x80)
-    "bl    pdaHook            \n"
+    //"bl    pdaHook            \n"
+    "bl    openMainMenu       \n"
     ASM_FUNC_END(0x80)
     "lis    0,  0x8013        \n" //skip actual on/off code
     "ori    0,  0,  0x3A94    \n"
@@ -398,6 +401,50 @@ void _start(void) {
     //WRITE16(0x8031b530, 0x0096); //Open Portal spell
     //WRITE16(0x8031b540, 0x0096); //Staff Booster spell
 
+    //don't load a bunch of extra unneeded files at boot.
+    WRITE_NOP(0x8004929c); //various romlist.zlb files
+    //note, many of these are used by individual maps, but
+    //the copies in the disc root aren't used and are loaded
+    //at boot, which just wastes memory and time.
+    //there are several more unused entries but they're for
+    //files that don't exist anyway.
+    static const u8 entries[] = { //XXX verify these are all unused.
+        0x0C,       //LACTIONS.bin (XXX used?)
+        0x10,       //FONTS.bin (old, unused)
+        0x13, 0x14, //GAMETEXT.bin, .tab (old unused ver)
+        0x18, 0x19, //SCREENS.bin, .tab
+        0x1A, 0x1B, //VOXMAP.tab, .bin
+        0x20, 0x21, //TEX1.bin, .tab
+        0x22,       //TEXTABLE.bin (XXX used?)
+        0x23, 0x24, //TEX0.bin, .tab
+        0x27,       //TRKBLK.tab
+        0x28, 0x29, //HITS.bin, .tab
+        0x2A, 0x2B, //MODELS.tab, .bin
+        0x2C,       //MODELIND.bin
+        0x2F, 0x30, //ANIM.TAB, .BIN
+        //this one the game seems to work without but generates
+        //a bunch of errors about reading outside of a file
+        //so it must be used somewhere...
+        //0x34,     //WEAPONDA.bin
+        0x35, 0x36, //VOXOBJ.tab, .bin
+        0x39, 0x3A, //SAVEGAME.bin, .tab
+        //these two, the game works without but is constantly
+        //trying to reload them...
+        //0x40,     //OBJEVENT.bin
+        //0x41,     //OBJHITS.bin
+        0x43,       //DLLS.tab (.bin doesn't exist)
+        //some duplicate entries too
+        0x45, 0x46, //MODELS.tab, .bin
+        0x49, 0x4A, //ANIM.TAB, .BIN
+        0x4B, 0x4C, //TEX1.bin, .tab
+        0x4D, 0x4E, //TEX0.bin, .tab
+        0x53, 0x54, //VOXMAP.tab, .bin
+        0x55, 0x56, //ANIMCURV.bin, .tab
+        0xFF}; //end
+    for(int i=0; entries[i] != 0xFF; i++) {
+        //change some jump table entries to a nearby blr.
+        WRITE32(0x802cc534 + entries[i] * 4, 0x80049500);
+    }
     DPRINT("Hooks installed!");
 }
 
