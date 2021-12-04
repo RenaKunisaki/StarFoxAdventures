@@ -672,8 +672,7 @@
       </function>
     </functions>
   </dll>
-  <dll address="0x8030F4AC" dolOffs="0x30C4AC" id="0x0006" interface="common" unk08="0x00000000" unk0E="0x0000">
-    <description>related to text? loaded at title screen</description>
+  <dll name="sky2" address="0x8030F4AC" dolOffs="0x30C4AC" id="0x0006" interface="common" unk08="0x00000000" unk0E="0x0000">
     <functions>
       <function address="0x8008ED24" idx="0x0" name="initialise">
         <return type="void"/>
@@ -685,18 +684,22 @@
         <return type="void"/>
       </function>
       <function address="0x00000000" idx="0x2" valid="0"/>
-      <function address="0x8008E980" idx="0x3">
+      <function address="0x8008E980" idx="0x3" name="update">
         <params>
-          <param allowNull="1" name="unused1" reg="r3" type="ObjInstance*"/>
-          <param allowNull="1" name="unused2" reg="r4" type="ObjInstance*"/>
-          <param reg="r5" type="pointer"/>
+          <param allowNull="1" reg="r3" type="ObjInstance*" name="obj"/>
+          <param allowNull="1" reg="r4" type="ObjInstance*" name="obj2"/>
+          <param reg="r5" type="EnvFxActEntry*" name="entry"/>
+          <param reg="r6" type="int" name="range"/>
+          <param reg="r7" type="uint" name="idx"/>
         </params>
+        <return />
       </function>
       <function address="0x8008E858" idx="0x4" name="onMapSetup">
         <params/>
       </function>
-      <function address="0x8008DD50" idx="0x5">
+      <function address="0x8008DD50" idx="0x5" name="run">
         <params/>
+        <return />
       </function>
       <function address="0x8008DCB0" idx="0x6">
         <params>
@@ -724,8 +727,8 @@
       </function>
     </functions>
   </dll>
-  <dll name="snow" address="0x8030F5B4" dolOffs="0x30C5B4" id="0x0007" interface="common" unk08="0x00000000" unk0E="0x0000">
-    <description>relates to fog, snow; loaded at title screen</description>
+  <dll name="newclouds" address="0x8030F5B4" dolOffs="0x30C5B4" id="0x0007" interface="common" unk08="0x00000000" unk0E="0x0000">
+    <description>rain and snow</description>
     <functions>
       <function address="0x80093AD4" idx="0x0" name="initialise">
         <return type="void"/>
@@ -737,12 +740,15 @@
         <return type="void"/>
       </function>
       <function address="0x00000000" idx="0x2" valid="0"/>
-      <function address="0x80093110" idx="0x3">
+      <function address="0x80093110" idx="0x3" name="update">
         <params>
-          <param allowNull="1" reg="r3" type="ObjInstance*"/>
-          <param allowNull="1" reg="r4" type="ObjInstance*"/>
-          <param reg="r5" type="pointer"/>
+          <param allowNull="1" reg="r3" type="ObjInstance*" name="obj"/>
+          <param allowNull="1" reg="r4" type="ObjInstance*" name="obj2"/>
+          <param reg="r5" type="EnvFxActEntry*" name="entry"/>
+          <param reg="r6" type="int" name="range"/>
+          <param reg="r7" type="uint" name="idx"/>
         </params>
+        <return />
       </function>
       <function address="0x8009305C" idx="0x4" name="onMapSetup">
         <params/>
@@ -782,7 +788,7 @@
     </functions>
   </dll>
   <dll address="0x8030F7E8" dolOffs="0x30C7E8" id="0x0009" interface="common" name="cloudaction" unk08="0x00000000" unk0E="0x0000">
-    <description>loaded at title screen</description>
+    <description>Handles various sky objects</description>
     <functions>
       <function address="0x80094F60" idx="0x0" name="initialise">
         <return type="void"/>
@@ -794,13 +800,14 @@
         <return type="void"/>
       </function>
       <function address="0x00000000" idx="0x2" valid="0"/>
-      <function address="0x80094C40" idx="0x3">
+      <function address="0x80094C40" idx="0x3" name="update">
+        <description>Replace current objects as necessary</description>
         <params>
           <param allowNull="1" name="unused1" reg="r3" type="ObjInstance*"/>
           <param allowNull="1" name="unused2" reg="r4" type="ObjInstance*"/>
-          <param reg="r5" type="pointer"/>
-          <param name="unused4" reg="r6" type="undefined"/>
-          <param reg="r7" type="undefined2"/>
+          <param reg="r5" type="EnvFxActEntry*" name="entry"/>
+          <param name="range" reg="r6" type="int"/>
+          <param name="idx" reg="r7" type="uint"/>
         </params>
         <return type="void"/>
       </function>

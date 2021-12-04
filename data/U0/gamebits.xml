@@ -216,7 +216,7 @@
   </bit>
   <bit id="0x0076" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0077" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0078" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0078" table="2" hint="0x00" hasHint="0" max="1" name="WM_Galleon_despawn"/>
   <bit id="0x0079" table="1" hint="0x00" hasHint="0" max="1" name="IM_StartRace">
     <description>setting starts the race scene</description>
   </bit>
@@ -300,7 +300,7 @@
   </bit>
   <bit id="0x00A2" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00A3" table="1" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00A4" table="1" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x00A4" table="1" hint="0x00" hasHint="0" max="1" name="WM_GalleonRelated00A4"/>
   <bit id="0x00A5" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00A6" table="2" hint="0x00" hasHint="0" max="1">
     <objref map="capeclaw" obj="StaffLeverO" objId="0x00045DBC" param="activated"/>
@@ -365,7 +365,7 @@
   <bit id="0x00CD" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00CE" table="2" hint="0x00" hasHint="0" max="1" name="IMRelated00CE"/>
   <bit id="0x00CF" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x00D0" table="2" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x00D0" table="2" hint="0x00" hasHint="0" max="1" name="WM_GalleonRelated00D0"/>
   <bit id="0x00D1" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00D2" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x00D3" table="2" hint="0x00" hasHint="0" max="1"/>
@@ -1136,8 +1136,8 @@
     <objref map="swapcircle" obj="StaffLeverO" objId="0x00044A5D" param="enabled"/>
   </bit>
   <bit id="0x02B9" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02BA" table="3" hint="0x00" hasHint="0" max="0xFF" name="Envfx02BA">
-    <description>related to player envfx</description>
+  <bit id="0x02BA" table="3" hint="0x00" hasHint="0" max="0xFF" name="dayNo">
+    <description>Counts from 0 to 27, increasing every morning in-game time. Used for environmental effects.</description>
   </bit>
   <bit id="0x02BB" table="2" hint="0x00" hasHint="0" max="1" name="SH_QueenDoorOpen"/>
   <bit id="0x02BC" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -1435,15 +1435,15 @@
   <bit id="0x03A8" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03A9" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03AA" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related03AA"/>
-  <bit id="0x03AB" table="3" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x03AC" table="3" hint="0x00" hasHint="0" max="1" name="HudNumberRelated03AC">
-    <description>related to envfx; affects HUD number rendering</description>
+  <bit id="0x03AB" table="3" hint="0x00" hasHint="0" max="1" name="disableDayFX1"/>
+  <bit id="0x03AC" table="3" hint="0x00" hasHint="0" max="1" name="disableDayFX2">
+    <description>disable an environment effect</description>
   </bit>
   <bit id="0x03AD" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="IM_ObjGroups"/>
   <bit id="0x03AE" table="2" hint="0x00" hasHint="0" max="1" name="IM_EnteredHut"/>
   <bit id="0x03AF" table="3" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x03B0" table="3" hint="0x00" hasHint="0" max="1" name="Envfx03B0">
-    <description>related to envfx</description>
+  <bit id="0x03B0" table="3" hint="0x00" hasHint="0" max="1" name="disableDayFX4">
+    <description>disable an environment effect</description>
   </bit>
   <bit id="0x03B1" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03B2" table="1" hint="0x00" hasHint="0" max="1"/>
