@@ -59,6 +59,7 @@ typedef s32 PlayerStateEnum32;
 #include "memory/alloc.h"
 #include "audio/audio.h"
 #include "map/map.h"
+#include "map/environment.h"
 #include "game/game.h"
 #include "game/gamebits.h"
 #include "game/cheats.h"

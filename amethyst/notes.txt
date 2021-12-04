@@ -5,7 +5,7 @@ A    | Attack      |          |          | FreeCam Reset
 B    | Cancel      |          |          |
 X    | Roll        |          | FreeMove |
 Y    | Item        |          | FrameAdv | FreeCam Look at player
-St   | Pause       |          | TimeStop |
+St   | Pause       |          | TimeStop | Cutscene Abort
 L    | Strafe      |          | Camera   | FreeCam Move
 R    | Shield      |          | Camera   | FreeCam Move
 Z    | FirstPerson |          | SpeedUp  | FreeCam Fast
@@ -14,6 +14,20 @@ Down | Item/Map    |          |          |
 Left | Item/Map    |          |          |
 Rght | Item/Map    |          |          |
 
+we can save more memory by trimming some files.
+ENVFXACT.BIN has a bunch of empty, unused entries at the end.
+- check if other files do too.
+several files are read but not used - delete or trim them:
+- FONTS.bin
+- GAMETEXT.bin, tab
+- LACTIONS.bin (some things read this but do nothing with it)
+- SAVEGAME.bin, tab
+- SCREENS.bin, tab
+	sems this never does actually get loaded.
+	it's possible to load in WM_Galleon but never does.
+	in fact WM_Galleon isn't used at all. if you spawn it it's the ship
+	but it crashes immediately. if you disable the update method, it's just
+	the ship, same as in the SB scene, but with no hit detection.
 
 force debug object models to load.
 XXX this somehow breaks magic caves. you can't exit or collect the upgrade.

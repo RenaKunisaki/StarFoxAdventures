@@ -1,11 +1,20 @@
 typedef struct PACKED {
-    float timeOfDay;
-    short envFxActIdx[5];
-    short envFxActIdx2[3];
-    u8    unk14[0x2C]; //maybe not an array
-    u8    flags_0x40; //SaveGameEnvFxFlags40
+/*0x00*/ float	timeOfDay;
+/*0x04*/ short	envFxActIdx[5];
+/*0x0e*/ short	envFxActIdx2[3];
+/*0x14*/ vec3i	skyObjPos[3];
+/*0x38*/ u8 unk38;
+/*0x39*/ u8 unk39;
+/*0x3a*/ u8 unk3a;
+/*0x3b*/ u8 unk3b;
+/*0x3c*/ u8 unk3c;
+/*0x3d*/ u8 unk3d;
+/*0x3e*/ u8 unk3e;
+/*0x3f*/ u8 unk3f;
+/*0x40*/ u8	flags40; //1:enable clouds+lights; 8:enable lights; 20:heat FX
+/*0x41*/ s8	skyObjIdx[3];
 } SaveGameEnvState;
-CASSERT(sizeof(SaveGameEnvState) == 0x41, sizeof_SaveGameEnvState);
+CASSERT(sizeof(SaveGameEnvState) == 0x44, sizeof_SaveGameEnvState);
 
 typedef struct PACKED {
     u32 id; //ObjUniqueId
@@ -37,9 +46,6 @@ typedef struct PACKED {
     byte              unk6A6;           //0x6a6
     byte              unk6A7;           //0x6a7
     SaveGameEnvState  env;              //0x6a8
-    byte              unk6E9;           //0x6e9
-    byte              unk6EA;           //0x6ea unused? set to FF for new game
-    byte              unk6EB;           //0x6eb
 } SaveGame;
 CASSERT(sizeof(SaveGame) == 0x6EC, sizeof_SaveGame);
 

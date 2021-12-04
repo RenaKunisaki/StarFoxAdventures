@@ -13,6 +13,7 @@ should test what it does with files that contain 0 fonts, or 0 texts (or just sm
 
 # future versions
 - keyboard stuff
+	- GBA stuff? to replace the PDA?
 - improve memory usage
 	- does the staff swipe effect really need 180K!? really!?
 	- Improve emergency free
@@ -54,10 +55,11 @@ should test what it does with files that contain 0 fonts, or 0 texts (or just sm
 		- be able to use your 1ups?
 		- be less tedious in general
 		- have other crew members (besides Falco) help by shooting and such?
+		- restore the actual Scales fight instead
 	- move that one plant
 	- put some more warps around to/from the hollow
 	- make the test of fear less dumb
-		- how much of the dumb is just input lag?
+		- how much of the dumb is just input/display lag on my system?
 	- make Tricky less chatty
 		- make him attack badguys without being told
 	- make the fireball hitbox bigger and/or the switches

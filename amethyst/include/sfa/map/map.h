@@ -39,6 +39,8 @@ CASSERT(sizeof(GlobalMaEntry) == 0xC, sizeof_GlobalMaEntry);
 typedef struct {
     u8 unk[0x20C]; //XXX find a way to extract this from ghidra
     float timeOfDay; //0x20C
+    uint timeSpeed210;
+    float timeSpeed;
 } SkyStruct;
 extern SkyStruct *pSkyStruct;
 
