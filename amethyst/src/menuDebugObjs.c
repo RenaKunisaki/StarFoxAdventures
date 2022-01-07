@@ -123,6 +123,10 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
     drawSimpleText(str, x, y);
     y += LINE_HEIGHT;
 
+    //sprintf(str, "\eFMTX    %08X", obj->mtxIdx);
+    //drawSimpleText(str, x, y);
+    //y += LINE_HEIGHT;
+
     Model **models = obj->models = obj->models;
     Model  *model = models ? models[obj->curModel] : NULL;
     u16     mdlId = (model && model->header) ? model->header->modelId : 0xFFFF;

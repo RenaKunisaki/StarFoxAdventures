@@ -32,14 +32,16 @@ void textureMenu_draw(Menu *self) {
     Texture *tex = ltex ? ltex->texture : NULL;
 
     int id = ltex->id;
-    sprintf(str, "Tex %04X.%02X: ID %c%04X Unk %02X @%08X",
-        self->selected, textureMenuFrame, id >= 0 ? ' ' : '-',
-        ABS(id), ltex->unk08, tex);
+    char sign = (id < 0) ? '-' : ' ';
+    if(id < 0) id = -id;
+    sprintf(str, "Tex \eF%04X.%02X\eF: ID \eF%c%04X\eF Unk \eF%02X @%08X\eF",
+        self->selected, textureMenuFrame, sign,
+        id & 0x7FFF, ltex->unk08, tex);
     menuDrawText(str, x, y, false);
     y += LINE_HEIGHT;
 
     if(tex) {
-        sprintf(str, "Flags: %08X RefCnt: %3d Fmt: %02X; %d x %d",
+        sprintf(str, "Flags: \eF%08X\eF RefCnt: \eF%3d\eF Fmt: \eF%02X; %d x %d\eF",
             tex->flags, tex->refCount, tex->format, tex->width, tex->height);
         menuDrawText(str, x, y, false);
         y += LINE_HEIGHT;
