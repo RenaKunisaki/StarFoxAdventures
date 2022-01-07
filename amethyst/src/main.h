@@ -72,6 +72,9 @@ typedef enum { //for savedata (field unused01)
 
 //see also CameraFlags in camera.h
 
+//boot.c
+void initBootHacks();
+
 //bsod.c
 void bsodHook(void);
 
@@ -132,6 +135,7 @@ void printHits();
 void logHitsInit();
 
 //main.c
+extern u64 tBootStart;
 extern u32 debugCheats;
 extern s16 overrideColorScale;
 extern u8 overrideFov;

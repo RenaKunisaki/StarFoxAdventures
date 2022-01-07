@@ -7,6 +7,7 @@
 //hack to ensure nothing is at offset 0 because that makes relocation difficult.
 int fart __attribute__((section(".offsetzero"))) = 0x52656E61;
 
+u64 tBootStart;
 u32 debugCheats = 0; //DebugCheat
 s16 overrideColorScale = -1;
 u8 overrideFov = 60;
@@ -284,6 +285,7 @@ __asm__(
 );
 
 void _start(void) {
+    tBootStart = __OSGetSystemTime();
     DPRINT("Patch running!");
 
     //attempt to fix heap metrics (doesn't actually work)
@@ -303,6 +305,7 @@ void _start(void) {
 
     //Install hooks
     hookBranch(0x80137df8, bsodHook, 1);
+    initBootHacks();
     initBugFixes();
     if(!runLoadingScreens_replaced) {
         runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c,
@@ -403,6 +406,9 @@ void _start(void) {
 
     //don't load a bunch of extra unneeded files at boot.
     WRITE_NOP(0x8004929c); //various romlist.zlb files
+    //(not sure if those are totally unused, or just will be loaded
+    //again when needed, but the game seems to do fine.)
+
     //note, many of these are used by individual maps, but
     //the copies in the disc root aren't used and are loaded
     //at boot, which just wastes memory and time.
@@ -445,6 +451,23 @@ void _start(void) {
         //change some jump table entries to a nearby blr.
         WRITE32(0x802cc534 + entries[i] * 4, 0x80049500);
     }
+    // (boot time: seconds without "speed up disc transfer rate" in Dolphin)
+    // (fast boot: seconds with "speed up disc transfer rate")
+    // boot time | fast boot | bytes used | blocks used | comment
+    // 17.492796 |  1.833884 |    3615576 |         558 | with extra files
+    // 13.855829 |  1.783834 |    3615672 |         509 | without
+    //  3.636967 |  0.050050 |        -96 |          49 | saved
+    // memory stats here are strange, since the byte count is near identical
+    // (and actually lower with the extras) but the block count isn't.
+    // possibly a bug in memory measurement; the game's own stats
+    // are wrong for the first heap, so, shrug
+
+    /* for(int i=-100; i<=100; i++) {
+        float (*func)(float) = (float (*)(float))0x80294204;
+        float r = func(((float)i) / 100.0f);
+        OSReport("%f => %f\n", ((float)i) / 100.0f, r);
+    } */
+
     DPRINT("Hooks installed!");
 }
 
