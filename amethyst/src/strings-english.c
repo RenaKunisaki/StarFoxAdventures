@@ -153,6 +153,7 @@ const char *strings_English[] = {
     "Obj ID", //object ID
     "OBJNO", //object number
     "Obj No.", //object number
+    "Obj Seq", //show object sequences
     "Off", //off
     "On", //on
     "ORIG", //original position

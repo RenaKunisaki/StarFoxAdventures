@@ -141,6 +141,7 @@ const char *strings_Japanese[] = {
     "オブジェクトのID", //object ID
     "オブジェクト番号", //object number
     "オブジェクト番号", //object number
+    "Obj Seq", //show object sequences
     "Off", //off
     "On", //on
     "元の位置", //original position

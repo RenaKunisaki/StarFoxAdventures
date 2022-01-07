@@ -338,6 +338,7 @@ void _start(void) {
     hitboxHooksInit();
     initMapHacks();
     envHooksInit();
+    seqHooksInit();
 
     //debug stuff
     WRITE_NOP(0x80119D90); //chapter select only needs Z button

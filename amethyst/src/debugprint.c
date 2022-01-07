@@ -19,6 +19,7 @@ u32 debugTextFlags =
     //DEBUGTEXT_AUDIO_STREAMS |
     //DEBUGTEXT_AUDIO_SFX |
     //DEBUGTEXT_ENVIRONMENT |
+    DEBUGTEXT_OBJSEQ |
     0;
 u32 debugRenderFlags =
     //DEBUGRENDER_WORLD_MAP |
@@ -395,6 +396,13 @@ static void printEnvironment() {
     }
 }
 
+static void printObjSeq() {
+    if(curSeqNo) {
+        debugPrintf("Seq " DPRINT_FIXED "%02X" DPRINT_NOFIXED "\n",
+            curSeqNo);
+    }
+}
+
 void mainLoopDebugPrint() {
     drawHeaps();
     if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
@@ -421,6 +429,7 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_AUDIO_STREAMS)     printStreams();
     if(debugTextFlags & DEBUGTEXT_AUDIO_SFX)         printSFX();
     if(debugTextFlags & DEBUGTEXT_ENVIRONMENT)       printEnvironment();
+    if(debugTextFlags & DEBUGTEXT_OBJSEQ)            printObjSeq();
 
     //not sure what these are, seem to never be used?
     /* extern ObjInstance *objVar_802cada0[5];

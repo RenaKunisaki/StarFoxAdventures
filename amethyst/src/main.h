@@ -205,6 +205,9 @@ void saveUpdateHook();
 void* saveMapLoadHook(MapDirIdx32 map, DataFileEnum file);
 void saveShowMsgHook(int param);
 
+//seq.c
+void seqHooksInit();
+
 //sort.c
 typedef int(*CompareFunc)(const void *itemA, const void *itemB);
 //void quicksortStrings(const char **items, int iStart, int iEnd);
