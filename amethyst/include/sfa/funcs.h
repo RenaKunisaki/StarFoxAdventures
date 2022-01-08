@@ -159,6 +159,8 @@ GLOBALFN Model* objGetCurModelPtr(ObjInstance *obj);
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
 GLOBALFN void objMtxFn_8002b47c (ObjInstance * obj, Mtx44 * mtx, bool useScale);
+GLOBALFN void objRenderFn_80041018(ObjInstance *obj);
+GLOBALFN void objRenderModel(ObjInstance *obj);
 GLOBALFN void objRunSeq(uint seqIdx, ObjInstance *obj, u32 flags);
 GLOBALFN void objSetModel(ObjInstance *obj, int modelIdx);
 GLOBALFN void objSeq_onMapSetup(void);
