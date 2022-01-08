@@ -1885,7 +1885,7 @@
           <param name="effect" reg="r4" type="ScreenTransition"/>
         </params>
       </function>
-      <function address="0x800D7C44" idx="0x5" name="fadeIn">
+      <function address="0x800D7C44" idx="0x5" name="do2">
         <params>
           <param name="time" reg="r3" type="uint"/>
           <param name="type" reg="r4" type="ScreenTransition"/>
@@ -3515,8 +3515,8 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x80319C28" dolOffs="0x316C28" id="0x0046" interface="camera" unk08="0x00000000" unk0E="0x0000" name="CameraModeDebug">
-    <description>D-pad up/down zooms, Right returns to normal (0x42) mode, C rotates</description>
+  <dll address="0x80319C28" dolOffs="0x316C28" id="0x0046" interface="camera" unk08="0x00000000" unk0E="0x0000">
+    <description>camera mode that zooms in a bit</description>
     <functions>
       <function address="0x80109B00" idx="0x0" name="initialise" stub="1">
         <return type="void"/>
@@ -3560,7 +3560,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x80319C88" dolOffs="0x316C88" id="0x0047" interface="camera" name="CameraModePath" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x80319C88" dolOffs="0x316C88" id="0x0047" interface="camera" name="CameraModeTestStrength" unk08="0x00000000" unk0E="0x0000">
     <description>used in Test of Strength</description>
     <functions>
       <function address="0x8010BF04" idx="0x0" name="initialise" stub="1">
@@ -3921,7 +3921,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319E38" dolOffs="0x316E38" id="0x004F" interface="camera" unk08="0x00000000" unk0E="0x0000">
-    <description>camera mode that shows a closeup of the player from the left-front (following a curve?)</description>
+    <description>camera mode that shows a closeup of the player from the left-front</description>
     <functions>
       <function address="0x8010F53C" idx="0x0" name="initialise" stub="1">
         <return type="void"/>
@@ -4145,7 +4145,8 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x80319F28" dolOffs="0x316F28" id="0x0054" interface="camera" unk08="0x00000000" unk0E="0x0000" name="cameraModeDrakor">
+  <dll address="0x80319F28" dolOffs="0x316F28" id="0x0054" interface="camera" unk08="0x00000000" unk0E="0x0000">
+    <description>Used by Drakor</description>
     <functions>
       <function address="0x80110C7C" idx="0x0" name="initialise" stub="1">
         <return type="void"/>
@@ -4190,7 +4191,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x80319F58" dolOffs="0x316F58" id="0x0055" interface="camera" name="CameraModePerv" unk08="0x00000000" unk0E="0x0000">
-    <description>Camera mode that looks up at the player from way underground; never used? Seems intended to orbit something from a distance</description>
+    <description>Camera mode that looks up at the player from way underground; never used?</description>
     <functions>
       <function address="0x80110E2C" idx="0x0" name="initialise" stub="1">
         <return type="void"/>
@@ -11619,7 +11620,7 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x20" type="GameBit"/>
     </objparams>
   </dll>
-  <dll address="0x803211A0" dolOffs="0x31E1A0" id="0x0113" interface="object" name="NewSeqObj" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803211A0" dolOffs="0x31E1A0" id="0x0113" interface="object" name="SeqObj2" unk08="0x00000000" unk0E="0x0000">
     <description/>
     <functions>
       <function address="0x8017CBD8" idx="0x0" name="initialise" stub="1">
@@ -13975,7 +13976,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
   </dll>
   <dll address="0x803222B0" dolOffs="0x31F2B0" id="0x013B" interface="object" name="WallAnimator" unk08="0x00000000" unk0E="0x0000">
-    <description>For Tricky digging tunnels</description>
+    <description/>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
       <function address="0x00000000" idx="0x1" valid="0"/>

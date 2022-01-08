@@ -54,7 +54,7 @@
       <params>
         <param reg="r3" type="Camera*" name="this" />
         <param reg="r4" type="int" name="mode" />
-        <param reg="r5" type="pointer" />
+        <param reg="r5" type="void*" name="params" /><!-- type depends on DLL -->
         <param reg="r6" type="DllInitFlags" name="flags" />
         <param reg="f1" type="float" name="x" />
         <param reg="f2" type="float" name="y" />
@@ -68,13 +68,14 @@
       </params>
       <return type="void" />
     </function>
-    <function idx="5">
+    <function idx="5" name="free">
       <params>
         <param reg="r3" type="Camera*" name="this" />
       </params>
       <return type="void" />
     </function>
-    <function idx="6">
+    <function idx="6" name="copyToCurrent">
+      <description>Copy the given camera's coords and rotation to the active camera</description>
       <params>
         <param reg="r3" type="Camera*" name="this" />
       </params>

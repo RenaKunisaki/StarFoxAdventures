@@ -53,7 +53,7 @@
   <bit id="0x0020" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0021" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0022" table="2" hint="0x0C" hasHint="1" max="1" name="SH_FoundQueen"/>
-  <bit id="0x0023" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x0023" table="2" hint="0x00" hasHint="0" max="1" name="SH_SouthCave_Opening">
     <objref map="hollow" obj="HitAnimator" objId="0x00043BAC" param="target"/>
     <objref map="hollow" obj="SH_BombWall" objId="0x00044A9F" param="exploded"/>
   </bit>
@@ -250,7 +250,7 @@
     <objref map="hollow" obj="SH_BombWall" objId="0x00044A6F" param="exploded"/>
   </bit>
   <bit id="0x0089" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x008A" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x008A" table="2" hint="0x00" hasHint="0" max="1" name="SH_SouthCave_BombPlanted">
     <objref map="hollow" obj="BombPlant" objId="0x00043B5C" param="exists"/>
   </bit>
   <bit id="0x008B" table="2" hint="0x00" hasHint="0" max="1" name="SH_WarpStoneBombPlanted">
@@ -724,7 +724,7 @@
   </bit>
   <bit id="0x01AA" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01AB" table="2" hint="0x00" hasHint="0" max="1" name="SH_MetQueen"/>
-  <bit id="0x01AC" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x01AC" table="2" hint="0x00" hasHint="0" max="1" name="SH_SouthCave_Open">
     <objref map="hollow" obj="SH_BombWall" objId="0x00044A9F" param="onExplode"/>
   </bit>
   <bit id="0x01AD" table="2" hint="0x0D" hasHint="1" max="1" name="PlantedBombSpore">
@@ -1136,7 +1136,7 @@
     <objref map="swapcircle" obj="StaffLeverO" objId="0x00044A5D" param="enabled"/>
   </bit>
   <bit id="0x02B9" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x02BA" table="3" hint="0x00" hasHint="0" max="0xFF" name="dayNo">
+  <bit id="0x02BA" table="3" hint="0x00" hasHint="0" max="0xFF" name="ENV_dayNo">
     <description>Counts from 0 to 27, increasing every morning in-game time. Used for environmental effects.</description>
   </bit>
   <bit id="0x02BB" table="2" hint="0x00" hasHint="0" max="1" name="SH_QueenDoorOpen"/>
@@ -1435,15 +1435,15 @@
   <bit id="0x03A8" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03A9" table="3" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03AA" table="2" hint="0x00" hasHint="0" max="1" name="SH_Related03AA"/>
-  <bit id="0x03AB" table="3" hint="0x00" hasHint="0" max="1" name="disableDayFX1"/>
-  <bit id="0x03AC" table="3" hint="0x00" hasHint="0" max="1" name="disableDayFX2">
+  <bit id="0x03AB" table="3" hint="0x00" hasHint="0" max="1" name="ENV_disableDayFX1"/>
+  <bit id="0x03AC" table="3" hint="0x00" hasHint="0" max="1" name="ENV_disableDayFX2">
     <description>disable an environment effect</description>
   </bit>
   <bit id="0x03AD" table="3" hint="0x00" hasHint="0" max="0xFFFFFFFF" name="IM_ObjGroups"/>
   <bit id="0x03AE" table="2" hint="0x00" hasHint="0" max="1" name="IM_EnteredHut"/>
   <bit id="0x03AF" table="3" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x03B0" table="3" hint="0x00" hasHint="0" max="1" name="disableDayFX4">
-    <description>disable an environment effect</description>
+  <bit id="0x03B0" table="3" hint="0x00" hasHint="0" max="1" name="ENV_isOutdoor">
+    <description>disable rain, snow</description>
   </bit>
   <bit id="0x03B1" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x03B2" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -1618,7 +1618,7 @@
   <bit id="0x0426" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0427" table="1" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0428" table="1" hint="0x00" hasHint="0" max="0xF"/>
-  <bit id="0x0429" table="2" hint="0x00" hasHint="0" max="1">
+  <bit id="0x0429" table="2" hint="0x00" hasHint="0" max="1" name="WM_GalleonRelated429">
     <description>related to savegame/obj groups/galleon</description>
   </bit>
   <bit id="0x042A" table="1" hint="0x00" hasHint="0" max="1"/>
@@ -4357,7 +4357,7 @@
     <objref map="capeclaw" obj="HitAnimator" objId="0x0004A192" param="target"/>
   </bit>
   <bit id="0x0BF7" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0BF8" table="0" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x0BF8" table="0" hint="0x00" hasHint="0" max="1" name="SH_initObjGroups"/>
   <bit id="0x0BF9" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0BFA" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0BFB" table="0" hint="0x00" hasHint="0" max="1"/>
@@ -4821,7 +4821,7 @@
     <objref map="moonpass" obj="MagicCaveTo" objId="0x00049196" param="Visible"/>
     <objref map="moonpass" obj="StaffBoulde" objId="0x0004B07D" param="activated"/>
   </bit>
-  <bit id="0x0D2A" table="2" hint="0x00" hasHint="0" max="1" name="StaffSeqRelated0D2A">
+  <bit id="0x0D2A" table="2" hint="0x00" hasHint="0" max="1" name="SawStaffBoostPad">
     <description>StaffActivated checks for this (hardcoded) in some case relating to sequences</description>
   </bit>
   <bit id="0x0D2B" table="2" hint="0x00" hasHint="0" max="1">
