@@ -191,7 +191,7 @@ void menuDebugTextObjSeq_select(const MenuItem *self, int amount) {
 Menu menuDebugText = {
     "Debug Text", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Master",          _FMT, menuDebugTextMaster_draw,         menuDebugTextMaster_select,
+    "Master",          _FMT, menuDebugTextMaster_draw,       menuDebugTextMaster_select,
     "Player State",    _FMT, menuDebugTextPlayerState_draw,  menuDebugTextPlayerState_select,
     "Tricky",          _FMT, menuDebugTextTricky_draw,       menuDebugTextTricky_select,
     "Player Coords",   _FMT, menuDebugTextPlayerCoords_draw, menuDebugTextPlayerCoords_select,
