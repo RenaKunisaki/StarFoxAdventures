@@ -56,7 +56,7 @@ static u16 debugModels[] = {
     0x02D5, //small pyramid
     0x02D9, //small arrow
     0x031B, //red crystal (InvisibleHitSwitch)
-    0x0321, //default dube (WaterFallSpray)
+    0x0321, //default cube (WaterFallSpray)
     0x044C, //red cylinder
     0x044E, //red/green disc
     0x0458, //CHECK plane
