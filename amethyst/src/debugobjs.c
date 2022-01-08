@@ -40,7 +40,7 @@ static const u16 overrideDlls[] = {
     0x02B2, //DustMoteSou
     0};
 
-/** Don't make these objects visible. (XXX not implemented)
+/** Don't make these objects visible.
  */
 static const u16 ignoreDlls[] = {
     //0x015A, //Explodable
