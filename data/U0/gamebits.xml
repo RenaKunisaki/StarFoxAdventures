@@ -787,7 +787,7 @@
   <bit id="0x01C5" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01C6" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01C7" table="0" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x01C8" table="0" hint="0x00" hasHint="0" max="1"/>
+  <bit id="0x01C8" table="0" hint="0x00" hasHint="0" max="1" name="BaddieRelated1C8"/>
   <bit id="0x01C9" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01CA" table="0" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x01CB" table="0" hint="0x00" hasHint="0" max="1"/>

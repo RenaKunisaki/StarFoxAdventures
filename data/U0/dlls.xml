@@ -527,13 +527,13 @@
         <return type="void"/>
       </function>
       <function address="0x80080454" idx="0x21" name="SetObjs"/>
-      <function address="0x80080430" idx="0x22">
+      <function address="0x80080430" idx="0x22" name="setOverridePos">
         <params>
           <param name="x" reg="f1" type="double"/>
           <param name="y" reg="f2" type="double"/>
           <param name="z" reg="f3" type="double"/>
         </params>
-        <return type="undefined4"/>
+        <return type="BOOL"/>
       </function>
       <function address="0x800803EC" idx="0x23">
         <params>
