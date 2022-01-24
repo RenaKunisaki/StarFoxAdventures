@@ -58,9 +58,7 @@
     <objref map="hollow" obj="SH_BombWall" objId="0x00044A9F" param="exploded"/>
   </bit>
   <bit id="0x0024" table="2" hint="0x00" hasHint="0" max="1"/>
-  <bit id="0x0025" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_TrickysBall_Bought">
-    <description>separate from ITEM_TrickysBall_Got?</description>
-  </bit>
+  <bit id="0x0025" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_TrickyBall_Bought"/>
   <bit id="0x0026" table="2" hint="0x00" hasHint="0" max="1"/>
   <bit id="0x0027" table="2" hint="0x28" hasHint="1" max="1" name="DIM_FoundInjuredSnowHorn"/>
   <bit id="0x0028" table="2" hint="0x00" hasHint="0" max="1" name="ITEM_AlpineRoot_028"/>
