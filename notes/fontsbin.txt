@@ -1,0 +1,23 @@
+Font names:
+    KanjiFont
+    FunFont
+    DinoSubtitleFont1
+    DinoSubtitleFont2
+    SubtitleFont
+    DinoMediumFontIn
+    DinoMediumFontOut
+    CommunicatorFont
+    TeenyFont
+    LargeFont
+
+File format:
+    u32 numFonts
+    Font font[numFonts]
+
+Font:
+    char name[?]
+    some data that might be sizes, fmt, etc
+    some sort of character map: u8 ?, u8 char, ending with FFFF
+        some entries are just CDCD
+    ???
+    doesn't look like enough room for graphics.

@@ -1,0 +1,34 @@
+if state == Idle:
+	hitByPlayerTimer -= dT;
+	if(hitByPlayerTimer < 0) hitByPlayerTimer = 0;
+	if hit by an object held by Fox:
+		if hitByPlayerTimer > 0:
+			hitByPlayerTimer = hitByPlayerTimer + 600
+			if subState != AttackPlayer:
+				if not pissed off:
+					say "get off!"
+					become pissed off
+				else if hitByPlayerTimer <= 3000:
+					say "get off!"
+				else:
+					hitByPlayerTimer = hitByPlayerTimer / 2
+					if have Flame and not in water:
+						subState = AttackPlayer
+					else:
+						say "get off!"
+		else:
+			hitByPlayerTimer = hitByPlayerTimer + 180
+			say "hey!"
+
+to make him attack you:
+1) hit him
+2) within 3 seconds, hit him again
+3) within 13 seconds, hit him 3 more times; each hit gives you another 10 seconds
+4) the 5th hit pushes the timer past 3000 (50 seconds) and triggers an attack
+	- at this point the timer is divided by 2
+	- if he's in water or doesn't have Flame he won't attack, but timer is still divided by 2
+5) the timer will be about 1500 (25 seconds) when he attacks; within that time another 3 hits will trigger another attack
+
+while pissed off, he won't obey commands
+(actually that same flag is for any time he won't obey, like when he's bringing the ball)
+feeding him resets

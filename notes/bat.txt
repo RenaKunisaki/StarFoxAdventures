@@ -1,0 +1,67 @@
+      Upper    Lower    0    4    8    12   16   20   24   28
+IBAT0 80001FFF 00000002 1000 0000 0000 0000 0001 1111 1111 1111
+IBAT1 00000000 00000000
+IBAT2 00000000 00000000
+IBAT3 00000000 00000000
+IBAT4 80001FFF 00000002
+IBAT5 C0001FFF 0000002A
+IBAT6 00000000 00000000
+IBAT7 E00001FE E0000002
+DBAT0 80001FFF 00000002
+DBAT1 C0001FFF 0000002A
+DBAT2 00000000 00000000
+DBAT3 E00001FE F0000002
+DBAT4 00000000 00000000
+DBAT5 00000000 00000000
+DBAT6 00000000 00000000
+DBAT7 00000000 00000000
+
+new:  00001FFF 00000002
+we should be able to use IBAT1, DBAT2
+
+upper
+ 0 - 14 high bits of addr
+15 - 18 reserved
+19 - 29 block length
+30      valid for supervisor mode
+31      valid for user mode
+lower
+ 0 - 14 high bits of physical addr
+15 - 24 reserved
+25 - 28 write thru, cache inhibit, memory coherence, guarded
+29      reserved
+30 - 31 protection
+
+BAT Area
+Length BL Encoding
+128 Kbytes 000 0000 0000
+256 Kbytes 000 0000 0001
+512 Kbytes 000 0000 0011
+  1 Mbyte  000 0000 0111
+  2 Mbytes 000 0000 1111
+  4 Mbytes 000 0001 1111
+  8 Mbytes 000 0011 1111
+ 16 Mbytes 000 0111 1111
+ 32 Mbytes 000 1111 1111
+ 64 Mbytes 001 1111 1111
+128 Mbytes 011 1111 1111
+256 Mbytes 111 1111 1111
+
+//SPR528 IBAT0U—BAT 0 Upper 2
+//SPR529 IBAT0L—BAT 0 Lower 2
+//SPR530 IBAT1U—BAT 1 Upper 2
+//SPR531 IBAT1L—BAT 1 Lower 2
+//SPR532 IBAT2U—BAT 2 Upper 2
+//SPR533 IBAT2L—BAT 2 Lower 2
+//SPR534 IBAT3U—BAT 3 Upper 2
+//SPR535 IBAT3L—BAT 3 Lower 2
+// a contextsynchronizing operation or a sync instruction must precede a modification of the BAT or
+//segment registers when the corresponding address translations are enabled
+
+In order to make a BAT register pair valid such that the BAT array entry then translates the
+current instruction stream, the following sequence should be used if fields in both the upper
+and lower BAT registers are to be modified (for instruction address translation):
+1. Clear the V bit in the BAT register pair.
+2. Initialize the other fields in the BAT register pair appropriately.
+3. Set the V bit in the BAT register pair.
+4. Perform a context-synchronizing operation

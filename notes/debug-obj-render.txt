@@ -1,0 +1,76 @@
+which debug objects have null render functions
+DLL Description
+038 unused title screen menu
+039 something with world map
+03A UI stub
+040 credits
+0D8 PinPonSpike
+0E2 Staff
+0F6 Area
+0F8 LevelName
+108 dummy
+10A Fall_Ladders
+10E DeathSeq
+10F MMP_Bridge
+113 SeqObj2
+120 TrickyGuardSpot
+126 Trigger
+12C Transporter
+12D LFXEmitter
+131 CF_DoorLight
+132 WaterFallSpray
+13A VisAnimator
+13D ExplodeAnimator
+150 GCRobotLightBea
+153 CFPerch
+15A Explodable
+15B CFForceField
+174 CCriverflow
+17B DFSH_LaserBeam
+183 MMP_gyservent
+185 CCgasvent
+19D ?
+1A3 NW_animice
+1A4 NW_ice
+1DB DIM2PathGenerator
+1F0 SB_KyteCage
+1FC LaserBeam
+20B FireFly
+216 VFP_LevelControl
+219 ?
+21A VFP_statueball
+21B ?
+21C VFP_Ladders
+21E VFP_Block1
+222 VFPDragHead
+224 spellstone platform?
+227 VFP_lavastar
+228 VFP_SpellPlace
+229 DFP_LevelControl
+22E DoorSwitch
+230 DFP_wallbar
+231 DFP_ForceAway
+232 DFP_RotatePuzzle
+233 DFP_Statue1
+234 DFP_PerchSwitch
+237 DFPSpPl
+239 TextBlock
+240 GCRobotBlast
+253 KT_Lazerlight
+25F CRFuelTank
+265 DR_Creator
+279 DR_EnergyDisc
+280 DR_CloudPer
+281 DR_EarthCal
+287 SPScarab
+288 SPDrape
+289 SPitembeam
+299 ?
+29D ARWArwingGu
+29E dummy
+2AB ProjectedLight
+2AC ControlLight
+2B4 CNTcounter
+
+many of these probably aren't actually using the render method anyway.
+could hook into the render logic around 8003b9f4 and add an additional check, if we're going to use the render method but it's a stub, then don't use it

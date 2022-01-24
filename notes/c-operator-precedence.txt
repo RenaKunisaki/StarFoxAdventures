@@ -1,0 +1,42 @@
+Pr As  Operators      Description
+ 1 LR  ++   --        Suffix/postfix increment and decrement
+ 1 LR  ()             Function call
+ 1 LR  []             Array subscripting
+ 1 LR  .              Structure and union member access
+ 1 LR  ->             Structure and union member access through pointer
+ 1 LR  (type){list}   Compound literal(C99)
+ 2 RL  ++   --        Prefix increment and decrement [1]
+ 2 RL  +    -         Unary plus and minus
+ 2 RL  !    ~         Logical NOT and bitwise NOT
+ 2 RL  (type)         Cast
+ 2 RL  *              Indirection (dereference)
+ 2 RL  &              Address-of
+ 2 RL  sizeof         Size-of [2]
+ 2 RL  _Alignof       Alignment requirement(C11)
+ 3 LR  *   /   %      Multiplication, division, and remainder
+ 4 LR  +   -          Addition and subtraction
+ 5 LR  <<  >>         Bitwise left shift and right shift
+ 6 LR  <   <=         For relational operators < and ≤ respectively
+ 6 LR  >   >=         For relational operators > and ≥ respectively
+ 7 LR  ==  !=         For relational = and ≠ respectively
+ 8 LR  &              Bitwise AND
+ 9 LR  ^              Bitwise XOR (exclusive or)
+10 LR  |              Bitwise OR (inclusive or)
+11 LR  &&             Logical AND
+12 LR  ||             Logical OR
+13 RL  ?:             Ternary conditional [3]
+14 RL  =   [4]        Simple assignment
+14 RL  +=  -=         Assignment by sum and difference
+14 RL  *=  /=  %=     Assignment by product, quotient, and remainder
+14 RL  <<= >>=        Assignment by bitwise left shift and right shift
+14 RL  &=  ^=  |=     Assignment by bitwise AND, XOR, and OR
+15 LR  ,              Comma
+
+Pr=Precedence (1=highest), As=Associativity (Left-to-Right, Right-to-Left)
+
+[1] The operand of prefix ++ and -- can't be a type cast. This rule grammatically forbids some expressions that would be semantically invalid anyway. Some compilers ignore this rule and detect the invalidity semantically.
+[2] The operand of sizeof can't be a type cast: the expression sizeof (int) * p is unambiguously interpreted as (sizeof(int)) * p, but not sizeof((int)*p).
+[3] The expression in the middle of the conditional operator (between ? and :) is parsed as if parenthesized: its precedence relative to ?: is ignored.
+[4] Assignment operators' left operands must be unary (level-2 non-cast) expressions. This rule grammatically forbids some expressions that would be semantically invalid anyway. Many compilers ignore this rule and detect the invalidity semantically. For example, e = a < d ? a++ : a = d is an expression that cannot be parsed because of this rule. However, many compilers ignore this rule and parse it as e = ( ((a < d) ? (a++) : a) = d ), and then give an error because it is semantically invalid.
+
+from https://en.cppreference.com/w/c/language/operator_precedence

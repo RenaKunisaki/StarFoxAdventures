@@ -1,0 +1,21 @@
+Looks like there are 5 tiers of drops:
+1: MagicDustSm, MagicDustMi, MagicDustLa, MagicDustHu
+2: MagicDustLa, MagicDustHu
+3: Apple, EnergyEgg
+4: Apple, MagicDustSm
+5: EnergyEgg
+6: MagicDustMi, ?, EnergyEgg, MagicDustMi, special
+Tiers 2, 4, 5 are defined but not used.
+
+"special" is some case where it moves a previous drop?
+
+Each baddie that's capable of dropping loot flips a coin on death to determine if it will drop something. What it drops is specific to each individual baddie. They can drop up to 3 items at once, from tiers 1, 3 and 6.
+
+There's also some logic to override the drop type.
+
+(drops & 0xF000): index into tier 3
+(drops & 0x0F00): index into tier 1
+(drops & 0x00FF): index into tier 6
+Each index can be 0 to mean nothing
+
+Baddie::dropLoot(): 80149cec

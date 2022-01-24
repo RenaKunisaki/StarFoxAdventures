@@ -1,0 +1,42 @@
+finishing race first time:
+51:25:306 GameBit 0x03A3 (IM_BikeRelated03A3) set to -1
+51:25:306 GameBit 0x03AD (IM_ObjGroups) set to 526363
+51:25:327 GameBit 0x03A3 (IM_BikeRelated03A3) set to 0
+51:25:327 GameBit 0x03A2 (IM_BikeRelated03A2) set to 0
+51:25:328 GameBit 0x0378 (IM_BikeRelated0378) set to 0
+51:25:328 GameBit 0x03B9 (IM_BikeRelated03B9) set to 0
+51:25:328 GameBit 0x04E5 (IM_FinishedRace04E5) set to 1
+51:25:329 GameBit 0x0379 (IM_BikeRelated0379) set to 1
+(load several objects)
+51:25:339 GameBit 0x037A (IM_FinishedRace) set to 1
+51:25:339 GameBit 0x012F (HintTexts0) set to 50855934
+51:25:385 GameBit 0x04E3 (TrickyTalk) set to 255
+51:25:398 LOADED OBJECT Tricky
+51:25:458 LOADED OBJECT ModelsWithT
+51:26:678 GameBit 0x03A3 (IM_BikeRelated03A3) set to -1
+51:27:807 GameBit 0x0079 (IM_BikeRelated0079) set to 0
+51:27:807 GameBit 0x00C8 (IM_BikeRelated00C8) set to 0
+51:29:287 GameBit 0x01D6 (IM_TrickyRelated01D6) set to 0
+52:09:659 GameBit 0x03A1 (IM_Done) set to 1
+52:09:249 GameBit 0x03AD (IM_ObjGroups) set to 526355
+52:09:249 GameBit 0x03AD (IM_ObjGroups) set to 526339
+52:09:250 GameBit 0x00ED (IM_ActNo) set to 2
+52:09:250 GameBit 0x0965 (ITEM_Spell0965_Disabled) set to 0
+52:09:250 GameBit 0x0986 (ITEM_FireBlaster_Disabled) set to 0
+52:09:250 GameBit 0x0961 (ITEM_Spell0961_Disabled) set to 0
+52:09:250 GameBit 0x0969 (ITEM_SharpClawDisguise_Disabled) set to 0
+
+
+Texts:
+937 communicator world map names
+938 communicator key item names
+939 communicator spell/tricky skill names
+944-969, 1116-1133 communicator item descriptions
+1003-1012, 1101-1103 communicator world map descriptions
+1288-1299 communicator map descriptions
+1300 list of place names
+10004-10326 PDA info texts
+
+
+0A7B shouldEnableCMenu - what sets this?
+- collecting the key on the ship

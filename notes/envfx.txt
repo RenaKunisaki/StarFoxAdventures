@@ -1,0 +1,72 @@
+day counter changes at 5am
+some only work if you pass an object (maybe to center on?)
+the game seems to just use the player object
+the effect remains at the location of the object you use
+some crash if you give an object though
+
+notable envfx IDs:
+
+0000 plain night sky (even at noon)
+0001 snow
+0002 loads SKYScapeSto, SKYmountain
+0004 everything is red
+0007 rain but claims to be snow
+0009 distant green fog
+000A light gray fog
+000B you become red
+000C distant blue/green fog
+0013 sunny
+0016 directional snow; effect follows you
+0017 snow that keeps changing direction, doesn't follow
+001A rain
+001D loads SKYScapeDef
+001E loads several objects
+001F everything is magenta
+0020 breaks (unknown GX opcode) if applied to player
+0022 orange sky
+0025 black sky, otherwise sunny
+0026 invisible snow? (type=snow but none appears)
+002A gentle snow, follows
+002C used by magic cave
+002D night-like, used by magic cave
+0037 clear blue sky but you must load 0036 first?
+0040 intense rain, lightning
+005A light nearly-diagonal rain
+0065 moderate snow, doesn't follow
+0068 moderate snow, doesn't follow
+0076 extreme fog, you can't even see yourself
+007C orange sky
+007F used by CFMainCrystal
+0084 rain and lightning
+0089 heavy rain
+008A very heavy rain
+008B moderate rain
+0094 heavy rain, lightning
+00B2 yellow fog
+00B7 gentle snow, used in NW
+00BE moderate snow
+00CB poop fog
+00CD deep purple sky
+00D5 deep pink sky
+00D8 everything is green
+00DE rain, vertical only
+0100 heavy snow, doesn't follow
+0102 heavy snow, follows
+010D deep orange sky
+0120 thick fog in some directions
+0126 less-thick fog in all directions
+0136 defaults for player
+0137 defaults for player
+0143 defaults for player
+0161 thick smoke
+016F aliens (green fog, pink sky)
+0190 you become cloaked in shadow
+01A8 rain, used by TTH
+01AF super dark
+01B8 related to rain
+01B9 related to rain
+01BA related to rain
+021F used by title screen
+0242 used by Cape Claw
+0249 max used ID (all after this are all zeros)
+03FF max valid ID
