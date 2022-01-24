@@ -23,8 +23,7 @@ __pycache__
 **/discroot/*
 **/junk/*
 **/tmp/*
-dp/rom
-dp/decomp/**
+dp/**
 root/**
 demo/**
 SFAModelTesting/**
