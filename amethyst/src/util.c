@@ -69,7 +69,7 @@ ObjectFileStruct* getObjFile(int defNo) {
  *  @param file ObjectFileStruct to read from.
  *  @return true if file is valid, false if not.
  *  @note If the `file` parameter is not valid or the name is empty,
- *   the returned name is "N/A".
+ *   the returned name is "<none>" or "<invalid>".
  *  @note All control/non-ASCII characters are skipped when copying the name.
  */
 bool getObjFileName(char *dest, ObjectFileStruct *file) {
@@ -100,7 +100,7 @@ bool getObjFileName(char *dest, ObjectFileStruct *file) {
  *  @param obj ObjInstance to read from.
  *  @return true if obj is valid, false if not.
  *  @note If the `obj` parameter is not valid or the name is empty,
- *   the returned name is "N/A".
+ *   the returned name is "<none>" or "<invalid>".
  *  @note All control/non-ASCII characters are skipped when copying the name.
  */
 bool getObjName(char *dest, ObjInstance *obj) {
