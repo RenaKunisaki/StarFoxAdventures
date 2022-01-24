@@ -4,7 +4,7 @@
 #include "revolution/os.h"
 
 u32 debugTextFlags =
-    //DEBUGTEXT_TRICKY |
+    DEBUGTEXT_TRICKY |
     DEBUGTEXT_PLAYER_COORDS |
     DEBUGTEXT_CAMERA_COORDS |
     //DEBUGTEXT_RESTART_POINT |
@@ -403,6 +403,42 @@ static void printObjSeq() {
     }
 }
 
+static void printTrickyInfo() {
+    //this is in addition to a bunch of vanilla info
+    if(!(pTricky && pTricky->state && pTricky->defNo == ObjDefEnum_Tricky)) return;
+
+    static const char *stateNames[] = {
+        "Init", "Idle", "DigGround", "DigTunnel",
+        "Dummy4", "Move", "Dummy6", "Flame",
+        "Guard", "Unk9", "UnkA", "PlayBall",
+        "UnkC", "BaddieAlert", "Growl", "Stay",
+    };
+
+    void *state = (void*)pTricky->state;
+    //float timer364 = *(float*)(state + 0x364);
+    float lastDamageTimer = *(float*)(state + 0x370);
+    float timer71C = *(float*)(state + 0x71C);
+    float hitByPlayerTimer = *(float*)(state + 0x720);
+    //float float740 = *(float*)(state + 0x740);
+    char objName[16];
+
+    getObjName(objName, *(ObjInstance**)(state + 0x360));
+    debugPrintf("Tricky lastDmg:" DPRINT_FIXED "%5d" DPRINT_NOFIXED
+        " Type " DPRINT_FIXED "%02X" DPRINT_NOFIXED " Src %s",
+        (int)lastDamageTimer, *(u32*)(state + 0x368), objName);
+
+    if(*(u32*)(state+0x54) & 0x10) debugPrintf("; not obeying");
+
+    getObjName(objName, *(ObjInstance**)(state + 0x24));
+    debugPrintf("\nAct:" DPRINT_FIXED "%s %02X" DPRINT_NOFIXED
+        " 71C:" DPRINT_FIXED "%5d" DPRINT_NOFIXED
+        " hitByPlayer:" DPRINT_FIXED "%7d 3A8:%02X" DPRINT_NOFIXED
+        " Target:%s\n",
+        stateNames[*(u8*)(state+0x08) & 0xF], *(u8*)(state+0x0A),
+        (int)timer71C, (int)hitByPlayerTimer,
+        *(u8*)(state + 0x3A8), objName);
+}
+
 void mainLoopDebugPrint() {
     drawHeaps();
     if(debugRenderFlags & DEBUGRENDER_PERF_METERS) renderPerfMeters();
@@ -430,6 +466,7 @@ void mainLoopDebugPrint() {
     if(debugTextFlags & DEBUGTEXT_AUDIO_SFX)         printSFX();
     if(debugTextFlags & DEBUGTEXT_ENVIRONMENT)       printEnvironment();
     if(debugTextFlags & DEBUGTEXT_OBJSEQ)            printObjSeq();
+    if(debugTextFlags & DEBUGTEXT_TRICKY)            printTrickyInfo();
 
     //not sure what these are, seem to never be used?
     /* extern ObjInstance *objVar_802cada0[5];

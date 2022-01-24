@@ -165,6 +165,12 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
         drawSimpleText(str, x, y);
         y += LINE_HEIGHT;
     }
+
+    //never set?
+    sprintf(str, "\eF%s %08X %s", "UNK30 ", obj->pMatrix,
+        (obj->pMatrix && obj->pMatrix->file) ? obj->pMatrix->file->name : "-");
+    drawSimpleText(str, x, y);
+    y += LINE_HEIGHT;
 }
 
 void objMenu_draw(Menu *self) {

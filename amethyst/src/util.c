@@ -77,6 +77,10 @@ bool getObjFileName(char *dest, ObjectFileStruct *file) {
     //dest must be at least 12 bytes
 
     //copy the name, filtering out any control codes.
+    if(file == NULL) {
+        strcpy(dest, "<none>");
+        return false;
+    }
     if(PTR_VALID(file)) {
         int p = 0;
         for(int i=0; i<11; i++) {
@@ -87,7 +91,7 @@ bool getObjFileName(char *dest, ObjectFileStruct *file) {
         dest[p] = 0;
         if(p) return true;
     }
-    strcpy(dest, "N/A");
+    strcpy(dest, "<invalid>");
     return false;
 }
 
@@ -100,9 +104,13 @@ bool getObjFileName(char *dest, ObjectFileStruct *file) {
  *  @note All control/non-ASCII characters are skipped when copying the name.
  */
 bool getObjName(char *dest, ObjInstance *obj) {
-    if(PTR_VALID(obj)) return getObjFileName(dest, obj->file);
+    if(obj == NULL) {
+        strcpy(dest, "<none>");
+        return false;
+    }
+    else if(PTR_VALID(obj)) return getObjFileName(dest, obj->file);
     else {
-        strcpy(dest, "N/A");
+        strcpy(dest, "<invalid>");
         return false;
     }
 }
