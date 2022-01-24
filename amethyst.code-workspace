@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "amethyst"
+		},
+		{
+			"path": "data"
+		}
+	],
+	"settings": {
+		"python.pythonPath": "/usr/bin/python3"
+	}
+}
