@@ -1,0 +1,70 @@
+.int 0x84000000 # 0724 eyelid
+    .int 0x81002DB0 # 0725 fur
+    .int 0x8100BD80 # 0726 ? maybe hair sides?
+    .int 0x01000000 # 0727 unused
+    .int 0x8100C6E0 # 0728 eyeball
+    .int 0x8100CA70 # 0729 hair front
+    .int 0x8100CBB0 # 072A hair back
+
+tex1Tab_data2: # for alt
+    .int dataFileSize # for quick access
+    .int 0x84000000 # 0724 eyelid
+    .int 0x81002DB0 # 0725 fur
+    .int 0x81012308 # 0726 ? maybe hair sides?
+    .int 0x01000000 # 0727 unused
+    .int 0x81012C68 # 0728 eyeball
+    .int 0x81012FF8 # 0729 hair front
+    .int 0x81013138 # 072A hair back
+
+     kt1     kt2 
+0724 0x00000 0x00000
+0725 0x05b60 0x05b60
+0726 0x17b00 0x24610
+0728 0x18dc0 0x258d0
+0729 0x194e0 0x25ff0
+072A 0x19760 0x26270
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../new-textures/kt1.bin ../new-textures/kt1/0725.bin 1 0x5B60
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../new-textures/kt1.bin ../new-textures/kt1/0726.bin 1 0x17b00
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../new-textures/kt1.bin ../new-textures/kt1/0727.bin 1 0x18dc0
+
+rena@lopmon:…/games/hax/sfa/extractor> rm ../new-textures/kt1/0727.bin 
+removed '../new-textures/kt1/0727.bin'
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../new-textures/kt1.bin ../new-textures/kt1/0728.bin 1 0x18dc0
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../new-textures/kt1.bin ../new-textures/kt1/0729.bin 1 0x194e0
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../new-textures/kt1.bin ../new-textures/kt1/072A.bin 1 0x19760
+
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../patches/krystal/kt2 ../new-textures/kt2/0725.bin 1 0x5b60
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../patches/krystal/kt2 ../new-textures/kt2/0726.bin 1 0x24610
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../patches/krystal/kt2 ../new-textures/kt2/0728.bin 1 0x258d0
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../patches/krystal/kt2 ../new-textures/kt2/0729.bin 1 0x25ff0
+
+rena@lopmon:…/games/hax/sfa/extractor> ./__main__.py dumpTexture ../patches/krystal/kt2 ../new-textures/kt2/072A.bin 1 0x26270
+
+./__main__.py compress ../new-textures/0724.new.tex ../new-textures/kt1/0724.bin 0
+./__main__.py compress ../new-textures/0724.new.tex ../new-textures/kt2/0724.bin 0
+
+./__main__.py packTexture ../new-textures/0724.00.RGB5A3.png ../new-textures/0724.00.tex RGB5A3 1
+./__main__.py packTexture ../new-textures/0724.01.RGB5A3.png ../new-textures/0724.01.tex RGB5A3 1
+./__main__.py packTexture ../new-textures/0724.02.RGB5A3.png ../new-textures/0724.02.tex RGB5A3 1
+./__main__.py packTexture ../new-textures/0724.03.RGB5A3.png ../new-textures/0724.03.tex RGB5A3 1
+./__main__.py packTexture ../new-textures/0724.04.RGB5A3.png ../new-textures/0724.04.tex RGB5A3 1
+./__main__.py packTexture ../new-textures/0724.05.RGB5A3.png ../new-textures/0724.05.tex RGB5A3 1
+./__main__.py packTexture ../new-textures/0724.06.RGB5A3.png ../new-textures/0724.06.tex RGB5A3 1
+./__main__.py compress ../new-textures/0724.00.tex ../new-textures/0724.00.bin 0
+./__main__.py compress ../new-textures/0724.01.tex ../new-textures/0724.01.bin 0
+./__main__.py compress ../new-textures/0724.02.tex ../new-textures/0724.02.bin 0
+./__main__.py compress ../new-textures/0724.03.tex ../new-textures/0724.03.bin 0
+./__main__.py compress ../new-textures/0724.04.tex ../new-textures/0724.04.bin 0
+./__main__.py compress ../new-textures/0724.05.tex ../new-textures/0724.05.bin 0
+./__main__.py compress ../new-textures/0724.06.tex ../new-textures/0724.06.bin 0
+
