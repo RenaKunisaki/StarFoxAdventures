@@ -151,7 +151,7 @@ export function makeCollapsibleList(items) {
         ul.append(E.li(null, items[i]));
     }
     return E.details(E.summary('count',
-        `[${items.length}] ${items[0]}`
+        `[${items.length}] `, items[0]
     ), ul);
 }
 
