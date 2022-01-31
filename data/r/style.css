@@ -4,7 +4,8 @@ html, body {
     color: #FFF;
 }
 body {
-    width:  100vw;
+    /* vw includes scrollbar areas */
+    width:  calc(100vw - 1.5em);
     height: 100vh;
 }
 
@@ -333,7 +334,10 @@ td.dll .name { padding-left: 0.5em }
     font-style: italic;
     white-space: pre-line;
 }
-.objref span { margin-right: 0.5em }
+/* .objref span { margin-right: 0.5em } */
+.objref .objid::after { content: ': ' }
+.objref .mapname::after { content: '.' }
+.objref .objname::after { content: '.' }
 
 /* ******************************** video log ******************************** */
 

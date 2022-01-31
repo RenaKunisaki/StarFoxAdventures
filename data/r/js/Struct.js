@@ -15,7 +15,7 @@ export default function Struct(fields, order='>') {
         }
         else {
             type = field.type;
-            offs = field.offs;
+            offs = field.offset;
         }
         if(_normalizedFields[name]) {
             throw new Error("Duplicate field name: "+String(name));
@@ -30,14 +30,20 @@ export default function Struct(fields, order='>') {
             size = (type == 's') ? 1 : (count*fieldSize[type]);
         }
         else {
-            count = type.count;
-            size  = type.type._size;
-            _normalizedFields[name] = {type:type.type, offset:offs, count:type.count};
+            count = field.count;
+            if(count == undefined) count = 1;
+            size  = type._size;
+            _normalizedFields[name] = {type:type, offset:offs, count:count};
         }
         structSize = Math.max(structSize, offs+size);
     }
 
     const cls = class {
+        [Symbol.toPrimitive](hint) {
+            if(hint == 'string') return this._toString();
+            return null;
+        }
+
         constructor(buffer, offset=0) {
             //if given a typed array, get the underlying buffer.
             if(buffer.buffer) {
@@ -53,35 +59,30 @@ export default function Struct(fields, order='>') {
 
             const getVal = function(field, offs) {
                 offs += offset;
-                try {
-                    switch(field.type) {
-                        case 'b': return view.getInt8(offs);
-                        case 'B': return view.getUint8(offs);
-                        case 'h': return view.getInt16(offs, LE);
-                        case 'H': return view.getUint16(offs, LE);
-                        case 'i': return view.getInt32(offs, LE);
-                        case 'I': return view.getUint32(offs, LE);
-                        case 'q': return view.getBigInt64(offs, LE);
-                        case 'Q': return view.getBigUint64(offs, LE);
-                        case 'f': return view.getFloat32(offs, LE);
-                        case 'd': return view.getFloat64(offs, LE);
-                        case 'c': return String.fromCharCode(view.getUint8(offs));
-                        case 's': {
-                            //for string, we use the field count as a maximum length.
-                            let s = '';
-                            while(s.length < field.count) {
-                                const c = view.getUint8(offs);
-                                if(c == 0) break;
-                                offs++;
-                                s += String.fromCharCode(c);
-                            }
-                            return s;
+                switch(field.type) {
+                    case 'b': return view.getInt8(offs);
+                    case 'B': return view.getUint8(offs);
+                    case 'h': return view.getInt16(offs, LE);
+                    case 'H': return view.getUint16(offs, LE);
+                    case 'i': return view.getInt32(offs, LE);
+                    case 'I': return view.getUint32(offs, LE);
+                    case 'q': return view.getBigInt64(offs, LE);
+                    case 'Q': return view.getBigUint64(offs, LE);
+                    case 'f': return view.getFloat32(offs, LE);
+                    case 'd': return view.getFloat64(offs, LE);
+                    case 'c': return String.fromCharCode(view.getUint8(offs));
+                    case 's': {
+                        //for string, we use the field count as a maximum length.
+                        let s = '';
+                        while(s.length < field.count) {
+                            const c = view.getUint8(offs);
+                            if(c == 0) break;
+                            offs++;
+                            s += String.fromCharCode(c);
                         }
-                        default: return new field.type(buffer, offs);
+                        return s;
                     }
-                }
-                catch(ex) {
-                    debugger;
+                    default: return new field.type(buffer, offs);
                 }
             }
 
@@ -103,15 +104,6 @@ export default function Struct(fields, order='>') {
                                 else offs += field.type._size;
                             }
                         }
-                        //dump value and raw data to console
-                        /* if(key == 'unk1C') {
-                            const b = [];
-                            for(let i=0; i<4; i++) {
-                                b.push(view.getUint8(field.offset+i).toString(16).padStart(2,'0'));
-                            }
-                            console.log("%s: %s[%d] =", key, field.type, field.count, res,
-                                b.join(' '));
-                        } */
                     }
                     return res;
                 },
@@ -140,15 +132,19 @@ export default function Struct(fields, order='>') {
                 let t = String(field.type);
                 if(typeof field.type == 'function') t = '?';
                 if(field.count != 1) t += '[' + String(field.count) + ']';
-                const row = [
+
+                let offs = field.offset.toString(16).padStart(4, '0');
+                res.push(`{ ${offs}: ${t} ${name}: ${items} }`);
+
+                /* const row = [
                     t.padEnd(4),
-                    field.offset.toString(16).padStart(4, '0'),
+                    ,
                     name,
                     items.join(', '),
                 ];
-                res.push(row.join('|'));
+                res.push(row.join('|')); */
             }
-            return res.join('\n');
+            return res.join(',\n');
         }
     }; //class
     cls._size = structSize;
@@ -157,12 +153,24 @@ export default function Struct(fields, order='>') {
     return new Proxy(cls, {
         get: function(instance, key) {
             if(key in instance) return instance[key];
+            //if(key == 'count') return 1; //otherwise instance would have it
+            if(key == Symbol.toPrimitive) {
+                return hint => {
+                    if(hint == 'string') return "<struct>";
+                    return null;
+                };
+            }
+
             //if(typeof key == 'number') { //lol nope
-            if(!isNaN(parseInt(key))) {
+            let lol;
+            try { lol = isNaN(parseInt(key)); }
+            catch { lol = true; }
+            if(!lol) {
                 //allows eg Type[n] as a struct field
                 return {type:cls, count:parseInt(key)};
             }
-            console.error("Field does not exist", typeof key, key);
+            console.error(`Field does not exist`, typeof key, key);
+            return undefined;
         },
     });
 } //function Struct

@@ -286,7 +286,7 @@ class WebServer(web.Application):
             return
 
         try:
-            log.info("Started.")
+            log.info("Listening on port %d.", self.port)
             self.loop.run_forever()
         except KeyboardInterrupt:
             print("Terminated by KeyboardInterrupt.")

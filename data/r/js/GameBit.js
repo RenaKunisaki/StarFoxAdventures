@@ -17,14 +17,23 @@ export default class GameBit {
     constructor(game, eBit) {
         /** Construct a GameBit from a 'bit' element from gamebits.xml.
          */
-        this.game      = game;
-        this.id        = int(eBit.getAttribute('id'));
-        this.table     = int(eBit.getAttribute('table'));
-        this.hintId    = int(eBit.getAttribute('hint'));
-        this.hasHint   = eBit.getAttribute('hasHint') == '1';
-        this.max       = int(eBit.getAttribute('max'));
-        this.name      = eBit.getAttribute('name');
+        this.game   = game;
+        this.id     = int(eBit.getAttribute('id'));
+        this.table  = int(eBit.getAttribute('table'));
+        this.hintId = int(eBit.getAttribute('hintid'));
+        this.size   = int(eBit.getAttribute('size'));
+        this.offset = int(eBit.getAttribute('offset'));
+        this.name   = eBit.getAttribute('name');
+        this.hint   = null;
         getDescriptionAndNotes(this, eBit);
+
+        let hint = eBit.getElementsByTagName('hint').item(0);
+        if(hint != null) {
+            this.hint = [];
+            for(let phrase of hint.getElementsByTagName('phrase')) {
+                this.hint.push(phrase.textContent);
+            }
+        }
 
         this.objRefs = [];
         for(let eRef of eBit.getElementsByTagName('objref')) {
