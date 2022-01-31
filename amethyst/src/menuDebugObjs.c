@@ -153,6 +153,7 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
     drawSimpleText(str, x, y);
     y += LINE_HEIGHT;
 
+    y += LINE_HEIGHT;
     sprintf(str, "\eF%s %08X %s", T("PARENT"), obj->parent,
         (obj->parent && obj->parent->file) ? obj->parent->file->name : "-");
     drawSimpleText(str, x, y);
@@ -171,6 +172,11 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
         (obj->pMatrix && obj->pMatrix->file) ? obj->pMatrix->file->name : "-");
     drawSimpleText(str, x, y);
     y += LINE_HEIGHT;
+
+    sprintf(str, "\eF%s %08X %s", "OVERRD", obj->copyMtxFrom,
+        (obj->copyMtxFrom && obj->copyMtxFrom->file) ?
+            obj->copyMtxFrom->file->name : "-");
+    drawSimpleText(str, x, y);
 }
 
 void objMenu_draw(Menu *self) {
