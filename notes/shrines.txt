@@ -1,0 +1,11 @@
+ # Map  From What
+ 1 ECSH WM   K1 Test of Observation (as Krystal)
+ 2 VFP  DIM  S1 Fire SpellStone 1
+ 3 ???? MMP  K2 Test of Combat
+ 4 OFP  CRF  S2 Water SpellStone 1
+ 5 ???? LV   K3 Test of Fear
+ 6 VFP  WC   S3 Fire SpellStone 2
+ 7 ???? NW   K4 Test of Strength
+ 8 OFP  DR   S4 Water SpellStone 2
+ 9 ???? WC   K5 Test of Knowledge
+10 ???? WM   K6 Test of Rushed Game Development

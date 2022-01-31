@@ -1,0 +1,135 @@
+Raw memory card:
+    XXX some headers
+    GCI files
+
+GCI file header:
+    0000 char[4]  gameCode
+    0004 char[2]  company
+    0006 s8       pad06           //always 0xFF
+    0007 s8       bannerFmt
+    0008 char[32] filename
+    0028 u32      lastModified    //seconds since 2000-01-01 00:00:00
+    002C u32      iconAddr        //where in the file to find the icon image
+    0030 u16      iconFmt
+    0032 u16      iconSpeed
+    0034 u8       permissions
+    0035 u8       copyCount
+    0036 s16      block           //which block this file begins at, plus 5
+    0038 s16      length
+    003A s16      pad3A           //always 0xFFFF
+    003C s16      commentAddr     //where in the file to find the comment string
+//ignore the block field for a GCI file
+
+Game's GCI file data:
+    0000 CardIconsAndText	   icons
+    2a48 ??[8]                 ?        //checksums?
+    2a50 SaveGame[3]           save
+    3f14 SaveSettingsAndScores global
+    3ff8 u32                   cksum3
+    3ffc u32                   cksum4
+
+CardIconsAndText:
+    0000 char[32]    comment1      //"Star Fox Adventures"
+    0020 char[32]    comment2      //"Dinosaur Planet"
+    0040 u8[6144]    opening_bnr   //banner graphic
+    1840 u8[4][1024] icon_img      //animated icon frames
+    2840 u8[512]     icon_pal      //icon palette
+    2a40 u32         cksum1        //checksum
+    2a44 u32         cksum2        //inverse checksum
+
+SaveSettingsAndScores:
+    0000 SaveGameSettings  settings
+    001c SavedHighScore[5] scoresToPlanet
+    0044 SavedHighScore[5] scoresDarkIce
+    006c SavedHighScore[5] scoresCloudRunner
+    0094 SavedHighScore[5] scoresWallCity
+    00bc SavedHighScore[5] scoresDragonRock
+
+SaveGameSettings:
+    0000 u8	 bExists
+    0001 u8	 unused01            //Amethyst: extra options
+    0002 u8	 bSubtitlesOn
+    0003 u8	 unusedHudSetting    //Amethyst: camera options; copied to a never-read variable
+    0004 u8	 unusedCameraSetting //copied to bitmask 0x18 of camera->flags_0x141
+    0005 u8	 unused05
+    0006 u8	 bWidescreen
+    0007 u8	 unused07            //Amethyst: current character
+    0008 u8	 bRumbleEnabled
+    0009 u8	 soundMode           //0:Stereo 1:Surround 2:Mono 3:Headphones
+    000a s8	 musicVolume
+    000b s8	 sfxVolume
+    000c s8	 cutsceneVolume
+    000d u8	 unused0D            //Amethyst: options
+    000e u16 unused0E            //Amethyst: FOV, map opacity
+    0010 u32 unlockedCheats
+    0014 u32 activeCheats
+    0018 u32 unk18	probably unused
+
+SavedHighScore:
+    0000 u32     score  //times 2, plus 1 if 10 gold rings
+    0004 char[4] name
+
+SaveGame:
+    0000 PlayerCharState[2]      charState       //{Krystal, Fox}
+    0018 u8                      trickyEnergy
+    0019 u8                      maxTrickyEnergy
+    001a u8                      trickyPlayCount
+    001b ??
+    001c char[4]                 saveFileName    //null terminated
+    0020 u8                      character       //0:Krystal 1:Fox
+    0021 u8                      flags21         //80=erase me; 60=save slot
+    0022 u8                      flag_0x22
+    0023 u8
+    0024 u8[324]                 gameBits2
+    0168 SaveGameObjectPos[63]   objs
+    0558 u8[5]                   texts           //hint texts
+    055d u8                      completion      //percent = (this / 187) * 100
+    055e u8                      numTexts
+    055f ??
+    0560 float                   playTime        //frame count
+    0564 u8[116]                 gameBits1
+    05d8 u8[172]                 gameBits3
+    0684 PlayerCharPos[2]        charPos
+    06a4 short                   camVar6A4       //related to camera actions?
+    06a6 ??
+    06a7 ??
+    06a8 SaveGameEnvState        env
+
+PlayerCharState:
+    0000 s8  curHealth      //in 1/4 hearts
+    0001 s8  maxHealth
+    0002 s8  unk02          //unused?
+    0003 s8  unk03
+    0004 u16 curMagic
+    0006 u16 maxMagic
+    0008 u8  money
+    0009 u8  curBafomDads
+    000a u8  maxBafomDads
+    000b u8  field_0B
+
+SaveGameObjectPos:
+    0000 u32   id
+    0004 vec3f pos
+
+PlayerCharPos:
+    0000 vec3f pos
+    000c s8    rotX      //high byte of vec3s.x
+    000d s8    mapLayer
+    000e s8    mapNo     //only set when the map has a parent?
+    000f ??              //probably padding
+
+SaveGameEnvState:
+    0000 float    timeOfDay
+    0004 short[5] envFxActIdx
+    000e short[3] envFxActIdx2
+    0014 vec3i[3] skyObjPos
+    0038 ??
+    0039 ??
+    003a ??
+    003b ??
+    003c ??
+    003d ??
+    003e ??
+    003f ??
+    0040 u8       flags40	//1:enable clouds+lights; 8:enable lights; 20:heat FX
+    0041 s8[3]	  skyObjIdx
