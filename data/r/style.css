@@ -339,6 +339,8 @@ td.dll .name { padding-left: 0.5em }
 .objref .mapname::after { content: '.' }
 .objref .objname::after { content: '.' }
 
+.fileselect .slotlist { font-family: monospace; }
+
 /* ******************************** video log ******************************** */
 
 

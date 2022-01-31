@@ -33,17 +33,53 @@ export default class GameBitList {
 
     _makeFileSelect() {
         this._fileInput = E.input('savefile', {type:'file', id:'savefile'});
+        this._fileSlotList = E.select('slotlist',
+            E.option(null, '(no file loaded)'),
+        );
         this.fileSelect = E.div('fileselect',
             E.h1(null, "Save File"),
-            this._fileInput);
-        this._fileInput.addEventListener('change', async e => {
-            this._saveFile = new SaveGame();
-            await this._saveFile.load(this._fileInput.files[0]);
-            console.log("Using savefile", this._saveFile);
-            this._saveGame = this._saveFile.saves[this._whichSave];
-            console.log("Using savegame", this._saveGame);
-            this.refresh();
-        }, false);
+            this._fileInput, this._fileSlotList);
+
+        this._fileInput.addEventListener('change',
+            async e => { await this._changeSaveFile() }, false);
+    }
+
+    async _changeSaveFile() {
+        this._saveFile = new SaveGame();
+        await this._saveFile.load(this._fileInput.files[0]);
+        this._buildSaveSlotList();
+        this._refreshSelectedSaveSlot();
+    }
+
+    _buildSaveSlotList() {
+        let slots = E.select('file');
+        const saves = this._saveFile.saves;
+        for(let i=0; i<3; i++) {
+            let name = "(empty)";
+            let percent = '0';
+            let time = '00h 00m 00s';
+            if(saves[i].charState[0].maxHealth) {
+                name = saves[i].saveFileName;
+                percent = ((saves[i].completion / 187) * 100).toFixed(0).padStart(3, ' ');
+                time = saves[i].playTime;
+                time = (time / 3600).toFixed(0).padStart(2, '0') + 'h ' +
+                    ((time/60) % 60).toFixed(0).padStart(2, '0') + 'm ' +
+                    (time % 60).toFixed(0).padStart(2, '0') + 's';
+            }
+            slots.append(E.option(null, `#${i+1} ${name} ${percent}% ${time}`,
+                {value:i}));
+        }
+        slots.addEventListener('change', e => {
+            this._refreshSelectedSaveSlot();
+        });
+        this._fileSlotList.replaceWith(slots);
+        this._fileSlotList = slots;
+    }
+
+    _refreshSelectedSaveSlot() {
+        this._whichSave = this._fileSlotList.value;
+        this._saveGame = this._saveFile.saves[this._whichSave];
+        this.refresh();
     }
 
     _makeTable() {
