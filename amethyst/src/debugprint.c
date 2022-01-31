@@ -4,7 +4,7 @@
 #include "revolution/os.h"
 
 u32 debugTextFlags =
-    DEBUGTEXT_TRICKY |
+    //DEBUGTEXT_TRICKY |
     DEBUGTEXT_PLAYER_COORDS |
     DEBUGTEXT_CAMERA_COORDS |
     //DEBUGTEXT_RESTART_POINT |
