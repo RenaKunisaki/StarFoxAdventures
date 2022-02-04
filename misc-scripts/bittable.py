@@ -48,3 +48,5 @@ for eBit in bitsXml.findall('bit'):
             sys.exit(1)
 
 print(ET.tostring(bitsXml, encoding='unicode'))
+
+# TODO look at the offsets for any gaps?

@@ -1,0 +1,45 @@
+html, body {
+    background: #000;
+    color: #FFF;
+}
+body {
+    /* vw includes scrollbar areas */
+    width:  calc(100vw - 1.5em);
+    height: 100vh;
+}
+
+a { color: #00CCFF }
+
+table {
+    border-top: 1px #FFF solid;
+    border-left: 1px #FFF solid;
+}
+
+td, th {
+    border-right: 1px #FFF solid;
+    border-bottom: 1px #FFF solid;
+    border-collapse: collapse;
+    padding: 2px;
+}
+
+tr:first-child th {
+    position: sticky;
+    top: 0;
+    background: #000;
+}
+th { font-family: monospace; }
+th.hex { text-align: right }
+
+tr:nth-child(2n) { background: #333 }
+tr:nth-child(2n+1) { background: #000 }
+tr:hover { background: #666 }
+
+td ul { padding-left: 1em }
+
+.notice {
+    border: 3px #880 ridge;
+    background-color: rgba(128, 128, 0, 0.5);
+    color: #FFF;
+    margin: 1em;
+    padding: 0.5em;
+}

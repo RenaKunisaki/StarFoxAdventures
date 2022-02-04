@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "wiki/StarFoxAdventures.wiki"
+		},
+		{
+			"path": "browser"
 		}
 	],
 	"settings": {

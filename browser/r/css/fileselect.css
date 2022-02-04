@@ -1,0 +1,13 @@
+.fileSelect .row {
+    padding: 0.5em;
+    margin-bottom: 2em;
+}
+
+.fileSelect h1 {
+    margin: 0;
+}
+
+.fileSelect input {
+    border: 1px #888 solid;
+    margin: 1em;
+}

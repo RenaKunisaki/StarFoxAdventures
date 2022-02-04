@@ -1,0 +1,37 @@
+.tabBar {
+    position: relative;
+    border: 1px #444 solid;
+    padding-top: calc(1.25em + 8px);
+}
+
+.tabBar .tabs {
+    position: absolute;
+    top:      0;
+    left:     0;
+    right:    0;
+    height:   1.25em;
+    background-color: rgba(0, 64, 128, 0.5);
+}
+
+.tabBar .tab {
+    display:       inline-block;
+    padding-left:  8px;
+    padding-right: 8px;
+    padding-top:   8px;
+    border-right:  2px #444 solid;
+    background:  #048;
+    color:       #BBB;
+}
+.tabBar .tab.active {
+    background:  #08C;
+    color:       #FFF;
+}
+.tabBar .tab:hover {
+    background:  #068;
+    color:       #DDD;
+}
+
+.tabBar .tabBody {
+    border: 1px #444 solid;
+    padding: 0.5em;
+}

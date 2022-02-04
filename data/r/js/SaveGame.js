@@ -56,6 +56,7 @@ export const PlayerCharState = Struct({
 export const SavedHighScore = Struct({
     'score': ['I',  0x00],
     'name':  ['4s', 0x04],
+    //XXX different for Japanese?
 });
 
 export const SaveGameSettings = Struct({
@@ -184,11 +185,11 @@ export class SaveGame {
 
     _parseSave(buffer) {
         let data = new SaveDataStruct(buffer);
-        //console.log("Save data:", data._toString());
+        console.log("Save data:", data._toString());
 
         this.global = data.global;
         this.saves  = data.saves;
-        console.log("Save 1:", this.saves[0]._toString());
+        //console.log("Save 1:", this.saves[0]._toString());
         //console.log("Save 2:", this.saves[1]._toString());
         //console.log("Save 3:", this.saves[2]._toString());
     }
