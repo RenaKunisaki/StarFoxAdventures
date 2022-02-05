@@ -97,6 +97,7 @@ WarpMenuItem warps[] = {
     { 12800,    973,  30080,  0}, //"Unused: Old Krazoa Palace",
 //  {  3693,    -37,    238,  0}, //"Unused: Old Krazoa Palace",
 //  {-19200,   -127,  33920,  0}, //"Unused: CloudRunner Race 2", //XXX Z coord is outside range of s16
+    {-12768,  -2364,  12376, -1} //"Unused: Dragon Rock Bottom"
 };
 
 //employ some simple dictionary compression
@@ -191,7 +192,7 @@ const char *warpNames[] = {
     "\x8E" "Title Screen",
     "Ship Battle",
     "\x8F" "AnimTest",
-    "\x8F" "WGShrine",
+    //"\x8F" "WGShrine",
     //"\x8F" "NikTest",
     //"\x8F" "Rolling Demo",
     //"\x8F" "Kamerian",
@@ -202,6 +203,7 @@ const char *warpNames[] = {
     "\x8F" "Old Krazoa Palace",
     //"\x8F" "Old Krazoa Palace",
     //"\x8F" "CloudRunner Race 2",
+    "\x8F" "Dragon Rock Bottom",
     NULL
 };
 
@@ -326,8 +328,9 @@ void warpMenu_run(Menu *self) {
     else if(buttonsJustPressed == PAD_BUTTON_A) {
         menuInputDelayTimer = MENU_INPUT_DELAY_SELECT;
         WarpMenuItem *warp = &warps[self->selected];
-        DPRINT("Warp to %f %f %f ly %d",
-            (float)warp->x, (float)warp->y, (float)warp->z, warp->layer);
+        DPRINT("Warp to %f %f %f ly %d (idx %d:%08X)",
+            (float)warp->x, (float)warp->y, (float)warp->z, warp->layer,
+            sel, warp);
         debugDoWarp(warp->x, warp->y, warp->z, warp->layer);
         //close all menus
         mainMenu_close(&menuMain);

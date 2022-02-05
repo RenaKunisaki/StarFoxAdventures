@@ -987,7 +987,7 @@
   </bit>
   <bit id="0x01EF" table="2" size="1" offset="0x039D"/>
   <bit id="0x01F0" table="2" size="1" offset="0x03D9"/>
-  <bit id="0x01F1" table="2" name="ITEM_DIMGoldKey_Got" size="1" offset="0x03DA">
+  <bit id="0x01F1" table="2" name="ITEM_DIM2CellKey_Got" size="1" offset="0x03DA">
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002182" param="key"/>
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002182" param="0x22"/>
     <objref map="snowmines2" obj="TreasureChe" objId="0x0004CC6D" param="item"/>
@@ -1034,7 +1034,7 @@
   <bit id="0x0206" table="1" size="1" offset="0x0160">
     <objref map="wallcity" obj="HitAnimator" objId="0x00047FEF" param="target"/>
   </bit>
-  <bit id="0x0207" table="2" name="ITEM_DIMGoldKey_Used" size="1" offset="0x03E2">
+  <bit id="0x0207" table="2" name="ITEM_DIM2CellKey_Used" size="1" offset="0x03E2">
     <objref map="snowmines2" obj="DIM2CellKey" objId="0x00002182" param="open"/>
   </bit>
   <bit id="0x0208" table="2" name="ITEM_DIMSilverKey_Used" size="1" offset="0x03E3">

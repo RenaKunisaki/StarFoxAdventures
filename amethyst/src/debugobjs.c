@@ -178,19 +178,19 @@ void debugObjsInit() {
     //override DLLs' render methods if they're no-ops.
     for(int i=FIRST_OBJ_DLL; i<=LAST_OBJ_DLL; i++) {
         if(isInList_u16(i, ignoreDlls)) continue;
-        if(!dlls[i]) continue;
-        u32 *render = dlls[i]->functions[4];
+        if(!g_dlls[i]) continue;
+        u32 *render = g_dlls[i]->functions[4];
         if(render == NULL
         || (PTR_VALID(render) && READ32(render) == 0x4E800020)) {
             //DPRINT("Hook render of DLL %04X", i);
-            dlls[i]->functions[4] = _renderHook;
+            g_dlls[i]->functions[4] = _renderHook;
         }
     }
 
     //override some more complex stubs
     for(int i=0; overrideDlls[i]; i++) {
         //DPRINT("Hook render of DLL %04X", overrideDlls[i]);
-        dlls[overrideDlls[i]]->functions[4] = _renderHook;
+        g_dlls[overrideDlls[i]]->functions[4] = _renderHook;
     }
 }
 

@@ -1,0 +1,11 @@
+https://www.youtube.com/watch?v=xHQYmpHWYEE
+
+coords \xC6\x47\x7F\xE7\xC5\x13\xBF\xFF\x46\x41\x60\x82
+rot 0 layer -1
+(-12767.9755859375, -2363.999755859375, 12376.126953125)
+warptab index 0x53
+
+DR_LightPol
+
+042C6CFC 803220C8 should fix the crash
+0418B344 38600053 should make all magic caves take you there

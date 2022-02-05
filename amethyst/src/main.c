@@ -307,6 +307,7 @@ void _start(void) {
     hookBranch(0x80137df8, bsodHook, 1);
     initBootHacks();
     initBugFixes();
+    dllHooksInit();
     if(!runLoadingScreens_replaced) {
         runLoadingScreens_replaced = (void(*)())hookBranch(0x80020f2c,
             runLoadingScreens_hook, 1);

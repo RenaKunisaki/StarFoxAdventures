@@ -81,6 +81,9 @@ void bsodHook(void);
 //bugfixes.c
 void initBugFixes();
 
+//dll.c
+void dllHooksInit();
+
 //drawarrow.c
 void drawArrow(vec3f pos, vec3s rot, float scale, Color4b color);
 

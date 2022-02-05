@@ -31318,7 +31318,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DC390" dolOffs="0x3339F0" id="0x027F" interface="data" name="Dummy27F" unk08="0x00000014" unk0E="0x0000">
+  <dll address="0x803DC390" dolOffs="0x3339F0" id="0x027F" interface="data" name="DR_Lights" unk08="0x00000014" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
