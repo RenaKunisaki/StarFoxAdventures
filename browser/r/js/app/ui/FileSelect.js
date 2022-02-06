@@ -1,4 +1,4 @@
-import { E } from "../../lib/Element.js";
+import { E, clearElement } from "../../lib/Element.js";
 
 export default class FileSelect {
     /** The UI for selecting an ISO and save file.
@@ -6,40 +6,20 @@ export default class FileSelect {
     constructor(app) {
         this.app = app;
 
-        //make ISO file input
-        this.eIso = E.input({type:'file', name:'iso', id:'iso'});
+        //set up ISO file input
+        this.eIso = document.getElementById('fileIso');
         this.eIso.addEventListener('change', e => {
             this.app.loadIso(this.eIso.files[0]);
         }, false);
 
-        //make save file input
-        this.eSave = E.input({type:'file', name:'save', id:'save'});
+        //set up save file input
+        this.eSave = document.getElementById('fileSave');
         this.eSave.addEventListener('change', e => {
             this.app.loadSave(this.eSave.files[0]);
         }, false);
 
         this._makeSlotSelect(null);
-
-        this.element = E.div('fileSelect',
-            E.div('row',
-                E.h1(null, "ISO File"),
-                this.eIso,
-                E.div('explanation',
-                    `Selecting a Star Fox Adventures ISO file will let you
-                    view lots of information extracted from it.`),
-            ),
-            E.div('row',
-                E.h1(null, "Save File"),
-                this.eSave, "Slot:", this.eSlot,
-                E.div('explanation',
-                    `Selecting a Star Fox Adventures save file will let you
-                    examine it. Must be a GCI file.`),
-            ),
-            E.aside('explanation',
-                `Neither file will be uploaded; all processing is done
-                within your own web browser.`),
-        );
-
+        this.element = document.getElementById('tab-file-select');
         this.app.onSaveLoaded(save => this._onSaveLoaded(save));
         //this.app.onSaveSlotChanged(slot => this._onSaveSlotChanged(slot));
     } //constructor
@@ -47,7 +27,8 @@ export default class FileSelect {
     _makeSlotSelect(save) {
         //Build the save slot selector.
         //save: SaveGame
-        let slots = E.select('saveSlot');
+        let slots = document.getElementById('saveSlot');
+        clearElement(slots);
         if(save == null) {
             slots.append(E.option(null, "(no savedata loaded)"));
         }

@@ -8,5 +8,55 @@
         <link rel="stylesheet" href="r/css/tabbar.css" />
         <script type="module" src="r/js/main.js"></script>
     </head>
-    <body><div id="loading">Loading...</div></body>
+    <body>
+        <div id="loading">Loading...</div>
+        <div id="tab-file-select" class="fileselect">
+            <div class="row about">
+                <h1>Star Fox Adventures data browser</h1>
+                <div class="explanation">
+                    This app lets you explore the contents of a Star Fox Adventures
+                    ISO file and/or save file.
+                </div>
+            </div>
+
+            <div class="row">
+                <h1>ISO File</h1>
+                <input type="file" name="iso" id="fileIso" />
+                <div class="explanation">
+                    Select a Star Fox Adventures ISO file to examine it.
+                </div>
+                <div class="note">
+                    <h2>Supported versions:</h2>
+                    <ul>
+                        <li>US version 1.0 (MD5: <code>afb0306454b581e37a62170fdfd1de09</code>)</li>
+                    </ul>
+                    <span>If no file is selected, you can still examine a save file,
+                        but not as much information will be available.
+                    </span>
+                </div>
+            </div>
+
+            <div class="row">
+                <h1>Save File</h1>
+                <input type="file" name="save" id="fileSave" />
+                <label for="saveSlot">Slot:</label>
+                <select id="saveSlot"></select>
+                <div class="explanation">
+                    Select a Star Fox Adventures save file to examine it.
+                </div>
+                <div class="note">
+                    <h2>Supported formats:</h2>
+                    <ul>
+                        <li>GCI</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="note">
+                No files are uploaded to the server. You must provide your own
+                legally-obtained copy.
+            </div>
+
+        </div>
+    </body>
 </html>

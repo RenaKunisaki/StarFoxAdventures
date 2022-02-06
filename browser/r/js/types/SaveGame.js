@@ -1,6 +1,7 @@
 import Struct from '../lib/Struct.js';
 import { Header } from './gci.js';
 import { Vec3f, Vec3i } from './common.js';
+import { hex } from '../Util.js';
 
 //Player character saved position
 export const PlayerCharPos = Struct(
@@ -113,7 +114,7 @@ export const CardIconsAndText = Struct(
     ['32s',   'fileName'],    //always "Star Fox Adventures" or Japanese
     ['32s',   'comment'],     //always "Dinosaur Planet" or "STARFOX ADVENTURES"
     ['6144B', 'opening_bnr'], //opening.bnr graphic
-    ['1024B', 'icon_img', 4], //animated icon frames
+    ['4096B', 'icon_img'], //animated icon frames (4x1024)
     ['512B',  'icon_pal'],    //icon palette
     ['I',     'cksum1'],      //checksum
     ['I',     'cksum2'],      //inverse checksum
@@ -132,10 +133,32 @@ export const SaveDataStruct = Struct(
 export class SaveSlot {
     /** One of the three save slots in the save file.
      */
-    constructor(idx, save) {
+    constructor(app, idx, save) {
+        this.app   = app;
         this.index = idx;  //slot number
         this._save = save; //SaveGameStruct
         console.assert(save);
+
+        //get gamebits
+        this.gameBits = {};
+        for(let [id, bit] of Object.entries(this.app.gameBits)) {
+            let name = bit.name || `_${hex(id,4)}`;
+            let tbl=null;
+            let val=0;
+            switch(bit.table) {
+                case 0: val = null; break; //temporary table, not saved
+                case 1: tbl = this._save.gameBits1; break;
+                case 2: tbl = this._save.gameBits2; break;
+                case 3: tbl = this._save.gameBits3; break;
+            }
+            if(tbl != null) { //extract value
+                for(let i=bit.offset; i<bit.offset+bit.size; i++) {
+                    val <<= 1;
+                    if(tbl[i >> 3] & (1 << (7-(i & 7)))) val |= 1;
+                }
+            }
+            this.gameBits[name] = {bit:bit, val:val, tbl:tbl};
+        }
     }
 
     [Symbol.toPrimitive](hint) {
@@ -176,6 +199,10 @@ export class SaveSlot {
 export class SaveGame {
     /** Reads the entire SaveDataStruct from a File or Blob.
      */
+    constructor(app) {
+        this.app = app;
+    }
+
     async load(file, version='U0') {
         this._file    = file;
         this._version = version; //game version
@@ -220,15 +247,16 @@ export class SaveGame {
     _parseSave(buffer) {
         //parse the actual save data
         this.data   = new SaveDataStruct(buffer);
-        console.log("this.data=", this.data);
-        console.log("this.data.global.settings.exists=", this.data.global.settings.exists);
-        console.log("this.data.saves=", this.data.saves);
-        console.log("this.data.saves[0]=", this.data.saves[0]);
+        //console.log("this.data=", this.data);
+        //console.log("this.data.global.settings.exists=", this.data.global.settings.exists);
+        //console.log("this.data.saves=", this.data.saves);
+        //console.log("this.data.saves[0]=", this.data.saves[0]);
         this.global = this.data.global;
         this.saves  = [
-            new SaveSlot(0, this.data.saves[0]),
-            new SaveSlot(1, this.data.saves[1]),
-            new SaveSlot(2, this.data.saves[2]),
+            new SaveSlot(this.app, 0, this.data.saves[0]),
+            new SaveSlot(this.app, 1, this.data.saves[1]),
+            new SaveSlot(this.app, 2, this.data.saves[2]),
         ];
+        console.log("Save 1", this.saves[0]);
     }
 }

@@ -60,14 +60,10 @@ export default function Struct(...fields) {
 
         if(typeof type == 'string') {
             //eg "I" or "4b", Python style
-            //note that we can specify an array of arrays like:
-            //['1024b', 'someArray', 4]
-            //giving an array of 4 elements of 1024 bytes each.
-            //so, don't overwrite count here.
-            let tCount = type.match(/\d+/);
-            tCount = (tCount == null) ? 1 : parseInt(tCount);
-            type   = type.match(/\d*(.+)/)[1];
-            size   = (type == 's') ? tCount : (tCount*fieldTypes[type].size);
+            count = type.match(/\d+/);
+            count = (count == null) ? 1 : parseInt(count);
+            type  = type.match(/\d*(.+)/)[1];
+            size  = (type == 's') ? 1 : fieldTypes[type].size;
         }
         else {
             //eg MyType or MyType[4]
@@ -99,7 +95,7 @@ export default function Struct(...fields) {
             type:type, offset:offset, count:count, name:name, size:size};
         structSize = Math.max(structSize, offset+size);
     } //for
-    //console.log("Fields", _normalizedFields, "size", structSize);
+    console.log("Fields", _normalizedFields, "size", structSize);
 
     const cls = class {
         [Symbol.toPrimitive](hint) {
