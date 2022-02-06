@@ -304,19 +304,19 @@ static void printPlayerState() {
         cState ? ((cState->flags02 << 8) | cState->field_03) : 0,
         cState ? cState->field_0B : 0);
 
-    float waterCurrentRelX = *(float*)(pState + 0x43C);
-    float waterCurrentRelY = *(float*)(pState + 0x440);
-    float waterCurrentAbsX = *(float*)(pState + 0x648);
-    float waterCurrentAbsY = *(float*)(pState + 0x64C);
+    float waterCurrentRelX = *(float*)(pState + 0x43C); //water current, player-relative
+    float waterCurrentRelZ = *(float*)(pState + 0x440);
+    float waterCurrentAbsX = *(float*)(pState + 0x648); //water current, world-relative
+    float waterCurrentAbsZ = *(float*)(pState + 0x64C);
     float waterDepth       = *(float*)(pState + 0x838); //how deep we are in it
     float waterHeight      = *(float*)(pState + 0x83C); //Y pos of top
     float waterBottomDist  = *(float*)(pState + 0x1B0); //distance to bottom
-    float curAbsLen = sqrtf(
+    float curAbsLen = sqrtf( //current's absolute-vector length
         (waterCurrentAbsX*waterCurrentAbsX)+
-        (waterCurrentAbsY*waterCurrentAbsY));
-    float curRelLen = sqrtf(
+        (waterCurrentAbsZ*waterCurrentAbsZ));
+    float curRelLen = sqrtf( //current's relative-vector length
         (waterCurrentRelX*waterCurrentRelX)+
-        (waterCurrentRelY*waterCurrentRelY));
+        (waterCurrentRelZ*waterCurrentRelZ));
     if(waterDepth > 0) {
         debugPrintf("Water plane @" DPRINT_FIXED "%5d" DPRINT_NOFIXED ", "
             DPRINT_FIXED "%4d" DPRINT_NOFIXED " from bottom, "
@@ -324,8 +324,8 @@ static void printPlayerState() {
             (int)waterHeight, (int)waterBottomDist, (int)waterDepth);
         debugPrintf("current: " DPRINT_FIXED "%f, %f (%f)" DPRINT_NOFIXED
             "\ncur rel: " DPRINT_FIXED "%f, %f (%f)" DPRINT_NOFIXED "\n",
-            waterCurrentAbsX, waterCurrentAbsY, curAbsLen,
-            waterCurrentRelX, waterCurrentRelY, curRelLen);
+            waterCurrentAbsX, waterCurrentAbsZ, curAbsLen,
+            waterCurrentRelX, waterCurrentRelZ, curRelLen);
     }
 
     printPlayerObj("Death obj",   *(ObjInstance**)(pState + 0x46C));
