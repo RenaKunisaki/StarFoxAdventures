@@ -69,11 +69,11 @@ void _lookAtTarget() {
         cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0,
         pCamera, &targetPos.x, &targetPos.y,
         &targetPos.z, &targetXZ, false);
-    pCamera->pos.rotation.x = -0x8000 - atan2(targetPos.x, targetPos.z);
+    pCamera->pos.rotation.x = -0x8000 - atan2fi(targetPos.x, targetPos.z);
 
     //tilt to point to player
     //(Y rotation value, even though it's local X-axis rotation...)
-    pCamera->pos.rotation.y = atan2(targetPos.y, targetXZ);
+    pCamera->pos.rotation.y = atan2fi(targetPos.y, targetXZ);
 }
 
 //update camera in Stay and Free modes

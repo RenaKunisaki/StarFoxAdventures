@@ -167,9 +167,8 @@ void objMenu_drawObjInfo(ObjInstance *obj) {
         y += LINE_HEIGHT;
     }
 
-    //never set?
-    sprintf(str, "\eF%s %08X %s", "UNK30 ", obj->pMatrix,
-        (obj->pMatrix && obj->pMatrix->file) ? obj->pMatrix->file->name : "-");
+    sprintf(str, "\eF%s %08X %s", "HELDBY", obj->heldBy,
+        (obj->heldBy && obj->heldBy->file) ? obj->heldBy->file->name : "-");
     drawSimpleText(str, x, y);
     y += LINE_HEIGHT;
 

@@ -57,7 +57,7 @@ typedef struct ObjInstance {
 	ObjPos              pos;                //0x00
 	vec3f               prevPos;            //0x18
 	vec3f               vel;                //0x24
-	ObjInstance        *pMatrix;            //0x30
+	ObjInstance        *heldBy;             //0x30
 	s8                  map;                //0x34 MapId8
 	u8                  mtxIdx;             //0x35
 	u8                  newOpacity;         //0x36

@@ -3,9 +3,9 @@
 
 void* dll_load_hook(int dll_id, u16 param) {
     //replaces the body of dll_load()
-    OSReport("Load DLL 0x%04X with param 0x%04X\n", dll_id, param);
+    OSReport("dll_load(0x%04X, 0x%04X)\n", dll_id, param);
 
-    //HACK
+    //HACK to fix dragrockbot
     if(dll_id == 0x27F) dll_id = 0x131;
 
     if(dll_id >= 0 && dll_id < NUM_DLLS) {

@@ -2,6 +2,7 @@
  */
 #include "main.h"
 #include "revolution/os.h"
+#include <math.h>
 
 u32 debugTextFlags =
     //DEBUGTEXT_TRICKY |
@@ -302,6 +303,30 @@ static void printPlayerState() {
         *(u32*)(pState + 0x3F4),
         cState ? ((cState->flags02 << 8) | cState->field_03) : 0,
         cState ? cState->field_0B : 0);
+
+    float waterCurrentRelX = *(float*)(pState + 0x43C);
+    float waterCurrentRelY = *(float*)(pState + 0x440);
+    float waterCurrentAbsX = *(float*)(pState + 0x648);
+    float waterCurrentAbsY = *(float*)(pState + 0x64C);
+    float waterDepth       = *(float*)(pState + 0x838); //how deep we are in it
+    float waterHeight      = *(float*)(pState + 0x83C); //Y pos of top
+    float waterBottomDist  = *(float*)(pState + 0x1B0); //distance to bottom
+    float curAbsLen = sqrtf(
+        (waterCurrentAbsX*waterCurrentAbsX)+
+        (waterCurrentAbsY*waterCurrentAbsY));
+    float curRelLen = sqrtf(
+        (waterCurrentRelX*waterCurrentRelX)+
+        (waterCurrentRelY*waterCurrentRelY));
+    if(waterDepth > 0) {
+        debugPrintf("Water plane @" DPRINT_FIXED "%5d" DPRINT_NOFIXED ", "
+            DPRINT_FIXED "%4d" DPRINT_NOFIXED " from bottom, "
+            DPRINT_FIXED "%4d" DPRINT_NOFIXED " from surface\n",
+            (int)waterHeight, (int)waterBottomDist, (int)waterDepth);
+        debugPrintf("current: " DPRINT_FIXED "%f, %f (%f)" DPRINT_NOFIXED
+            "\ncur rel: " DPRINT_FIXED "%f, %f (%f)" DPRINT_NOFIXED "\n",
+            waterCurrentAbsX, waterCurrentAbsY, curAbsLen,
+            waterCurrentRelX, waterCurrentRelY, curRelLen);
+    }
 
     printPlayerObj("Death obj",   *(ObjInstance**)(pState + 0x46C));
     //printPlayerObj("Staff obj",   *(ObjInstance**)(pState + 0x4B8)); //just target?
