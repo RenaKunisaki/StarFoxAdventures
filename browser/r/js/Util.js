@@ -1,3 +1,5 @@
+import { E } from "./lib/Element.js";
+
 export function get(params) {
     /** Fetch some remote resource.
      *  @param path URI to fetch.
@@ -65,6 +67,7 @@ export function float(n, dflt=null) {
     if(n == null || n == undefined) return dflt;
     return parseFloat(n);
 }
+export const Percent = val => (val * 100).toFixed(0).padStart(3) + '%';
 export function hsv2rgb(h, s, v) {
     //from https://en.wikipedia.org/wiki/HSL_and_HSV
     const c = v * s; //chroma
@@ -80,4 +83,13 @@ export function hsv2rgb(h, s, v) {
     else if(5 <= h && h <= 6) { r=c; g=0; b=x; }
     const m = v - c
     return [r+m, g+m, b+m];
+}
+export function Table(...rows) {
+    let elems = [];
+    for(let row of rows) {
+        let tr = E.tr(null);
+        for(let cell of row) tr.append(E.td(null, cell));
+        elems.push(tr);
+    }
+    return elems;
 }

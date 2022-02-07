@@ -95,7 +95,7 @@ export default function Struct(...fields) {
             type:type, offset:offset, count:count, name:name, size:size};
         structSize = Math.max(structSize, offset+size);
     } //for
-    console.log("Fields", _normalizedFields, "size", structSize);
+    //console.log("Fields", _normalizedFields, "size", structSize);
 
     const cls = class {
         [Symbol.toPrimitive](hint) {

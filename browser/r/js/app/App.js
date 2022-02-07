@@ -5,6 +5,7 @@ import { E } from "../lib/Element.js";
 import FileSelect from "./ui/FileSelect.js";
 import TabBar from "./ui/TabBar.js";
 import SaveInfo from "./ui/SaveInfo.js";
+import GameBits from "./ui/GameBits.js";
 import GameBit from "../types/GameBit.js";
 
 export default class App {
@@ -25,11 +26,20 @@ export default class App {
         this.ui = {
             fileSelect: new FileSelect(this),
             saveInfo:   new SaveInfo(this),
+            gameBits:   new GameBits(this),
         };
-        this.ui.tabs = new TabBar({
-            ["Files"]: E.div(this.ui.fileSelect.element),
-            ["Save Info"]: E.div(this.ui.saveInfo.element),
-        });
+
+        const tabs = {};
+        for(let elem of document.getElementsByClassName('tabBody')) {
+            tabs[elem.getAttribute('data-tab-name')] = elem;
+            if(elem.getAttribute('data-needs-savegame')) {
+                elem.append(E.div('notice', "Select a save file to examine."));
+            }
+            if(elem.getAttribute('data-needs-iso')) {
+                elem.append(E.div('notice', "Select an ISO file to examine."));
+            }
+        }
+        this.ui.tabs = new TabBar(tabs);
         document.getElementById('loading').replaceWith(this.ui.tabs.element);
     }
 
@@ -61,6 +71,7 @@ export default class App {
         await this.saveGame.load(file);
         this.saveSlot = this.saveGame.saves[this.saveSlotIdx];
         this._doCallback('onSaveLoaded', this.saveGame);
+        this._doCallback('onSaveSlotChanged', this.saveSlot);
     }
 
     async useSaveSlot(slot) {

@@ -157,7 +157,8 @@ export class SaveSlot {
                     if(tbl[i >> 3] & (1 << (7-(i & 7)))) val |= 1;
                 }
             }
-            this.gameBits[name] = {bit:bit, val:val, tbl:tbl};
+            this.gameBits[name] = val;
+            this.gameBits[id] = val;
         }
     }
 

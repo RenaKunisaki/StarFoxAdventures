@@ -4,13 +4,14 @@
         <title>SFA</title>
         <link rel="stylesheet" href="r/css/main.css" />
         <link rel="stylesheet" href="r/css/fileselect.css" />
+        <link rel="stylesheet" href="r/css/gamebits.css" />
         <link rel="stylesheet" href="r/css/saveinfo.css" />
         <link rel="stylesheet" href="r/css/tabbar.css" />
         <script type="module" src="r/js/main.js"></script>
     </head>
     <body>
         <div id="loading">Loading...</div>
-        <div id="tab-file-select" class="fileselect">
+        <div id="tab-file-select" class="tabBody fileselect" data-tab-name="Files">
             <div class="row about">
                 <h1>Star Fox Adventures data browser</h1>
                 <div class="explanation">
@@ -57,6 +58,14 @@
                 legally-obtained copy.
             </div>
 
+        </div><!-- tab-file-select -->
+
+        <div id="tab-save-info" class="tabBody saveInfo"
+        data-tab-name="Save Info" data-needs-savegame="1">
+        </div>
+
+        <div id="tab-gameBits" class="tabBody gameBits"
+        data-tab-name="GameBits">
         </div>
     </body>
 </html>

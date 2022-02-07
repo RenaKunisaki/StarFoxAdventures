@@ -43,3 +43,7 @@ td ul { padding-left: 1em }
     margin: 1em;
     padding: 0.5em;
 }
+
+/* numbers */
+.int { text-align: right; font-family: monospace; }
+.hex { text-align: right; font-family: monospace; }

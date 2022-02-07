@@ -1,30 +1,17 @@
 import { E } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
+import { hex, Percent, Table } from "../../Util.js";
 
 //XXX verify
 const soundModes = ["Stereo", "Mono", "Surround", "Headphones"];
-
-//XXX move
-const Percent = val => (val * 100).toFixed(0).padStart(3) + '%';
-
-function Table(...rows) {
-    let elems = [];
-    for(let row of rows) {
-        let tr = E.tr(null);
-        for(let cell of row) tr.append(E.td(null, cell));
-        elems.push(tr);
-    }
-    return elems;
-}
 
 export default class SaveInfo {
     /** Displays information about a save file.
      */
     constructor(app) {
         this.app = app;
-        this.element = E.div('notice', "Select a save file to examine.");
+        this.element = document.getElementById('tab-save-info');
 
-        this.app.onSaveLoaded(save => this._onSaveLoaded(save));
+        //this.app.onSaveLoaded(save => this._onSaveLoaded(save));
         this.app.onSaveSlotChanged(slot => this._onSaveSlotChanged(slot));
     } //constructor
 
@@ -116,12 +103,6 @@ export default class SaveInfo {
         );
         this.element.replaceWith(elem);
     }
-
-    _onSaveLoaded(save) {
-        //called when app loads a new save file.
-        //save: SaveGame
-        this.refresh();
-    } //_onSaveLoaded
 
     _onSaveSlotChanged(slot) {
         //called when the active save slot is changed.
