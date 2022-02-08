@@ -101,13 +101,13 @@ export default class SaveInfo {
     _makeSettingsTable(save) {
         if(save.global == null) {
             return E.table('globals',
-                E.tr('title', E.th(null, "Settings")),
+                E.tr('title', E.th(null, "Settings (all slots)")),
                 E.tr('notice', E.td(null, "No data")),
             );
         }
         const settings = save.global.settings;
         return E.table('globals',
-            E.tr('title', E.th(null, "Settings", {colspan:2})),
+            E.tr('title', E.th(null, "Settings (all slots)", {colspan:2})),
             ...Table(
                 ["Valid",           settings.exists],
                 ["Subtitles",       settings.bSubtitlesOn ? "On" : "Off"],
@@ -151,8 +151,8 @@ export default class SaveInfo {
                     `${FS.curBafomDads} / ${FS.maxBafomDads}`],
                 ["Unk0B", hex(KS.unk0B, 2), hex(FS.unk0B, 2)],
                 ["Position",
-                    `${KP.pos.x.toFixed(2)}, ${KP.pos.y.toFixed(2)}, ${KP.pos.z.toFixed(2)}`,
-                    `${FP.pos.x.toFixed(2)}, ${FP.pos.y.toFixed(2)}, ${FP.pos.z.toFixed(2)}`],
+                    `${KP.pos.x.toFixed(0)}, ${KP.pos.y.toFixed(0)}, ${KP.pos.z.toFixed(0)}`,
+                    `${FP.pos.x.toFixed(0)}, ${FP.pos.y.toFixed(0)}, ${FP.pos.z.toFixed(0)}`],
                 ["X Rot",    int(KP.rotX),     int(FP.rotX)],
                 ["Map Layer",int(KP.mapLayer), int(FP.mapLayer)],
                 ["Map ID",   hex(KP.mapNo, 2), hex(FP.mapNo, 2)],
@@ -166,8 +166,8 @@ export default class SaveInfo {
         const slot = this.app.saveSlot;
         console.log("save slot", slot);
         const elem = E.div('saveInfo',
-            this._makeSlotTable(slot),
             this._makeSettingsTable(save),
+            this._makeSlotTable(slot),
             this._makeCharsTable(slot),
             this._makeScoresTable(save, slot)
         );

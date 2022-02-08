@@ -43,6 +43,10 @@ td ul { padding-left: 1em }
     margin: 1em;
     padding: 0.5em;
 }
+tr.notice {
+    font-style: italic;
+    text-align: center;
+}
 
 /* numbers */
 .int { text-align: right; font-family: monospace; }
