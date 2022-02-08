@@ -165,12 +165,14 @@ export default class SaveInfo {
         const save = this.app.saveGame;
         const slot = this.app.saveSlot;
         console.log("save slot", slot);
-        this.element.replaceWith(E.div('saveInfo',
+        const elem = E.div('saveInfo',
             this._makeSlotTable(slot),
             this._makeSettingsTable(save),
             this._makeCharsTable(slot),
             this._makeScoresTable(save, slot)
-        ));
+        );
+        this.element.replaceWith(elem);
+        this.element = elem;
     }
 
     _onSaveSlotChanged(slot) {

@@ -90,6 +90,7 @@ export default class App {
     onSaveSlotChanged(cb) { this._callbacks.onSaveSlotChanged.push(cb) }
 
     _doCallback(evt, ...args) {
+        console.log("callback:", evt, args);
         for(let cb of this._callbacks[evt]) {
             try {
                 cb(...args);
