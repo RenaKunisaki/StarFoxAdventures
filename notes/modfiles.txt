@@ -1,0 +1,44 @@
+WGShrine:           loads animtest
+NikTest:            no files (linklevel, mod63); runs out of memory
+Rolling Demo:       loads animtest
+Kamerian:           loads animtest
+Duster Cave:        no files (cloudjoin, mod56); runs out of memory
+Diamond Bay:        no files (dbay)
+Discovery Falls:    loads animtest
+Willow Grove:       loads animtest
+Old KP:             works
+CloudRunner Race 2: empty
+Dragon Rock Bottom: works
+
+things we should try:
+- copy the files from "Copy of swaphol" into a used dir in K/U0
+	- or just swap the dir with swaphol in K
+
+check for non-empty versions: insidegal, dbay, dfalls, linklevel, swapcircle
+- demo has insidegal (mod38), linklevel (mod63), swapcircle (mod22)
+- also has cloudtreasure (mod23), frontend (mod30)
+
+final version's mod files are modxx.tab, modxx.zlb.bin
+K has multiple (.bin, .zlb.bin, .lzo.bin)
+should investigate which are used
+there's also .blk in the root
+
+why is there both desert and dragrock?
+
+kiosk animtest has some extra mod files: .lzo.bin, .tex
+many have multiple copies in different formats
+
+kiosk also has different files under card, musyxbin
+
+do romlist files store objects' coords as world pos? so we could infer the location on the grid if a map is missing...
+
+v1.1 has some dirs in the root that are partial copies of ones in gametext
+starfox.h.bak might actually be correct IDs
+E0 has audio/dataMusic.bin, Sfx.bin, Streams.bin
+	also has some of those gametext dirs copied but they're empty
+J1 and E1 also have BUG_cannon_fall
+E1 has another: Bug4
+
+save1.bin size=3952 (0xF70), others=1772 (0x6EC) (the size of one save slot)
+3952 isn't enough for 3 slots, though
+the rest is just zeros

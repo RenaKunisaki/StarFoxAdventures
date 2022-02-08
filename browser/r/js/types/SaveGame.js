@@ -2,6 +2,7 @@ import Struct from '../lib/Struct.js';
 import { Header } from './gci.js';
 import { Vec3f, Vec3i } from './common.js';
 import { hex } from '../Util.js';
+import { E } from '../lib/Element.js';
 
 //Player character saved position
 export const PlayerCharPos = Struct(
@@ -118,14 +119,18 @@ export const CardIconsAndText = Struct(
     ['512B',  'icon_pal'],    //icon palette
     ['I',     'cksum1'],      //checksum
     ['I',     'cksum2'],      //inverse checksum
+    ['2I',    'unk2A48'], //probably checksums
 );
+
+export const ActualSaveData = Struct(
+    [SaveGameStruct[3],     'saves'],
+    [SaveSettingsAndScores, 'global'],
+)
 
 //The entire file on the memory card
 export const SaveDataStruct = Struct(
     [CardIconsAndText,      'icons'],
-    ['2I',                  'unk2A48'], //probably checksums
-    [SaveGameStruct[3],     'saves'],
-    [SaveSettingsAndScores, 'global'],
+    [ActualSaveData,        'data'],
     ['I',                   'cksum1'],
     ['I',                   'cksum2'],
 );
@@ -159,6 +164,14 @@ export class SaveSlot {
             }
             this.gameBits[name] = val;
             this.gameBits[id] = val;
+        }
+
+        //get other fields (HACK)
+        const fields = ['trickyEnergy', 'maxTrickyEnergy', 'trickyPlayCount',
+            'unk1B', 'character', 'flags21', 'flags22', 'unk23', 'texts',
+            'numTexts', 'unk55F', 'unk6A4', 'unk6A6', 'charState', 'charPos'];
+        for(let f of fields) {
+            this[f] = this._save[f];
         }
     }
 
@@ -217,7 +230,13 @@ export class SaveGame {
             throw new Error("RAW memory card image not supported yet");
         }
         else if(file.size >= 0x6040) {
-            await this._parseGci();
+            await this._parseGci(await this._file.arrayBuffer());
+        }
+        else if(file.size == 1772 || file.size == 3952) {
+            //3952: save1.bin, a single save slot + a bunch of zeros
+            //1772: save[2..5].bin, a single save slot
+            let buffer = await this._file.arrayBuffer();
+            this._parseOneSlot(buffer);
         }
         else {
             throw new Error("File is too small to be a valid savegame");
@@ -242,12 +261,13 @@ export class SaveGame {
             default: throw new Error(`Unknown version '${header.gameCode}'`);
         }
         //ignore the block field in the header.
-        this._parseSave(buffer.slice(0x40));
+        this._parseSave(buffer.slice(0x40), true);
     }
 
-    _parseSave(buffer) {
+    _parseSave(buffer, withIcons) {
         //parse the actual save data
-        this.data   = new SaveDataStruct(buffer);
+        if(withIcons) this.data = new SaveDataStruct(buffer).data;
+        else this.data = new ActualSaveData(buffer);
         //console.log("this.data=", this.data);
         //console.log("this.data.global.settings.exists=", this.data.global.settings.exists);
         //console.log("this.data.saves=", this.data.saves);
@@ -259,5 +279,14 @@ export class SaveGame {
             new SaveSlot(this.app, 2, this.data.saves[2]),
         ];
         console.log("Save 1", this.saves[0]);
+    }
+
+    _parseOneSlot(buffer) {
+        //parse a single save slot, from debug savegame/saveN.bin
+        this.data   = null;
+        this.global = null;
+        this.saves  = [
+            new SaveSlot(this.app, 0, new SaveGameStruct(buffer)),
+        ];
     }
 }
