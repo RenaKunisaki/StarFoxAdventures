@@ -49,5 +49,15 @@ tr.notice {
 }
 
 /* numbers */
-.int { text-align: right; font-family: monospace; }
-.hex { text-align: right; font-family: monospace; }
+.int { text-align: right; font-family: monospace; white-space: pre; }
+.hex { text-align: right; font-family: monospace; white-space: pre; }
+
+.fileList {
+    position: relative;
+    display: inline-block;
+    padding-right: 5em; /* to stop size overlapping name */
+}
+.fileList .fileSize {
+    position: absolute;
+    right: 0;
+}

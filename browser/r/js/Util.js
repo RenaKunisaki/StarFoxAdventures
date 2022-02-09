@@ -54,7 +54,6 @@ export function hex(n, size=1) {
     if(n == null || n == undefined) return String(n);
     return n.toString(16).toUpperCase().padStart(size, '0');
 }
-
 export function int(n, dflt=null) {
     /** Convert string `n` to int, returning `dflt` for null/undefined.
      */
@@ -68,6 +67,16 @@ export function float(n, dflt=null) {
     return parseFloat(n);
 }
 export const Percent = val => (val * 100).toFixed(0).padStart(3) + '%';
+export function fileSize(val) {
+    const units = [' ', 'K', 'M', 'G', 'T'];
+    let unit = 0;
+    while(unit < units.length && val > 9999) {
+        val = Math.floor(val / 1024);
+        unit++;
+    }
+    return `${val.toString().padStart(4)}${units[unit]}`;
+}
+
 export function hsv2rgb(h, s, v) {
     //from https://en.wikipedia.org/wiki/HSL_and_HSV
     const c = v * s; //chroma

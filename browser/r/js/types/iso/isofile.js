@@ -24,6 +24,8 @@ export default class IsoFile {
         this.bufferOffs = bufferOffs;
         this.parent     = parent;
         this.isSystem   = isSystem;
+        this.name       = path.split('/');
+        this.name       = this.name[this.name.length - 1];
     }
 
     isDescendantOf(file) {
