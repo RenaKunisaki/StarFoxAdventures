@@ -22,7 +22,10 @@
 
             <div class="row">
                 <h1>ISO File</h1>
-                <input type="file" name="iso" id="fileIso" />
+                <div>
+                    <input type="file" name="iso" id="fileIso" />
+                    <span class="progress" id="fileIsoProgress"></span>
+                </div>
                 <div class="explanation">
                     Select a Star Fox Adventures ISO file to examine it.
                 </div>
@@ -62,6 +65,10 @@
 
         <div id="tab-save-info" class="tabBody saveInfo"
         data-tab-name="Save Info" data-needs-savegame="1">
+        </div>
+
+        <div id="tab-fileList" class="tabBody fileList"
+        data-tab-name="ISO Files" data-needs-iso="1">
         </div>
 
         <div id="tab-gameBits" class="tabBody gameBits"

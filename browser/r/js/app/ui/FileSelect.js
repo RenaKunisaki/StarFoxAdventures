@@ -7,9 +7,16 @@ export default class FileSelect {
         this.app = app;
 
         //set up ISO file input
+        const eProgress = document.getElementById('fileIsoProgress');
         this.eIso = document.getElementById('fileIso');
         this.eIso.addEventListener('change', e => {
             this.app.loadIso(this.eIso.files[0]);
+        }, false);
+        this.eIso.addEventListener('progress', e => {
+            console.log("progress", e);
+            if(e.lengthComputable) {
+                eProgress.innerText = `${((e.loaded/e.total)*100).toFixed(2)}%`;
+            }
         }, false);
 
         //set up save file input

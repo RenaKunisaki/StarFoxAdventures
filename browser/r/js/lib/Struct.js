@@ -148,8 +148,8 @@ export default function Struct(...fields) {
             return new Proxy(this, {
                 get: function(instance, key) {
                     //if the class actually has this field, return that.
-                    if(key in instance) res = instance[key];
                     let res;
+                    if(key in instance) res = instance[key];
                     const field = _normalizedFields[key];
                     if(field) {
                         //if this is one of the struct fields, read it

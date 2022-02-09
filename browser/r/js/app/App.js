@@ -1,12 +1,15 @@
 import { SaveGame } from "../types/SaveGame.js";
 import { getXml } from "../Util.js";
-//XXX move these
+
+//XXX move these?
 import { E } from "../lib/Element.js";
+import FileList from "./ui/FileList.js";
 import FileSelect from "./ui/FileSelect.js";
 import TabBar from "./ui/TabBar.js";
 import SaveInfo from "./ui/SaveInfo.js";
 import GameBits from "./ui/GameBits.js";
 import GameBit from "../types/GameBit.js";
+import { ISO } from "../types/iso/iso.js";
 
 export default class App {
     constructor() {
@@ -24,6 +27,7 @@ export default class App {
 
     async run() {
         this.ui = {
+            fileList:   new FileList(this),
             fileSelect: new FileSelect(this),
             saveInfo:   new SaveInfo(this),
             gameBits:   new GameBits(this),
@@ -60,8 +64,10 @@ export default class App {
 
     async loadIso(file) {
         //load given ISO file (type File)
-        //TODO
-        this._doCallback('onIsoLoaded', file);
+        console.log("Loading ISO", file);
+        this.iso = new ISO().readBuffer(await file.arrayBuffer());
+        console.log("ISO loaded", this.iso);
+        this._doCallback('onIsoLoaded', this.iso);
     }
 
     async loadSave(file) {

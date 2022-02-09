@@ -220,6 +220,7 @@ export class SaveGame {
     async load(file, version='U0') {
         this._file    = file;
         this._version = version; //game version
+        const buffer  = await this._file.arrayBuffer();
 
         if(file.size == SaveDataStruct._size) {
             //parse raw save file
@@ -230,7 +231,7 @@ export class SaveGame {
             throw new Error("RAW memory card image not supported yet");
         }
         else if(file.size >= 0x6040) {
-            await this._parseGci(await this._file.arrayBuffer());
+            await this._parseGci(buffer);
         }
         else if(file.size == 1772 || file.size == 3952) {
             //3952: save1.bin, a single save slot + a bunch of zeros
