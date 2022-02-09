@@ -146,7 +146,7 @@ class GCISO(ISO):
         path: local file path.
         name: ISO file path.
         """
-        for i, file in enumerate(self.files):
+        for file in self.files:
             if file.path == name:
                 print("Replace:  ", name)
                 file.replaceWith(path)
@@ -273,7 +273,7 @@ class GCISO(ISO):
         # In fact, the original ISO has what appears to be random
         # noise as padding here (well, not here, because its string
         # table is larger due to less optimization).
-        # I can't find any reference to, or structre in, that data.
+        # I can't find any reference to, or structure in, that data.
         # it may well be completely random.
         file.writePadding(0x8000)
         self._alignTo(file, 0x8000)

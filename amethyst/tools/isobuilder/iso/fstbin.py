@@ -37,7 +37,7 @@ class FstBin(IsoFile):
         strTabOffs = nFiles * 0x0C
 
         # read entries
-        for i in range(nFiles - 1):
+        for _ in range(nFiles - 1):
             entry = self._readEntry(file)
             self._entries.append(entry)
 
