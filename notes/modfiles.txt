@@ -6,7 +6,7 @@ Duster Cave:        no files (cloudjoin, mod56); runs out of memory
 Diamond Bay:        no files (dbay)
 Discovery Falls:    loads animtest
 Willow Grove:       loads animtest
-Old KP:             works
+Old KP:             works (should change warp point to be right on the teleporter)
 CloudRunner Race 2: empty
 Dragon Rock Bottom: works
 
@@ -23,7 +23,7 @@ K has multiple (.bin, .zlb.bin, .lzo.bin)
 should investigate which are used
 there's also .blk in the root
 
-why is there both desert and dragrock?
+why is there both desert and dragrock? looks like desert is actually OFP
 
 kiosk animtest has some extra mod files: .lzo.bin, .tex
 many have multiple copies in different formats
