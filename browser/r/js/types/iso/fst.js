@@ -59,6 +59,7 @@ export class FST {
                 f = new IsoFile(entry.path, false, entry.fileOffs,
                     entry.fileSize, buffer, entry.fileOffs, parent);
             }
+            f.idx = entry.idx;
             this.files.push(f);
         }
 

@@ -1,6 +1,5 @@
-import { E } from "../../lib/Element.js";
-import { hex, int, Percent, fileSize } from "../../Util.js";
-import Table from "./Table.js";
+import { E, clearElement } from "../../lib/Element.js";
+import { fileSize, hex } from "../../Util.js";
 
 export default class FileList {
     /** Displays list of files in ISO.
@@ -12,11 +11,30 @@ export default class FileList {
     }
 
     refresh(iso) {
-        console.log("files", iso.files);
+        //console.log("files", iso.files);
+        //make the actual file list element
         let [eList, iFile] = this._makeElemForDir(iso, 0);
-        const elem = E.div('fileList', eList);
+
+        //make the right pane to show file info
+        this.eRightPane = E.div('rightPane', "");
+
+        const elem = E.div('fileList',
+            E.div('list', E.h1(null, "Files"), eList),
+            this.eRightPane);
         this.element.replaceWith(elem);
         this.element = elem;
+    }
+
+    _showFile(file) {
+        clearElement(this.eRightPane);
+        this.eRightPane.append(
+            E.h1(null, file.name),
+            E.table('fileInfo',
+                E.tr(E.th(null, "Index"), E.td('index int', file.idx.toLocaleString())),
+                E.tr(E.th(null, "Size"), E.td('fileSize int', file.size.toLocaleString())),
+                E.tr(E.th(null, "Offset"), E.td('offset hex', `0x${hex(file.bufferOffs)}`)),
+            ),
+        )
     }
 
     _makeElemForDir(iso, iFile, _depth=0) {
@@ -34,14 +52,16 @@ export default class FileList {
             if(file.parent != parent) break;
             if(file.isDir) {
                 let [eFile, nextIdx] = this._makeElemForDir(iso, iFile, _depth+1);
-                list.append(E.li('file', eFile));
+                list.append(E.li('dir', eFile));
                 iFile = nextIdx;
             }
             else {
-                list.append(E.li('file',
+                const eFile = E.li('file',
                     E.span('name', file.name),
                     E.span('fileSize int', fileSize(file.size), {title:file.size}),
-                ));
+                );
+                eFile.addEventListener('click', e => this._showFile(file));
+                list.append(eFile);
                 iFile++;
             }
         }

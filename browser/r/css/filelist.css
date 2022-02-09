@@ -1,0 +1,25 @@
+.fileList {
+    display: flex;
+    flex-direction: row;
+}
+.fileList .list {
+    flex-basis: 20em;
+    position: relative;
+    padding-right: 5em; /* to stop size overlapping name */
+    margin-right: 1em; /* don't butt up against border */
+}
+.fileList .list .fileSize {
+    position: absolute;
+    right: 0;
+}
+.fileList li.file:hover {
+    color: #08F;
+}
+.fileList .file {
+    padding-left: 1em;
+}
+.fileList .rightPane {
+    flex-grow: 2;
+    border-left: 1px #FFF solid;
+    padding-left: 1em;
+}
