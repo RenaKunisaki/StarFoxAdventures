@@ -5,6 +5,7 @@ import { getXml } from "../Util.js";
 import { E } from "../lib/Element.js";
 import FileList from "./ui/FileList.js";
 import FileSelect from "./ui/FileSelect.js";
+import FileViewer from "./ui/FileViewer/FileViewer.js";
 import TabBar from "./ui/TabBar.js";
 import SaveInfo from "./ui/SaveInfo.js";
 import GameBits from "./ui/GameBits.js";
@@ -12,7 +13,8 @@ import GameBit from "../types/GameBit.js";
 import { ISO } from "../types/iso/iso.js";
 
 export default class App {
-    constructor() {
+    constructor(parent) {
+        this.parent      = parent; //parent window's App instance
         this.iso         = null; //the loaded ISO file
         this.saveGame    = null; //the loaded savegame file
         this.saveSlot    = null; //the selected slot
@@ -26,25 +28,57 @@ export default class App {
     }
 
     async run() {
-        this.ui = {
-            fileList:   new FileList(this),
-            fileSelect: new FileSelect(this),
-            saveInfo:   new SaveInfo(this),
-            gameBits:   new GameBits(this),
-        };
-
-        const tabs = {};
-        for(let elem of document.getElementsByClassName('tabBody')) {
-            tabs[elem.getAttribute('data-tab-name')] = elem;
-            if(elem.getAttribute('data-needs-savegame')) {
-                elem.append(E.div('notice', "Select a save file to examine."));
+        if(this.parent) {
+            for(let elem of document.getElementsByClassName('tabBody')) {
+                elem.style.display = 'none';
             }
-            if(elem.getAttribute('data-needs-iso')) {
-                elem.append(E.div('notice', "Select an ISO file to examine."));
-            }
+            this.parent._childWindowLoaded();
         }
-        this.ui.tabs = new TabBar(tabs);
-        document.getElementById('loading').replaceWith(this.ui.tabs.element);
+        else {
+            this.ui = {
+                fileList:   new FileList(this),
+                fileSelect: new FileSelect(this),
+                saveInfo:   new SaveInfo(this),
+                gameBits:   new GameBits(this),
+            };
+
+            const tabs = {};
+            for(let elem of document.getElementsByClassName('tabBody')) {
+                tabs[elem.getAttribute('data-tab-name')] = elem;
+                if(elem.getAttribute('data-needs-savegame')) {
+                    elem.append(E.div('notice', "Select a save file to examine."));
+                }
+                if(elem.getAttribute('data-needs-iso')) {
+                    elem.append(E.div('notice', "Select an ISO file to examine."));
+                }
+            }
+            this.ui.tabs = new TabBar(tabs);
+            document.getElementById('loading').replaceWith(this.ui.tabs.element);
+        }
+    }
+
+    openChildWindow(url=null) {
+        /** Open a child window and wait for it to load.
+         *  @param url The URL to open to.
+         *  @return The new window object, or null on failure.
+         *  @note The URL must point to another instance of this app;
+         *     otherwise, the promise will never resolve.
+         */
+        if(url == null) url = window.location;
+        const win = window.open(url);
+        if(!win) {
+            alert("Unable to open new window (popup blocker?)");
+            return null;
+        }
+        return new Promise((resolve, reject) => {
+            this._pWaitForChildWindow = () => resolve(win);
+        });
+    }
+
+    _childWindowLoaded() {
+        /** Called by child window once it's loaded. */
+        this._pWaitForChildWindow();
+        this._pWaitForChildWindow = null;
     }
 
     async _getXml(cls, version, name, tag) {
@@ -88,6 +122,13 @@ export default class App {
         this.saveSlotIdx = slot;
         this.saveSlot = this.saveGame.saves[this.saveSlotIdx];
         this._doCallback('onSaveSlotChanged', this.saveSlot);
+    }
+
+    showFile(file) {
+        //Display contents of file. Used for child window.
+        window.title = file.path;
+        const viewer = new FileViewer(this, file);
+        document.getElementById('loading').replaceWith(viewer.element);
     }
 
     //callbacks

@@ -1,7 +1,11 @@
 import App from './app/App.js';
 
 async function main() {
-    window.app = new App();
+    let parent = null;
+    if(window.opener && window.opener.app) {
+        parent = window.opener.app;
+    }
+    window.app = new App(parent);
     await window.app.run();
 }
 

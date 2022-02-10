@@ -27,6 +27,7 @@ export default class FileList {
 
     _showFile(file) {
         clearElement(this.eRightPane);
+        const eView = E.button(null, "View in New Window");
         this.eRightPane.append(
             E.h1(null, file.name),
             E.table('fileInfo',
@@ -34,7 +35,14 @@ export default class FileList {
                 E.tr(E.th(null, "Size"), E.td('fileSize int', file.size.toLocaleString())),
                 E.tr(E.th(null, "Offset"), E.td('offset hex', `0x${hex(file.bufferOffs)}`)),
             ),
-        )
+            eView,
+        );
+
+        eView.addEventListener('click', async e => {
+            const win = await this.app.openChildWindow();
+            console.log("Opened window", win);
+            if(win) win.app.showFile(file);
+        })
     }
 
     _makeElemForDir(iso, iFile, _depth=0) {
