@@ -172,6 +172,7 @@ const char *strings_English[] = {
     "Player", //object menu instructions
     "Player Settings", //settings for player character
     "Player State", //player character's state
+    "Player Vel", //player's velocity
     "Player", //which player to use
     "Play Count", //number of times played
     "Play SFX", //play sound effect

@@ -160,6 +160,7 @@ const char *strings_Japanese[] = {
     "プレイヤー", //object menu instructions
     "プレイヤー設定", //settings for player character
     "プレイヤーの状態", //player character's state
+    "プレイヤーの速度", //player's velocity
     "プレイヤー", //which player to use
     "Play Count", //number of times played
     "SE再生", //play sound effect

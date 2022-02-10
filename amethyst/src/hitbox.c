@@ -148,11 +148,63 @@ void _renderObjHitboxes(ObjInstance *obj) {
     }
 }
 
+void _drawVel(vec3f base, vec3f tip, Color4b color) {
+    //draw a thin pyramid with its (not drawn) base centred around "base"
+    //and its tip at "tip".
+    //similar to drawArrow() but different params, no base
+    gxSetTexEnvColor(0, &color);
+
+    vec3f TL  = {-1.0f + base.x, -1.0f + base.y, 0.0f + base.z};
+    vec3f TR  = { 1.0f + base.x, -1.0f + base.y, 0.0f + base.z};
+    vec3f BR  = { 1.0f + base.x,  1.0f + base.y, 0.0f + base.z};
+    vec3f BL  = {-1.0f + base.x,  1.0f + base.y, 0.0f + base.z};
+
+    GXBegin(GX_TRIANGLEFAN, 2, 6);
+    drawSolidVtx(tip, &color);
+    //top
+    drawSolidVtx(TL,  &color);
+    drawSolidVtx(TR,  &color);
+    //right
+    drawSolidVtx(BR,  &color);
+    //bottom
+    drawSolidVtx(BL,  &color);
+    //left
+    drawSolidVtx(TL,  &color);
+}
+
+void _renderPlayerVel() {
+    ObjInstance *player = pPlayer;
+    if(!player) return;
+    //if(player->catId != 1) return;
+
+    Color4b color = {255, 0, 0, 128};
+    vec3f pos = player->pos.pos;
+    pos.y += 30; //from middle, not bottom
+    pos.x -= playerMapOffsetX;
+    pos.z -= playerMapOffsetZ;
+
+    vec3f tip = pos;
+    vec3f vel = player->vel;
+    Mtx44 m;
+    PSMTXIdentiy(&m);
+    mtxRotateByVec3s(&m, &player->pos.rotation);
+    //vec3f_multByMtx2(&m, &pos, &pos);
+    vec3f_multByMtx2(&m, &vel, &vel);
+
+    //scale by 60 to show where you'll be in one second
+    //because otherwise it's too small to see.
+    tip.x += (player->vel.x * 60);
+    tip.y += (player->vel.y * 60);
+    tip.z += (player->vel.z * 60);
+
+    _drawVel(pos, tip, color);
+}
+
 void renderObjsHook(u8 param) {
     //renderObjects(visible);
     WRITE8(0x803db658, param); //replaced call just does this
     if(debugRenderFlags & (DEBUGRENDER_HITBOXES | DEBUGRENDER_ATTACH_POINTS |
-        DEBUGRENDER_FOCUS_POINTS | DEBUGRENDER_UNK_POINTS)) {
+        DEBUGRENDER_FOCUS_POINTS | DEBUGRENDER_UNK_POINTS | DEBUGRENDER_PLAYER_VEL)) {
         beginDrawHitboxes();
         for(int iObj=0; iObj < numLoadedObjs; iObj++) {
             _renderObjHitboxes(loadedObjects[iObj]);
@@ -165,6 +217,8 @@ void renderObjsHook(u8 param) {
                 _renderObjHitboxes(loadedObjects[idx]);
             }
         } */
+
+        if(debugRenderFlags & DEBUGRENDER_PLAYER_VEL) _renderPlayerVel();
         finishDrawingHitboxes();
     }
 }

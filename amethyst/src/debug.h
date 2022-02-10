@@ -29,6 +29,7 @@ typedef enum {
     DEBUGRENDER_ATTACH_POINTS = (1 <<  5),
     DEBUGRENDER_FOCUS_POINTS  = (1 <<  6),
     DEBUGRENDER_UNK_POINTS    = (1 <<  7),
+    DEBUGRENDER_PLAYER_VEL    = (1 <<  8),
 } DebugRenderFlags;
 
 typedef enum {
