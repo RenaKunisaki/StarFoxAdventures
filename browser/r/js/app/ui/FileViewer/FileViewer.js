@@ -1,5 +1,6 @@
 import { E, clearElement } from "../../../lib/Element.js";
 import HexViewer from "./HexViewer.js";
+import { RomListViewer } from "./RomListViewer.js";
 
 export default class FileViewer {
     constructor(app, file) {
@@ -15,10 +16,10 @@ export default class FileViewer {
         let elem;
 
         const name = this.file.name;
-        /* if(name.endsWith('.romlist.zlb')) {
-            elem = "XXXX"; // TODO
+        if(name.endsWith('.romlist.zlb')) {
+            this.viewer = new RomListViewer(this.app, this.view);
         }
-        else */ this.viewer = new HexViewer(this.app, this.view);
+        else this.viewer = new HexViewer(this.app, this.view);
 
         clearElement(this.element);
         this.element.append(
