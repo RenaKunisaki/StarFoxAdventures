@@ -32,6 +32,8 @@ export default class App {
             for(let elem of document.getElementsByClassName('tabBody')) {
                 elem.style.display = 'none';
             }
+            //XXX make a proxy
+            this.iso = this.parent.iso;
             this.parent._childWindowLoaded();
         }
         else {
@@ -126,7 +128,7 @@ export default class App {
 
     showFile(file) {
         //Display contents of file. Used for child window.
-        window.title = file.path;
+        document.title = file.path;
         const viewer = new FileViewer(this, file);
         document.getElementById('loading').replaceWith(viewer.element);
     }

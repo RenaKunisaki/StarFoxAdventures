@@ -27,6 +27,10 @@ export class RomListViewer {
     }
 
     refresh() {
+        this.objIndex = this.app.iso.getFile('/OBJINDEX.bin').getData();
+        this.objsTab  = this.app.iso.getFile('/OBJECTS.tab').getData();
+        this.objsBin  = this.app.iso.getFile('/OBJECTS.bin').getData();
+
         this.table = new Table({columns: [
             {displayName:"ID", name:'id', type:'hex', length:8},
             {displayName:"DefNo", name:'objDef', type:'hex', length:4},
@@ -47,11 +51,35 @@ export class RomListViewer {
         this.element.append(this.table.element);
     }
 
+    _getObjName(defNo) {
+        //XXX move to some general place
+        const offs = this.objsTab.getUint32(defNo * 4);
+        let res = '';
+        //XXX length and location depend on game version
+        for(let i=0; i<11; i++) {
+            let b = this.objsBin.getUint8(offs+i+0x91);
+            if(b >= 0x20 && b <= 0x7E) res += String.fromCharCode(b);
+            else if(b == 0) break;
+            //else ignore
+        }
+        return res;
+    }
+
     _makeRow(view, offs, entry) {
+        let defNo = entry.objDef;
+        if(defNo < 0) defNo = -defNo;
+        else {
+            try { defNo = this.objIndex.getUint16(defNo*2); }
+            catch(ex) {
+                console.log("Invalid defNo", defNo);
+                defNo = 0;
+            }
+        }
+
         const row = {
             id: entry.id,
-            objDef: entry.objDef,
-            object: "TODO",
+            objDef: defNo,
+            object: this._getObjName(defNo),
             x: Math.round(entry.position.x),
             y: Math.round(entry.position.y),
             z: Math.round(entry.position.z),
