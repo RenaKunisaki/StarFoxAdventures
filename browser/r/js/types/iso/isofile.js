@@ -33,4 +33,33 @@ export default class IsoFile {
         return ((self.parent == file) ||
             (self.parent != null && self.parent.isDescendantOf(file)));
     }
+
+    getFormat() {
+        let view = new DataView(this.buffer, this.bufferOffs, 4);
+        const magic = view.getUint32(0, false);
+        switch(magic) {
+            case 0x5A4C4200: return "ZLB"; //'ZLB\0'
+            default: return "raw";
+        }
+    }
+
+    getData(decompress=true) {
+        let view = new DataView(this.buffer, this.bufferOffs, this.size);
+        if(decompress) {
+            const magic = view.getUint32(0, false);
+            switch(magic) {
+                case 0x5A4C4200: //'ZLB\0'
+                    console.log("Decompressing ZLB");
+                    view = new DataView(pako.inflate(new Uint8Array(
+                        this.buffer, this.bufferOffs+0x10, this.size-0x10))
+                        .buffer);
+                    break;
+
+                //XXX FEEDFACE, LZO, etc
+
+                default: break;
+            }
+        }
+        return view;
+    }
 };

@@ -1,7 +1,0 @@
-.hex .offset {
-    margin-right: 1em;
-}
-
-.hex .line:nth-child(2n) { color: #DDD; }
-.hex .line:nth-child(2n+1) { color: #FFF; }
-.hex .line:hover { color: #08F; }
