@@ -166,6 +166,9 @@ extern u8 overrideMinimapSize;
 extern u8 overrideMinimapAlpha;
 void minimapMainLoopHook();
 
+//objects.c
+bool isObjectEnabled(ObjInstance *obj);
+
 //pdahook.c
 void pdaHookInit();
 

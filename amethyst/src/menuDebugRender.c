@@ -55,6 +55,18 @@ void menuDebugRenderDebugObjs_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugRenderHideDisabled_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_HIDE_DISABLED) ?
+        T("Yes") : T("No"));
+    menuDrawText(str, x, y, selected);
+}
+void menuDebugRenderHideDisabled_select(const MenuItem *self, int amount) {
+    debugRenderFlags ^= DEBUGRENDER_HIDE_DISABLED;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
 void menuDebugRenderPlayerVel_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
     sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_PLAYER_VEL) ?
@@ -136,6 +148,7 @@ Menu menuDebugRender = {
     "Perf Meters",    _FMT, menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
     "RNG",            _FMT, menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,
     "Debug Objects",  _FMT, menuDebugRenderDebugObjs_draw,    menuDebugRenderDebugObjs_select,
+    "Hide Disabled",  _FMT, menuDebugRenderHideDisabled_draw, menuDebugRenderHideDisabled_select,
     "Player Velocity",_FMT, menuDebugRenderPlayerVel_draw,    menuDebugRenderPlayerVel_select,
     "Hitboxes",       _FMT, menuDebugRenderHitboxes_draw,     menuDebugRenderHitboxes_select,
     "Attach Points",  _FMT, menuDebugRenderAttachPoints_draw, menuDebugRenderAttachPoints_select,

@@ -30,6 +30,7 @@ typedef enum {
     DEBUGRENDER_FOCUS_POINTS  = (1 <<  6),
     DEBUGRENDER_UNK_POINTS    = (1 <<  7),
     DEBUGRENDER_PLAYER_VEL    = (1 <<  8),
+    DEBUGRENDER_HIDE_DISABLED = (1 <<  9),
 } DebugRenderFlags;
 
 typedef enum {

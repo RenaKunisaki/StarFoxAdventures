@@ -96,6 +96,7 @@ const char *strings_English[] = {
     "Headphones", //sound mode: headphones
     "Heap Details", //show details about memory allocation
     "Heat Effect", //enable a heat wave effect on screen
+    "Hide Disabled", //don't show disabled objects
     "Hitboxes", //show hit areas
     "HITS", //hitboxes
     "HUD", //heads-up display

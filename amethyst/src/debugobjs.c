@@ -155,6 +155,11 @@ BOOL shouldRender) {
     if(!(debugRenderFlags & DEBUGRENDER_DEBUG_OBJS)) return;
     if(!PTR_VALID(obj)) return;
 
+    //hide disabled objects
+    if(debugRenderFlags & DEBUGRENDER_HIDE_DISABLED) {
+        if(!isObjectEnabled(obj)) return;
+    }
+
     //copied
     if(PTR_VALID(obj->models) && PTR_VALID(obj->models[obj->curModel])) {
         objRenderModel(obj);
