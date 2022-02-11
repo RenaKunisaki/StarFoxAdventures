@@ -175,28 +175,35 @@ void _drawVel(vec3f base, vec3f tip, Color4b color) {
 void _renderPlayerVel() {
     ObjInstance *player = pPlayer;
     if(!player) return;
-    //if(player->catId != 1) return;
 
     Color4b color = {255, 0, 0, 128};
     vec3f pos = player->pos.pos;
-    pos.y += 30; //from middle, not bottom
+    pos.y += 30; //from head, not bottom
     pos.x -= playerMapOffsetX;
     pos.z -= playerMapOffsetZ;
 
-    vec3f tip = pos;
-    vec3f vel = player->vel;
-    Mtx44 m;
-    PSMTXIdentiy(&m);
-    mtxRotateByVec3s(&m, &player->pos.rotation);
-    //vec3f_multByMtx2(&m, &pos, &pos);
-    vec3f_multByMtx2(&m, &vel, &vel);
-
     //scale by 60 to show where you'll be in one second
     //because otherwise it's too small to see.
+    vec3f tip = pos;
     tip.x += (player->vel.x * 60);
     tip.y += (player->vel.y * 60);
     tip.z += (player->vel.z * 60);
+    _drawVel(pos, tip, color);
 
+    //if there's a water current, draw it too
+    if(player->catId != ObjCatId_Player) return;
+    void *pState = pPlayer ? pPlayer->state : NULL;
+    if(!pState) return;
+
+    float waterDepth = *(float*)(pState + 0x838); //how deep we are in it
+    if(waterDepth <= 0) return;
+    vec3f vel = {0, 0, 0};
+    vel.x = *(float*)(pState + 0x648); //water current, player-relative
+    vel.z = *(float*)(pState + 0x64C);
+    tip.x = pos.x + (vel.x * 60);
+    tip.y = pos.y + (vel.y * 60);
+    tip.z = pos.z + (vel.z * 60);
+    color.r=0; color.g=128; color.b=255; color.a=128;
     _drawVel(pos, tip, color);
 }
 
