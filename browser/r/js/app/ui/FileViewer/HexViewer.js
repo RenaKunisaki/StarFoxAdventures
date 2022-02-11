@@ -37,7 +37,7 @@ export default class HexViewer {
         this.offset  = 0;
         this.rows    = 64;
         this.eBody   = E.div('hexdump');
-        this.element = E.div('hexview',
+        this.element = E.div('hexviewer',
             this._makeToolbar(),
             this.eBody);
         this.refresh();

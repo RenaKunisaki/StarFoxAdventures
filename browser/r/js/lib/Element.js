@@ -29,7 +29,8 @@ export function createElement(name, ...args) {
             else {
                 for(const k in arg) {
                     //elem[k] = options[k];
-                    const v = arg[k];
+                    let v = arg[k];
+                    if(v === true) v = k; //foo:true => foo="foo"
                     if(k in elem) elem[k] = v;
                     else elem.setAttribute(k, v);
                     if(k == 'className') haveClass = true;

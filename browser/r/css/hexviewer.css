@@ -7,3 +7,7 @@
     color: #08F;
     text-decoration: underline;
 }
+
+.hexviewer input[type=number] {
+    width: 3em;
+}
