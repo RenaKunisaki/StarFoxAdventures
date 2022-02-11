@@ -1,0 +1,9 @@
+.hexdump .more {
+    text-align: center;
+}
+
+.hexdump .more:hover {
+    cursor: pointer;
+    color: #08F;
+    text-decoration: underline;
+}

@@ -48,15 +48,17 @@ export default class HexViewer {
             }
             eLine.append(E.span('text', text));
             lines.push(eLine);
-            //subtract 1 here because it's dumb to have "1 more line"
-            //instead of just having the line
-            if(lines.length >= this.rows-1) break;
+            if(lines.length >= this.rows) break;
         }
         elem.append(...lines);
-        if(offs < this.view.byteLength) {
+        if(offs+1 < this.view.byteLength) {
             const nMoreLines = Math.ceil((this.view.byteLength - offs) / this.columns);
             elem.append(E.div('more',
                 `${nMoreLines} more line${nMoreLines == 1 ? '' : 's'}...`));
+            elem.addEventListener('click', e => {
+                this.rows = Math.ceil(this.view.byteLength / this.columns)+1;
+                this.refresh();
+            })
             //XXX show them when clicked
         }
 
