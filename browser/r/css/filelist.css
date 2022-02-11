@@ -7,6 +7,8 @@
     position: relative;
     padding-right: 5em; /* to stop size overlapping name */
     margin-right: 1em; /* don't butt up against border */
+    overflow: auto;
+    max-height: calc(100vh - 3em);
 }
 .fileList .list .fileSize {
     position: absolute;
@@ -22,4 +24,17 @@
     flex-grow: 2;
     border-left: 1px #FFF solid;
     padding-left: 1em;
+}
+.fileList div.fileInfo {
+    padding-bottom: 1em;
+}
+.fileList .fileInfo table {
+    display: inline-block;
+}
+.fileList .fileInfo button {
+    vertical-align: top;
+}
+.fileList .fileViewer {
+    padding-top: 1em;
+    border-top: 1px #FFF solid;
 }

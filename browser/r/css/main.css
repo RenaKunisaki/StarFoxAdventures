@@ -36,6 +36,11 @@ tr:hover { background: #666 }
 
 td ul { padding-left: 1em }
 
+h1 {
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
 .notice {
     border: 3px #880 ridge;
     background-color: rgba(128, 128, 0, 0.5);

@@ -1,5 +1,6 @@
 import { E, clearElement } from "../../lib/Element.js";
 import { fileSize, hex } from "../../Util.js";
+import FileViewer from "./FileViewer/FileViewer.js";
 
 export default class FileList {
     /** Displays list of files in ISO.
@@ -30,19 +31,24 @@ export default class FileList {
         const eView = E.button(null, "View in New Window");
         this.eRightPane.append(
             E.h1(null, file.name),
-            E.table('fileInfo',
-                E.tr(E.th(null, "Index"), E.td('index int', file.idx.toLocaleString())),
-                E.tr(E.th(null, "Size"), E.td('fileSize int', file.size.toLocaleString())),
-                E.tr(E.th(null, "Offset"), E.td('offset hex', `0x${hex(file.bufferOffs)}`)),
+            E.div('fileInfo',
+                E.table('fileInfo',
+                    E.tr(E.th(null, "Index"), E.td('index int', file.idx.toLocaleString())),
+                    E.tr(E.th(null, "Size"), E.td('fileSize int', file.size.toLocaleString())),
+                    E.tr(E.th(null, "Offset"), E.td('offset hex', `0x${hex(file.bufferOffs)}`)),
+                ),
+                eView,
             ),
-            eView,
         );
 
         eView.addEventListener('click', async e => {
             const win = await this.app.openChildWindow();
             console.log("Opened window", win);
             if(win) win.app.showFile(file);
-        })
+        });
+
+        const viewer = new FileViewer(this.app, file, false);
+        this.eRightPane.append(viewer.element);
     }
 
     _makeElemForDir(iso, iFile, _depth=0) {
