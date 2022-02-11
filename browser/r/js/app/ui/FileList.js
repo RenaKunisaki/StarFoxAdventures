@@ -30,7 +30,7 @@ export default class FileList {
         clearElement(this.eRightPane);
         const eView = E.button(null, "View in New Window");
         this.eRightPane.append(
-            E.h1(null, file.name),
+            E.h1(null, file.path),
             E.div('fileInfo',
                 E.table('fileInfo',
                     E.tr(E.th(null, "Index"), E.td('index int', file.idx.toLocaleString())),
