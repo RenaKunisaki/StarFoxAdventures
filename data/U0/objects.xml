@@ -8474,7 +8474,7 @@
     <model id="0x0458"/>
   </object>
   <object id="0x0493" name="setuppoint" def="0x000D" dll="0x00E9" cat="0x0004">
-    <description/>
+    <description>Does nothing, but might be referenced by something?</description>
     <map id="0x00" count="2"/>
     <map id="0x02" count="7"/>
     <map id="0x03" count="9"/>
@@ -8603,7 +8603,7 @@
     <model id="0x02D9"/>
   </object>
   <object id="0x0495" name="sideload" def="0x0075" dll="0x00EA" cat="0x001E">
-    <description/>
+    <description>"Sidekick Loader" - loads Tricky when he's not already loaded</description>
     <map id="0x02" count="4"/>
     <map id="0x03" count="9"/>
     <map id="0x04" count="15"/>
@@ -8640,7 +8640,7 @@
     <seq id="0x002E"/>
   </object>
   <object id="0x0496" name="siderepel" def="0x05E7" dll="0x00EB" cat="0x001F">
-    <description/>
+    <description>"Sidekick Repel" - does nothing on its own, presumably Tricky avoids it</description>
     <map id="0x04" count="22"/>
     <map id="0x07" count="2"/>
     <map id="0x0A" count="10"/>

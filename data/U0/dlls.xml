@@ -9246,7 +9246,7 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x3C" type="unk32"/>
     </objparams>
   </dll>
-  <dll address="0x80320C20" dolOffs="0x31DC20" id="0x00E9" interface="object" name="DummyE9" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x80320C20" dolOffs="0x31DC20" id="0x00E9" interface="object" name="setuppoint" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
