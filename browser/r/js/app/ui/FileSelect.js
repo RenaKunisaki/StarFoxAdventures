@@ -7,7 +7,17 @@ export default class FileSelect {
     constructor(app) {
         this.app = app;
 
-        //set up ISO file input
+        this._makeIsoInput();
+        this._makeSaveInput();
+        this._makeSlotSelect(null);
+        this.element = document.getElementById('tab-file-select');
+        this.app.onSaveLoaded(save => this._onSaveLoaded(save));
+        //this.app.onSaveSlotChanged(slot => this._onSaveSlotChanged(slot));
+        this.app.onIsoLoaded(iso => this._showIsoInfo(iso));
+    } //constructor
+
+    _makeIsoInput() {
+        //build the ISO file input field.
         const eProgress = document.getElementById('fileIsoProgress');
         this.eIso = document.getElementById('fileIso');
         this.eIso.addEventListener('change', async e => {
@@ -28,19 +38,24 @@ export default class FileSelect {
                 eProgress.innerText = `${((e.loaded/e.total)*100).toFixed(2)}%`;
             }
         }, false);
+    }
 
-        //set up save file input
+    _makeSaveInput() {
+        //build the save file input field.
         this.eSave = document.getElementById('fileSave');
-        this.eSave.addEventListener('change', e => {
-            this.app.loadSave(this.eSave.files[0]);
+        this.eSave.addEventListener('change', async e => {
+            const elem = document.getElementById('selectedSaveInfo');
+            clearElement(elem);
+            elem.append(E.div('info', "Loading..."));
+            try {
+                await this.app.loadSave(this.eSave.files[0]);
+            }
+            catch(err) {
+                clearElement(elem);
+                elem.append(E.div('error', err.toString()));
+            }
         }, false);
-
-        this._makeSlotSelect(null);
-        this.element = document.getElementById('tab-file-select');
-        this.app.onSaveLoaded(save => this._onSaveLoaded(save));
-        //this.app.onSaveSlotChanged(slot => this._onSaveSlotChanged(slot));
-        this.app.onIsoLoaded(iso => this._showIsoInfo(iso));
-    } //constructor
+    }
 
     _makeSlotSelect(save) {
         //Build the save slot selector.
@@ -73,6 +88,7 @@ export default class FileSelect {
     _onSaveLoaded(save) {
         //called when app loads a new save file.
         //save: SaveGame
+        this._showSaveInfo(save);
         this._makeSlotSelect(save);
     } //_onSaveLoaded
 
@@ -93,6 +109,38 @@ export default class FileSelect {
         );
         if(!iso.bootBin.gameCode.startsWith('GSA')) {
             elem.append(E.div('error', "Unsupported game"));
+        }
+    }
+
+    _showSaveInfo(save) {
+        //update the Selected File pane with the given save.
+        const elem = document.getElementById('selectedSaveInfo');
+        clearElement(elem);
+        if(save.gciHeader) {
+            const header = save.gciHeader;
+            //GC epoch is 2000-01-01, and JS dates want milliseconds
+            const lastMod = new Date((header.lastModified + 946702800) * 1000);
+            elem.append(
+                E.table(
+                    ...Table(
+                        ["Game ID", header.gameCode],
+                        ["Company", header.company],
+                        ["File Name", header.filename],
+                        ["Last Modified", lastMod.toISOString()],
+                        ["Copy Count", header.copyCount],
+                        //XXX comment string
+                    )
+                )
+            );
+            if(!save.gciHeader.gameCode.startsWith('GSA')) {
+                elem.append(E.div('error', "Unsupported game"));
+            }
+            else if(save._version != this.app.gameVersion) {
+                elem.append(E.div('notice', "Version doesn't match ISO"));
+            }
+        }
+        else {
+            elem.append(E.div('notice', "No info available"));
         }
     }
 

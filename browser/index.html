@@ -55,18 +55,30 @@
 
             <div class="row">
                 <h1>Save File</h1>
-                <input type="file" name="save" id="fileSave" />
-                <label for="saveSlot">Slot:</label>
-                <select id="saveSlot"></select>
-                <div class="explanation">
-                    Select a Star Fox Adventures save file to examine it.
-                </div>
-                <div class="note">
-                    <h2>Supported formats:</h2>
-                    <ul>
-                        <li>GCI</li>
-                        <li>Raw binary (<code>savegame/saveN.bin</code>)</li>
-                    </ul>
+                <div class="columns">
+                    <div class="leftpane">
+                        <div>
+                            <input type="file" name="save" id="fileSave" />
+                        </div>
+                        <div>
+                            <label for="saveSlot">Slot:</label>
+                            <select id="saveSlot"></select>
+                        </div>
+                        <div class="explanation">
+                            Select a Star Fox Adventures save file to examine it.
+                        </div>
+                        <div class="note">
+                            <h2>Supported formats:</h2>
+                            <ul>
+                                <li>GCI</li>
+                                <li>Raw binary (<code>savegame/saveN.bin</code>)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="rightpane">
+                        <h2>Selected file:</h2>
+                        <div id="selectedSaveInfo">None</div>
+                    </div>
                 </div>
             </div>
 

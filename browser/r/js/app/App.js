@@ -128,6 +128,10 @@ export default class App {
         await this.getFilesForVersion('U0'); //XXX
         this.saveGame = new SaveGame(this);
         await this.saveGame.load(file);
+
+        if(this.gameVersion == null)
+            this.gameVersion = this.saveGame._version;
+
         this.saveSlot = this.saveGame.saves[this.saveSlotIdx];
         this._doCallback('onSaveLoaded', this.saveGame);
         this._doCallback('onSaveSlotChanged', this.saveSlot);
