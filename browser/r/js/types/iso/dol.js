@@ -1,4 +1,4 @@
-import Struct from '../../lib/Struct.js';
+import { hex } from '../../Util.js';
 import IsoFile from './isofile.js';
 
 const NUM_TEXT_SECTIONS = 7;
@@ -13,6 +13,21 @@ export default class DOL extends IsoFile {
         this.bssSize      = 0;
         this.entryPoint   = 0;
         if(buffer != null) this.readBuffer(buffer, offset);
+    }
+
+    addrToSection(addr) {
+        for(let section of this.textSections.concat(this.dataSections)) {
+            if(addr >= section.addr && addr < section.addr+section.size) {
+                return section;
+            }
+        }
+        return null;
+    }
+
+    addrToOffset(addr) {
+        const section = this.addrToSection(addr);
+        if(!section) return null;
+        return (addr - section.addr) + section.offset;
     }
 
     readBuffer(buffer, offset) {
@@ -52,6 +67,41 @@ export default class DOL extends IsoFile {
         offset += 12;
 
         this.size = Math.max(...(this.textSections.concat(this.dataSections))
-            .map(it => it.size));
+            .map(it => it.offset + it.size));
+        console.log(`DOL size=0x${hex(this.size)}`);
+
+        this._dumpSections();
+    }
+
+    _dumpSections() {
+        let secs = {};
+        for(let i=0; i<NUM_TEXT_SECTIONS; i++) {
+            const sec = this.textSections[i];
+            secs[`text${i}`] = {
+                addr:    hex(sec.addr),
+                offset:  hex(sec.offset),
+                size:    hex(sec.size),
+                end:     hex(sec.addr+sec.size),
+                endOffs: hex(sec.offset+sec.size),
+            };
+        }
+        for(let i=0; i<NUM_DATA_SECTIONS; i++) {
+            const sec = this.dataSections[i];
+            secs[`data${i}`] = {
+                addr:    hex(sec.addr),
+                offset:  hex(sec.offset),
+                size:    hex(sec.size),
+                end:     hex(sec.addr+sec.size),
+                endOffs: hex(sec.offset+sec.size),
+            };
+        }
+        secs['bss'] = {
+            addr:    hex(this.bssAddr),
+            offset:  null,
+            size:    hex(this.bssSize),
+            end:     hex(this.bssAddr+this.bssSize),
+            endOffs: null,
+        };
+        console.table(secs);
     }
 }
