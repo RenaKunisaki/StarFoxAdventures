@@ -3,6 +3,11 @@
     margin-bottom: 2em;
 }
 
+.fileSelect .row:not(:first-child) {
+    border-top: 1px #FFF solid;
+    padding-top: 1em;
+}
+
 .fileSelect h1 {
     margin: 0;
 }
@@ -10,4 +15,17 @@
 .fileSelect input {
     border: 1px #888 solid;
     margin: 1em;
+}
+
+.fileSelect .columns {
+    display: flex;
+    flex-direction: row;
+}
+.fileSelect .leftPane {
+    flex-basis: 50%;
+    border-right: 1px #FFF solid;
+}
+.fileSelect .rightPane {
+    flex-basis: 50%;
+    margin-left: 1em;
 }

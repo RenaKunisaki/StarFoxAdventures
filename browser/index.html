@@ -26,21 +26,29 @@
 
             <div class="row">
                 <h1>ISO File</h1>
-                <div>
-                    <input type="file" name="iso" id="fileIso" />
-                    <span class="progress" id="fileIsoProgress"></span>
-                </div>
-                <div class="explanation">
-                    Select a Star Fox Adventures ISO file to examine it.
-                </div>
-                <div class="note">
-                    <h2>Supported versions:</h2>
-                    <ul>
-                        <li>US version 1.0 (MD5: <code>afb0306454b581e37a62170fdfd1de09</code>)</li>
-                    </ul>
-                    <span>If no file is selected, you can still examine a save file,
-                        but not as much information will be available.
-                    </span>
+                <div class="columns">
+                    <div class="leftpane">
+                        <div>
+                            <input type="file" name="iso" id="fileIso" />
+                            <span class="progress" id="fileIsoProgress"></span>
+                        </div>
+                        <div class="explanation">
+                            Select a Star Fox Adventures ISO file to examine it.
+                        </div>
+                        <div class="note">
+                            <h2>Supported versions:</h2>
+                            <ul>
+                                <li>US version 1.0 (MD5: <code>afb0306454b581e37a62170fdfd1de09</code>)</li>
+                            </ul>
+                            <span>If no file is selected, you can still examine a save file,
+                                but not as much information will be available.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="rightpane">
+                        <h2>Selected file:</h2>
+                        <div id="selectedIsoInfo">None</div>
+                    </div>
                 </div>
             </div>
 

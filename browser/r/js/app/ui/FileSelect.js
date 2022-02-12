@@ -1,4 +1,5 @@
 import { E, clearElement } from "../../lib/Element.js";
+import { Table } from "../../Util.js";
 
 export default class FileSelect {
     /** The UI for selecting an ISO and save file.
@@ -29,6 +30,7 @@ export default class FileSelect {
         this.element = document.getElementById('tab-file-select');
         this.app.onSaveLoaded(save => this._onSaveLoaded(save));
         //this.app.onSaveSlotChanged(slot => this._onSaveSlotChanged(slot));
+        this.app.onIsoLoaded(iso => this._showIsoInfo(iso));
     } //constructor
 
     _makeSlotSelect(save) {
@@ -64,5 +66,25 @@ export default class FileSelect {
         //save: SaveGame
         this._makeSlotSelect(save);
     } //_onSaveLoaded
+
+    _showIsoInfo(iso) {
+        //update the Selected File pane with the given ISO.
+        const elem = document.getElementById('selectedIsoInfo');
+        clearElement(elem);
+        elem.append(
+            E.table(
+                ...Table(
+                    ["Title",   iso.bootBin.gameName],
+                    ["Game ID", iso.bootBin.gameCode],
+                    ["Company", iso.bootBin.company],
+                    ["Disc #",  iso.bootBin.discNo],
+                    ["Version", iso.bootBin.version],
+                )
+            )
+        );
+        if(!iso.bootBin.gameCode.startsWith('GSA')) {
+            elem.append(E.div('error', "Unsupported game"));
+        }
+    }
 
 } //class
