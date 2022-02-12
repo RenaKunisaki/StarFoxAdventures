@@ -10,6 +10,7 @@ import TabBar from "./ui/TabBar.js";
 import SaveInfo from "./ui/SaveInfo.js";
 import GameBits from "./ui/GameBits.js";
 import ObjList from "./ui/ObjList.js";
+import DllList from "./ui/DllList.js";
 import GameBit from "../types/GameBit.js";
 import GameObject from "../types/GameObject.js";
 import DLL from "../types/DLL.js";
@@ -47,6 +48,7 @@ export default class App {
                 saveInfo:   new SaveInfo(this),
                 gameBits:   new GameBits(this),
                 objList:    new ObjList(this),
+                dllList:    new DllList(this),
             };
 
             const tabs = {};

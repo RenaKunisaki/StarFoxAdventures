@@ -12,12 +12,13 @@ export default class DLL {
         this.dolOffs   = int(eDll.getAttribute('dolOffs'));
         this.name      = eDll.getAttribute('name');
         this.interface = eDll.getAttribute('interface');
-        this.unk08     = int(eDll.getAttribute('unk08'));
-        this.unk0E     = int(eDll.getAttribute('unk0E'));
+        //XXX these fields shouldn't exist (were based on outdated info)
+        //this.unk08     = int(eDll.getAttribute('unk08'));
+        //this.unk0E     = int(eDll.getAttribute('unk0E'));
 
         this.description = '';
         let desc = eDll.getElementsByTagName('description');
-        if(desc && desc[0]) this.description = desc.textContent;
+        if(desc && desc[0]) this.description = desc[0].textContent;
 
         this.notes = [];
         for(let note in eDll.getElementsByTagName('note')) {

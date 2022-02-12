@@ -1,9 +1,9 @@
 import { E } from "../../lib/Element.js";
-import { hex, Percent } from "../../Util.js";
+import { hex } from "../../Util.js";
 import Table from "./Table.js";
 
 export default class ObjList {
-    /** Displays table of ObjList.
+    /** Displays all object definitions.
      */
     constructor(app) {
         this.app = app;
@@ -24,10 +24,10 @@ export default class ObjList {
 
     _makeTable() {
         return new Table({columns: [
-            {displayName:"#",        name:'id',      type:'hex', length: 4},
-            {displayName:"Name",     name:'name',    type:'string'},
-            {displayName:"Cat",      name:'cat',     type:'string'},
-            {displayName:"DLL",      name:'dll',     type:'string',
+            {displayName:"#",    name:'id',   type:'hex', length: 4},
+            {displayName:"Name", name:'name', type:'string'},
+            {displayName:"Cat",  name:'cat',  type:'string'},
+            {displayName:"DLL",  name:'dll',  type:'string',
                 makeElem: (dll, td, row) => {
                     if(!dll) {
                         return E.td('null', "-");
@@ -40,7 +40,17 @@ export default class ObjList {
                     return res;
                 },
             },
-            {displayName:"Flags", name:'flags', type:'hex', length: 8},
+            {displayName:"Flags",    name:'flags', type:'hex', length:8},
+            {displayName:"#P",       name:'nPlayerObjs', type:'int', title:"Player Objs"},
+            {displayName:"#M",       name:'nModels', type:'int', title:"Num. Models"},
+            {displayName:"#T",       name:'nTextures', type:'int', title:"# Textures"},
+            {displayName:"Seqs",     name:'nSeqs', type:'int'},
+            {displayName:"Map",      name:'map', type:'hex', length:2,
+                makeElem: (val, td, row) => {
+                    if(val < 0) td.classList.add('null');
+                    return td;
+                },
+            },
         ]});
     }
 
@@ -57,6 +67,11 @@ export default class ObjList {
             cat:         cat,
             dll:         dll,
             flags:       obj.flags,
+            nModels:     obj.nModels,
+            nTextures:   obj.nTextures,
+            nPlayerObjs: obj.nPlayerObjs,
+            nSeqs:       obj.nSeqs,
+            map:         obj.map,
             //XXX more
         };
         return row;

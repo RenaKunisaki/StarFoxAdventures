@@ -67,12 +67,9 @@ tr.notice {
     padding: 0.5em;
 }
 
-.null {
-    color: #888;
-}
-.invalid {
-    color: #F88;
-}
+.null { color: #888; }
+.zero { color: #888; }
+.invalid { color: #F88; }
 
 /* numbers */
 .int { text-align: right; font-family: monospace; white-space: pre; }
