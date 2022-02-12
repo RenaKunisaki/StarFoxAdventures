@@ -26,6 +26,7 @@ export default class IsoFile {
         this.isSystem   = isSystem;
         this.name       = path.split('/');
         this.name       = this.name[this.name.length - 1];
+        this._data      = {}; //cache
     }
 
     isDescendantOf(file) {
@@ -45,11 +46,21 @@ export default class IsoFile {
 
     getRawData(offset=0, size=0) {
         if(size <= 0) size = this.size;
-        return new DataView(this.buffer, this.bufferOffs+offset, size);
+
+        let key = `R${offset},${size}`;
+        if(!this._data[key]) {
+            this._data[key] = new DataView(this.buffer,
+                this.bufferOffs+offset, size);
+        }
+        return this._data[key];
     }
 
     getData(decompress=true, offset=0, size=0) {
         if(size <= 0) size = this.size;
+
+        let key = `${decompress?'D':'R'}${offset},${size}`;
+        if(this._data[key]) return this._data[key];
+
         let view = this.getRawData(offset, size);
         if(decompress) {
             const magic = view.getUint32(0, false);
@@ -67,6 +78,8 @@ export default class IsoFile {
                 default: break;
             }
         }
+
+        this._data[key] = view;
         return view;
     }
 };

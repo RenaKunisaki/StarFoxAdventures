@@ -1,7 +1,6 @@
 import { SaveGame } from "../types/SaveGame.js";
 import { getXml } from "../Util.js";
 
-//XXX move these?
 import { E } from "../lib/Element.js";
 import FileList from "./ui/FileList.js";
 import FileSelect from "./ui/FileSelect.js";
@@ -11,20 +10,16 @@ import SaveInfo from "./ui/SaveInfo.js";
 import GameBits from "./ui/GameBits.js";
 import ObjList from "./ui/ObjList.js";
 import DllList from "./ui/DllList.js";
-import GameBit from "../types/GameBit.js";
-import GameObject from "../types/GameObject.js";
-import DLL from "../types/DLL.js";
 import { ISO } from "../types/iso/iso.js";
+import Game from "../game/game.js";
 
 export default class App {
     constructor(parent) {
         this.parent      = parent; //parent window's App instance
-        this.iso         = null; //the loaded ISO file
         this.saveGame    = null; //the loaded savegame file
         this.saveSlot    = null; //the selected slot
         this.saveSlotIdx = 0;
-        this.gameVersion = null;
-        this.gameBits    = null; //gamebits.xml
+        this.game        = new Game(this);
         this._callbacks  = {
             onIsoLoaded: [],
             onSaveLoaded: [],
@@ -38,7 +33,7 @@ export default class App {
                 elem.style.display = 'none';
             }
             //XXX make a proxy
-            this.iso = this.parent.iso;
+            this.game = this.parent.game;
             this.parent._childWindowLoaded();
         }
         else {
@@ -106,59 +101,24 @@ export default class App {
         }
     }
 
-    async getFilesForVersion(version) {
-        this.gameBits = await this._getXml(GameBit, version, 'gamebits', 'bit');
-        this.dlls = await this._getXml(DLL, version, 'dlls', 'dll');
-
-        this.objCats = {};
-        const objCatsXml = await getXml(`data/${version}/objcats.xml`);
-        for(let elem of objCatsXml.getElementsByTagName('cat')) {
-            this.objCats[parseInt(elem.getAttribute('id'))] = elem.getAttribute('name');
-        }
-    }
-
     async loadIso(file) {
         //load given ISO file (type File)
         console.log("Loading ISO", file);
-        this.iso = new ISO().readBuffer(await file.arrayBuffer());
-        console.log("ISO loaded", this.iso);
-
-        let version;
-        switch(this.iso.bootBin.gameCode) {
-            case 'GSAE': version = 'U'; break;
-            case 'GSAP': version = 'E'; break;
-            case 'GSAJ': version = 'J'; break;
-            default: {
-                console.warn("Unrecognized game ID:", this.iso.bootBin.gameCode);
-                version = '?';
-            }
-        }
-        version += this.iso.bootBin.version.toString();
-        console.log("Game version:", version);
-        this.gameVersion = version;
-
-        //download data files
-        await this.getFilesForVersion(version);
-
-        //parse files from game
-        const objsTab = this.iso.getFile('/OBJECTS.tab').getData();
-        this.gameObjects = [];
-        for(let i=0; objsTab.getInt32((i+1)*4) >= 0; i++) {
-            this.gameObjects.push(new GameObject(this, i));
-        }
+        const iso = new ISO().readBuffer(await file.arrayBuffer());
+        await this.game.loadIso(iso);
+        console.log("ISO loaded", this.game.iso);
 
         //trigger callbacks
-        this._doCallback('onIsoLoaded', this.iso);
+        this._doCallback('onIsoLoaded', this.game.iso);
     }
 
     async loadSave(file) {
         //load given save (GCI) file (type File)
-        await this.getFilesForVersion('U0'); //XXX
         this.saveGame = new SaveGame(this);
         await this.saveGame.load(file);
 
-        if(this.gameVersion == null)
-            this.gameVersion = this.saveGame._version;
+        if(this.game.version == null)
+            await this.game.setVersion(this.saveGame._version);
 
         this.saveSlot = this.saveGame.saves[this.saveSlotIdx];
         this._doCallback('onSaveLoaded', this.saveGame);

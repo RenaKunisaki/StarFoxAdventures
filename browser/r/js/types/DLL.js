@@ -25,6 +25,9 @@ export default class DLL {
             this.notes.push(note.textContent);
         }
 
+        //const dol = this.app.iso.mainDol.getData();
+        //let addr = dol.getUint32()
+
         //XXX get func info from interface
         this.functions = [];
         for(let eFunc of eDll.getElementsByTagName('function')) {

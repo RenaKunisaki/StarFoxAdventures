@@ -82,8 +82,8 @@ export default class GameObject {
          */
         this.app = app;
 
-        const objsTab = this.app.iso.getFile('/OBJECTS.tab').getData();
-        const objsBin = this.app.iso.getFile('/OBJECTS.bin');
+        const objsTab = this.app.game.iso.getFile('/OBJECTS.tab').getData();
+        const objsBin = this.app.game.iso.getFile('/OBJECTS.bin');
         const objsBinData = objsBin.getData();
         const offset  = objsTab.getUint32(idx*4);
         const size    = objsTab.getUint32((idx+1)*4) - offset;

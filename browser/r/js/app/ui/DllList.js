@@ -13,7 +13,7 @@ export default class DllList {
 
     refresh() {
         let tbl = this._makeTable();
-        for(let [id, dll] of Object.entries(this.app.dlls)) {
+        for(let [id, dll] of Object.entries(this.app.game.dlls)) {
             tbl.add(this._makeRow(dll));
         }
         const elem = E.div('dllList', tbl.element);
@@ -23,7 +23,7 @@ export default class DllList {
 
     _makeTable() {
         return new Table({columns: [
-            {displayName:"#",       name:'id',         type:'hex', length:4,
+            {displayName:"#", name:'id', type:'hex', length:4,
                 makeElem: (val, td, row) => {
                     if(!row.isValid) td.classList.add('invalid');
                     return td;
@@ -35,7 +35,9 @@ export default class DllList {
             {displayName:"DOLOfs",  name:'dolOffs',    type:'hex', length:6},
             {displayName:"Constr",  name:'constructor',type:'hex', length:8},
             {displayName:"Destr",   name:'destructor', type:'hex', length:8},
-            {displayName:"#Fn",     name:'nFuncs',     type:'int', title:"# Functions"},
+            {displayName:"#Fn",     name:'nFuncs',     type:'int',
+                title:"# Functions",
+            },
             {displayName:"Description",name:'description',type:'string'},
         ]});
     }

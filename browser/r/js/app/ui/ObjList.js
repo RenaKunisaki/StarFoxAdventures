@@ -14,7 +14,7 @@ export default class ObjList {
 
     refresh() {
         let tbl = this._makeTable();
-        for(let obj of this.app.gameObjects) {
+        for(let obj of this.app.game.objects) {
             tbl.add(this._makeRow(obj));
         }
         const elem = E.div('objList', tbl.element);
@@ -55,11 +55,11 @@ export default class ObjList {
     }
 
     _makeRow(obj) {
-        let cat = this.app.objCats[obj.catId];
+        let cat = this.app.game.objCats[obj.catId];
         if(cat == undefined) cat = `#${obj.catId}`;
 
         let dll = null;
-        if(obj.dll_id >= 0) dll = this.app.dlls[obj.dll_id];
+        if(obj.dll_id >= 0) dll = this.app.game.dlls[obj.dll_id];
 
         const row = {
             id:          obj.id,

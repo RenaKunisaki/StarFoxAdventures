@@ -146,7 +146,7 @@ export class SaveSlot {
 
         //get gamebits
         this.gameBits = {};
-        for(let [id, bit] of Object.entries(this.app.gameBits)) {
+        for(let [id, bit] of Object.entries(this.app.game.bits)) {
             let name = bit.name || `_${hex(id,4)}`;
             let tbl=null;
             let val=0;

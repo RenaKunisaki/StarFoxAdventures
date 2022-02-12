@@ -14,7 +14,7 @@ export default class GameBits {
 
     refresh() {
         let tbl = this._makeTable();
-        for(let [id, bit] of Object.entries(this.app.gameBits)) {
+        for(let [id, bit] of Object.entries(this.app.game.bits)) {
             tbl.add(this._makeRow(bit));
         }
         console.log("Bit table", tbl);
