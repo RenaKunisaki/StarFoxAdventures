@@ -52,6 +52,13 @@ tr.notice {
     font-style: italic;
     text-align: center;
 }
+.error {
+    border: 3px #800 ridge;
+    background-color: rgba(128, 0, 0, 0.5);
+    color: #FFF;
+    margin: 1em;
+    padding: 0.5em;
+}
 
 /* numbers */
 .int { text-align: right; font-family: monospace; white-space: pre; }
