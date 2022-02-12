@@ -30,6 +30,7 @@ export default class FileSelect {
             catch(err) {
                 clearElement(elem);
                 elem.append(E.div('error', err.toString()));
+                throw err;
             }
         }, false);
         this.eIso.addEventListener('progress', e => {

@@ -89,13 +89,19 @@ export default class App {
     }
 
     async _getXml(cls, version, name, tag) {
-        const data = await getXml(`data/${version}/${name}.xml`);
-        const res  = {};
-        for(let elem of data.getElementsByTagName(tag)) {
-            let inst = new cls(this, elem);
-            res[inst.id] = inst;
+        try {
+            const data = await getXml(`data/${version}/${name}.xml`);
+            const res  = {};
+            for(let elem of data.getElementsByTagName(tag)) {
+                let inst = new cls(this, elem);
+                res[inst.id] = inst;
+            }
+            return res;
         }
-        return res;
+        catch(err) {
+            console.error("Error loading XML", version, name);
+            throw err;
+        }
     }
 
     async getFilesForVersion(version) {
