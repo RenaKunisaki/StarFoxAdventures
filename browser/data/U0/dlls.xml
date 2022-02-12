@@ -10941,7 +10941,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803217C0" dolOffs="0x31E7C0" id="0x0108" interface="object" name="Dummy108" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803217C0" dolOffs="0x31E7C0" id="0x0108" interface="object" name="EndObject" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x80186494" idx="0x0" name="initialise" stub="1">
@@ -14621,7 +14621,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DBE10" dolOffs="0x333470" id="0x0146" interface="data" name="Dummy146" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DBE10" dolOffs="0x333470" id="0x0146" interface="data" name="CloudShipCo" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -14961,7 +14961,7 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x1E" type="GameBit"/>
     </objparams>
   </dll>
-  <dll address="0x803DBE50" dolOffs="0x3334B0" id="0x014D" name="Dummy14D" unk08="0x42480000" unk0E="0x0000">
+  <dll address="0x803DBE50" dolOffs="0x3334B0" id="0x014D" name="LaserBeam" unk08="0x42480000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -15152,13 +15152,13 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DBE60" dolOffs="0x3334C0" id="0x0151" name="Dummy151" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DBE60" dolOffs="0x3334C0" id="0x0151" name="CFScalesGal" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
     </functions>
   </dll>
-  <dll address="0x803DBE68" dolOffs="0x3334C8" id="0x0152" interface="data" name="Dummy152" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DBE68" dolOffs="0x3334C8" id="0x0152" interface="data" name="CF_ObjCreator" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -15608,7 +15608,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DBEA0" dolOffs="0x333500" id="0x015C" name="Dummy15C" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DBEA0" dolOffs="0x333500" id="0x015C" name="CFForceFiel_15C" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -15759,7 +15759,7 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x00000000" idx="0x0" valid="0"/>
     </functions>
   </dll>
-  <dll address="0x803DBEB0" dolOffs="0x333510" id="0x0161" name="Dummy161" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DBEB0" dolOffs="0x333510" id="0x0161" name="CFTreasRobo" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -15898,7 +15898,7 @@ seemingly only used to track magic plants' growth</description>
       </cmd>
     </objcmds>
   </dll>
-  <dll address="0x803DBEC8" dolOffs="0x333528" id="0x0165" interface="data" name="Dummy165" unk08="0xFF000000" unk0E="0x0028">
+  <dll address="0x803DBEC8" dolOffs="0x333528" id="0x0165" interface="data" name="CFRemovalSh" unk08="0xFF000000" unk0E="0x0028">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -16037,7 +16037,7 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x20" type="GameBit"/>
     </objparams>
   </dll>
-  <dll address="0x803DBEE0" dolOffs="0x333540" id="0x0168" interface="data" name="Dummy168" unk08="0x03E60000" unk0E="0x0000">
+  <dll address="0x803DBEE0" dolOffs="0x333540" id="0x0168" interface="data" name="HoloPoint" unk08="0x03E60000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -16829,7 +16829,7 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x801C1688" idx="0x13"/>
     </functions>
   </dll>
-  <dll address="0x80325F20" dolOffs="0x322F20" id="0x0176" name="Dummy176" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x80325F20" dolOffs="0x322F20" id="0x0176" name="DFSH_Door1Speci" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -17148,7 +17148,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803230F8" dolOffs="0x3200F8" id="0x017C" name="Dummy17C" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803230F8" dolOffs="0x3200F8" id="0x017C" name="GCRobotPatr" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -24958,7 +24958,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x80328AD8" dolOffs="0x325AD8" id="0x0205" name="Dummy205" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x80328AD8" dolOffs="0x325AD8" id="0x0205" name="WM_Vein" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -25714,13 +25714,13 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x00000082" idx="0x0" valid="0"/>
     </functions>
   </dll>
-  <dll address="0x80328E28" dolOffs="0x325E28" id="0x0213" name="Dummy213" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x80328E28" dolOffs="0x325E28" id="0x0213" name="WM_VConsole" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
     </functions>
   </dll>
-  <dll address="0x803DC140" dolOffs="0x3337A0" id="0x0214" name="Dummy214" unk08="0x00000082" unk0E="0x0000">
+  <dll address="0x803DC140" dolOffs="0x3337A0" id="0x0214" name="WM_TransTop" unk08="0x00000082" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -28201,7 +28201,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DC150" dolOffs="0x3337B0" id="0x023D" interface="data" name="Dummy23D" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DC150" dolOffs="0x3337B0" id="0x023D" interface="data" name="DBPointMum" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -28607,7 +28607,7 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x00000000" idx="0x0" valid="0"/>
     </functions>
   </dll>
-  <dll address="0x8032A110" dolOffs="0x327110" id="0x024C" name="Dummy24C" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x8032A110" dolOffs="0x327110" id="0x024C" name="BossDrakor_24C" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -30553,7 +30553,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DC2E0" dolOffs="0x333940" id="0x026A" interface="data" name="Dummy26A" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DC2E0" dolOffs="0x333940" id="0x026A" interface="data" name="DR_Geezer" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -30669,7 +30669,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DC2E8" dolOffs="0x333948" id="0x026D" interface="data" name="Dummy26D" unk08="0xFFFF8000" unk0E="0x0000">
+  <dll address="0x803DC2E8" dolOffs="0x333948" id="0x026D" interface="data" name="DR_Vines" unk08="0xFFFF8000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -30807,7 +30807,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DC338" dolOffs="0x333998" id="0x0270" name="Dummy270" unk08="0xBC23D70A" unk0E="0x999A">
+  <dll address="0x803DC338" dolOffs="0x333998" id="0x0270" name="DR_Rock" unk08="0xBC23D70A" unk0E="0x999A">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
@@ -31078,13 +31078,13 @@ seemingly only used to track magic plants' growth</description>
       </param>
     </objparams>
   </dll>
-  <dll address="0x803DC360" dolOffs="0x3339C0" id="0x0274" name="Dummy274" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DC360" dolOffs="0x3339C0" id="0x0274" name="DR_pulley" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
     </functions>
   </dll>
-  <dll address="0x803DC358" dolOffs="0x3339B8" id="0x0275" name="Dummy275" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DC358" dolOffs="0x3339B8" id="0x0275" name="DR_cradle" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -31096,11 +31096,11 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x00000000" idx="0x0" valid="0"/>
     </functions>
   </dll>
-  <dll address="0x803DC370" dolOffs="0x3339D0" id="0x0277" interface="data" name="Dummy277" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DC370" dolOffs="0x3339D0" id="0x0277" interface="data" name="CFWindLiftL" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
-  <dll address="0x803DC378" dolOffs="0x3339D8" id="0x0278" name="Dummy278" unk08="0xFFFFFE70" unk0E="0x0000">
+  <dll address="0x803DC378" dolOffs="0x3339D8" id="0x0278" name="DR_platforms" unk08="0xFFFFFE70" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
@@ -31168,11 +31168,11 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
   </dll>
-  <dll address="0x803DC388" dolOffs="0x3339E8" id="0x027A" interface="data" name="Dummy27A" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x803DC388" dolOffs="0x3339E8" id="0x027A" interface="data" name="DR_Collapse" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions/>
   </dll>
-  <dll address="0x8032AD00" dolOffs="0x327D00" id="0x027B" name="Dummy27B" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x8032AD00" dolOffs="0x327D00" id="0x027B" name="DR_CaveIn" prev="0xFFFFFFFF" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
     <functions>
       <function address="0x00000000" idx="0x0" valid="0"/>
