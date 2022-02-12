@@ -41,6 +41,13 @@ h1 {
     margin-bottom: 4px;
 }
 
+.info {
+    border: 3px #080 ridge;
+    background-color: rgba(0, 128, 0, 0.5);
+    color: #FFF;
+    margin: 1em;
+    padding: 0.5em;
+}
 .notice {
     border: 3px #880 ridge;
     background-color: rgba(128, 128, 0, 0.5);

@@ -10,8 +10,17 @@ export default class FileSelect {
         //set up ISO file input
         const eProgress = document.getElementById('fileIsoProgress');
         this.eIso = document.getElementById('fileIso');
-        this.eIso.addEventListener('change', e => {
-            this.app.loadIso(this.eIso.files[0]);
+        this.eIso.addEventListener('change', async e => {
+            const elem = document.getElementById('selectedIsoInfo');
+            clearElement(elem);
+            elem.append(E.div('info', "Loading..."));
+            try {
+                await this.app.loadIso(this.eIso.files[0]);
+            }
+            catch(err) {
+                clearElement(elem);
+                elem.append(E.div('error', err.toString()));
+            }
         }, false);
         this.eIso.addEventListener('progress', e => {
             console.log("progress", e);

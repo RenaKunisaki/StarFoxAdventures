@@ -15,7 +15,7 @@
     </head>
     <body>
         <div id="loading">Loading...</div>
-        <div id="tab-file-select" class="tabBody fileselect" data-tab-name="Files">
+        <div id="tab-file-select" class="tabBody fileselect" data-tab-name="Main">
             <div class="row about">
                 <h1>Star Fox Adventures data browser</h1>
                 <div class="explanation">
@@ -39,6 +39,7 @@
                             <h2>Supported versions:</h2>
                             <ul>
                                 <li>US version 1.0 (MD5: <code>afb0306454b581e37a62170fdfd1de09</code>)</li>
+                                <li>Other versions (less information available)</li>
                             </ul>
                             <span>If no file is selected, you can still examine a save file,
                                 but not as much information will be available.
@@ -64,6 +65,7 @@
                     <h2>Supported formats:</h2>
                     <ul>
                         <li>GCI</li>
+                        <li>Raw binary (<code>savegame/saveN.bin</code>)</li>
                     </ul>
                 </div>
             </div>
@@ -80,7 +82,7 @@
         </div>
 
         <div id="tab-fileList" class="tabBody fileList"
-        data-tab-name="ISO Files" data-needs-iso="1">
+        data-tab-name="Files" data-needs-iso="1">
         </div>
 
         <div id="tab-gameBits" class="tabBody gameBits"
