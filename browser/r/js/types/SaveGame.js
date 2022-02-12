@@ -190,7 +190,7 @@ export class SaveSlot {
     get isEmpty()  { return this._save.name == ""; }
     get name()     { return this._save.name; }
     get playTime() { //eg "00h 00m 00s" or "999999h 59m 59s"
-        let time = this._save.playTime;
+        let time = this._save.playTime / 60; //time is in frames
         return (time / 3600).toFixed(0).padStart(2, '0') + 'h ' +
             ((time/60) % 60).toFixed(0).padStart(2, '0') + 'm ' +
             (time % 60).toFixed(0).padStart(2, '0') + 's';
@@ -215,6 +215,7 @@ export class SaveGame {
      */
     constructor(app) {
         this.app = app;
+        this.gciHeader = null;
     }
 
     async load(file, version='U0') {
@@ -248,6 +249,7 @@ export class SaveGame {
         //parse GCI image (raw memory card sectors of only this game)
         let buffer = await this._file.arrayBuffer();
         let header = new Header(buffer);
+        this.gciHeader = header;
         console.log("GCI Header:", header);
         if(!header.gameCode.startsWith('GSA') || header.company != '01') {
             throw new Error("Not a Star Fox Adventures save file" +
