@@ -52,6 +52,7 @@ export function hex(n, size=1) {
      *  Result is uppercase without prefix, eg "0000BABE".
      */
     if(n == null || n == undefined) return String(n);
+    if(n < 0) n = (((1 << (size*4)) - 1) ^ -n) + 1;
     return n.toString(16).toUpperCase().padStart(size, '0');
 }
 export function int(n, dflt=null) {
