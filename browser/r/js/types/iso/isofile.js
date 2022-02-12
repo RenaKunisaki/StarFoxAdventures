@@ -43,16 +43,23 @@ export default class IsoFile {
         }
     }
 
-    getData(decompress=true) {
-        let view = new DataView(this.buffer, this.bufferOffs, this.size);
+    getRawData(offset=0, size=0) {
+        if(size <= 0) size = this.size;
+        return new DataView(this.buffer, this.bufferOffs+offset, size);
+    }
+
+    getData(decompress=true, offset=0, size=0) {
+        if(size <= 0) size = this.size;
+        let view = this.getRawData(offset, size);
         if(decompress) {
             const magic = view.getUint32(0, false);
             switch(magic) {
                 case 0x5A4C4200: //'ZLB\0'
                     console.log("Decompressing ZLB");
-                    view = new DataView(pako.inflate(new Uint8Array(
-                        this.buffer, this.bufferOffs+0x10, this.size-0x10))
-                        .buffer);
+                    const decomp = pako.inflate(new Uint8Array(
+                        this.buffer, this.bufferOffs+offset+0x10,
+                        this.size-0x10));
+                    view = new DataView(decomp.buffer);
                     break;
 
                 //XXX FEEDFACE, LZO, etc

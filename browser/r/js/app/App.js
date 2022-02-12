@@ -9,7 +9,10 @@ import FileViewer from "./ui/FileViewer/FileViewer.js";
 import TabBar from "./ui/TabBar.js";
 import SaveInfo from "./ui/SaveInfo.js";
 import GameBits from "./ui/GameBits.js";
+import ObjList from "./ui/ObjList.js";
 import GameBit from "../types/GameBit.js";
+import GameObject from "../types/GameObject.js";
+import DLL from "../types/DLL.js";
 import { ISO } from "../types/iso/iso.js";
 
 export default class App {
@@ -43,6 +46,7 @@ export default class App {
                 fileSelect: new FileSelect(this),
                 saveInfo:   new SaveInfo(this),
                 gameBits:   new GameBits(this),
+                objList:    new ObjList(this),
             };
 
             const tabs = {};
@@ -96,7 +100,13 @@ export default class App {
 
     async getFilesForVersion(version) {
         this.gameBits = await this._getXml(GameBit, version, 'gamebits', 'bit');
-        //console.log("gameBits=", this.gameBits);
+        this.dlls = await this._getXml(DLL, version, 'dlls', 'dll');
+
+        this.objCats = {};
+        const objCatsXml = await getXml(`data/${version}/objcats.xml`);
+        for(let elem of objCatsXml.getElementsByTagName('cat')) {
+            this.objCats[parseInt(elem.getAttribute('id'))] = elem.getAttribute('name');
+        }
     }
 
     async loadIso(file) {
@@ -119,7 +129,17 @@ export default class App {
         console.log("Game version:", version);
         this.gameVersion = version;
 
+        //download data files
         await this.getFilesForVersion(version);
+
+        //parse files from game
+        const objsTab = this.iso.getFile('/OBJECTS.tab').getData();
+        this.gameObjects = [];
+        for(let i=0; objsTab.getInt32((i+1)*4) >= 0; i++) {
+            this.gameObjects.push(new GameObject(this, i));
+        }
+
+        //trigger callbacks
         this._doCallback('onIsoLoaded', this.iso);
     }
 

@@ -18,7 +18,7 @@ export default class GameBits {
             tbl.add(this._makeRow(bit));
         }
         console.log("Bit table", tbl);
-        const elem = E.div('saveInfo', tbl.element);
+        const elem = E.div('gameBits', tbl.element);
         this.element.replaceWith(elem);
         this.element = elem;
     }

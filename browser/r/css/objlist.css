@@ -1,0 +1,3 @@
+.objList .id::after {
+    content: ' ';
+}
