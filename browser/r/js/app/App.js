@@ -19,6 +19,7 @@ export default class App {
         this.saveGame    = null; //the loaded savegame file
         this.saveSlot    = null; //the selected slot
         this.saveSlotIdx = 0;
+        this.gameVersion = null;
         this.gameBits    = null; //gamebits.xml
         this._callbacks  = {
             onIsoLoaded: [],
@@ -103,6 +104,22 @@ export default class App {
         console.log("Loading ISO", file);
         this.iso = new ISO().readBuffer(await file.arrayBuffer());
         console.log("ISO loaded", this.iso);
+
+        let version;
+        switch(this.iso.bootBin.gameCode) {
+            case 'GSAE': version = 'U'; break;
+            case 'GSAP': version = 'E'; break;
+            case 'GSAJ': version = 'J'; break;
+            default: {
+                console.warn("Unrecognized game ID:", this.iso.bootBin.gameCode);
+                version = '?';
+            }
+        }
+        version += this.iso.bootBin.version.toString();
+        console.log("Game version:", version);
+        this.gameVersion = version;
+
+        await this.getFilesForVersion(version);
         this._doCallback('onIsoLoaded', this.iso);
     }
 

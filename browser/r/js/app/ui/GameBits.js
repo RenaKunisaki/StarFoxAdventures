@@ -8,13 +8,11 @@ export default class GameBits {
     constructor(app) {
         this.app = app;
         this.element = document.getElementById('tab-gameBits');
-        this.app.onSaveSlotChanged(slot => this._onSaveSlotChanged(slot));
+        this.app.onSaveSlotChanged(slot => this.refresh());
+        this.app.onIsoLoaded(iso => this.refresh());
     } //constructor
 
     refresh() {
-        const save = this.app.saveGame;
-        const slot = this.app.saveSlot;
-
         let tbl = this._makeTable();
         for(let [id, bit] of Object.entries(this.app.gameBits)) {
             tbl.add(this._makeRow(bit));
@@ -85,9 +83,4 @@ export default class GameBits {
             //nObjRefs:    bit.objRefs.length,
         };
     }
-
-    _onSaveSlotChanged(slot) {
-        //called when the active save slot is changed.
-        this.refresh();
-    } //_onSaveSlotChanged
 }
