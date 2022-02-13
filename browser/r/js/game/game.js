@@ -76,10 +76,23 @@ export default class Game {
     }
 
     _loadObjects() {
+        const objIndex = this.iso.getFile('/OBJINDEX.bin').getData();
+        this.objIndex = [];
+        const revIndex = {};
+        for(let i=0; i<objIndex.byteLength; i += 2) {
+            const idx = objIndex.getInt16(i);
+            this.objIndex.push(idx);
+            //file is padded with zeros so don't let those overwrite
+            //the actual index zero
+            if(idx >= 0 && revIndex[idx] == undefined) revIndex[idx] = i >> 1;
+        }
+
         const objsTab = this.iso.getFile('/OBJECTS.tab').getData();
         this.objects = [];
         for(let i=0; objsTab.getInt32((i+1)*4) >= 0; i++) {
-            this.objects.push(new GameObject(this.app, i));
+            const obj = new GameObject(this.app, i);
+            if(revIndex[i] != undefined) obj.index = revIndex[i];
+            this.objects.push(obj);
         }
     }
 

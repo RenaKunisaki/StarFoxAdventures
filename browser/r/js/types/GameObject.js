@@ -96,6 +96,7 @@ export default class GameObject {
         this.data     = objsBin.getData(false, offset, size);
         const header  = new ObjectData(this.data);
         this.header   = header;
+        this.index    = null; //from OBJINDEX.bin
 
         return new Proxy(this, {
             get: function(instance, key) {

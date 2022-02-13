@@ -24,7 +24,10 @@ export default class ObjList {
 
     _makeTable() {
         return new Table({columns: [
-            {displayName:"#",    name:'id',   type:'hex', length: 4},
+            {displayName:"#",    name:'id',   type:'hex', length:4},
+            {displayName:"Idx#", name:'index',type:'hex', length:4,
+                title:"Entry in OBJINDEX.bin"
+            },
             {displayName:"Name", name:'name', type:'string'},
             {displayName:"Cat",  name:'cat',  type:'string'},
             {displayName:"DLL",  name:'dll',  type:'string',
@@ -40,12 +43,12 @@ export default class ObjList {
                     return res;
                 },
             },
-            {displayName:"Flags",    name:'flags', type:'hex', length:8},
-            {displayName:"#P",       name:'nPlayerObjs', type:'int', title:"Player Objs"},
-            {displayName:"#M",       name:'nModels', type:'int', title:"Num. Models"},
-            {displayName:"#T",       name:'nTextures', type:'int', title:"# Textures"},
-            {displayName:"Seqs",     name:'nSeqs', type:'int'},
-            {displayName:"Map",      name:'map', type:'hex', length:2,
+            {displayName:"Flags", name:'flags', type:'hex', length:8},
+            {displayName:"#P",    name:'nPlayerObjs', type:'int', title:"Player Objs"},
+            {displayName:"#M",    name:'nModels', type:'int', title:"Num. Models"},
+            {displayName:"#T",    name:'nTextures', type:'int', title:"# Textures"},
+            {displayName:"Seqs",  name:'nSeqs', type:'int'},
+            {displayName:"Map",   name:'map', type:'hex', length:2,
                 makeElem: (val, td, row) => {
                     if(val < 0) td.classList.add('null');
                     return td;
@@ -63,6 +66,7 @@ export default class ObjList {
 
         const row = {
             id:          obj.id,
+            index:       obj.index,
             name:        obj.name,
             cat:         cat,
             dll:         dll,
