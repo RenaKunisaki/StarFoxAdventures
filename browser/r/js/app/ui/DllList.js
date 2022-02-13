@@ -1,5 +1,4 @@
 import { E } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
 import Table from "./Table.js";
 
 export default class DllList {

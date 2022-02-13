@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<addresses>
+    <address name="g_dlls" val="0x802C6300" />
+    <address name="mapIdXltnTbl" val="0x802CBCD0" />
+    <address name="mapDirName" val="0x802CBBAC" />
+    <address name="parentMapId" val="0x802CBDFC" />
+</addresses>

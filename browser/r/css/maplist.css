@@ -1,0 +1,9 @@
+.mapList .animtest {
+    color: #CCC;
+}
+
+.mapList .missing {
+    color: #FF0;
+}
+
+.mapList .id::after { content: ' '; }

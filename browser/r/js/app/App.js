@@ -10,6 +10,7 @@ import SaveInfo from "./ui/SaveInfo.js";
 import GameBits from "./ui/GameBits.js";
 import ObjList from "./ui/ObjList.js";
 import DllList from "./ui/DllList.js";
+import MapList from "./ui/MapList.js";
 import { ISO } from "../types/iso/iso.js";
 import Game from "../game/game.js";
 
@@ -44,6 +45,7 @@ export default class App {
                 gameBits:   new GameBits(this),
                 objList:    new ObjList(this),
                 dllList:    new DllList(this),
+                mapList:    new MapList(this),
             };
 
             const tabs = {};

@@ -27,14 +27,14 @@ export default class DLL {
 
         //read data from the DOL file instead of XML
         const dol       = this.app.game.iso.mainDol;
-        const dolData   = dol.getData();
+        const data      = dol.getData();
         const gDllsAddr = this.app.game.dllTableAddr; //address of g_dlls
         const dllOffs   = dol.addrToOffset(gDllsAddr + (this.id*4)); //file offset of &g_dlls[this.id]
-        const aPtr      = dolData.getUint32(dllOffs); //address of this DLL
+        const aPtr      = data.getUint32(dllOffs); //address of this DLL
         const aOffs     = dol.addrToOffset(aPtr); //file offset of this DLL
         this.address    = aPtr;
         this.dolOffs    = aOffs;
-        //this.nFuncs     = dolData.getUint16(aOffs+0xC) - 1; //export count
+        //this.nFuncs     = data.getUint16(aOffs+0xC); //export count
         //this value is wrong for some deleted DLLs
 
         //XXX get func info from interface

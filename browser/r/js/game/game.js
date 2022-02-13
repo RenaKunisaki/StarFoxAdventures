@@ -2,6 +2,7 @@ import { getXml, int } from "../Util.js";
 import GameBit from "../types/GameBit.js";
 import GameObject from "../types/GameObject.js";
 import DLL from "../types/DLL.js";
+import Map from "./map.js";
 
 export default class Game {
     /** Info and methods relating to the game itself.
@@ -37,17 +38,29 @@ export default class Game {
     async setVersion(version) {
         this.version = version;
 
+        //get addresses
+        this.addresses = {};
+        const addrsXml = await getXml(`data/${this.version}/addresses.xml`);
+        for(let elem of addrsXml.getElementsByTagName('address')) {
+            this.addresses[elem.getAttribute('name')] =
+                int(elem.getAttribute('val'));
+        }
+
+        //get GameBits
         this.bits = await this.app._getXml(GameBit, version, 'gamebits', 'bit');
 
+        //get object categories
         this.objCats = {};
         const objCatsXml = await getXml(`data/${version}/objcats.xml`);
         for(let elem of objCatsXml.getElementsByTagName('cat')) {
-            this.objCats[parseInt(elem.getAttribute('id'))] = elem.getAttribute('name');
+            this.objCats[parseInt(elem.getAttribute('id'))] =
+                elem.getAttribute('name');
         }
 
         if(this.iso) {
             await this._loadDlls();
             this._loadObjects();
+            await this._loadMaps();
         }
     }
 
@@ -68,5 +81,15 @@ export default class Game {
         for(let i=0; objsTab.getInt32((i+1)*4) >= 0; i++) {
             this.objects.push(new GameObject(this.app, i));
         }
+    }
+
+    async _loadMaps() {
+        const xml = await getXml(`data/${this.version}/maps.xml`);
+        this.maps = {};
+        for(let elem of xml.getElementsByTagName('map')) {
+            const map = new Map(this.app, elem);
+            this.maps[map.id] = map;
+        }
+        console.log("maps", this.maps);
     }
 }
