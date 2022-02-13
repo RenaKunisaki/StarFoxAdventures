@@ -87,6 +87,13 @@ export default class App {
         this._pWaitForChildWindow = null;
     }
 
+    async showFileInNewWindow(file) {
+        const win = await this.openChildWindow();
+        console.log("Opened window", win);
+        if(win) win.app.showFile(file);
+        return win;
+    }
+
     async _getXml(cls, version, name, tag) {
         try {
             const data = await getXml(`data/${version}/${name}.xml`);

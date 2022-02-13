@@ -87,10 +87,14 @@ export default class MapList {
                         //overhead by actually decompressing and parsing
                         //every romlist just to check if it only contains
                         //one or two items.
-                        if(file.size < 128) {
+                        if(file.size <= 64) {
                             td.classList.add('empty');
                             td.setAttribute('title', `Size: ${file.size}`);
                         }
+                        td.addEventListener('click', async e => {
+                            await this.app.showFileInNewWindow(file);
+                        });
+                        td.classList.add('link');
                     }
                     else {
                         td.classList.add('missing');

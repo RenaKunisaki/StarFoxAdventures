@@ -73,6 +73,12 @@ tr.notice {
 .zero { color: #888; }
 .invalid { color: #F88; }
 
+.link {
+    /* for "fake" links */
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 /* numbers */
 .int { text-align: right; font-family: monospace; white-space: pre; }
 .hex { text-align: right; font-family: monospace; white-space: pre; }

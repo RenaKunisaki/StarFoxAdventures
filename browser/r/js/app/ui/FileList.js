@@ -42,9 +42,7 @@ export default class FileList {
         );
 
         eView.addEventListener('click', async e => {
-            const win = await this.app.openChildWindow();
-            console.log("Opened window", win);
-            if(win) win.app.showFile(file);
+            await this.app.showFileInNewWindow(file);
         });
 
         const viewer = new FileViewer(this.app, file, false);
