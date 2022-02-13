@@ -86,10 +86,29 @@ export default class Game {
     async _loadMaps() {
         const xml = await getXml(`data/${this.version}/maps.xml`);
         this.maps = {};
+        let nextId = -1; //use negative IDs for maps that don't have an ID
+        const usedRomLists = {};
         for(let elem of xml.getElementsByTagName('map')) {
             const map = new Map(this.app, elem);
-            this.maps[map.id] = map;
+            let id = map.id;
+            if(id == null) id = nextId--;
+            this.maps[id] = map;
+            usedRomLists[map.romListName] = true;
         }
+
+        //find romlist files not referenced by maps
+        for(let file of this.iso.files) {
+            if(file.name.endsWith('.romlist.zlb')) {
+                let name = file.name.split('.')[0];
+                if(!usedRomLists[name]) {
+                    const map = new Map(this);
+                    map.romListName = name;
+                    this.maps[nextId--] = map;
+                    usedRomLists[name] = true;
+                }
+            }
+        }
+
         console.log("maps", this.maps);
     }
 }
