@@ -38,6 +38,7 @@ export default class MapList {
             else {
                 td.classList.add('invalid');
                 clearElement(td).append(E.span('id', hex(val,2)));
+                td.setAttribute('title', "Invalid");
             }
             return td;
         };
@@ -50,15 +51,27 @@ export default class MapList {
                 if(dir) {
                     if(!this.app.game.iso.getFile(`/${row.dirName}/MODELS.bin`)) {
                         td.classList.add('missing');
+                        td.setAttribute('title', "Empty dir");
                     }
                 }
-                else td.classList.add('missing');
+                else {
+                    td.classList.add('missing');
+                    td.setAttribute('title', "Missing dir");
+                }
             }
             return td;
         };
         return new Table({columns: [
             {displayName:"#", name:'id', type:'hex', length:2},
-            {displayName:"Name", name:'name', type:'string'},
+            {displayName:"Name", name:'name', type:'string',
+                makeElem: (val, td, row) => {
+                    if(!row.used) {
+                        td.classList.add('unused');
+                        td.setAttribute('title', "Unused");
+                    }
+                    return td;
+                }
+            },
             {displayName:"#D", name:'dirId', type:'hex', length:2,
                 title:"Dir ID", makeElem: makeDirElem,
             },
@@ -74,9 +87,15 @@ export default class MapList {
                         //overhead by actually decompressing and parsing
                         //every romlist just to check if it only contains
                         //one or two items.
-                        if(file.size < 128) td.classList.add('empty');
+                        if(file.size < 128) {
+                            td.classList.add('empty');
+                            td.setAttribute('title', `Size: ${file.size}`);
+                        }
                     }
-                    else td.classList.add('missing');
+                    else {
+                        td.classList.add('missing');
+                        td.setAttribute('title', "Missing file");
+                    }
                     return td;
                 }
             },
@@ -121,6 +140,7 @@ export default class MapList {
             link1:       map.links[1],
             blocks:      map.blocks,
             description: map.description,
+            used:        map.used,
         };
     }
 }

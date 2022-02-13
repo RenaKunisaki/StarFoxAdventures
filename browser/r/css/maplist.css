@@ -1,9 +1,5 @@
-.mapList .animtest {
-    color: #CCC;
-}
-
-.mapList .missing {
-    color: #FF0;
-}
-
+.mapList .animtest { color: #880; }
+.mapList .missing { color: #FF0; }
+.mapList .empty { color: #888; }
+.mapList .unused { color: #888; }
 .mapList .id::after { content: ' '; }

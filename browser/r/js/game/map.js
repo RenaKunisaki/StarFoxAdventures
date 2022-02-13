@@ -47,6 +47,7 @@ export default class Map {
         this.links       = [null, null]; //linked map IDs
         this.blocks      = [];
         this.description = '';
+        this.used        = null;
 
         if(elem) {
             this.id = int(elem.getAttribute('id'));
@@ -68,6 +69,7 @@ export default class Map {
             this.sizeZ    = int(elem.getAttribute('h'));
             this.originX  = int(elem.getAttribute('originX'));
             this.originZ  = int(elem.getAttribute('originY')); //XXX
+            this.used     = !int(elem.getAttribute('unused'));
 
             let eDesc = elem.getElementsByTagName('description');
             if(eDesc && eDesc[0]) this.description = eDesc[0].textContent;
