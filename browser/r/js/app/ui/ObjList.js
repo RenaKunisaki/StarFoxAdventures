@@ -24,12 +24,12 @@ export default class ObjList {
 
     _makeTable() {
         return new Table({columns: [
-            {displayName:"#",    name:'id',   type:'hex', length:4},
+            {displayName:"#",    name:'id',   type:'hex', length:4,
+                title:"Index in OBJECTS.bin"},
             {displayName:"Idx#", name:'index',type:'hex', length:4,
-                title:"Entry in OBJINDEX.bin"
-            },
-            {displayName:"Name", name:'name', type:'string'},
-            {displayName:"Cat",  name:'cat',  type:'string'},
+                title:"Entry in OBJINDEX.bin"},
+            {displayName:"Name", name:'name', type:'string', title:"Internal name"},
+            {displayName:"Category",  name:'cat',  type:'string'},
             {displayName:"DLL",  name:'dll',  type:'string',
                 makeElem: (dll, td, row) => {
                     if(!dll) {
