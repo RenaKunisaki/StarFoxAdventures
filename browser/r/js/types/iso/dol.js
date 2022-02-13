@@ -6,7 +6,7 @@ const NUM_DATA_SECTIONS = 11;
 
 export default class DOL extends IsoFile {
     constructor(path, offset=0, size=0, buffer=null, isSystem=false) {
-        super(path, false, offset, size, buffer, 0, null, isSystem);
+        super(path, false, offset, size, buffer, offset, null, isSystem);
         this.textSections = [];
         this.dataSections = [];
         this.bssAddr      = 0;
@@ -36,7 +36,8 @@ export default class DOL extends IsoFile {
             offset += buffer.byteOffset;
             buffer  = buffer.buffer;
         }
-        const view = new DataView(buffer);
+        const view = new DataView(buffer, offset);
+        offset = 0;
         for(let i=0; i<NUM_TEXT_SECTIONS; i++) {
             this.textSections.push({offset:view.getUint32(offset)});
             offset += 4;
@@ -69,6 +70,7 @@ export default class DOL extends IsoFile {
         this.size = Math.max(...(this.textSections.concat(this.dataSections))
             .map(it => it.offset + it.size));
         console.log(`DOL size=0x${hex(this.size)}`);
+        console.log(`data: ${hex(this.getData().getUint32(0x100))}`);
 
         this._dumpSections();
     }

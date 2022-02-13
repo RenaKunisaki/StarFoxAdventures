@@ -1,4 +1,4 @@
-import { getXml } from "../Util.js";
+import { getXml, int } from "../Util.js";
 import GameBit from "../types/GameBit.js";
 import GameObject from "../types/GameObject.js";
 import DLL from "../types/DLL.js";
@@ -13,6 +13,7 @@ export default class Game {
         this.bits    = null; //GameBits
         this.objCats = null; //object categories
         this.dlls    = null;
+        this.dllTableAddr = null; //RAM address of g_dlls
     }
 
     async loadIso(iso) {
@@ -37,7 +38,6 @@ export default class Game {
         this.version = version;
 
         this.bits = await this.app._getXml(GameBit, version, 'gamebits', 'bit');
-        this.dlls = await this.app._getXml(DLL, version, 'dlls', 'dll');
 
         this.objCats = {};
         const objCatsXml = await getXml(`data/${version}/objcats.xml`);
@@ -46,7 +46,19 @@ export default class Game {
         }
 
         if(this.iso) {
+            await this._loadDlls();
             this._loadObjects();
+        }
+    }
+
+    async _loadDlls() {
+        const xml = await getXml(`data/${this.version}/dlls.xml`);
+        this.dllTableAddr = int(xml.getElementsByTagName('dlls')[0].
+            getAttribute('tableAddress'));
+        this.dlls = {};
+        for(let elem of xml.getElementsByTagName('dll')) {
+            const dll = new DLL(this.app, elem);
+            this.dlls[dll.id] = dll;
         }
     }
 

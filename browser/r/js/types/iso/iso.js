@@ -70,6 +70,8 @@ export class ISO {
         console.log(`Read fst.bin  from 0x${hex(this.bootBin.fstOffs)}`);
         this.fstbin = new FST().read(buffer, this.bootBin.fstOffs);
 
+        //size is found by adding up the sections, so not known here.
+        //not sure how it gets loaded, probably appldr just loads a fixed size.
         console.log(`Read main.dol from 0x${hex(this.bootBin.mainDolOffs)}`);
         this.mainDol = new DOL("main.dol", this.bootBin.mainDolOffs, 0,
             buffer, true);

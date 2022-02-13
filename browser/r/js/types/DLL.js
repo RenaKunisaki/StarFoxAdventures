@@ -1,4 +1,4 @@
-import { int } from "../Util.js";
+import { int, hex } from "../Util.js";
 
 export default class DLL {
     /** A DLL in the game code.
@@ -25,8 +25,17 @@ export default class DLL {
             this.notes.push(note.textContent);
         }
 
-        //const dol = this.app.iso.mainDol.getData();
-        //let addr = dol.getUint32()
+        //read data from the DOL file instead of XML
+        const dol       = this.app.game.iso.mainDol;
+        const dolData   = dol.getData();
+        const gDllsAddr = this.app.game.dllTableAddr; //address of g_dlls
+        const dllOffs   = dol.addrToOffset(gDllsAddr + (this.id*4)); //file offset of &g_dlls[this.id]
+        const aPtr      = dolData.getUint32(dllOffs); //address of this DLL
+        const aOffs     = dol.addrToOffset(aPtr); //file offset of this DLL
+        this.address    = aPtr;
+        this.dolOffs    = aOffs;
+        //this.nFuncs     = dolData.getUint16(aOffs+0xC) - 1; //export count
+        //this value is wrong for some deleted DLLs
 
         //XXX get func info from interface
         this.functions = [];
