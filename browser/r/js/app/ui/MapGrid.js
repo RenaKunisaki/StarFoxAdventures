@@ -26,6 +26,7 @@ export default class MapGrid {
         this.layer   = 0;
         this.element = document.getElementById('tab-mapGrid');
         this.app.onIsoLoaded(iso => this._onIsoLoaded());
+        this.app.onSaveSlotChanged(slot => this.refresh());
     }
 
     _onIsoLoaded() {
@@ -72,6 +73,22 @@ export default class MapGrid {
         const layer   = grid[layerNo];
         const xMin    = Math.min(...Object.keys(layer));
         const xMax    = Math.max(...Object.keys(layer));
+        let posK = {x:9999, z:9999, layer:9999};
+        let posF = {x:9999, z:9999, layer:9999};
+        if(this.app.saveSlot) {
+            posK = this.app.saveSlot.charPos[0];
+            posF = this.app.saveSlot.charPos[1];
+            posK = {
+                x:     Math.floor(posK.pos.x/MAP_CELL_SIZE),
+                z:     Math.floor(posK.pos.z/MAP_CELL_SIZE),
+                layer: posK.mapLayer,
+            };
+            posF = {
+                x:     Math.floor(posF.pos.x/MAP_CELL_SIZE),
+                z:     Math.floor(posF.pos.z/MAP_CELL_SIZE),
+                layer: posF.mapLayer,
+            };
+        }
 
         //find range
         let zMin = 999999, zMax = -999999;
@@ -121,6 +138,15 @@ export default class MapGrid {
                         cls += ' hasWarp';
                     }
 
+                    if(layerNo == posK.layer && x == posK.x && z == posK.z) {
+                        cls += ' krystal';
+                        title += "\nKrystal's saved position";
+                    }
+                    if(layerNo == posF.layer && x == posF.x && z == posF.z) {
+                        cls += ' fox';
+                        title += "\nFox's saved position";
+                    }
+
                     td = E.td('cell'+cls, text, {
                         title: title,
                         style: `background-color: rgb(${bg[0]}, ${bg[1]}, ${bg[2]})`,
@@ -132,7 +158,10 @@ export default class MapGrid {
                     if(cell.relZ == cell.map.sizeZ-1) td.classList.add('top');
                     if(cell.isOrigin) td.classList.add('origin');
                 }
-                else td = E.td('empty', ' ');
+                else {
+                    td = E.td('empty', ' ');
+                    if(x == 0 || z == 0) td.classList.add('zero');
+                }
                 tr.append(td);
             }
             tr.append(E.th('coord', z));

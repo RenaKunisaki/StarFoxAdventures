@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 4.2333 4.2335"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1.1 (3bf5ae0d25, 2021-09-20, custom)"
+   sodipodi:docname="base.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#ffffff"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="1"
+     inkscape:document-units="mm"
+     showgrid="false"
+     units="px"
+     borderlayer="true"
+     inkscape:showpageshadow="false"
+     inkscape:zoom="17.734"
+     inkscape:cx="-4.9621"
+     inkscape:cy="8.7119"
+     inkscape:current-layer="layer1"
+     showguides="true"
+     inkscape:guide-bbox="true">
+    <sodipodi:guide
+       position="2.1204,1.8334"
+       orientation="1,0"
+       id="guide2137" />
+  </sodipodi:namedview>
+  <defs
+     id="defs2">
+    <inkscape:path-effect
+       effect="clone_original"
+       linkeditem="#path3739"
+       method="bsplinespiro"
+       allow_transforms="false"
+       id="path-effect6443"
+       lpeversion="1" />
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath7014">
+      <use
+         x="0"
+         y="0"
+         xlink:href="#path6445"
+         id="use7016"
+         width="100%"
+         height="100%"
+         style="stroke-width:1" />
+    </clipPath>
+  </defs>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <path
+       d="M 4.2647,3.172 C 3.9501,2.954 3.6634,2.6747 3.4766,2.1745 3.6984,1.2639 3.8485,0.7117 4.2062,0.06237 3.609,0.18644 2.9492,0.76797 2.6191,1.0198 2.484,1.1085 1.9287,1.1011 1.737,1.0778 1.409,0.82659 0.70738,0.20898 0.08031,0.0787 0.43798,0.72803 0.58807,1.2802 0.80985,2.1908 0.62307,2.691 0.33633,2.9703 0.0218,3.1883 0.49676,3.7264 1.232,4.0445 2.1432,4.2303 3.0545,4.0282 3.7897,3.7101 4.2647,3.172 Z"
+       id="path6445"
+       inkscape:path-effect="#path-effect6443"
+       inkscape:original-d="M 0,0"
+       style="fill:#b2b2b2;fill-opacity:1;stroke:none" />
+    <path
+       style="opacity:1;fill:#894322;fill-opacity:1;stroke:none;stroke-width:0.26459;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 2.1204,4.4496 C 1.0695,3.7759 0.49111,2.9895 0.55271,2.0504 0.59128,1.2707 0.80304,0.67033 1.3515,0.41869 1.8522,2.2248 2.4324,1.7891 3.0456,0.41869 3.4521,0.61584 3.7347,1.1808 3.874,2.1709 3.6861,3.2153 3.0132,3.9114 2.1204,4.4496 Z"
+       id="path6534"
+       clip-path="url(#clipPath7014)"
+       sodipodi:nodetypes="cccccc" />
+    <path
+       id="path3739"
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:0.26459;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 4.2647,3.172 C 3.9501,2.954 3.6634,2.6747 3.4766,2.1745 3.6984,1.2639 3.8485,0.7117 4.2062,0.06237 3.609,0.18644 2.9492,0.76797 2.6191,1.0198 2.484,1.1085 1.9287,1.1011 1.737,1.0778 1.409,0.82659 0.70738,0.20898 0.08031,0.0787 0.43798,0.72803 0.58807,1.2802 0.80985,2.1908 0.62307,2.691 0.33633,2.9703 0.0218,3.1883 0.49676,3.7264 1.232,4.0445 2.1432,4.2303 3.0545,4.0282 3.7897,3.7101 4.2647,3.172 Z"
+       sodipodi:nodetypes="cccccccccc" />
+    <path
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:0.26459;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 2.1204,3.2298 1.9392,2.989 2.2991,2.999 Z"
+       id="path5455"
+       sodipodi:nodetypes="cccc" />
+    <path
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:0.26459;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 1.6095,2.5816 1.1976,2.0733"
+       id="path6010" />
+    <path
+       style="opacity:1;fill:none;stroke:#000000;stroke-width:0.26459;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 2.7026,2.5936 3.0781,2.1254"
+       id="path6012"
+       sodipodi:nodetypes="cc" />
+  </g>
+</svg>

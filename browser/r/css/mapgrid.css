@@ -7,8 +7,11 @@
 .mapGrid tr, .mapGrid td {
     border: 1px #888 dotted;
     border-collapse: collapse;
+    background-position: center center;
+    background-size: cover;
 }
 
+.mapGrid td.zero    { background-color: #222; }
 .mapGrid td.left    { border-left:   1px #FFF solid; }
 .mapGrid td.right   { border-right:  1px #FFF solid; }
 .mapGrid td.bottom  { border-bottom: 1px #FFF solid; }
@@ -21,6 +24,8 @@
     border-right:  2px #F0F solid;
     border-bottom: 2px #F0F solid;
 }
+.mapGrid td.krystal { background-image: url(/r/icons/krystal.svg); }
+.mapGrid td.fox     { background-image: url(/r/icons/fox.svg); }
 
 .mapGrid tr {
     background-color: #000;
