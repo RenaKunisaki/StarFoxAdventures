@@ -470,7 +470,11 @@ void mainLoopDebugPrint() {
     if(debugRenderFlags & DEBUGRENDER_RNG) drawRNG();
     if(debugRenderFlags & DEBUGRENDER_WORLD_MAP) drawMapGrid();
 
-    if(!enableDebugText) return; //or else game hangs
+    if(!enableDebugText) {
+        //WRITE32(0x800559C8, 0x4082000C); //turn off logging object loads
+        return; //or else game hangs
+    }
+    //WRITE_NOP(0x800559C8); //enable logging object loads (very slow)
     debugPrintf(DPRINT_COLOR "\xFF\xFF\xFF\xFF"
         DPRINT_BGCOLOR "\x01\x01\x01\x3F"); //reset color
 

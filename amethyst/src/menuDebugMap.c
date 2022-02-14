@@ -113,6 +113,7 @@ void menuDebugMapLoad_select(const MenuItem *self, int amount) {
     else {
         audioPlaySound(NULL, MENU_OPEN_SOUND);
         mapLoadDataFiles(loadMapNo);
+        //mapLoadForObject(loadMapNo, pPlayer);
     }
 }
 

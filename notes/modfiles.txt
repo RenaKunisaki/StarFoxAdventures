@@ -31,6 +31,7 @@ many have multiple copies in different formats
 kiosk also has different files under card, musyxbin
 
 do romlist files store objects' coords as world pos? so we could infer the location on the grid if a map is missing...
+no, they don't.
 
 v1.1 has some dirs in the root that are partial copies of ones in gametext
 starfox.h.bak might actually be correct IDs
@@ -42,3 +43,8 @@ E1 has another: Bug4
 save1.bin size=3952 (0xF70), others=1772 (0x6EC) (the size of one save slot)
 3952 isn't enough for 3 slots, though
 the rest is just zeros
+
+if we want to try swapping unused romlist files into animtest we need to edit the romlist size field in its entry in MAPS.bin or wherever that was
+but even then it seems to not care, no additional objects are loaded
+same if I hook into the loading routine and change which romlist it loads
+it just seems to ignore the file

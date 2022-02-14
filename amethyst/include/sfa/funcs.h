@@ -132,9 +132,11 @@ GLOBALFN void mainLoopDoQueuedSounds(void);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
 GLOBALFN int mapCoordsToId(int x, int z, int layer); //MapId32
 GLOBALFN int mapGetDirIdx(int id); //MapId32 -> MapDirIdx32
+GLOBALFN void* mapGetRomListAndOffsets(MapId32 mapId, BOOL bSkipInit);
 GLOBALFN void mapLoadByCoords(float x, float y, float z, int layer);
 GLOBALFN void* mapLoadDataFile(MapDirIdx32 map, DataFileEnum file);
 GLOBALFN int mapLoadDataFiles(MapDirIdx32 mapNo);
+GLOBALFN void mapLoadForObject(MapDirIdx32 mapId, ObjInstance *obj);
 GLOBALFN void mapReload(void);
 GLOBALFN void mapScreenDrawHud(void);
 GLOBALFN void mapUnload(MapDirIdx32 map, uint flags);
@@ -182,6 +184,7 @@ GLOBALFN void padReadControllers(PADStatus*);
 GLOBALFN void padUpdate(void);
 GLOBALFN void pauseMenuDraw(int,int,int); //XXX params
 GLOBALFN void pauseMenuDrawText(void);
+GLOBALFN void piRomLoadSection(int offset, MapId32 map, void *buffer);
 GLOBALFN void playerDie(ObjInstance *player); //immediately kill player
 GLOBALFN ObjInstance* playerGetNearestObject(int idx,ObjInstance *obj,float *outDistance);
 GLOBALFN ObjInstance** playerGetObject(int idx, int *outIdx);
