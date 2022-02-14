@@ -9,11 +9,18 @@
     border-collapse: collapse;
 }
 
-.mapGrid td.left   { border-left:   1px #FFF solid; }
-.mapGrid td.right  { border-right:  1px #FFF solid; }
-.mapGrid td.bottom { border-bottom: 1px #FFF solid; }
-.mapGrid td.top    { border-top:    1px #FFF solid; }
-.mapGrid td.origin { border:        1px #0FF solid; }
+.mapGrid td.left    { border-left:   1px #FFF solid; }
+.mapGrid td.right   { border-right:  1px #FFF solid; }
+.mapGrid td.bottom  { border-bottom: 1px #FFF solid; }
+.mapGrid td.top     { border-top:    1px #FFF solid; }
+.mapGrid td.origin  { border:        1px #0FF solid; }
+.mapGrid td.hasWarp { border:        1px #F0F solid; }
+.mapGrid td.origin.hasWarp {
+    border-top:    1px #0FF solid;
+    border-left:   1px #0FF solid;
+    border-right:  1px #F0F solid;
+    border-bottom: 1px #F0F solid;
+}
 
 .mapGrid tr {
     background-color: #000;

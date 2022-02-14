@@ -1,6 +1,8 @@
 import { E, clearElement } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
 
+const MAP_CELL_SIZE = 640;
+
 function mapIdToColor(id) {
     //arbitrary function for assigning map IDs a color.
     //I just picked something that looked nice.
@@ -47,13 +49,29 @@ export default class MapGrid {
         return cell;
     }
 
+    _getWarps(layer, x, z) {
+        let result = [];
+        x *= MAP_CELL_SIZE;
+        z *= MAP_CELL_SIZE;
+        if(this.app.game.warpTab) {
+            for(let [idx, warp] of Object.entries(this.app.game.warpTab)) {
+                if(warp.x >= x && warp.x < (x+MAP_CELL_SIZE)
+                && warp.z >= z && warp.z < (z+MAP_CELL_SIZE)
+                && warp.layer == layer) {
+                    result.push(parseInt(idx));
+                }
+            }
+        }
+        return result;
+    }
+
     refresh() {
-        const grid  = this.app.game.mapGrid;
-        const elem  = E.table('mapGrid');
-        console.log("show layer", this.eLayerPicker.value);
-        const layer = grid[this.eLayerPicker.value];
-        const xMin  = Math.min(...Object.keys(layer));
-        const xMax  = Math.max(...Object.keys(layer));
+        const grid    = this.app.game.mapGrid;
+        const elem    = E.table('mapGrid');
+        const layerNo = this.eLayerPicker.value;
+        const layer   = grid[layerNo];
+        const xMin    = Math.min(...Object.keys(layer));
+        const xMax    = Math.max(...Object.keys(layer));
 
         //find range
         let zMin = 999999, zMax = -999999;
@@ -87,10 +105,25 @@ export default class MapGrid {
                         text = E.span(E.div(null, mod), E.div(null, sub));
                         cls  = '';
                     }
-                    let bg = mapIdToColor(cell.mapId);
+
+                    //XXX check warps for out-of-bounds cells too
+                    //or better yet put the elements into an array and
+                    //then just iterate the warp list once.
+                    let title = cell.map.name;
+                    if(block) title = `${title} - mod${block.mod}.${block.sub}`;
+                    else title += ' - Out of Bounds';
+
+                    let bg    = mapIdToColor(cell.mapId);
+                    let warps = this._getWarps(layerNo, x, z);
+                    if(warps.length > 0) {
+                        title += '\nWarps: ' +
+                            [...(warps.map(w => `0x${hex(w,2)}`))].join(', ');
+                        cls += ' hasWarp';
+                    }
+
                     td = E.td('cell'+cls, text, {
-                        title: cell.map.name,
-                        style: `background-color: rgba(${bg[0]}, ${bg[1]}, ${bg[2]}, 0.5)`,
+                        title: title,
+                        style: `background-color: rgb(${bg[0]}, ${bg[1]}, ${bg[2]})`,
                     });
 
                     if(cell.relX == 0) td.classList.add('left');

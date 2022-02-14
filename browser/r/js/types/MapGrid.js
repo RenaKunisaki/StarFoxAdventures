@@ -28,18 +28,21 @@ export default function parseMapGrid(app) {
                 let cz = (z + entry.z) - map.originZ;
                 let iBlock = (z * map.sizeX) + x;
                 if(layer[cx] == undefined) layer[cx] = [];
-                layer[cx][cz] = {
-                    worldX: cx,
-                    worldZ: cz,
-                    layer:  entry.layer,
-                    mapId:  entry.mapId,
-                    link:   entry.link,
-                    map:    map,
-                    relX:   x,
-                    relZ:   z,
-                    block:  map.blocks[iBlock],
-                    isOrigin: x == map.originX && z == map.originZ,
-                };
+                //maps can overlap
+                if(map.blocks[iBlock] != null || !(layer[cx][cz])) {
+                    layer[cx][cz] = {
+                        worldX: cx,
+                        worldZ: cz,
+                        layer:  entry.layer,
+                        mapId:  entry.mapId,
+                        link:   entry.link,
+                        map:    map,
+                        relX:   x,
+                        relZ:   z,
+                        block:  map.blocks[iBlock],
+                        isOrigin: x == map.originX && z == map.originZ,
+                    };
+                }
             }
         }
     }
