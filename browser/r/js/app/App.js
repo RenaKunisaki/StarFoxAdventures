@@ -127,6 +127,7 @@ export default class App {
 
     async loadSave(file) {
         //load given save (GCI) file (type File)
+        this.saveSlotIdx = 0;
         this.saveGame = new SaveGame(this);
         await this.saveGame.load(file);
 
