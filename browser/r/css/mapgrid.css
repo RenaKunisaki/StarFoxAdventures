@@ -11,7 +11,10 @@
     background-size: cover;
 }
 
-.mapGrid td.zero    { background-color: #222; }
+/* we can't change the background-color opacity without specifying a color... */
+.mapGrid td.oob     { opacity: 0.75; }
+.mapGrid td.xZero   { border-left: 1px #CCC dashed; border-right:  1px #CCC dashed; }
+.mapGrid td.zZero   { border-top:  1px #CCC dashed; border-bottom: 1px #CCC dashed; }
 .mapGrid td.left    { border-left:   1px #FFF solid; }
 .mapGrid td.right   { border-right:  1px #FFF solid; }
 .mapGrid td.bottom  { border-bottom: 1px #FFF solid; }
