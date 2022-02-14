@@ -29,6 +29,11 @@ export default class MapGrid {
         this.element = document.getElementById('tab-mapGrid');
         this.app.onIsoLoaded(iso => this._onIsoLoaded());
         this.app.onSaveSlotChanged(slot => this.refresh());
+
+        this.eToolbar  = E.div('toolbar');
+        this.eCellInfo = E.span('cellInfo');
+        this.eBody     = E.div('body');
+        this.element.append(this.eToolbar, this.eBody);
     }
 
     _onIsoLoaded() {
@@ -44,6 +49,7 @@ export default class MapGrid {
         elem.value = this.layerNo;
         elem.addEventListener('change', e => this.refresh());
         this.eLayerPicker = elem;
+        clearElement(this.eToolbar).append(this.eLayerPicker, this.eCellInfo);
     }
 
     _getCell(layer, x, z) {
@@ -141,10 +147,10 @@ export default class MapGrid {
             style: `background-color: rgb(${bg[0]}, ${bg[1]}, ${bg[2]})`,
         });
 
-        if(cell.relX == 0) td.classList.add('left');
-        if(cell.relX == cell.map.sizeX-1) td.classList.add('right');
-        if(cell.relZ == 0) td.classList.add('bottom');
-        if(cell.relZ == cell.map.sizeZ-1) td.classList.add('top');
+        if(cell.relX == cell.map.minX) td.classList.add('left');
+        if(cell.relX == cell.map.maxX) td.classList.add('right');
+        if(cell.relZ == cell.map.minZ) td.classList.add('bottom');
+        if(cell.relZ == cell.map.maxZ) td.classList.add('top');
         if(cell.isOrigin) td.classList.add('origin');
         return td;
     }
@@ -172,6 +178,9 @@ export default class MapGrid {
                 if(z == 0) td.classList.add('zZero');
                 tr.append(td);
                 this.cellElems[z][x] = td;
+                td.addEventListener('mouseover', e => {
+                    this.eCellInfo.innerText = `${x*MAP_CELL_SIZE}, ${z*MAP_CELL_SIZE}`;
+                })
             }
             tr.append(E.th('coord', z));
             elem.append(tr);
@@ -182,6 +191,6 @@ export default class MapGrid {
         this._addCharPositions();
         this._addWarps();
 
-        clearElement(this.element).append(this.eLayerPicker, elem);
+        clearElement(this.eBody).append(elem);
     }
 }

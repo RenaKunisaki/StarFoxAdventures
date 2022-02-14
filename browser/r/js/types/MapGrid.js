@@ -20,6 +20,8 @@ export default function parseMapGrid(app) {
         let layer = layers[entry.layer];
         if(layer[entry.x] == undefined) layer[entry.x] = [];
         map.links = entry.link;
+        map.minX =  999999; map.minZ =  999999;
+        map.maxX = -999999; map.maxZ = -999999;
 
         //fill in the cells
         for(let x=0; x<map.sizeX; x++) {
@@ -28,6 +30,10 @@ export default function parseMapGrid(app) {
                 let cz = (z + entry.z) - map.originZ;
                 let iBlock = (z * map.sizeX) + x;
                 if(layer[cx] == undefined) layer[cx] = [];
+
+                let relX = x - map.originX;
+                let relZ = z - map.originZ;
+
                 //maps can overlap
                 if(map.blocks[iBlock] != null || !(layer[cx][cz])) {
                     layer[cx][cz] = {
@@ -37,11 +43,15 @@ export default function parseMapGrid(app) {
                         mapId:  entry.mapId,
                         link:   entry.link,
                         map:    map,
-                        relX:   x,
-                        relZ:   z,
+                        relX:   x - map.originX,
+                        relZ:   z - map.originZ,
                         block:  map.blocks[iBlock],
                         isOrigin: x == map.originX && z == map.originZ,
                     };
+                    if(relX > map.maxX) map.maxX = relX;
+                    if(relZ > map.maxZ) map.maxZ = relZ;
+                    if(relX < map.minX) map.minX = relX;
+                    if(relZ < map.minZ) map.minZ = relZ;
                 }
             }
         }

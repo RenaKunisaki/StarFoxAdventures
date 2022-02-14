@@ -1,3 +1,9 @@
+.mapGrid .body {
+    overflow: auto;
+    width: 100%;
+    height: calc(100% - 4em);
+}
+
 .mapGrid table {
     border-spacing: 0;
     table-layout: fixed;
