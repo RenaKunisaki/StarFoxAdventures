@@ -1,6 +1,5 @@
 import { E, clearElement } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
-import parseMapGrid from "../../types/MapGrid.js";
 
 function mapIdToColor(id) {
     //arbitrary function for assigning map IDs a color.
@@ -28,15 +27,13 @@ export default class MapGrid {
     }
 
     _onIsoLoaded() {
-        this.grid = parseMapGrid(this.app);
-        console.log("grid", this.grid);
         this._makeLayerPicker();
         this.refresh();
     }
 
     _makeLayerPicker() {
         const elem = E.select();
-        for(let idx of Object.keys(this.grid)) {
+        for(let idx of Object.keys(this.app.game.mapGrid)) {
             elem.append(E.option(null, `Layer ${idx}`, {value:idx}));
         }
         elem.value = 0;
@@ -51,9 +48,10 @@ export default class MapGrid {
     }
 
     refresh() {
+        const grid  = this.app.game.mapGrid;
         const elem  = E.table('mapGrid');
         console.log("show layer", this.eLayerPicker.value);
-        const layer = this.grid[this.eLayerPicker.value];
+        const layer = grid[this.eLayerPicker.value];
         const xMin  = Math.min(...Object.keys(layer));
         const xMax  = Math.max(...Object.keys(layer));
 

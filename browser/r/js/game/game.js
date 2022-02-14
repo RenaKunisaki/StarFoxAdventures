@@ -3,6 +3,9 @@ import GameBit from "../types/GameBit.js";
 import GameObject from "../types/GameObject.js";
 import DLL from "../types/DLL.js";
 import Map from "./map.js";
+import parseMapGrid from "../types/MapGrid.js";
+
+const MAP_CELL_SIZE = 640;
 
 export default class Game {
     /** Info and methods relating to the game itself.
@@ -15,6 +18,7 @@ export default class Game {
         this.bits      = null; //GameBits
         this.objCats   = null; //object categories
         this.dlls      = null;
+        this.maps      = null;
     }
 
     async loadIso(iso) {
@@ -64,6 +68,18 @@ export default class Game {
             this._loadObjects();
             await this._loadMaps();
         }
+    }
+
+    getMapAt(layer, x, z) {
+        /** Get map by coordinates.
+         *  Accepts raw coords (not divided by cell size).
+         */
+        if(!this.mapGrid) throw new Error("Maps not loaded yet");
+        let res = this.mapGrid[layer];
+        if(res) res = res[Math.floor(x / MAP_CELL_SIZE)];
+        if(res) res = res[Math.floor(z / MAP_CELL_SIZE)];
+        if(res) res = res.map;
+        return res;
     }
 
     async _loadDlls() {
@@ -125,5 +141,6 @@ export default class Game {
         }
 
         console.log("maps", this.maps);
+        this.mapGrid = parseMapGrid(this.app);
     }
 }

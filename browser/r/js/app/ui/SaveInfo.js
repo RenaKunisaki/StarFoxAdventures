@@ -133,6 +133,35 @@ export default class SaveInfo {
     _makeCharsTable(slot) {
         const FP=slot.charPos[1],   KP=slot.charPos[0];
         const FS=slot.charState[1], KS=slot.charState[0];
+
+        //get name of map for each player's position
+        let foxMap = null, kryMap = null;
+        if(this.app.game.mapGrid) {
+            foxMap = this.app.game.getMapAt(FP.mapLayer, FP.pos.x, FP.pos.z);
+            kryMap = this.app.game.getMapAt(KP.mapLayer, KP.pos.x, KP.pos.z);
+            foxMap = foxMap ? foxMap.name : "(invalid)";
+            kryMap = kryMap ? kryMap.name : "(invalid)";
+        }
+        else {
+            foxMap = "(no ISO)";
+            kryMap = foxMap;
+        }
+
+        //the map ID field (XXX probably a dir ID)
+        let foxMapId = '', kryMapId = '';
+        if(this.app.game.maps) {
+            foxMapId = this.app.game.maps[FP.mapNo];
+            kryMapId = this.app.game.maps[KP.mapNo];
+            foxMapId = foxMapId ? foxMapId.name : "(invalid)";
+            kryMapId = kryMapId ? kryMapId.name : "(invalid)";
+        }
+        else {
+            foxMapId = "(no ISO)";
+            kryMapId = foxMapId;
+        }
+        foxMapId = `${hex(FP.mapNo, 2)} ${foxMapId}`;
+        kryMapId = `${hex(KP.mapNo, 2)} ${kryMapId}`;
+
         return E.table('chars',
             E.tr('title', E.th(null, "Character States", {colspan:3})),
             E.tr(null, E.th(null, "What"), E.th(null, "Krystal"), E.th(null, "Fox")),
@@ -150,12 +179,13 @@ export default class SaveInfo {
                     `${KS.curBafomDads} / ${KS.maxBafomDads}`,
                     `${FS.curBafomDads} / ${FS.maxBafomDads}`],
                 ["Unk0B", hex(KS.unk0B, 2), hex(FS.unk0B, 2)],
+                ["Map", kryMap, foxMap],
                 ["Position",
                     `${KP.pos.x.toFixed(0)}, ${KP.pos.y.toFixed(0)}, ${KP.pos.z.toFixed(0)}`,
                     `${FP.pos.x.toFixed(0)}, ${FP.pos.y.toFixed(0)}, ${FP.pos.z.toFixed(0)}`],
                 ["X Rot",    int(KP.rotX),     int(FP.rotX)],
                 ["Map Layer",int(KP.mapLayer), int(FP.mapLayer)],
-                ["Map ID",   hex(KP.mapNo, 2), hex(FP.mapNo, 2)],
+                ["Map ID",   kryMapId, foxMapId],
                 ["Unk0F",    hex(KP.unk0F, 2), hex(FP.unk0F, 2)],
             )
         );
