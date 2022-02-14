@@ -4,6 +4,7 @@ import GameObject from "../types/GameObject.js";
 import DLL from "../types/DLL.js";
 import Map from "./map.js";
 import parseMapGrid from "../types/MapGrid.js";
+import parseWarpTab from "../types/Warptab.js";
 
 const MAP_CELL_SIZE = 640;
 
@@ -19,6 +20,7 @@ export default class Game {
         this.objCats   = null; //object categories
         this.dlls      = null;
         this.maps      = null;
+        this.warpTab   = null;
     }
 
     async loadIso(iso) {
@@ -66,6 +68,7 @@ export default class Game {
         if(this.iso) {
             await this._loadDlls();
             this._loadObjects();
+            this.warpTab = parseWarpTab(this.app);
             await this._loadMaps();
         }
     }
