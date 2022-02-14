@@ -28,7 +28,7 @@ export default class DLL {
         //read data from the DOL file instead of XML
         const dol       = this.app.game.iso.mainDol;
         const data      = dol.getData();
-        const gDllsAddr = this.app.game.dllTableAddr; //address of g_dlls
+        const gDllsAddr = this.app.game.addresses.g_dlls.address;
         const dllOffs   = dol.addrToOffset(gDllsAddr + (this.id*4)); //file offset of &g_dlls[this.id]
         const aPtr      = data.getUint32(dllOffs); //address of this DLL
         const aOffs     = dol.addrToOffset(aPtr); //file offset of this DLL

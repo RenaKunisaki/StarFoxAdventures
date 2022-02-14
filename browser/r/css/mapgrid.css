@@ -1,0 +1,29 @@
+.mapGrid table {
+    border-spacing: 0;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.mapGrid tr, .mapGrid td {
+    border: 1px #888 dotted;
+    border-collapse: collapse;
+}
+
+.mapGrid td.left   { border-left:   1px #FFF solid; }
+.mapGrid td.right  { border-right:  1px #FFF solid; }
+.mapGrid td.bottom { border-bottom: 1px #FFF solid; }
+.mapGrid td.top    { border-top:    1px #FFF solid; }
+.mapGrid td.origin { border:        1px #0FF solid; }
+
+.mapGrid tr {
+    background-color: #000;
+}
+
+.mapGrid td, .mapGrid th {
+    width:       25px;
+    height:      25px;
+    font-size:   11px;
+    text-align:  right;
+    font-family: monospace;
+    padding:     1px;
+}

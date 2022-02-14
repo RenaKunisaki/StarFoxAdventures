@@ -8,13 +8,13 @@ export default class Game {
     /** Info and methods relating to the game itself.
      */
     constructor(app) {
-        this.app     = app;
-        this.version = null;
-        this.iso     = null;
-        this.bits    = null; //GameBits
-        this.objCats = null; //object categories
-        this.dlls    = null;
-        this.dllTableAddr = null; //RAM address of g_dlls
+        this.app       = app;
+        this.version   = null;
+        this.iso       = null;
+        this.addresses = {}; //name => {address, count}
+        this.bits      = null; //GameBits
+        this.objCats   = null; //object categories
+        this.dlls      = null;
     }
 
     async loadIso(iso) {
@@ -39,11 +39,13 @@ export default class Game {
         this.version = version;
 
         //get addresses
-        this.addresses = {};
         const addrsXml = await getXml(`data/${this.version}/addresses.xml`);
         for(let elem of addrsXml.getElementsByTagName('address')) {
-            this.addresses[elem.getAttribute('name')] =
-                int(elem.getAttribute('val'));
+            this.addresses[elem.getAttribute('name')] = {
+                address: int(elem.getAttribute('address')),
+                type:    elem.getAttribute('type'),
+                count:   int(elem.getAttribute('count')),
+            };
         }
 
         //get GameBits
