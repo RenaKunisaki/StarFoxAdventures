@@ -179,7 +179,9 @@ export default class MapGrid {
                 tr.append(td);
                 this.cellElems[z][x] = td;
                 td.addEventListener('mouseover', e => {
-                    this.eCellInfo.innerText = `${x*MAP_CELL_SIZE}, ${z*MAP_CELL_SIZE}`;
+                    let text = `${x*MAP_CELL_SIZE}, ${z*MAP_CELL_SIZE}`;
+                    if(cell) text += ` - ${cell.map.name}`;
+                    this.eCellInfo.innerText = text;
                 })
             }
             tr.append(E.th('coord', z));

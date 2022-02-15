@@ -38,7 +38,8 @@ export class ISO {
         this.bootBin = new BootBin(buffer, offset);
         console.log("boot.bin", this.bootBin);
         if(this.bootBin.magic != DVD_MAGIC) {
-            throw new Error(`Invalid DVD_MAGIC ${hex(this.bootBin.magic)}, expected ${hex(DVD_MAGIC)}`);
+            console.error(`Invalid DVD_MAGIC ${hex(this.bootBin.magic)}, expected ${hex(DVD_MAGIC)}`);
+            throw new Error("Not a GameCube ISO file");
         }
         offset += BootBin._size;
 
