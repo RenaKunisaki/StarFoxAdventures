@@ -6,7 +6,9 @@ import Map from "./map.js";
 import parseMapGrid from "../types/MapGrid.js";
 import parseWarpTab from "../types/Warptab.js";
 
-const MAP_CELL_SIZE = 640;
+export const MAP_CELL_SIZE = 640;
+export const TEXT_LANGUAGES = ['English', 'French',
+    'German', 'Italian', 'Japanese', 'Spanish'];
 
 export default class Game {
     /** Info and methods relating to the game itself.
@@ -21,6 +23,7 @@ export default class Game {
         this.dlls      = null;
         this.maps      = null;
         this.warpTab   = null;
+        this.texts     = null;
     }
 
     async loadIso(iso) {
@@ -70,6 +73,7 @@ export default class Game {
             this._loadObjects();
             this.warpTab = parseWarpTab(this.app);
             await this._loadMaps();
+            await this._loadTexts();
         }
     }
 
@@ -145,5 +149,27 @@ export default class Game {
 
         console.log("maps", this.maps);
         this.mapGrid = parseMapGrid(this.app);
+    }
+
+    async _loadTexts() {
+        const xml = await getXml(`data/${this.version}/gametext.xml`);
+        this.texts = {};
+        for(let elem of xml.getElementsByTagName('text')) {
+            let id = int(elem.getAttribute('id'));
+            let lang = TEXT_LANGUAGES[int(elem.getAttribute('language'))];
+            if(!this.texts[lang]) this.texts[lang] = {};
+            let text = {
+                id:      id,
+                lang:    lang,
+                phrases: [],
+                window:  int(elem.getAttribute('window')),
+                alignH:  int(elem.getAttribute('alignH')),
+                alignV:  int(elem.getAttribute('alignV')),
+            };
+            for(let phrase of elem.getElementsByTagName('phrase')) {
+                text.phrases.push(phrase.textContent);
+            }
+            this.texts[lang][id] = text;
+        }
     }
 }

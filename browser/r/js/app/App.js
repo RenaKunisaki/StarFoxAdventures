@@ -13,6 +13,7 @@ import DllList from "./ui/DllList.js";
 import MapList from "./ui/MapList.js";
 import MapGrid from "./ui/MapGrid.js";
 import Warptab from "./ui/Warptab.js";
+import TextList from "./ui/TextList.js";
 import { ISO } from "../types/iso/iso.js";
 import Game from "../game/game.js";
 
@@ -50,6 +51,7 @@ export default class App {
                 mapList:    new MapList(this),
                 mapGrid:    new MapGrid(this),
                 warpTab:    new Warptab(this),
+                textList:   new TextList(this),
             };
 
             const tabs = {};
