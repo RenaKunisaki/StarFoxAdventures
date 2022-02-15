@@ -14,7 +14,8 @@ export default class TextList {
             this.eLang.append(E.option(null, lang, {value:lang}));
         }
         this.eLang.addEventListener('change', e => this.refresh());
-        this.element.append(this.eLang);
+        //XXX only English is in the XML file
+        //this.element.append(this.eLang);
         this.app.onIsoLoaded(iso => this.refresh());
     } //constructor
 
@@ -25,7 +26,7 @@ export default class TextList {
             tbl.add(this._makeRow(text));
         }
         const elem = E.div('textList', tbl.element);
-        clearElement(this.element).append(this.eLang, elem);
+        clearElement(this.element).append(/*this.eLang,*/ elem);
     }
 
     _makeTable() {
