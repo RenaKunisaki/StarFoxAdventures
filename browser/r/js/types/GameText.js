@@ -67,6 +67,10 @@ export default class GameTextFile {
     }
 
     readCharStructs() {
+        /** Read the CharacterStructs.
+         *  These tell where each character is in the texture,
+         *  which texture it's in, and how to align it.
+         */
         const numCharStructs = this.data.getUint32(this._offset);
         this._offset += 4;
         this.charStructs = [];
@@ -76,6 +80,10 @@ export default class GameTextFile {
     }
 
     readTexts() {
+        /** Read the GameText structs.
+         *  These tell which strings belong to each text,
+         *  how to display it, and which language it is.
+         */
         const numTexts  = this.data.getUint16(this._offset);
         this.strDataLen = this.data.getUint16(this._offset+2);
         this._offset += 4;
@@ -96,6 +104,16 @@ export default class GameTextFile {
     }
 
     readString() {
+        /** Read a null-terminated string.
+         *  This is ugly because the way the game handles control codes
+         *  is bizarre. They're marked by a Unicode private-use character
+         *  and are followed by some number of parameters, BUT, those
+         *  parameters can contain null bytes. So the only way to read the
+         *  strings is to go one byte at a time, parsing both UTF-8 and
+         *  the control codes.
+         *  This is probably not the most elegant implementation, but,
+         *  it seems to do the job.
+         */
         let result = [];
         let done   = false;
         let start  = this._offset;
@@ -103,18 +121,28 @@ export default class GameTextFile {
             let c = this.data.getUint8(this._offset++);
             switch(c) {
                 case 0x00: done = true; break;
-                case 0xEE: case 0xEF: {
+                case 0xEE: case 0xEF: { //control codes
                     if(this._offset > start) {
+                        //read all text from previous start to here.
                         result.push(['str',
                             this._readUtf8String(start, this._offset)]);
                     }
-                    result.push((c == 0xEE) ?
-                        this._readEEcode() : this._readEFcode());
-                    start = this._offset;
+                    //read the control code.
+                    let s = (c == 0xEE) ?
+                        this._readEEcode() : this._readEFcode();
+                    if(s != null) {
+                        //add the control code
+                        result.push(s);
+                        start = this._offset;
+                    }
+                    //else, it was not a control code, but some other
+                    //UTF codepoint in the same range, such as the
+                    //Japanese fullwidth question mark.
                     break;
                 }
             }
         }
+        //read any remaining text from last control code to end.
         if(this._offset > start) {
             result.push(['str',
                 this._readUtf8String(start, this._offset)]);
@@ -123,6 +151,11 @@ export default class GameTextFile {
     }
 
     readStringTable() {
+        /** Read the string offsets.
+         *  These are offsets into the actual string data.
+         *  The `phrases` field of GameTextStruct is an index
+         *  into this list of offsets.
+         */
         const numStrs = this.data.getUint32(this._offset);
         this._offset += 4;
 
@@ -141,9 +174,11 @@ export default class GameTextFile {
     }
 
     readUnknown() {
+        /** Read some padding data.
+         *  This data is always all 0xEE in every file and isn't used.
+         */
         const numBytes = this.data.getUint32(this._offset);
-        //this data is always all 0xEE in every file and isn't used.
-        //just verify that in case it's different in some version...
+        //just verify in case it's different in some version...
         //XXX remove this.
         for(let i=0; i<numBytes; i++) {
             let b = this.data.getUint8(this._offset + i + 4);
@@ -156,6 +191,8 @@ export default class GameTextFile {
     }
 
     readCharTextures() {
+        /** Read the texture graphics.
+         */
         this.charTextures = [];
         this.textureOffset = this._offset;
         while(true) {
@@ -180,6 +217,7 @@ export default class GameTextFile {
     }
 
     _readUtf8String(start, end) {
+        /** Read UTF-8 encoded string at given offsets. */
         //console.log(`Read string from 0x${hex(start)}`);
         const decoder = new TextDecoder('utf-8');
         const view    = new DataView(this.data.buffer,
@@ -188,6 +226,7 @@ export default class GameTextFile {
     }
 
     _readEEcode() {
+        /** Read control code starting with 0xEE. */
         let param = this.data.getUint16(this._offset);
         this._offset += 2;
         switch(param) {
@@ -210,17 +249,23 @@ export default class GameTextFile {
                 return ['hint', param];
             }
 
-            default: return ['unkEE', hex(param,4)];
+            default: {
+                //not a control code. go back and read the 0xEE
+                //and following as UTF-8 instead.
+                this._offset -= 2;
+                return null;
+            }
         }
     }
 
     _readEFcode() {
-        let param = this.data.getUint8(this._offset++);
-        console.log(`PARAM ${hex(param)}`);
-        //if(param != 0xA3) return ['unkEF', hex(param,2)];
+        /** Read control code starting with 0xEF. */
+        let param = this.data.getUint8(this._offset);
+        if(param != 0xA3) return null; //not a control code
+        this._offset++
         param = this.data.getUint8(this._offset++);
         switch(param) {
-            case 0xB2: {
+            case 0xB2: { //unused
                 const res = ['unkEFB2',
                     this.data.getUint16(this._offset),
                     this.data.getUint16(this._offset+2),
@@ -228,47 +273,47 @@ export default class GameTextFile {
                 this._offset += 4;
                 return res;
             }
-            case 0xB3: return ['unkEFB3'];
-            case 0xB4: {
+            case 0xB3: return ['unkEFB3']; //unused
+            case 0xB4: { //set text scale
                 param = this.data.getUint16(this._offset);
                 this._offset += 2;
                 return ['scale', param];
             }
-            case 0xB5: {
+            case 0xB5: { //unused
                 const res = ['unkEFB5', this.data.getUint16(this._offset)];
                 this._offset += 2;
                 return res;
             }
-            case 0xB6: {
+            case 0xB6: { //unused
                 const res = ['unkEFB5', this.data.getUint16(this._offset)];
                 this._offset += 2;
                 return res;
             }
-            case 0xB7: {
+            case 0xB7: { //select font
                 param = this.data.getUint16(this._offset);
                 this._offset += 2;
                 return ['font', param];
             }
-            case 0xB8: return ['justify', 'left'];
+            case 0xB8: return ['justify', 'left']; //set justify
             case 0xB9: return ['justify', 'right'];
             case 0xBA: return ['justify', 'center'];
             case 0xBB: return ['justify', 'full'];
-            case 0xBC: {
+            case 0xBC: { //unused
                 const res = ['unkEFBC', this.data.getUint16(this._offset)];
                 this._offset += 2;
                 return res;
             }
-            case 0xBD: {
+            case 0xBD: { //unused
                 const res = ['unkEFBD', this.data.getUint16(this._offset)];
                 this._offset += 2;
                 return res;
             }
-            case 0xBE: {
+            case 0xBE: { //unused
                 const res = ['unkEFBE', this.data.getUint16(this._offset)];
                 this._offset += 2;
                 return res;
             }
-            case 0xBF: {
+            case 0xBF: { //set text/background colors
                 const tr = this.data.getUint8(this._offset++); //text
                 const tg = this.data.getUint8(this._offset++);
                 const tb = this.data.getUint8(this._offset++);
@@ -279,8 +324,10 @@ export default class GameTextFile {
                 const ba = this.data.getUint8(this._offset++);
                 return ['color', [tr, tg, tb, ta], [br, bg, bb, ba]];
             }
-
-            default: return ['unkEF', hex(param,2)];
+            default: { //not a control code
+                this._offset--;
+                return null;
+            }
         }
     }
 }
