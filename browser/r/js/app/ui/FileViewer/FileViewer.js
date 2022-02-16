@@ -43,18 +43,25 @@ export default class FileViewer {
         let fmt = this.eFormatSel.value;
 
         const name = this.file.name;
-        if(this.error) {
-            this.viewer = new ErrorMessage(this.app, this.error);
+        try {
+            if(this.error) {
+                this.viewer = new ErrorMessage(this.app, this.error);
+            }
+            else if((fmt == 'auto' && name.endsWith('.romlist.zlb'))
+            || fmt == 'romlist') {
+                this.viewer = new RomListViewer(this.app, this.view);
+            }
+            else if((fmt == 'auto' && this.file.path.startsWith('/gametext'))
+            || fmt == 'gametext') {
+                this.viewer = new GameTextViewer(this.app, this.view);
+            }
+            else this.viewer = new HexViewer(this.app, this.view);
         }
-        else if((fmt == 'auto' && name.endsWith('.romlist.zlb'))
-        || fmt == 'romlist') {
-            this.viewer = new RomListViewer(this.app, this.view);
+        catch(ex) {
+            //XXX instead of showing "not a GameText file" when set to Auto,
+            //we should just switch to hex view...
+            this.viewer = new ErrorMessage(this.app, ex.toString());
         }
-        else if((fmt == 'auto' && this.file.path.startsWith('/gametext'))
-        || fmt == 'gametext') {
-            this.viewer = new GameTextViewer(this.app, this.view);
-        }
-        else this.viewer = new HexViewer(this.app, this.view);
 
         clearElement(this.element);
         if(this.showTitle) {

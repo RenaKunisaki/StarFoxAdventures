@@ -72,6 +72,8 @@ export default class GameTextFile {
          *  which texture it's in, and how to align it.
          */
         const numCharStructs = this.data.getUint32(this._offset);
+        //sanity check
+        if(numCharStructs > 10000) throw new Error("Not a GameText file");
         this._offset += 4;
         this.charStructs = [];
         for(let i=0; i<numCharStructs; i++) {
