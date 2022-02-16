@@ -31,16 +31,32 @@ const TextureStruct = Struct(
 );
 
 export default class GameTextFile {
-    constructor(app, file) {
+    constructor(app, data) {
         this.app     = app;
-        this.file    = file;
-        this.data    = file.getData();
-        this._offset = 0; //file read offset
+        this.data    = data;
+        this._offset = 0; //data read offset
         this.readCharStructs();
         this.readTexts();
-        this.readStrings();
+        this.readStringTable();
         this.readUnknown();
         this.readCharTextures();
+
+        //read the actual strings
+        for(let text of this.texts) {
+            const base = text.phrases;
+            text.phrases = [];
+            for(let i=0; i<text.nPhrases; i++) {
+                if(isNaN(this.strTab[base+i])) debugger;
+                this._offset = this.strTab[base+i] + this.strDataOffs;
+                let phrase = {
+                    fileOffs: this._offset,
+                    str: this.readString(),
+                };
+                phrase.byteLength = this._offset - phrase.fileOffs;
+                this._offset += phrase.byteLength;
+                text.phrases.push(phrase);
+            }
+        }
     }
 
     //XXX move to some kind of file wrapper
@@ -60,12 +76,22 @@ export default class GameTextFile {
     }
 
     readTexts() {
-        const numTexts   = this.data.getUint16(this._offset);
-        const strDataLen = this.data.getUint16(this._offset+2);
+        const numTexts  = this.data.getUint16(this._offset);
+        this.strDataLen = this.data.getUint16(this._offset+2);
         this._offset += 4;
         this.texts = [];
         for(let i=0; i<numTexts; i++) {
-            this.texts.push(this._readStruct(GameTextStruct));
+            const text = this._readStruct(GameTextStruct);
+            //copy the struct to a normal Object so we can modify it later.
+            this.texts.push({
+                id:       text.id,
+                nPhrases: text.nPhrases,
+                window:   text.window,
+                alignH:   text.alignH,
+                alignV:   text.alignV,
+                language: text.language,
+                phrases:  text.phrases,
+            });
         }
     }
 
@@ -79,7 +105,8 @@ export default class GameTextFile {
                 case 0x00: done = true; break;
                 case 0xEE: case 0xEF: {
                     if(this._offset > start) {
-                        result.push(this._readUtf8String(start, this._offset));
+                        result.push(['str',
+                            this._readUtf8String(start, this._offset)]);
                     }
                     result.push((c == 0xEE) ?
                         this._readEEcode() : this._readEFcode());
@@ -89,27 +116,28 @@ export default class GameTextFile {
             }
         }
         if(this._offset > start) {
-            result.push(this._readUtf8String(start, this._offset));
+            result.push(['str',
+                this._readUtf8String(start, this._offset)]);
         }
         return result;
     }
 
-    readStrings() {
+    readStringTable() {
         const numStrs = this.data.getUint32(this._offset);
         this._offset += 4;
-        this.strings = [];
+
+        //read the offset table
+        this.strTab = [];
         for(let i=0; i<numStrs; i++) {
             let offs = this.data.getUint32(this._offset);
             this._offset += 4;
-            this.strings.push({offset:offs});
+            this.strTab.push(offs);
         }
-        const base = this._offset;
-        for(let i=0; i<numStrs; i++) {
-            this._offset = this.strings[i].offset + base;
-            this.strings[i].fileOffs = this._offset;
-            this.strings[i].str = this.readString();
-        }
-        this._offset = base + this.strDataLen;
+
+        this.strDataOffs = this._offset;
+
+        //skip past the actual strings
+        this._offset += this.strDataLen;
     }
 
     readUnknown() {
@@ -117,10 +145,10 @@ export default class GameTextFile {
         //this data is always all 0xEE in every file and isn't used.
         //just verify that in case it's different in some version...
         //XXX remove this.
-        for(let i=0; i<numBytes; i += 4) {
-            if(this.data.getUint32(this._offset + i + 4) != 0xEEEEEEEE) {
-                console.log("Suspicious data in gametext file!",
-                    this._offset + i + 4);
+        for(let i=0; i<numBytes; i++) {
+            let b = this.data.getUint8(this._offset + i + 4);
+            if(b != 0xEE) {
+                console.log(`Suspicious data in gametext file! 0x${hex(b)} @ 0x${hex(this._offset + i + 4)}`);
                 break;
             }
         }
@@ -152,8 +180,10 @@ export default class GameTextFile {
     }
 
     _readUtf8String(start, end) {
+        //console.log(`Read string from 0x${hex(start)}`);
         const decoder = new TextDecoder('utf-8');
-        const view    = new DataView(this.data.buffer, start, end-start);
+        const view    = new DataView(this.data.buffer,
+            start+this.data.byteOffset, (end-start)-1);
         return decoder.decode(view);
     }
 
@@ -180,20 +210,39 @@ export default class GameTextFile {
                 return ['hint', param];
             }
 
-            default: return ['unkEE', param];
+            default: return ['unkEE', hex(param,4)];
         }
     }
 
     _readEFcode() {
         let param = this.data.getUint8(this._offset++);
-        if(param != 0xA3) return ['unkEF', param];
-
+        console.log(`PARAM ${hex(param)}`);
+        //if(param != 0xA3) return ['unkEF', hex(param,2)];
         param = this.data.getUint8(this._offset++);
         switch(param) {
+            case 0xB2: {
+                const res = ['unkEFB2',
+                    this.data.getUint16(this._offset),
+                    this.data.getUint16(this._offset+2),
+                ];
+                this._offset += 4;
+                return res;
+            }
+            case 0xB3: return ['unkEFB3'];
             case 0xB4: {
                 param = this.data.getUint16(this._offset);
                 this._offset += 2;
                 return ['scale', param];
+            }
+            case 0xB5: {
+                const res = ['unkEFB5', this.data.getUint16(this._offset)];
+                this._offset += 2;
+                return res;
+            }
+            case 0xB6: {
+                const res = ['unkEFB5', this.data.getUint16(this._offset)];
+                this._offset += 2;
+                return res;
             }
             case 0xB7: {
                 param = this.data.getUint16(this._offset);
@@ -204,7 +253,21 @@ export default class GameTextFile {
             case 0xB9: return ['justify', 'right'];
             case 0xBA: return ['justify', 'center'];
             case 0xBB: return ['justify', 'full'];
-
+            case 0xBC: {
+                const res = ['unkEFBC', this.data.getUint16(this._offset)];
+                this._offset += 2;
+                return res;
+            }
+            case 0xBD: {
+                const res = ['unkEFBD', this.data.getUint16(this._offset)];
+                this._offset += 2;
+                return res;
+            }
+            case 0xBE: {
+                const res = ['unkEFBE', this.data.getUint16(this._offset)];
+                this._offset += 2;
+                return res;
+            }
             case 0xBF: {
                 const tr = this.data.getUint8(this._offset++); //text
                 const tg = this.data.getUint8(this._offset++);
@@ -217,7 +280,7 @@ export default class GameTextFile {
                 return ['color', [tr, tg, tb, ta], [br, bg, bb, ba]];
             }
 
-            default: return ['unkEFA3', param];
+            default: return ['unkEF', hex(param,2)];
         }
     }
 }

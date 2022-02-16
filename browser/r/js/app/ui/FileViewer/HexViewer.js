@@ -84,13 +84,13 @@ export default class HexViewer {
             eLine.append(E.span('offset', hex(offs, 6) + '  '));
 
             let data = '';
-            //try {
+            try {
                 for(let i=0; i<nCols/fSize; i++) {
                     let it = fFunc(this.view, offs+(i*fSize));
                     data += it + (((i & 3) == 3) ? '  ' : ' ');
                 }
-            //}
-            //catch(RangeError) {}
+            }
+            catch(RangeError) {}
             eLine.append(E.span('data', data));
 
             lines.push(eLine);
