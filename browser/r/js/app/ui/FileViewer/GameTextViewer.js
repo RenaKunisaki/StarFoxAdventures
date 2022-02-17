@@ -14,37 +14,59 @@ export class GameTextViewer {
     }
 
     _makeElemForPhrase(phrase) {
-        let result = E.span('gametext');
+        let elem = E.span();
+        let result = [elem];
         for(let str of phrase.str) {
             switch(str[0]) {
-                case 'str': result.append(str[1]); break;
+                case 'str': elem.append(str[1]); break;
                 case 'seq':
-                    result.append(E.span('command', `[SEQ ${str[1]}]`));
+                    elem.append(E.span('command', `[SEQ ${str[1]}]`));
                     break;
                 case 'time':
-                    result.append(E.span('command', `[TIME ${str[1]}, ${str[2]}, ${str[3]}]`));
+                    elem.append(E.span('command', `[TIME ${str[1]}, ${str[2]}, ${str[3]}]`));
                     break;
                 case 'hint':
-                    result.append(E.span('command', `[HINT ${str[1]}]`));
+                    elem.append(E.span('command', `[HINT ${str[1]}]`));
                     break;
-                case 'scale':
-                    result.append(E.span('command', `[SCALE ${str[1]}]`));
+                case 'scale': {
+                    //elem.append(E.span('command', `[SCALE ${str[1]}]`));
+                    let scale = parseInt(str[1]) / 256;
+                    elem = E.span(null, {style:`font-size: ${scale*100}%`});
+                    result.push(elem);
                     break;
-                case 'font':
-                    result.append(E.span('command', `[FONT ${str[1]}]`));
+                }
+                case 'font': {
+                    let font = parseInt(str[1]);
+                    elem = E.span(`font${font}`);
+                    result.push(elem);
                     break;
+                }
                 case 'justify':
-                    result.append(E.span('command', `[JUST ${str[1]}]`));
+                    elem.append(E.span('command', `[JUST ${str[1]}]`));
                     break;
-                case 'color':
-                    result.append(E.span('command', `[COLOR ${str[1]}, ${str[2]}]`));
+                case 'color': {
+                    //elem.append(E.span('command', `[COLOR ${str[1]}, ${str[2]}]`));
+                    let fg = str[1], bg = str[2];
+                    fg = `rgba(${fg[0]}, ${fg[1]}, ${fg[2]}, ${fg[3]/255})`;
+                    let style = `color: ${fg};`;
+                    if(bg) {
+                        bg = `rgba(${bg[0]}, ${bg[1]}, ${bg[2]}, ${bg[3]/255})`;
+                        style += `text-shadow:
+                            -1px -1px 0 ${bg},
+                             1px -1px 0 ${bg},
+                             1px  1px 0 ${bg},
+                            -1px  1px 0 ${bg};`;
+                    }
+                    elem = E.span(null, {style:style});
+                    result.push(elem);
                     break;
+                }
                 default:
-                    result.append(E.span('command', `[${str}]`));
+                    elem.append(E.span('command', `[${str}]`));
                     break;
             }
         }
-        return result;
+        return E.span('gametext', ...result);
     }
 
     _makeTable() {

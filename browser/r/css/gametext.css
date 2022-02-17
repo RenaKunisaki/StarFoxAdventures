@@ -1,0 +1,15 @@
+.gametext .font0 { /* most Japanese text */
+    font-family: 'FOT-RodinNTLG Pro B';
+    font-size: 20pt;
+}
+/* font1 doesn't exist */
+.gametext .font2 { /* button icons */
+    font-weight: bold;
+}
+.gametext .font2, .gametext .font5 { /* flag icons, faces */
+    text-decoration: underline;
+}
+.gametext .font4 { /* most English text */
+    font-family: 'EurostileBQ-Regular';
+    font-size: 20pt;
+}

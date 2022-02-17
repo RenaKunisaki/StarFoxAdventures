@@ -130,6 +130,7 @@ export default class GameTextFile {
                             this._readUtf8String(start, this._offset)]);
                     }
                     //read the control code.
+                    let thisOffs = this._offset;
                     let s = (c == 0xEE) ?
                         this._readEEcode() : this._readEFcode();
                     if(s != null) {
@@ -137,9 +138,14 @@ export default class GameTextFile {
                         result.push(s);
                         start = this._offset;
                     }
-                    //else, it was not a control code, but some other
-                    //UTF codepoint in the same range, such as the
-                    //Japanese fullwidth question mark.
+                    else {
+                        //this was not a control code, but some other
+                        //UTF codepoint in the same range, such as the
+                        //Japanese fullwidth question mark.
+                        //go back to the 0xEE/0xEF byte and include it as
+                        //the beginning of the string.
+                        start = thisOffs-1;
+                    }
                     break;
                 }
             }
@@ -233,11 +239,13 @@ export default class GameTextFile {
         this._offset += 2;
         switch(param) {
             case 0x8080: {
+                //tells which sequence this is (XXX used by game?)
                 param = this.data.getUint16(this._offset);
                 this._offset += 2;
                 return ['seq', param];
             }
             case 0x8098: {
+                //something to do with timing...
                 let a = this.data.getUint16(this._offset);
                 let b = this.data.getUint16(this._offset+2);
                 let c = this.data.getUint16(this._offset+4);
@@ -246,6 +254,7 @@ export default class GameTextFile {
             }
 
             case 0x80A0: {
+                //ignored by game, but tells which TaskTextsNNN this is in.
                 param = this.data.getUint16(this._offset);
                 this._offset += 2;
                 return ['hint', param];
@@ -316,15 +325,21 @@ export default class GameTextFile {
                 return res;
             }
             case 0xBF: { //set text/background colors
-                const tr = this.data.getUint8(this._offset++); //text
-                const tg = this.data.getUint8(this._offset++);
-                const tb = this.data.getUint8(this._offset++);
-                const ta = this.data.getUint8(this._offset++);
-                const br = this.data.getUint8(this._offset++); //background
-                const bg = this.data.getUint8(this._offset++);
-                const bb = this.data.getUint8(this._offset++);
-                const ba = this.data.getUint8(this._offset++);
-                return ['color', [tr, tg, tb, ta], [br, bg, bb, ba]];
+                //const tr = this.data.getUint8(this._offset++); //text
+                //const tg = this.data.getUint8(this._offset++);
+                //const tb = this.data.getUint8(this._offset++);
+                //const ta = this.data.getUint8(this._offset++);
+                //const br = this.data.getUint8(this._offset++); //background
+                //const bg = this.data.getUint8(this._offset++);
+                //const bb = this.data.getUint8(this._offset++);
+                //const ba = this.data.getUint8(this._offset++);
+                //return ['color', [tr, tg, tb, ta], [br, bg, bb, ba]];
+                const tr = this.data.getUint16(this._offset);
+                const tg = this.data.getUint16(this._offset+2);
+                const tb = this.data.getUint16(this._offset+4);
+                const ta = this.data.getUint16(this._offset+6);
+                this._offset += 8;
+                return ['color', [tr, tg, tb, ta]];
             }
             default: { //not a control code
                 this._offset--;

@@ -66,6 +66,8 @@ export default class IsoFile {
             const magic = view.getUint32(0, false);
             switch(magic) {
                 case 0x5A4C4200: //'ZLB\0'
+                    //BUG: if there are multiple ZLB archives in one file,
+                    //we can only see the first one...
                     console.log("Decompressing ZLB");
                     const decomp = pako.inflate(new Uint8Array(
                         this.buffer, this.bufferOffs+offset+0x10,
