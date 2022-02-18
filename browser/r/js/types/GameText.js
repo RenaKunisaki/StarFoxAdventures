@@ -62,11 +62,16 @@ export default class GameTextFile {
         this.readUnknown();
         this.readCharTextures();
 
+        //XXX Sequences files have some extra info before the
+        //actual strings, such as the sequence ID. Investigate this.
+
         //read the actual strings
+        console.log("strTab", this.strTab);
         for(let text of this.texts) {
             const base = text.phrases;
             text.phrases = [];
             for(let i=0; i<text.nPhrases; i++) {
+                console.log(`text 0x${hex(text.id,4)} phrase ${i} base=0x${hex(base)}`);
                 if(isNaN(this.strTab[base+i])) debugger;
                 this._file.seek(this.strTab[base+i] + this.strDataOffs);
                 let phrase = {
@@ -92,6 +97,7 @@ export default class GameTextFile {
             throw new Error("Not a GameText file");
         }
         this.charStructs = this._file.read(CharacterStruct, numCharStructs);
+        if(numCharStructs == 1) this.charStructs = [this.charStructs];
     }
 
     readTexts() {
@@ -148,6 +154,7 @@ export default class GameTextFile {
 
         //read the offset table
         this.strTab = this._file.readU32(numStrs);
+        if(numStrs == 1) this.strTab = [this.strTab];
         this.strDataOffs = this._file.tell();
         console.log(`numStrs=0x${hex(numStrs)} strDataOffs=0x${hex(this.strDataOffs)}`);
 
