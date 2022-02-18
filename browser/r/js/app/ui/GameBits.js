@@ -38,7 +38,27 @@ export default class GameBits {
             {displayName:"Name",     name:'name',    type:'string'},
             {displayName:"Value",    name:'value',   type:'string', classes:'int'},
             {displayName:"Obj Refs", name:'objRefs', type:'string',
-                compareFunc: (a, b) => a.nObjRefs - b.nObjRefs,
+                compareFunc: (a, b) => {
+                    let ra = a.objRefs[0];
+                    let rb = b.objRefs[0];
+                    ra = ra ? `${ra.map} ${ra.objNo} ${ra.param} ${ra.objId}` : '';
+                    rb = rb ? `${rb.map} ${rb.objNo} ${rb.param} ${rb.objId}` : '';
+                    if(ra > rb) return  1;
+                    if(ra < rb) return -1;
+                    return 0;
+                },
+                makeElem: (val, td, row) => {
+                    const items = [];
+                    for(let objRef of row.objRefs) {
+                        items.push(E.div('objref',
+                            E.span('mapId', objRef.map), '.',
+                            E.span('objNo', objRef.obj), '.',
+                            E.span('objId', hex(objRef.objId, 8)), '.',
+                            E.span('param', objRef.param),
+                        ));
+                    }
+                    return E.td('string', CollapseList(...items));
+                },
             },
             {displayName:"Description", name:'description', type:'string',
                 makeElem: (val, td, row) => {
@@ -61,21 +81,6 @@ export default class GameBits {
     _makeRow(bit) {
         const slot = this.app.saveSlot;
         let hint = '';
-        //if(bit.hintId) {
-        //    hint = makeCollapsibleList(bit.hint);
-        //}
-        //let objRefs = [];
-        //for(let r of bit.objRefs) {
-        //    //to make these link to obj/map we need to re-parse the data
-        //    //and include their IDs in the files, since names can be
-        //    //ambiguous.
-        //    objRefs.push(E.span('objref',
-        //        E.span('objid', hex(r.objId,8)),
-        //        E.span('mapname',   r.map), //XXX link to the map
-        //        E.span('objname',   r.obj), //XXX link to the object
-        //        E.span('hex',       r.param),
-        //    ));
-        //}
         return {
             id:          bit.id,
             table:       bit.table,
@@ -88,8 +93,7 @@ export default class GameBits {
             description: bit.description,
             notes:       bit.notes,
             hint:        bit.hint,
-            //objRefs:     makeCollapsibleList(objRefs),
-            //nObjRefs:    bit.objRefs.length,
+            objRefs:     bit.objRefs,
         };
     }
 }
