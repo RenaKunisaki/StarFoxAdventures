@@ -53,6 +53,7 @@ export function hex(n, size=1) {
     /** Convert number `n` to hex, padded to given `size`.
      *  Result is uppercase without prefix, eg "0000BABE".
      */
+    if(typeof(n) == 'string') n = parseInt(n);
     if(n == null || n == undefined) return String(n);
     if(n < 0) n = (((1 << (size*4)) - 1) ^ -n) + 1;
     return n.toString(16).toUpperCase().padStart(size, '0');
@@ -140,3 +141,40 @@ export function addReverseMap(obj) {
     for(let [v, k] of Object.entries(obj2)) obj[v] = k;
     return obj;
 }
+
+export function download(data, name, type='') {
+    /** Prompt the user to download the file whose content
+     *  is stored in `data`, with default name `name` and
+     *  MIME type `type`.
+     */
+    //not async because we don't wait for the download; we just
+    //simulate clicking a link. the user might get a "save file"
+    //prompt and be able to cancel, or it might just go to
+    //Downloads folder automatically, depending on their settings.
+    const file = new Blob([data], {type: type});
+    const a = E.a({href: URL.createObjectURL(file)});
+    a.download = name;
+    a.click();
+}
+
+export function prettyXml(sourceXml) {
+    const xmlDoc  = new DOMParser().parseFromString(sourceXml, 'application/xml');
+    const xsltDoc = new DOMParser().parseFromString([
+        // describes how we want to modify the XML - indent everything
+        '<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform">',
+        '  <xsl:strip-space elements="*"/>',
+        '  <xsl:template match="para[content-style][not(text())]">', // change to just text() to strip space in text nodes
+        '    <xsl:value-of select="normalize-space(.)"/>',
+        '  </xsl:template>',
+        '  <xsl:template match="node()|@*">',
+        '    <xsl:copy><xsl:apply-templates select="node()|@*"/></xsl:copy>',
+        '  </xsl:template>',
+        '  <xsl:output indent="yes"/>',
+        '</xsl:stylesheet>',
+    ].join('\n'), 'application/xml');
+
+    const xsltProcessor = new XSLTProcessor();
+    xsltProcessor.importStylesheet(xsltDoc);
+    const resultDoc = xsltProcessor.transformToDocument(xmlDoc);
+    return new XMLSerializer().serializeToString(resultDoc);
+};

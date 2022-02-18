@@ -1,7 +1,7 @@
 import { E, clearElement } from "../../../lib/Element.js";
 import { addReverseMap, hex } from "../../../Util.js";
 import Table from "../Table.js";
-import GameTextFile from "../../../types/GameText.js";
+import GameTextFile from "../../../types/GameTextFile.js";
 
 const Languages = addReverseMap({
     English:  0,

@@ -1,6 +1,7 @@
 import { hex } from "../Util.js";
 import Struct from '../lib/Struct.js';
 import BinaryFile from "../lib/BinaryFile.js";
+import IsoFile from "./iso/isofile.js";
 
 const CharacterStruct = Struct(
     ['I', 'character'],
@@ -53,6 +54,7 @@ const ControlCodes = { //code: [param names...]
 
 export default class GameTextFile {
     constructor(app, data) {
+        if(data instanceof IsoFile) data = data.getData(); //lolno
         this.app     = app;
         this.data    = data;
         this._file   = new BinaryFile(this.data);
@@ -66,12 +68,12 @@ export default class GameTextFile {
         //actual strings, such as the sequence ID. Investigate this.
 
         //read the actual strings
-        console.log("strTab", this.strTab);
+        //console.log("strTab", this.strTab);
         for(let text of this.texts) {
             const base = text.phrases;
             text.phrases = [];
             for(let i=0; i<text.nPhrases; i++) {
-                console.log(`text 0x${hex(text.id,4)} phrase ${i} base=0x${hex(base)}`);
+                //console.log(`text 0x${hex(text.id,4)} phrase ${i} base=0x${hex(base)}`);
                 if(isNaN(this.strTab[base+i])) debugger;
                 this._file.seek(this.strTab[base+i] + this.strDataOffs);
                 let phrase = {
@@ -91,7 +93,7 @@ export default class GameTextFile {
          *  which texture it's in, and how to align it.
          */
         const numCharStructs = this._file.readU32();
-        console.log(`numCharStructs = 0x${hex(numCharStructs)}`);
+        //console.log(`numCharStructs = 0x${hex(numCharStructs)}`);
         //sanity check to avoid hanging
         if(numCharStructs > 10000) {
             throw new Error("Not a GameText file");
@@ -107,7 +109,7 @@ export default class GameTextFile {
          */
         const numTexts  = this._file.readU16();
         this.strDataLen = this._file.readU16();
-        console.log(`numTexts=0x${hex(numTexts)} strDataLen=0x${hex(this.strDataLen)}`);
+        //console.log(`numTexts=0x${hex(numTexts)} strDataLen=0x${hex(this.strDataLen)}`);
         this.texts = [];
         for(let i=0; i<numTexts; i++) {
             const text = this._file.read(GameTextStruct);
@@ -156,7 +158,7 @@ export default class GameTextFile {
         this.strTab = this._file.readU32(numStrs);
         if(numStrs == 1) this.strTab = [this.strTab];
         this.strDataOffs = this._file.tell();
-        console.log(`numStrs=0x${hex(numStrs)} strDataOffs=0x${hex(this.strDataOffs)}`);
+        //console.log(`numStrs=0x${hex(numStrs)} strDataOffs=0x${hex(this.strDataOffs)}`);
 
         //skip past the actual strings
         this._file.seek(this.strDataLen, 'SEEK_CUR');
@@ -167,7 +169,7 @@ export default class GameTextFile {
          *  This data is always all 0xEE in every file and isn't used.
          */
         const numBytes = this._file.readU32();
-        console.log(`unkDataLen=0x${hex(numBytes)}`);
+        //console.log(`unkDataLen=0x${hex(numBytes)}`);
         //just verify in case it's different in some version...
         //XXX remove this.
         const offs = this._file.tell();
@@ -190,13 +192,13 @@ export default class GameTextFile {
         //game will only recognize 2 textures
         while(this.charTextures.length < 2) {
             let start = this._file.tell();
-            console.log(`charTextures[${this.charTextures.length}] start=0x${hex(start)}`);
+            //console.log(`charTextures[${this.charTextures.length}] start=0x${hex(start)}`);
             let texS  = this._file.read(TextureStruct);
             if(texS.width == 0 && texS.height == 0) break;
             let size = texS.width * texS.height;
             if(texS.pixFmt == 4) { size >>= 1; }
 
-            console.log(`charTextures[${this.charTextures.length}] size=${texS.width},${texS.height}`);
+            //console.log(`charTextures[${this.charTextures.length}] size=${texS.width},${texS.height}`);
             this.charTextures.push({
                 offset: start,
                 texFmt: texS.texFmt,
