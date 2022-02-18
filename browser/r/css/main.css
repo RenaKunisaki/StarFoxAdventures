@@ -88,3 +88,5 @@ tr.notice {
 .hexdump .line:nth-child(2n+1) { color: #FFF; }
 .hexdump .line:hover { color: #08F; }
 
+.collapseList .count::before { content: '[' }
+.collapseList .count::after { content: '] ' }

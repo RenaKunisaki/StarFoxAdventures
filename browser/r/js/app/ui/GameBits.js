@@ -41,39 +41,16 @@ export default class GameBits {
                 compareFunc: (a, b) => {
                     let ra = a.objRefs[0];
                     let rb = b.objRefs[0];
-                    ra = ra ? `${ra.map} ${ra.objNo} ${ra.param} ${ra.objId}` : '';
-                    rb = rb ? `${rb.map} ${rb.objNo} ${rb.param} ${rb.objId}` : '';
+                    ra = ra ? `${ra.map} ${ra.objNo} ${ra.objId} ${ra.param}` : '';
+                    rb = rb ? `${rb.map} ${rb.objNo} ${rb.objId} ${rb.param}` : '';
                     if(ra > rb) return  1;
                     if(ra < rb) return -1;
                     return 0;
                 },
-                makeElem: (val, td, row) => {
-                    const items = [];
-                    for(let objRef of row.objRefs) {
-                        items.push(E.div('objref',
-                            E.span('mapId', objRef.map), '.',
-                            E.span('objNo', objRef.obj), '.',
-                            E.span('objId', hex(objRef.objId, 8)), '.',
-                            E.span('param', objRef.param),
-                        ));
-                    }
-                    return E.td('string', CollapseList(...items));
-                },
+                makeElem: (val, td, row) => this._makeObjRefsElem(row),
             },
             {displayName:"Description", name:'description', type:'string',
-                makeElem: (val, td, row) => {
-                    const items = [];
-                    if(row.description) {
-                        items.push(E.span('description', row.description));
-                    }
-                    for(let hint of row.hint) {
-                        items.push(E.span('hintText', hint));
-                    }
-                    for(let note of row.notes) {
-                        items.push(E.span('note', note));
-                    }
-                    return E.td('string', CollapseList(...items));
-                },
+                makeElem: (val, td, row) => this._makeDescriptionElem(row),
             },
         ]});
     }
@@ -95,5 +72,32 @@ export default class GameBits {
             hint:        bit.hint,
             objRefs:     bit.objRefs,
         };
+    }
+
+    _makeObjRefsElem(row) {
+        const items = [];
+        for(let objRef of row.objRefs) {
+            items.push(E.div('objref',
+                E.span('mapId', objRef.map), '.',
+                E.span('objNo', objRef.obj), '.',
+                E.span('objId', hex(objRef.objId, 8)), '.',
+                E.span('param', objRef.param),
+            ));
+        }
+        return E.td('string', CollapseList(...items));
+    }
+
+    _makeDescriptionElem(row) {
+        const items = [];
+        if(row.description) {
+            items.push(E.span('description', row.description));
+        }
+        for(let hint of row.hint) {
+            items.push(E.span('hintText', hint));
+        }
+        for(let note of row.notes) {
+            items.push(E.span('note', note));
+        }
+        return E.td('string', CollapseList(...items));
     }
 }

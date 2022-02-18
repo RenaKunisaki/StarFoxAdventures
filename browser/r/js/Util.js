@@ -125,7 +125,8 @@ export function CollapseList(...items) {
     if(items.length == 0) return '';
     if(items.length == 1) return E.span('list', items[0]);
     const eList = E.ul();
-    const elem = E.details('list', E.summary(null, items[0]), eList);
+    const elem = E.details('collapseList', E.summary(null,
+        E.span('count', items.length), items[0]), eList);
     for(let i=1; i<items.length; i++) {
         eList.append(E.li(null, items[i]));
     }
