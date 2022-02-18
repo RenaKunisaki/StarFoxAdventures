@@ -20,6 +20,7 @@
     border-right:  2px #000 solid;
     background:  #048;
     color:       #BBB;
+    cursor:        pointer;
 }
 .tabBar .tab.active {
     background:  #08C;
