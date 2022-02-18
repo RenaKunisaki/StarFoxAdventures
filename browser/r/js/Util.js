@@ -142,22 +142,11 @@ export function addReverseMap(obj) {
     return obj;
 }
 
-export function download(data, name, type='') {
-    /** Prompt the user to download the file whose content
-     *  is stored in `data`, with default name `name` and
-     *  MIME type `type`.
-     */
-    //not async because we don't wait for the download; we just
-    //simulate clicking a link. the user might get a "save file"
-    //prompt and be able to cancel, or it might just go to
-    //Downloads folder automatically, depending on their settings.
-    const file = new Blob([data], {type: type});
-    const a = E.a({href: URL.createObjectURL(file)});
-    a.download = name;
-    a.click();
-}
-
 export function prettyXml(sourceXml) {
+    /** Given a string containing XML, return a beautified version.
+     *  @note Adapted from https://stackoverflow.com/a/47317538
+     */
+    //TODO figure out how to get <foo /> instead of <foo></foo>
     const xmlDoc  = new DOMParser().parseFromString(sourceXml, 'application/xml');
     const xsltDoc = new DOMParser().parseFromString([
         // describes how we want to modify the XML - indent everything
@@ -178,3 +167,25 @@ export function prettyXml(sourceXml) {
     const resultDoc = xsltProcessor.transformToDocument(xmlDoc);
     return new XMLSerializer().serializeToString(resultDoc);
 };
+
+export function download(data, name, type='') {
+    /** Prompt the user to download the file whose content
+     *  is stored in `data`, with default name `name` and
+     *  MIME type `type`.
+     */
+    //not async because we don't wait for the download; we just
+    //simulate clicking a link. the user might get a "save file"
+    //prompt and be able to cancel, or it might just go to
+    //Downloads folder automatically, depending on their settings.
+    const file = new Blob([data], {type: type});
+    const a = E.a({href: URL.createObjectURL(file)});
+    a.download = name;
+    a.click();
+}
+
+export function downloadXml(xml, name, type='application/xml') {
+    if(!name.endsWith('.xml')) name += '.xml';
+    download(
+        prettyXml(new XMLSerializer().serializeToString(xml)),
+        name, type);
+}
