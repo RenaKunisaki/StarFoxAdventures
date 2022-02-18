@@ -60,6 +60,7 @@ export default class FileViewer {
         catch(ex) {
             //XXX instead of showing "not a GameText file" when set to Auto,
             //we should just switch to hex view...
+            console.error(ex);
             this.viewer = new ErrorMessage(this.app, ex.toString());
         }
 

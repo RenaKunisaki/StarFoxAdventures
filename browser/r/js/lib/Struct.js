@@ -2,7 +2,7 @@
  *  2022 Rena Kunisaki
  *  Danger, dragons ahead.
  */
-const fieldTypes = {
+export const fieldTypes = {
     //type: {size, func}
     //type is the character used to specify this type.
     //size is the number of bytes wide this type is.

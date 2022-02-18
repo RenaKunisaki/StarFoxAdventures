@@ -17,52 +17,65 @@ export class GameTextViewer {
         let elem = E.span();
         let result = [elem];
         for(let str of phrase.str) {
-            switch(str[0]) {
-                case 'str': elem.append(str[1]); break;
+            if(typeof(str) == 'string') elem.append(str);
+            else switch(str.cmd) {
                 case 'seq':
-                    elem.append(E.span('command', `[SEQ ${str[1]}]`));
+                    elem.append(E.span('command', `[SEQ ${str.id}]`));
                     break;
                 case 'time':
-                    elem.append(E.span('command', `[TIME ${str[1]}, ${str[2]}, ${str[3]}]`));
+                    elem.append(E.span('command', `[TIME ${str.unk1}, ${str.time}, ${str.unk3}]`));
                     break;
                 case 'hint':
-                    elem.append(E.span('command', `[HINT ${str[1]}]`));
+                    elem.append(E.span('command', `[HINT ${str.id}]`));
                     break;
                 case 'scale': {
-                    //elem.append(E.span('command', `[SCALE ${str[1]}]`));
-                    let scale = parseInt(str[1]) / 256;
+                    //elem.append(E.span('command', `[SCALE ${str.scale}]`));
+                    let scale = parseInt(str.scale) / 256;
                     elem = E.span(null, {style:`font-size: ${scale*100}%`});
                     result.push(elem);
                     break;
                 }
                 case 'font': {
-                    let font = parseInt(str[1]);
+                    //elem.append(E.span('command', `[FONT ${str.id}]`));
+                    let font = parseInt(str.id);
                     elem = E.span(`font${font}`);
                     result.push(elem);
                     break;
                 }
-                case 'justify':
-                    elem.append(E.span('command', `[JUST ${str[1]}]`));
+                case 'justifyLeft':
+                    elem.append(E.span('command', `[JUST left]`));
+                    break;
+                case 'justifyRight':
+                    elem.append(E.span('command', `[JUST right]`));
+                    break;
+                case 'justifyCenter':
+                    elem.append(E.span('command', `[JUST center]`));
+                    break;
+                case 'justifyFull':
+                    elem.append(E.span('command', `[JUST full]`));
                     break;
                 case 'color': {
-                    //elem.append(E.span('command', `[COLOR ${str[1]}, ${str[2]}]`));
-                    let fg = str[1], bg = str[2];
-                    fg = `rgba(${fg[0]}, ${fg[1]}, ${fg[2]}, ${fg[3]/255})`;
-                    let style = `color: ${fg};`;
-                    if(bg) {
-                        bg = `rgba(${bg[0]}, ${bg[1]}, ${bg[2]}, ${bg[3]/255})`;
-                        style += `text-shadow:
-                            -1px -1px 0 ${bg},
-                             1px -1px 0 ${bg},
-                             1px  1px 0 ${bg},
-                            -1px  1px 0 ${bg};`;
-                    }
+                    //elem.append(E.span('command', `[COLOR ${str.r},${str.g},${str.b},${str.a}]`));
+                    const style = `color: rgba(${str.r}, ${str.g}, ${str.b}, ${str.a/255});`;
                     elem = E.span(null, {style:style});
                     result.push(elem);
                     break;
                 }
+                case 'unkF8F2':
+                case 'unkF8F3':
+                    elem.append(E.span('command', `[${str.cmd} ${str.unk1}, ${str.unk2}]`));
+                    break;
+                case 'unkF8F5':
+                case 'unkF8F6':
+                    elem.append(E.span('command', `[${str.cmd} ${str.unk1}]`));
+                    break;
+                //case 'unkF8FC':
+                //case 'unkF8FD':
+                //case 'unkF8FE':
+                //    elem.append(E.span('command', `[${str.cmd}]`));
+                //    break;
                 default:
-                    elem.append(E.span('command', `[${str}]`));
+                    elem.append(E.span('command', str.cmd));
                     break;
             }
         }
