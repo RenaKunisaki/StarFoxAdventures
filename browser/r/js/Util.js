@@ -34,6 +34,7 @@ export function get(params) {
 }
 
 export async function getBin(path) {
+    /** Download a binary file. */
     return (await get({
         path:         path,
         mimeType:     'application/octet-stream',
@@ -41,6 +42,7 @@ export async function getBin(path) {
     })).response;
 }
 export async function getXml(path) {
+    /** Download an XML file. */
     return (await get({
         path:     path,
         mimeType: 'text/xml; charset=utf-8',
@@ -69,6 +71,7 @@ export function float(n, dflt=null) {
 }
 export const Percent = val => (val * 100).toFixed(0).padStart(3) + '%';
 export function fileSize(val) {
+    /** Convert `val` to human-readable number of bytes. */
     const units = [' ', 'K', 'M', 'G', 'T'];
     let unit = 0;
     while(unit < units.length && val > 9999) {
@@ -79,7 +82,13 @@ export function fileSize(val) {
 }
 
 export function hsv2rgb(h, s, v) {
-    //from https://en.wikipedia.org/wiki/HSL_and_HSV
+    /** Convert Hue, Saturation, Value to RGB.
+     *  @param h hue, in degrees (0..360)
+     *  @param s saturation (0..1)
+     *  @param v value (0..1)
+     *  @return [r, g, b] (0..1)
+     *  @note copied from https://en.wikipedia.org/wiki/HSL_and_HSV
+     */
     const c = v * s; //chroma
     h = h / 60; //convert degrees
     const x = c * (1 - Math.abs(h % 2 - 1));
@@ -94,7 +103,9 @@ export function hsv2rgb(h, s, v) {
     const m = v - c
     return [r+m, g+m, b+m];
 }
+
 export function Table(...rows) {
+    /** Create the tr and td elements of a table from some arrays. */
     let elems = [];
     for(let row of rows) {
         let tr = E.tr(null);
@@ -102,6 +113,23 @@ export function Table(...rows) {
         elems.push(tr);
     }
     return elems;
+}
+
+export function CollapseList(...items) {
+    /** Given some strings or HTML elements, return a list.
+     *  If there is more than one item, the list is a
+     *  collapsible element (<summary> and <details> elements).
+     *  If one item, the list is a <span>. If zero,
+     *  the list is an empty string.
+     */
+    if(items.length == 0) return '';
+    if(items.length == 1) return E.span('list', items[0]);
+    const eList = E.ul();
+    const elem = E.details('list', E.summary(null, items[0]), eList);
+    for(let i=1; i<items.length; i++) {
+        eList.append(E.li(null, items[i]));
+    }
+    return elem;
 }
 
 export function addReverseMap(obj) {

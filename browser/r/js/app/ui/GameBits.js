@@ -1,5 +1,5 @@
 import { E } from "../../lib/Element.js";
-import { hex, Percent } from "../../Util.js";
+import { CollapseList, hex } from "../../Util.js";
 import Table from "./Table.js";
 
 export default class GameBits {
@@ -41,11 +41,19 @@ export default class GameBits {
                 compareFunc: (a, b) => a.nObjRefs - b.nObjRefs,
             },
             {displayName:"Description", name:'description', type:'string',
-                //makeElem: (val, td, row) => {
-                //    return E.td('string', makeDescriptionAndNotes(row),
-                //        E.div('hint', row.hint),
-                //    );
-                //},
+                makeElem: (val, td, row) => {
+                    const items = [];
+                    if(row.description) {
+                        items.push(E.span('description', row.description));
+                    }
+                    for(let hint of row.hint) {
+                        items.push(E.span('hintText', hint));
+                    }
+                    for(let note of row.notes) {
+                        items.push(E.span('note', note));
+                    }
+                    return E.td('string', CollapseList(...items));
+                },
             },
         ]});
     }
@@ -79,6 +87,7 @@ export default class GameBits {
             value:       slot ? slot.gameBits[bit.id] : '',
             description: bit.description,
             notes:       bit.notes,
+            hint:        bit.hint,
             //objRefs:     makeCollapsibleList(objRefs),
             //nObjRefs:    bit.objRefs.length,
         };

@@ -13,15 +13,23 @@ export default class GameBit {
         this.size   = int(eBit.getAttribute('size'));
         this.offset = int(eBit.getAttribute('offset')); //in bits
         this.name   = eBit.getAttribute('name');
-        this.hint   = null;
+        this.hint   = [];
+        this.notes  = [];
+        this.description = null;
         //getDescriptionAndNotes(this, eBit);
+
+        let desc = eBit.getElementsByTagName('description').item(0);
+        if(desc != null) this.description = desc.textContent;
 
         let hint = eBit.getElementsByTagName('hint').item(0);
         if(hint != null) {
-            this.hint = [];
             for(let phrase of hint.getElementsByTagName('phrase')) {
                 this.hint.push(phrase.textContent);
             }
+        }
+
+        for(let note of eBit.getElementsByTagName('note')) {
+            this.notes.push(note.textContent);
         }
 
         //this.objRefs = [];
