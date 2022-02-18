@@ -1,6 +1,12 @@
+.gametext {
+    font-size: 20pt;
+}
+.gametext .justify-Right  { text-align: right; }
+.gametext .justify-Center { text-align: center; }
+.gametext .justify-Full   { text-align: justify; }
+
 .gametext .font0 { /* most Japanese text */
     font-family: 'FOT-RodinNTLG Pro B';
-    font-size: 20pt;
 }
 /* font1 doesn't exist */
 .gametext .font2 { /* button icons */
@@ -11,5 +17,4 @@
 }
 .gametext .font4 { /* most English text */
     font-family: 'EurostileBQ-Regular';
-    font-size: 20pt;
 }

@@ -103,3 +103,11 @@ export function Table(...rows) {
     }
     return elems;
 }
+
+export function addReverseMap(obj) {
+    /** Given a dict with keys eg a:1, b:2... add keys 1:a, 2:b... */
+    const obj2 = {}; //don't change while iterating
+    for(let [k, v] of Object.entries(obj)) obj2[v] = k;
+    for(let [v, k] of Object.entries(obj2)) obj[v] = k;
+    return obj;
+}
