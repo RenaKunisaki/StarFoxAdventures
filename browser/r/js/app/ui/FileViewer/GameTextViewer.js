@@ -29,6 +29,7 @@ class GameTextRenderer {
         this._color      = [255, 255, 255, 255];
         this._justify    = Justify[Justify.Left]; //get the name
         this._scale      = 1.0;
+        this._isHint     = false;
 
         const list = E.ul('phrases');
         for(let phrase of text.phrases) {
@@ -66,6 +67,7 @@ class GameTextRenderer {
                     elem.append(E.span('command', `[TIME ${str.unk1}, ${str.time}, ${str.unk3}]`));
                     break;
                 case 'hint':
+                    this._isHint = true;
                     elem.append(E.span('command', `[HINT ${str.id}]`));
                     break;
                 case 'scale': {
@@ -125,6 +127,14 @@ class GameTextRenderer {
                 startNew = false;
             }
         } //for
+        if(this._isHint) {
+            //HACK: with hint texts, the first phrase is shown on the
+            //file select screen, and the rest are shown in-game.
+            //that means the color only applies to the first line.
+            //we can replicate that by resetting it here.
+            this._isHint = false;
+            this._color = [255, 255, 255, 255];
+        }
         return E.span('gametext', ...result);
     }
 }
