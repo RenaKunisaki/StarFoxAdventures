@@ -34,7 +34,7 @@ const TextureStruct = Struct(
 const ControlCodes = { //code: [param names...]
     [0xE000]: ['seq', 'id'],
     [0xE018]: ['time', 'unk1', 'time', 'unk3'],
-    [0xE018]: ['hint', 'id'],
+    [0xE020]: ['hint', 'id'],
     [0xF8F2]: ['unkF8F2', 'unk1', 'unk2'], //unused
     [0xF8F3]: ['unkF8F3', 'unk1', 'unk2'], //unused
     [0xF8F4]: ['scale', 'scale'],
@@ -132,6 +132,7 @@ export default class GameTextFile {
                 }
                 result.push(control);
             }
+            //else if(c >= 0x80) result.push(`\\u${hex(c,4)}`);
             else result.push(String.fromCodePoint(c));
         }
         return result;
