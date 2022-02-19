@@ -2,10 +2,10 @@ import { E } from "./lib/Element.js";
 
 export function get(params) {
     /** Fetch some remote resource.
-     *  @param path URI to fetch.
-     *  @param mimeType MIME type override to use.
-     *  @param respType 'text' or 'arraybuffer' to override responseType.
-     *  @return a Promise which resolves to the XHR object once the request
+     *  @param {string} path URI to fetch.
+     *  @param {string} mimeType MIME type override to use.
+     *  @param {string} respType 'text' or 'arraybuffer' to override responseType.
+     *  @returns a Promise which resolves to the XHR object once the request
      *  is completed, which you can use to retrieve the response in the
      *  desired format.
      */
@@ -34,7 +34,10 @@ export function get(params) {
 }
 
 export async function getBin(path) {
-    /** Download a binary file. */
+    /** Download a binary file.
+     *  @param {string} path file path to download.
+     *  @returns {ArrayBuffer} file data.
+     */
     return (await get({
         path:         path,
         mimeType:     'application/octet-stream',
@@ -42,7 +45,10 @@ export async function getBin(path) {
     })).response;
 }
 export async function getXml(path) {
-    /** Download an XML file. */
+    /** Download an XML file.
+     *  @param {string} path file path to download.
+     *  @returns {XMLDocument} file data.
+     */
     return (await get({
         path:     path,
         mimeType: 'text/xml; charset=utf-8',
@@ -51,7 +57,10 @@ export async function getXml(path) {
 
 export function hex(n, size=1) {
     /** Convert number `n` to hex, padded to given `size`.
-     *  Result is uppercase without prefix, eg "0000BABE".
+     *  @param {number} n number to convert.
+     *  @param {number} size minimum number of digits.
+     *  @returns {string} hex string.
+     *  @note result is uppercase without prefix, eg "0000BABE".
      */
     if(typeof(n) == 'string') n = parseInt(n);
     if(n == null || n == undefined) return String(n);
@@ -60,19 +69,34 @@ export function hex(n, size=1) {
 }
 export function int(n, dflt=null) {
     /** Convert string `n` to int, returning `dflt` for null/undefined.
+     *  @param {string} n string to convert.
+     *  @returns {number} integer value, or `dflt`.
      */
     if(n == null || n == undefined) return dflt;
     return parseInt(n);
 }
 export function float(n, dflt=null) {
     /** Convert string `n` to float, returning `dflt` for null/undefined.
+     *  @param {string} n string to convert.
+     *  @returns {number} float value, or `dflt`.
      */
     if(n == null || n == undefined) return dflt;
     return parseFloat(n);
 }
-export const Percent = val => (val * 100).toFixed(0).padStart(3) + '%';
+export function Percent(val) {
+    /** Convert value (0..1) to percent string.
+     *  @param {number} val value to convert.
+     *  @returns {string} percent.
+     *  @example Percent(0.5) => "50%"
+     */
+    return (val * 100).toFixed(0).padStart(3) + '%';
+}
 export function fileSize(val) {
-    /** Convert `val` to human-readable number of bytes. */
+    /** Convert `val` to human-readable number of bytes.
+     *  @param {number} val number of bytes.
+     *  @returns {string} human-readable string.
+     *  @example fileSize(65536) => "64K"
+     */
     const units = [' ', 'K', 'M', 'G', 'T'];
     let unit = 0;
     while(unit < units.length && val > 9999) {
@@ -84,10 +108,10 @@ export function fileSize(val) {
 
 export function hsv2rgb(h, s, v) {
     /** Convert Hue, Saturation, Value to RGB.
-     *  @param h hue, in degrees (0..360)
-     *  @param s saturation (0..1)
-     *  @param v value (0..1)
-     *  @return [r, g, b] (0..1)
+     *  @param {number} h hue, in degrees (0..360)
+     *  @param {number} s saturation (0..1)
+     *  @param {number} v value (0..1)
+     *  @returns {array} [r, g, b] (0..1)
      *  @note copied from https://en.wikipedia.org/wiki/HSL_and_HSV
      */
     const c = v * s; //chroma
@@ -106,7 +130,10 @@ export function hsv2rgb(h, s, v) {
 }
 
 export function Table(...rows) {
-    /** Create the tr and td elements of a table from some arrays. */
+    /** Create the tr and td elements of a table from some arrays.
+     *  @param {array} rows arrays of cell contents.
+     *  @returns {array} array of HTML `tr` elements.
+     */
     let elems = [];
     for(let row of rows) {
         let tr = E.tr(null);
@@ -118,7 +145,9 @@ export function Table(...rows) {
 
 export function CollapseList(...items) {
     /** Given some strings or HTML elements, return a list.
-     *  If there is more than one item, the list is a
+     *  @param {array} items items to list.
+     *  @returns list element.
+     *  @note If there is more than one item, the list is a
      *  collapsible element (<summary> and <details> elements).
      *  If one item, the list is a <span>. If zero,
      *  the list is an empty string.
@@ -135,7 +164,10 @@ export function CollapseList(...items) {
 }
 
 export function addReverseMap(obj) {
-    /** Given a dict with keys eg a:1, b:2... add keys 1:a, 2:b... */
+    /** Given a dict with keys eg a:1, b:2... add keys 1:a, 2:b...
+     *  @param {object} obj object to modify.
+     *  @returns {object} obj.
+     */
     const obj2 = {}; //don't change while iterating
     for(let [k, v] of Object.entries(obj)) obj2[v] = k;
     for(let [v, k] of Object.entries(obj2)) obj[v] = k;
@@ -144,6 +176,8 @@ export function addReverseMap(obj) {
 
 export function prettyXml(sourceXml) {
     /** Given a string containing XML, return a beautified version.
+     *  @param {string} sourceXml the XML to format.
+     *  @returns {string} the formatted XML.
      *  @note Adapted from https://stackoverflow.com/a/47317538
      */
     //TODO figure out how to get <foo /> instead of <foo></foo>
@@ -172,6 +206,9 @@ export function download(data, name, type='') {
     /** Prompt the user to download the file whose content
      *  is stored in `data`, with default name `name` and
      *  MIME type `type`.
+     *  @param data data to download.
+     *  @param {string} name default file name.
+     *  @param {string} type MIME type.
      */
     //not async because we don't wait for the download; we just
     //simulate clicking a link. the user might get a "save file"
@@ -184,6 +221,11 @@ export function download(data, name, type='') {
 }
 
 export function downloadXml(xml, name, type='application/xml') {
+    /** Prompt the user to download an XML file.
+     *  @param {XMLDocument} xml data to download.
+     *  @param {string} name default file name.
+     *  @param {string} type MIME type.
+     */
     if(!name.endsWith('.xml')) name += '.xml';
     download(
         prettyXml(new XMLSerializer().serializeToString(xml)),
