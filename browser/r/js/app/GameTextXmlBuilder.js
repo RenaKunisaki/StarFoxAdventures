@@ -37,11 +37,21 @@ export default class GameTextXmlBuilder {
     _readFile(textFile) {
         //extract texts from one gametext file
         for(let text of textFile.texts) {
-            if(this.texts[text.id] == undefined) this.texts[text.id] = {};
-            if(this.texts[text.id][text.language] == undefined) {
-                this.texts[text.id][text.language] = [];
+            let obj = this.texts[text.id];
+            if(obj == undefined) {
+                obj = {
+                    id:     text.id,
+                    window: text.window,
+                    alignH: text.alignH,
+                    alignV: text.alignV,
+                    langs:  {},
+                };
+                this.texts[text.id] = obj;
+            }
+            if(obj.langs[text.language] == undefined) {
+                obj.langs[text.language] = [];
                 for(let phrase of text.phrases) {
-                    this.texts[text.id][text.language].push(phrase.str);
+                    obj.langs[text.language].push(phrase.str);
                 }
             }
             else { //check if text is identical
@@ -73,13 +83,13 @@ export default class GameTextXmlBuilder {
     _makeTextElem(id, text) {
         //make the element for one Text
         const eText = E.text({
-            id:`0x${hex(id,4)}`,
+            id:     `0x${hex(id,4)}`,
             window: `0x${hex(text.window,2)}`,
             alignH: text.alignH,
             alignV: text.alignV,
         });
 
-        for(let [lang, phrases] of Object.entries(text)) {
+        for(let [lang, phrases] of Object.entries(text.langs)) {
             const eLang = E.lang({id:lang});
             for(let phrase of phrases) {
                 const ePhrase = E.phrase();
