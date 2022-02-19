@@ -1,0 +1,11 @@
+for LV strength test:
+- each frame, if you just pressed A, timer is decreased by 2.7
+- timer has a minimum value of -40
+- each frame the timer's value is added to the rotation (which is an integer)
+- then, timer's value is increased by 0.19 * D, where D scales somehow with how close you are to winning
+- rotation is an integer starting at -15288
+- when rotation reaches -18140 you win; when it reaches -2852 you lose
+
+for K4, it works the same but the numbers are different and D is constant
+
+both compensate for lag by doing the check multiple times if more than one frame passes per tick, but since buttons aren't updated between checks, this can be exploited; if you manage to lag the game on a frame you pressed A, it'll count as multiple A presses on that frame. (also applies the other way; lag on a frame you didn't press A counts as multiple non-pressing frames)
