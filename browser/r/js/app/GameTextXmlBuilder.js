@@ -94,8 +94,8 @@ export default class GameTextXmlBuilder {
             for(let phrase of phrases) {
                 const ePhrase = E.phrase();
                 for(let s of phrase) {
-                    if(typeof(s) == 'string') ePhrase.append(s);
-                    else if(s.cmd == 'str') ePhrase.append(s.str);
+                    if(typeof(s) == 'string') ePhrase.append(E.str(null, s));
+                    else if(s.cmd == 'str') ePhrase.append(E.str(null, s.str));
                     else {
                         const eCmd = createElement(s.cmd);
                         for(let [k,v] of Object.entries(s)) {

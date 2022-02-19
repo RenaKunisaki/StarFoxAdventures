@@ -2,9 +2,10 @@ import { E, clearElement } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
 import Table from "./Table.js";
 import { TEXT_LANGUAGES } from "../../game/game.js";
+import { GameTextRenderer } from "./FileViewer/GameTextViewer.js";
 
 export default class TextList {
-    /** Displays all GameText definitions.
+    /** Displays all GameText definitions from XML.
      */
     constructor(app) {
         this.app = app;
@@ -14,19 +15,19 @@ export default class TextList {
             this.eLang.append(E.option(null, lang, {value:lang}));
         }
         this.eLang.addEventListener('change', e => this.refresh());
-        //XXX only English is in the XML file
-        //this.element.append(this.eLang);
+        this.element.append(this.eLang);
         this.app.onIsoLoaded(iso => this.refresh());
+        this.renderer = new GameTextRenderer(this.app);
     } //constructor
 
     refresh() {
         this.lang = this.eLang.value;
         let tbl = this._makeTable();
-        for(let text of Object.values(this.app.game.texts[this.lang])) {
+        for(let text of Object.values(this.app.game.texts)) {
             tbl.add(this._makeRow(text));
         }
         const elem = E.div('textList', tbl.element);
-        clearElement(this.element).append(/*this.eLang,*/ elem);
+        clearElement(this.element).append(this.eLang, elem);
     }
 
     _makeTable() {
@@ -38,10 +39,10 @@ export default class TextList {
             {displayName:"V", name:'alignV', type:'int', title:"Align V"},
             {displayName:"Text", name:'phrases',  type:'string',
                 makeElem: (phrases, td, row) => {
-                    let list = E.ul('phrases');
-                    for(let phrase of phrases) {
-                        list.append(E.li('phrase', phrase));
-                    }
+                    let list;
+                    let p = phrases[this.lang];
+                    if(p) list = this.renderer.render(p, this.lang);
+                    else list = E.span('error', "no text");
                     clearElement(td).append(list);
                     return td;
                 },
@@ -52,7 +53,6 @@ export default class TextList {
     _makeRow(text) {
         const row = {
             id:      text.id,
-            lang:    text.lang,
             phrases: text.phrases,
             window:  text.window,
             alignH:  text.alignH,

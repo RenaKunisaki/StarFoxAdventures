@@ -127,7 +127,7 @@ export default class GameTextFile {
     }
 
     readString() {
-        const result = [];
+        const buf = [];
         while(this._file.tell() < this.data.byteLength) {
             const c = this._file.readUtf8Char();
             if(c == 0) break;
@@ -138,11 +138,23 @@ export default class GameTextFile {
                 for(let i=1; i < ControlCodes[c].length; i++) {
                     control[ControlCodes[c][i]] = this._file.readS16();
                 }
-                result.push(control);
+                buf.push(control);
             }
             //else if(c >= 0x80) result.push(`\\u${hex(c,4)}`);
-            else result.push(String.fromCodePoint(c));
+            else buf.push(String.fromCodePoint(c));
         }
+        //join chars into strings
+        const result = [];
+        let str = '';
+        for(let i=0; i<buf.length; i++) {
+            if(typeof(buf[i]) == 'string') str += buf[i];
+            else {
+                if(str != '') result.push(str);
+                str = '';
+                result.push(buf[i]);
+            }
+        }
+        if(str != '') result.push(str);
         return result;
     }
 

@@ -154,22 +154,32 @@ export default class Game {
     async _loadTexts() {
         const xml = await getXml(`data/${this.version}/gametext.xml`);
         this.texts = {};
-        for(let elem of xml.getElementsByTagName('text')) {
-            let id = int(elem.getAttribute('id'));
-            let lang = TEXT_LANGUAGES[int(elem.getAttribute('language'))];
-            if(!this.texts[lang]) this.texts[lang] = {};
+        for(let eText of xml.getElementsByTagName('text')) {
+            let id   = int(eText.getAttribute('id'));
             let text = {
                 id:      id,
-                lang:    lang,
-                phrases: [],
-                window:  int(elem.getAttribute('window')),
-                alignH:  int(elem.getAttribute('alignH')),
-                alignV:  int(elem.getAttribute('alignV')),
+                phrases: {},
+                window:  int(eText.getAttribute('window')),
+                alignH:  int(eText.getAttribute('alignh')),
+                alignV:  int(eText.getAttribute('alignv')),
             };
-            for(let phrase of elem.getElementsByTagName('phrase')) {
-                text.phrases.push(phrase.textContent);
+            for(let eLang of eText.getElementsByTagName('lang')) {
+                let phrases = [];
+                for(let ePhrase of eLang.getElementsByTagName('phrase')) {
+                    let phrase = [];
+                    for(let str of ePhrase.children) {
+                        const cmd = {cmd:str.tagName};
+                        if(cmd.cmd == 'str') cmd.str = str.textContent;
+                        else for(let attr of str.attributes) {
+                            cmd[attr.name] = attr.value;
+                        }
+                        phrase.push(cmd);
+                    }
+                    phrases.push(phrase);
+                }
+                text.phrases[TEXT_LANGUAGES[eLang.getAttribute('id')]] = phrases;
             }
-            this.texts[lang][id] = text;
+            this.texts[id] = text;
         }
     }
 }

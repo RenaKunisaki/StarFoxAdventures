@@ -18,21 +18,21 @@ const Justify = addReverseMap({
     Full:   3,
 })
 
-class GameTextRenderer {
+export class GameTextRenderer {
     constructor(app) {
         this.app = app;
     }
 
-    render(text) {
-        this._lang       = Languages[text.lang];
-        this._curFontIdx = (text.lang == Languages.Japanese) ? 0 : 4;
+    render(phrases, lang=Languages.English) {
+        this._lang       = lang;
+        this._curFontIdx = lang == Languages.Japanese ? 0 : 4;
         this._color      = [255, 255, 255, 255];
         this._justify    = Justify[Justify.Left]; //get the name
         this._scale      = 1.0;
         this._isHint     = false;
 
         const list = E.ul('phrases');
-        for(let phrase of text.phrases) {
+        for(let phrase of phrases) {
             list.append(E.li('phrase',
                 this._makeElemForPhrase(phrase)));
         }
@@ -56,10 +56,13 @@ class GameTextRenderer {
     _makeElemForPhrase(phrase) {
         let elem = this._makeNewElem();
         let result = [elem];
-        for(let str of phrase.str) {
+        for(let str of phrase) {
             let startNew = false;
             if(typeof(str) == 'string') elem.append(str);
-            else switch(str.cmd) {
+            else switch(str.cmd.toLowerCase()) {
+                //conversion to XML converts attributes to lowercase,
+                //so handle that here in case this came from XML.
+                case 'str': elem.append(str.str); break;
                 case 'seq':
                     elem.append(E.span('command', `[SEQ ${str.id}]`));
                     break;
@@ -82,19 +85,19 @@ class GameTextRenderer {
                     startNew = true;
                     break;
                 }
-                case 'justifyLeft':
+                case 'justifyleft':
                     this._justify = Justify[Justify.Left];
                     startNew = true;
                     break;
-                case 'justifyRight':
+                case 'justifyright':
                     this._justify = Justify[Justify.Right];
                     startNew = true;
                     break;
-                case 'justifyCenter':
+                case 'justifycenter':
                     this._justify = Justify[Justify.Center];
                     startNew = true;
                     break;
-                case 'justifyFull':
+                case 'justifyfull':
                     this._justify = Justify[Justify.Full];
                     startNew = true;
                     break;
@@ -104,17 +107,17 @@ class GameTextRenderer {
                     startNew = true;
                     break;
                 }
-                case 'unkF8F2':
-                case 'unkF8F3':
+                case 'unkf8f2':
+                case 'unkf8f3':
                     elem.append(E.span('command', `[${str.cmd} ${str.unk1}, ${str.unk2}]`));
                     break;
-                case 'unkF8F5':
-                case 'unkF8F6':
+                case 'unkf8f5':
+                case 'unkf8f6':
                     elem.append(E.span('command', `[${str.cmd} ${str.unk1}]`));
                     break;
-                //case 'unkF8FC':
-                //case 'unkF8FD':
-                //case 'unkF8FE':
+                //case 'unkf8fc':
+                //case 'unkf8fd':
+                //case 'unkf8fe':
                 //    elem.append(E.span('command', `[${str.cmd}]`));
                 //    break;
                 default:
