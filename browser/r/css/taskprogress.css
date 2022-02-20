@@ -1,0 +1,23 @@
+.taskProgress {
+    position: fixed;
+    top: calc(50% - 5em);
+    bottom: calc(50% - 5em);
+    left: calc(50% - 10em);
+    right: calc(50% - 10em);
+    padding: 1em;
+    border: 3px #888 ridge;
+    background-color: rgba(0, 64, 128, 0.5);
+    color: #FFF;
+    box-shadow: 2px 2px 2px #444;
+    text-align: center;
+}
+
+.taskProgress progress {
+    display: block;
+    margin: auto;
+}
+
+.taskProgress h1, .taskProgress h2 {
+    margin-top: 0;
+    margin-bottom: 0;
+}

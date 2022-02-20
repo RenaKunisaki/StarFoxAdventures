@@ -24,6 +24,12 @@ export default class FileSelect {
             const elem = document.getElementById('selectedIsoInfo');
             clearElement(elem);
             elem.append(E.div('info', "Loading..."));
+            await this.app.progress.update({
+                taskText: "Reading ISO",
+                subText: "Reading file...",
+                stepsDone: 0,
+                numSteps: 1,
+            });
             try {
                 await this.app.loadIso(this.eIso.files[0]);
             }
@@ -35,9 +41,13 @@ export default class FileSelect {
         }, false);
         this.eIso.addEventListener('progress', e => {
             console.log("progress", e);
+            const task = {};
             if(e.lengthComputable) {
+                task.numSteps = e.total;
+                task.stepsDone = e.loaded;
                 eProgress.innerText = `${((e.loaded/e.total)*100).toFixed(2)}%`;
             }
+            this.app.progress.update(task);
         }, false);
     }
 

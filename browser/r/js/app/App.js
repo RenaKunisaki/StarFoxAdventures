@@ -2,6 +2,7 @@ import { SaveGame } from "../types/SaveGame.js";
 import { getXml } from "../Util.js";
 
 import { E } from "../lib/Element.js";
+import TaskProgress from "./ui/TaskProgress.js";
 import FileList from "./ui/FileList.js";
 import FileSelect from "./ui/FileSelect.js";
 import FileViewer from "./ui/FileViewer/FileViewer.js";
@@ -45,6 +46,7 @@ export default class App {
             this.parent._childWindowLoaded();
         }
         else {
+            this.progress = new TaskProgress();
             this.ui = {
                 fileList:   new FileList(this),
                 fileSelect: new FileSelect(this),
@@ -138,8 +140,12 @@ export default class App {
     async loadIso(file) {
         //load given ISO file (type File)
         console.log("Loading ISO", file);
+
+        await this.progress.update({subText: "Parsing..."});
+
         const iso = new ISO().readBuffer(await file.arrayBuffer());
         await this.game.loadIso(iso);
+        this.progress.hide();
         console.log("ISO loaded", this.game.iso);
 
         //trigger callbacks
