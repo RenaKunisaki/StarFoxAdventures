@@ -8,11 +8,16 @@ export default class MiscTab {
     constructor(app) {
         this.app = app;
         document.getElementById('genGameTextXml').addEventListener('click',
-            e => this._genGameTextXml());
+            async e => await this._genGameTextXml());
     }
 
-    _genGameTextXml() {
-        const xml = (new GameTextXmlBuilder(this.app)).build();
+    async _genGameTextXml() {
+        this.app.progress.show({
+            taskText: "Generating XML",
+            numSteps: 1, stepsDone: 0,
+        });
+        const xml = await ((new GameTextXmlBuilder(this.app)).build());
+        this.app.progress.hide();
         for(let [lang, file] of Object.entries(xml)) {
             downloadXml(file, lang);
         }

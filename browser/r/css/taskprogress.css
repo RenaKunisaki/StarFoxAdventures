@@ -2,8 +2,8 @@
     position: fixed;
     top: calc(50% - 5em);
     bottom: calc(50% - 5em);
-    left: calc(50% - 10em);
-    right: calc(50% - 10em);
+    left: calc(50% - 20em);
+    right: calc(50% - 20em);
     padding: 1em;
     border: 3px #888 ridge;
     background-color: rgba(0, 64, 128, 0.5);

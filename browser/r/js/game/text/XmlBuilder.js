@@ -11,22 +11,42 @@ export default class GameTextXmlBuilder {
         this.app = app;
     }
 
-    build() {
+    async build() {
         this.texts = {}; //lang => {id => Text}
         for(let lang of Object.keys(Language)) {
             this.texts[lang] = {};
         }
-        this._readFiles();
+        await this._readFiles();
         return this._genXml();
     }
 
-    _readFiles() {
+    async _readFiles() {
         //iterate all gametext files to collect all texts
+
+        //build list of files
+        await this.app.progress.update({
+            taskText:  "Generating XML",
+            subText:   "Getting file list...",
+            numSteps:  1,
+            stepsDone: 0,
+        });
+        const files = [];
         for(let file of this.app.game.iso.files) {
             if(file.isDir) continue;
             if(!file.path.startsWith('/gametext/')) continue;
             if(file.path.endsWith('.new')) continue; //skip leftover source files
-            console.log("Reading", file.path);
+            files.push(file);
+        }
+
+        let iFile = 0;
+        for(let file of files) {
+            iFile++;
+            await this.app.progress.update({
+                taskText:  "Generating XML",
+                subText:   file.path,
+                numSteps:  files.length,
+                stepsDone: iFile,
+            });
             let textFile;
             try {
                 textFile = new BinaryReader(this.app, file);

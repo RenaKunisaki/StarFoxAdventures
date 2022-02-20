@@ -1,17 +1,20 @@
 import { E } from "../../lib/Element.js";
 
 export class TaskCancelled extends Error {
-
+    constructor() {
+        super("Task cancelled");
+    }
 }
 
 export default class TaskProgress {
     /** A popup that shows progress of a task. */
     constructor() {
-        this.numSteps   = 0;
+        this.numSteps   = 1;
         this.stepsDone  = 0;
         this.taskText   = "";
         this.subText    = "";
         this._cancelled = false;
+        this._started   = false;
 
         this.eBar       = E.progress();
         this.eText      = E.h1('taskText');
@@ -30,20 +33,32 @@ export default class TaskProgress {
         this.btnCancel.addEventListener('click', e => {this._cancelled = true});
     }
 
-    show() {
+    show(params={}) {
+        this._updateDisplay(params);
         this.element.style.display = '';
+        this._started = true;
     }
 
     hide() {
         this.element.style.display = 'none';
+        this._started = false;
     }
 
-    update(params) {
+    async update(params) {
         if(this._cancelled) {
             this._cancelled = false;
             this.hide();
             throw new TaskCancelled();
         }
+        if(this._started) {
+            this._updateDisplay(params);
+            this.show();
+            //wait for next frame so we can let other tasks process
+            await new Promise(window.requestAnimationFrame);
+        }
+    }
+
+    _updateDisplay(params) {
         if(params.taskText  != undefined) this.taskText  = params.taskText;
         if(params.subText   != undefined) this.subText   = params.subText;
         if(params.stepsDone != undefined) this.stepsDone = params.stepsDone;
@@ -54,8 +69,5 @@ export default class TaskProgress {
         this.eNumSteps .innerText = this.numSteps;
         this.eBar.setAttribute('max',   this.numSteps);
         this.eBar.setAttribute('value', this.stepsDone);
-        this.show();
-        //wait for next frame so we can let other tasks process
-        return new Promise(window.requestAnimationFrame);
     }
 }

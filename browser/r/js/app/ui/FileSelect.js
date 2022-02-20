@@ -24,6 +24,7 @@ export default class FileSelect {
             const elem = document.getElementById('selectedIsoInfo');
             clearElement(elem);
             elem.append(E.div('info', "Loading..."));
+            this.app.progress.show();
             await this.app.progress.update({
                 taskText: "Reading ISO",
                 subText: "Reading file...",

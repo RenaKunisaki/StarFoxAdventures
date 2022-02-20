@@ -28,12 +28,15 @@ export default class App {
             onSaveSlotChanged: [],
             onLanguageChanged: [],
         };
+        this.progress    = new TaskProgress();
+        this.progress.update({taskText: "Initializing..."});
         this.parent      = parent; //parent window's App instance
         this.saveGame    = null; //the loaded savegame file
         this.saveSlot    = null; //the selected slot
         this.saveSlotIdx = 0;
         this.language    = 'English';
         this.game        = new Game(this);
+        this.progress.hide();
     }
 
     async run() {
@@ -46,7 +49,6 @@ export default class App {
             this.parent._childWindowLoaded();
         }
         else {
-            this.progress = new TaskProgress();
             this.ui = {
                 fileList:   new FileList(this),
                 fileSelect: new FileSelect(this),
@@ -139,17 +141,14 @@ export default class App {
 
     async loadIso(file) {
         //load given ISO file (type File)
-        console.log("Loading ISO", file);
-
         await this.progress.update({subText: "Parsing..."});
-
         const iso = new ISO().readBuffer(await file.arrayBuffer());
         await this.game.loadIso(iso);
-        this.progress.hide();
         console.log("ISO loaded", this.game.iso);
 
         //trigger callbacks
         this._doCallback('onIsoLoaded', this.game.iso);
+        this.progress.hide();
     }
 
     async loadSave(file) {

@@ -52,6 +52,7 @@ export default class Game {
         this.version = version;
 
         //get addresses
+        await this.app.progress.update({subText:"Downloading addresses.xml..."});
         const addrsXml = await getXml(`data/${this.version}/addresses.xml`);
         if(addrsXml) {
             for(let elem of addrsXml.getElementsByTagName('address')) {
@@ -68,6 +69,7 @@ export default class Game {
 
         //get object categories
         this.objCats = {};
+        await this.app.progress.update({subText:"Downloading objcats.xml..."});
         const objCatsXml = await getXml(`data/${version}/objcats.xml`);
         if(objCatsXml) {
             for(let elem of objCatsXml.getElementsByTagName('cat')) {
@@ -78,7 +80,7 @@ export default class Game {
 
         if(this.iso) {
             await this._loadDlls();
-            this._loadObjects();
+            await this._loadObjects();
             this.warpTab = parseWarpTab(this.app);
             await this._loadMaps();
         }
@@ -86,8 +88,10 @@ export default class Game {
 
     async getBits() {
         if(!this.bits) {
+            await this.app.progress.update({subText:"Downloading gamebits.xml..."});
             this.bits = await this.app._getXml(GameBit,
                 this.version, 'gamebits', 'bit');
+            this.app.progress.hide();
         }
         return this.bits;
     }
@@ -105,6 +109,7 @@ export default class Game {
     }
 
     async _loadDlls() {
+        await this.app.progress.update({subText:"Downloading dlls.xml..."});
         const xml = await getXml(`data/${this.version}/dlls.xml`);
         if(!xml) return;
         this.dllTableAddr = int(xml.getElementsByTagName('dlls')[0].
@@ -116,11 +121,18 @@ export default class Game {
         }
     }
 
-    _loadObjects() {
+    async _loadObjects() {
         const objIndex = this.iso.getFile('/OBJINDEX.bin').getData();
         this.objIndex = [];
         const revIndex = {};
         for(let i=0; i<objIndex.byteLength; i += 2) {
+            if(!(i % 100)) {
+                await this.app.progress.update({
+                    subText:"Parsing OBJINDEX.bin...",
+                    numSteps: objIndex.byteLength / 2,
+                    stepsDone: i / 2,
+                });
+            }
             const idx = objIndex.getInt16(i);
             this.objIndex.push(idx);
             //file is padded with zeros so don't let those overwrite
@@ -131,6 +143,13 @@ export default class Game {
         const objsTab = this.iso.getFile('/OBJECTS.tab').getData();
         this.objects = [];
         for(let i=0; objsTab.getInt32((i+1)*4) >= 0; i++) {
+            if(!(i % 100)) {
+                await this.app.progress.update({
+                    subText:"Parsing OBJECTS.bin...",
+                    numSteps: objsTab.byteLength / 4, //approximate
+                    stepsDone: i,
+                });
+            }
             const obj = new GameObject(this.app, i);
             if(revIndex[i] != undefined) obj.index = revIndex[i];
             this.objects.push(obj);
@@ -138,6 +157,10 @@ export default class Game {
     }
 
     async _loadMaps() {
+        await this.app.progress.update({
+            subText:"Downloading maps.xml...",
+            numSteps: 1, stepsDone: 0,
+        });
         const xml = await getXml(`data/${this.version}/maps.xml`);
         this.maps = {};
         let nextId = -1; //use negative IDs for maps that don't have an ID
@@ -153,8 +176,15 @@ export default class Game {
         }
 
         //find romlist files not referenced by maps
+        let iFile = 0;
         for(let file of this.iso.files) {
+            iFile++;
             if(file.name.endsWith('.romlist.zlb')) {
+                await this.app.progress.update({
+                    subText:`Parsing ${file.name}...`,
+                    numSteps: this.iso.files.length,
+                    stepsDone: iFile,
+                });
                 let name = file.name.split('.')[0];
                 if(!usedRomLists[name]) {
                     const map = new Map(this);
@@ -166,14 +196,29 @@ export default class Game {
         }
 
         console.log("maps", this.maps);
+        await this.app.progress.update({
+            subText:"Parsing globalma.bin...",
+            numSteps: 1, stepsDone: 0,
+        });
         this.mapGrid = parseMapGrid(this.app);
     }
 
     async _loadTexts(lang) {
+        await this.app.progress.update({
+            subText:"Downloading gametext...",
+            numSteps: 1, stepsDone: 0,
+        });
         const xml = await getXml(`data/${this.version}/gametext/${lang}.xml`);
         if(!xml) return;
         this.texts = {};
+        let iText = 0;
         for(let eText of xml.getElementsByTagName('text')) {
+            if(!(iText++ % 100)) {
+                await this.app.progress.update({
+                    subText:"Parsing gametext...",
+                    numSteps: 1, stepsDone: 0,
+                });
+            }
             let text = Text.fromXml(eText);
             this.texts[text.id] = text;
         }
