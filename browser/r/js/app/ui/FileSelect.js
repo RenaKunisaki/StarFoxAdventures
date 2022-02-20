@@ -137,9 +137,11 @@ export default class FileSelect {
             if(!save.gciHeader.gameCode.startsWith('GSA')) {
                 elem.append(E.div('error', "Unsupported game"));
             }
-            else if(save._version != this.app.gameVersion) {
+            else if(save._version != this.app.game.version
+            && this.app.game.iso) {
                 elem.append(E.div('notice', "Version doesn't match ISO"));
             }
+            else if(!this.app.game.iso) this.app.game.setVersion(save._version);
         }
         else {
             elem.append(E.div('notice', "No info available"));

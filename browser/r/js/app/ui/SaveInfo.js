@@ -12,6 +12,7 @@ export default class SaveInfo {
         this.element = document.getElementById('tab-save-info');
 
         //this.app.onSaveLoaded(save => this._onSaveLoaded(save));
+        this.app.onIsoLoaded(iso => this.refresh());
         this.app.onSaveSlotChanged(slot => this._onSaveSlotChanged(slot));
     } //constructor
 
