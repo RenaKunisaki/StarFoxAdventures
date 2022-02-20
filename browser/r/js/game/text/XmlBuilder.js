@@ -1,4 +1,4 @@
-import { E, createElement } from "../../lib/Element.js";
+import { E } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
 import { Language, LangById } from "./Language.js";
 import BinaryReader from "./BinaryReader.js";

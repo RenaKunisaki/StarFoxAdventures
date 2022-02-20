@@ -1,6 +1,8 @@
-import { E } from "../../lib/Element.js";
-import { CollapseList, hex } from "../../Util.js";
+import { E, clearElement } from "../../lib/Element.js";
+import { CollapseList, downloadXml, hex } from "../../Util.js";
 import Table from "./Table.js";
+
+const XML = 'http://www.w3.org/1999/xhtml';
 
 export default class GameBits {
     /** Displays table of GameBits.
@@ -10,6 +12,9 @@ export default class GameBits {
         this.element = document.getElementById('tab-gameBits');
         this.app.onSaveSlotChanged(slot => this.refresh());
         this.app.onIsoLoaded(iso => this.refresh());
+
+        this.btnSave = E.button('save', "Save");
+        this.btnSave.addEventListener('click', e => this._save());
     } //constructor
 
     refresh() {
@@ -19,8 +24,7 @@ export default class GameBits {
         }
         console.log("Bit table", tbl);
         const elem = E.div('gameBits', tbl.element);
-        this.element.replaceWith(elem);
-        this.element = elem;
+        clearElement(this.element).append(this.btnSave, elem);
     }
 
     _makeTable() {
@@ -35,7 +39,11 @@ export default class GameBits {
             {displayName:"H",        name:'hintId',  type:'hex', length: 2},
             {displayName:"Size",     name:'size',    type:'int'},
             {displayName:"Offs",     name:'offset',  type:'hex', length: 4},
-            {displayName:"Name",     name:'name',    type:'string'},
+            {displayName:"Name",     name:'name',    type:'string',
+                onEdit: (row, col, e, td) => {
+                    row.bit.name = td.innerText;
+                },
+            },
             {displayName:"Value",    name:'value',   type:'string', classes:'int'},
             {displayName:"Obj Refs", name:'objRefs', type:'string',
                 compareFunc: (a, b) => {
@@ -51,6 +59,11 @@ export default class GameBits {
             },
             {displayName:"Description", name:'description', type:'string',
                 makeElem: (val, td, row) => this._makeDescriptionElem(row),
+                onEdit: (row, col, e, td) => {
+                    //XXX this is really ugly with the hint texts
+                    row.bit.description = td.innerText;
+                    console.log("GameBit description changed", row, td.innerText);
+                }
             },
         ]});
     }
@@ -59,6 +72,7 @@ export default class GameBits {
         const slot = this.app.saveSlot;
         let hint = '';
         return {
+            bit:         bit,
             id:          bit.id,
             table:       bit.table,
             hintId:      bit.hintId,
@@ -99,5 +113,14 @@ export default class GameBits {
             items.push(E.span('note', note));
         }
         return E.td('string', CollapseList(...items));
+    }
+
+    _save() {
+        /** Called when Save button is clicked. */
+        const xml = document.implementation.createDocument(XML, "gamebits");
+        for(let [id, bit] of Object.entries(this.app.game.bits)) {
+            xml.documentElement.appendChild(bit.toXml());
+        }
+        downloadXml(xml, 'gamebits');
     }
 }

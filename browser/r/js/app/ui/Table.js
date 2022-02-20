@@ -170,6 +170,10 @@ export default class Table {
                 td.classList.add('empty');
             }
             if(col.classes) td.classList.add(col.classes);
+            if(col.onEdit) {
+                td.setAttribute('contenteditable', 'true');
+                td.addEventListener('input', e => col.onEdit(row, col, e, td));
+            }
             tr.append(td);
             this._colElems[col.name].push(td);
         }
