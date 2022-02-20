@@ -78,6 +78,8 @@ export default class App {
             this.ui.tabs = new TabBar(tabs);
             document.getElementById('loading').replaceWith(this.ui.tabs.element);
         }
+
+        this.setLanguage('English');
     }
 
     setLanguage(lang) {
