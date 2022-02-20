@@ -79,12 +79,13 @@ export default class App {
             document.getElementById('loading').replaceWith(this.ui.tabs.element);
         }
 
-        this.setLanguage('English');
+        await this.setLanguage('English');
+        this.ui.gameBits.refresh();
     }
 
-    setLanguage(lang) {
+    async setLanguage(lang) {
         this.language = lang;
-        this._doCallback('onLanguageChanged', lang);
+        await this._doCallback('onLanguageChanged', lang);
     }
 
     openChildWindow(url=null) {

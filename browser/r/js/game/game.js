@@ -62,10 +62,7 @@ export default class Game {
         }
 
         await this._loadTexts(this.app.language);
-
-        //get GameBits
-        this.bits = await this.app._getXml(GameBit, version, 'gamebits', 'bit');
-        console.log("got GameBits");
+        //await this.getBits();
 
         //get object categories
         this.objCats = {};
@@ -81,6 +78,14 @@ export default class Game {
             this.warpTab = parseWarpTab(this.app);
             await this._loadMaps();
         }
+    }
+
+    async getBits() {
+        if(!this.bits) {
+            this.bits = await this.app._getXml(GameBit,
+                this.version, 'gamebits', 'bit');
+        }
+        return this.bits;
     }
 
     getMapAt(layer, x, z) {

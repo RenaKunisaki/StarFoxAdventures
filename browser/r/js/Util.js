@@ -11,9 +11,10 @@ export function get(params) {
      */
     if(typeof params == 'string') params = {path:params};
 
-    let firefux = '_='+performance.now();
-    if(params.path.indexOf('?') >= 0) firefux = '&'+firefux;
-    else firefux='?'+firefux;
+    //let firefux = '_='+performance.now();
+    //if(params.path.indexOf('?') >= 0) firefux = '&'+firefux;
+    //else firefux='?'+firefux;
+    const firefux = '';
 
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest();
@@ -217,6 +218,7 @@ export function downloadXml(xml, name, type='application/xml') {
      */
     if(!name.endsWith('.xml')) name += '.xml';
     download(
-        prettyXml(new XMLSerializer().serializeToString(xml)),
+        //prettyXml(new XMLSerializer().serializeToString(xml)),
+        new XMLSerializer().serializeToString(xml),
         name, type);
 }

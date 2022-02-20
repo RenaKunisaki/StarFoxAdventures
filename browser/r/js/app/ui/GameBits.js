@@ -18,14 +18,16 @@ export default class GameBits {
     } //constructor
 
     refresh() {
-        let tbl = this._makeTable();
-        for(let [id, bit] of Object.entries(this.app.game.bits)) {
-            tbl.add(this._makeRow(bit));
-        }
-        if(this.app.saveSlot == null) tbl.hideColumn('value');
-        else tbl.showColumn('value');
-        const elem = E.div('gameBits', tbl.element);
-        clearElement(this.element).append(this.btnSave, elem);
+        this.app.game.getBits().then(e => {
+            let tbl = this._makeTable();
+            for(let [id, bit] of Object.entries(this.app.game.bits)) {
+                tbl.add(this._makeRow(bit));
+            }
+            if(this.app.saveSlot == null) tbl.hideColumn('value');
+            else tbl.showColumn('value');
+            const elem = E.div('gameBits', tbl.element);
+            clearElement(this.element).append(this.btnSave, elem);
+        });
     }
 
     _makeTable() {
