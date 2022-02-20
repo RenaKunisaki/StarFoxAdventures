@@ -15,6 +15,19 @@ export default function parseMapGrid(app) {
         let entry = new MapGridItem(globalMap, i * MapGridItem._size);
         if(entry.mapId < 0) break;
         let map = app.game.maps[entry.mapId];
+        if(!map) {
+            //this map was missing from XML, probably because
+            //we don't have XML for this version
+            app.game.maps[entry.mapId] = {
+                layer: entry.layer,
+                x: entry.x,
+                z: entry.z,
+                sizeX: 1, sizeZ: 1,
+                originX: 0, originZ: 0,
+                blocks: [null],
+            };
+            map = app.game.maps[entry.mapId];
+        }
 
         if(layers[entry.layer] == undefined) layers[entry.layer] = [];
         let layer = layers[entry.layer];

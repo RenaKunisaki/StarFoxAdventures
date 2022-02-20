@@ -53,12 +53,14 @@ export default class Game {
 
         //get addresses
         const addrsXml = await getXml(`data/${this.version}/addresses.xml`);
-        for(let elem of addrsXml.getElementsByTagName('address')) {
-            this.addresses[elem.getAttribute('name')] = {
-                address: int(elem.getAttribute('address')),
-                type:    elem.getAttribute('type'),
-                count:   int(elem.getAttribute('count')),
-            };
+        if(addrsXml) {
+            for(let elem of addrsXml.getElementsByTagName('address')) {
+                this.addresses[elem.getAttribute('name')] = {
+                    address: int(elem.getAttribute('address')),
+                    type:    elem.getAttribute('type'),
+                    count:   int(elem.getAttribute('count')),
+                };
+            }
         }
 
         await this._loadTexts(this.app.language);
@@ -67,9 +69,11 @@ export default class Game {
         //get object categories
         this.objCats = {};
         const objCatsXml = await getXml(`data/${version}/objcats.xml`);
-        for(let elem of objCatsXml.getElementsByTagName('cat')) {
-            this.objCats[parseInt(elem.getAttribute('id'))] =
-                elem.getAttribute('name');
+        if(objCatsXml) {
+            for(let elem of objCatsXml.getElementsByTagName('cat')) {
+                this.objCats[parseInt(elem.getAttribute('id'))] =
+                    elem.getAttribute('name');
+            }
         }
 
         if(this.iso) {
@@ -102,6 +106,7 @@ export default class Game {
 
     async _loadDlls() {
         const xml = await getXml(`data/${this.version}/dlls.xml`);
+        if(!xml) return;
         this.dllTableAddr = int(xml.getElementsByTagName('dlls')[0].
             getAttribute('tableAddress'));
         this.dlls = {};
@@ -137,12 +142,14 @@ export default class Game {
         this.maps = {};
         let nextId = -1; //use negative IDs for maps that don't have an ID
         const usedRomLists = {};
-        for(let elem of xml.getElementsByTagName('map')) {
-            const map = new Map(this.app, elem);
-            let id = map.id;
-            if(id == null) id = nextId--;
-            this.maps[id] = map;
-            usedRomLists[map.romListName] = true;
+        if(xml) {
+            for(let elem of xml.getElementsByTagName('map')) {
+                const map = new Map(this.app, elem);
+                let id = map.id;
+                if(id == null) id = nextId--;
+                this.maps[id] = map;
+                usedRomLists[map.romListName] = true;
+            }
         }
 
         //find romlist files not referenced by maps
@@ -164,6 +171,7 @@ export default class Game {
 
     async _loadTexts(lang) {
         const xml = await getXml(`data/${this.version}/gametext/${lang}.xml`);
+        if(!xml) return;
         this.texts = {};
         for(let eText of xml.getElementsByTagName('text')) {
             let text = Text.fromXml(eText);
