@@ -30,7 +30,7 @@ export default class GameBit {
             this.objRefs.push({
                 map:   eRef.getAttribute('map'),
                 obj:   eRef.getAttribute('obj'),
-                objId: int(eRef.getAttribute('objId')),
+                objId: int(eRef.getAttribute('objid')),
                 param: eRef.getAttribute('param'),
             });
         }
@@ -62,7 +62,7 @@ export default class GameBit {
             elem.append(E.objref(null, {
                 map:   eRef.map,
                 obj:   eRef.obj,
-                objId: `0x${hex(eRef.objId,8)}`,
+                objid: `0x${hex(eRef.objId,8)}`,
                 param: eRef.param,
             }));
         }
