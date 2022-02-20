@@ -11,16 +11,15 @@ export function get(params) {
      */
     if(typeof params == 'string') params = {path:params};
 
-    //let firefux = '_='+performance.now();
-    //if(params.path.indexOf('?') >= 0) firefux = '&'+firefux;
-    //else firefux='?'+firefux;
-    const firefux = '';
+    let lolcache = '_='+performance.now();
+    if(params.path.indexOf('?') >= 0) lolcache = '&'+lolcache;
+    else lolcache='?'+lolcache;
 
     return new Promise(function (resolve, reject) {
         const xhr = new XMLHttpRequest();
         if(params.mimeType != undefined) xhr.overrideMimeType(params.mimeType);
         if(params.responseType != undefined) xhr.responseType = params.responseType;
-        xhr.open('GET', params.path+firefux, true);
+        xhr.open('GET', params.path+lolcache, true);
         xhr.onreadystatechange = () => {
             if(xhr.readyState == 4) resolve(xhr);
         };

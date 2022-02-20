@@ -72,14 +72,17 @@ export default class Phrase {
         return new Phrase(str, lang);
     }
 
-    toString() {
+    toString(commands=true) {
         /** Convert to plain text.
+         *  @param {boolean} commands Whether to include control codes.
          *  @returns {string} String representation.
          */
         const res = [];
         for(let str of this._str) {
             if(typeof(str) == 'string') res.push(str);
-            else if(str instanceof CommandBase) res.push(str.toString());
+            else if(str instanceof CommandBase) {
+                if(commands) res.push(str.toString());
+            }
             else throw new TypeError(
                 `Unexpected object in GameText Phrase: ${str}`);
         }

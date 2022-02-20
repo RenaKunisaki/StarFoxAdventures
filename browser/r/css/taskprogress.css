@@ -6,7 +6,7 @@
     right: calc(50% - 20em);
     padding: 1em;
     border: 3px #888 ridge;
-    background-color: rgba(0, 64, 128, 0.5);
+    background-color: rgba(0, 64, 128, 0.75);
     color: #FFF;
     box-shadow: 2px 2px 2px #444;
     text-align: center;

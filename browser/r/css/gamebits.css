@@ -8,3 +8,5 @@
 .objref .objNo { display: inline-block; min-width: 25% }
 .objref .objId { display: inline-block; min-width: 25% }
 .objref .param { display: inline-block; min-width: 25% }
+
+.gameBits .hintText { font-style: italic; }

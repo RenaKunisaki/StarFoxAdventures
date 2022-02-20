@@ -118,9 +118,7 @@ export default class GameBits {
         if(row.description) {
             items.push(E.span('description', row.description));
         }
-        for(let hint of row.hint) {
-            items.push(E.span('hintText', hint));
-        }
+        if(row.hint) items.push(E.span('hintText', row.hint));
         for(let note of row.notes) {
             items.push(E.span('note', note));
         }
