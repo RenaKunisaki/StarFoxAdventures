@@ -37,7 +37,12 @@ export default class Game {
         switch(this.iso.bootBin.gameCode) {
             case 'GSAE': version = 'U'; break;
             case 'GSAP': version = 'E'; break;
-            case 'GSAJ': version = 'J'; break;
+            case 'GSAJ': {
+                if(this.iso.bootBin.gameName == '08 2002.05.17 E3_2002_StarFox')
+                    version = 'K';
+                else version = 'J';
+                break;
+            }
             default: {
                 console.warn("Unrecognized game ID:", this.iso.bootBin.gameCode);
                 version = '?';
