@@ -6,3 +6,5 @@ export const Language = {
     Japanese: 4,
     Spanish:  5,
 };
+export const LangById = {};
+for(let [name,id] of Object.entries(Language)) LangById[id] = name;

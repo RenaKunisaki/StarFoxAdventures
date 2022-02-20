@@ -3,19 +3,20 @@ import GameBit from "../types/GameBit.js";
 import GameObject from "../types/GameObject.js";
 import DLL from "../types/DLL.js";
 import Map from "./map.js";
+import Text from "./text/Text.js";
 import parseMapGrid from "../types/MapGrid.js";
 import parseWarpTab from "../types/Warptab.js";
 
 export const MAP_CELL_SIZE = 640;
 export const TEXT_LANGUAGES = ['English', 'French',
-    'German', 'Italian', 'Japanese', 'Spanish'];
+    'German', 'Italian', 'Japanese', 'Spanish']; //XXX move
 
 export default class Game {
     /** Info and methods relating to the game itself.
      */
     constructor(app) {
         this.app       = app;
-        this.version   = null;
+        this.version   = 'U0';
         this.iso       = null;
         this.addresses = {}; //name => {address, count}
         this.bits      = null; //GameBits
@@ -24,6 +25,9 @@ export default class Game {
         this.maps      = null;
         this.warpTab   = null;
         this.texts     = null;
+
+        this._loadTexts(this.app.language);
+        this.app.onLanguageChanged(lang => this._loadTexts(lang));
     }
 
     async loadIso(iso) {
@@ -73,7 +77,7 @@ export default class Game {
             this._loadObjects();
             this.warpTab = parseWarpTab(this.app);
             await this._loadMaps();
-            //await this._loadTexts();
+            await this._loadTexts(this.app.language);
         }
     }
 
@@ -151,35 +155,12 @@ export default class Game {
         this.mapGrid = parseMapGrid(this.app);
     }
 
-    async _loadTexts() {
-        const xml = await getXml(`data/${this.version}/gametext.xml`);
+    async _loadTexts(lang) {
+        const xml = await getXml(`data/${this.version}/gametext/${lang}.xml`);
         this.texts = {};
         for(let eText of xml.getElementsByTagName('text')) {
-            let id   = int(eText.getAttribute('id'));
-            let text = {
-                id:      id,
-                phrases: {},
-                window:  int(eText.getAttribute('window')),
-                alignH:  int(eText.getAttribute('alignh')),
-                alignV:  int(eText.getAttribute('alignv')),
-            };
-            for(let eLang of eText.getElementsByTagName('lang')) {
-                let phrases = [];
-                for(let ePhrase of eLang.getElementsByTagName('phrase')) {
-                    let phrase = [];
-                    for(let str of ePhrase.children) {
-                        const cmd = {cmd:str.tagName};
-                        if(cmd.cmd == 'str') cmd.str = str.textContent;
-                        else for(let attr of str.attributes) {
-                            cmd[attr.name] = attr.value;
-                        }
-                        phrase.push(cmd);
-                    }
-                    phrases.push(phrase);
-                }
-                text.phrases[TEXT_LANGUAGES[eLang.getAttribute('id')]] = phrases;
-            }
-            this.texts[id] = text;
+            let text = Text.fromXml(eText);
+            this.texts[text.id] = text;
         }
     }
 }

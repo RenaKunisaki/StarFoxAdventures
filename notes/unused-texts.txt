@@ -1,0 +1,138 @@
+General Pepper (Arwing levels):
+001F	Good flying, Fox!
+0020	You have a new high score!
+0030	Well done!
+
+Slippy (Arwing levels):
+003A	Be careful, Fox!
+003B	Danger ahead!
+
+Peppy (Arwing levels):
+0044	Look out, Fox!
+0045	Enemy approaching.
+0046	Shoot the big asteroids!
+0047	Use the bomb!
+
+Deleted moves:
+03AB	[item names in pause menu]
+
+includes "Decoy", "Baddie Alert"
+
+03BC	With this command you can use Tricky as a decoy while you sneak around without getting noticed!
+
+03C1	The Staff will glow red when a baddie is nearby.
+
+03FB	Decoy Move
+
+04A0	- This is the BAD GUY ALERT.
+- Your Staff will glow red...
+- ...whenever there is a baddie nearby.
+
+275C	- BAD GUY ALERT
+- 50 Scarabs
+
+
+Hint texts:
+01AE	- Saved Dinosaur Planet
+- Andross!! He's back again, Fox! Shoot the weak points on the Krazoa Head, then when he turns around, take out his hands! Use your bombs to make him reveal his true form, then blast away at his brain! Keep your nerve, Fox, you're almost there.
+01AF	- Saved Dinosaur Planet
+- Back again, Fox!? Time to teach Andross another lesson. Have fun!
+
+The first one can be seen in the pause menu during the Andross fight, but the first line (which would appear on the file select screen after defeating Andross) can never be seen since the game doesn't save after this. The second is never seen.
+
+Menu texts:
+01FF	- Krazoa
+- Warp
+- Shop
+- OK
+- Cancel
+- Change
+
+old version of WarpStone menu
+
+0330	OPTIONS
+0331	START
+
+unused copies of some title menu texts
+
+037A	PREVIOUSLY ON
+
+was shown on file select in old versions
+
+0365	- Full
+- Wide
+- Cinema
+
+old screen size texts
+
+03AE	A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 1 2 3 4 5 6 7 8 9 0 . ! Del End A B C D E F G H I J K L M N O P Q R S T U V W X Y Z 1 2 3 4 5 6 7 8 9 0 . ! Del End
+
+unused copy of name entry text (the used ones have one ID per letter)
+
+03E3	- ABCDEFGHIJKLMNOPQRSTUVWXYZ
+- abcdefghijklmnopqrstuvwxyz0123456789
+- ()!&$-+:;',.©/\@%><
+03A4	Cheat
+0500	Display Credits
+0501	Xmas Mode
+0502	GFX Mode
+0503	Falco
+0504	New Video
+0505	Crazy Sounds
+0506	Dinosaur
+0507	- [analog stick] Normal
+- [analog stick] Sepia
+
+possibly from a removed cheat menu similar to Diddy Kong Racing
+
+0481	No Controller
+
+Displayed in a large font. Never used. In Japanese, this text is blank.
+
+0489	1
+048A	2
+etc...
+These appear in the middle of the screen.
+
+0516	0123456789?
+
+
+PDA texts:
+2715	Press A to Replay Race
+
+grouped with item descriptions (related to SP_ReplayDis?)
+
+2732	APPLE
+
+old name for health pickups
+
+273D	- MUSHGUS
+- Watch out for the deadly gas!
+
+Description for red killer mushrooms
+
+
+Level names:
+0437	CloudRunner Diamond Mines
+
+
+Misc:
+
+00F9, 00FA
+- English, Italian, Japanese, Spanish: not present
+- French: blank
+- German: "<no translation>"
+
+Used, but notable:
+008E	Remember, only a dinosaur of noble birth... ...may breathe life into the SpellStones.
+
+in the kiosk demo version, Tricky actually had to breathe fire on the stones.
+
+00A3	Have you visited the WarpStone Shop yet?
+
+in older versions, the shop was where the Game Well Maze is.
+
+277C	- KRYSTAL'S STAFF
+- Weapon of magical power
+
+appears again as ID 2814

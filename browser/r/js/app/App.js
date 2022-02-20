@@ -17,19 +17,22 @@ import Warptab from "./ui/Warptab.js";
 import TextList from "./ui/TextList.js";
 import { ISO } from "../types/iso/iso.js";
 import Game from "../game/game.js";
+import { Language } from "../game/text/Language.js";
 
 export default class App {
     constructor(parent) {
-        this.parent      = parent; //parent window's App instance
-        this.saveGame    = null; //the loaded savegame file
-        this.saveSlot    = null; //the selected slot
-        this.saveSlotIdx = 0;
-        this.game        = new Game(this);
         this._callbacks  = {
             onIsoLoaded: [],
             onSaveLoaded: [],
             onSaveSlotChanged: [],
+            onLanguageChanged: [],
         };
+        this.parent      = parent; //parent window's App instance
+        this.saveGame    = null; //the loaded savegame file
+        this.saveSlot    = null; //the selected slot
+        this.saveSlotIdx = 0;
+        this.language    = 'English';
+        this.game        = new Game(this);
     }
 
     async run() {
@@ -56,6 +59,12 @@ export default class App {
                 textList:   new TextList(this),
             };
 
+            const eLang = document.getElementById('language');
+            for(let lang of Object.keys(Language)) {
+                eLang.append(E.option(null, lang, {value:lang}));
+            }
+            eLang.addEventListener('change', e => this.setLanguage(eLang.value));
+
             const tabs = {};
             for(let elem of document.getElementsByClassName('tabBody')) {
                 tabs[elem.getAttribute('data-tab-name')] = elem;
@@ -69,6 +78,11 @@ export default class App {
             this.ui.tabs = new TabBar(tabs);
             document.getElementById('loading').replaceWith(this.ui.tabs.element);
         }
+    }
+
+    setLanguage(lang) {
+        this.language = lang;
+        this._doCallback('onLanguageChanged', lang);
     }
 
     openChildWindow(url=null) {
@@ -164,12 +178,14 @@ export default class App {
     onIsoLoaded(cb) { this._callbacks.onIsoLoaded.push(cb) }
     onSaveLoaded(cb) { this._callbacks.onSaveLoaded.push(cb) }
     onSaveSlotChanged(cb) { this._callbacks.onSaveSlotChanged.push(cb) }
+    onLanguageChanged(cb) { this._callbacks.onLanguageChanged.push(cb) }
 
-    _doCallback(evt, ...args) {
+    async _doCallback(evt, ...args) {
         console.log("callback:", evt, args);
         for(let cb of this._callbacks[evt]) {
             try {
-                cb(...args);
+                let r = cb(...args);
+                if(r instanceof Promise) await r;
             }
             catch(ex) {
                 console.error("Exception in callback", ex);

@@ -1,5 +1,6 @@
 import { Language } from "./Language.js";
 import Phrase from "./Phrase.js";
+import { int } from "../../Util.js";
 
 export default class Text {
     /** One "text" in a GameText file.
@@ -17,6 +18,21 @@ export default class Text {
         this.window   = window;
         this.align    = align; // [h, v]
         for(let phrase of phrases) this.addPhrase(phrase);
+    }
+
+    static fromXml(elem, lang=Language.English) {
+        /** Read Text from XML <text> element. */
+        const id     = int(elem.getAttribute('id'));
+        const window = int(elem.getAttribute('window'));
+        const align  = [
+            int(elem.getAttribute('alignH')),
+            int(elem.getAttribute('alignV')),
+        ];
+        const self = new Text(id, [], lang, window, align);
+        for(let ePhrase of elem.getElementsByTagName('phrase')) {
+            self.addPhrase(Phrase.fromXml(ePhrase));
+        }
+        return self;
     }
 
     addPhrase(phrase) {

@@ -10,24 +10,18 @@ export default class TextList {
     constructor(app) {
         this.app = app;
         this.element = document.getElementById('tab-textList');
-        this.eLang = E.select('language');
-        for(let lang of TEXT_LANGUAGES) {
-            this.eLang.append(E.option(null, lang, {value:lang}));
-        }
-        this.eLang.addEventListener('change', e => this.refresh());
-        this.element.append(this.eLang);
         this.app.onIsoLoaded(iso => this.refresh());
+        this.app.onLanguageChanged(lang => this.refresh());
         this.renderer = new GameTextRenderer(this.app);
     } //constructor
 
     refresh() {
-        /* this.lang = this.eLang.value;
         let tbl = this._makeTable();
         for(let text of Object.values(this.app.game.texts)) {
             tbl.add(this._makeRow(text));
         }
         const elem = E.div('textList', tbl.element);
-        clearElement(this.element).append(this.eLang, elem); */
+        clearElement(this.element).append(elem);
     }
 
     _makeTable() {
@@ -39,11 +33,8 @@ export default class TextList {
             {displayName:"V", name:'alignV', type:'int', title:"Align V"},
             {displayName:"Text", name:'phrases',  type:'string',
                 makeElem: (phrases, td, row) => {
-                    let list;
-                    let p = phrases[this.lang];
-                    if(p) list = this.renderer.render(p, this.lang);
-                    else list = E.span('error', "no text");
-                    clearElement(td).append(list);
+                    clearElement(td).append(this.renderer.render(row.text));
+                    td.classList.add('gametext');
                     return td;
                 },
             },
@@ -52,11 +43,12 @@ export default class TextList {
 
     _makeRow(text) {
         const row = {
+            text:    text,
             id:      text.id,
             phrases: text.phrases,
             window:  text.window,
-            alignH:  text.alignH,
-            alignV:  text.alignV,
+            alignH:  text.align[0],
+            alignV:  text.align[1],
         };
         return row;
     }

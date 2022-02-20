@@ -19,6 +19,7 @@ export class CommandBase {
         for(let i=0; i<params.length; i++) {
             this[this.constructor.params[i]] = int(params[i]);
         }
+        this.chr = this.constructor.chr;
     }
 }
 

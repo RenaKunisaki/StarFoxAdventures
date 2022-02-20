@@ -1,5 +1,12 @@
 import { CommandBase, Command, CommandById } from "./Command.js";
-import { E } from "../../lib/Element.js";
+import { createElement, E } from "../../lib/Element.js";
+import { Language } from "./Language.js";
+
+//build lookup table for fast access
+const cmdByChr = {};
+for(let [name, cls] of Object.entries(Command)) {
+    cmdByChr[cls.chr] = {name:name, cls:cls};
+}
 
 export default class Phrase {
     /** One "phrase" in a GameText file.
@@ -36,7 +43,7 @@ export default class Phrase {
                 buf = '';
                 const cls = CommandById[c];
                 const data = file.readU16Array(cls.params.length);
-                console.log("cmd", c, "cls", cls, "data", data);
+                //console.log("cmd", c, "cls", cls, "data", data);
                 str.push(new cls(...data));
             }
             else buf += String.fromCodePoint(c);
@@ -58,6 +65,7 @@ export default class Phrase {
                 }
                 str.push(new cls(...params));
             }
+            else if(ch.tagName == undefined) continue; //text node (whitespace)
             else throw new TypeError(
                 `Unexpected XML tag '${ch.tagName}' in <phrase>`);
         }
@@ -76,6 +84,31 @@ export default class Phrase {
                 `Unexpected object in GameText Phrase: ${str}`);
         }
         return res.join('');
+    }
+
+    toXml() {
+        /** Convert to XML.
+         *  @returns {Element} XML element.
+         */
+        const ePhrase = E.phrase();
+        for(let str of this._str) {
+            if(typeof(str) == 'string') {
+                ePhrase.append(E.str(null, str));
+            }
+            else if(!(str instanceof CommandBase)) {
+                throw new TypeError(
+                    `Unexpected object in GameText Phrase: ${str}`);
+            }
+            else {
+                const cmd  = cmdByChr[str.chr];
+                const eCmd = createElement(cmd.name);
+                for(let param of cmd.cls.params) {
+                    eCmd.setAttribute(param, str[param]);
+                }
+                ePhrase.append(eCmd);
+            }
+        }
+        return ePhrase;
     }
 
     toHtml(params) {

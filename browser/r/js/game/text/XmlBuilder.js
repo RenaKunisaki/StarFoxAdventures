@@ -1,13 +1,9 @@
 import { E, createElement } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
-import GameTextFile from "../types/GameTextFile.js";
+import { Language, LangById } from "./Language.js";
+import BinaryReader from "./BinaryReader.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
-
-//TODO change this to create <text id="X" lang="X">
-//instead of <text id="X"><lang id="X">
-//then restore the function in MiscTab and re-export.
-//then restore the XML reading and TextList.
 
 export default class GameTextXmlBuilder {
     /** Builds gametext.xml file */
@@ -16,7 +12,10 @@ export default class GameTextXmlBuilder {
     }
 
     build() {
-        this.texts = {}; //id => Text
+        this.texts = {}; //lang => {id => Text}
+        for(let lang of Object.keys(Language)) {
+            this.texts[lang] = {};
+        }
         this._readFiles();
         return this._genXml();
     }
@@ -30,7 +29,7 @@ export default class GameTextXmlBuilder {
             console.log("Reading", file.path);
             let textFile;
             try {
-                textFile = new GameTextFile(this.app, file);
+                textFile = new BinaryReader(this.app, file);
             }
             catch(ex) { //probably not a GameText file
                 continue;
@@ -42,45 +41,25 @@ export default class GameTextXmlBuilder {
     _readFile(textFile) {
         //extract texts from one gametext file
         for(let text of textFile.texts) {
-            let obj = this.texts[text.id];
-            if(obj == undefined) {
-                obj = {
-                    id:     text.id,
-                    window: text.window,
-                    alignH: text.alignH,
-                    alignV: text.alignV,
-                    langs:  {},
-                };
-                this.texts[text.id] = obj;
-            }
-            if(obj.langs[text.language] == undefined) {
-                obj.langs[text.language] = [];
-                for(let phrase of text.phrases) {
-                    obj.langs[text.language].push(phrase.str);
-                }
-            }
-            else { //check if text is identical
-                /* const n = Math.max(texts[text.id][text.lang].length,
-                    text.phrases.length);
-                for(let i=0; i<n; i++) {
-                    const t1 = texts[text.id][text.lang][i];
-                    const t2 = text.phrases[i].str;
-                    if(t1 != t2) { //XXX this won't work...
-                        console.log(`Text mismatch, ID 0x${hex(text.id,4)}`,
-                            t1, t2);
-                        break;
-                    }
-                } */
-            }
+            const texts = this.texts[LangById[text.language]];
+            console.assert(texts);
+            if(!texts[text.id]) texts[text.id] = text;
         }
     }
 
     _genXml() {
         //generate the XML
         console.log("Generating XML");
-        const xml = document.implementation.createDocument(XML, "gametext");
-        for(let [id, text] of Object.entries(this.texts)) {
-            xml.documentElement.appendChild(this._makeTextElem(id, text));
+        const xml = {};
+        for(let lang of Object.keys(Language)) {
+            xml[lang] = document.implementation.createDocument(XML, "gametext");
+            xml[lang].documentElement.setAttribute('language', lang);
+        }
+        for(let [lang, texts] of Object.entries(this.texts)) {
+            for(let [id, text] of Object.entries(texts)) {
+                xml[lang].documentElement.appendChild(
+                    this._makeTextElem(id, text));
+            }
         }
         return xml;
     }
@@ -90,28 +69,12 @@ export default class GameTextXmlBuilder {
         const eText = E.text({
             id:     `0x${hex(id,4)}`,
             window: `0x${hex(text.window,2)}`,
-            alignH: text.alignH,
-            alignV: text.alignV,
+            alignH: text.align[0],
+            alignV: text.align[1],
         });
 
-        for(let [lang, phrases] of Object.entries(text.langs)) {
-            const eLang = E.lang({id:lang});
-            for(let phrase of phrases) {
-                const ePhrase = E.phrase();
-                for(let s of phrase) {
-                    if(typeof(s) == 'string') ePhrase.append(E.str(null, s));
-                    else if(s.cmd == 'str') ePhrase.append(E.str(null, s.str));
-                    else {
-                        const eCmd = createElement(s.cmd);
-                        for(let [k,v] of Object.entries(s)) {
-                            if(k != 'cmd') eCmd.setAttribute(k,v);
-                        }
-                        ePhrase.append(eCmd);
-                    }
-                }
-                eLang.append(ePhrase);
-            }
-            eText.append(eLang);
+        for(let phrase of text.phrases) {
+            eText.append(phrase.toXml());
         }
 
         return eText;
