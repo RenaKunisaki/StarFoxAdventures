@@ -4,6 +4,11 @@ import GameTextFile from "../types/GameTextFile.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
 
+//TODO change this to create <text id="X" lang="X">
+//instead of <text id="X"><lang id="X">
+//then restore the function in MiscTab and re-export.
+//then restore the XML reading and TextList.
+
 export default class GameTextXmlBuilder {
     /** Builds gametext.xml file */
     constructor(app) {
