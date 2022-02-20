@@ -144,7 +144,20 @@ export class SaveSlot {
         this._save = save; //SaveGameStruct
         console.assert(save);
 
-        //get gamebits
+        this.gameBits = null;
+
+        //get other fields (HACK)
+        const fields = ['trickyEnergy', 'maxTrickyEnergy', 'trickyPlayCount',
+            'unk1B', 'character', 'flags21', 'flags22', 'unk23', 'texts',
+            'numTexts', 'unk55F', 'unk6A4', 'unk6A6', 'charState', 'charPos'];
+        for(let f of fields) {
+            this[f] = this._save[f];
+        }
+    }
+
+    getGameBits() {
+        //called later once bits have been loaded
+        console.assert(this.app.game.bits);
         this.gameBits = {};
         for(let [id, bit] of Object.entries(this.app.game.bits)) {
             let name = bit.name || `_${hex(id,4)}`;
@@ -164,14 +177,6 @@ export class SaveSlot {
             }
             this.gameBits[name] = val;
             this.gameBits[id] = val;
-        }
-
-        //get other fields (HACK)
-        const fields = ['trickyEnergy', 'maxTrickyEnergy', 'trickyPlayCount',
-            'unk1B', 'character', 'flags21', 'flags22', 'unk23', 'texts',
-            'numTexts', 'unk55F', 'unk6A4', 'unk6A6', 'charState', 'charPos'];
-        for(let f of fields) {
-            this[f] = this._save[f];
         }
     }
 
@@ -243,6 +248,10 @@ export class SaveGame {
         else {
             throw new Error("File is too small to be a valid savegame");
         }
+    }
+
+    getGameBits() {
+        for(let slot of this.saves) slot.getGameBits();
     }
 
     async _parseGci() {

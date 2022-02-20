@@ -16,7 +16,7 @@ export default class Game {
      */
     constructor(app) {
         this.app       = app;
-        this.version   = 'U0';
+        this.version   = null;
         this.iso       = null;
         this.addresses = {}; //name => {address, count}
         this.bits      = null; //GameBits
@@ -26,7 +26,7 @@ export default class Game {
         this.warpTab   = null;
         this.texts     = null;
 
-        this._loadTexts(this.app.language);
+        this.setVersion('U0');
         this.app.onLanguageChanged(lang => this._loadTexts(lang));
     }
 
@@ -61,8 +61,11 @@ export default class Game {
             };
         }
 
+        await this._loadTexts(this.app.language);
+
         //get GameBits
         this.bits = await this.app._getXml(GameBit, version, 'gamebits', 'bit');
+        console.log("got GameBits");
 
         //get object categories
         this.objCats = {};
@@ -77,7 +80,6 @@ export default class Game {
             this._loadObjects();
             this.warpTab = parseWarpTab(this.app);
             await this._loadMaps();
-            await this._loadTexts(this.app.language);
         }
     }
 

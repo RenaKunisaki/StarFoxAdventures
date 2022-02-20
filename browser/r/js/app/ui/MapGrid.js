@@ -156,6 +156,7 @@ export default class MapGrid {
     }
 
     refresh() {
+        if(!this.app.game.iso) return;
         const grid    = this.app.game.mapGrid;
         const elem    = E.table('mapGrid');
         const layerNo = this.eLayerPicker.value;

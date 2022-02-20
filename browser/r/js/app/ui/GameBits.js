@@ -22,19 +22,27 @@ export default class GameBits {
         for(let [id, bit] of Object.entries(this.app.game.bits)) {
             tbl.add(this._makeRow(bit));
         }
-        console.log("Bit table", tbl);
+        if(this.app.saveSlot == null) tbl.hideColumn('value');
+        else tbl.showColumn('value');
         const elem = E.div('gameBits', tbl.element);
         clearElement(this.element).append(this.btnSave, elem);
     }
 
     _makeTable() {
         return new Table({columns: [
-            {displayName:"#", name:'id',    type:'hex', length: 4},
-            {displayName:"T", name:'table', type:'int',
-                makeElem: (val, td, bit) => {
-                    td.classList.add(`bitTable${bit.table}`);
+            {displayName:"#", name:'id',    type:'hex', length: 4,
+                makeElem: (val, td, row) => {
+                    if(row.bit.offset == 0 && row.bit.table == 0) {
+                        td.classList.add('deleted');
+                    }
                     return td;
-                }
+                },
+            },
+            {displayName:"T", name:'table', type:'int',
+                makeElem: (val, td, row) => {
+                    td.classList.add(`bitTable${row.table}`);
+                    return td;
+                },
             },
             {displayName:"H",        name:'hintId',  type:'hex', length: 2},
             {displayName:"Size",     name:'size',    type:'int'},
@@ -42,6 +50,7 @@ export default class GameBits {
             {displayName:"Name",     name:'name',    type:'string',
                 onEdit: (row, col, e, td) => {
                     row.bit.name = td.innerText;
+                    this.btnSave.classList.add('unsaved');
                 },
             },
             {displayName:"Value",    name:'value',   type:'string', classes:'int'},
@@ -63,6 +72,7 @@ export default class GameBits {
                     //XXX this is really ugly with the hint texts
                     row.bit.description = td.innerText;
                     console.log("GameBit description changed", row, td.innerText);
+                    this.btnSave.classList.add('unsaved');
                 }
             },
         ]});
@@ -122,5 +132,6 @@ export default class GameBits {
             xml.documentElement.appendChild(bit.toXml());
         }
         downloadXml(xml, 'gamebits');
+        this.btnSave.classList.remove('unsaved');
     }
 }

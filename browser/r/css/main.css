@@ -72,11 +72,16 @@ tr.notice {
 .null { color: #888; }
 .zero { color: #888; }
 .invalid { color: #F88; }
+.deleted { color: #CCC; text-decoration: line-through; }
 
 .link {
     /* for "fake" links */
     text-decoration: underline;
     cursor: pointer;
+}
+
+.unsaved {
+    font-weight: bold;
 }
 
 /* numbers */

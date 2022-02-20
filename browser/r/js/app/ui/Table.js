@@ -180,12 +180,20 @@ export default class Table {
         return tr;
     }
 
-    _toggleColumn(name) {
+    toggleColumn(name) {
         const show = (this._colHeaders[name].style.display == 'none');
         this._colHeaders[name].style.display = show ? '' : 'none';
         for(let elem of this._colElems[name]) {
             elem.style.display = show ? '' : 'none';
         }
+    }
+    showColumn(name) {
+        const hidden = (this._colHeaders[name].style.display == 'none');
+        if(hidden) this.toggleColumn(name);
+    }
+    hideColumn(name) {
+        const hidden = (this._colHeaders[name].style.display == 'none');
+        if(!hidden) this.toggleColumn(name);
     }
 
     _buildColumnPicker() {
@@ -201,7 +209,7 @@ export default class Table {
             let label = E.label(null, {
                 for:   `check${_nextId}`,
             }, name);
-            check.addEventListener('click', e => this._toggleColumn(col.name));
+            check.addEventListener('click', e => this.toggleColumn(col.name));
             this._colPicker.append(E.li('column', check, label));
         }
         this._colPicker.style.display = 'none';

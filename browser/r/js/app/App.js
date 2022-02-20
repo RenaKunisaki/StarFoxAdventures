@@ -149,8 +149,11 @@ export default class App {
         this.saveGame = new SaveGame(this);
         await this.saveGame.load(file);
 
+        //this will trigger downloading gamebits.xml
         if(this.game.version == null)
             await this.game.setVersion(this.saveGame._version);
+
+        this.saveGame.getGameBits();
 
         this.saveSlot = this.saveGame.saves[this.saveSlotIdx];
         this._doCallback('onSaveLoaded', this.saveGame);
