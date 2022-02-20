@@ -2,7 +2,7 @@ import { E, clearElement } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
 import Table from "./Table.js";
 import { TEXT_LANGUAGES } from "../../game/game.js";
-import { GameTextRenderer } from "./FileViewer/GameTextViewer.js";
+import GameTextRenderer from "../../game/text/Renderer.js";
 
 export default class TextList {
     /** Displays all GameText definitions from XML.
@@ -21,13 +21,13 @@ export default class TextList {
     } //constructor
 
     refresh() {
-        this.lang = this.eLang.value;
+        /* this.lang = this.eLang.value;
         let tbl = this._makeTable();
         for(let text of Object.values(this.app.game.texts)) {
             tbl.add(this._makeRow(text));
         }
         const elem = E.div('textList', tbl.element);
-        clearElement(this.element).append(this.eLang, elem);
+        clearElement(this.element).append(this.eLang, elem); */
     }
 
     _makeTable() {

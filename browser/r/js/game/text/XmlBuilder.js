@@ -1,5 +1,5 @@
-import { E, clearElement, createElement } from "../lib/Element.js";
-import { download, hex, prettyXml } from "../Util.js";
+import { E, createElement } from "../../lib/Element.js";
+import { hex } from "../../Util.js";
 import GameTextFile from "../types/GameTextFile.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
@@ -11,7 +11,7 @@ export default class GameTextXmlBuilder {
     }
 
     build() {
-        this.texts = {}; //id => {lang => [phrase, phrase...]}
+        this.texts = {}; //id => Text
         this._readFiles();
         return this._genXml();
     }

@@ -163,17 +163,6 @@ export function CollapseList(...items) {
     return elem;
 }
 
-export function addReverseMap(obj) {
-    /** Given a dict with keys eg a:1, b:2... add keys 1:a, 2:b...
-     *  @param {object} obj object to modify.
-     *  @returns {object} obj.
-     */
-    const obj2 = {}; //don't change while iterating
-    for(let [k, v] of Object.entries(obj)) obj2[v] = k;
-    for(let [v, k] of Object.entries(obj2)) obj[v] = k;
-    return obj;
-}
-
 export function prettyXml(sourceXml) {
     /** Given a string containing XML, return a beautified version.
      *  @param {string} sourceXml the XML to format.

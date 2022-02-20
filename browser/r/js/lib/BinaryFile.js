@@ -141,11 +141,13 @@ export default class BinaryFile {
         return res;
     }
 
-    _readType(len, fmt) {
+    _readType(len, fmt, forceArray=false) {
         /** Read a primitive Struct type */
         const type = (typeof(fmt) == 'string') ? fieldTypes[fmt] : fmt;
         if(!type) throw new Error(`Unrecognized type "${fmt}"`);
-        if(len == 1) {
+        if(len < 0) throw new RangeError(`len must be >= 0 (was ${len})`);
+        else if(len == 0) return [];
+        else if(len == 1 && !forceArray) {
             const res = type.func(this._view, this._readOffs, this._le);
             this._readOffs += type.size;
             return res;
@@ -154,7 +156,7 @@ export default class BinaryFile {
         for(let i=0; i<len; i++) {
             res.push(this._readType(1, type));
         }
-        return (len == 1) ? res[0] : res;
+        return (len == 1 && !forceArray) ? res[0] : res;
     }
 
     _readTypeMulti(count, len, fmt) {
@@ -166,14 +168,24 @@ export default class BinaryFile {
         return res;
     }
 
-    readS8    (count=1) { return this._readType(count, 'b') }
-    readU8    (count=1) { return this._readType(count, 'B') }
-    readS16   (count=1) { return this._readType(count, 'h') }
-    readU16   (count=1) { return this._readType(count, 'H') }
-    readS32   (count=1) { return this._readType(count, 'i') }
-    readU32   (count=1) { return this._readType(count, 'I') }
-    readS64   (count=1) { return this._readType(count, 'q') }
-    readU64   (count=1) { return this._readType(count, 'Q') }
-    readFloat (count=1) { return this._readType(count, 'f') }
-    readDouble(count=1) { return this._readType(count, 'd') }
+    readS8         (count=1) { return this._readType(count, 'b') }
+    readU8         (count=1) { return this._readType(count, 'B') }
+    readS16        (count=1) { return this._readType(count, 'h') }
+    readU16        (count=1) { return this._readType(count, 'H') }
+    readS32        (count=1) { return this._readType(count, 'i') }
+    readU32        (count=1) { return this._readType(count, 'I') }
+    readS64        (count=1) { return this._readType(count, 'q') }
+    readU64        (count=1) { return this._readType(count, 'Q') }
+    readFloat      (count=1) { return this._readType(count, 'f') }
+    readDouble     (count=1) { return this._readType(count, 'd') }
+    readS8Array    (count=1) { return this._readType(count, 'b', true) }
+    readU8Array    (count=1) { return this._readType(count, 'B', true) }
+    readS16Array   (count=1) { return this._readType(count, 'h', true) }
+    readU16Array   (count=1) { return this._readType(count, 'H', true) }
+    readS32Array   (count=1) { return this._readType(count, 'i', true) }
+    readU32Array   (count=1) { return this._readType(count, 'I', true) }
+    readS64Array   (count=1) { return this._readType(count, 'q', true) }
+    readU64Array   (count=1) { return this._readType(count, 'Q', true) }
+    readFloatArray (count=1) { return this._readType(count, 'f', true) }
+    readDoubleArray(count=1) { return this._readType(count, 'd', true) }
 }

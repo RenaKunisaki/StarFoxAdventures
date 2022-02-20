@@ -1,9 +1,9 @@
 .gametext {
     font-size: 20pt;
 }
-.gametext .justify-Right  { text-align: right; }
-.gametext .justify-Center { text-align: center; }
-.gametext .justify-Full   { text-align: justify; }
+.gametext .justifyRight  { text-align: right; }
+.gametext .justifyCenter { text-align: center; }
+.gametext .justifyFull   { text-align: justify; }
 
 .gametext .font0 { /* most Japanese text */
     font-family: 'FOT-RodinNTLG Pro B';

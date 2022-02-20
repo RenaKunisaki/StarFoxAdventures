@@ -1,6 +1,6 @@
 import { E, createElement } from "../../lib/Element.js";
 import { downloadXml, hex } from "../../Util.js";
-import GameTextXmlBuilder from "../GameTextXmlBuilder.js";
+//import GameTextXmlBuilder from "../../game/text/XmlBuilder.js";
 
 export default class MiscTab {
     /** Misc stuff mainly for development.
@@ -12,6 +12,6 @@ export default class MiscTab {
     }
 
     _genGameTextXml() {
-        downloadXml((new GameTextXmlBuilder(this.app)).build(), 'gametext');
+        //downloadXml((new GameTextXmlBuilder(this.app)).build(), 'gametext');
     }
 }

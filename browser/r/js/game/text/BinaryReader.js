@@ -1,7 +1,8 @@
-import { hex } from "../Util.js";
-import Struct from '../lib/Struct.js';
-import BinaryFile from "../lib/BinaryFile.js";
-import IsoFile from "./iso/isofile.js";
+import Struct from "../../lib/Struct.js";
+import BinaryFile from "../../lib/BinaryFile.js";
+import IsoFile from "../../types/iso/isofile.js";
+import Text from "./Text.js";
+import Phrase from "./Phrase.js";
 
 const CharacterStruct = Struct(
     ['I', 'character'],
@@ -32,29 +33,11 @@ const TextureStruct = Struct(
     ['H', 'height'],
 );
 
-const ControlCodes = { //code: [param names...]
-    [0xE000]: ['seq', 'id'],
-    [0xE018]: ['time', 'unk1', 'time', 'unk3'],
-    [0xE020]: ['hint', 'id'],
-    [0xF8F2]: ['unkF8F2', 'unk1', 'unk2'], //unused
-    [0xF8F3]: ['unkF8F3', 'unk1', 'unk2'], //unused
-    [0xF8F4]: ['scale', 'scale'],
-    [0xF8F5]: ['unkF8F5', 'unk1'], //unused
-    [0xF8F6]: ['unkF8F6', 'unk1'], //unused
-    [0xF8F7]: ['font', 'id'],
-    [0xF8F8]: ['justifyLeft'],
-    [0xF8F9]: ['justifyRight'],
-    [0xF8FA]: ['justifyCenter'],
-    [0xF8FB]: ['justifyFull'],
-    [0xF8FC]: ['unkF8FC'], //unused
-    [0xF8FD]: ['unkF8FD'], //unused
-    [0xF8FE]: ['unkF8FE'], //unused
-    [0xF8FF]: ['color', 'r', 'g', 'b', 'a'],
-};
+export default class BinaryReader {
+    /** Reads a GameText binary file. */
 
-export default class GameTextFile {
     constructor(app, data) {
-        if(data instanceof IsoFile) data = data.getData(); //lolno
+        if(data instanceof IsoFile) data = data.getData();
         this.app     = app;
         this.data    = data;
         this._file   = new BinaryFile(this.data);
@@ -63,28 +46,10 @@ export default class GameTextFile {
         this.readStringTable();
         this.readUnknown();
         this.readCharTextures();
+        this.readStrings();
 
         //XXX Sequences files have some extra info before the
         //actual strings, such as the sequence ID. Investigate this.
-
-        //read the actual strings
-        //console.log("strTab", this.strTab);
-        for(let text of this.texts) {
-            const base = text.phrases;
-            text.phrases = [];
-            for(let i=0; i<text.nPhrases; i++) {
-                //console.log(`text 0x${hex(text.id,4)} phrase ${i} base=0x${hex(base)}`);
-                if(isNaN(this.strTab[base+i])) debugger;
-                this._file.seek(this.strTab[base+i] + this.strDataOffs);
-                let phrase = {
-                    fileOffs: this._file.tell(),
-                    str: this.readString(),
-                };
-                phrase.byteLength = this._file.tell() - phrase.fileOffs;
-                this._file.seek(phrase.byteLength, 'SEEK_CUR');
-                text.phrases.push(phrase);
-            }
-        }
     }
 
     readCharStructs() {
@@ -100,62 +65,6 @@ export default class GameTextFile {
         }
         this.charStructs = this._file.read(CharacterStruct, numCharStructs);
         if(numCharStructs == 1) this.charStructs = [this.charStructs];
-    }
-
-    readTexts() {
-        /** Read the GameText structs.
-         *  These tell which strings belong to each text,
-         *  how to display it, and which language it is.
-         */
-        const numTexts  = this._file.readU16();
-        this.strDataLen = this._file.readU16();
-        //console.log(`numTexts=0x${hex(numTexts)} strDataLen=0x${hex(this.strDataLen)}`);
-        this.texts = [];
-        for(let i=0; i<numTexts; i++) {
-            const text = this._file.read(GameTextStruct);
-            //copy the struct to a normal Object so we can modify it later.
-            this.texts.push({
-                id:       text.id,
-                nPhrases: text.nPhrases,
-                window:   text.window,
-                alignH:   text.alignH,
-                alignV:   text.alignV,
-                language: text.language,
-                phrases:  text.phrases,
-            });
-        }
-    }
-
-    readString() {
-        const buf = [];
-        while(this._file.tell() < this.data.byteLength) {
-            const c = this._file.readUtf8Char();
-            if(c == 0) break;
-            else if(ControlCodes[c]) {
-                //control codes are followed by zero or more parameters,
-                //which can contain null bytes.
-                let control = {cmd:ControlCodes[c][0]};
-                for(let i=1; i < ControlCodes[c].length; i++) {
-                    control[ControlCodes[c][i]] = this._file.readS16();
-                }
-                buf.push(control);
-            }
-            //else if(c >= 0x80) result.push(`\\u${hex(c,4)}`);
-            else buf.push(String.fromCodePoint(c));
-        }
-        //join chars into strings
-        const result = [];
-        let str = '';
-        for(let i=0; i<buf.length; i++) {
-            if(typeof(buf[i]) == 'string') str += buf[i];
-            else {
-                if(str != '') result.push(str);
-                str = '';
-                result.push(buf[i]);
-            }
-        }
-        if(str != '') result.push(str);
-        return result;
     }
 
     readStringTable() {
@@ -220,6 +129,50 @@ export default class GameTextFile {
                 data:   this.data.buffer.slice(start, start+size),
                 length: ((texS.width * texS.height * texS.pixFmt) >> 4) * 2,
             });
+            //XXX make actual images
+        }
+    }
+
+    readTexts() {
+        /** Read the GameText structs.
+         *  These tell which strings belong to each text,
+         *  how to display it, and which language it is.
+         */
+        const numTexts  = this._file.readU16();
+        this.strDataLen = this._file.readU16();
+        //console.log(`numTexts=0x${hex(numTexts)} strDataLen=0x${hex(this.strDataLen)}`);
+        //here we fill in _textOffsets[] with some empty Text objects plus
+        //info about where the strings are and how many.
+        //later we'll use that to fill in texts[] with the completed
+        //Text objects.
+        this._textOffsets = [];
+        for(let i=0; i<numTexts; i++) {
+            const text = this._file.read(GameTextStruct);
+            this._textOffsets.push({
+                text: new Text(text.id, [], text.language, text.window,
+                    [text.alignH, text.alignV]),
+                phraseOffs: text.phrases,
+                nPhrases:   text.nPhrases, //offset into strtab -> offset into strdata
+            });
+        }
+    }
+
+    readStrings() {
+        //read the actual strings
+        //console.log("strTab", this.strTab);
+        this.texts = [];
+        for(let offs of this._textOffsets) {
+            const base = offs.phraseOffs;
+            const text = offs.text;
+            for(let i=0; i<offs.nPhrases; i++) {
+                //console.log(`text 0x${hex(text.id,4)} phrase ${i} base=0x${hex(base)}`);
+                console.assert(!isNaN(this.strTab[base+i]));
+                this._file.seek(this.strTab[base+i] + this.strDataOffs);
+                let phrase = Phrase.fromFile(this._file, text.language);
+                this._file.seek(phrase.byteLength, 'SEEK_CUR');
+                text.addPhrase(phrase);
+            }
+            this.texts.push(text);
         }
     }
 }

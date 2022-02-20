@@ -73,7 +73,7 @@ export default class Game {
             this._loadObjects();
             this.warpTab = parseWarpTab(this.app);
             await this._loadMaps();
-            await this._loadTexts();
+            //await this._loadTexts();
         }
     }
 
