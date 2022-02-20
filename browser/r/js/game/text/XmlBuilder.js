@@ -27,8 +27,7 @@ export default class GameTextXmlBuilder {
         await this.app.progress.update({
             taskText:  "Generating XML",
             subText:   "Getting file list...",
-            numSteps:  1,
-            stepsDone: 0,
+            numSteps:  1, stepsDone: 0,
         });
         const files = [];
         for(let file of this.app.game.iso.files) {
@@ -38,6 +37,7 @@ export default class GameTextXmlBuilder {
             files.push(file);
         }
 
+        //parse the files
         let iFile = 0;
         for(let file of files) {
             iFile++;
