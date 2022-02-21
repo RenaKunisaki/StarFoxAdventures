@@ -239,9 +239,10 @@ export class SaveGame {
         else if(file.size >= 0x6040) {
             await this._parseGci(buffer);
         }
-        else if(file.size == 1772 || file.size == 3952) {
+        else if(file.size == 1772 || file.size == 3952 || file.size == 6144) {
             //3952: save1.bin, a single save slot + a bunch of zeros
             //1772: save[2..5].bin, a single save slot
+            //6144: savegame.bin, no idea
             let buffer = await this._file.arrayBuffer();
             this._parseOneSlot(buffer);
         }
