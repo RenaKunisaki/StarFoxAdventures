@@ -93,6 +93,11 @@ tr.notice {
 .hexdump .line:nth-child(2n+1) { color: #FFF; }
 .hexdump .line:hover { color: #08F; }
 
+.textdump {
+    font-family: monospace;
+    white-space: pre;
+}
+
 .collapseList .count::before { content: '[' }
 .collapseList .count::after { content: '] ' }
 

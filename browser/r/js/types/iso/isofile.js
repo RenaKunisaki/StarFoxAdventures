@@ -62,7 +62,7 @@ export default class IsoFile {
         if(this._data[key]) return this._data[key];
 
         let view = this.getRawData(offset, size);
-        if(decompress) {
+        if(decompress && this.size >= 4) {
             const magic = view.getUint32(0, false);
             switch(magic) {
                 case 0x5A4C4200: //'ZLB\0'

@@ -126,9 +126,12 @@ export default class BinaryFile {
     readStr(maxLen, join=true) {
         /** Read UTF-8 string up to `maxLen` bytes */
         const res = [];
-        const end = this._readOffs + maxLen;
+        let   end = this._readOffs + maxLen;
+        if(end >= this.byteLength) end = this.byteLength - 1;
         while(this._readOffs < end) {
-            res.push(String.fromCodePoint(this.readUtf8Char()));
+            let c = this.readUtf8Char();
+            if(!c) break;
+            res.push(String.fromCodePoint(c));
         }
         return join ? res.join('') : res;
     }

@@ -1,6 +1,7 @@
 import { E, clearElement } from "../../../lib/Element.js";
 import ErrorMessage from "../ErrorMessage.js";
 import HexViewer from "./HexViewer.js";
+import TextViewer from "./TextViewer.js";
 import { RomListViewer } from "./RomListViewer.js";
 import { GameTextViewer } from "./GameTextViewer.js";
 
@@ -18,6 +19,7 @@ export default class FileViewer {
         catch(ex) {
             this.view = null;
             this.error = ex;
+            console.error(ex);
         }
         this._makeFormatSelect();
         this.refresh();
@@ -25,10 +27,11 @@ export default class FileViewer {
 
     _makeFormatSelect() {
         this.eFormatSel = E.select('formatList', {id:'formatSelect'},
-            E.option(null, "Auto",     {value:'auto'}),
-            E.option(null, "Hex",      {value:'hex'}),
-            E.option(null, "RomList",  {value:'romlist'}),
-            E.option(null, "GameText", {value:'gametext'}),
+            E.option(null, "Auto",       {value:'auto'}),
+            E.option(null, "Hex",        {value:'hex'}),
+            E.option(null, "Plain Text", {value:'text'}),
+            E.option(null, "RomList",    {value:'romlist'}),
+            E.option(null, "GameText",   {value:'gametext'}),
         );
         this.eFormatSel.addEventListener('change', e => this.refresh());
 
@@ -45,7 +48,10 @@ export default class FileViewer {
         const name = this.file.name;
         try {
             if(this.error) {
-                this.viewer = new ErrorMessage(this.app, this.error);
+                this.viewer = new ErrorMessage(this.app, this.error.toString());
+            }
+            else if(this.view.byteLength == 0) {
+                this.viewer = new ErrorMessage(this.app, "File is empty");
             }
             else if((fmt == 'auto' && name.endsWith('.romlist.zlb'))
             || fmt == 'romlist') {
@@ -55,6 +61,7 @@ export default class FileViewer {
             || fmt == 'gametext') {
                 this.viewer = new GameTextViewer(this.app, this.view);
             }
+            else if(fmt == 'text') this.viewer = new TextViewer(this.app, this.view);
             else this.viewer = new HexViewer(this.app, this.view);
         }
         catch(ex) {
