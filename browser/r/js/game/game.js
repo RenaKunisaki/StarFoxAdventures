@@ -55,6 +55,7 @@ export default class Game {
 
     async setVersion(version) {
         this.version = version;
+        this.bits    = null; //force redownload
 
         //get addresses
         await this.app.progress.update({subText:"Downloading addresses.xml..."});
