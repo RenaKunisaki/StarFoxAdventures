@@ -156,18 +156,22 @@ export default class DLL {
             };
             //make displayed value
             const type = GhidraTypes[param.type];
-            let disp = result[name].value.toString();
+            let disp = String(result[name].value);
             if(type.disp) disp = type.disp(result[name].value);
             else switch(param.type) {
                 case 'GameBit': case 'GameBit16': case 'GameBit32': {
-                    disp = `${hex(val,4)}`; //XXX link to list
+                    disp = `0x${hex(val,4)}`; //XXX link to list
+                    break;
+                }
+                case 'ObjDefEnum': {
+                    disp = `0x${hex(val,4)} ${this.app.game.getObjName(val)}`;
                     break;
                 }
                 case 'MapDirIdx8': {
                     if(this.app.game.mapDirs[val]) {
-                        disp = `${hex(val,2)} ${this.app.game.mapDirs[val].name}`;
+                        disp = `0x${hex(val,2)} ${this.app.game.mapDirs[val].name}`;
                     }
-                    else disp = `${hex(val,2)} ?`;
+                    else disp = `0x${hex(val,2)} ?`;
                     break;
                 }
             }

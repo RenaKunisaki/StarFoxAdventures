@@ -351,7 +351,7 @@
       <function address="0x8010210C" idx="0x18" name="minimapShowHelpTextForTarget">
         <return type="void"/>
       </function>
-      <function address="0x801020B8" idx="0x19">
+      <function address="0x801020B8" idx="0x19" name="setScissorRectY1tmp">
         <description>related to scissor</description>
         <params>
           <param reg="r3" type="int">
@@ -425,13 +425,13 @@
           <param type="int"/>
         </params>
       </function>
-      <function address="0x80087380" idx="0x7">
+      <function address="0x80087380" idx="0x7" name="update">
         <params>
           <param name="obj" reg="r3" type="ObjInstance *"/>
         </params>
         <return type="float"/>
       </function>
-      <function address="0x8008249C" idx="0x8" name="UpdatePositions">
+      <function address="0x8008249C" idx="0x8" name="updateCamera">
         <params/>
         <return type="ObjInstance *"/>
       </function>
@@ -454,7 +454,7 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x80081CF8" idx="0xC" name="Run">
+      <function address="0x80081CF8" idx="0xC" name="run">
         <params/>
         <return type="void"/>
       </function>
@@ -497,7 +497,7 @@
           <param reg="r6" type="int"/>
         </params>
       </function>
-      <function address="0x80080BE4" idx="0x17">
+      <function address="0x80080BE4" idx="0x17" name="preempt">
         <params>
           <param reg="r3" type="ObjInstance*"/>
           <param reg="r4" type="int">
@@ -506,14 +506,45 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x80080BCC" idx="0x18"/>
+      <function address="0x80080BCC" idx="0x18">
+        <params>
+          <param reg="r3" type="int"/>
+          <param reg="r4" type="undefined4"/>
+        </params>
+        <return type="void"/>
+      </function>
       <function address="0x80080BC4" idx="0x19"/>
-      <function address="0x80080BBC" idx="0x1A"/>
-      <function address="0x80080BB4" idx="0x1B"/>
-      <function address="0x80080BAC" idx="0x1C"/>
-      <function address="0x80080BA4" idx="0x1D"/>
-      <function address="0x80080B9C" idx="0x1E"/>
-      <function address="0x800882E4" idx="0x1F"/>
+      <function address="0x80080BBC" idx="0x1A">
+        <params>
+          <param reg="r3"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x80080BB4" idx="0x1B" name="getAnimCount1">
+        <return type="int"/>
+      </function>
+      <function address="0x80080BAC" idx="0x1C" name="setAnimCount1">
+        <params>
+          <param name="val" reg="r3" type="undefined2"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x80080BA4" idx="0x1D" name="getAnimCount2">
+        <return type="int"/>
+      </function>
+      <function address="0x80080B9C" idx="0x1E" name="setAnimCount2">
+        <params>
+          <param name="val" reg="r3" type="undefined2"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x800882E4" idx="0x1F" name="setXrot">
+        <params>
+          <param name="seqNo" reg="r3" type="int"/>
+          <param name="xRot" reg="r4" type="s16"/>
+        </params>
+        <return type="void"/>
+      </function>
       <function address="0x80080580" idx="0x20">
         <params>
           <param name="obj" reg="r3" type="undefined4"/>
@@ -526,8 +557,15 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x80080454" idx="0x21" name="SetObjs"/>
-      <function address="0x80080430" idx="0x22">
+      <function address="0x80080454" idx="0x21" name="SetObjs">
+        <params>
+          <param name="defNo" reg="r3" type="ObjDefEnum32"/>
+          <param name="obj" reg="r4" type="ObjInstance *"/>
+          <param name="rotate" reg="r5" type="bool"/>
+        </params>
+        <return type="BOOL"/>
+      </function>
+      <function address="0x80080430" idx="0x22" name="setOverridePos">
         <params>
           <param name="x" reg="f1" type="double"/>
           <param name="y" reg="f2" type="double"/>
@@ -1049,7 +1087,7 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x800A2100" idx="0x5">
+      <function address="0x800A2100" idx="0x5" name="hitDetect">
         <params/>
       </function>
       <function address="0x800A20D8" idx="0x6"/>
@@ -1157,7 +1195,12 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x800A4100" idx="0x5"/>
+      <function address="0x800A4100" idx="0x5">
+        <params>
+          <param reg="r3" type="byte"/>
+        </params>
+        <return type="void"/>
+      </function>
     </functions>
   </dll>
   <dll address="0x80310604" dolOffs="0x30D604" id="0x000E" interface="common" name="partfx" unk08="0x00000000" unk0E="0x0000">
@@ -1203,7 +1246,7 @@
         <return type="void"/>
       </function>
       <function address="0x00000000" idx="0x2" valid="0"/>
-      <function address="0x800D9D3C" idx="0x3">
+      <function address="0x800D9D3C" idx="0x3" name="init">
         <params>
           <param reg="r3" type="ObjInstance*"/>
           <param reg="r4" type="ObjInstance*"/>
@@ -1231,7 +1274,7 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x800D9668" idx="0x6">
+      <function address="0x800D9668" idx="0x6" name="render">
         <params>
           <param reg="r3" type="ObjInstance *"/>
         </params>
@@ -1255,7 +1298,7 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x800D8020" idx="0x9">
+      <function address="0x800D8020" idx="0x9" name="getExtraSize">
         <return type="int"/>
         <params>
           <param name="this" reg="r3" type="ObjInstance *"/>
@@ -1267,7 +1310,7 @@
           <param name="f5" reg="f5" type="float"/>
         </params>
       </function>
-      <function address="0x800D8F90" idx="0xA">
+      <function address="0x800D8F90" idx="0xA" name="setScale">
         <params>
           <param reg="r3" type="ObjInstance*"/>
           <param reg="r4" type="ObjInstance*"/>
@@ -1286,7 +1329,7 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x800D8ED4" idx="0xC">
+      <function address="0x800D8ED4" idx="0xC" name="modelMtxFn">
         <params>
           <param name="this" reg="r3" type="ObjInstance *"/>
           <param name="state" reg="r4" type="ObjState_Player *"/>
@@ -1295,7 +1338,7 @@
         </params>
         <return type="void"/>
       </function>
-      <function address="0x800D8E7C" idx="0xD">
+      <function address="0x800D8E7C" idx="0xD" name="render2">
         <params>
           <param name="this" reg="r3" type="ObjInstance *"/>
           <param name="state" reg="r4" type="ObjState_Player *"/>
@@ -1614,7 +1657,14 @@
         <return type="void"/>
       </function>
       <function address="0x800D9ECC" idx="0x6" return="0" stub="1"/>
-      <function address="0x800D9EC8" idx="0x7" stub="1"/>
+      <function address="0x800D9EC8" idx="0x7" stub="1">
+        <params>
+          <param reg="r3" type="undefined4"/>
+          <param reg="r4" type="int"/>
+          <param reg="r5" type="int"/>
+        </params>
+        <return type="void"/>
+      </function>
       <function address="0x800D9EC4" idx="0x8" stub="1"/>
       <function address="0x800D9EB8" idx="0x9">
         <return type="int"/>
@@ -1635,7 +1685,7 @@
         <return type="void"/>
       </function>
       <function address="0x00000000" idx="0x2" valid="0"/>
-      <function address="0x8009600C" idx="0x3">
+      <function address="0x8009600C" idx="0x3" name="run">
         <return type="void"/>
         <params>
           <param name="ctx" reg="r3" type="EVP_PKEY_CTX *"/>
@@ -1730,7 +1780,19 @@
         </params>
         <return type="RomCurve *"/>
       </function>
-      <function address="0x800E34B0" idx="0xA"/>
+      <function address="0x800E34B0" idx="0xA">
+        <params>
+          <param name="x" reg="f1" type="float"/>
+          <param name="y" reg="f2" type="float"/>
+          <param name="z" reg="f3" type="float"/>
+          <param name="type" reg="r3" type="int"/>
+          <param name="action" reg="r4" type="int"/>
+          <param name="outX" reg="r5" type="float *"/>
+          <param name="outY" reg="r6" type="float *"/>
+          <param name="outZ" reg="r7" type="float *"/>
+        </params>
+        <return type="void"/>
+      </function>
       <function address="0x800E33E0" idx="0xB">
         <return type="double"/>
       </function>
@@ -1842,8 +1904,20 @@
       <function address="0x800E7AE8" idx="0x5"/>
       <function address="0x800E771C" idx="0x6">
         <return type="void"/>
+        <params>
+          <param name="dT" reg="f1" type="double"/>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="state" reg="r4" type="dll15_state *"/>
+        </params>
       </function>
-      <function address="0x800E768C" idx="0x7"/>
+      <function address="0x800E768C" idx="0x7">
+        <params>
+          <param name="dT" reg="f1" type="double"/>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="state" reg="r4" type="dll15_state *"/>
+        </params>
+        <return type="void"/>
+      </function>
       <function address="0x800E6CE4" idx="0x8">
         <return type="void"/>
         <params>
@@ -2189,7 +2263,15 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x80111FB4" idx="0x12"/>
       <function address="0x8011313C" idx="0x13"/>
       <function address="0x80112E94" idx="0x14"/>
-      <function address="0x80112A28" idx="0x15"/>
+      <function address="0x80112A28" idx="0x15">
+        <params>
+          <param name="this" reg="r3" type="undefined4"/>
+          <param reg="r4" type="undefined4"/>
+          <param reg="r5" type="undefined4"/>
+          <param reg="r6" type="undefined4"/>
+        </params>
+        <return type="void"/>
+      </function>
       <function address="0x801126E0" idx="0x16">
         <params>
           <param name="this" reg="r3" type="undefined4"/>
@@ -2205,7 +2287,9 @@ seemingly only used to track magic plants' growth</description>
       </function>
       <function address="0x80112544" idx="0x17"/>
       <function address="0x80112098" idx="0x18"/>
-      <function address="0x80111EB4" idx="0x19"/>
+      <function address="0x80111EB4" idx="0x19">
+        <return type="void"/>
+      </function>
       <function address="0x80111E48" idx="0x1A">
         <return type="double"/>
       </function>
@@ -2604,9 +2688,34 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x00000000" idx="0x2" valid="0"/>
       <function address="0x80115094" idx="0x3"/>
       <function address="0x8011508C" idx="0x4"/>
-      <function address="0x80114F64" idx="0x5"/>
-      <function address="0x80114DEC" idx="0x6"/>
-      <function address="0x80114BB0" idx="0x7"/>
+      <function address="0x80114F64" idx="0x5">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param reg="r4" type="float *"/>
+          <param reg="r5" type="undefined2"/>
+          <param reg="r6" type="undefined2"/>
+          <param reg="r7" type="int"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x80114DEC" idx="0x6">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="state" reg="r4" type="int"/>
+          <param name="idx" reg="r5" type="int"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x80114BB0" idx="0x7">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="state" reg="r4" type="SeqState *"/>
+          <param reg="r5" type="astruct_40 *"/>
+          <param reg="r6" type="undefined2"/>
+          <param reg="r7" type="undefined2"/>
+        </params>
+        <return type="void"/>
+      </function>
       <function address="0x8011507C" idx="0x8">
         <params>
           <param reg="r3" type="int"/>
@@ -3328,13 +3437,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x801057B0" idx="0x5">
+      <function address="0x801057B0" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80105510" idx="0x6">
+      <function address="0x80105510" idx="0x6" name="copyToCurrent">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3415,13 +3524,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x801070D0" idx="0x5">
+      <function address="0x801070D0" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x801070CC" idx="0x6" stub="1">
+      <function address="0x801070CC" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3456,13 +3565,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80108B6C" idx="0x5">
+      <function address="0x80108B6C" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80108AD0" idx="0x6">
+      <function address="0x80108AD0" idx="0x6" name="copyToCurrent">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3507,7 +3616,7 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80107AEC" idx="0x6">
+      <function address="0x80107AEC" idx="0x6" name="copyToCurrent">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3546,13 +3655,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010974C" idx="0x5">
+      <function address="0x8010974C" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80109748" idx="0x6" stub="1">
+      <function address="0x80109748" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3591,13 +3700,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010B3F8" idx="0x5">
+      <function address="0x8010B3F8" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010B3F4" idx="0x6" stub="1">
+      <function address="0x8010B3F4" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3636,13 +3745,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80109C18" idx="0x5">
+      <function address="0x80109C18" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80109C14" idx="0x6" stub="1">
+      <function address="0x80109C14" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3681,13 +3790,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010C068" idx="0x5">
+      <function address="0x8010C068" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010C064" idx="0x6" stub="1">
+      <function address="0x8010C064" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3732,7 +3841,7 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010CEC0" idx="0x6" stub="1">
+      <function address="0x8010CEC0" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3771,13 +3880,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010D340" idx="0x5">
+      <function address="0x8010D340" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010D33C" idx="0x6" stub="1">
+      <function address="0x8010D33C" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3816,13 +3925,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010DAD8" idx="0x5" stub="1">
+      <function address="0x8010DAD8" idx="0x5" name="free" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010DAD4" idx="0x6" stub="1">
+      <function address="0x8010DAD4" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3861,13 +3970,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010DD28" idx="0x5">
+      <function address="0x8010DD28" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010DD24" idx="0x6" stub="1">
+      <function address="0x8010DD24" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3906,13 +4015,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010E588" idx="0x5">
+      <function address="0x8010E588" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010E51C" idx="0x6">
+      <function address="0x8010E51C" idx="0x6" name="copyToCurrent">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3951,13 +4060,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010F2FC" idx="0x5">
+      <function address="0x8010F2FC" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010F2F8" idx="0x6" stub="1">
+      <function address="0x8010F2F8" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -3996,13 +4105,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010F720" idx="0x5">
+      <function address="0x8010F720" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010F540" idx="0x6">
+      <function address="0x8010F540" idx="0x6" name="copyToCurrent">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -4047,7 +4156,7 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010FA54" idx="0x6" stub="1">
+      <function address="0x8010FA54" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -4086,13 +4195,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010FC78" idx="0x5" stub="1">
+      <function address="0x8010FC78" idx="0x5" name="free" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x8010FC74" idx="0x6" stub="1">
+      <function address="0x8010FC74" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -4131,13 +4240,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x801101E8" idx="0x5">
+      <function address="0x801101E8" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x801101E4" idx="0x6" stub="1">
+      <function address="0x801101E4" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -4176,13 +4285,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x801106B8" idx="0x5">
+      <function address="0x801106B8" idx="0x5" name="free">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x801106B4" idx="0x6" stub="1">
+      <function address="0x801106B4" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -4227,7 +4336,7 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80110C80" idx="0x6" stub="1">
+      <function address="0x80110C80" idx="0x6" name="copyToCurrent" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -4266,13 +4375,13 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80110EC0" idx="0x5" stub="1">
+      <function address="0x80110EC0" idx="0x5" name="free" stub="1">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
         </params>
       </function>
-      <function address="0x80110E30" idx="0x6">
+      <function address="0x80110E30" idx="0x6" name="copyToCurrent">
         <return type="void"/>
         <params>
           <param name="this" reg="r3" type="Camera *"/>
@@ -4383,7 +4492,17 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x00000000" idx="0x0" valid="0"/>
       <function address="0x00000000" idx="0x1" valid="0"/>
       <function address="0x00000000" idx="0x2" valid="0"/>
-      <function address="0x800EB618" idx="0x3"/>
+      <function address="0x800EB618" idx="0x3">
+        <params>
+          <param name="owner" reg="r3" type="ObjInstance *"/>
+          <param name="type" reg="r4" type="uint"/>
+          <param reg="r5" type="int"/>
+          <param reg="r6" type="uint"/>
+          <param reg="r7" type="int"/>
+          <param name="range" reg="r8" type="float *"/>
+        </params>
+        <return type="void"/>
+      </function>
     </functions>
   </dll>
   <dll address="0x8031210C" dolOffs="0x30F10C" id="0x005C" unk08="0x00000000" unk0E="0x0000">
@@ -6906,21 +7025,25 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams>
+    <objparams size="0x25">
       <param name="curveNo" offset="0x18" type="s16">
-        <description>if &lt; 0, don't translate by OBJSEQ2C.tab; value is index into ANIMCURV.tab</description>
+        <description>related to showing/hiding</description>
       </param>
-      <param offset="0x1A" type="GameBit16"/>
+      <param name="bit6A" offset="0x1A" type="GameBit16"/>
       <param name="obj" offset="0x1C" type="s16">
-        <description>0:none, 1:player, 2:Tricky, else objDefNo + 4</description>
+        <description>subtract 4 for "could not find object" msg</description>
       </param>
       <param name="seqIdx" offset="0x1F" type="byte"/>
       <param offset="0x20" type="byte"/>
       <param offset="0x21" type="byte"/>
-      <param offset="0x22" type="byte"/>
-      <param name="posOffs" offset="0x24" type="byte">
-        <description>converted to float and divided under 1</description>
+      <param name="bUseType2" offset="0x22" type="byte">
+        <description>seq-&gt;type = bUseType2 ? 2 : 0</description>
       </param>
+      <param name="posOffs" offset="0x24" type="byte">
+        <description>state-&gt;seq.field_0x24</description>
+      </param>
+      <param offset="0x1E" type="undefined"/>
+      <param offset="0x23" type="undefined"/>
     </objparams>
   </dll>
   <dll address="0x80320830" dolOffs="0x31D830" id="0x00C7" interface="object" name="DIM2RoofRub" unk08="0x00000000" unk0E="0x0000">
@@ -7084,20 +7207,39 @@ seemingly only used to track magic plants' growth</description>
         <cmd id="0x07"/>
       </objcmds>
     </functions>
-    <objparams length="0x38">
-      <param offset="0x18" type="GameBit"/>
-      <param offset="0x1A" type="GameBit"/>
+    <objparams length="0x38" size="0x36">
+      <param name="bit_incOnDeath" offset="0x18" type="GameBit"/>
+      <param name="bit_clearOnDeath" offset="0x1A" type="GameBit"/>
       <param name="hasWeapon" offset="0x27" type="byte"/>
       <param name="hitbox" offset="0x28" type="u8">
         <description>Sets the WhichParentHitbox flags of the object</description>
       </param>
       <param offset="0x29" type="byte"/>
       <param name="rotation" offset="0x2A" type="s8"/>
-      <param offset="0x2C" type="undefined2"/>
+      <param name="saveTime" offset="0x2C" type="undefined2">
+        <description>time passed to gplayAddTime if not 0 and ID not -1</description>
+      </param>
       <param offset="0x2E" type="byte"/>
       <param offset="0x2F" type="byte"/>
       <param offset="0x32" type="byte"/>
       <param offset="0x34" type="undefined2"/>
+      <param name="bit_cleared" offset="0x1C" type="GameBit16">
+        <description>for BribeClaw, set when you pay</description>
+      </param>
+      <param offset="0x1E" type="undefined"/>
+      <param offset="0x1F" type="undefined"/>
+      <param offset="0x20" type="undefined"/>
+      <param offset="0x21" type="undefined"/>
+      <param name="drops" offset="0x22" type="ushort">
+        <description>masks F000, 0F00, 00FF control different drops</description>
+      </param>
+      <param offset="0x24" type="undefined"/>
+      <param offset="0x25" type="undefined"/>
+      <param offset="0x26" type="undefined"/>
+      <param offset="0x2B" type="undefined"/>
+      <param offset="0x30" type="undefined"/>
+      <param offset="0x31" type="undefined"/>
+      <param offset="0x33" type="undefined"/>
     </objparams>
   </dll>
   <dll address="0x8031FE68" dolOffs="0x31CE68" id="0x00CA" interface="object" unk08="0x00000000" unk0E="0x0000">
@@ -9477,7 +9619,7 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x80171D8C" idx="0xF"/>
       <function address="0x80171D14" idx="0x10"/>
     </functions>
-    <objparams>
+    <objparams size="0x30">
       <param offset="0x1A" type="u8">
         <description>normally set to 0x14</description>
       </param>
@@ -9505,6 +9647,16 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x2E" type="s16">
         <description>normally set to 1 or 2</description>
       </param>
+      <param offset="0x18" type="undefined"/>
+      <param offset="0x19" type="undefined"/>
+      <param offset="0x20" type="undefined"/>
+      <param offset="0x21" type="undefined"/>
+      <param offset="0x26" type="undefined"/>
+      <param offset="0x27" type="undefined"/>
+      <param offset="0x28" type="undefined"/>
+      <param offset="0x29" type="undefined"/>
+      <param offset="0x2A" type="undefined"/>
+      <param offset="0x2B" type="undefined"/>
     </objparams>
   </dll>
   <dll address="0x80320D10" dolOffs="0x31DD10" id="0x00EE" interface="object" name="EffectBox" unk08="0x00000000" unk0E="0x0000">
@@ -9694,16 +9846,22 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams>
+    <objparams size="0x22">
       <param name="rotX" offset="0x18" type="s8"/>
-      <param name="warpIdx" offset="0x1A" type="WarpEnum8"/>
+      <param name="warpIdx" offset="0x1A" type="WarpEnum8">
+        <description>index to WARPTAB.BIN</description>
+      </param>
       <param offset="0x1B" type="s8"/>
-      <param offset="0x1D" type="s8"/>
+      <param name="type" offset="0x1D" type="s8">
+        <description>2 = don't warp</description>
+      </param>
       <param name="range" offset="0x1E" type="u8"/>
       <param offset="0x1F" type="s8">
         <description>Modified by init function</description>
       </param>
       <param name="doWarp" offset="0x20" type="GameBit16"/>
+      <param offset="0x19" type="undefined"/>
+      <param offset="0x1C" type="RomListObjLoadFlags"/>
     </objparams>
   </dll>
   <dll address="0x80320DF0" dolOffs="0x31DDF0" id="0x00F1" interface="object" name="InvHit" unk08="0x00000000" unk0E="0x0000">
@@ -11612,9 +11770,17 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x28">
-      <param offset="0x1A" type="GameBit"/>
+    <objparams length="0x28" size="0x24">
+      <param name="bit1A" offset="0x1A" type="GameBit"/>
       <param offset="0x20" type="GameBit"/>
+      <param name="bit18" offset="0x18" type="GameBit16"/>
+      <param name="rotation" offset="0x1C" type="byte"/>
+      <param name="flags1D" offset="0x1D" type="byte"/>
+      <param name="seqIdx" offset="0x1E" type="s8"/>
+      <param name="modelNo" offset="0x1F" type="undefined1">
+        <description>Created by retype action</description>
+      </param>
+      <param offset="0x22" type="ObjDefEnum"/>
     </objparams>
   </dll>
   <dll address="0x803211A0" dolOffs="0x31E1A0" id="0x0113" interface="object" name="SeqObj2" unk08="0x00000000" unk0E="0x0000">
@@ -13171,7 +13337,7 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x8019003C" idx="0x9" name="getExtraSize" return="292" stub="1">
         <return type="int"/>
       </function>
-      <function address="0x8018FF40" idx="0xA" name="setScale_ret_m1" return="-1" stub="1">
+      <function address="0x8018FF40" idx="0xA" name="setScale_ret_m1_ret_m1" return="-1" stub="1">
         <params>
           <param name="this" reg="r3" type="ObjInstance *"/>
           <param name="scale" reg="ps1_1" type="float"/>
@@ -14035,6 +14201,20 @@ seemingly only used to track magic plants' growth</description>
         <return type="void"/>
       </function>
     </functions>
+    <objparams size="0x26">
+      <param name="bit18" offset="0x18" type="short"/>
+      <param offset="0x1A" type="undefined"/>
+      <param offset="0x1B" type="undefined"/>
+      <param offset="0x1C" type="undefined"/>
+      <param offset="0x1D" type="undefined"/>
+      <param offset="0x1E" type="undefined"/>
+      <param offset="0x1F" type="undefined"/>
+      <param offset="0x20" type="undefined"/>
+      <param offset="0x21" type="undefined"/>
+      <param offset="0x22" type="undefined"/>
+      <param offset="0x23" type="undefined"/>
+      <param name="rotation" offset="0x24" type="short"/>
+    </objparams>
   </dll>
   <dll address="0x803222F8" dolOffs="0x31F2F8" id="0x013C" interface="object" name="XYZAnimator" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -15530,18 +15710,41 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams>
+    <objparams size="0x42">
       <param offset="0x18" type="u8">
         <description>explosion style?</description>
       </param>
       <param name="rotation" offset="0x1A" type="vec3s"/>
       <param name="scale" offset="0x3D" type="u8"/>
       <param name="onExplode" offset="0x3E" type="GameBit">
-        <description>set to 1 shortly after exploding</description>
+        <description>becomes invisible on load if set</description>
       </param>
       <param name="exploded" offset="0x40" type="GameBit">
-        <description>whether it's already exploded</description>
+        <description>explodes when set</description>
       </param>
+      <param offset="0x19" type="undefined"/>
+      <param offset="0x20" type="short"/>
+      <param offset="0x22" type="short"/>
+      <param offset="0x24" type="short"/>
+      <param offset="0x26" type="undefined"/>
+      <param offset="0x27" type="undefined"/>
+      <param offset="0x28" type="undefined"/>
+      <param offset="0x29" type="undefined"/>
+      <param offset="0x2A" type="undefined"/>
+      <param offset="0x2B" type="undefined"/>
+      <param offset="0x2C" type="short"/>
+      <param offset="0x2E" type="short"/>
+      <param offset="0x30" type="short"/>
+      <param offset="0x32" type="undefined"/>
+      <param offset="0x33" type="undefined"/>
+      <param offset="0x34" type="undefined"/>
+      <param offset="0x35" type="undefined"/>
+      <param offset="0x36" type="undefined"/>
+      <param offset="0x37" type="undefined"/>
+      <param offset="0x38" type="ushort"/>
+      <param offset="0x3A" type="undefined"/>
+      <param offset="0x3B" type="undefined"/>
+      <param offset="0x3C" type="undefined"/>
     </objparams>
   </dll>
   <dll address="0x80322F20" dolOffs="0x31FF20" id="0x015B" interface="object" name="CFForceField" unk08="0x00000000" unk0E="0x0000">
@@ -16736,6 +16939,13 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams size="0x1E">
+      <param name="xRot" offset="0x18" type="byte"/>
+      <param name="scale" offset="0x19" type="byte"/>
+      <param offset="0x1A" type="byte"/>
+      <param offset="0x1B" type="undefined"/>
+      <param name="disable" offset="0x1C" type="GameBit16"/>
+    </objparams>
   </dll>
   <dll address="0x80325EC0" dolOffs="0x322EC0" id="0x0175" interface="object" name="DFropenode" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -23381,7 +23591,12 @@ seemingly only used to track magic plants' growth</description>
           <param name="scale" reg="ps1_1" type="float"/>
         </params>
       </function>
-      <function address="0x801E1E64" idx="0xB"/>
+      <function address="0x801E1E64" idx="0xB">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+        </params>
+        <return type="int"/>
+      </function>
       <function address="0x801E1E00" idx="0xC" name="modelMtxFn">
         <params>
           <param name="this" reg="r3" type="ObjInstance *"/>
@@ -23395,7 +23610,12 @@ seemingly only used to track magic plants' growth</description>
           <param name="this" reg="r3" type="ObjInstance *"/>
         </params>
       </function>
-      <function address="0x801E1DB0" idx="0xE"/>
+      <function address="0x801E1DB0" idx="0xE">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+        </params>
+        <return type="int"/>
+      </function>
     </functions>
   </dll>
   <dll address="0x80327C88" dolOffs="0x324C88" id="0x01E9" interface="object" name="SB_Propeller" unk08="0x00000000" unk0E="0x0000">
@@ -29258,7 +29478,7 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x801ECA60" idx="0x16" stub="1"/>
       <function address="0x801ECA5C" idx="0x17" stub="1"/>
     </functions>
-    <objparams>
+    <objparams size="0x24">
       <param name="rotation" offset="0x18" type="s8"/>
       <param name="cantRide" offset="0x19" type="s8"/>
       <param name="riding" offset="0x1A" type="GameBit16">
@@ -29268,6 +29488,12 @@ seemingly only used to track magic plants' growth</description>
         <description>for type 2</description>
       </param>
       <param name="enableHitbox" offset="0x1E" type="GameBit16"/>
+      <param offset="0x1C" type="RomListObjLoadFlags"/>
+      <param offset="0x1D" type="byte"/>
+      <param offset="0x20" type="undefined"/>
+      <param offset="0x21" type="undefined"/>
+      <param offset="0x22" type="undefined"/>
+      <param offset="0x23" type="undefined"/>
     </objparams>
   </dll>
   <dll address="0x80335138" dolOffs="0x332138" id="0x0256" interface="object" name="DIMSnowHorn1" unk08="0x00000000" unk0E="0x0000">
@@ -30550,6 +30776,15 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams size="0x20">
+      <param name="rotX" offset="0x18" type="s8"/>
+      <param offset="0x19" type="undefined"/>
+      <param offset="0x1A" type="undefined"/>
+      <param offset="0x1B" type="undefined"/>
+      <param offset="0x1C" type="undefined"/>
+      <param offset="0x1D" type="undefined"/>
+      <param name="collected" offset="0x1E" type="GameBit16"/>
+    </objparams>
   </dll>
   <dll address="0x803DC2E0" dolOffs="0x333940" id="0x026A" interface="data" name="Dummy26A" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed</description>
@@ -30741,6 +30976,15 @@ seemingly only used to track magic plants' growth</description>
       </function>
       <function address="0x8021AD74" idx="0xB"/>
     </functions>
+    <objparams size="0x20">
+      <param offset="0x18" type="byte"/>
+      <param offset="0x19" type="undefined"/>
+      <param name="objType" offset="0x1A" type="short">
+        <description>0=disabled</description>
+      </param>
+      <param offset="0x1C" type="short"/>
+      <param offset="0x1E" type="GameBit16"/>
+    </objparams>
   </dll>
   <dll address="0x8032AC58" dolOffs="0x327C58" id="0x026F" interface="object" name="DR_Generator" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -30997,6 +31241,12 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x8021E748" idx="0x16"/>
       <function address="0x8021E66C" idx="0x17"/>
     </functions>
+    <objparams size="0x1E">
+      <param name="rotX" offset="0x18" type="char"/>
+      <param offset="0x19" type="undefined"/>
+      <param offset="0x1A" type="short"/>
+      <param offset="0x1C" type="short"/>
+    </objparams>
   </dll>
   <dll address="0x8032AC90" dolOffs="0x327C90" id="0x0273" interface="object" name="FirePipe" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -31722,8 +31972,15 @@ seemingly only used to track magic plants' growth</description>
         </params>
         <return type="void"/>
       </function>
-      <function address="0x801E63C0" idx="0xB"/>
-      <function address="0x801E6358" idx="0xC" name="modelMtxFn">
+      <function address="0x801E63C0" idx="0xB">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="state" reg="r4" type="ObjState_ShopKeeper *"/>
+          <param name="seqIdx" reg="r5" type="int"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x801E6358" idx="0xC" name="isItemAvailable">
         <return type="BOOL"/>
         <params>
           <param name="this" reg="r3" type="ObjInstance *"/>
@@ -31731,22 +31988,84 @@ seemingly only used to track magic plants' growth</description>
           <param reg="r5" type="vec3f *"/>
         </params>
       </function>
-      <function address="0x801E62F0" idx="0xD" name="render2">
+      <function address="0x801E62F0" idx="0xD" name="isItemBought">
         <return type="BOOL"/>
         <params>
           <param name="this" reg="r3" type="ObjInstance *"/>
         </params>
       </function>
-      <function address="0x801E62C0" idx="0xE"/>
-      <function address="0x801E6290" idx="0xF"/>
-      <function address="0x801E6264" idx="0x10"/>
-      <function address="0x801E6234" idx="0x11"/>
-      <function address="0x801E6224" idx="0x12"/>
-      <function address="0x801E6214" idx="0x13"/>
-      <function address="0x801E60C0" idx="0x14"/>
-      <function address="0x801E60A4" idx="0x15"/>
-      <function address="0x801E607C" idx="0x16"/>
-      <function address="0x801E6050" idx="0x17"/>
+      <function address="0x801E62C0" idx="0xE" name="getItemMinPrice">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="itemIdx" reg="r4" type="int"/>
+        </params>
+        <return type="u8"/>
+      </function>
+      <function address="0x801E6290" idx="0xF" name="getItemField4">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="itemIdx" reg="r4" type="int"/>
+        </params>
+        <return type="byte"/>
+      </function>
+      <function address="0x801E6264" idx="0x10" name="getItemPrice">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="itemIdx" reg="r4" type="int"/>
+        </params>
+        <return type="u8"/>
+      </function>
+      <function address="0x801E6234" idx="0x11" name="getItemTextId">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="itemIdx" reg="r4" type="int"/>
+        </params>
+        <return type="int"/>
+      </function>
+      <function address="0x801E6224" idx="0x12" name="setStateField1">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param reg="r4"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x801E6214" idx="0x13" name="getStateField1">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+        </params>
+        <return type="int"/>
+      </function>
+      <function address="0x801E60C0" idx="0x14" name="buyItem">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param name="amount" reg="r4" type="undefined4"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x801E60A4" idx="0x15">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param reg="r4"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x801E607C" idx="0x16">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param reg="r4" type="undefined1"/>
+          <param reg="r5" type="undefined1"/>
+        </params>
+        <return type="void"/>
+      </function>
+      <function address="0x801E6050" idx="0x17">
+        <params>
+          <param name="this" reg="r3" type="ObjInstance *"/>
+          <param reg="r4" type="undefined4"/>
+          <param reg="r5" type="undefined4"/>
+          <param reg="r6" type="undefined4"/>
+        </params>
+        <return type="void"/>
+      </function>
     </functions>
   </dll>
   <dll address="0x80328370" dolOffs="0x325370" id="0x0286" interface="object" name="ShopKeeper" unk08="0x00000000" unk0E="0x0000">
