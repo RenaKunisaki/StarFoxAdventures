@@ -26,6 +26,15 @@ export const fieldTypes = {
     //type 's' (string) is handled specially
 };
 
+export function parseType(type) {
+    let count, size;
+    count = type.match(/\d+/);
+    count = (count == null) ? 1 : parseInt(count);
+    type  = type.match(/\d*(.+)/)[1];
+    size  = (type == 's') ? 1 : fieldTypes[type].size;
+    return {type:type, size:size, count:count};
+}
+
 export default function Struct(...fields) {
     /** A binary structure definition.
      *  fields: The field definitions.
@@ -60,10 +69,7 @@ export default function Struct(...fields) {
 
         if(typeof type == 'string') {
             //eg "I" or "4b", Python style
-            count = type.match(/\d+/);
-            count = (count == null) ? 1 : parseInt(count);
-            type  = type.match(/\d*(.+)/)[1];
-            size  = (type == 's') ? 1 : fieldTypes[type].size;
+            ({type, size, count} = parseType(type));
         }
         else {
             //eg MyType or MyType[4]
@@ -114,6 +120,8 @@ export default function Struct(...fields) {
             this._buffer = buffer;
             this._offset = offset; //for debug; not used
             if(buffer.byteLength < structSize) {
+                console.error("buffer byteLength=", buffer.byteLength,
+                    "structSize=", structSize, "fields:", fields);
                 throw new Error("Buffer too small for type");
             }
             const view = new DataView(buffer);

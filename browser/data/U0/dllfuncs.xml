@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<dllfuncs>
+  <interface name="data">
+    <description>DLLs with no code</description>
+  </interface>
+
+  <interface name="common">
+    <description>Common to all DLLs</description>
+    <function idx="0" name="initialise">
+      <description>Called when DLL is loaded</description>
+      <params>
+        <param reg="r3" type="undefined4" name="param">
+          <description>Parameter passed to dll_load</description>
+        </param>
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="1" name="release">
+      <description>Called when DLL is unloaded</description>
+      <params />
+      <return type="void" />
+    </function>
+    <function idx="2">
+      <description>Unused?</description>
+    </function>
+  </interface>
+
+  <interface name="UI">
+    <description>DLLs used for UI</description>
+    <extends interface="common" />
+    <function idx="3" name="frameStart">
+      <description>Called at beginning of frame</description>
+      <params />
+      <return type="int"/>
+    </function>
+    <function idx="4" name="frameEnd">
+      <description>Called after updating objects but before rendering HUD/UI</description>
+      <params />
+      <return type="void"/>
+    </function>
+    <function idx="5" name="render">
+      <description>Called before rendering UI/HUD</description>
+      <params>
+        <param reg="r3" type="pointer" name="this" allowNull="1" />
+      </params>
+    </function>
+  </interface>
+
+  <interface name="camera">
+    <description>DLLs implementing camera nmodes.</description>
+    <extends interface="common" />
+    <function idx="3" name="init">
+      <description>Set up object instance</description>
+      <params>
+        <param reg="r3" type="Camera*" name="this" />
+        <param reg="r4" type="int" name="mode" />
+        <param reg="r5" type="void*" name="params" /><!-- type depends on DLL -->
+        <param reg="r6" type="DllInitFlags" name="flags" />
+        <param reg="f1" type="float" name="x" />
+        <param reg="f2" type="float" name="y" />
+        <param reg="f3" type="float" name="z" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="4" name="update">
+      <params>
+        <param reg="r3" type="Camera*" name="this" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="5" name="free">
+      <params>
+        <param reg="r3" type="Camera*" name="this" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="6" name="copyToCurrent">
+      <description>Copy the given camera's coords and rotation to the active camera</description>
+      <params>
+        <param reg="r3" type="Camera*" name="this" />
+      </params>
+      <return type="void" />
+    </function>
+    <!-- following are only in CameraModeNormal? -->
+    <function idx="7" name="follow">
+      <description>Makes camera follow focused object.</description>
+      <params>
+        <param reg="r3" type="Camera*" name="this" />
+        <param reg="r4" type="ObjInstance*" name="that" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="8">
+      <params>
+        <param reg="r3" type="Camera*" name="this" />
+        <param reg="f1" type="double" name="angle1" />
+        <param reg="f2" type="double" name="angle2" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="9">
+      <params>
+        <param reg="r3" type="Camera*" name="this" />
+        <param reg="r4" type="ObjInstance*" name="that" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="10">
+      <params>
+        <param reg="r3" type="undefined4*" name="out1" />
+        <param reg="r4" type="undefined4*" name="out2" />
+        <param reg="r5" type="float*" name="outX" allowNull="1" />
+        <param reg="r6" type="float*" name="outY" allowNull="1" />
+        <param reg="r7" type="float*" name="outZ" allowNull="1" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="11">
+      <params>
+        <param reg="r3" type="Camera*" name="this" />
+        <param reg="r4" type="uint" name="flags" />
+        <param reg="r5" type="undefined1" />
+        <param reg="r6" type="float*" name="out1" />
+        <param reg="r7" type="float*" name="out2" />
+      </params>
+      <return type="void" />
+    </function>
+  </interface>
+
+  <interface name="object">
+    <description>DLLs referenced by game objects.</description>
+    <extends interface="common" />
+    <function idx="3" name="init">
+      <description>Set up object instance</description>
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+        <param reg="r4" type="ObjDef*" name="objDef" />
+        <param reg="r5" type="ObjInstance*" name="obj2" />
+        <param reg="r6" type="DllInitFlags" name="flags" />
+        <param reg="f1" type="float" name="x" />
+        <param reg="f2" type="float" name="y" />
+        <param reg="f3" type="float" name="z" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="4" name="update">
+      <description>Update object instance</description>
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="5" name="hitDetect">
+      <description>Override hit detection</description>
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+      </params>
+    </function>
+    <function idx="6" name="render">
+      <description>Override render</description>
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+        <param reg="r4" />
+        <param reg="r5" />
+        <param reg="r6" />
+        <param reg="r7" />
+        <param reg="r8" type="bool" name="shouldRender" />
+      </params>
+    </function>
+    <function idx="7" name="free">
+      <description>Free object instance</description>
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+        <param reg="r4" type="int" />
+      </params>
+    </function>
+    <function idx="8">
+      <description></description>
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+      </params>
+    </function>
+    <function idx="9" name="getExtraSize">
+      <description>Get extra size for object (size of State struct)</description>
+      <params />
+      <return type="int" />
+    </function>
+    <function idx="10" name="setScale">
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+        <param reg="f1" type="float" name="scale" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="11">
+    </function>
+    <function idx="12" name="modelMtxFn">
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+        <param reg="r4" type="undefined4" />
+        <param reg="r5" type="vec3f *" />
+      </params>
+      <return type="void" />
+    </function>
+    <function idx="13" name="render2">
+      <params>
+        <param reg="r3" type="ObjInstance*" name="this" />
+      </params>
+    </function>
+  </interface>
+</dllfuncs>

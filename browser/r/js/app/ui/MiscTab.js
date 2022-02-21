@@ -25,20 +25,7 @@ export default class MiscTab {
             numSteps: file.size / 4, stepsDone: 0,
         });
 
-        const data = new BinaryFile(file.getData());
-        const xml  = document.implementation.createDocument(XML, "gametext");
-        for(let i=0; i<file.size / 4; i++) {
-            let bit       = new GameBit(this.app, null);
-            const item    = data.readU32();
-            bit.id        = i;
-            bit.offset    = item >> 16;
-            bit.size      = ((item >> 8) & 0x1F) + 1;
-            const hasHint = ((item >> 13) & 1) != 0;
-            bit.table     = (item >> 14) & 3;
-            bit.hintId    = hasHint ? ((item & 0xFF) + 0xF4) : null;
-            xml.documentElement.appendChild(bit.toXml());
-            if(!(i % 100)) await this.app.progress.update({stepsDone:i});
-        }
+
         this.app.progress.hide();
         downloadXml(xml, 'gamebits.xml');
     }

@@ -11,6 +11,30 @@ export const MAP_CELL_SIZE = 640;
 export const TEXT_LANGUAGES = ['English', 'French',
     'German', 'Italian', 'Japanese', 'Spanish']; //XXX move
 
+//could move this to XML...
+export const VERSION_INFO = {
+    U0: {
+        objNameOffs: 0x91, //offset of name in ObjData
+        objNameLen:  11,
+    },
+    U1: {
+        objNameOffs: 0x91, //offset of name in ObjData
+        objNameLen:  11,
+    },
+    E0: {
+        objNameOffs: 0x91, //offset of name in ObjData
+        objNameLen:  11,
+    },
+    J0: {
+        objNameOffs: 0x91, //offset of name in ObjData
+        objNameLen:  11,
+    },
+    J1: {
+        objNameOffs: 0x91, //offset of name in ObjData
+        objNameLen:  11,
+    },
+}
+
 export default class Game {
     /** Info and methods relating to the game itself.
      */
@@ -23,6 +47,7 @@ export default class Game {
         this.objCats   = null; //object categories
         this.dlls      = null;
         this.maps      = null;
+        this.mapDirs   = null;
         this.warpTab   = null;
         this.texts     = null;
 
@@ -54,8 +79,9 @@ export default class Game {
     }
 
     async setVersion(version) {
-        this.version = version;
-        this.bits    = null; //force redownload
+        this.version  = version;
+        this.bits     = null; //force redownload
+        this._verInfo = VERSION_INFO[this.version];
 
         //get addresses
         await this.app.progress.update({subText:"Downloading addresses.xml..."});
@@ -114,6 +140,21 @@ export default class Game {
         return res;
     }
 
+    getObjName(defNo) {
+        if(!this.objsTab) return '(no ISO)';
+        const offs = this.objsTab.getUint32(defNo * 4);
+        let   res  = '';
+        const len  = this._verInfo.objNameLen;
+        const base = this._verInfo.objNameOffs;
+        for(let i=0; i<len; i++) {
+            let b = this.objsBin.getUint8(offs+base+i);
+            if(b >= 0x20 && b <= 0x7E) res += String.fromCharCode(b);
+            else if(b == 0) break;
+            else res += '?';
+        }
+        return res;
+    }
+
     async _loadDlls() {
         await this.app.progress.update({subText:"Downloading dlls.xml..."});
         const xml = await getXml(`data/${this.version}/dlls.xml`);
@@ -128,8 +169,12 @@ export default class Game {
     }
 
     async _loadObjects() {
+        this.objsTab = this.app.game.iso.getFile('/OBJECTS.tab').getData();
+        this.objsBin = this.app.game.iso.getFile('/OBJECTS.bin').getData();
+
+        //parse OBJINDEX.bin
         const objIndex = this.iso.getFile('/OBJINDEX.bin').getData();
-        this.objIndex = [];
+        this.objIndex  = [];
         const revIndex = {};
         for(let i=0; i<objIndex.byteLength; i += 2) {
             if(!(i % 100)) {
@@ -146,13 +191,13 @@ export default class Game {
             if(idx >= 0 && revIndex[idx] == undefined) revIndex[idx] = i >> 1;
         }
 
-        const objsTab = this.iso.getFile('/OBJECTS.tab').getData();
+        //parse OBJECTS.bin
         this.objects = [];
-        for(let i=0; objsTab.getInt32((i+1)*4) >= 0; i++) {
+        for(let i=0; this.objsTab.getInt32((i+1)*4) >= 0; i++) {
             if(!(i % 100)) {
                 await this.app.progress.update({
                     subText:"Parsing OBJECTS.bin...",
-                    numSteps: objsTab.byteLength / 4, //approximate
+                    numSteps: this.objsTab.byteLength / 4, //approximate
                     stepsDone: i,
                 });
             }
@@ -169,6 +214,7 @@ export default class Game {
         });
         const xml = await getXml(`data/${this.version}/maps.xml`);
         this.maps = {};
+        this.mapDirs = {}; //dir ID => map
         let nextId = -1; //use negative IDs for maps that don't have an ID
         const usedRomLists = {};
         if(xml) {
@@ -178,6 +224,7 @@ export default class Game {
                 if(id == null) id = nextId--;
                 this.maps[id] = map;
                 usedRomLists[map.romListName] = true;
+                if(map.dirId != null) this.mapDirs[map.dirId] = map;
             }
         }
 
