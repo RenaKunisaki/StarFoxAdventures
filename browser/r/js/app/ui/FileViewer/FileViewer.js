@@ -61,7 +61,9 @@ export default class FileViewer {
             || fmt == 'gametext') {
                 this.viewer = new GameTextViewer(this.app, this.view);
             }
-            else if(fmt == 'text') this.viewer = new TextViewer(this.app, this.view);
+            else if(fmt == 'text') {
+                this.viewer = new TextViewer(this.app, this.view);
+            }
             else this.viewer = new HexViewer(this.app, this.view);
         }
         catch(ex) {

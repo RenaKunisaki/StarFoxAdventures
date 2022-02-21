@@ -1,5 +1,5 @@
 import { E, clearElement } from "../../lib/Element.js";
-import { fileSize, hex } from "../../Util.js";
+import { download, fileSize, hex } from "../../Util.js";
 import FileViewer from "./FileViewer/FileViewer.js";
 
 export default class FileList {
@@ -29,6 +29,7 @@ export default class FileList {
     _showFile(file) {
         clearElement(this.eRightPane);
         const eView = E.button(null, "View in New Window");
+        const eDownload = E.button(null, "Download");
         this.eRightPane.append(
             E.h1(null, file.path),
             E.div('fileInfo',
@@ -37,12 +38,16 @@ export default class FileList {
                     E.tr(E.th(null, "Size"), E.td('fileSize int', file.size.toLocaleString())),
                     E.tr(E.th(null, "Offset"), E.td('offset hex', `0x${hex(file.bufferOffs)}`)),
                 ),
-                eView,
+                E.div('buttons', eView, eDownload),
             ),
         );
 
         eView.addEventListener('click', async e => {
             await this.app.showFileInNewWindow(file);
+        });
+
+        eDownload.addEventListener('click', e => {
+            download(file.getData(), file.name);
         });
 
         const viewer = new FileViewer(this.app, file, false);
