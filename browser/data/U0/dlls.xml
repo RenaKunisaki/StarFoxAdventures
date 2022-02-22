@@ -10911,7 +10911,7 @@ seemingly only used to track magic plants' growth</description>
       <param offset="0x19" type="s8"/>
       <param offset="0x1A" type="s16"/>
       <param offset="0x1C" type="s16"/>
-      <param name="noHitbox" offset="0x1E" type="GameBit16"/>
+      <param name="destroyed" offset="0x1E" type="GameBit16"/>
       <param offset="0x20" type="s16"/>
     </objparams>
   </dll>
@@ -14937,6 +14937,9 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams>
+      <param offset="0x20" type="GameBit16" name="enabled" />
+    </objparams>
   </dll>
   <dll address="0x80322AB8" dolOffs="0x31FAB8" id="0x014A" interface="object" name="CFPowerBase" unk08="0x00000000" unk0E="0x0000">
     <description/>
