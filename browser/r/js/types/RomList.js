@@ -45,6 +45,8 @@ class RomListEntry {
                 const params = dll.readObjParams(this.paramData);
                 for(let [name, param] of Object.entries(dll.objParams)) {
                     this.params[name] = {
+                        //XXX this is gross, we end up with param.param
+                        //and value.value
                         param: param,
                         value: params[name],
                     };

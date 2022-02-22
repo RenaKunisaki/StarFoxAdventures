@@ -1,5 +1,6 @@
 import { E, createElement } from "../../lib/Element.js";
 import { downloadXml, hex } from "../../Util.js";
+import GameBitsXmlBuilder from "../../game/GameBitsXmlBuilder.js";
 import GameTextXmlBuilder from "../../game/text/XmlBuilder.js";
 import BinaryFile from "../../lib/BinaryFile.js";
 import GameBit from "../../types/GameBit.js";
@@ -18,14 +19,7 @@ export default class MiscTab {
     }
 
     async _genGameBitsXml() {
-        const file = this.app.game.iso.getFile('/BITTABLE.bin');
-        this.app.progress.show({
-            taskText: "Generating XML",
-            subText:  "Parsing BITTABLE.bin...",
-            numSteps: file.size / 4, stepsDone: 0,
-        });
-
-
+        const xml = await ((new GameBitsXmlBuilder(this.app)).build());
         this.app.progress.hide();
         downloadXml(xml, 'gamebits.xml');
     }

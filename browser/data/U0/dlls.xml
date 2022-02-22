@@ -7207,7 +7207,7 @@ seemingly only used to track magic plants' growth</description>
         <cmd id="0x07"/>
       </objcmds>
     </functions>
-    <objparams length="0x38" size="0x36">
+    <objparams size="0x36">
       <param name="bit_incOnDeath" offset="0x18" type="GameBit"/>
       <param name="bit_clearOnDeath" offset="0x1A" type="GameBit"/>
       <param name="hasWeapon" offset="0x27" type="byte"/>
@@ -7452,7 +7452,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="void"/>
       </function>
     </functions>
-    <objparams length="0x38"/>
+    <objparams size="0x38"/>
   </dll>
   <dll address="0x8031FFD0" dolOffs="0x31CFD0" id="0x00CD" interface="object" name="IceBall" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -7657,7 +7657,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x2C"/>
+    <objparams size="0x2C"/>
   </dll>
   <dll address="0x80320178" dolOffs="0x31D178" id="0x00D0" interface="object" name="Grimble" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -7790,7 +7790,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="void"/>
       </function>
     </functions>
-    <objparams length="0x24"/>
+    <objparams size="0x24"/>
   </dll>
   <dll address="0x80320294" dolOffs="0x31D294" id="0x00D2" interface="object" name="Tumbleweed" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -8090,7 +8090,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
       <function address="0x80168B80" idx="0xB" stub="1"/>
     </functions>
-    <objparams length="0x38"/>
+    <objparams size="0x38"/>
   </dll>
   <dll address="0x80320458" dolOffs="0x31D458" id="0x00D6" interface="object" name="KaldaChompMe" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -8153,7 +8153,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <pbjparams length="0x20"/>
+    <pbjparams size="0x20"/>
   </dll>
   <dll address="0x80320490" dolOffs="0x31D490" id="0x00D7" interface="object" name="KaldaChompSpit" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -9052,7 +9052,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x24">
+    <objparams size="0x24">
       <param offset="0x1C" type="s16">
         <description>normally set to 1</description>
       </param>
@@ -9198,7 +9198,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x24"/>
+    <objparams size="0x24"/>
   </dll>
   <dll address="0x80320B00" dolOffs="0x31DB00" id="0x00E6" interface="object" name="ReStartMarker" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -10651,7 +10651,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x20">
+    <objparams size="0x20">
       <param name="growTime" offset="0x18" type="u16">
         <description>How long to regrow (min 100)</description>
       </param>
@@ -10977,7 +10977,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x24"/>
+    <objparams size="0x24"/>
   </dll>
   <dll address="0x80321750" dolOffs="0x31E750" id="0x0106" interface="object" name="Scarab" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -11554,7 +11554,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x20">
+    <objparams size="0x20">
       <param type="note">allocated with this size, but the extra space seems to be unused.</param>
     </objparams>
   </dll>
@@ -11770,16 +11770,14 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x28" size="0x24">
+    <objparams size="0x28">
       <param name="bit1A" offset="0x1A" type="GameBit"/>
-      <param offset="0x20" type="GameBit"/>
+      <param offset="0x20" type="short" name="seqNo"/>
       <param name="bit18" offset="0x18" type="GameBit16"/>
       <param name="rotation" offset="0x1C" type="byte"/>
       <param name="flags1D" offset="0x1D" type="byte"/>
       <param name="seqIdx" offset="0x1E" type="s8"/>
-      <param name="modelNo" offset="0x1F" type="undefined1">
-        <description>Created by retype action</description>
-      </param>
+      <param name="modelNo" offset="0x1F" type="undefined1"/>
       <param offset="0x22" type="ObjDefEnum"/>
     </objparams>
   </dll>
@@ -12164,7 +12162,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x30">
+    <objparams size="0x30">
       <param name="collected" offset="0x24" type="GameBit"/>
     </objparams>
   </dll>
@@ -12251,7 +12249,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x20"/>
+    <objparams size="0x20"/>
   </dll>
   <dll address="0x80321A50" dolOffs="0x31EA50" id="0x011B" interface="object" name="Landed_Arwing" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -12300,7 +12298,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x28">
+    <objparams size="0x28">
       <param name="Visible" offset="0x1C" type="GameBit"/>
     </objparams>
   </dll>
@@ -12355,7 +12353,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x28">
+    <objparams size="0x28">
       <param name="rotation" offset="0x18" type="s8"/>
       <param name="type" offset="0x1C" type="u8">
         <description>0: rocket boost
@@ -12764,7 +12762,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x1C">
+    <objparams size="0x1C">
       <param name="active" offset="0x1A" type="GameBit"/>
     </objparams>
   </dll>
@@ -12821,7 +12819,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
       <function address="0x80171300" idx="0xB" return="0" stub="1"/>
     </functions>
-    <objparams length="varies">
+    <objparams size="varies">
       <param name="action" offset="0x18" type="byte"/>
       <param name="type" offset="0x19" type="byte"/>
       <param offset="0x1B" type="byte"/>
@@ -13408,7 +13406,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x20">
+    <objparams size="0x20">
       <param offset="0x1C" type="float"/>
     </objparams>
   </dll>
@@ -14392,7 +14390,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x20"/>
+    <objparams size="0x20"/>
   </dll>
   <dll address="0x803223B0" dolOffs="0x31F3B0" id="0x013F" interface="object" name="TexFrameAnimator" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -19861,7 +19859,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x20">
+    <objparams size="0x20">
       <param name="exists" offset="0x1C" type="GameBit">
         <description>If 0xFFFF, will throw spores</description>
       </param>
@@ -23063,7 +23061,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
       <function address="0x801BD240" idx="0xB" stub="1"/>
     </functions>
-    <objparams length="0x38"/>
+    <objparams size="0x38"/>
   </dll>
   <dll address="0x80325BF8" dolOffs="0x322BF8" id="0x01E1" interface="object" name="DIM_BossGut" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -23126,7 +23124,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x38"/>
+    <objparams size="0x38"/>
   </dll>
   <dll address="0x80325C30" dolOffs="0x322C30" id="0x01E2" interface="object" name="DIM_BossTonsil" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -23198,7 +23196,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
       <function address="0x801BE86C" idx="0xB" stub="1"/>
     </functions>
-    <objparams length="0x38"/>
+    <objparams size="0x38"/>
   </dll>
   <dll address="0x80325C70" dolOffs="0x322C70" id="0x01E3" interface="object" name="DIM_BossGut2" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -23521,7 +23519,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <params length="0x24"/>
+    <params size="0x24"/>
   </dll>
   <dll address="0x80327BE0" dolOffs="0x324BE0" id="0x01E8" interface="object" name="SB_Galleon" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -26759,7 +26757,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x24">
+    <objparams size="0x24">
       <param name="rotation" offset="0x18" type="s8"/>
       <param offset="0x19" type="byte"/>
       <param offset="0x1A" type="s16"/>
@@ -26993,7 +26991,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x24">
+    <objparams size="0x24">
       <param offset="0x1A" type="undefined2"/>
       <param offset="0x1C" type="undefined2"/>
       <param name="activated" offset="0x1E" type="GameBit16">
@@ -28566,7 +28564,7 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x00000000" idx="0xC" valid="0"/>
       <function address="0x000B0000" idx="0xD" valid="0"/>
     </functions>
-    <objparams length="0x24"/>
+    <objparams size="0x24"/>
   </dll>
   <dll address="0x80329378" dolOffs="0x326378" id="0x0241" interface="object" name="DrakorEnergy" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -28637,7 +28635,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
       <function address="0x801FF9B0" idx="0xB" stub="1"/>
     </functions>
-    <objparams length="0x24"/>
+    <objparams size="0x24"/>
   </dll>
   <dll address="0x80329774" dolOffs="0x326774" id="0x0242" interface="object" name="DBstealerworm" unk08="0x00000000" unk0E="0x0000">
     <description>egg thieves</description>
@@ -28889,7 +28887,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x24"/>
+    <objparams size="0x24"/>
   </dll>
   <dll address="0x8032A0D8" dolOffs="0x3270D8" id="0x024E" interface="object" name="DrakorD_ThornBush" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -29016,7 +29014,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x18"/>
+    <objparams size="0x18"/>
   </dll>
   <dll address="0x8032A58C" dolOffs="0x32758C" id="0x0250" interface="object" name="KT_Rex" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -30192,7 +30190,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="uint"/>
       </function>
     </functions>
-    <objparams length="0x24">
+    <objparams size="0x24">
       <param offset="0x19" type="byte"/>
       <param offset="0x1E" type="GameBit"/>
       <param offset="0x20" type="GameBit"/>
@@ -31146,7 +31144,7 @@ seemingly only used to track magic plants' growth</description>
       <function address="0x8021B3CC" idx="0x16"/>
       <function address="0x8021B384" idx="0x17"/>
     </functions>
-    <objparams length="0x24"/>
+    <objparams size="0x24"/>
   </dll>
   <dll address="0x8032ABC0" dolOffs="0x327BC0" id="0x0272" interface="object" name="HighTop" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -33459,7 +33457,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x20">
+    <objparams size="0x20">
       <param name="rotZ" offset="0x18" type="s8">
         <description>guessed from other two; set to 0</description>
       </param>
@@ -35052,7 +35050,7 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
-    <objparams length="0x24">
+    <objparams size="0x24">
       <param offset="0x19" type="byte"/>
       <param name="time" offset="0x1A" type="short"/>
       <param name="target" offset="0x1E" type="GameBit">

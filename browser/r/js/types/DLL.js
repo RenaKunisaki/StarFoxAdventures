@@ -99,6 +99,8 @@ export default class DLL {
         this.objParamOffsets = null;
         const eParams = eDll.getElementsByTagName('objparams').item(0);
         if(!eParams) return;
+        let dllName = eDll.getAttribute('name');
+        if(!dllName) dllName = eDll.getAttribute('id');
 
         this.objParams = {};
         this.objParamOffsets = {};
@@ -112,6 +114,11 @@ export default class DLL {
             if(param.name == undefined) param.name = `unk${hex(param.offset)}`;
             let eDesc = eParam.getElementsByTagName('description').item(0);
             if(eDesc) param.description = eDesc.textContent;
+            if(this.objParamOffsets[param.offset]) {
+                //we do this sometimes when the same field has different
+                //meanings depending on some other param
+                console.warn(`Multiple params assigned to offset 0x${hex(param.offset)} of DLL ${dllName}`);
+            }
             this.objParams[param.name] = param;
             this.objParamOffsets[param.offset] = param;
             if(param.offset > maxOffs) maxOffs = param.offset;
@@ -121,6 +128,7 @@ export default class DLL {
         const structDef = [];
         let offs = 0x18; //end of common objdef
         while(offs <= maxOffs) {
+            let prevOffs = offs;
             let param = this.objParamOffsets[offs];
             if(param) {
                 console.assert(GhidraTypes[param.type]);
@@ -132,6 +140,12 @@ export default class DLL {
             else {
                 structDef.push(['b', `_${hex(offs)}`]);
                 offs++;
+            }
+            for(let i=prevOffs+1; i<offs; i++) {
+                if(this.objParamOffsets[i]) {
+                    const p = this.objParamOffsets[i];
+                    console.warn(`Param ${p.name} overlaps another param in DLL ${dllName}`);
+                }
             }
         }
         //console.log("Creating struct", structDef);

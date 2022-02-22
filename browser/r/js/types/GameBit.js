@@ -62,12 +62,12 @@ export default class GameBit {
             elem.append(E.note(null, note));
         }
 
-        for(let eRef of this.objRefs) {
+        for(let objref of this.objRefs) {
             elem.append(E.objref(null, {
-                map:   eRef.map,
-                obj:   eRef.obj,
-                objid: `0x${hex(eRef.objId,8)}`,
-                param: eRef.param,
+                map:   objref.map,
+                obj:   objref.obj,
+                objid: `0x${hex(objref.objId,8)}`,
+                param: objref.param,
             }));
         }
 
