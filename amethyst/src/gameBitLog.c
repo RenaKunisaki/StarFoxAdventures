@@ -9,6 +9,7 @@ struct {
     u16 bit;
 } bitLog[MAX_BIT_LOG];
 
+static uint8_t *ignoreList = NULL;
 
 static BOOL (*gameBitHook_replaced)();
 BOOL gameBitHook(uint bit, int val) {
@@ -24,6 +25,23 @@ BOOL gameBitHook(uint bit, int val) {
         return gameBitHook_replaced();
     }
 
+    if(!ignoreList) {
+        ignoreList = allocTagged(NUM_GAMEBITS, ALLOC_TAG_TEST_COL,
+            "gamebit:ignore");
+        registerFreeablePtr((void**)&ignoreList, "gamebit:ignore");
+        if(ignoreList) {
+            memset(ignoreList, 0, NUM_GAMEBITS);
+        }
+    }
+
+    if(ignoreList) {
+        if(ignoreList[bit] == 0xFF) {
+            //don't log
+            return gameBitHook_replaced();
+        }
+        else ignoreList[bit]++;
+    }
+
     DPRINT("GameBit 0x%04X (%s) set to %d", bit, getBitName(bit), val);
     /* if(bit == 0x94E) {
         OSReport("BREAKPOINT");
@@ -31,6 +49,10 @@ BOOL gameBitHook(uint bit, int val) {
             waitNextFrame();
         }
     } */
+
+    if(ignoreList && ignoreList[bit] == 0xFF) {
+        DPRINT(" - ignoring further changes to this bit!");
+    }
 
     //log the change
     bool found = false;

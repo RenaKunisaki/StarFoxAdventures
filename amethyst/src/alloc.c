@@ -78,6 +78,7 @@ u32 *outUsedBlocks, u32 *outUsedBytes, int *outBlocksPct, int *outBytesPct) {
  *   and NULL will be stored to the address.
  */
 bool registerFreeablePtr(void **ptr, const char *name) {
+    static bool didWarn = false;
     if(!ptr) {
         OSReport("ERROR: Registering NULL freeable pointer %s at %08X",
             name, __builtin_return_address(0));
@@ -96,6 +97,12 @@ bool registerFreeablePtr(void **ptr, const char *name) {
             return true;
         }
     }
+
+    if(!didWarn) {
+        didWarn = true;
+        DPRINT("MAX_FREEABLE_PTRS reached!");
+    }
+
     return false;
 }
 

@@ -1,0 +1,6 @@
+F1B = 1
+ GameBit 0x0458 (CF_ObjGroups) set to 1
+
+seq 0xDB length 0xE
+seq 0x41 (idx 0) on CFseqobject
+this is the one that triggers losing the staff
