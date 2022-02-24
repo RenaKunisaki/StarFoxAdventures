@@ -1,4 +1,5 @@
 #include "main.h"
+#include "revolution/os.h"
 
 #define BIT_LOG_TIME 120
 #define MAX_BIT_LOG 16
@@ -24,9 +25,12 @@ BOOL gameBitHook(uint bit, int val) {
     }
 
     DPRINT("GameBit 0x%04X (%s) set to %d", bit, getBitName(bit), val);
-    //if(bit == 0xA7B) {
-    //    while(1) {}
-    //}
+    /* if(bit == 0x94E) {
+        OSReport("BREAKPOINT");
+        while(1) {
+            waitNextFrame();
+        }
+    } */
 
     //log the change
     bool found = false;

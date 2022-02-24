@@ -37,7 +37,7 @@ void worldMapHook() {
             break;
 
         case 0x3A: //CloudRunner
-            mainSetBits(0x0458, 0); //CF_ObjGroups
+            mainSetBits(0x0458, 1); //CF_ObjGroups
             mainSetBits(0x047C, 0); //CD_ObjGroups
             mainSetBits(0x04A3, 0); //CR_ObjGroups
             warpToMap(0x63, false);
