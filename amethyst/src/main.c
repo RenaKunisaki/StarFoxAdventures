@@ -143,14 +143,14 @@ void mainLoopHook() {
 
     playerMainLoopHook();
 
+    ObjInstance *arwing = getArwing();
+    u8 *arwingState = arwing ? (u8*)arwing->state : NULL;
     PlayerCharState *playerState =
         &saveData.curSaveGame.charState[saveData.curSaveGame.character];
     if(debugCheats & DBGCHT_INF_HP) {
         playerState->curHealth = playerState->maxHealth;
-        ObjInstance *arwing = getArwing();
-        if(arwing) {
-            u8 *state = (u8*)arwing->state;
-            state[0x468] = state[0x469]; //curHealth = maxHealth
+        if(arwingState) {
+            arwingState[0x468] = arwingState[0x469]; //curHealth = maxHealth
         }
     }
     if(debugCheats & DBGCHT_INF_MP) {
@@ -172,11 +172,14 @@ void mainLoopHook() {
     if(debugCheats & DBGCHT_INF_TRICKY) {
         saveData.curSaveGame.trickyEnergy = saveData.curSaveGame.maxTrickyEnergy;
     }
-    WRITE32(0x8022D518, (debugCheats & DBGCHT_10_RINGS) ? 0x3860000A : 0x88630470);
-    iCacheFlush((void*)0x8022D518, 4);
-    WRITE32(0x8022b798, (debugCheats & DBGCHT_ARW_INF_BOMBS)
-        ? 0x38600004 : 0x887F044C);
-    iCacheFlush((void*)0x8022D578, 4);
+
+    if(arwingState) {
+        WRITE32(0x8022D518, (debugCheats & DBGCHT_10_RINGS) ? 0x3860000A : 0x88630470);
+        iCacheFlush((void*)0x8022D518, 4);
+        if(debugCheats & DBGCHT_ARW_INF_BOMBS) {
+            arwingState[0x44C] = 3; //nBombs = 3
+        }
+    }
 
     //move camera while time is stopped in debug mode
     if(timeStop && (debugCameraMode != CAM_MODE_NORMAL) && !menuState) {
