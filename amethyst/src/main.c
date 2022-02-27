@@ -118,6 +118,9 @@ void mainLoopHook() {
     WRITE32(0x80148bc8, (debugTextFlags & DEBUGTEXT_TRICKY) ? 0x4BFEED80 : 0x9421FF90);
     iCacheFlush((void*)0x80148bc8, 4);
 
+    WRITE32(0x8000E398, (cameraFlags & CAM_FLAG_NO_LETTERBOX) ? 0x38000000 : 0xA80D96A6);
+    iCacheFlush((void*)0x8000E398, 4);
+
     minimapMainLoopHook();
     mainLoopDebugPrint();
     runMenu();

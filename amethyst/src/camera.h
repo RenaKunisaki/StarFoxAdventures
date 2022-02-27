@@ -1,9 +1,10 @@
 typedef enum {
-    CAM_FLAG_PAD3     = 0x01, //use controller 3 to move
-    CAM_FLAG_INVERT_X = 0x02, //invert X axis movement
-    CAM_FLAG_INVERT_Y = 0x04, //invert Y axis movement
-    CAM_FLAG_NO_HUD   = 0x08, //disable the HUD
-} CameraFlags;
+    CAM_FLAG_PAD3         = (1 << 0), //use controller 3 to move
+    CAM_FLAG_INVERT_X     = (1 << 1), //invert X axis movement
+    CAM_FLAG_INVERT_Y     = (1 << 2), //invert Y axis movement
+    CAM_FLAG_NO_HUD       = (1 << 3), //disable the HUD
+    CAM_FLAG_NO_LETTERBOX = (1 << 4), //disable letterboxing in cutscenes
+} CameraFlags; //u8
 
 typedef enum {
     CAM_MODE_NORMAL = 0,

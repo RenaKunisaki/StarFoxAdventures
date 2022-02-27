@@ -43,7 +43,8 @@ void menuFOV_select(const MenuItem *self, int amount) {
 
 void menuHudOnOff_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];;
-    sprintf(str, self->fmt, T(self->name), (cameraFlags & CAM_FLAG_NO_HUD) ? T("Off") : T("On"));
+    sprintf(str, self->fmt, T(self->name),
+        (cameraFlags & CAM_FLAG_NO_HUD) ? T("Off") : T("On"));
     menuDrawText(str, x, y, selected);
 }
 void menuHudOnOff_select(const MenuItem *self, int amount) {
@@ -53,12 +54,26 @@ void menuHudOnOff_select(const MenuItem *self, int amount) {
 }
 
 
+void menuLetterboxOnOff_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];;
+    sprintf(str, self->fmt, T(self->name),
+        (cameraFlags & CAM_FLAG_NO_LETTERBOX) ? T("Off") : T("On"));
+    menuDrawText(str, x, y, selected);
+}
+void menuLetterboxOnOff_select(const MenuItem *self, int amount) {
+    cameraFlags ^= CAM_FLAG_NO_LETTERBOX;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
+}
+
+
 Menu menuVideoSettings = {
     "Video Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
-    "Widescreen",  "%s: %s", menuWidescreen_draw, menuWidescreen_select,
-    "Particle FX", "%s: %s", menuParticleFx_draw, menuParticleFx_select,
-    "FOV",         "%s: %d", menuFOV_draw,        menuFOV_select,
-    "HUD",         "%s: %s", menuHudOnOff_draw,   menuHudOnOff_select,
+    "Widescreen",   "%s: %s", menuWidescreen_draw,     menuWidescreen_select,
+    "Particle FX",  "%s: %s", menuParticleFx_draw,     menuParticleFx_select,
+    "FOV",          "%s: %d", menuFOV_draw,            menuFOV_select,
+    "HUD",          "%s: %s", menuHudOnOff_draw,       menuHudOnOff_select,
+    "Letterboxing", "%s: %s", menuLetterboxOnOff_draw, menuLetterboxOnOff_select,
     NULL,
 };

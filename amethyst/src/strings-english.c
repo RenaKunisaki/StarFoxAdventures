@@ -112,6 +112,7 @@ const char *strings_English[] = {
     "Kill Player", //kill the player (for testing)
     "Krystal", //Krystal player character
     "Language", //change text language
+    "Letterboxing", //letterbox screen effect
     "Lights", //debug: examine lights
     "List", //open a list of objects
     "Load EnvFX", //load environment effects

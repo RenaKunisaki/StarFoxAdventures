@@ -100,6 +100,7 @@ const char *strings_Japanese[] = {
     "プレイヤーkill", //kill the player (for testing)
     "クリスタル", //Krystal player character
     "言語", //change text language
+    "レターボックス", //letterbox screen effect
     "ライト", //debug: examine lights
     "名鑑", //open a list of objects
     "Load EnvFX", //load environment effects
