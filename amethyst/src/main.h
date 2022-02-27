@@ -52,12 +52,14 @@ typedef enum {
 } FurFxMode;
 
 typedef enum {
-    DBGCHT_INF_HP       = (1 << 0),
-    DBGCHT_INF_MP       = (1 << 1),
-    DBGCHT_INF_MONEY    = (1 << 2),
-    DBGCHT_INF_LIVES    = (1 << 3),
-    DBGCHT_ENEMY_FROZEN = (1 << 4),
-    DBGCHT_INF_TRICKY   = (1 << 5),
+    DBGCHT_INF_HP        = (1 << 0),
+    DBGCHT_INF_MP        = (1 << 1),
+    DBGCHT_INF_MONEY     = (1 << 2),
+    DBGCHT_INF_LIVES     = (1 << 3),
+    DBGCHT_ENEMY_FROZEN  = (1 << 4),
+    DBGCHT_INF_TRICKY    = (1 << 5),
+    DBGCHT_10_RINGS      = (1 << 6),
+    DBGCHT_ARW_INF_BOMBS = (1 << 7),
 } DebugCheat;
 
 typedef enum {

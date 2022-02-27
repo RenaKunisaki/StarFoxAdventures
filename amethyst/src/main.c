@@ -168,9 +168,15 @@ void mainLoopHook() {
     }
     else WRITE32(0x8002b048, 0x540307FE);
     iCacheFlush((void*)0x8002b048, 4);
+
     if(debugCheats & DBGCHT_INF_TRICKY) {
         saveData.curSaveGame.trickyEnergy = saveData.curSaveGame.maxTrickyEnergy;
     }
+    WRITE32(0x8022D518, (debugCheats & DBGCHT_10_RINGS) ? 0x3860000A : 0x88630470);
+    iCacheFlush((void*)0x8022D518, 4);
+    WRITE32(0x8022b798, (debugCheats & DBGCHT_ARW_INF_BOMBS)
+        ? 0x38600004 : 0x887F044C);
+    iCacheFlush((void*)0x8022D578, 4);
 
     //move camera while time is stopped in debug mode
     if(timeStop && (debugCameraMode != CAM_MODE_NORMAL) && !menuState) {

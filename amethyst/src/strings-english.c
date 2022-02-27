@@ -15,6 +15,8 @@
 const char *strings_English[] = {
     "Address", //memory address
     "ADDR", //memory address
+    "Arwing: Always 10 Rings", //cheat
+    "Arwing: Infinite Bombs", //cheat
     "Attach Points", //show attachment points
     "Audio Settings", //change audio settings
     "Audio SFX", //sound effects

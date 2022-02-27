@@ -127,6 +127,30 @@ void menuDebugCheatUnlock_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugCheatRings_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name),
+        (debugCheats & DBGCHT_10_RINGS) ? T("On") : T("Off"));
+    menuDrawText(str, x, y, selected);
+}
+void menuDebugCheatRings_select(const MenuItem *self, int amount) {
+    debugCheats ^= DBGCHT_10_RINGS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
+void menuDebugCheatBombs_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name),
+        (debugCheats & DBGCHT_ARW_INF_BOMBS) ? T("On") : T("Off"));
+    menuDrawText(str, x, y, selected);
+}
+void menuDebugCheatBombs_select(const MenuItem *self, int amount) {
+    debugCheats ^= DBGCHT_ARW_INF_BOMBS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
 Menu menuDebugCheat = {
     "Cheats", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
@@ -137,5 +161,7 @@ Menu menuDebugCheat = {
     "Infinite Tricky Energy", "%s: %s", menuDebugCheatTricky_draw, menuDebugCheatTricky_select,
     "Frozen Baddies",         "%s: %s", menuDebugCheatFrozen_draw, menuDebugCheatFrozen_select,
     "Unlock Everything",      "%s",     genericMenuItem_draw,      menuDebugCheatUnlock_select,
+    "Arwing: Always 10 Rings","%s: %s", menuDebugCheatRings_draw,  menuDebugCheatRings_select,
+    "Arwing: Infinite Bombs", "%s: %s", menuDebugCheatBombs_draw,  menuDebugCheatBombs_select,
     NULL,
 };

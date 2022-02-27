@@ -3,6 +3,8 @@
 const char *strings_Japanese[] = {
     "住所", //memory address
     "住所", //memory address
+    "アーウィン：常に10リング", //cheat
+    "アーウィン：無限爆弾", //cheat
     "アタッチポイント", //show attachment points
     "オーディオ設定", //change audio settings
     "オーディオ効果音", //sound effects
