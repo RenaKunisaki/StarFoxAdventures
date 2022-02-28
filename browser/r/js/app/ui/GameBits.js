@@ -125,12 +125,23 @@ export default class GameBits {
         return E.td('string', CollapseList(...items));
     }
 
-    _save() {
+    async _save() {
         /** Called when Save button is clicked. */
+        this.app.progress.show({
+            taskText: "Generating XML",
+            subText:  "",
+            numSteps: Object.keys(this.app.game.bits).length, stepsDone: 0,
+        });
+
         const xml = document.implementation.createDocument(XML, "gamebits");
+        let i = 0;
         for(let [id, bit] of Object.entries(this.app.game.bits)) {
             xml.documentElement.appendChild(bit.toXml());
+            if((i++ % 100) == 0) {
+                await this.app.progress.update({stepsDone: i});
+            }
         }
+        this.app.progress.hide();
         downloadXml(xml, 'gamebits');
         this.btnSave.classList.remove('unsaved');
     }
