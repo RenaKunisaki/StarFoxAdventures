@@ -4,6 +4,13 @@
     height: calc(100% - 4em);
 }
 
+.mapGrid .notice {
+    position: absolute;
+    top: 1em;
+    left: auto;
+    right: auto;
+}
+
 .mapGrid table {
     border-spacing: 0;
     table-layout: fixed;
