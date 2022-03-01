@@ -11,6 +11,7 @@
 GameLanguageEnum prevLanguage = -1;
 u8 curPhrase = 0;
 u8 cursor = 3; //digit (left to right)
+u8 winId = 0xFF; //override window ID
 bool useWindow = true;
 
 static bool isTextValid(gametextStruct *text) {
@@ -32,9 +33,10 @@ void textMenu_draw(Menu *self) {
     gametextStruct *text = gameTextGet(self->selected);
     if(isTextValid(text)) {
         gameTextSetColor(255, 255, 255, 255);
-        sprintf(str, "\eFTxt:%04X\n(%5d)\nPhr:%2d/%2d\nWin:%02X (%s)\nLng:%s\nCur:%s\nAlg:%d %d",
+        sprintf(str, "\eFTxt:%04X\n(%5d)\nPhr:%2d/%2d\nWin:%02X (%s)\n"
+                "WinOvr:%02X\nLng:%s\nCur:%s\nAlg:%d %d",
             self->selected & 0xFFFF, self->selected, curPhrase+1, text->numPhrases,
-            text->window, useWindow ? "On" : "Off",
+            text->window, useWindow ? "On" : "Off", winId,
             text->language < NUM_LANGUAGES ? languageNamesShort[text->language] : "??",
             languageNamesShort[curLanguage],
             text->alignH, text->alignV);
@@ -43,7 +45,8 @@ void textMenu_draw(Menu *self) {
         const char *phrase = NULL;
         if(curPhrase < text->numPhrases) phrase = text->phrases[curPhrase];
         if(PTR_VALID(phrase)) {
-            if(useWindow) gameTextShowStr(phrase, text->window, 0, 0);
+            if(useWindow) gameTextShowStr(phrase,
+                (winId == 0xFF) ? text->window : winId, 0, 0);
             else {
                 int tx = sx, ty = TEXT_MENU_YPOS, rx = 0, ry = 0;
                 Color4b color = {0xFF, 0xFF, 0xFF, 0xFF};
@@ -164,6 +167,16 @@ void textMenu_run(Menu *self) {
         menuInputDelayTimer = (controllerStates[0].stickY < -MENU_ANALOG_STICK_THRESHOLD)
             ? MENU_INPUT_DELAY_MOVE : MENU_INPUT_DELAY_MOVE_FAST;
         curPhrase++;
+    }
+
+    //change window override
+    else if(buttonsJustPressed == PAD_BUTTON_UP) {
+        menuInputDelayTimer = MENU_INPUT_DELAY_ADJUST;
+        winId++;
+    }
+    else if(buttonsJustPressed == PAD_BUTTON_DOWN) {
+        menuInputDelayTimer = MENU_INPUT_DELAY_ADJUST;
+        winId--;
     }
 }
 
