@@ -25,10 +25,10 @@ class GameTextStruct:
     def fromFile(file:io.FileIO) -> GameTextStruct:
         self = GameTextStruct()
         self.identifier, self.numPhrases, self.window, self.alignH, self.alignV, \
-        self.language, self.phrases = readStruct(file, '>HHbbbbI')
+        self.language, self.phrases = readStruct(file, '>HHBbbbI')
         return self
 
     def toBytes(self, strIdx) -> bytes:
         self.numPhrases = len(self.phrases)
-        return struct.pack('>HHbbbbI', self.identifier, self.numPhrases,
+        return struct.pack('>HHBbbbI', self.identifier, self.numPhrases,
             self.window, self.alignH, self.alignV, self.language, strIdx)

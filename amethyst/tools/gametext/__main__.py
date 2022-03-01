@@ -159,6 +159,29 @@ class App:
         for c in reader.chars: writer.addChar(c)
         for t in reader.texts: writer.addText(t)
 
+        # HACK: add missing texts for WarpStone.
+        # this is just so we can see the unused menu.
+        # putting it here (and injecting into every file)
+        # because I'm lazy.
+        #extra = {
+        #    0x034C: "Cape Claw",
+        #    0x034D: "Ocean Force Point",
+        #    0x0429: "LightFoot Village",
+        #    0x034F: "Moon Mountain Pass",
+        #    0x0350: "Volcano Force Point",
+        #    0x0351: "Ice Mountain",
+        #}
+        #win = 0x2F
+        #for id, text in extra.items():
+        #    writer.addText(GameTextStruct(
+        #        identifier = id,
+        #        numPhrases = 1,
+        #        window = win, alignH = 0, alignV = 0,
+        #        language = 0,
+        #        phrases = [GameString('\uF8F4\x01\xB3' + text)], # set scale
+        #    ))
+        #    win += 1
+
         # read the character set file
         # XXX use whatever the method was to reference these by the import system
         # instead of assuming a specific working directory.

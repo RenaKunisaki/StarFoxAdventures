@@ -189,6 +189,13 @@ void mainLoopHook() {
     //XXX doesn't always work?
     if(overrideColorScale >= 0) colorScale = overrideColorScale;
 
+    //HACK: correct WarpStone menu text box positions.
+    //this is just for restoring the menu and isn't needed.
+    //for(int i=0; i<6; i++) {
+    //    WRITE16(0x802c79f6 + (i*0x20), (i+2) * 0x30);
+    //}
+    //WRITE16(0x803dd90c, 0x0100); //make menu visible
+
     doHudHacks();
     raceTimerUpdate();
 }
