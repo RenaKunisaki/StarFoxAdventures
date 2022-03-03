@@ -258,8 +258,15 @@ int padGetStickXHook(int pad) {
     if(joypadDisable || isDvdDriveBusy) return 0;
     int result = controllerStates[pad + (whichControllerFrame * 4)].stickX;
     u16 buttons = controllerStates[pad + (whichControllerFrame * 4)].button;
-    //XXX mode 0x52 is both holding L button and aiming with staff.
+    //XXX mode 0x52 is both holding L button and aiming with staff,
+    //and pushing blocks.
     //find a better way to distinguish the two than checking for L button.
+
+    void *pState = pPlayer ? pPlayer->state : NULL;
+    u16 stateNo = pState ? *(u16*)(pState + 0x274) : 0;
+    //don't invert controls when pushing a block
+    if(stateNo == 0x1D) return result;
+
     if((cameraFlags & CAM_FLAG_INVERT_X) && !(buttons & PAD_TRIGGER_L)) {
         if(cameraMode == 0x52    //staff aiming
         || cameraMode == 0x44    //viewfinder
@@ -275,6 +282,12 @@ int padGetStickYHook(int pad) {
     if(joypadDisable || isDvdDriveBusy) return 0;
     int result = controllerStates[pad + (whichControllerFrame * 4)].stickY;
     u16 buttons = controllerStates[pad + (whichControllerFrame * 4)].button;
+
+    void *pState = pPlayer ? pPlayer->state : NULL;
+    u16 stateNo = pState ? *(u16*)(pState + 0x274) : 0;
+    //don't invert controls when pushing a block
+    if(stateNo == 0x1D) return result;
+
     if(cameraMode == 0x44) { //viewfinder
         //already inverted by default, so do opposite
         if(!(cameraFlags & CAM_FLAG_INVERT_Y)) return -result;
