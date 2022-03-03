@@ -436,7 +436,7 @@ void _start(void) {
     //there are several more unused entries but they're for
     //files that don't exist anyway.
     static const u8 entries[] = { //XXX verify these are all unused.
-        0x0C,       //LACTIONS.bin (XXX used?)
+        0x0C,       //LACTIONS.bin (read, but nothing done)
         0x10,       //FONTS.bin (old, unused)
         0x13, 0x14, //GAMETEXT.bin, .tab (old unused ver)
         0x18, 0x19, //SCREENS.bin, .tab
@@ -488,6 +488,9 @@ void _start(void) {
         float r = func(((float)i) / 100.0f);
         OSReport("%f => %f\n", ((float)i) / 100.0f, r);
     } */
+
+    //disable getLActions() since the file isn't loaded anymore
+    WRITE_BLR(getLActions);
 
     DPRINT("Hooks installed!");
 }

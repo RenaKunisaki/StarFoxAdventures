@@ -11,6 +11,9 @@
 		},
 		{
 			"path": "browser"
+		},
+		{
+			"path": "speedrun"
 		}
 	],
 	"settings": {

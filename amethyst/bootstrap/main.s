@@ -3,7 +3,8 @@
 # sort of "second-stage bootloader". It must be position-independent code.
 # The build process appends the other patches' binary to this file's, and fills
 # in the header to tell it how to load that code.
-# It exppects r3 to be the address it's loaded at.
+# It exppects r3 to be the address it's loaded at and r4 to be the size
+# of boot.bin.
 
 .set DEBUG,0
 .text

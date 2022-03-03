@@ -164,6 +164,8 @@ void spawnList_run(Menu *self) {
         curMenu->close(curMenu);
 
         //find selected defNo
+        //BUG: this doesn't always work, eg for GCRobotBlas
+        //it returns 0x5C but should be 0x652
         spawnObjDef.def.objType = objIdList[self->selected];
         if(objIdList) free(objIdList);
         objIdList = NULL;

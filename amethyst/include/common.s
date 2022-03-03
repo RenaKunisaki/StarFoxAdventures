@@ -204,7 +204,7 @@
 
 # expands to:
 # lis reg, X
-# lwz dest, Y(reg)
+# lwz reg, Y(reg)
 # where X and Y are the upper and lower halves of addr,
 # adjusted as necessary when Y >= 0x8000.
 .macro LOADW reg, addr

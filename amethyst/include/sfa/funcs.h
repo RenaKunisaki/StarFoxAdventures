@@ -69,6 +69,7 @@ GLOBALFN ObjPos* getCameraPos(void);
 GLOBALFN int getControlCharLen(int chr);
 GLOBALFN void getEnvfxAct(ObjInstance *obj, ObjInstance *obj2, uint idx, int range);
 GLOBALFN void getEnvfxActImmediately(ObjInstance *obj, ObjInstance *obj2, uint idx, int range);
+GLOBALFN int getLActions(ObjInstance *obj, ObjInstance *obj2, int idx);
 GLOBALFN Texture* getLoadedTexture(int id);
 GLOBALFN void* getTabEntry(void *buf, DataFileEnum32 fileId, uint idx, int size);
 GLOBALFN void gplayClearRestartPoint(void);
@@ -190,6 +191,7 @@ GLOBALFN ObjInstance* playerGetNearestObject(int idx,ObjInstance *obj,float *out
 GLOBALFN ObjInstance** playerGetObject(int idx, int *outIdx);
 GLOBALFN void playerInitFuncPtrs(void);
 GLOBALFN void playerLock(ObjInstance *obj, BOOL lock);
+GLOBALFN void playerRender(ObjInstance *self, int param_2, int param_3, int param_4, int param_5, bool shouldRender);
 GLOBALFN BOOL playerSetHeldObject(ObjInstance *player, ObjInstance *obj);
 GLOBALFN void PSMTXConcat(Mtx * Ma, Mtx * Mb, Mtx * out);
 GLOBALFN void PSMTXIdentiy(Mtx *M);
