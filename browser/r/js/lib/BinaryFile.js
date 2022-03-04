@@ -21,6 +21,8 @@ export default class BinaryFile {
 
     tell() { return this._readOffs }
     seek(offs, whence=0) {
+        console.assert(!isNaN(offs));
+        console.assert(isFinite(offs));
         switch(whence) {
             case 0: case 'SEEK_SET': this._readOffs = offs; break;
             case 1: case 'SEEK_CUR': this._readOffs += offs; break;
@@ -40,8 +42,12 @@ export default class BinaryFile {
     }
 
     readBytes(count) {
-        /** Read the given number of bytes. */
-        const res = this.buffer.slice(this._readOffs, this._readOffs+count);
+        /** Read the given number of bytes.
+         *  @param count Number of bytes.
+         *  @returns {ArrayBuffer} Binary data.
+         */
+        const offs = this.byteOffset + this._readOffs;
+        const res  = this.buffer.slice(offs, offs+count);
         this._readOffs += count;
         return res;
     }

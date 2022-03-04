@@ -2,7 +2,7 @@ import GameFile from "../../../game/GameFile.js";
 import IsoFile from "../../../types/iso/isofile.js";
 import { E, clearElement } from "../../../lib/Element.js";
 import Table from "../Table.js";
-import { Percent } from "../../../Util.js";
+import { download, Percent } from "../../../Util.js";
 
 export default class ArchiveViewer {
     constructor(app, data) {
@@ -18,6 +18,7 @@ export default class ArchiveViewer {
         else throw new Error("Unsupported object for file: "+(typeof data));
         this.eBody   = E.div();
         this.element = E.div('archiveviewer', this.eBody);
+        this.cbView  = null;
         this.refresh();
     }
 
@@ -29,7 +30,7 @@ export default class ArchiveViewer {
         for(let item of contents) {
             tbl.add(this._makeRow(i++, item));
             //rows.push([i++, item.fmt, fileSize(item.packedSize),
-            //    fileSize(item.unpackedSize), hex(item.headerOffs, 6)]);
+            //    fileSize(item.unpackedSize), hex(item.fileOffset, 6)]);
         }
         clearElement(this.eBody).append(tbl.element);
     }
@@ -37,14 +38,16 @@ export default class ArchiveViewer {
     _makeTable() {
         return new Table({title:"Archive Contents", columns: [
             {displayName:"#", name:'idx', type:'int'},
-            {displayName:"Offset", name:'headerOffs', type:'hex', length:6},
+            {displayName:"Offset", name:'fileOffset', type:'hex', length:6},
             {displayName:"Format", name:'fmt', type:'string'},
             {displayName:"Packed", name:'packedSize', type:'hex', length:6,
                 title:"Packed size"},
             {displayName:"Raw",    name:'unpackedSize', type:'hex', length:6,
                 title:"Unpacked size"},
-            {displayName:"Pack",    name:'packRatio', type:'int',
+            {displayName:"Pack",   name:'packRatio', type:'int',
                 title:"Compression ratio"},
+            {displayName:"Actions",name:'actions', type:'string',
+                makeElem: (val, td, row) => this._makeActions(row)},
         ]});
     }
 
@@ -53,5 +56,22 @@ export default class ArchiveViewer {
             idx: idx,
             packRatio: Percent(item.packedSize / item.unpackedSize),
         }, item);
+    }
+
+    _makeActions(row) {
+        const bView = E.button('view', "View");
+        const bDownload = E.button('download', "Download");
+        bView.addEventListener('click', e => this._viewFile(row));
+        bDownload.addEventListener('click', e => this._downloadFile(row));
+        return E.span(bView, bDownload);
+    }
+
+    _viewFile(row) {
+        if(this.cbView) this.cbView(row, this.file.decompress(row.fileOffset));
+        else console.error("No view callback installed");
+    }
+
+    _downloadFile(row) {
+        download(this.file.decompress(row.fileOffset), `${hex(row.fileOffset,6)}.bin`);
     }
 }

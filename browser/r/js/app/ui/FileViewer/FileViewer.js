@@ -59,6 +59,10 @@ export default class FileViewer {
             else if((fmt == 'auto' && contents.length > 1)
             || fmt == 'archive') {
                 this.viewer = new ArchiveViewer(this.app, this.gameFile);
+                this.viewer.cbView = (item, data) => {
+                    this.view = new DataView(data);
+                    this.refresh();
+                };
             }
             else if((fmt == 'auto' && name.endsWith('.romlist.zlb'))
             || fmt == 'romlist') {

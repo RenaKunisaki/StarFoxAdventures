@@ -58,6 +58,7 @@ export default class IsoFile {
     getData(decompress=true, offset=0, size=0) {
         if(size <= 0) size = this.size;
 
+        //XXX this is obsolete with GameFile. use that instead.
         let key = `${decompress?'D':'R'}${offset},${size}`;
         if(this._data[key]) return this._data[key];
 
