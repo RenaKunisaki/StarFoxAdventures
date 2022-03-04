@@ -338,6 +338,7 @@ static void printPlayerState() {
     printPlayerObj("Obj7F4",      *(ObjInstance**)(pState + 0x7F4));
     printPlayerObj("Hold obj",    *(ObjInstance**)(pState + 0x7F8));
     printPlayerObj("Push obj",    *(ObjInstance**)(pState + 0x248));
+    printPlayerObj("Enemy",       *(ObjInstance**)(pState + 0x2D0));
 }
 
 static void printPerformance() {
