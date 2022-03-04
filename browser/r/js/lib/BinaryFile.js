@@ -147,14 +147,17 @@ export default class BinaryFile {
         return c;
     }
 
-    readStr(maxLen, join=true) {
+    readStr(maxLen, join=true, nulls=false) {
         /** Read UTF-8 string up to `maxLen` bytes */
         const res = [];
         let   end = this._readOffs + maxLen;
         if(end >= this.byteLength) end = this.byteLength - 1;
         while(this._readOffs < end) {
             let c = this.readUtf8Char();
-            if(!c) break;
+            if(!c) {
+                if(nulls) c = 0x20; //c = 0x2400; //U+2400 SYMBOL FOR NULL
+                else break;
+            }
             res.push(String.fromCodePoint(c));
         }
         return join ? res.join('') : res;

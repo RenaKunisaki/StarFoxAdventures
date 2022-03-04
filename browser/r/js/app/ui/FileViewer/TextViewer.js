@@ -15,7 +15,7 @@ export default class TextViewer {
 
     refresh() {
         const elem = E.div('textdump');
-        let str = this.file.readStr(1000000);
+        let str = this.file.readStr(1000000, true, true);
         elem.append(E.span(null, str));
         clearElement(this.eBody);
         this.eBody.append(elem);
