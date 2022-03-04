@@ -15,7 +15,7 @@ export default class GameFile extends BinaryFile {
         this._contents = [null, null]; //cache
     }
 
-    decompress(offset, _depth=0) {
+    decompress(offset=0, _depth=0) {
         /** Decompress data at given offset and return it.
          *  @param offset Offset to read from.
          *  @returns {ArrayBuffer} Decompressed data.
@@ -48,6 +48,11 @@ export default class GameFile extends BinaryFile {
             }
             default: throw new Error(`Unimplemented format: '${header.fmt}'`);
         }
+    }
+
+    getItem(idx, includePadding=false) {
+        const contents = this.getContents(includePadding);
+        return this.decompress(contents[idx].fileOffset);
     }
 
     getContents(includePadding=false) {

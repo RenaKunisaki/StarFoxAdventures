@@ -16,8 +16,8 @@ export const RomListEntryStruct = Struct(
 
 class RomListEntry {
     constructor(app, data, offset) {
-        this.app   = app;
-        const base = new RomListEntryStruct(data, offset);
+        this.app        = app;
+        const base      = new RomListEntryStruct(data, offset);
         this.byteLength = base.length * 4;
         this.objDef     = base.objDef;
         this.acts       = [base.acts0, base.acts1]; //XXX parse
@@ -37,6 +37,7 @@ class RomListEntry {
             if(defNo < 0) defNo = -defNo;
             else defNo = this.app.game.objIndex[defNo];
             this.object = this.app.game.objects[defNo];
+            if(!this.object) this.object = this.app.game.objects[0];
 
             //parse the object-specific params
             const dll = this.app.game.dlls[this.object.dll_id];

@@ -9,6 +9,7 @@ export default class FileList {
         this.app = app;
         this.element = document.getElementById('tab-fileList');
         this.app.onIsoLoaded(iso => this.refresh(iso));
+        this.viewer = null; //FileViewer
     }
 
     refresh(iso) {
@@ -51,11 +52,25 @@ export default class FileList {
             download(file.getRawData(), file.name);
         });
         eDownloadDec.addEventListener('click', e => {
-            download(file.getData(), file.name);
+            if(this.viewer) {
+                let name = file.name;
+                if(this.viewer.archiveIdx != null) {
+                    name = name.split('.');
+                    const ext = name.pop();
+                    name = name.join('');
+                    if(name == '') name = 'file';
+                    name = `${name}.${this.viewer.archiveIdx}.${ext}`;
+                }
+                const buf = this.viewer.view.buffer.slice(
+                    this.viewer.view.byteOffset,
+                    this.viewer.view.byteOffset + this.viewer.view.byteLength);
+                download(buf, name);
+            }
+            else alert("Select an item to download.");
         });
 
-        const viewer = new FileViewer(this.app, file, false);
-        this.eRightPane.append(viewer.element);
+        this.viewer = new FileViewer(this.app, file, false);
+        this.eRightPane.append(this.viewer.element);
     }
 
     _makeElemForDir(iso, iFile, _depth=0) {

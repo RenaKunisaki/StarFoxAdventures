@@ -9,16 +9,16 @@ import { GameTextViewer } from "./GameTextViewer.js";
 
 export default class FileViewer {
     constructor(app, file, showTitle=true) {
-        this.app        = app;
-        this.file       = file;
-        this.element    = E.div('fileViewer');
-        this.viewer     = null;
-        this.showTitle  = showTitle;
-        this.error      = null;
-        this.archiveIdx = null; //item idx of archive we're viewing (null=none)
-        this.gameFile   = new GameFile(this.file);
         try {
-            this.view = this.file.getData();
+            this.app        = app;
+            this.file       = file;
+            this.element    = E.div('fileViewer');
+            this.viewer     = null;
+            this.showTitle  = showTitle;
+            this.error      = null;
+            this.archiveIdx = null; //item idx of archive we're viewing (null=none)
+            this.gameFile   = new GameFile(this.file);
+            this.view       = this.gameFile;
         }
         catch(ex) {
             this.view = null;
@@ -50,11 +50,25 @@ export default class FileViewer {
         const fmt      = this.eFormatSel.value;
         const name     = this.file.name;
         const contents = this.gameFile.getContents();
+
+        //if this is an archive with only one item (like many compressed
+        //files) then just show that item. otherwise show the raw data and
+        //let user choose an item.
+        //this means we can't view the compressed form of such an archive,
+        //but I don't think that's very important.
+        let buf = this.view;
+        if(contents.length == 1) buf = this.gameFile.getItem(0);
+        else if(this.archiveIdx != null) {
+            buf = this.gameFile.getItem(this.archiveIdx);
+        }
+        else buf = this.gameFile.getView();
+        if(!(buf instanceof DataView)) buf = new DataView(buf);
+
         try {
             if(this.error) {
                 this.viewer = new ErrorMessage(this.app, this.error.toString());
             }
-            else if(this.view.byteLength == 0) {
+            else if(buf.byteLength == 0) {
                 this.viewer = new ErrorMessage(this.app, "File is empty");
             }
             //if we're viewing an item in the archive, don't show the
@@ -75,16 +89,16 @@ export default class FileViewer {
             }
             else if((fmt == 'auto' && name.endsWith('.romlist.zlb'))
             || fmt == 'romlist') {
-                this.viewer = new RomListViewer(this.app, this.view);
+                this.viewer = new RomListViewer(this.app, buf);
             }
             else if((fmt == 'auto' && this.file.path.startsWith('/gametext'))
             || fmt == 'gametext') {
-                this.viewer = new GameTextViewer(this.app, this.view);
+                this.viewer = new GameTextViewer(this.app, buf);
             }
             else if(fmt == 'text') {
-                this.viewer = new TextViewer(this.app, this.view);
+                this.viewer = new TextViewer(this.app, buf);
             }
-            else this.viewer = new HexViewer(this.app, this.view);
+            else this.viewer = new HexViewer(this.app, buf);
         }
         catch(ex) {
             //XXX instead of showing "not a GameText file" when set to Auto,

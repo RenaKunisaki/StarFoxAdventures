@@ -32,6 +32,23 @@ export default class BinaryFile {
     }
     isEof() { return this._readOffs >= this.byteLength }
 
+    getView(offset=0, length=0) {
+        if(offset <  0) offset += this.byteLength;
+        if(length <= 0) length += this.byteLength;
+        if(length >= (this.byteLength - offset)) length = this.byteLength - offset;
+        //console.assert(length > 0); can happen for empty files
+        return new DataView(this.buffer, offset+this.byteOffset, length);
+    }
+
+    getBuffer(offset=0, length=0) {
+        if(offset <  0) offset += this.byteLength;
+        if(length <= 0) length += this.byteLength;
+        if(length >= (this.byteLength - offset)) length = this.byteLength - offset;
+        //console.assert(length > 0);
+        return this.buffer.slice(offset+this.byteOffset,
+            offset+this.byteOffset+length);
+    }
+
     read(fmt, count=1) {
         /** Read some data from the file. */
         switch(typeof(fmt)) {
