@@ -1,6 +1,7 @@
 import { E, clearElement } from "../../../lib/Element.js";
 import ErrorMessage from "../ErrorMessage.js";
-import { fileSize, hex, Table } from "../../../Util.js";
+import GameFile from "../../../game/GameFile.js";
+import ArchiveViewer from "./ArchiveViewer.js";
 import HexViewer from "./HexViewer.js";
 import TextViewer from "./TextViewer.js";
 import { RomListViewer } from "./RomListViewer.js";
@@ -8,12 +9,13 @@ import { GameTextViewer } from "./GameTextViewer.js";
 
 export default class FileViewer {
     constructor(app, file, showTitle=true) {
-        this.app  = app;
-        this.file = file;
-        this.element = E.div('fileViewer');
-        this.viewer = null;
+        this.app       = app;
+        this.file      = file;
+        this.element   = E.div('fileViewer');
+        this.viewer    = null;
         this.showTitle = showTitle;
-        this.error = null;
+        this.error     = null;
+        this.gameFile  = new GameFile(this.file);
         try {
             this.view = this.file.getData();
         }
@@ -29,6 +31,7 @@ export default class FileViewer {
     _makeFormatSelect() {
         this.eFormatSel = E.select('formatList', {id:'formatSelect'},
             E.option(null, "Auto",       {value:'auto'}),
+            E.option(null, "Archive",    {value:'archive'}),
             E.option(null, "Hex",        {value:'hex'}),
             E.option(null, "Plain Text", {value:'text'}),
             E.option(null, "RomList",    {value:'romlist'}),
@@ -43,14 +46,19 @@ export default class FileViewer {
     }
 
     _makeViewer() {
-        const fmt  = this.eFormatSel.value;
-        const name = this.file.name;
+        const fmt      = this.eFormatSel.value;
+        const name     = this.file.name;
+        const contents = this.gameFile.getContents();
         try {
             if(this.error) {
                 this.viewer = new ErrorMessage(this.app, this.error.toString());
             }
             else if(this.view.byteLength == 0) {
                 this.viewer = new ErrorMessage(this.app, "File is empty");
+            }
+            else if((fmt == 'auto' && contents.length > 1)
+            || fmt == 'archive') {
+                this.viewer = new ArchiveViewer(this.app, this.gameFile);
             }
             else if((fmt == 'auto' && name.endsWith('.romlist.zlb'))
             || fmt == 'romlist') {
@@ -73,14 +81,8 @@ export default class FileViewer {
         }
     }
 
-    _makeArchiveViewer() {
-        //XXX move this to its own class or something
-
-    }
-
     refresh() {
-        //this._makeViewer();
-        this._makeArchiveViewer();
+        this._makeViewer();
         clearElement(this.element);
         if(this.showTitle) {
             this.element.append(

@@ -28,6 +28,7 @@ export default class BinaryFile {
             default: throw new RangeError("Invalid value for 'whence'");
         }
     }
+    isEof() { return this._readOffs >= this.byteLength }
 
     read(fmt, count=1) {
         /** Read some data from the file. */
