@@ -337,6 +337,7 @@ static void printPlayerState() {
     //XXX confirm 7F4 is an object
     printPlayerObj("Obj7F4",      *(ObjInstance**)(pState + 0x7F4));
     printPlayerObj("Hold obj",    *(ObjInstance**)(pState + 0x7F8));
+    printPlayerObj("Push obj",    *(ObjInstance**)(pState + 0x248));
 }
 
 static void printPerformance() {

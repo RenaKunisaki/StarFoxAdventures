@@ -70,6 +70,8 @@ typedef enum {
 typedef enum { //for savedata (field unused01)
     EXTRA_FEATURE_RUMBLE_BLUR   = (1 << 0),
     EXTRA_FEATURE_NO_PARTICLEFX = (1 << 1),
+    EXTRA_FEATURE_NO_AIM_SNAP   = (1 << 2), //disable staff aim snapback
+    EXTRA_FEATURE_SENSITIVE_AIM = (1 << 3), //disable staff aim interpolation
 } ExtraFeatureFlag;
 
 //see also CameraFlags in camera.h
@@ -148,6 +150,8 @@ extern u8 furFxMode;
 extern u16 dayOfYear, curYear;
 extern bool bRumbleBlur;
 extern bool bDisableParticleFx;
+extern bool bNoAimSnap;
+extern bool bSensitiveAim;
 extern const char *languageNames[NUM_LANGUAGES];
 extern const char *languageNamesShort[NUM_LANGUAGES];
 void setGameLanguage(GameLanguageEnum lang);

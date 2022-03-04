@@ -3,6 +3,8 @@
 const char *strings_Japanese[] = {
     "住所", //memory address
     "住所", //memory address
+    "センター復帰を目指す", //whether staff crosshair should move back on its own
+    "感度を目指す", //how fast staff crosshair moves
     "アーウィン：常に10リング", //cheat
     "アーウィン：無限爆弾", //cheat
     "アタッチポイント", //show attachment points
@@ -87,6 +89,7 @@ const char *strings_Japanese[] = {
     "ヒープの状態", //show details about memory allocation
     "熱表現", //enable a heat wave effect on screen
     "非表示無効", //don't show disabled objects
+    "高い", //higher than normal
     "ヒットボックス", //show hit areas
     "接触領域", //hitboxes
     "HUD", //heads-up display

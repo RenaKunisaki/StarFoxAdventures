@@ -65,13 +65,39 @@ void menuCamInvY_select(const MenuItem *self, int amount) {
 }
 
 
+void menuAimSnap_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bNoAimSnap ? T("Off") : T("On"));
+    menuDrawText(str, x, y, selected);
+}
+void menuAimSnap_select(const MenuItem *self, int amount) {
+    bNoAimSnap = !bNoAimSnap;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
+}
+
+
+void menuAimSensitive_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), bSensitiveAim ?
+        T("High") : T("Normal"));
+    menuDrawText(str, x, y, selected);
+}
+void menuAimSensitive_select(const MenuItem *self, int amount) {
+    bSensitiveAim = !bSensitiveAim;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
+}
+
 Menu menuControlSettings = {
     "Control Settings", 0,
     genericMenu_run, genericMenu_draw, mainSubMenu_close,
-    "Rumble",         "%s: %s",    menuRumble_draw,     menuRumble_select,
-    "Rumble Blur",    "%s: %s",    menuRumbleBlur_draw, menuRumbleBlur_select,
-    "Camera Control", "%s: %s %d", menuCamCtrl_draw,    menuCamCtrl_select,
-    "Camera X",       "%s: %s",    menuCamInvX_draw,    menuCamInvX_select,
-    "Camera Y",       "%s: %s",    menuCamInvY_draw,    menuCamInvY_select,
+    "Rumble",         "%s: %s",    menuRumble_draw,       menuRumble_select,
+    "Rumble Blur",    "%s: %s",    menuRumbleBlur_draw,   menuRumbleBlur_select,
+    "Camera Control", "%s: %s %d", menuCamCtrl_draw,      menuCamCtrl_select,
+    "Camera X",       "%s: %s",    menuCamInvX_draw,      menuCamInvX_select,
+    "Camera Y",       "%s: %s",    menuCamInvY_draw,      menuCamInvY_select,
+    "Aim Snapback",   "%s: %s",    menuAimSnap_draw,      menuAimSnap_select,
+    "Aim Sensitivity","%s: %s",    menuAimSensitive_draw, menuAimSensitive_select,
     NULL,
 };

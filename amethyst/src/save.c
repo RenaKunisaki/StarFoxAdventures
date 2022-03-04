@@ -41,8 +41,10 @@ void saveLoadHook() {
         overridePlayerNo = save->unused07;
 
         u8 extraFeatureFlags = save->unused01;
-        bRumbleBlur = extraFeatureFlags & EXTRA_FEATURE_RUMBLE_BLUR;
+        bRumbleBlur        = extraFeatureFlags & EXTRA_FEATURE_RUMBLE_BLUR;
         bDisableParticleFx = extraFeatureFlags & EXTRA_FEATURE_NO_PARTICLEFX;
+        bNoAimSnap         = extraFeatureFlags & EXTRA_FEATURE_NO_AIM_SNAP;
+        bSensitiveAim      = extraFeatureFlags & EXTRA_FEATURE_SENSITIVE_AIM;
 
         cameraFlags = save->unusedHudSetting;
         overrideFov = save->unused0E;
@@ -94,6 +96,8 @@ void updateSaveData() {
     save->unused01 = 0;
     if(bRumbleBlur) save->unused01 |= EXTRA_FEATURE_RUMBLE_BLUR;
     if(bDisableParticleFx) save->unused01 |= EXTRA_FEATURE_NO_PARTICLEFX;
+    if(bNoAimSnap) save->unused01 |= EXTRA_FEATURE_NO_AIM_SNAP;
+    if(bSensitiveAim) save->unused01 |= EXTRA_FEATURE_SENSITIVE_AIM;
 
     save->unusedHudSetting = cameraFlags;
     save->unk18 = hudFlags;

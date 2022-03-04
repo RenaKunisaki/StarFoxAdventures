@@ -15,7 +15,8 @@ u8 furFxMode = 0; //FurFxMode
 u16 dayOfYear, curYear;
 bool bRumbleBlur = false;
 bool bDisableParticleFx = false;
-
+bool bNoAimSnap = false;
+bool bSensitiveAim = false;
 
 static inline void checkTime() {
     u64 ticks = __OSGetSystemTime();
@@ -74,20 +75,16 @@ static inline void doPadMainLoop() {
     if(bPressed4 & PAD_BUTTON_MENU) endObjSequence(curSeqNo);
 }
 
-void mainLoopHook() {
-    //replaces a bl to a do-nothing subroutine
-
+static inline void sanityCheck() {
     //sanity check
     if(furFxMode >= NUM_FURFX_MODES) furFxMode = 0;
     if(backpackMode >= NUM_BACKPACK_MODES) backpackMode = 0;
     if(overridePlayerNo >= NUM_PLAYER_IDS) overridePlayerNo = 0;
     if(overrideMinimapSize >= NUM_MINIMAP_SIZES) overrideMinimapSize = 0;
     if(overrideFov == 0) overrideFov = 60;
+}
 
-    checkTime();
-    doPadMainLoop();
-
-    //do some overrides
+static inline void doFovOverride() {
     if(overrideFov != 60 && !CameraParamsViewfinder) {
         //override if not in first person
         fovY = overrideFov;
@@ -95,7 +92,9 @@ void mainLoopHook() {
         if(pCamera) pCamera->fov = overrideFov;
         if(cameraMtxVar57) cameraMtxVar57->mtx1[3][0] = overrideFov;
     }
+}
 
+static inline void doFurFx() {
     switch(furFxMode) {
         case FURFX_NORMAL:
             WRITE16(0x800414E2, 0);
@@ -111,24 +110,9 @@ void mainLoopHook() {
             WRITE_BLR(0x800414B4);
             iCacheFlush((void*)0x800414B4, 0x40);
     }
+}
 
-    WRITE32(0x800a4df4, bDisableParticleFx ? 0x4E800020 : 0x9421FED0);
-    iCacheFlush((void*)0x800a4df4, 4);
-
-    WRITE32(0x80148bc8, (debugTextFlags & DEBUGTEXT_TRICKY) ? 0x4BFEED80 : 0x9421FF90);
-    iCacheFlush((void*)0x80148bc8, 4);
-
-    WRITE32(0x8000E398, (cameraFlags & CAM_FLAG_NO_LETTERBOX) ? 0x38000000 : 0xA80D96A6);
-    iCacheFlush((void*)0x8000E398, 4);
-
-    minimapMainLoopHook();
-    mainLoopDebugPrint();
-    runMenu();
-    krystalMainLoop();
-    doFreeMove();
-    saveUpdateHook();
-    gameBitHookUpdate();
-
+static inline void doAspectRatio() {
     //correct aspect ratio
     if(renderFlags & RenderFlag_Widescreen) {
         viewportAspect = 16.0 / 9.6;
@@ -140,9 +124,9 @@ void mainLoopHook() {
         viewportAspectNotWidescreen = 5.0 / 4.0;
         //shadows use same address as main viewport for non-widescreen
     }
+}
 
-    playerMainLoopHook();
-
+static inline void doCheats() {
     ObjInstance *arwing = getArwing();
     u8 *arwingState = arwing ? (u8*)arwing->state : NULL;
     PlayerCharState *playerState =
@@ -180,6 +164,35 @@ void mainLoopHook() {
             arwingState[0x44C] = 3; //nBombs = 3
         }
     }
+}
+
+void mainLoopHook() {
+    //replaces a bl to a do-nothing subroutine
+    sanityCheck();
+    checkTime();
+    doPadMainLoop();
+    doFovOverride();
+    doFurFx();
+
+    WRITE32(0x800a4df4, bDisableParticleFx ? 0x4E800020 : 0x9421FED0);
+    iCacheFlush((void*)0x800a4df4, 4);
+
+    WRITE32(0x80148bc8, (debugTextFlags & DEBUGTEXT_TRICKY) ? 0x4BFEED80 : 0x9421FF90);
+    iCacheFlush((void*)0x80148bc8, 4);
+
+    WRITE32(0x8000E398, (cameraFlags & CAM_FLAG_NO_LETTERBOX) ? 0x38000000 : 0xA80D96A6);
+    iCacheFlush((void*)0x8000E398, 4);
+
+    minimapMainLoopHook();
+    mainLoopDebugPrint();
+    runMenu();
+    krystalMainLoop();
+    doFreeMove();
+    saveUpdateHook();
+    gameBitHookUpdate();
+    doAspectRatio();
+    playerMainLoopHook();
+    doCheats();
 
     //move camera while time is stopped in debug mode
     if(timeStop && (debugCameraMode != CAM_MODE_NORMAL) && !menuState) {

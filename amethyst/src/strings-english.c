@@ -15,6 +15,8 @@
 const char *strings_English[] = {
     "Address", //memory address
     "ADDR", //memory address
+    "Aim Snapback", //whether staff crosshair should move back on its own
+    "Aim Sensitivity", //how fast staff crosshair moves
     "Arwing: Always 10 Rings", //cheat
     "Arwing: Infinite Bombs", //cheat
     "Attach Points", //show attachment points
@@ -99,6 +101,7 @@ const char *strings_English[] = {
     "Heap Details", //show details about memory allocation
     "Heat Effect", //enable a heat wave effect on screen
     "Hide Disabled", //don't show disabled objects
+    "High", //higher than normal
     "Hitboxes", //show hit areas
     "HITS", //hitboxes
     "HUD", //heads-up display
