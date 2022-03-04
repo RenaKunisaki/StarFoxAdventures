@@ -169,7 +169,6 @@ export default class BinaryReader {
                 console.assert(!isNaN(this.strTab[base+i]));
                 this._file.seek(this.strTab[base+i] + this.strDataOffs);
                 let phrase = Phrase.fromFile(this._file, text.language);
-                this._file.seek(phrase.byteLength, 'SEEK_CUR');
                 text.addPhrase(phrase);
             }
             this.texts.push(text);
