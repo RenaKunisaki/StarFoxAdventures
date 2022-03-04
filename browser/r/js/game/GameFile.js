@@ -69,8 +69,8 @@ export default class GameFile extends BinaryFile {
             let item = this._readArchiveHeader(offset);
             if(item == null) break;
 
-            offset += item.offset + item.packedSize;
-            if(offset & 3) offset += (3 - (offset & 3)); //round up
+            offset += item.fileSize;
+            if(offset & 3) offset += (4 - (offset & 3)); //round up
             if(includePadding || item.fmt != 'padding') result.push(item);
         }
         this._contents[cacheKey] = result;
@@ -93,36 +93,45 @@ export default class GameFile extends BinaryFile {
                     unpackedSize: length,
                     offset:       0,
                     fileOffset:   offset,
+                    fileSize:     length,
                 };
             }
             case 0x44495200: //'DIR\0'
             case 0x44495230: //'DIR0' (XXX used?)
             case 0x44495231: //'DIR1' (XXX used?)
-            case 0x4449526E: //'DIRn' (XXX used?)
-            return {
-                fmt:         'DIR',
-                version:      this.readU32(), //always 1
-                unpackedSize: this.readU32(), //not checked, should be == packedSize
-                packedSize:   this.readU32(),
-                offset:       0x10,
-                fileOffset:   offset,
-            };
-            case 0x5A4C4200: return { //'ZLB\0'
-                fmt:         'ZLB',
-                version:      this.readU32(), //always 1
-                unpackedSize: this.readU32(),
-                packedSize:   this.readU32(),
-                offset:       0x10,
-                fileOffset:   offset,
-            };
+            case 0x4449526E: { //'DIRn' (XXX used?)
+                const result = {
+                    fmt:         'DIR',
+                    version:      this.readU32(), //always 1
+                    unpackedSize: this.readU32(), //not checked, should be == packedSize
+                    packedSize:   this.readU32(),
+                    offset:       0x10,
+                    fileOffset:   offset,
+                };
+                result.fileSize = result.packedSize + result.offset;
+                return result;
+            }
+            case 0x5A4C4200: { //'ZLB\0'
+                const result = {
+                    fmt:         'ZLB',
+                    version:      this.readU32(), //always 1
+                    unpackedSize: this.readU32(),
+                    packedSize:   this.readU32(),
+                    offset:       0x10,
+                    fileOffset:   offset,
+                };
+                result.fileSize = result.packedSize + result.offset;
+                return result;
+            }
             case 0xE0E0E0E0: {
                 const result = {
                     fmt:        'E0E0E0E0',
                     packedSize: this.readU32(),
                     offset:     this.readU32() + 0x18,
-                    fileOffset:   offset,
+                    fileOffset:  offset,
                 };
                 result.unpackedSize = result.packedSize;
+                result.fileSize = result.packedSize + result.offset;
                 //XXX what is this?
                 result.extraData = this.readU32Array((result.offset - 0x0C)/4);
                 return result;
@@ -135,6 +144,7 @@ export default class GameFile extends BinaryFile {
                     packedSize:   this.readU32(),
                     fileOffset:   offset,
                 };
+                result.fileSize = result.packedSize + result.offset;
                 //XXX what is this?
                 result.extraData = this.readU32Array((result.offset - 0x10)/4);
                 return result;
@@ -149,6 +159,7 @@ export default class GameFile extends BinaryFile {
                 };
                 result.extraData = this.readU32Array(result.offset);
                 result.offset = (result.offset - 3) * 4; //offset from magic
+                result.fileSize = result.packedSize + result.offset;
                 return result;
             }
             default: return {
@@ -157,6 +168,7 @@ export default class GameFile extends BinaryFile {
                 unpackedSize: this.byteLength - offset,
                 offset:       0,
                 fileOffset:   offset,
+                fileSize:     this.byteLength - offset,
             };
         }
     }

@@ -37,6 +37,7 @@ export default class ArchiveViewer {
         return new Table({title:"Archive Contents", columns: [
             {displayName:"#", name:'idx', type:'int'},
             {displayName:"Offset", name:'fileOffset', type:'hex', length:6},
+            {displayName:"End",    name:'endOffset', type:'hex', length:6},
             {displayName:"Format", name:'fmt', type:'string'},
             {displayName:"Packed", name:'packedSize', type:'hex', length:6,
                 title:"Packed size"},
@@ -51,7 +52,8 @@ export default class ArchiveViewer {
 
     _makeRow(idx, item) {
         return Object.assign({
-            idx: idx,
+            idx:       idx,
+            endOffset: item.fileOffset + item.fileSize,
             packRatio: Percent(item.packedSize / item.unpackedSize),
         }, item); //copy
     }
