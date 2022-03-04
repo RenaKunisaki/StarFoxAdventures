@@ -15,7 +15,7 @@ export class GameTextViewer {
     }
 
     _makeTable() {
-        this.table = new Table({columns: [
+        this.table = new Table({title:"GameText Data", columns: [
             {displayName:"#", name:'id',   type:'hex', length:4},
             {displayName:"W", name:'window',type:'hex', length:2,
                 title:"Window type"},

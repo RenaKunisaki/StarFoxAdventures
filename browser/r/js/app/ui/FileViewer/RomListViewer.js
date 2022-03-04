@@ -17,7 +17,7 @@ export class RomListViewer {
         this.objsTab  = this.app.game.iso.getFile('/OBJECTS.tab').getData();
         this.objsBin  = this.app.game.iso.getFile('/OBJECTS.bin').getData();
 
-        this.table = new Table({columns: [
+        this.table = new Table({title:"Romlist Data", columns: [
             {displayName:"ID", name:'id', type:'hex', length:8},
             {displayName:"DefNo", name:'objDef', type:'hex', length:4},
             {displayName:"Object", name:'object', type:'str'},

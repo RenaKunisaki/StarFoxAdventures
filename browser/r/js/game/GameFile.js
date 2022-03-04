@@ -24,25 +24,13 @@ export default class GameFile extends BinaryFile {
         if(this._contents[cacheKey] != null) return this._contents[cacheKey];
         const result = [];
         let offset   = 0;
-        let done     = false;
-        while(offset < this.byteLength && !done) {
+        while(offset < this.byteLength) {
             let item = this._readArchiveHeader(offset);
-            if(item == null) {
-                item = {
-                    fmt:          'raw',
-                    packedSize:   this.byteLength - offset,
-                    unpackedSize: this.byteLength - offset,
-                    offset:       offset,
-                    headerOffs:   offset,
-                };
-                done = true;
-            }
-            else {
-                item.headerOffs = offset;
-                offset += item.offset + item.packedSize;
-                //round up
-                if(offset & 3) offset += (3 - (offset & 3));
-            }
+            if(item == null) break;
+
+            item.headerOffs = offset;
+            offset += item.offset + item.packedSize;
+            if(offset & 3) offset += (3 - (offset & 3)); //round up
             if(includePadding || item.fmt != 'padding') result.push(item);
         }
         this._contents[cacheKey] = result;
@@ -58,8 +46,7 @@ export default class GameFile extends BinaryFile {
         switch(magic) {
             case 0x00000000: {
                 let length = 1;
-                while((this.byteLength - this.tell() >= 1)
-                && (!this.readU8())) length += 1;
+                while(!this.isEof() && !this.readU8()) length += 1;
                 return {
                     fmt:          'padding',
                     packedSize:   length,
@@ -67,7 +54,6 @@ export default class GameFile extends BinaryFile {
                     offset:       0,
                 };
             }
-
             case 0x44495200: //'DIR\0'
             case 0x44495230: //'DIR0' (XXX used?)
             case 0x44495231: //'DIR1' (XXX used?)
@@ -79,7 +65,6 @@ export default class GameFile extends BinaryFile {
                 packedSize:   this.readU32(),
                 offset:       0x10,
             };
-
             case 0x5A4C4200: return { //'ZLB\0'
                 fmt:         'ZLB',
                 version:      this.readU32(), //always 1
@@ -87,7 +72,6 @@ export default class GameFile extends BinaryFile {
                 packedSize:   this.readU32(),
                 offset:       0x10,
             };
-
             case 0xE0E0E0E0: {
                 const result = {
                     fmt:        'E0E0E0E0',
@@ -99,7 +83,6 @@ export default class GameFile extends BinaryFile {
                 result.extraData = this.readU32Array((result.offset - 0x0C)/4);
                 return result;
             }
-
             case 0xF0F0F0F0: {
                 const result = {
                     fmt:          'F0F0F0F0',
@@ -111,7 +94,6 @@ export default class GameFile extends BinaryFile {
                 result.extraData = this.readU32Array((result.offset - 0x10)/4);
                 return result;
             }
-
             case 0xFACEFEED: {
                 const result = {
                     fmt:         'FACEFEED',
@@ -123,8 +105,12 @@ export default class GameFile extends BinaryFile {
                 result.offset = (result.offset - 3) * 4; //offset from magic
                 return result;
             }
-
-            default: return null;
+            default: return {
+                fmt: 'raw',
+                packedSize:   this.byteLength - offset,
+                unpackedSize: this.byteLength - offset,
+                offset:       0,
+            };
         }
     }
 }
