@@ -1,5 +1,6 @@
 import { E, clearElement } from "../../../lib/Element.js";
 import ErrorMessage from "../ErrorMessage.js";
+import { fileSize, hex, Table } from "../../../Util.js";
 import HexViewer from "./HexViewer.js";
 import TextViewer from "./TextViewer.js";
 import { RomListViewer } from "./RomListViewer.js";
@@ -41,10 +42,8 @@ export default class FileViewer {
         );
     }
 
-    refresh() {
-        let elem;
-        let fmt = this.eFormatSel.value;
-
+    _makeViewer() {
+        const fmt  = this.eFormatSel.value;
         const name = this.file.name;
         try {
             if(this.error) {
@@ -72,7 +71,16 @@ export default class FileViewer {
             console.error(ex);
             this.viewer = new ErrorMessage(this.app, ex.toString());
         }
+    }
 
+    _makeArchiveViewer() {
+        //XXX move this to its own class or something
+
+    }
+
+    refresh() {
+        //this._makeViewer();
+        this._makeArchiveViewer();
         clearElement(this.element);
         if(this.showTitle) {
             this.element.append(

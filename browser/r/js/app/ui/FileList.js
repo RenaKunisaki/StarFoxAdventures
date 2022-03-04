@@ -29,7 +29,8 @@ export default class FileList {
     _showFile(file) {
         clearElement(this.eRightPane);
         const eView = E.button(null, "View in New Window");
-        const eDownload = E.button(null, "Download");
+        const eDownloadRaw = E.button(null, "Download Raw File");
+        const eDownloadDec = E.button(null, "Download Decoded File");
         this.eRightPane.append(
             E.h1(null, file.path),
             E.div('fileInfo',
@@ -38,7 +39,7 @@ export default class FileList {
                     E.tr(E.th(null, "Size"), E.td('fileSize int', file.size.toLocaleString())),
                     E.tr(E.th(null, "Offset"), E.td('offset hex', `0x${hex(file.bufferOffs)}`)),
                 ),
-                E.div('buttons', eView, eDownload),
+                E.div('buttons', eView, eDownloadRaw, eDownloadDec),
             ),
         );
 
@@ -46,7 +47,10 @@ export default class FileList {
             await this.app.showFileInNewWindow(file);
         });
 
-        eDownload.addEventListener('click', e => {
+        eDownloadRaw.addEventListener('click', e => {
+            download(file.getRawData(), file.name);
+        });
+        eDownloadDec.addEventListener('click', e => {
             download(file.getData(), file.name);
         });
 

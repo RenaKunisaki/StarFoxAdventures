@@ -97,6 +97,7 @@ export function fileSize(val) {
      *  @returns {string} human-readable string.
      *  @example fileSize(65536) => "64K"
      */
+    if(val == undefined || val == null) return val;
     const units = [' ', 'K', 'M', 'G', 'T'];
     let unit = 0;
     while(unit < units.length && val > 9999) {
