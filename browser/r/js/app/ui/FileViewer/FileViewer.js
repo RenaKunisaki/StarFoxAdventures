@@ -9,13 +9,14 @@ import { GameTextViewer } from "./GameTextViewer.js";
 
 export default class FileViewer {
     constructor(app, file, showTitle=true) {
-        this.app       = app;
-        this.file      = file;
-        this.element   = E.div('fileViewer');
-        this.viewer    = null;
-        this.showTitle = showTitle;
-        this.error     = null;
-        this.gameFile  = new GameFile(this.file);
+        this.app        = app;
+        this.file       = file;
+        this.element    = E.div('fileViewer');
+        this.viewer     = null;
+        this.showTitle  = showTitle;
+        this.error      = null;
+        this.archiveIdx = null; //item idx of archive we're viewing (null=none)
+        this.gameFile   = new GameFile(this.file);
         try {
             this.view = this.file.getData();
         }
@@ -56,13 +57,21 @@ export default class FileViewer {
             else if(this.view.byteLength == 0) {
                 this.viewer = new ErrorMessage(this.app, "File is empty");
             }
-            else if((fmt == 'auto' && contents.length > 1)
-            || fmt == 'archive') {
+            //if we're viewing an item in the archive, don't show the
+            //archive's contents by default.
+            //we can still switch the view mode to Archive to see them,
+            //which is how we go back to the list from an item.
+            else if((fmt == 'auto' && this.archiveIdx == null
+            && contents.length > 1) || fmt == 'archive') {
                 this.viewer = new ArchiveViewer(this.app, this.gameFile);
                 this.viewer.cbView = (item, data) => {
+                    //View button clicked. replace view with the item's data.
                     this.view = new DataView(data);
+                    this.archiveIdx = item.idx;
+                    this.eFormatSel.value = 'auto';
                     this.refresh();
                 };
+                this.archiveIdx = null; //we're not viewing an item
             }
             else if((fmt == 'auto' && name.endsWith('.romlist.zlb'))
             || fmt == 'romlist') {

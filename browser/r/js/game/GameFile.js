@@ -80,7 +80,7 @@ export default class GameFile extends BinaryFile {
         const magic = this.readU32();
         switch(magic) {
             case 0x00000000: {
-                let length = 1;
+                let length = 4;
                 while(!this.isEof() && !this.readU8()) length += 1;
                 return {
                     fmt:          'padding',
