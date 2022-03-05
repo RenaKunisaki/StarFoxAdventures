@@ -33,7 +33,7 @@ export default class MapGrid {
         this.eToolbar  = E.div('toolbar');
         this.eCellInfo = E.span('cellInfo');
         this.eBody     = E.div('body');
-        this.element.append(this.eToolbar, this.eBody);
+        clearElement(this.element).append(this.eToolbar, this.eBody);
     }
 
     _onIsoLoaded() {
@@ -194,6 +194,8 @@ export default class MapGrid {
         this._addCharPositions();
         this._addWarps();
 
+        //clear this too, to get rid of "select an ISO" message
+        clearElement(this.element).append(this.eToolbar, this.eBody);
         clearElement(this.eBody).append(elem);
     }
 }
