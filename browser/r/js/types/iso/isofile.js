@@ -54,35 +54,4 @@ export default class IsoFile {
         }
         return this._data[key];
     }
-
-    getData(decompress=true, offset=0, size=0) {
-        if(size <= 0) size = this.size;
-
-        //XXX this is obsolete with GameFile. use that instead.
-        let key = `${decompress?'D':'R'}${offset},${size}`;
-        if(this._data[key]) return this._data[key];
-
-        let view = this.getRawData(offset, size);
-        if(decompress && this.size >= 4) {
-            const magic = view.getUint32(0, false);
-            switch(magic) {
-                case 0x5A4C4200: //'ZLB\0'
-                    //BUG: if there are multiple ZLB archives in one file,
-                    //we can only see the first one...
-                    //console.log("Decompressing ZLB");
-                    const decomp = pako.inflate(new Uint8Array(
-                        this.buffer, this.bufferOffs+offset+0x10,
-                        this.size-0x10));
-                    view = new DataView(decomp.buffer);
-                    break;
-
-                //XXX FEEDFACE, LZO, etc
-
-                default: break;
-            }
-        }
-
-        this._data[key] = view;
-        return view;
-    }
 };

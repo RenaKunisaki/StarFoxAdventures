@@ -4,6 +4,7 @@ import GameTextXmlBuilder from "../game/text/XmlBuilder.js";
 import BinaryFile from "../lib/BinaryFile.js";
 import GameBit from "../types/GameBit.js";
 import RomList from "../types/RomList.js";
+import GameFile from "./GameFile.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
 
@@ -28,7 +29,7 @@ export default class GameBitsXmlBuilder {
             numSteps: bitTable.size / 4, stepsDone: 0,
         });
 
-        const data = new BinaryFile(bitTable.getData());
+        const data = new BinaryFile(bitTable.getRawData());
         const xml  = document.implementation.createDocument(XML, "gamebits");
         this.xml   = xml;
         for(let i=0; i<bitTable.size / 4; i++) {
@@ -74,7 +75,8 @@ export default class GameBitsXmlBuilder {
                 numSteps:  files.length, stepsDone: iFile,
             });
             const mapName = file.name.split('.')[0];
-            const romList = new RomList(this.app, file.getData());
+            const gFile   = new GameFile(file);
+            const romList = new RomList(this.app, gFile);
             for(let entry of romList.entries) {
                 let params = entry.params;
                 if(params == null) params = [];

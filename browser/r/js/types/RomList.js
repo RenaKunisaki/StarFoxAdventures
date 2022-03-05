@@ -1,3 +1,4 @@
+import GameFile from "../game/GameFile.js";
 import Struct from "../lib/Struct.js";
 import { Vec3f } from "./common.js";
 
@@ -66,6 +67,7 @@ export default class RomList {
          */
         this.app     = app;
         this.entries = [];
+        if(view instanceof GameFile) view = view.decompress();
         for(let offs=0; offs<view.byteLength;) {
             let entry = new RomListEntry(this.app, view, offs);
             this.entries.push(entry);

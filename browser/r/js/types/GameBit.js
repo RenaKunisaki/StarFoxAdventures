@@ -40,7 +40,13 @@ export default class GameBit {
         }
 
         if(this.hintId != undefined && this.app.game.texts) {
-            this.hint = this.app.game.texts[this.hintId].phrases[0].toString(false);
+            try {
+                this.hint = this.app.game.texts[this.hintId]
+                    .phrases[0].toString(false);
+            }
+            catch(ex) {
+                this.hint = ex.toString();
+            }
         }
     }
 
