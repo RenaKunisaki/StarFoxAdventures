@@ -93,7 +93,7 @@ export default class GameObject {
         this.offset   = offset;
         this.dataSize = size;
         this.id       = idx;
-        this.data     = objsBin.getData(false, offset, size);
+        this.data     = objsBin.getData(offset, size);
         const header  = new ObjectData(this.data);
         this.header   = header;
         this.index    = null; //from OBJINDEX.bin
