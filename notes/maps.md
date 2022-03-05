@@ -41,14 +41,14 @@ it's 0x10 * 0x50 entries?
 and it is 12-byte entries
 
 ........  0001 0203  0405 0607  0809 0A0B
-00000000  FFF0 FFFF  0000 0012  FFFF FFFF  
-0000000C  0002 FFE6  0000 0010  000C FFFF  
-00000018  0000 002E  0000 0006  FFFF FFFF  
-00000024  0007 002D  0000 0009  FFFF FFFF  
-00000030  0011 0000  0000 000B  FFFF FFFF  
-0000003C  FFF3 0014  0000 0013  FFFF FFFF  
-00000048  0012 FFEB  0000 0021  FFFF FFFF  
-00000054  0018 FFEB  0000 0022  FFFF FFFF  
+00000000  FFF0 FFFF  0000 0012  FFFF FFFF
+0000000C  0002 FFE6  0000 0010  000C FFFF
+00000018  0000 002E  0000 0006  FFFF FFFF
+00000024  0007 002D  0000 0009  FFFF FFFF
+00000030  0011 0000  0000 000B  FFFF FFFF
+0000003C  FFF3 0014  0000 0013  FFFF FFFF
+00000048  0012 FFEB  0000 0021  FFFF FFFF
+00000054  0018 FFEB  0000 0022  FFFF FFFF
 
 offs|type|what
 ----|----|----
@@ -232,60 +232,60 @@ BLOCKS.bin is modXX
 swaphol/mod13.tab entry 0x101: 0x100058A0 (what does this mean?)
 swaphol/mod13.zlb.bin is tiny:
 
-0000  00 00 00 00  00 08 00 00  00 00 01 C0  00 00 00 00  
-0010  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  
-0020  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  
-0030  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  
-0040  00 00 00 00  00 00 00 00  00 00 00 00  00 00 01 9C  
-0050  00 00 01 74  00 00 01 2C  00 00 01 00  00 00 01 14  
-0060  00 00 01 18  00 00 01 30  00 00 00 B8  00 00 00 00  
-0070  00 00 00 00  00 00 00 00  00 00 01 24  00 00 00 00  
+0000  00 00 00 00  00 08 00 00  00 00 01 C0  00 00 00 00
+0010  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00
+0020  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00
+0030  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00
+0040  00 00 00 00  00 00 00 00  00 00 00 00  00 00 01 9C
+0050  00 00 01 74  00 00 01 2C  00 00 01 00  00 00 01 14
+0060  00 00 01 18  00 00 01 30  00 00 00 B8  00 00 00 00
+0070  00 00 00 00  00 00 00 00  00 00 01 24  00 00 00 00
 0080  00 00 00 00  00 07 00 00  00 00
 008C                                  FD 11  FD 11 FD 11  <-- ???
-0090  00 03 00 00  00 01 00 03  00 01 00 01  00 00 00 00  
-00A0  01 01 01 00  
+0090  00 03 00 00  00 01 00 03  00 01 00 01  00 00 00 00
+00A0  01 01 01 00
 00A4: name: 6D 6F 64 31  33 2E 30 00  00 00 00 00  "mod13.0"
-00B0: padding:  00 00 00 00  00 00 00 00  
+00B0: padding:  00 00 00 00  00 00 00 00
 - end of header -
 
 00B8: dlists: 1 x DisplayListPtr
     offs=000000E0  size=0020
     bbox=0000 0000 0000  1400 0000 1400
-    shader=0000  
-    offs?=0000 0011  
-    ?=07000000  
-00D4: padding?: 00 00 00 00  00 00 00 00  00 00 00 00  
+    shader=0000
+    offs?=0000 0011
+    ?=07000000
+00D4: padding?: 00 00 00 00  00 00 00 00  00 00 00 00
 00E0: dlist[0]: 0x20 bytes:
-    95 00 03 00  00 00 01 00  01 02 00 02  00 00 00 00  
-    00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  
+    95 00 03 00  00 00 01 00  01 02 00 02  00 00 00 00
+    00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00
 0100: vtxs: 3 x vec3s
     1400 0000 1400
-    0000 0000 1400  
+    0000 0000 1400
     1400 0000 0000
-0112: padding: 00 00  
+0112: padding: 00 00
 0114: colors: 1 x u16: 347F
-0116: padding: 00 00  
+0116: padding: 00 00
 0118: texcoords: 3 x vec2s
     0100 0000
-    0000 0000  
-    0100 0100  
+    0000 0000
+    0100 0100
 0124: renderInstrs[0]: 7 bytes: 01 0C 28 00  04 A0 00
-012B: padding: 00  
-012C: textures: 1 x int: 00 00 02 1B  
+012B: padding: 00
+012C: textures: 1 x int: 00 00 02 1B
 0130: shaders: 1 x Shader
-    0130  00 00 00 FF  FF FF FF FF  00 00 00 00  FF 00 00 00  
-    0140  FF FF FF FF  00 00 00 00  00 00 00 00  FF FF FF FF  
-    0150  00 00 00 00  00 00 00 00  80 00 00 00  00 00 00 00  
-    0160  00 00 00 00  FF FF FF FF  FF FF FF FF  00 00 00 1C  
-    0170  06 01 00 00  
+    0130  00 00 00 FF  FF FF FF FF  00 00 00 00  FF 00 00 00
+    0140  FF FF FF FF  00 00 00 00  00 00 00 00  FF FF FF FF
+    0150  00 00 00 00  00 00 00 00  80 00 00 00  00 00 00 00
+    0160  00 00 00 00  FF FF FF FF  FF FF FF FF  00 00 00 1C
+    0170  06 01 00 00
 0174: ptr_0x50:
-    0170               00 00 00 00  02 80 00 00  00 00 00 00  
-    0180  02 80 00 00  00 19 00 04  00 01 00 00  00 00 00 00  
-    0190  00 00 00 00  00 00 00 00  00 00 00 00  
+    0170               00 00 00 00  02 80 00 00  00 00 00 00
+    0180  02 80 00 00  00 19 00 04  00 01 00 00  00 00 00 00
+    0190  00 00 00 00  00 00 00 00  00 00 00 00
 019C: ptr_0x4C:
-    0190                                         00 02 00 01  
-    01A0  00 00 FF FF  00 00 00 00  00 00 00 00  00 00 00 00  
-    01B0  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00  
+    0190                                         00 02 00 01
+    01A0  00 00 FF FF  00 00 00 00  00 00 00 00  00 00 00 00
+    01B0  00 00 00 00  00 00 00 00  00 00 00 00  00 00 00 00
 
 what happens if we change entry 0x0101 in swaphol/mod13.tab from 0x100058A0 to the next entry, 0x1000CC60? then we get a chunk of incorrect geometry around the waterfall. we can fall through it out of bounds (does not softlock) or hop onto it and run around.
 I have no idea where the actual geometry is though if mod13 is this small...
@@ -294,7 +294,7 @@ What about 0x100058B0? then the block just doesn't load at all and we softlock o
 
 so what do these numbers mean, and how does the game know which blocks to use here? and where the heck is the geometry?
 the coords are roughly 0xD580 0xDF80
-> Map: 0007 ThornTail Hollow             Type 00 unk 06 0000 Objs:  439 @8168E3A0  
+> Map: 0007 ThornTail Hollow             Type 00 unk 06 0000 Objs:  439 @8168E3A0
 > Coords: -5552.61  -780.94 -3281.25  Cell  -16  -13 @ -10240 -8320 0
 
 cell should be 0xFFF0, 0xFFF3 or so
@@ -718,3 +718,72 @@ so these two bytes define which map states the object should load in:
     02 state 15
     01 unused?
 if bit is set, object will NOT load in that state.
+
+====
+
+HITS.BIN is map hitbox info
+it's read by MapBlock::initHits
+
+GCPolygon eg:
+0000 0001 0005 01FF
+0000 0005 0003 01FF
+0004 0000 0003 FF01
+0004 0003 0002 FF01
+0000 0004 0006 FFFF
+0004 0007 0006 F8FF
+0001 0000 0006 1FFF
+0000 0000 ...
+
+likely u16 x, y, z (vtx idxs)
+then maybe tex coords or flags or hit info
+
+animtest's first item (mod6.0) has 3 groups:
+1stP                                         flag
+0001 02 03 04 05 0607 0809 0A 0B 0C 0D 0E 0F 1011 1213 1415
+0000 00 00 02 80 FFAA 0056 00 00 00 00 00 00 0018 0004 0002
+0000 00 00 FF AA 0056 0000 02 80 00 00 00 19 0000 0004 0000
+0280 FF AA FF AA 0000 0280 00 00 00 00 00 04 0007 0000 0000
+
+first several entries in HITS.bin:
+0001 0203 0405 0607 0809 0A0B 0C0D 0E0F 1011 1213
+00F9 009C F8F3 F8F3 0280 01F8 2828 0E85 FFFF 0000
+009C 011E F8F3 F8F3 01F8 0194 2828 0E85 FFFF 0000
+011E 0125 F8F3 F8F3 0194 0136 2828 0E85 FFFF 0000
+0125 00CC F8F3 F8F3 0136 00E6 2828 0E85 FFFF 0000
+00CC 00CC F8F3 F8F3 00E6 0000 2828 0E85 FFFF 0000
+009C 00F9 F837 F837 01F8 0280 00BB 8E83 FFFF 0000
+0000 0000 0000 0000 01E4 0188 F8F3 F8F3 01F8 0280
+2828 0E85 FFFF 0000 0162 01E4 F8F3 F8F3 0194 01F8
+2828 0E85 FFFF 0000 015B 0162 F8F3 F8F3 0136 0194
+2828 0E85 FFFF 0000 01B8 015B F8F3 F8F3 00E2 0136
+2828 0E85 FFFF 0000 01B4 01B8 F8F3 F8F3 0000 00E2
+2828 0E85 FFFF 0000 0188 01E4 F837 F837 0280 01F8
+00BB 8E83 FFFF 0000 0000 0000 0000 0000 0137 00F9
+this looks like maybe variable length?
+
+HITS.tab: (leading 0000s trimmed)
+0100 0160 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0 01C0
+0240 0440 0580 0580 0700
+0840 0960 09A0 09A0 09A0 09A0 09A0 09A0 09A0
+09E0 0A00 0A00 0A20 0A60 0A60 0A60 0A60 0A60 0A60 0A60 0A60 0A60 0A60 0A60
+0AC0 0B60 0B60 0B60
+0BA0 0BA0 0C00 1280 1400 1900 1A00 1AA0 1B40 1C60
+total size is 6400 bytes (1600 words, which could be a 40x40 grid?)
+the global map grid is much bigger than that
+
+0x0	0x2	short	short		pos or size, range 0-640
+0x2	0x2	short	short		"
+0x4	0x1	??	undefined
+0x5	0x1	??	undefined
+0x6	0x1	??	undefined
+0x7	0x1	??	undefined
+0x8	0x2	short	short
+0xa	0x2	short	short
+0xc	0x1	??	undefined
+0xd	0x1	??	undefined
+0xe	0x1	??	undefined
+0xf	0x1	db	byte
+0x10	0x1	??	undefined
+0x11	0x1	??	undefined
+0x12	0x1	??	undefined
+0x13	0x1	??	undefined
