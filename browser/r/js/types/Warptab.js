@@ -9,7 +9,7 @@ const WarpTabEntry = Struct(
 );
 
 export default function parseWarpTab(app) {
-    const warpTab = app.game.iso.getFile('/WARPTAB.bin').getData();
+    const warpTab = app.game.iso.getFile('/WARPTAB.bin').getRawData();
     const result  = [];
     for(let offs=0; offs < warpTab.byteLength; offs += WarpTabEntry._size) {
         let entry = new WarpTabEntry(warpTab, offs);

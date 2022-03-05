@@ -169,11 +169,11 @@ export default class Game {
     }
 
     async _loadObjects() {
-        this.objsTab = this.app.game.iso.getFile('/OBJECTS.tab').getData();
-        this.objsBin = this.app.game.iso.getFile('/OBJECTS.bin').getData();
+        this.objsTab = this.app.game.iso.getFile('/OBJECTS.tab').getRawData();
+        this.objsBin = this.app.game.iso.getFile('/OBJECTS.bin').getRawData();
 
         //parse OBJINDEX.bin
-        const objIndex = this.iso.getFile('/OBJINDEX.bin').getData();
+        const objIndex = this.iso.getFile('/OBJINDEX.bin').getRawData();
         this.objIndex  = [];
         const revIndex = {};
         for(let i=0; i<objIndex.byteLength; i += 2) {

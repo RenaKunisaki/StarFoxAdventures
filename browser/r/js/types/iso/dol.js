@@ -70,7 +70,7 @@ export default class DOL extends IsoFile {
         this.size = Math.max(...(this.textSections.concat(this.dataSections))
             .map(it => it.offset + it.size));
         console.log(`DOL size=0x${hex(this.size)}`);
-        console.log(`data: ${hex(this.getData().getUint32(0x100))}`);
+        console.log(`data: ${hex(this.getRawData().getUint32(0x100))}`);
 
         this._dumpSections();
     }

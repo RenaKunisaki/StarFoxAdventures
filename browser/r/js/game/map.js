@@ -127,9 +127,9 @@ export default class Map {
         const mapsTab = this.app.game.iso.getFile('/MAPS.tab');
         const mapsBin = this.app.game.iso.getFile('/MAPS.bin');
         if(mapsTab && mapsBin) {
-            const tab = new MapsTabEntry(mapsTab.getData(),
+            const tab = new MapsTabEntry(mapsTab.getRawData(),
                 this.id * MapsTabEntry._size);
-            const bin = mapsBin.getData();
+            const bin = mapsBin.getRawData();
             //console.log("MapsTabEntry size=", MapsTabEntry._size);
 
             this.mapsBin0Offset      = tab.info;
@@ -148,7 +148,7 @@ export default class Map {
     _readMapInfo() {
         const mapInfo = this.app.game.iso.getFile('/MAPINFO.bin');
         if(mapInfo) {
-            const data = new MapInfoEntry(mapInfo.getData(),
+            const data = new MapInfoEntry(mapInfo.getRawData(),
                 this.id * MapInfoEntry._size);
             this.name         = data.name;
             this.type         = data.type;
