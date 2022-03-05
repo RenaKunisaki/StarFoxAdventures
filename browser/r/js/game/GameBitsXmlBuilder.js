@@ -29,7 +29,7 @@ export default class GameBitsXmlBuilder {
             numSteps: bitTable.size / 4, stepsDone: 0,
         });
 
-        const data = new BinaryFile(bitTable.getRawData());
+        const data = new BinaryFile(bitTable.getData());
         const xml  = document.implementation.createDocument(XML, "gamebits");
         this.xml   = xml;
         for(let i=0; i<bitTable.size / 4; i++) {

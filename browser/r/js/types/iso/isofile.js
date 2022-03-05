@@ -44,7 +44,7 @@ export default class IsoFile {
         }
     }
 
-    getRawData(offset=0, size=0) {
+    getData(offset=0, size=0) {
         if(size <= 0) size += this.size;
 
         let key = `R${offset},${size}`;

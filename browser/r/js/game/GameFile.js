@@ -9,7 +9,7 @@ export default class GameFile extends BinaryFile {
         if(buffer instanceof IsoFile) {
             byteOffset = 0;
             byteLength = buffer.size;
-            buffer     = buffer.getRawData();
+            buffer     = buffer.getData();
         }
         super(buffer, byteOffset, byteLength, '>'); //always big endian
         this._contents = [null, null]; //cache

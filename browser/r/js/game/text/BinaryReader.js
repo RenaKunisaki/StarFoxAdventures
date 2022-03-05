@@ -37,7 +37,7 @@ export default class BinaryReader {
     /** Reads a GameText binary file. */
 
     constructor(app, data) {
-        if(data instanceof IsoFile) data = data.getRawData();
+        if(data instanceof IsoFile) data = data.getData();
         this.app     = app;
         this.data    = data;
         this._file   = new BinaryFile(this.data);

@@ -13,9 +13,9 @@ export class RomListViewer {
     }
 
     refresh() {
-        this.objIndex = this.app.game.iso.getFile('/OBJINDEX.bin').getRawData();
-        this.objsTab  = this.app.game.iso.getFile('/OBJECTS.tab').getRawData();
-        this.objsBin  = this.app.game.iso.getFile('/OBJECTS.bin').getRawData();
+        this.objIndex = this.app.game.iso.getFile('/OBJINDEX.bin').getData();
+        this.objsTab  = this.app.game.iso.getFile('/OBJECTS.tab').getData();
+        this.objsBin  = this.app.game.iso.getFile('/OBJECTS.bin').getData();
 
         this.table = new Table({title:"Romlist Data", columns: [
             {displayName:"ID", name:'id', type:'hex', length:8},

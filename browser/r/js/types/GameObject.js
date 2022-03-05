@@ -82,9 +82,9 @@ export default class GameObject {
          */
         this.app = app;
 
-        const objsTab = this.app.game.iso.getFile('/OBJECTS.tab').getRawData();
+        const objsTab = this.app.game.iso.getFile('/OBJECTS.tab').getData();
         const objsBin = this.app.game.iso.getFile('/OBJECTS.bin');
-        const objsBinData = objsBin.getRawData();
+        const objsBinData = objsBin.getData();
         const offset  = objsTab.getUint32(idx*4);
         const size    = objsTab.getUint32((idx+1)*4) - offset;
         if(offset >= objsBinData.byteLength) {
@@ -93,7 +93,7 @@ export default class GameObject {
         this.offset   = offset;
         this.dataSize = size;
         this.id       = idx;
-        this.data     = objsBin.getRawData(false, offset, size);
+        this.data     = objsBin.getData(false, offset, size);
         const header  = new ObjectData(this.data);
         this.header   = header;
         this.index    = null; //from OBJINDEX.bin

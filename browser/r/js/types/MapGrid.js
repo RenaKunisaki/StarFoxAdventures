@@ -9,7 +9,7 @@ const MapGridItem = Struct(
 
 export default function parseMapGrid(app) {
     const layers    = {};
-    const globalMap = app.game.iso.getFile('/globalma.bin').getRawData();
+    const globalMap = app.game.iso.getFile('/globalma.bin').getData();
 
     for(let i=0; ; i++) {
         let entry = new MapGridItem(globalMap, i * MapGridItem._size);

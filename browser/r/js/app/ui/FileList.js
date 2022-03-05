@@ -49,7 +49,7 @@ export default class FileList {
         });
 
         eDownloadRaw.addEventListener('click', e => {
-            download(file.getRawData(), file.name);
+            download(file.getData(), file.name);
         });
         eDownloadDec.addEventListener('click', e => {
             if(this.viewer) {

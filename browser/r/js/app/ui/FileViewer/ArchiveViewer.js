@@ -9,7 +9,7 @@ export default class ArchiveViewer {
         this.app = app;
         if(data instanceof GameFile) this.file = data;
         else if(data instanceof IsoFile) {
-            this.file = new GameFile(data.getRawData(), 0, data.size);
+            this.file = new GameFile(data.getData(), 0, data.size);
         }
         else if(data instanceof DataView) {
             this.file = new GameFile(data.buffer,
