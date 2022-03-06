@@ -1,7 +1,13 @@
 <?xml version="1.0"?>
 <addresses>
+    <!-- global DLL table -->
     <address name="g_dlls" type="DLL*" address="0x802C6300" count="0x2C2" />
+    <!-- translates map dir IDs to map IDs (index into MAPINFO.bin) -->
     <address name="mapIdXltnTbl" type="int" address="0x802CBCD0" count="75" />
-    <address name="mapDirName" type="char*" address="0x802CBBAC" count="0x49" />
+    <!-- pointers to map asset dirs -->
+    <address name="mapDirNames" type="char*" address="0x802CBBAC" count="0x49" />
+    <!-- pointers to map romlist file names -->
+    <address name="mapName" type="char*" address="0x802cb940" count="117" />
+    <!-- array of map dir ID => parent dir ID -->
     <address name="parentMapId" type="s16" address="0x802CBDFC" count="0x4C" />
 </addresses>

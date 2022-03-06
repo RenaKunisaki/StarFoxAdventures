@@ -1,5 +1,14 @@
 import { E } from "./lib/Element.js";
 
+export function getAttr(elem, name) {
+    /** This function exists solely because the way browsers
+     *  handle XML is completely fucking stupid.
+     */
+    let result = elem.getAttribute(name);
+    if(result == undefined) result = elem.getAttribute(name.toLowerCase());
+    return result;
+}
+
 export function get(params) {
     /** Fetch some remote resource.
      *  @param {string} path URI to fetch.
@@ -210,15 +219,14 @@ export function download(data, name, type='') {
     a.click();
 }
 
-export function downloadXml(xml, name, type='application/xml') {
+export function downloadXml(xml, name, type='application/xml', pretty=false) {
     /** Prompt the user to download an XML file.
      *  @param {XMLDocument} xml data to download.
      *  @param {string} name default file name.
      *  @param {string} type MIME type.
      */
     if(!name.endsWith('.xml')) name += '.xml';
-    download(
-        //prettyXml(new XMLSerializer().serializeToString(xml)),
-        new XMLSerializer().serializeToString(xml),
-        name, type);
+    let data = new XMLSerializer().serializeToString(xml);
+    if(pretty) data = prettyXml(data);
+    download(data, name, type);
 }

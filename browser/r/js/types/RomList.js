@@ -19,6 +19,7 @@ class RomListEntry {
     constructor(app, data, offset) {
         this.app        = app;
         const base      = new RomListEntryStruct(data, offset);
+        console.assert(base.length >= 6);
         this.byteLength = base.length * 4;
         this.objDef     = base.objDef;
         this.acts       = [base.acts0, base.acts1]; //XXX parse
@@ -41,7 +42,8 @@ class RomListEntry {
             if(!this.object) this.object = this.app.game.objects[0];
 
             //parse the object-specific params
-            const dll = this.app.game.dlls[this.object.dll_id];
+            const dlls = this.app.game.dlls;
+            const dll = dlls ? dlls[this.object.dll_id] : null;
             if(dll && dll.objParams) {
                 this.params  = {};
                 const params = dll.readObjParams(this.paramData);
@@ -67,7 +69,8 @@ export default class RomList {
          */
         this.app     = app;
         this.entries = [];
-        if(view instanceof GameFile) view = view.decompress();
+        if(view instanceof GameFile) view = new DataView(view.decompress());
+        if(view instanceof ArrayBuffer) view = new DataView(view);
         for(let offs=0; offs<view.byteLength;) {
             let entry = new RomListEntry(this.app, view, offs);
             this.entries.push(entry);

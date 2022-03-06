@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<addresses>
+    <address name="g_dlls" type="DLL*" address="0x802b79c0" count="0x30E" />
+    <address name="mapIdXltnTbl" type="int" address="0x802bbf14" count="0x4B" />
+    <address name="mapDirNames" type="char*" address="0x802bbdf0" count="0x49" />
+    <!-- mapName doesn't exist in this version -->
+    <address name="parentMapId" type="s16" address="0x802bc040" count="0x4C" />
+</addresses>

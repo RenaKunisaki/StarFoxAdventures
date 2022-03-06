@@ -1,4 +1,5 @@
 import Struct from '../lib/Struct.js';
+import Map from '../game/map.js';
 const MapGridItem = Struct(
     ['h',  'x'],     //global X coord
     ['h',  'z'],     //global Z coord
@@ -16,17 +17,20 @@ export default function parseMapGrid(app) {
         if(entry.mapId < 0) break;
         let map = app.game.maps[entry.mapId];
         if(!map) {
+            console.log("No map info for ID", entry.mapId);
             //this map was missing from XML, probably because
             //we don't have XML for this version
-            app.game.maps[entry.mapId] = {
-                layer: entry.layer,
-                x: entry.x,
-                z: entry.z,
-                sizeX: 1, sizeZ: 1,
-                originX: 0, originZ: 0,
-                blocks: [null],
-            };
-            map = app.game.maps[entry.mapId];
+            map         = new Map(app);
+            map.id      = entry.mapId;
+            map.layer   = entry.layer;
+            map.x       = entry.x;
+            map.z       = entry.z;
+            map.sizeX   = 1;
+            map.sizeZ   = 1;
+            map.originX = 0;
+            map.originZ = 0;
+            map.blocks  = [null];
+            app.game.maps[entry.mapId] = map;
         }
 
         if(layers[entry.layer] == undefined) layers[entry.layer] = [];

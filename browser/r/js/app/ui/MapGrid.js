@@ -134,7 +134,7 @@ export default class MapGrid {
             cls  = '';
         }
 
-        let title = cell.map.name;
+        let title = `#0x${hex(cell.map.id)} (dir 0x${hex(cell.map.dirId)}) ${cell.map.name}`;
         if(block) title += ` [mod${block.mod}.${block.sub}]`;
         else title += ' [Out of Bounds]';
         //if(cell.isOrigin) title += ' [Map origin]';

@@ -26,61 +26,142 @@ const MapInfoEntry = Struct(
 );
 
 export default class MapParser {
-    /** Parses MAPS.bin, MAPINFO.bin */
+    /** Parses MAPS.bin, MAPINFO.bin, romlists, etc for all maps. */
     constructor(app) {
         this.app = app;
         this.maps = {};
+        this._mapsByDirId = {};
     }
-
+    _getMapById(id) {
+        let map = this.maps[id];
+        if(map == undefined) {
+            map = {id:id};
+            this.maps[id] = map;
+        }
+        return map;
+    }
+    _getMapByDirId(id) {
+        let map = this._mapsByDirId[id];
+        if(map == undefined) {
+            map = {dirId:id};
+            this._mapsByDirId[id] = map;
+        }
+        return map;
+    }
+    async parse() {
+        /** Read map info from game. */
+        this.readIdxTable();
+        this.readMapNames();
+        this.readDirNames();
+        this.readParents();
+        await this.parseMapsBin();
+        this.parseMapInfo();
+        return this.maps;
+    }
+    readMapNames() {
+        //romlist file names
+        if(this.app.game.version == 'K0') return; //no names
+        const dol    = this.app.game.iso.mainDol;
+        const file   = new GameFile(dol.getData());
+        const aNames = this.app.game.addresses.mapName;
+        for(let iMap=0; iMap<aNames.count; iMap++) {
+            const map = this._getMapById(iMap);
+            file.seek(dol.addrToOffset(aNames.address + (iMap*4)));
+            const ptr = file.readU32();
+            file.seek(dol.addrToOffset(ptr));
+            map.romListName = file.readStr(256);
+        }
+    }
+    readDirNames() {
+        //asset dir names
+        const dol    = this.app.game.iso.mainDol;
+        const file   = new GameFile(dol.getData());
+        const aNames = this.app.game.addresses.mapDirNames;
+        for(let iMap=0; iMap<aNames.count; iMap++) {
+            const map = this._getMapByDirId(iMap);
+            file.seek(dol.addrToOffset(aNames.address + (iMap*4)));
+            const ptr = file.readU32();
+            file.seek(dol.addrToOffset(ptr));
+            map.dirName = file.readStr(256);
+        }
+    }
+    readIdxTable() {
+        //translates map ID to MAPINFO.BIN index
+        const dol    = this.app.game.iso.mainDol;
+        const file   = new GameFile(dol.getData());
+        const aTable = this.app.game.addresses.mapIdXltnTbl;
+        file.seek(dol.addrToOffset(aTable.address));
+        for(let iMap=0; iMap<aTable.count; iMap++) {
+            let id = file.readS32();
+            if(id < 0) break;
+            const map = this._getMapById(iMap);
+            map.dirId = id;
+            this._mapsByDirId[map.dirId] = map;
+        }
+    }
+    readParents() {
+        const dol    = this.app.game.iso.mainDol;
+        const file   = new GameFile(dol.getData());
+        const aTable = this.app.game.addresses.parentMapId;
+        file.seek(dol.addrToOffset(aTable.address));
+        for(let iMap=0; iMap<aTable.count; iMap++) {
+            const map = this._getMapById(iMap);
+            let parent = file.readS16();
+            //if(parent == -1) parent = null;
+            map.parentId = parent;
+        }
+    }
     parseMapInfo() {
         this.mapInfo = new GameFile(this.app.game.iso.getFile('/MAPINFO.bin'));
-        const nMaps = this.mapInfo.size / MapInfoEntry._size;
-        const maps  = [];
-        for(let iMap=0; iMap<nMaps; iMap++) {
-            let entry = new MapInfoEntry(this.mapInfo, iMap * MapInfoEntry._size);
-            maps.push({
-                name:    entry.name,
-                type:    entry.type,
-                unk1D:   entry.unk1D,
-                objType: entry.objType,
-            });
+        for(let map of Object.values(this.maps)) {
+            if(map.id != undefined) {
+                let entry = new MapInfoEntry(this.mapInfo,
+                    map.id * MapInfoEntry._size);
+                map.name    = entry.name;
+                map.type    = entry.type;
+                map.unk1D   = entry.unk1D;
+                map.objType = entry.objType;
+            }
         }
-        return maps;
     }
-
-    parseMapsBin() {
+    async parseMapsBin() {
         this.mapsBin = new GameFile(this.app.game.iso.getFile('/MAPS.bin'));
         this.mapsTab = new GameFile(this.app.game.iso.getFile('/MAPS.tab'));
-        const nMaps  = this.mapsTab.size / MapsTabEntry._size;
-        const maps   = [];
+        const nMaps  = Math.floor(this.mapsTab.byteLength / MapsTabEntry._size);
         for(let iMap=0; iMap<nMaps; iMap++) {
-            let entry = new MapsTabEntry (this.mapsTab, iMap * MapsTabEntry._size);
-            let info  = new MapsBinEntry0(this.mapsBin, entry.info);
-            let map   = {
-                idx:     iMap,
-                sizeX:   info.sizeX,
-                sizeZ:   info.sizeZ,
-                originX: info.originX,
-                originZ: info.originZ,
-                nBlocks: info.nBlocks,
-                unk08:   info.unk08,
-                unk0C:   info.unk0C[0],
-                unk10:   info.unk0C[1],
-                unk14:   info.unk0C[2],
-                unk18:   info.unk0C[3],
-                unk1E:   info.unk1E,
-            };
-            map.blocks  = this._readBlocks(info.blocks, map.nBlocks);
-            map.romList = this._readRomList(info.romList, map);
-            maps.push(map);
+            await this.app.progress.update({
+                subText:   "Parsing maps...",
+                numSteps:  nMaps, stepsDone: iMap,
+            });
+            let tab  = new MapsTabEntry (this.mapsTab, iMap * MapsTabEntry._size);
+            let info = new MapsBinEntry0(this.mapsBin, tab.info);
+            let map  = this._getMapById(iMap);
+            map.sizeX   = info.sizeX;
+            map.sizeZ   = info.sizeZ;
+            map.originX = info.originX;
+            map.originZ = info.originZ;
+            map.nBlocks = info.nBlocks;
+            map.unk08   = info.unk08;
+            map.unk0C   = info.unk0C;
+            map.unk1E   = info.unk1E;
+            map.blocks  = this._readBlocks(map, tab.blocks);
+            this._readRomList(tab.romList, map);
         }
-        return maps;
     }
-
-    _readBlocks(offset, count) {
+    _readBlocks(map, offset) {
         const result = [];
+        let blocks;
         this.mapsBin.seek(offset);
-        let blocks = this.mapsBin.readU32Array(count);
+        try {
+            blocks = this.mapsBin.readU32Array(map.nBlocks);
+        }
+        catch(ex) {
+            if(ex instanceof RangeError) {
+                console.log("Map has invalid blocks offset:", map);
+                return [];
+            }
+            else throw ex;
+        }
         for(let blockData of blocks) {
             let block = {
                 unk1:  blockData >> 31,
@@ -93,20 +174,32 @@ export default class MapParser {
         }
         return result;
     }
-
     _readRomList(offset, map) {
         if(this.app.game.version == 'K0') {
             //for kiosk version the romlist is inside MAPS.bin
-            return new RomList(this.app, this.mapsBin.decompress(offset));
+            const data = this.mapsBin.decompress(offset);
+            map.romListSize = data.byteLength;
+            map.romList     = new RomList(this.app, data);
         }
         else {
             //for other versions only the size is here, used to tell how
             //much memory to allocate. we don't need to check it.
-            if(!map.dirName) {
-                //XXX this has to be read from the DOL
-                console.error("Can't read romlist for map with unknown dir");
+            //XXX we should, though.
+            if(!map.romListName) {
+                console.error("No romListName for map", map);
                 return null;
             }
+            const path = `/${map.romListName}.romlist.zlb`;
+            let   file = this.app.game.iso.getFile(path);
+            let   data;
+            if(!file) {
+                console.log('File not found:', path);
+                //the game will also check MAPS.bin
+                data = new this.mapsBin.decompress(offset);
+            }
+            else data = new GameFile(file);
+            map.romListSize = data.byteLength;
+            map.romList     = new RomList(this.app, data);
         }
     }
 }

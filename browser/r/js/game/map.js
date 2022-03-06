@@ -1,4 +1,4 @@
-import { hex, int } from "../Util.js";
+import { getAttr, hex, int } from "../Util.js";
 import Struct from "../lib/Struct.js";
 
 const MapInfoEntry = Struct(
@@ -49,12 +49,13 @@ class Block {
                 this.unk2 = elem >> 0x1FF;
             }
             else { //XML element
-                this.mod  = int(elem.getAttribute('mod'));
-                this.sub  = int(elem.getAttribute('sub'));
-                this.x    = int(elem.getAttribute('x'), x);
-                this.z    = int(elem.getAttribute('y'), z); //XXX
-                this.unk1 = int(elem.getAttribute('unk1'));
-                this.unk2 = int(elem.getAttribute('unk2'));
+                this.mod  = int(getAttr(elem, 'mod'));
+                this.sub  = int(getAttr(elem, 'sub'));
+                this.x    = int(getAttr(elem, 'x'), x);
+                this.z    = int(getAttr(elem, 'y'), z); //XXX
+                if(this.z == undefined) this.z = int(getAttr(elem, 'z'));
+                this.unk1 = int(getAttr(elem, 'unk1'));
+                this.unk2 = int(getAttr(elem, 'unk2'));
             }
         }
     }
@@ -91,26 +92,26 @@ export default class Map {
 
     _readXml(elem) {
         //read info from XML element.
-        this.id = int(elem.getAttribute('id'));
-        this.dirId = int(elem.getAttribute('dirId'));
-        this.type = int(elem.getAttribute('type'));
+        this.id = int(getAttr(elem, 'id'));
+        this.dirId = int(getAttr(elem, 'dirId'));
+        this.type = int(getAttr(elem, 'type'));
         //XXX
-        this.playerObj = (int(elem.getAttribute('param3')) << 8) |
-            int(elem.getAttribute('param4'));
-        this.romListName = elem.getAttribute('romlist');
-        this.dirName = elem.getAttribute('dir');
-        this.name = elem.getAttribute('internalName');
-        this.parentId = int(elem.getAttribute('parent'));
-        this.worldX   = int(elem.getAttribute('worldX'));
-        this.worldZ   = int(elem.getAttribute('worldY')); //XXX
-        this.layer    = int(elem.getAttribute('layer'));
-        this.links[0] = int(elem.getAttribute('link0'));
-        this.links[1] = int(elem.getAttribute('link1'));
-        this.sizeX    = int(elem.getAttribute('w'));
-        this.sizeZ    = int(elem.getAttribute('h'));
-        this.originX  = int(elem.getAttribute('originX'));
-        this.originZ  = int(elem.getAttribute('originY')); //XXX
-        this.used     = !int(elem.getAttribute('unused'));
+        this.playerObj = (int(getAttr(elem, 'param3')) << 8) |
+            int(getAttr(elem, 'param4'));
+        this.romListName = getAttr(elem, 'romlist');
+        this.dirName = getAttr(elem, 'dir');
+        this.name = getAttr(elem, 'internalName');
+        this.parentId = int(getAttr(elem, 'parent'));
+        this.worldX   = int(getAttr(elem, 'worldX'));
+        this.worldZ   = int(getAttr(elem, 'worldY')); //XXX
+        this.layer    = int(getAttr(elem, 'layer'));
+        this.links[0] = int(getAttr(elem, 'link0'));
+        this.links[1] = int(getAttr(elem, 'link1'));
+        this.sizeX    = int(getAttr(elem, 'w'));
+        this.sizeZ    = int(getAttr(elem, 'h'));
+        this.originX  = int(getAttr(elem, 'originX'));
+        this.originZ  = int(getAttr(elem, 'originY')); //XXX
+        this.used     = !int(getAttr(elem, 'unused'));
 
         let eDesc = elem.getElementsByTagName('description');
         if(eDesc && eDesc[0]) this.description = eDesc[0].textContent;
@@ -122,6 +123,7 @@ export default class Map {
 
     _readGameFiles() {
         //read info from the files in the ISO.
+        if(isNaN(this.id)) return;
         this._readMapInfo();
 
         const mapsTab = this.app.game.iso.getFile('/MAPS.tab');
@@ -130,14 +132,19 @@ export default class Map {
             const tab = new MapsTabEntry(mapsTab.getData(),
                 this.id * MapsTabEntry._size);
             const bin = mapsBin.getData();
-            //console.log("MapsTabEntry size=", MapsTabEntry._size);
+            console.log("MapsTabEntry", tab);
 
             this.mapsBin0Offset      = tab.info;
             this.blocksOffset        = tab.blocks;
             this.rectOffsets         = tab.rects;
             this.romListHeaderOffset = tab.romList;
 
-            this._readMapsBin0(bin, tab);
+            try {
+                this._readMapsBin0(bin, tab);
+            }
+            catch(ex) {
+                console.error("Failed reading MAPS.BIN entry for map", this, ex);
+            }
             //console.log(this);
             this._readBlocks(bin, tab);
             this._readRomListHeader(bin, tab);

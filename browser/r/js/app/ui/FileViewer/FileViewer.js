@@ -12,6 +12,7 @@ export default class FileViewer {
         try {
             this.app        = app;
             this.file       = file;
+            this._startOffs = 0;
             this.element    = E.div('fileViewer');
             this.viewer     = null;
             this.showTitle  = showTitle;
@@ -40,16 +41,28 @@ export default class FileViewer {
         );
         this.eFormatSel.addEventListener('change', e => this.refresh());
 
+        this.eOffset = E.input('offset hex', {id:'viewOffset', value:'0'});
+        this.eOffset.addEventListener('change', e => {
+            const offs = parseInt(this.eOffset.value, 16);
+            if(!isNaN(offs)) {
+                this._startOffs = offs;
+                this.refresh();
+            }
+        })
+
         this.eToolbar = E.div('toolbar',
             E.label(null, "View as:", {For:'formatSelect'}),
             this.eFormatSel,
+            E.label(null, "Offset:", {for:'viewOffset'}),
+            this.eOffset,
         );
     }
 
     _makeViewer() {
         const fmt      = this.eFormatSel.value;
         const name     = this.file.name;
-        const contents = this.gameFile.getContents();
+        let   offs     = this._startOffs;
+        const contents = this.gameFile.getContents(offs);
 
         //if this is an archive with only one item (like many compressed
         //files) then just show that item. otherwise show the raw data and
@@ -57,11 +70,11 @@ export default class FileViewer {
         //this means we can't view the compressed form of such an archive,
         //but I don't think that's very important.
         let buf = this.view;
-        if(contents.length == 1) buf = this.gameFile.getItem(0);
+        if(contents.length == 1) buf = this.gameFile.getItem(0, offs);
         else if(this.archiveIdx != null) {
-            buf = this.gameFile.getItem(this.archiveIdx);
+            buf  = this.gameFile.getItem(this.archiveIdx, offs);
         }
-        else buf = this.gameFile.getView();
+        else buf = this.gameFile.getView(offs);
         if(!(buf instanceof DataView)) buf = new DataView(buf);
 
         try {
@@ -77,7 +90,7 @@ export default class FileViewer {
             //which is how we go back to the list from an item.
             else if((fmt == 'auto' && this.archiveIdx == null
             && contents.length > 1) || fmt == 'archive') {
-                this.viewer = new ArchiveViewer(this.app, this.gameFile);
+                this.viewer = new ArchiveViewer(this.app, buf);
                 this.viewer.cbView = (item, data) => {
                     //View button clicked. replace view with the item's data.
                     this.view = new DataView(data);

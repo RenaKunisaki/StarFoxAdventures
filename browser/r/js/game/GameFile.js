@@ -15,7 +15,7 @@ export default class GameFile extends BinaryFile {
         this._contents = [null, null]; //cache
     }
 
-    decompress(offset=0, _depth=0) {
+    decompress(offset=0, extData=[], _depth=0) {
         /** Decompress data at given offset and return it.
          *  @param offset Offset to read from.
          *  @returns {ArrayBuffer} Decompressed data.
@@ -24,7 +24,7 @@ export default class GameFile extends BinaryFile {
         const header = this._readArchiveHeader(offset);
         if(header == null) return null;
         this.seek(header.fileOffset);
-        console.log("Decoding", header);
+        //console.log("Decoding", header);
         switch(header.fmt) {
             case 'raw': case 'padding': {
                 return this.readBytes(header.packedSize);
@@ -42,29 +42,34 @@ export default class GameFile extends BinaryFile {
                 return decomp.buffer;
             }
             case 'FACEFEED': case 'E0E0E0E0': case 'F0F0F0F0': {
-                //XXX do something with extra data?
                 if(header.offset == 0) return null; //avoid infinite loop
-                return this.decompress(offset + header.offset, _depth+1);
+                if(header.extraData) {
+                    //append to provided array
+                    for(let item of header.extraData) {
+                        extData.push(item);
+                    }
+                }
+                return this.decompress(offset + header.offset, extData, _depth+1);
             }
             default: throw new Error(`Unimplemented format: '${header.fmt}'`);
         }
     }
 
-    getItem(idx, includePadding=false) {
-        const contents = this.getContents(includePadding);
-        return this.decompress(contents[idx].fileOffset);
+    getItem(idx, startOffs=0, extData=[], includePadding=false) {
+        const contents = this.getContents(startOffs, includePadding);
+        return this.decompress(contents[idx].fileOffset, extData);
     }
 
-    getContents(includePadding=false) {
+    getContents(startOffs=0, includePadding=false) {
         /** Return a list of the file's contents.
          *  For files that are archives, this will be one or more items.
          *  For other files, it will be zero or one entries (depending whether
          *  the file is empty).
          */
-        const cacheKey = includePadding ? 0 : 1;
+        const cacheKey = `${startOffs}.${includePadding}`;
         if(this._contents[cacheKey] != null) return this._contents[cacheKey];
         const result = [];
-        let offset   = 0;
+        let offset   = startOffs;
         while(offset < this.byteLength) {
             let item = this._readArchiveHeader(offset);
             if(item == null) break;
@@ -157,9 +162,14 @@ export default class GameFile extends BinaryFile {
                     packedSize:   this.readU32(),
                     fileOffset:   offset,
                 };
-                result.extraData = this.readU32Array(result.offset);
-                result.offset = (result.offset - 3) * 4; //offset from magic
-                result.fileSize = result.packedSize + result.offset;
+                //offset is total number of words in the header
+                //including the FACEFEED bytes themselves.
+                //subtract the 4 words we already read.
+                const nWords     = result.offset;
+                result.extraData = this.readU32Array(nWords-4);
+                result.offset    = nWords * 4; //offset from magic
+                result.fileSize  = result.packedSize + result.offset;
+                console.log("FACEFEED", result);
                 return result;
             }
             default: return {
