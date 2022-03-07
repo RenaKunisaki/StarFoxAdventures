@@ -10,8 +10,8 @@ export default class Map {
      *   several entries in MAPINFO.bin that have a corresponding romlist
      *   file but no asset directory.
      */
-    constructor(app, params={}) {
-        this.app         = app;
+    constructor(game, params={}) {
+        this.game        = game;
         this.id          = params.id;          //the map ID
         this.dirId       = params.dirId;       //index into list of map dirs
         this.dirName     = params.dirName;     //name of asset dir

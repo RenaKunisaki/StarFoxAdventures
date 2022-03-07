@@ -18,7 +18,7 @@ export class MapParser {
     _getMapById(id) {
         let map = this.game.maps[id];
         if(map == undefined) {
-            map = new Map(this.app, {id:id});
+            map = new Map(this.game, {id:id});
             this.game.maps[id] = map;
         }
         return map;
@@ -26,7 +26,7 @@ export class MapParser {
     _getMapByDirId(id) {
         let map = this._mapsByDirId[id];
         if(map == undefined) {
-            map = new Map(this.app, {dirId:id});
+            map = new Map(this.game, {dirId:id});
             this._mapsByDirId[id] = map;
         }
         return map;
@@ -62,10 +62,10 @@ export class MapParser {
         //romlist file names
         //Kiosk version doesn't use separate romlist files,
         //so doesn't have this table.
-        if(this.app.game.version == 'K0') return;
-        const dol    = this.app.game.iso.mainDol;
+        if(this.game.version == 'K0') return;
+        const dol    = this.game.iso.mainDol;
         const file   = new GameFile(dol.getData());
-        const aNames = this.app.game.addresses.mapName;
+        const aNames = this.game.addresses.mapName;
         for(let iMap=0; iMap<aNames.count; iMap++) {
             const map = this._getMapById(iMap);
             file.seek(dol.addrToOffset(aNames.address + (iMap*4)));
@@ -93,9 +93,9 @@ export class MapParser {
     }
     readIdxTable() {
         //translates map dir ID to map ID (MAPINFO.BIN index)
-        const dol    = this.app.game.iso.mainDol;
+        const dol    = this.game.iso.mainDol;
         const file   = new GameFile(dol.getData());
-        const aTable = this.app.game.addresses.mapIdXltnTbl;
+        const aTable = this.game.addresses.mapIdXltnTbl;
         file.seek(dol.addrToOffset(aTable.address));
         for(let iMap=0; iMap<aTable.count; iMap++) {
             let id = file.readS32();
@@ -110,9 +110,9 @@ export class MapParser {
         //if it's not -1, it's the dir ID of another map that should also be
         //loaded alongside this one.
         //this table is a mapping of dir ID => parent dir ID.
-        const dol    = this.app.game.iso.mainDol;
+        const dol    = this.game.iso.mainDol;
         const file   = new GameFile(dol.getData());
-        const aTable = this.app.game.addresses.parentMapId;
+        const aTable = this.game.addresses.parentMapId;
         file.seek(dol.addrToOffset(aTable.address));
         for(let iMap=0; iMap<aTable.count; iMap++) {
             const map = this._getMapByDirId(iMap);
@@ -144,7 +144,7 @@ export class MapParser {
             numSteps: 1, stepsDone: 0,
         });
         this.game.mapGrid = {}; //layer => array
-        const globalMap = app.game.iso.getFile('/globalma.bin').getData();
+        const globalMap = this.game.iso.getFile('/globalma.bin').getData();
         for(let i=0; ; i++) {
             let entry = new MapGridItem(globalMap, i * MapGridItem._size);
             if(entry.mapId < 0) break;
@@ -196,8 +196,8 @@ export class MapParser {
         }
     }
     async parseMapsBin() {
-        this.mapsBin = new GameFile(this.app.game.iso.getFile('/MAPS.bin'));
-        this.mapsTab = new GameFile(this.app.game.iso.getFile('/MAPS.tab'));
+        this.mapsBin = new GameFile(this.game.iso.getFile('/MAPS.bin'));
+        this.mapsTab = new GameFile(this.game.iso.getFile('/MAPS.tab'));
         const nMaps  = Math.floor(this.mapsTab.byteLength / MapsTabEntry._size);
         for(let iMap=0; iMap<nMaps; iMap++) {
             await this.app.progress.update({
@@ -235,7 +235,7 @@ export class MapParser {
         }
         let x = 0, z = 0;
         for(let blockData of blocks) {
-            let block = new Block(this.app, map, x, z, blockData);
+            let block = new Block(map, x, z, blockData);
             if(block.mod == 0xFF) block = null;
             result.push(block);
             x++;
@@ -244,7 +244,7 @@ export class MapParser {
         return result;
     }
     _readRomList(offset, map) {
-        if(this.app.game.version == 'K0') {
+        if(this.game.version == 'K0') {
             //for kiosk version the romlist is inside MAPS.bin
             const data = this.mapsBin.decompress(offset);
             map.romListSize = data.byteLength;
@@ -259,7 +259,7 @@ export class MapParser {
                 return null;
             }
             const path = `/${map.romListName}.romlist.zlb`;
-            let   file = this.app.game.iso.getFile(path);
+            let   file = this.game.iso.getFile(path);
             let   data;
             if(!file) {
                 console.log('File not found:', path);
@@ -274,7 +274,7 @@ export class MapParser {
     }
     async findStrayRomLists() {
         //find romlist files not referenced by maps
-        const iso = this.app.game.iso;
+        const iso = this.game.iso;
         let iFile = 0;
         let nextId = -1;
         for(let file of iso.files) {
@@ -287,7 +287,7 @@ export class MapParser {
                 });
                 let name = file.name.split('.')[0];
                 if(!this._usedRomLists[name]) {
-                    const map = new Map(this.app);
+                    const map = new Map(this.game);
                     map.romListName = name;
                     this.game.maps[nextId--] = map;
                     this._usedRomLists[name] = true;
@@ -301,7 +301,7 @@ export class MapParser {
             subText:"Downloading maps.xml...",
             numSteps: 1, stepsDone: 0,
         });
-        const xml = await getXml(`data/${this.app.game.version}/maps.xml`);
+        const xml = await getXml(`data/${this.game.version}/maps.xml`);
         if(!xml) return;
 
         for(let elem of xml.getElementsByTagName('map')) {

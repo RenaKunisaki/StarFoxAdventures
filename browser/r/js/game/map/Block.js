@@ -1,8 +1,7 @@
 export default class Block {
     /** One block of a map.
      */
-    constructor(app, map, x, z, val) {
-        this.app  =  app;
+    constructor(map, x, z, val) {
         this.map  =  map;
         this.x    =  x;
         this.z    =  z;
