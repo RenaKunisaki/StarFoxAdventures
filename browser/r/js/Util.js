@@ -1,5 +1,17 @@
 import { E } from "./lib/Element.js";
 
+export function assertType(obj, ...types) {
+    /** Ensure the given object is of one of the given types.
+     *  @param obj object to check.
+     *  @param types one or more types that obj can be.
+     *  @returns obj.
+     */
+    for(let t of types) {
+        if(obj instanceof t) return obj;
+    }
+    throw new TypeError(`Incorrect type for object: ${obj}`)
+}
+
 export function getAttr(elem, name) {
     /** This function exists solely because the way browsers
      *  handle XML is completely fucking stupid.

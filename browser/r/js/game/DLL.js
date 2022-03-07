@@ -1,7 +1,7 @@
-import { int, hex } from "../Util.js";
+import { assertType, int, hex } from "../Util.js";
 import Struct, { parseType } from "../lib/Struct.js";
 import { GhidraTypes } from "../types/GhidraTypes.js";
-import { E } from "../lib/Element.js";
+import App from "../app/App.js";
 
 export default class DLL {
     /** A DLL in the game code.
@@ -9,7 +9,7 @@ export default class DLL {
     constructor(app, eDll) {
         /** Construct a DLL from a 'dll' element from dlls.xml.
          */
-        this.app       = app;
+        this.app       = assertType(app, App);
         this.id        = int(eDll.getAttribute('id'));
         this.address   = int(eDll.getAttribute('address'));
         this.dolOffs   = int(eDll.getAttribute('dolOffs'));

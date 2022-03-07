@@ -1,7 +1,7 @@
 import { E, clearElement } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
 import Table from "./Table.js";
-import { TEXT_LANGUAGES } from "../../game/game.js";
+import { TEXT_LANGUAGES } from "../../game/Game.js";
 import GameTextRenderer from "../../game/text/Renderer.js";
 
 export default class TextList {

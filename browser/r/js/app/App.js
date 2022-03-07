@@ -17,7 +17,7 @@ import MiscTab from "./ui/MiscTab.js";
 import Warptab from "./ui/Warptab.js";
 import TextList from "./ui/TextList.js";
 import { ISO } from "../types/iso/iso.js";
-import Game from "../game/game.js";
+import Game from "../game/Game.js";
 import { Language } from "../game/text/Language.js";
 
 export default class App {

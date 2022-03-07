@@ -1,17 +1,17 @@
-import { E, createElement } from "../lib/Element.js";
-import { downloadXml, hex } from "../Util.js";
-import GameTextXmlBuilder from "../game/text/XmlBuilder.js";
+import { E } from "../lib/Element.js";
+import { assertType, hex } from "../Util.js";
 import BinaryFile from "../lib/BinaryFile.js";
 import GameBit from "./GameBit.js";
 import RomList from "./map/RomList.js";
 import GameFile from "./GameFile.js";
+import App from "../app/App.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
 
 export default class GameBitsXmlBuilder {
     /** Generates gamebits.xml. */
     constructor(app) {
-        this.app = app;
+        this.app = assertType(app, App);
     }
 
     async build() {

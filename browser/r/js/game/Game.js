@@ -1,10 +1,12 @@
-import { getXml, int } from "../Util.js";
+import { assertType, getXml, int } from "../Util.js";
 import GameBit from "./GameBit.js";
 import GameObject from "./GameObject.js";
 import DLL from "./DLL.js";
 import { MapParser } from "./map/MapParser.js";
 import Text from "./text/Text.js";
 import parseWarpTab from "./Warptab.js";
+import App from "../app/App.js";
+import { ISO } from "../types/iso/iso.js";
 
 export const MAP_CELL_SIZE = 640;
 export const TEXT_LANGUAGES = ['English', 'French',
@@ -38,7 +40,7 @@ export default class Game {
     /** Info and methods relating to the game itself.
      */
     constructor(app) {
-        this.app         = app;
+        this.app         = assertType(app, App);
         this.version     = null;
         this.iso         = null;
         this.addresses   = {}; //name => {address, count}
@@ -58,7 +60,7 @@ export default class Game {
     }
 
     async loadIso(iso) {
-        this.iso = iso;
+        this.iso = assertType(iso, ISO);
 
         let version;
         switch(this.iso.bootBin.gameCode) {
@@ -186,8 +188,8 @@ export default class Game {
     }
 
     async _loadObjects() {
-        this.objsTab = this.app.game.iso.getFile('/OBJECTS.tab').getData();
-        this.objsBin = this.app.game.iso.getFile('/OBJECTS.bin').getData();
+        this.objsTab = this.iso.getFile('/OBJECTS.tab').getData();
+        this.objsBin = this.iso.getFile('/OBJECTS.bin').getData();
 
         //parse OBJINDEX.bin
         const objIndex = this.iso.getFile('/OBJINDEX.bin').getData();

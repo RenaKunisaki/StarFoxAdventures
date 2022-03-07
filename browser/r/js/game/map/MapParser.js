@@ -1,15 +1,16 @@
 import RomList from "./RomList.js";
 import GameFile from "./../GameFile.js";
-import { getAttr, getXml, int } from "../../Util.js";
+import { assertType, getAttr, getXml, int } from "../../Util.js";
 import { MapsBinEntry0, MapsTabEntry, MapInfoEntry, MapGridItem } from "./types.js";
 import Map from "./Map.js";
 import Block from "./Block.js";
+import Game from "../Game.js";
 
 export class MapParser {
     /** Parses MAPS.bin, MAPINFO.bin, romlists, etc for all maps. */
     constructor(game) {
+        this.game          = assertType(game, Game);
         this.app           = game.app;
-        this.game          = game;
         this.game.maps     = {};
         this.game.mapDirs  = {}; //name => map
         this._mapsByDirId  = {};

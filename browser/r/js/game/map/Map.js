@@ -1,3 +1,7 @@
+import { assertType } from "../../Util.js";
+import Game from "../Game.js";
+import Block from "./Block.js";
+
 export default class Map {
     /** A map in the game.
      *  @note Map IDs can be confusing because the game refers to them by
@@ -11,7 +15,7 @@ export default class Map {
      *   file but no asset directory.
      */
     constructor(game, params={}) {
-        this.game        = game;
+        this.game        = assertType(game, Game);
         this.id          = params.id;          //the map ID
         this.dirId       = params.dirId;       //index into list of map dirs
         this.dirName     = params.dirName;     //name of asset dir
@@ -47,6 +51,7 @@ export default class Map {
     }
 
     addBlock(block) {
+        assertType(block, Block);
         if(this.blocks == undefined) this.blocks = [];
         this.blocks.push(block);
     }

@@ -1,16 +1,18 @@
+import Game from "../Game.js";
 import { E } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
+import { assertType, hex } from "../../Util.js";
 import { MapParser } from "./MapParser.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
 
 export default class MapsXmlBuilder {
     /** Generates maps.xml. */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game = assertType(game, Game);
+        this.app = this.game.app;
     }
     async build() {
-        this.maps = await (new MapParser(this.app)).parse();
+        this.maps = await (new MapParser(this.game)).parse();
         this.xml  = document.implementation.createDocument(XML, "maps");
         for(let map of Object.values(this.maps)) {
             this.xml.documentElement.appendChild(await this.makeMapElem(map));

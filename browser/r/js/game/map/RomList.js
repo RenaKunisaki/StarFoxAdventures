@@ -1,6 +1,8 @@
 import GameFile from "../GameFile.js";
 import Struct from "../../lib/Struct.js";
 import { Vec3f } from "../../types/common.js";
+import { assertType } from "../../Util.js";
+import Game from "../Game.js";
 
 export const RomListEntryStruct = Struct(
     ['h',   'objDef'],
@@ -17,7 +19,7 @@ export const RomListEntryStruct = Struct(
 
 class RomListEntry {
     constructor(game, data, offset) {
-        this.game       = game;
+        this.game       = assertType(game, Game);
         this.app        = game.app;
         const base      = new RomListEntryStruct(data, offset);
         console.assert(base.length >= 6);
@@ -37,8 +39,7 @@ class RomListEntry {
         if(this.game.objects) {
             //get the object
             let defNo = this.objDef;
-            if(defNo < 0) defNo = -defNo;
-            else defNo = this.app.game.objIndex[defNo];
+            defNo = (defNo < 0) ? -defNo : this.app.game.objIndex[defNo];
             this.object = this.app.game.objects[defNo];
             if(!this.object) this.object = this.app.game.objects[0];
 
@@ -68,7 +69,7 @@ export default class RomList {
          *  @param {Game} game the game this is from.
          *  @param {DataView} view the data to read.
          */
-        this.game    = game;
+        this.game    = assertType(game, Game);
         this.entries = [];
         if(view instanceof GameFile) view = new DataView(view.decompress());
         if(view instanceof ArrayBuffer) view = new DataView(view);

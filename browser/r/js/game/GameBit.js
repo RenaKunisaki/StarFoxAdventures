@@ -1,5 +1,6 @@
-import { hex, int } from "../Util.js";
+import { assertType, hex, int } from "../Util.js";
 import { E } from "../lib/Element.js";
+import App from "../app/App.js";
 
 export default class GameBit {
     /** A "Bit" (as the game calls them) in the game's GameBit tables.
@@ -9,7 +10,7 @@ export default class GameBit {
          */
         //we don't use fromXml() because we want to instantiate directly
         //using app._getXml()
-        this.app     = app;
+        this.app     = assertType(app, App);
         this.id      = eBit ? int(eBit.getAttribute('id')) : null;
         this.table   = eBit ? int(eBit.getAttribute('table')) : null;
         this.hintId  = eBit ? int(eBit.getAttribute('hintid')) : null;

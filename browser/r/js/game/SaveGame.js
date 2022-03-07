@@ -1,8 +1,8 @@
 import Struct from '../lib/Struct.js';
 import { Header } from '../types/gci.js';
 import { Vec3f, Vec3i } from '../types/common.js';
-import { hex } from '../Util.js';
-import { E } from '../lib/Element.js';
+import { assertType, hex } from '../Util.js';
+import App from '../app/App.js';
 
 //Player character saved position
 export const PlayerCharPos = Struct(
@@ -139,7 +139,7 @@ export class SaveSlot {
     /** One of the three save slots in the save file.
      */
     constructor(app, idx, save) {
-        this.app   = app;
+        this.app   = assertType(app, App);
         this.index = idx;  //slot number
         this._save = save; //SaveGameStruct
         console.assert(save);
@@ -219,7 +219,7 @@ export class SaveGame {
     /** Reads the entire SaveDataStruct from a File or Blob.
      */
     constructor(app) {
-        this.app = app;
+        this.app = assertType(app, App);
         this.gciHeader = null;
     }
 

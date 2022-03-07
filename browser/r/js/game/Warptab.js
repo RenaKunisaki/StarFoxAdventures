@@ -1,4 +1,6 @@
+import App from '../app/App.js';
 import Struct from '../lib/Struct.js';
+import { assertType } from '../Util.js';
 
 const WarpTabEntry = Struct(
     ['f', 'x'],
@@ -9,6 +11,7 @@ const WarpTabEntry = Struct(
 );
 
 export default function parseWarpTab(app) {
+    assertType(app, App);
     const warpTab = app.game.iso.getFile('/WARPTAB.bin').getData();
     const result  = [];
     for(let offs=0; offs < warpTab.byteLength; offs += WarpTabEntry._size) {
