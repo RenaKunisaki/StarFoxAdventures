@@ -1,6 +1,6 @@
-import GameFile from "../game/GameFile.js";
-import Struct from "../lib/Struct.js";
-import { Vec3f } from "./common.js";
+import GameFile from "../GameFile.js";
+import Struct from "../../lib/Struct.js";
+import { Vec3f } from "../../types/common.js";
 
 export const RomListEntryStruct = Struct(
     ['h',   'objDef'],
@@ -16,8 +16,9 @@ export const RomListEntryStruct = Struct(
 );
 
 class RomListEntry {
-    constructor(app, data, offset) {
-        this.app        = app;
+    constructor(game, data, offset) {
+        this.game       = game;
+        this.app        = game.app;
         const base      = new RomListEntryStruct(data, offset);
         console.assert(base.length >= 6);
         this.byteLength = base.length * 4;

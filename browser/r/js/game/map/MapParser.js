@@ -1,4 +1,4 @@
-import RomList from "../../types/RomList.js";
+import RomList from "./RomList.js";
 import GameFile from "./../GameFile.js";
 import { getAttr, getXml, int } from "../../Util.js";
 import { MapsBinEntry0, MapsTabEntry, MapInfoEntry, MapGridItem } from "./types.js";
@@ -248,7 +248,7 @@ export class MapParser {
             //for kiosk version the romlist is inside MAPS.bin
             const data = this.mapsBin.decompress(offset);
             map.romListSize = data.byteLength;
-            map.romList     = new RomList(this.app, data);
+            map.romList     = new RomList(this.game, data);
         }
         else {
             //for other versions only the size is here, used to tell how
@@ -269,7 +269,7 @@ export class MapParser {
             }
             else data = new GameFile(file);
             map.romListSize = data.byteLength;
-            map.romList     = new RomList(this.app, data);
+            map.romList     = new RomList(this.game, data);
         }
     }
     async findStrayRomLists() {

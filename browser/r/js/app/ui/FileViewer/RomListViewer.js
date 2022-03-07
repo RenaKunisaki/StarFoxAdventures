@@ -1,12 +1,13 @@
 import { E, clearElement } from "../../../lib/Element.js";
 import { hex } from "../../../Util.js";
 import Table from "../Table.js";
-import RomList from "../../../types/RomList.js";
+import RomList from "../../../game/map/RomList.js";
 
 export class RomListViewer {
     //displays romlist data
     constructor(app, dataView) {
         this.app     = app;
+        this.game    = app.game;
         this.view    = dataView;
         this.element = E.div('romlist');
         this.refresh();
@@ -53,7 +54,7 @@ export class RomListViewer {
             },
         ]});
 
-        this.romList = new RomList(this.app, this.view);
+        this.romList = new RomList(this.game, this.view);
         for(let entry of this.romList.entries) {
             this.table.add(this._makeRow(entry));
         }

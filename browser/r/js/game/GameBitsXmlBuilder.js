@@ -3,7 +3,7 @@ import { downloadXml, hex } from "../Util.js";
 import GameTextXmlBuilder from "../game/text/XmlBuilder.js";
 import BinaryFile from "../lib/BinaryFile.js";
 import GameBit from "../types/GameBit.js";
-import RomList from "../types/RomList.js";
+import RomList from "./map/RomList.js";
 import GameFile from "./GameFile.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
