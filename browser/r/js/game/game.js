@@ -38,17 +38,20 @@ export default class Game {
     /** Info and methods relating to the game itself.
      */
     constructor(app) {
-        this.app       = app;
-        this.version   = null;
-        this.iso       = null;
-        this.addresses = {}; //name => {address, count}
-        this.bits      = null; //GameBits
-        this.objCats   = null; //object categories
-        this.dlls      = null;
-        this.maps      = null;
-        this.mapDirs   = null;
-        this.warpTab   = null;
-        this.texts     = null;
+        this.app         = app;
+        this.version     = null;
+        this.iso         = null;
+        this.addresses   = {}; //name => {address, count}
+        this.bits        = null; //GameBits
+        this.objects     = null;
+        this.objIndex    = null; //maps obj defNo to obj index
+        this.objCats     = null; //object categories
+        this.dlls        = null;
+        this.maps        = null;
+        this.mapDirs     = null; //id => name
+        this.mapsByDirId = {};
+        this.warpTab     = null;
+        this.texts       = null;
 
         this.setVersion('U0');
         this.app.onLanguageChanged(lang => this._loadTexts(lang));
@@ -139,19 +142,34 @@ export default class Game {
         return res;
     }
 
+    getObject(defNo) {
+        let obj = null;
+        //this is the same logic the game uses
+        if(defNo < 0) obj = this.objects[-defNo];
+        else obj = this.objects[this.objIndex[defNo]];
+        return obj;
+    }
+
     getObjName(defNo) {
+        //XXX not useful? should maybe be internal
         if(!this.objsTab) return '(no ISO)';
-        const offs = this.objsTab.getUint32(defNo * 4);
-        let   res  = '';
-        const len  = this._verInfo.objNameLen;
-        const base = this._verInfo.objNameOffs;
-        for(let i=0; i<len; i++) {
-            let b = this.objsBin.getUint8(offs+base+i);
-            if(b >= 0x20 && b <= 0x7E) res += String.fromCharCode(b);
-            else if(b == 0) break;
-            else res += '?';
+        try {
+            const offs = this.objsTab.getUint32(defNo * 4);
+            let   res  = '';
+            const len  = this._verInfo.objNameLen;
+            const base = this._verInfo.objNameOffs;
+            for(let i=0; i<len; i++) {
+                let b = this.objsBin.getUint8(offs+base+i);
+                if(b >= 0x20 && b <= 0x7E) res += String.fromCharCode(b);
+                else if(b == 0) break;
+                else res += '?';
+            }
+            return res;
         }
-        return res;
+        catch(ex) {
+            if(ex instanceof RangeError) return "N/A";
+            else throw ex;
+        }
     }
 
     async _loadDlls() {

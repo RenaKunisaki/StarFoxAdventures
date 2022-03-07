@@ -22,15 +22,17 @@ export default class MapList {
     }
 
     _makeTable() {
-        const makeMapElem = (val, td, row) => {
+        const makeMapElem = (val, td, row, isDir=false) => {
             if(val == null || val <= 0) {
                 td.classList.add('null');
                 td.innerText = "-";
                 return td;
             }
-            const map = this.app.game.maps[val];
+            const map = isDir ? this.app.game.mapsByDirId[val]
+                : this.app.game.maps[val];
             if(map) {
                 clearElement(td).append(
+                    E.span('isDir', isDir ? 'D' : ''),
                     E.span('id', hex(val,2)),
                     E.span('name', map.name),
                 );
@@ -104,9 +106,9 @@ export default class MapList {
             {displayName:"RLen", name:'romListSize', type:'int',
                 title:"RomList uncompressed size"},
             {displayName:"Parent", name:'parentId', type:'string',
-                //makeElem: makeMapElem,
-                //XXX this value is a dir ID, not a map ID
+                makeElem: (val, td, row) => makeMapElem(val, td, row, true),
             },
+            {displayName:"T",  name:'type', type:'int', title:"Type"},
             {displayName:"WX", name:'worldX', type:'int', title:"World X"},
             {displayName:"WZ", name:'worldZ', type:'int', title:"World Z"},
             {displayName:"SX", name:'sizeX', type:'int', title:"Size X"},
@@ -119,7 +121,20 @@ export default class MapList {
             {displayName:"Link1", name:'link1', type:'string', title:"Linked Map",
                 makeElem: makeMapElem},
             {displayName:"#Blk",  name:'nBlocks', type:'int', title:"Number of blocks"},
-            {displayName:"unk08", name:'unk08', type:'hex', length:4},
+            {displayName:"Player",name:'objType', type:'string',
+                title:"Player object (ignored in final version)",
+                makeElem: (val, td, row) => {
+                    let res = "default";
+                    if(val != 0) {
+                        const obj = this.app.game.getObject(val);
+                        res = obj ? obj.name : 'N/A';
+                    }
+                    td.innerText = `${hex(val,4)} ${res}`;
+                    return td;
+                },
+            },
+            {displayName:"unk08", name:'unk08', type:'hex', length:8},
+            //XXX unk0C is an array of 4 values
             {displayName:"unk0C", name:'unk0C', type:'hex', length:4},
             {displayName:"unk1D", name:'unk1D', type:'hex', length:4},
             {displayName:"Flgs",  name:'unk1E', type:'hex', length:4,
@@ -138,7 +153,7 @@ export default class MapList {
             name:            map.name,
             type:            map.type,
             parentId:        map.parentId,
-            playerObj:       map.playerObj,
+            objType:         map.objType,
             worldX:          map.worldX,
             worldZ:          map.worldZ,
             layer:           map.layer,

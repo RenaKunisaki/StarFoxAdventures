@@ -79,7 +79,7 @@ export class Map {
         this.type        = params.type;        //map type from MAPINFO.bin
         this.parentId    = params.parentId;    //parent map ID
         this.links       = params.links;       //linked map IDs
-        this.playerObj   = params.playerObj;   //player object type (not used in final)
+        this.objType     = params.objType;     //player object type (not used in final)
         this.worldX      = params.worldX;      //coords on global map grid
         this.worldZ      = params.worldZ;
         this.layer       = params.layer;       //which global map grid
@@ -144,8 +144,8 @@ export class MapParser {
         });
         this.readIdxTable();
         this.readMapNames();
-        this.readDirNames();
         this.readParents();
+        this.readDirNames();
         await this.parseMapsBin();
         await this.parseMapInfo();
         await this.parseGlobalMap();
@@ -157,7 +157,8 @@ export class MapParser {
             this.game.maps[map.id] = map;
         }
         for(let map of Object.values(this.game.maps)) {
-            if(map.dirName) this.game.mapDirs[map.dirName] = map;
+            map.dirName = this.game.mapDirs[map.dirId];
+            this.game.mapsByDirId[map.dirId] = map;
         }
         return this.game.maps;
     }
@@ -183,15 +184,15 @@ export class MapParser {
         //this table contains several duplicate entries, which is why we need
         //to track both the dir name and the dir ID (which is just the index
         //into this table).
-        const dol    = this.app.game.iso.mainDol;
+        const dol    = this.game.iso.mainDol;
         const file   = new GameFile(dol.getData());
-        const aNames = this.app.game.addresses.mapDirNames;
-        for(let iMap=0; iMap<aNames.count; iMap++) {
-            const map = this._getMapByDirId(iMap);
-            file.seek(dol.addrToOffset(aNames.address + (iMap*4)));
+        const aNames = this.game.addresses.mapDirNames;
+        this.game.mapDirs = [];
+        for(let iDir=0; iDir<aNames.count; iDir++) {
+            file.seek(dol.addrToOffset(aNames.address + (iDir*4)));
             const ptr = file.readU32();
             file.seek(dol.addrToOffset(ptr));
-            map.dirName = file.readStr(256);
+            this.game.mapDirs.push(file.readStr(256));
         }
     }
     readIdxTable() {
@@ -212,12 +213,13 @@ export class MapParser {
         //each map has a parent map ID.
         //if it's not -1, it's the dir ID of another map that should also be
         //loaded alongside this one.
+        //this table is a mapping of dir ID => parent dir ID.
         const dol    = this.app.game.iso.mainDol;
         const file   = new GameFile(dol.getData());
         const aTable = this.app.game.addresses.parentMapId;
         file.seek(dol.addrToOffset(aTable.address));
         for(let iMap=0; iMap<aTable.count; iMap++) {
-            const map = this._getMapById(iMap);
+            const map = this._getMapByDirId(iMap);
             let parent = file.readS16();
             //if(parent == -1) parent = null;
             map.parentId = parent;
@@ -313,7 +315,7 @@ export class MapParser {
             map.sizeZ   = info.sizeZ;
             map.originX = info.originX;
             map.originZ = info.originZ;
-            map.nBlocks = info.nBlocks;
+            map.nBlocks = info.nBlocks; //maybe memory for block data?
             map.unk08   = info.unk08;
             map.unk0C   = info.unk0C;
             map.unk1E   = info.unk1E;
@@ -365,7 +367,8 @@ export class MapParser {
             let   data;
             if(!file) {
                 console.log('File not found:', path);
-                //the game will also check MAPS.bin
+                //the game will also check MAPS.bin.
+                //XXX check if any maps have old romlists here.
                 data = new this.mapsBin.decompress(offset);
             }
             else data = new GameFile(file);
