@@ -34,7 +34,7 @@ class RomListEntry {
             this.byteLength-0x18);
         this.params     = null;
 
-        if(this.app.game.objects) {
+        if(this.game.objects) {
             //get the object
             let defNo = this.objDef;
             if(defNo < 0) defNo = -defNo;
@@ -63,17 +63,17 @@ class RomListEntry {
 
 export default class RomList {
     /** romlist file, defines objects on a map. */
-    constructor(app, view) {
+    constructor(game, view) {
         /** Construct RomList.
-         *  @param {App} app the app instance.
+         *  @param {Game} game the game this is from.
          *  @param {DataView} view the data to read.
          */
-        this.app     = app;
+        this.game    = game;
         this.entries = [];
         if(view instanceof GameFile) view = new DataView(view.decompress());
         if(view instanceof ArrayBuffer) view = new DataView(view);
         for(let offs=0; offs<view.byteLength;) {
-            let entry = new RomListEntry(this.app, view, offs);
+            let entry = new RomListEntry(this.game, view, offs);
             this.entries.push(entry);
             offs += entry.byteLength;
         }

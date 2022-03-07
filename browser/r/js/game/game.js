@@ -1,10 +1,10 @@
 import { getXml, int } from "../Util.js";
-import GameBit from "../types/GameBit.js";
-import GameObject from "../types/GameObject.js";
-import DLL from "../types/DLL.js";
+import GameBit from "./GameBit.js";
+import GameObject from "./GameObject.js";
+import DLL from "./DLL.js";
 import { MapParser } from "./map/MapParser.js";
 import Text from "./text/Text.js";
-import parseWarpTab from "../types/Warptab.js";
+import parseWarpTab from "./Warptab.js";
 
 export const MAP_CELL_SIZE = 640;
 export const TEXT_LANGUAGES = ['English', 'French',

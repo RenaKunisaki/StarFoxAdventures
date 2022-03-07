@@ -2,7 +2,7 @@ import { E, createElement } from "../lib/Element.js";
 import { downloadXml, hex } from "../Util.js";
 import GameTextXmlBuilder from "../game/text/XmlBuilder.js";
 import BinaryFile from "../lib/BinaryFile.js";
-import GameBit from "../types/GameBit.js";
+import GameBit from "./GameBit.js";
 import RomList from "./map/RomList.js";
 import GameFile from "./GameFile.js";
 
@@ -76,7 +76,7 @@ export default class GameBitsXmlBuilder {
             });
             const mapName = file.name.split('.')[0];
             const gFile   = new GameFile(file);
-            const romList = new RomList(this.app, gFile);
+            const romList = new RomList(this.app.game, gFile);
             for(let entry of romList.entries) {
                 let params = entry.params;
                 if(params == null) params = [];

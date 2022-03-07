@@ -1,4 +1,4 @@
-import { SaveGame } from "../types/SaveGame.js";
+import { SaveGame } from "../game/SaveGame.js";
 import { getXml } from "../Util.js";
 
 import { E } from "../lib/Element.js";

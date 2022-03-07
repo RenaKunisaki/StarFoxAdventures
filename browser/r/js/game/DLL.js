@@ -1,6 +1,6 @@
 import { int, hex } from "../Util.js";
 import Struct, { parseType } from "../lib/Struct.js";
-import { GhidraTypes } from "./GhidraTypes.js";
+import { GhidraTypes } from "../types/GhidraTypes.js";
 import { E } from "../lib/Element.js";
 
 export default class DLL {

@@ -1,6 +1,6 @@
 import Struct from '../lib/Struct.js';
-import { Header } from './gci.js';
-import { Vec3f, Vec3i } from './common.js';
+import { Header } from '../types/gci.js';
+import { Vec3f, Vec3i } from '../types/common.js';
 import { hex } from '../Util.js';
 import { E } from '../lib/Element.js';
 
