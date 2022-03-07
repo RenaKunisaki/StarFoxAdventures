@@ -2,9 +2,8 @@ import { getXml, int } from "../Util.js";
 import GameBit from "../types/GameBit.js";
 import GameObject from "../types/GameObject.js";
 import DLL from "../types/DLL.js";
-import Map from "./map.js";
+import { MapParser } from "./MapParser.js";
 import Text from "./text/Text.js";
-import parseMapGrid from "../types/MapGrid.js";
 import parseWarpTab from "../types/Warptab.js";
 
 export const MAP_CELL_SIZE = 640;
@@ -208,52 +207,8 @@ export default class Game {
     }
 
     async _loadMaps() {
-        await this.app.progress.update({
-            subText:"Downloading maps.xml...",
-            numSteps: 1, stepsDone: 0,
-        });
-        const xml = await getXml(`data/${this.version}/maps.xml`);
-        this.maps = {};
-        this.mapDirs = {}; //dir ID => map
-        let nextId = -1; //use negative IDs for maps that don't have an ID
-        const usedRomLists = {};
-        if(xml) {
-            for(let elem of xml.getElementsByTagName('map')) {
-                const map = new Map(this.app, elem);
-                let id = map.id;
-                if(id == null) id = nextId--;
-                this.maps[id] = map;
-                usedRomLists[map.romListName] = true;
-                if(map.dirId != null) this.mapDirs[map.dirId] = map;
-            }
-        }
-
-        //find romlist files not referenced by maps
-        let iFile = 0;
-        for(let file of this.iso.files) {
-            iFile++;
-            if(file.name.endsWith('.romlist.zlb')) {
-                await this.app.progress.update({
-                    subText:`Parsing ${file.name}...`,
-                    numSteps: this.iso.files.length,
-                    stepsDone: iFile,
-                });
-                let name = file.name.split('.')[0];
-                if(!usedRomLists[name]) {
-                    const map = new Map(this);
-                    map.romListName = name;
-                    this.maps[nextId--] = map;
-                    usedRomLists[name] = true;
-                }
-            }
-        }
-
-        console.log("maps", this.maps);
-        await this.app.progress.update({
-            subText:"Parsing globalma.bin...",
-            numSteps: 1, stepsDone: 0,
-        });
-        this.mapGrid = parseMapGrid(this.app);
+        const parser = new MapParser(this);
+        await parser.parse();
     }
 
     async _loadTexts(lang) {

@@ -65,7 +65,7 @@ export default class MapList {
             {displayName:"#", name:'id', type:'hex', length:2},
             {displayName:"Name", name:'name', type:'string',
                 makeElem: (val, td, row) => {
-                    if(!row.used) {
+                    if(!row.isUsed) {
                         td.classList.add('unused');
                         td.setAttribute('title', "Unused");
                     }
@@ -93,9 +93,6 @@ export default class MapList {
                         });
                         td.classList.add('link');
                         td.setAttribute('title', `Size: ${file.size}`);
-                        if(file.size != row.romListCompSize) {
-                            td.classList.add('invalid');
-                        }
                     }
                     else {
                         td.classList.add('missing');
@@ -104,8 +101,6 @@ export default class MapList {
                     return td;
                 }
             },
-            {displayName:"CLen", name:'romListCompSize', type:'int',
-                title:"RomList compressed size"},
             {displayName:"RLen", name:'romListSize', type:'int',
                 title:"RomList uncompressed size"},
             {displayName:"Parent", name:'parentId', type:'string',
@@ -123,14 +118,11 @@ export default class MapList {
                 makeElem: makeMapElem},
             {displayName:"Link1", name:'link1', type:'string', title:"Linked Map",
                 makeElem: makeMapElem},
-            {displayName:"MAPSofs0", name:'mapsBin0Offset', type:'hex', length:8},
-            {displayName:"MAPSunk8", name:'mapsBinUnk08', type:'hex', length:2,
-                title:"MAPS.bin unknown field 0x8"},
-            {displayName:"MAPSunkC", name:'mapsBinUnk0C', type:'hex', length:2,
-                title:"MAPS.bin unknown field 0xC"},
-            {displayName:"1C", name:'mapsBinUnk1C', type:'hex', length:4,
-                title:"MAPS.bin unknown field 0x1C"},
-            {displayName:"Flgs", name:'bin0flags', type:'hex', length:4,
+            {displayName:"#Blk",  name:'nBlocks', type:'int', title:"Number of blocks"},
+            {displayName:"unk08", name:'unk08', type:'hex', length:4},
+            {displayName:"unk0C", name:'unk0C', type:'hex', length:4},
+            {displayName:"unk1D", name:'unk1D', type:'hex', length:4},
+            {displayName:"Flgs",  name:'unk1E', type:'hex', length:4,
                 title:"MAPS.bin flags or something"},
             {displayName:"Description", name:'description', type:'string'},
         ]});
@@ -142,6 +134,7 @@ export default class MapList {
             dirId:           map.dirId,
             dirName:         map.dirName,
             romListName:     map.romListName,
+            romListSize:     map.romListSize,
             name:            map.name,
             type:            map.type,
             parentId:        map.parentId,
@@ -153,21 +146,16 @@ export default class MapList {
             sizeZ:           map.sizeZ,
             originX:         map.originX,
             originZ:         map.originZ,
-            link0:           map.links[0],
-            link1:           map.links[1],
+            link0:           map.links ? map.links[0] : '',
+            link1:           map.links ? map.links[1] : '',
             blocks:          map.blocks,
+            nBlocks:         map.nBlocks,
             description:     map.description,
-            used:            map.used,
-            romListSize:     map.romListSize,
-            romListCompSize: map.romListCompSize,
-            mapsBinUnk08:    map.mapsBinUnk08,
-            mapsBinUnk0C:    map.mapsBinUnk0C,
-            mapsBinUnk1C:    map.mapsBinUnk1C,
-            bin0flags:       map.bin0flags,
-            mapsBin0Offset:  map.mapsBin0Offset,
-            blocksOffset:    map.blocksOffset,
-            rectOffsets:     map.rectOffsets,
-            romListHeaderOffset: map.romListHeaderOffset,
+            isUsed:          map.isUsed,
+            unk08:           map.unk08,
+            unk0C:           map.unk0C,
+            unk1D:           map.unk1D,
+            unk1E:           map.unk1E,
         };
     }
 }
