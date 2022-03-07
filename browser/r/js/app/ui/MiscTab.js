@@ -39,7 +39,7 @@ export default class MiscTab {
     }
 
     async _genMapsXml() {
-        const xml = await ((new MapsXmlBuilder(this.app)).build());
+        const xml = await ((new MapsXmlBuilder(this.app.game)).build());
         this.app.progress.hide();
         downloadXml(xml, 'maps.xml', type,
             document.getElementById('genPrettyXml').checked);
