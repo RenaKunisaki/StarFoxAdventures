@@ -23,12 +23,12 @@ export default class Warptab {
 
     _makeTable() {
         return new Table({columns: [
-            {displayName:"#", name:'idx', type:'hex', length:2},
-            {displayName:"X", name:'x',   type:'float'},
-            {displayName:"Y", name:'y',   type:'float'},
-            {displayName:"Z", name:'z',   type:'float'},
-            {displayName:"L", name:'layer', type:'int', title:"Map Layer"},
-            {displayName:"R", name:'xRot', type:'int', title:"X Rotation"},
+            {displayName:"#",   name:'idx', type:'hex', length:2},
+            {displayName:"X",   name:'x',   type:'float'},
+            {displayName:"Y",   name:'y',   type:'float'},
+            {displayName:"Z",   name:'z',   type:'float'},
+            {displayName:"Ly",  name:'layer', type:'int', title:"Map Layer"},
+            {displayName:"Rot", name:'xRot', type:'int', title:"X Rotation"},
             {displayName:"Map", name:'map', type:'string'},
         ]});
     }
@@ -36,9 +36,9 @@ export default class Warptab {
     _makeRow(idx, warp) {
         const row = {
             idx:   parseInt(idx),
-            x:     warp.x,
-            y:     warp.y,
-            z:     warp.z,
+            x:     warp.x.toFixed(2),
+            y:     warp.y.toFixed(2),
+            z:     warp.z.toFixed(2),
             layer: warp.layer,
             xRot:  warp.xRot,
         };

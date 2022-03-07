@@ -85,8 +85,9 @@ tr.notice {
 }
 
 /* numbers */
-.int { text-align: right; font-family: monospace; white-space: pre; }
-.hex { text-align: right; font-family: monospace; white-space: pre; }
+.int   { text-align: right; font-family: monospace; white-space: pre; }
+.hex   { text-align: right; font-family: monospace; white-space: pre; }
+.float { text-align: right; font-family: monospace; white-space: pre; }
 
 .hexdump { font-family: monospace; white-space: pre; }
 .hexdump .line:nth-child(2n) { color: #DDD; }

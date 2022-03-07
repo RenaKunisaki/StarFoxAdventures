@@ -25,7 +25,7 @@ export default class MapList {
         const makeMapElem = (val, td, row, isDir=false) => {
             if(val == null || val <= 0) {
                 td.classList.add('null');
-                td.innerText = "-";
+                td.innerText = "none";
                 return td;
             }
             const map = isDir ? this.app.game.mapsByDirId[val]
@@ -135,7 +135,9 @@ export default class MapList {
             },
             {displayName:"unk08", name:'unk08', type:'hex', length:8},
             //XXX unk0C is an array of 4 values
-            {displayName:"unk0C", name:'unk0C', type:'hex', length:4},
+            //also it's always zeros except for two maps that also have
+            //negative sizes, so it's probably some padding/unused field
+            //{displayName:"unk0C", name:'unk0C', type:'hex', length:4},
             {displayName:"unk1D", name:'unk1D', type:'hex', length:4},
             {displayName:"Flgs",  name:'unk1E', type:'hex', length:4,
                 title:"MAPS.bin flags or something"},
