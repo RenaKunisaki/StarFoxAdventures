@@ -1,7 +1,7 @@
 import { downloadXml, hex } from "../../Util.js";
 import GameBitsXmlBuilder from "../../game/GameBitsXmlBuilder.js";
 import GameTextXmlBuilder from "../../game/text/XmlBuilder.js";
-import MapsXmlBuilder from "../../game/MapsXmlBuilder.js";
+import MapsXmlBuilder from "../../game/map/MapsXmlBuilder.js";
 
 const type = 'application/xml';
 

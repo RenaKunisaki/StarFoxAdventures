@@ -1,6 +1,6 @@
-import { E } from "../lib/Element.js";
-import { hex } from "../Util.js";
-import { MapParser } from "./map/MapParser.js";
+import { E } from "../../lib/Element.js";
+import { hex } from "../../Util.js";
+import { MapParser } from "./MapParser.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
 
