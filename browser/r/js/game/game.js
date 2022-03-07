@@ -2,7 +2,7 @@ import { getXml, int } from "../Util.js";
 import GameBit from "../types/GameBit.js";
 import GameObject from "../types/GameObject.js";
 import DLL from "../types/DLL.js";
-import { MapParser } from "./MapParser.js";
+import { MapParser } from "./map/MapParser.js";
 import Text from "./text/Text.js";
 import parseWarpTab from "../types/Warptab.js";
 
