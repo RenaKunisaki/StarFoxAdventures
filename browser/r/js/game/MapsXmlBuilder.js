@@ -19,9 +19,10 @@ export default class MapsXmlBuilder {
     }
     async makeMapElem(map) {
         const attrs = {
-            id:     `0x${hex(map.id,2)}`,
-            dirId:  `0x${hex(map.dirId,2)}`,
-            isUsed: map.isUsed,
+            id:      `0x${hex(map.id,2)}`,
+            dirId:   `0x${hex(map.dirId,2)}`,
+            romList: map.romListName,
+            isUsed:  map.isUsed,
         };
         if(attrs.isUsed === true) attrs.isUsed = '1';
         else if(attrs.isUsed === false) attrs.isUsed = '0';
