@@ -39,12 +39,12 @@ class RomListEntry {
         if(this.game.objects) {
             //get the object
             let defNo = this.objDef;
-            defNo = (defNo < 0) ? -defNo : this.app.game.objIndex[defNo];
-            this.object = this.app.game.objects[defNo];
-            if(!this.object) this.object = this.app.game.objects[0];
+            defNo = (defNo < 0) ? -defNo : this.game.objIndex[defNo];
+            this.object = this.game.objects[defNo];
+            if(!this.object) this.object = this.game.objects[0];
 
             //parse the object-specific params
-            const dlls = this.app.game.dlls;
+            const dlls = this.game.dlls;
             const dll = dlls ? dlls[this.object.dll_id] : null;
             if(dll && dll.objParams) {
                 this.params  = {};

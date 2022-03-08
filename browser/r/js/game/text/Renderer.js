@@ -2,7 +2,7 @@ import { E } from "../../lib/Element.js";
 import { Language } from "./Language.js";
 import Text from "./Text.js";
 import Phrase from "./Phrase.js";
-import { CommandBase, Command } from "./Command.js";
+import { assertType } from "../../Util.js";
 
 export default class GameTextRenderer {
     /** Builds HTML representation of a Text. */
@@ -12,15 +12,10 @@ export default class GameTextRenderer {
 
     render(text) {
         /** Render the specified Text. */
-        console.assert(text instanceof Text);
+        assertType(text, Text);
 
-        const params = {
-            font:    text.language == Language.Japanese ? 0 : 4,
-            justify: 'Left',
-            color:   [255,255,255,255],
-            size:    100, //percent
-            hint:    null,
-        };
+        const params = {hint:null};
+        this._resetParams(params, text);
 
         const list = E.ul('phrases');
         for(let phrase of text.phrases) {
@@ -36,11 +31,17 @@ export default class GameTextRenderer {
                 //We mimic that behaviour by resetting the color after
                 //a phrase that contains the Hint command (which is quite
                 //convenient as the game seems to just ignore this command).
-                params.color = [255, 255, 255, 255];
-                //It's not necessary to reset other params since they
-                //aren't changed by any hint texts.
+                this._resetParams(params, text);
             }
         }
         return list;
+    }
+
+    _resetParams(params, text) {
+        params.font    = text.language == Language.Japanese ? 0 : 4;
+        params.justify = 'Left';
+        params.color   = [255,255,255,255];
+        params.size    = 100; //percent
+        //params.hint    = null;
     }
 }

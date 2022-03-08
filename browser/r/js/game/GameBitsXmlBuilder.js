@@ -4,14 +4,15 @@ import BinaryFile from "../lib/BinaryFile.js";
 import GameBit from "./GameBit.js";
 import RomList from "./map/RomList.js";
 import GameFile from "./GameFile.js";
-import App from "../app/App.js";
+import Game from "./Game.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
 
 export default class GameBitsXmlBuilder {
     /** Generates gamebits.xml. */
-    constructor(app) {
-        this.app = assertType(app, App);
+    constructor(game) {
+        this.game = assertType(game, Game);
+        this.app  = game.app;
     }
 
     async build() {
@@ -22,7 +23,7 @@ export default class GameBitsXmlBuilder {
     }
 
     async parseBitTable() {
-        const bitTable = this.app.game.iso.getFile('/BITTABLE.bin');
+        const bitTable = this.game.iso.getFile('/BITTABLE.bin');
         this.app.progress.show({
             taskText: "Generating XML",
             subText:  "Parsing BITTABLE.bin...",
@@ -33,7 +34,7 @@ export default class GameBitsXmlBuilder {
         const xml  = document.implementation.createDocument(XML, "gamebits");
         this.xml   = xml;
         for(let i=0; i<bitTable.size / 4; i++) {
-            let bit       = this.app.game.bits[i];
+            let bit       = this.game.bits[i];
             if(!bit) bit = new GameBit(this.app, null);
             const item    = data.readU32();
             bit.id        = i;
@@ -59,7 +60,7 @@ export default class GameBitsXmlBuilder {
             numSteps:  1, stepsDone: 0,
         });
         const files = [];
-        for(let file of this.app.game.iso.files) {
+        for(let file of this.game.iso.files) {
             if(file.isDir) continue;
             if(!file.path.endsWith('.romlist.zlb')) continue;
             files.push(file);
@@ -76,7 +77,7 @@ export default class GameBitsXmlBuilder {
             });
             const mapName = file.name.split('.')[0];
             const gFile   = new GameFile(file);
-            const romList = new RomList(this.app.game, gFile);
+            const romList = new RomList(this.game, gFile);
             for(let entry of romList.entries) {
                 let params = entry.params;
                 if(params == null) params = [];

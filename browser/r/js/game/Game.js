@@ -117,7 +117,7 @@ export default class Game {
         if(this.iso) {
             await this._loadDlls();
             await this._loadObjects();
-            this.warpTab = parseWarpTab(this.app);
+            this.warpTab = parseWarpTab(this);
             await this._loadMaps();
         }
     }
@@ -182,7 +182,7 @@ export default class Game {
             getAttribute('tableAddress'));
         this.dlls = {};
         for(let elem of xml.getElementsByTagName('dll')) {
-            const dll = new DLL(this.app, elem);
+            const dll = new DLL(this, elem);
             this.dlls[dll.id] = dll;
         }
     }
@@ -220,7 +220,7 @@ export default class Game {
                     stepsDone: i,
                 });
             }
-            const obj = new GameObject(this.app, i);
+            const obj = new GameObject(this, i);
             if(revIndex[i] != undefined) obj.index = revIndex[i];
             this.objects.push(obj);
         }

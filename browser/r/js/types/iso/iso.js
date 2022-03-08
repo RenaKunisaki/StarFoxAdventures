@@ -1,12 +1,9 @@
-import Struct from '../../lib/Struct.js';
-import IsoFile from './isofile.js';
 import DOL from './dol.js';
 import { Appldr } from './appldr.js';
 import { Bi2Bin } from './bi2.js';
 import { BootBin } from './bootbin.js';
 import { FST } from './fst.js';
 import { hex } from '../../Util.js';
-import App from '../../app/App.js';
 
 //boot.bin, bi2.bin, appldr, fst, main.dol, files
 

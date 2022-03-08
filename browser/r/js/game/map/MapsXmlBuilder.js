@@ -9,7 +9,7 @@ export default class MapsXmlBuilder {
     /** Generates maps.xml. */
     constructor(game) {
         this.game = assertType(game, Game);
-        this.app = this.game.app;
+        this.app  = game.app;
     }
     async build() {
         this.maps = await (new MapParser(this.game)).parse();

@@ -2,7 +2,7 @@ import Struct from '../lib/Struct.js';
 import { Header } from '../types/gci.js';
 import { Vec3f, Vec3i } from '../types/common.js';
 import { assertType, hex } from '../Util.js';
-import App from '../app/App.js';
+import Game from './Game.js';
 
 //Player character saved position
 export const PlayerCharPos = Struct(
@@ -138,8 +138,9 @@ export const SaveDataStruct = Struct(
 export class SaveSlot {
     /** One of the three save slots in the save file.
      */
-    constructor(app, idx, save) {
-        this.app   = assertType(app, App);
+    constructor(game, idx, save) {
+        this.game  = assertType(game, Game);
+        this.app   = game.app;
         this.index = idx;  //slot number
         this._save = save; //SaveGameStruct
         console.assert(save);
@@ -157,9 +158,9 @@ export class SaveSlot {
 
     getGameBits() {
         //called later once bits have been loaded
-        console.assert(this.app.game.bits);
+        console.assert(this.game.bits);
         this.gameBits = {};
-        for(let [id, bit] of Object.entries(this.app.game.bits)) {
+        for(let [id, bit] of Object.entries(this.game.bits)) {
             let name = bit.name || `_${hex(id,4)}`;
             let tbl=null;
             let val=0;
@@ -218,8 +219,9 @@ export class SaveSlot {
 export class SaveGame {
     /** Reads the entire SaveDataStruct from a File or Blob.
      */
-    constructor(app) {
-        this.app = assertType(app, App);
+    constructor(game) {
+        this.game      = assertType(game, Game);
+        this.app       = game.app;
         this.gciHeader = null;
     }
 

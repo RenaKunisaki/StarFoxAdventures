@@ -59,7 +59,7 @@ export default class App {
                 mapList:    new MapList(this),
                 mapGrid:    new MapGrid(this),
                 miscTab:    new MiscTab(this),
-                warpTab:    new Warptab(this),
+                warpTab:    new Warptab(this.game),
                 textList:   new TextList(this),
             };
 

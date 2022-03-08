@@ -108,7 +108,7 @@ export default class BinaryReader {
     readCharTextures() {
         /** Read the texture graphics.
          */
-        this.charTextures = [];
+        this.charTextures  = [];
         this.textureOffset = this._file.tell();
         //game will only recognize 2 textures
         while(this.charTextures.length < 2) {

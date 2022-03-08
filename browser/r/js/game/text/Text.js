@@ -1,6 +1,6 @@
 import { Language } from "./Language.js";
 import Phrase from "./Phrase.js";
-import { int } from "../../Util.js";
+import { assertType, int } from "../../Util.js";
 
 export default class Text {
     /** One "text" in a GameText file.
@@ -42,7 +42,7 @@ export default class Text {
          *  the Text structs.
          *  @param {Phrase} phrase phrase to add.
          */
-        console.assert(phrase instanceof Phrase);
+        assertType(phrase, Phrase);
         this.phrases.push(phrase);
     }
 }

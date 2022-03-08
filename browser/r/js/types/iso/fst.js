@@ -1,6 +1,5 @@
 import Struct from '../../lib/Struct.js';
 import IsoFile from './isofile.js';
-import { hex } from '../../Util.js';
 
 //ISO directory structure
 export const FstEntry = Struct(

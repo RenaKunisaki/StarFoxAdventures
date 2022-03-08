@@ -1,19 +1,21 @@
+import Game from "../../game/Game.js";
 import { E } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
+import { assertType, hex } from "../../Util.js";
 import Table from "./Table.js";
 
 export default class Warptab {
     /** Displays all warp definitions.
      */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.element = document.getElementById('tab-warpTab');
         this.app.onIsoLoaded(iso => this.refresh());
     } //constructor
 
     refresh() {
         let tbl = this._makeTable();
-        for(let [idx, warp] of Object.entries(this.app.game.warpTab)) {
+        for(let [idx, warp] of Object.entries(this.game.warpTab)) {
             tbl.add(this._makeRow(idx, warp));
         }
         const elem = E.div('warpTab', tbl.element);
@@ -42,8 +44,8 @@ export default class Warptab {
             layer: warp.layer,
             xRot:  warp.xRot,
         };
-        if(this.app.game.mapGrid) {
-            let map = this.app.game.getMapAt(warp.layer, warp.x, warp.z);
+        if(this.game.mapGrid) {
+            let map = this.game.getMapAt(warp.layer, warp.x, warp.z);
             if(map) row.map = map.name;
             else row.map = '-';
         }

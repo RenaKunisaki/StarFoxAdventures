@@ -1,5 +1,3 @@
-import Struct from '../../lib/Struct.js';
-
 export default class IsoFile {
     //A file in an ISO.
 

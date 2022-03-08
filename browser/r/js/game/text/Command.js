@@ -28,7 +28,7 @@ export const Command = {
     seqnum: class extends CommandBase {
         static chr    = 0xE000;
         static params = ['id'];
-        toString() { return `[SEQ ${this.id}]` }
+        toString() { return `[SEQ ${this.id}]` } //for debug/unformatted viewing
     },
     time: class extends CommandBase {
         static chr    = 0xE018;

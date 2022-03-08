@@ -9,7 +9,8 @@ export function assertType(obj, ...types) {
     for(let t of types) {
         if(obj instanceof t) return obj;
     }
-    throw new TypeError(`Incorrect type for object: ${obj}`)
+    let name = obj.constructor ? obj.constructor.name : (typeof obj);
+    throw new TypeError(`Incorrect type for object: ${name}`)
 }
 
 export function getAttr(elem, name) {

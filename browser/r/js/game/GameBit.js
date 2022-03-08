@@ -1,16 +1,20 @@
 import { assertType, hex, int } from "../Util.js";
 import { E } from "../lib/Element.js";
+import Game from "./Game.js";
 import App from "../app/App.js";
 
 export default class GameBit {
     /** A "Bit" (as the game calls them) in the game's GameBit tables.
      */
-    constructor(app, eBit=null) {
+    constructor(game, eBit=null) {
         /** Construct a GameBit from a 'bit' element from gamebits.xml.
          */
         //we don't use fromXml() because we want to instantiate directly
         //using app._getXml()
-        this.app     = assertType(app, App);
+        //XXX _getXml() passes App, not Game
+        if(game instanceof App) game = game.game;
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.id      = eBit ? int(eBit.getAttribute('id')) : null;
         this.table   = eBit ? int(eBit.getAttribute('table')) : null;
         this.hintId  = eBit ? int(eBit.getAttribute('hintid')) : null;
@@ -40,9 +44,9 @@ export default class GameBit {
             }
         }
 
-        if(this.hintId != undefined && this.app.game.texts) {
+        if(this.hintId != undefined && this.game.texts) {
             try {
-                this.hint = this.app.game.texts[this.hintId]
+                this.hint = this.game.texts[this.hintId]
                     .phrases[0].toString(false);
             }
             catch(ex) {

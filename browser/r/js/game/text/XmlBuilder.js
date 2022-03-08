@@ -1,14 +1,16 @@
 import { E } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
+import { assertType, hex } from "../../Util.js";
 import { Language, LangById } from "./Language.js";
 import BinaryReader from "./BinaryReader.js";
+import Game from "../Game.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
 
 export default class GameTextXmlBuilder {
     /** Builds gametext.xml file */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game = assertType(game, Game);
+        this.app  = game.app;
     }
 
     async build() {
@@ -30,7 +32,7 @@ export default class GameTextXmlBuilder {
             numSteps:  1, stepsDone: 0,
         });
         const files = [];
-        for(let file of this.app.game.iso.files) {
+        for(let file of this.game.iso.files) {
             if(file.isDir) continue;
             if(!file.path.startsWith('/gametext/')) continue;
             if(file.path.endsWith('.new')) continue; //skip leftover source files

@@ -1,5 +1,6 @@
-import { hex } from "../Util.js";
+import { assertType, hex } from "../Util.js";
 import Struct from '../lib/Struct.js';
+import Game from "./Game.js";
 
 const ObjectData = Struct(
     ['f',   'unk00'],
@@ -77,13 +78,14 @@ const ObjectData = Struct(
 export default class GameObject {
     /** An object definition in the game.
      */
-    constructor(app, idx) {
+    constructor(game, idx) {
         /** Construct object with given index into OBJECTS.tab.
          */
-        this.app = app;
+        this.game = assertType(game, Game);
+        this.app  = game.app;
 
-        const objsTab = this.app.game.iso.getFile('/OBJECTS.tab').getData();
-        const objsBin = this.app.game.iso.getFile('/OBJECTS.bin');
+        const objsTab = this.game.iso.getFile('/OBJECTS.tab').getData();
+        const objsBin = this.game.iso.getFile('/OBJECTS.bin');
         const objsBinData = objsBin.getData();
         const offset  = objsTab.getUint32(idx*4);
         const size    = objsTab.getUint32((idx+1)*4) - offset;

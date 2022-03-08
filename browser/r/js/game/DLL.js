@@ -1,15 +1,16 @@
 import { assertType, int, hex } from "../Util.js";
 import Struct, { parseType } from "../lib/Struct.js";
 import { GhidraTypes } from "../types/GhidraTypes.js";
-import App from "../app/App.js";
+import Game from "./Game.js";
 
 export default class DLL {
     /** A DLL in the game code.
      */
-    constructor(app, eDll) {
+    constructor(game, eDll) {
         /** Construct a DLL from a 'dll' element from dlls.xml.
          */
-        this.app       = assertType(app, App);
+        this.game      = assertType(game, Game);
+        this.app       = game.app;
         this.id        = int(eDll.getAttribute('id'));
         this.address   = int(eDll.getAttribute('address'));
         this.dolOffs   = int(eDll.getAttribute('dolOffs'));
@@ -43,10 +44,10 @@ export default class DLL {
 
     _readDol() {
         //read data from the DOL file instead of XML
-        if(!this.app.game.iso) return;
-        const dol       = this.app.game.iso.mainDol;
+        if(!this.game.iso) return;
+        const dol       = this.game.iso.mainDol;
         const data      = dol.getData();
-        const gDllsAddr = this.app.game.addresses.g_dlls.address;
+        const gDllsAddr = this.game.addresses.g_dlls.address;
         const dllOffs   = dol.addrToOffset(gDllsAddr + (this.id*4)); //file offset of &g_dlls[this.id]
         const aPtr      = data.getUint32(dllOffs); //address of this DLL
         const aOffs     = dol.addrToOffset(aPtr); //file offset of this DLL
@@ -178,12 +179,12 @@ export default class DLL {
                     break;
                 }
                 case 'ObjDefEnum': {
-                    disp = `0x${hex(val,4)} ${this.app.game.getObjName(val)}`;
+                    disp = `0x${hex(val,4)} ${this.game.getObjName(val)}`;
                     break;
                 }
                 case 'MapDirIdx8': {
-                    if(this.app.game.mapDirs[val]) {
-                        disp = `0x${hex(val,2)} ${this.app.game.mapDirs[val].name}`;
+                    if(this.game.mapDirs[val]) {
+                        disp = `0x${hex(val,2)} ${this.game.mapDirs[val].name}`;
                     }
                     else disp = `0x${hex(val,2)} ?`;
                     break;

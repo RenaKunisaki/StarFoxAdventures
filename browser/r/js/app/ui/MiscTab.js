@@ -19,7 +19,7 @@ export default class MiscTab {
     }
 
     async _genGameBitsXml() {
-        const xml = await ((new GameBitsXmlBuilder(this.app)).build());
+        const xml = await ((new GameBitsXmlBuilder(this.app.game)).build());
         this.app.progress.hide();
         downloadXml(xml, 'gamebits.xml', type,
             document.getElementById('genPrettyXml').checked);
@@ -30,7 +30,7 @@ export default class MiscTab {
             taskText: "Generating XML",
             numSteps: 1, stepsDone: 0,
         });
-        const xml = await ((new GameTextXmlBuilder(this.app)).build());
+        const xml = await ((new GameTextXmlBuilder(this.app.game)).build());
         this.app.progress.hide();
         for(let [lang, file] of Object.entries(xml)) {
             downloadXml(file, lang, type,
