@@ -169,7 +169,7 @@ export default class GameFile extends BinaryFile {
                 result.extraData = this.readU32Array(nWords-4);
                 result.offset    = nWords * 4; //offset from magic
                 result.fileSize  = result.packedSize + result.offset;
-                console.log("FACEFEED", result);
+                //console.log("FACEFEED", result);
                 return result;
             }
             default: return {

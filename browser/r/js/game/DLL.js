@@ -179,7 +179,9 @@ export default class DLL {
                     break;
                 }
                 case 'ObjDefEnum': {
-                    disp = `0x${hex(val,4)} ${this.game.getObjName(val)}`;
+                    const obj = this.game.getObject(val);
+                    const name = obj ? obj.name : '?';
+                    disp = `0x${hex(val,4)} ${name}`;
                     break;
                 }
                 case 'MapDirIdx8': {

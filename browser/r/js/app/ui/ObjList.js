@@ -34,14 +34,18 @@ export default class ObjList {
             {displayName:"Category",  name:'cat',  type:'string'},
             {displayName:"DLL",  name:'dll',  type:'string',
                 makeElem: (dll, td, row) => {
-                    if(!dll) {
-                        return E.td('null', "-");
-                    }
+                    let name = '-';
+                    if(dll) name = dll.name;
                     let res = E.td('string',
-                        E.span('id hex', hex(dll.id, 4)),
-                        E.span('name', dll.name),
+                        E.span('id hex', hex(row.dll_id, 4)),
+                        E.span('name', name),
                     );
-                    if(!dll.isValid) res.classList.add('invalid');
+                    if(row.dll_id <= 0 || row.dll_id == 0xFFFF) {
+                        res.classList.add('null');
+                    }
+                    else if(!(dll && dll.isValid)) {
+                        res.classList.add('invalid');
+                    }
                     return res;
                 },
             },
@@ -64,13 +68,14 @@ export default class ObjList {
         if(cat == undefined) cat = `#${obj.catId}`;
 
         let dll = null;
-        if(obj.dll_id >= 0) dll = this.game.dlls[obj.dll_id];
+        if(obj.dll_id >= 0 && this.game.dlls) dll = this.game.dlls[obj.dll_id];
 
         const row = {
             id:          obj.id,
             index:       obj.index,
             name:        obj.name,
             cat:         cat,
+            dll_id:      obj.dll_id,
             dll:         dll,
             flags:       obj.flags,
             nModels:     obj.nModels,

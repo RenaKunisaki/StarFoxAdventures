@@ -13,7 +13,7 @@ export const TEXT_LANGUAGES = ['English', 'French',
     'German', 'Italian', 'Japanese', 'Spanish']; //XXX move
 
 //could move this to XML...
-export const VERSION_INFO = {
+/* export const VERSION_INFO = {
     U0: {
         objNameOffs: 0x91, //offset of name in ObjData
         objNameLen:  11,
@@ -34,7 +34,11 @@ export const VERSION_INFO = {
         objNameOffs: 0x91, //offset of name in ObjData
         objNameLen:  11,
     },
-}
+    K0: {
+        objNameOffs: 0x54, //offset of name in ObjData
+        objNameLen:  15,
+    },
+} */
 
 export default class Game {
     /** Info and methods relating to the game itself.
@@ -85,7 +89,7 @@ export default class Game {
     async setVersion(version) {
         this.version  = version;
         this.bits     = null; //force redownload
-        this._verInfo = VERSION_INFO[this.version];
+        //this._verInfo = VERSION_INFO[this.version];
 
         //get addresses
         await this.app.progress.update({subText:"Downloading addresses.xml..."});
@@ -152,8 +156,7 @@ export default class Game {
         return obj;
     }
 
-    getObjName(defNo) {
-        //XXX not useful? should maybe be internal
+    /* _getObjName(defNo) {
         if(!this.objsTab) return '(no ISO)';
         try {
             const offs = this.objsTab.getUint32(defNo * 4);
@@ -172,7 +175,7 @@ export default class Game {
             if(ex instanceof RangeError) return "N/A";
             else throw ex;
         }
-    }
+    } */
 
     async _loadDlls() {
         await this.app.progress.update({subText:"Downloading dlls.xml..."});

@@ -1,6 +1,7 @@
 import Game from "../../game/Game.js";
-import { E } from "../../lib/Element.js";
+import { E, clearElement } from "../../lib/Element.js";
 import { assertType } from "../../Util.js";
+import ErrorMessage from "./ErrorMessage.js";
 import Table from "./Table.js";
 
 export default class DllList {
@@ -14,13 +15,17 @@ export default class DllList {
     } //constructor
 
     refresh() {
+        if(!this.game.dlls) {
+            const err = new ErrorMessage(this.app, "No DLL info available");
+            clearElement(this.element).append(err.element);
+            return;
+        }
         let tbl = this._makeTable();
         for(let [id, dll] of Object.entries(this.game.dlls)) {
             tbl.add(this._makeRow(dll));
         }
         const elem = E.div('dllList', tbl.element);
-        this.element.replaceWith(elem);
-        this.element = elem;
+        clearElement(this.element).append(elem);
     }
 
     _makeTable() {

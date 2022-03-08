@@ -21,7 +21,8 @@ export class RomListViewer {
 
         this.table = new Table({title:"Romlist Data", columns: [
             {displayName:"ID", name:'id', type:'hex', length:8},
-            {displayName:"DefNo", name:'objDef', type:'hex', length:4},
+            {displayName:"Obj#", name:'objDef', type:'hex', length:4, title:"Object index"},
+            {displayName:"Def#", name:'defNo', type:'hex', length:4, title:"Object defNo"},
             {displayName:"Object", name:'object', type:'str'},
             {displayName:"X", name:'x', type:'int'},
             {displayName:"Y", name:'y', type:'int'},
@@ -77,10 +78,12 @@ export class RomListViewer {
             }
         }
 
+        const obj = this.game.getObject(entry.objDef);
         const row = {
             id:     entry.id,
-            objDef: defNo,
-            object: this.game.getObjName(defNo),
+            objDef: entry.objDef,
+            defNo:  defNo,
+            object: obj ? obj.name : '?',
             x: Math.round(entry.position.x),
             y: Math.round(entry.position.y),
             z: Math.round(entry.position.z),
