@@ -154,7 +154,7 @@ export default class App {
     async loadSave(file) {
         //load given save (GCI) file (type File)
         this.saveSlotIdx = 0;
-        this.saveGame = new SaveGame(this);
+        this.saveGame = new SaveGame(this.game);
         await this.saveGame.load(file);
 
         //this will trigger downloading gamebits.xml
@@ -181,7 +181,7 @@ export default class App {
     showFile(file) {
         //Display contents of file. Used for child window.
         document.title = file.path;
-        const viewer = new FileViewer(this, file);
+        const viewer = new FileViewer(this.game, file);
         document.getElementById('loading').replaceWith(viewer.element);
     }
 

@@ -289,11 +289,10 @@ export class SaveGame {
         //console.log("this.data.saves[0]=", this.data.saves[0]);
         this.global = this.data.global;
         this.saves  = [
-            new SaveSlot(this.app, 0, this.data.saves[0]),
-            new SaveSlot(this.app, 1, this.data.saves[1]),
-            new SaveSlot(this.app, 2, this.data.saves[2]),
+            new SaveSlot(this.game, 0, this.data.saves[0]),
+            new SaveSlot(this.game, 1, this.data.saves[1]),
+            new SaveSlot(this.game, 2, this.data.saves[2]),
         ];
-        console.log("Save 1", this.saves[0]);
     }
 
     _parseOneSlot(buffer) {
@@ -301,7 +300,7 @@ export class SaveGame {
         this.data   = null;
         this.global = null;
         this.saves  = [
-            new SaveSlot(this.app, 0, new SaveGameStruct(buffer)),
+            new SaveSlot(this.game, 0, new SaveGameStruct(buffer)),
         ];
     }
 }
