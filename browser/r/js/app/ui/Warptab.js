@@ -24,7 +24,7 @@ export default class Warptab {
     }
 
     _makeTable() {
-        return new Table({columns: [
+        return new Table({title:"Warps", columns: [
             {displayName:"#",   name:'idx', type:'hex', length:2},
             {displayName:"X",   name:'x',   type:'float'},
             {displayName:"Y",   name:'y',   type:'float'},

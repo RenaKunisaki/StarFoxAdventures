@@ -33,7 +33,7 @@ export default class GameBits {
     }
 
     _makeTable() {
-        return new Table({columns: [
+        return new Table({title:"GameBits", columns: [
             {displayName:"#", name:'id',    type:'hex', length: 4,
                 makeElem: (val, td, row) => {
                     if(row.bit.offset == 0 && row.bit.table == 0) {

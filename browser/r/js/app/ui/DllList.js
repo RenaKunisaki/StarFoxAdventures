@@ -24,7 +24,7 @@ export default class DllList {
     }
 
     _makeTable() {
-        return new Table({columns: [
+        return new Table({title:"DLLs", columns: [
             {displayName:"#", name:'id', type:'hex', length:4,
                 makeElem: (val, td, row) => {
                     if(!row.isValid) td.classList.add('invalid');

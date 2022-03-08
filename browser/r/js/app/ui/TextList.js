@@ -26,7 +26,7 @@ export default class TextList {
     }
 
     _makeTable() {
-        return new Table({columns: [
+        return new Table({title:"GameText", columns: [
             {displayName:"#", name:'id',   type:'hex', length:4},
             {displayName:"W", name:'window',type:'hex', length:2,
                 title:"Window type"},

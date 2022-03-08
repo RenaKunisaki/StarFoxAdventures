@@ -112,11 +112,11 @@ export const CardIconsAndText = Struct(
     ['32s',   'fileName'],    //always "Star Fox Adventures" or Japanese
     ['32s',   'comment'],     //always "Dinosaur Planet" or "STARFOX ADVENTURES"
     ['6144B', 'opening_bnr'], //opening.bnr graphic
-    ['4096B', 'icon_img'], //animated icon frames (4x1024)
+    ['4096B', 'icon_img'],    //animated icon frames (4x1024)
     ['512B',  'icon_pal'],    //icon palette
     ['I',     'cksum1'],      //checksum
     ['I',     'cksum2'],      //inverse checksum
-    ['2I',    'unk2A48'], //probably checksums
+    ['2I',    'unk2A48'],     //probably checksums
 );
 
 export const ActualSaveData = Struct(

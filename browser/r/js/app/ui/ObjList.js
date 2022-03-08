@@ -25,7 +25,7 @@ export default class ObjList {
     }
 
     _makeTable() {
-        return new Table({columns: [
+        return new Table({title:"Game Objects", columns: [
             {displayName:"#",    name:'id',   type:'hex', length:4,
                 title:"Index in OBJECTS.bin"},
             {displayName:"Idx#", name:'index',type:'hex', length:4,

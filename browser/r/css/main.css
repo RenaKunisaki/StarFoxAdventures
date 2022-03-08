@@ -35,6 +35,9 @@ th.hex { text-align: right }
 tr:nth-child(2n) { background: #333 }
 tr:nth-child(2n+1) { background: #000 }
 tr:hover { background: #666 }
+tr.title, tr.title th {
+    background: linear-gradient(#009DF3, #0000F0);
+}
 
 td ul { padding-left: 1em }
 

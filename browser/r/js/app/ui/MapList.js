@@ -65,7 +65,7 @@ export default class MapList {
             }
             return td;
         };
-        return new Table({columns: [
+        return new Table({title:"Maps", columns: [
             {displayName:"#", name:'id', type:'hex', length:2},
             {displayName:"Name", name:'name', type:'string',
                 makeElem: (val, td, row) => {
