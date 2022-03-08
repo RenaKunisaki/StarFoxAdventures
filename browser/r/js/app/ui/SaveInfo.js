@@ -198,6 +198,8 @@ export default class SaveInfo {
         const save = this.app.saveGame;
         const slot = this.app.saveSlot;
         console.log("save slot", slot);
+        if(!save) return;
+        if(!slot) return;
         const elem = E.div('saveInfo',
             this._makeSettingsTable(save),
             this._makeSlotTable(slot),
