@@ -23,48 +23,52 @@ export default class MapList {
         this.element = elem;
     }
 
-    _makeTable() {
-        const makeMapElem = (val, td, row, isDir=false) => {
-            if(val == null || val <= 0) {
-                td.classList.add('null');
-                td.innerText = "none";
-                return td;
-            }
-            const map = isDir ? this.game.mapsByDirId[val]
-                : this.game.maps[val];
-            if(map) {
-                clearElement(td).append(
-                    E.span('isDir', isDir ? 'D' : ''),
-                    E.span('id', hex(val,2)),
-                    E.span('name', map.name),
-                );
-            }
-            else {
-                td.classList.add('invalid');
-                clearElement(td).append(E.span('id', hex(val,2)));
-                td.setAttribute('title', "Invalid");
-            }
+    _makeMapElem(val, td, row, isDir=false) {
+        if(val == null || val <= 0) {
+            td.classList.add('null');
+            td.innerText = "none";
             return td;
-        };
-        const makeDirElem = (val, td, row) => {
-            if(row.dirId == 5) {
-                td.classList.add('animtest');
-            }
-            else {
-                const dir = this.game.iso.getFile(`/${row.dirName}`);
-                if(dir) {
-                    if(!this.game.iso.getFile(`/${row.dirName}/MODELS.bin`)) {
-                        td.classList.add('missing');
-                        td.setAttribute('title', "Empty dir");
-                    }
-                }
-                else {
+        }
+        const map = isDir ? this.game.mapsByDirId[val]
+            : this.game.maps[val];
+        if(map) {
+            clearElement(td).append(
+                E.span('isDir', isDir ? 'D' : ''),
+                E.span('id', hex(val,2)),
+                E.span('name', map.name),
+            );
+        }
+        else {
+            td.classList.add('invalid');
+            clearElement(td).append(E.span('id', hex(val,2)));
+            td.setAttribute('title', "Invalid");
+        }
+        return td;
+    }
+
+    _makeDirElem(val, td, row) {
+        if(row.dirId == 5) {
+            td.classList.add('animtest');
+        }
+        else {
+            const dir = this.game.iso.getFile(`/${row.dirName}`);
+            if(dir) {
+                if(!this.game.iso.getFile(`/${row.dirName}/MODELS.bin`)) {
                     td.classList.add('missing');
-                    td.setAttribute('title', "Missing dir");
+                    td.setAttribute('title', "Empty dir");
                 }
             }
-            return td;
-        };
+            else {
+                td.classList.add('missing');
+                td.setAttribute('title', "Missing dir");
+            }
+        }
+        return td;
+    }
+
+    _makeTable() {
+        const makeMapElem = (v,t,r) => this._makeMapElem(v,t,r);
+        const makeDirElem = (v,t,r) => this._makeDirElem(v,t,r);
         return new Table({title:"Maps", columns: [
             {displayName:"#", name:'id', type:'hex', length:2},
             {displayName:"Name", name:'name', type:'string',
