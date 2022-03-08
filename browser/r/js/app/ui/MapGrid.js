@@ -1,5 +1,6 @@
+import Game from "../../game/Game.js";
 import { E, clearElement } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
+import { assertType, hex } from "../../Util.js";
 
 //XXX move these
 const MAP_CELL_SIZE = 640;
@@ -23,8 +24,9 @@ function mapIdToColor(id) {
 export default class MapGrid {
     /** Displays global map grid.
      */
-    constructor(app) {
-        this.app     = app;
+    constructor(game) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.layerNo = 0;
         this.element = document.getElementById('tab-mapGrid');
         this.app.onIsoLoaded(iso => this._onIsoLoaded());
@@ -43,7 +45,7 @@ export default class MapGrid {
 
     _makeLayerPicker() {
         const elem = E.select();
-        for(let idx of Object.keys(this.app.game.mapGrid)) {
+        for(let idx of Object.keys(this.game.mapGrid)) {
             elem.append(E.option(null, `Layer ${idx}`, {value:idx}));
         }
         elem.value = this.layerNo;
@@ -107,8 +109,8 @@ export default class MapGrid {
     }
 
     _addWarps() {
-        if(!this.app.game.warpTab) return;
-        for(let [idx, warp] of Object.entries(this.app.game.warpTab)) {
+        if(!this.game.warpTab) return;
+        for(let [idx, warp] of Object.entries(this.game.warpTab)) {
             if(warp.layer == this.layerNo) {
                 let td = this.cellElems[Math.floor(warp.z / MAP_CELL_SIZE)];
                 if(td) td = td[Math.floor(warp.x / MAP_CELL_SIZE)];
@@ -156,8 +158,8 @@ export default class MapGrid {
     }
 
     refresh() {
-        if(!this.app.game.iso) return;
-        const grid    = this.app.game.mapGrid;
+        if(!this.game.iso) return;
+        const grid    = this.game.mapGrid;
         const elem    = E.table('mapGrid');
         const layerNo = this.eLayerPicker.value;
         this .layerNo = layerNo;

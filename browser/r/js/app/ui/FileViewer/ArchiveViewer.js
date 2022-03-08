@@ -2,11 +2,13 @@ import GameFile from "../../../game/GameFile.js";
 import IsoFile from "../../../types/iso/isofile.js";
 import { E, clearElement } from "../../../lib/Element.js";
 import Table from "../Table.js";
-import { download, hex, Percent } from "../../../Util.js";
+import { assertType, download, hex, Percent } from "../../../Util.js";
+import Game from "../../../game/Game.js";
 
 export default class ArchiveViewer {
-    constructor(app, data) {
-        this.app = app;
+    constructor(game, data) {
+        this.game = assertType(game, Game);
+        this.app  = game.app;
         if(data instanceof GameFile) this.file = data;
         else if(data instanceof IsoFile) {
             this.file = new GameFile(data.getData(), 0, data.size);

@@ -1,18 +1,21 @@
+import Game from "../../game/Game.js";
 import { E } from "../../lib/Element.js";
+import { assertType } from "../../Util.js";
 import Table from "./Table.js";
 
 export default class DllList {
     /** Displays DLL info.
      */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game = assertType(game, Game);
+        this.app  = game.app;
         this.element = document.getElementById('tab-dllList');
         this.app.onIsoLoaded(iso => this.refresh());
     } //constructor
 
     refresh() {
         let tbl = this._makeTable();
-        for(let [id, dll] of Object.entries(this.app.game.dlls)) {
+        for(let [id, dll] of Object.entries(this.game.dlls)) {
             tbl.add(this._makeRow(dll));
         }
         const elem = E.div('dllList', tbl.element);

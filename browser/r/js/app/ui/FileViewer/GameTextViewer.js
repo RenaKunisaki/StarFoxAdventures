@@ -1,13 +1,15 @@
 import { E, clearElement } from "../../../lib/Element.js";
 import Table from "../Table.js";
 import BinaryReader from "../../../game/text/BinaryReader.js";
-import { Language } from "../../../game/text/Language.js";
 import GameTextRenderer from "../../../game/text/Renderer.js";
+import { assertType } from "../../../Util.js";
+import Game from "../../../game/Game.js";
 
 export class GameTextViewer {
     //displays GameText file contents
-    constructor(app, dataView) {
-        this.app     = app;
+    constructor(game, dataView) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.view    = dataView;
         this.element = E.div('gametext');
         this._makeTable();

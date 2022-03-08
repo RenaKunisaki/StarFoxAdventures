@@ -6,11 +6,14 @@ import HexViewer from "./HexViewer.js";
 import TextViewer from "./TextViewer.js";
 import { RomListViewer } from "./RomListViewer.js";
 import { GameTextViewer } from "./GameTextViewer.js";
+import { assertType } from "../../../Util.js";
+import Game from "../../../game/Game.js";
 
 export default class FileViewer {
-    constructor(app, file, showTitle=true) {
+    constructor(game, file, showTitle=true) {
+        this.game = assertType(game, Game);
+        this.app  = game.app;
         try {
-            this.app        = app;
             this.file       = file;
             this._startOffs = 0;
             this.element    = E.div('fileViewer');
@@ -90,7 +93,7 @@ export default class FileViewer {
             //which is how we go back to the list from an item.
             else if((fmt == 'auto' && this.archiveIdx == null
             && contents.length > 1) || fmt == 'archive') {
-                this.viewer = new ArchiveViewer(this.app, buf);
+                this.viewer = new ArchiveViewer(this.game, buf);
                 this.viewer.cbView = (item, data) => {
                     //View button clicked. replace view with the item's data.
                     this.view = new DataView(data);
@@ -102,22 +105,22 @@ export default class FileViewer {
             }
             else if((fmt == 'auto' && name.endsWith('.romlist.zlb'))
             || fmt == 'romlist') {
-                this.viewer = new RomListViewer(this.app, buf);
+                this.viewer = new RomListViewer(this.game, buf);
             }
             else if((fmt == 'auto' && this.file.path.startsWith('/gametext'))
             || fmt == 'gametext') {
-                this.viewer = new GameTextViewer(this.app, buf);
+                this.viewer = new GameTextViewer(this.game, buf);
             }
             else if(fmt == 'text') {
-                this.viewer = new TextViewer(this.app, buf);
+                this.viewer = new TextViewer(this.game, buf);
             }
-            else this.viewer = new HexViewer(this.app, buf);
+            else this.viewer = new HexViewer(this.game, buf);
         }
         catch(ex) {
             //XXX instead of showing "not a GameText file" when set to Auto,
             //we should just switch to hex view...
             console.error(ex);
-            this.viewer = new ErrorMessage(this.app, ex.toString());
+            this.viewer = new ErrorMessage(this.game, ex.toString());
         }
     }
 

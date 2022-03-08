@@ -1,5 +1,6 @@
+import Game from "../../../game/Game.js";
 import { E, clearElement } from "../../../lib/Element.js";
-import { hex } from "../../../Util.js";
+import { assertType, hex } from "../../../Util.js";
 
 const fmtSizes = {
     hex:   1, ascii:  1, hexscii: 1,
@@ -31,8 +32,9 @@ const fmtFuncs = {
 };
 
 export default class HexViewer {
-    constructor(app, dataView) {
-        this.app     = app;
+    constructor(game, dataView) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.view    = dataView;
         this.offset  = 0;
         this.rows    = 64;

@@ -1,9 +1,12 @@
 import { E, clearElement } from "../../../lib/Element.js";
 import BinaryFile from "../../../lib/BinaryFile.js";
+import { assertType } from "../../../Util.js";
+import Game from "../../../game/Game.js";
 
 export default class TextViewer {
-    constructor(app, dataView) {
-        this.app     = app;
+    constructor(game, dataView) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.file    = new BinaryFile(dataView.buffer,
             dataView.byteOffset, dataView.byteLength);
         this.offset  = 0;

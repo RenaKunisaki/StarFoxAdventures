@@ -1,14 +1,15 @@
 import { E, clearElement } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
+import { assertType, hex } from "../../Util.js";
 import Table from "./Table.js";
-import { TEXT_LANGUAGES } from "../../game/Game.js";
+import Game, { TEXT_LANGUAGES } from "../../game/Game.js";
 import GameTextRenderer from "../../game/text/Renderer.js";
 
 export default class TextList {
     /** Displays all GameText definitions from XML.
      */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.element = document.getElementById('tab-textList');
         this.app.onIsoLoaded(iso => this.refresh());
         this.app.onLanguageChanged(lang => this.refresh());

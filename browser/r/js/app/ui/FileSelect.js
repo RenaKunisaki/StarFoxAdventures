@@ -1,11 +1,13 @@
+import Game from "../../game/Game.js";
 import { E, clearElement } from "../../lib/Element.js";
-import { Table } from "../../Util.js";
+import { assertType, Table } from "../../Util.js";
 
 export default class FileSelect {
     /** The UI for selecting an ISO and save file.
       */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game = assertType(game, Game);
+        this.app  = game.app;
 
         this._makeIsoInput();
         this._makeSaveInput();
@@ -148,11 +150,11 @@ export default class FileSelect {
             if(!save.gciHeader.gameCode.startsWith('GSA')) {
                 elem.append(E.div('error', "Unsupported game"));
             }
-            else if(save._version != this.app.game.version
-            && this.app.game.iso) {
+            else if(save._version != this.game.version
+            && this.game.iso) {
                 elem.append(E.div('notice', "Version doesn't match ISO"));
             }
-            else if(!this.app.game.iso) this.app.game.setVersion(save._version);
+            else if(!this.game.iso) this.game.setVersion(save._version);
         }
         else {
             elem.append(E.div('notice', "No info available"));

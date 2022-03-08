@@ -1,22 +1,23 @@
 import { E, clearElement } from "../../../lib/Element.js";
-import { hex } from "../../../Util.js";
+import { assertType, hex } from "../../../Util.js";
 import Table from "../Table.js";
 import RomList from "../../../game/map/RomList.js";
+import Game from "../../../game/Game.js";
 
 export class RomListViewer {
     //displays romlist data
-    constructor(app, dataView) {
-        this.app     = app;
-        this.game    = app.game;
+    constructor(game, dataView) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.view    = dataView;
         this.element = E.div('romlist');
         this.refresh();
     }
 
     refresh() {
-        this.objIndex = this.app.game.iso.getFile('/OBJINDEX.bin').getData();
-        this.objsTab  = this.app.game.iso.getFile('/OBJECTS.tab').getData();
-        this.objsBin  = this.app.game.iso.getFile('/OBJECTS.bin').getData();
+        this.objIndex = this.game.iso.getFile('/OBJINDEX.bin').getData();
+        this.objsTab  = this.game.iso.getFile('/OBJECTS.tab').getData();
+        this.objsBin  = this.game.iso.getFile('/OBJECTS.bin').getData();
 
         this.table = new Table({title:"Romlist Data", columns: [
             {displayName:"ID", name:'id', type:'hex', length:8},
@@ -67,8 +68,8 @@ export class RomListViewer {
         let defNo = entry.objDef;
         if(defNo < 0) defNo = -defNo;
         else {
-            if(this.app.game.objIndex[defNo]) {
-                defNo = this.app.game.objIndex[defNo];
+            if(this.game.objIndex[defNo]) {
+                defNo = this.game.objIndex[defNo];
             }
             else {
                 console.log("Invalid defNo", defNo);
@@ -79,7 +80,7 @@ export class RomListViewer {
         const row = {
             id:     entry.id,
             objDef: defNo,
-            object: this.app.game.getObjName(defNo),
+            object: this.game.getObjName(defNo),
             x: Math.round(entry.position.x),
             y: Math.round(entry.position.y),
             z: Math.round(entry.position.z),

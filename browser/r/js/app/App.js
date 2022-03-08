@@ -50,17 +50,17 @@ export default class App {
         }
         else {
             this.ui = {
-                fileList:   new FileList(this),
-                fileSelect: new FileSelect(this),
-                saveInfo:   new SaveInfo(this),
-                gameBits:   new GameBits(this),
-                objList:    new ObjList(this),
-                dllList:    new DllList(this),
-                mapList:    new MapList(this),
-                mapGrid:    new MapGrid(this),
-                miscTab:    new MiscTab(this),
-                warpTab:    new Warptab(this.game),
-                textList:   new TextList(this),
+                fileList:   new FileList  (this.game),
+                fileSelect: new FileSelect(this.game),
+                saveInfo:   new SaveInfo  (this.game),
+                gameBits:   new GameBits  (this.game),
+                objList:    new ObjList   (this.game),
+                dllList:    new DllList   (this.game),
+                mapList:    new MapList   (this.game),
+                mapGrid:    new MapGrid   (this.game),
+                miscTab:    new MiscTab   (this.game),
+                warpTab:    new Warptab   (this.game),
+                textList:   new TextList  (this.game),
             };
 
             const eLang = document.getElementById('language');

@@ -1,12 +1,14 @@
+import Game from "../../game/Game.js";
 import { E } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
+import { assertType, hex } from "../../Util.js";
 import Table from "./Table.js";
 
 export default class ObjList {
     /** Displays all object definitions.
      */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.element = document.getElementById('tab-objList');
         //this.app.onSaveSlotChanged(slot => this.refresh());
         this.app.onIsoLoaded(iso => this.refresh());
@@ -14,7 +16,7 @@ export default class ObjList {
 
     refresh() {
         let tbl = this._makeTable();
-        for(let obj of this.app.game.objects) {
+        for(let obj of this.game.objects) {
             tbl.add(this._makeRow(obj));
         }
         const elem = E.div('objList', tbl.element);
@@ -58,11 +60,11 @@ export default class ObjList {
     }
 
     _makeRow(obj) {
-        let cat = this.app.game.objCats[obj.catId];
+        let cat = this.game.objCats[obj.catId];
         if(cat == undefined) cat = `#${obj.catId}`;
 
         let dll = null;
-        if(obj.dll_id >= 0) dll = this.app.game.dlls[obj.dll_id];
+        if(obj.dll_id >= 0) dll = this.game.dlls[obj.dll_id];
 
         const row = {
             id:          obj.id,

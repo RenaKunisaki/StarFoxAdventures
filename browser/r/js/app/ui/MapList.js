@@ -1,19 +1,21 @@
 import { E, clearElement } from "../../lib/Element.js";
 import Table from "./Table.js";
-import { hex } from "../../Util.js";
+import { assertType, hex } from "../../Util.js";
+import Game from "../../game/Game.js";
 
 export default class MapList {
     /** Displays list of maps.
      */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.element = document.getElementById('tab-mapList');
         this.app.onIsoLoaded(iso => this.refresh());
     }
 
     refresh() {
         let tbl = this._makeTable();
-        for(let [id, map] of Object.entries(this.app.game.maps)) {
+        for(let [id, map] of Object.entries(this.game.maps)) {
             tbl.add(this._makeRow(map));
         }
         const elem = E.div('mapList', tbl.element);
@@ -28,8 +30,8 @@ export default class MapList {
                 td.innerText = "none";
                 return td;
             }
-            const map = isDir ? this.app.game.mapsByDirId[val]
-                : this.app.game.maps[val];
+            const map = isDir ? this.game.mapsByDirId[val]
+                : this.game.maps[val];
             if(map) {
                 clearElement(td).append(
                     E.span('isDir', isDir ? 'D' : ''),
@@ -49,9 +51,9 @@ export default class MapList {
                 td.classList.add('animtest');
             }
             else {
-                const dir = this.app.game.iso.getFile(`/${row.dirName}`);
+                const dir = this.game.iso.getFile(`/${row.dirName}`);
                 if(dir) {
-                    if(!this.app.game.iso.getFile(`/${row.dirName}/MODELS.bin`)) {
+                    if(!this.game.iso.getFile(`/${row.dirName}/MODELS.bin`)) {
                         td.classList.add('missing');
                         td.setAttribute('title', "Empty dir");
                     }
@@ -82,7 +84,7 @@ export default class MapList {
             },
             {displayName:"Romlist", name:'romListName', type:'string',
                 makeElem: (val, td, row) => {
-                    const file = this.app.game.iso.getFile(
+                    const file = this.game.iso.getFile(
                         `/${row.romListName}.romlist.zlb`);
                     if(file) {
                         //heuristic since we don't need to add a bunch of
@@ -126,7 +128,7 @@ export default class MapList {
                 makeElem: (val, td, row) => {
                     let res = "default";
                     if(val != 0) {
-                        const obj = this.app.game.getObject(val);
+                        const obj = this.game.getObject(val);
                         res = obj ? obj.name : 'N/A';
                     }
                     td.innerText = `${hex(val,4)} ${res}`;

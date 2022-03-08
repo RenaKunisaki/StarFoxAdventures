@@ -1,15 +1,17 @@
+import Game from "../../game/Game.js";
 import { E, clearElement } from "../../lib/Element.js";
-import { download, fileSize, hex } from "../../Util.js";
+import { assertType, download, fileSize, hex } from "../../Util.js";
 import FileViewer from "./FileViewer/FileViewer.js";
 
 export default class FileList {
     /** Displays list of files in ISO.
      */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.element = document.getElementById('tab-fileList');
+        this.viewer  = null; //FileViewer
         this.app.onIsoLoaded(iso => this.refresh(iso));
-        this.viewer = null; //FileViewer
     }
 
     refresh(iso) {
@@ -36,9 +38,15 @@ export default class FileList {
             E.h1(null, file.path),
             E.div('fileInfo',
                 E.table('fileInfo',
-                    E.tr(E.th(null, "Index"), E.td('index int', file.idx.toLocaleString())),
-                    E.tr(E.th(null, "Size"), E.td('fileSize int', file.size.toLocaleString())),
-                    E.tr(E.th(null, "Offset"), E.td('offset hex', `0x${hex(file.bufferOffs)}`)),
+                    E.tr(
+                        E.th(null, "Index"),
+                        E.td('index int', file.idx.toLocaleString())
+                    ), E.tr(
+                        E.th(null, "Size"),
+                        E.td('fileSize int', file.size.toLocaleString())
+                    ), E.tr(
+                        E.th(null, "Offset"),
+                        E.td('offset hex', `0x${hex(file.bufferOffs)}`)),
                 ),
                 E.div('buttons', eView, eDownloadRaw, eDownloadDec),
             ),
@@ -69,7 +77,7 @@ export default class FileList {
             else alert("Select an item to download.");
         });
 
-        this.viewer = new FileViewer(this.app, file, false);
+        this.viewer = new FileViewer(this.game, file, false);
         this.eRightPane.append(this.viewer.element);
     }
 

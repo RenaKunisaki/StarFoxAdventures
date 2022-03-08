@@ -1,5 +1,6 @@
+import Game from "../../game/Game.js";
 import { E } from "../../lib/Element.js";
-import { int, float, hex, Percent, Table } from "../../Util.js";
+import { int, float, hex, Percent, Table, assertType } from "../../Util.js";
 
 //XXX verify
 const soundModes = ["Stereo", "Mono", "Surround", "Headphones"];
@@ -7,8 +8,9 @@ const soundModes = ["Stereo", "Mono", "Surround", "Headphones"];
 export default class SaveInfo {
     /** Displays information about a save file.
      */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.element = document.getElementById('tab-save-info');
 
         //this.app.onSaveLoaded(save => this._onSaveLoaded(save));
@@ -137,9 +139,9 @@ export default class SaveInfo {
 
         //get name of map for each player's position
         let foxMap = null, kryMap = null;
-        if(this.app.game.mapGrid) {
-            foxMap = this.app.game.getMapAt(FP.mapLayer, FP.pos.x, FP.pos.z);
-            kryMap = this.app.game.getMapAt(KP.mapLayer, KP.pos.x, KP.pos.z);
+        if(this.game.mapGrid) {
+            foxMap = this.game.getMapAt(FP.mapLayer, FP.pos.x, FP.pos.z);
+            kryMap = this.game.getMapAt(KP.mapLayer, KP.pos.x, KP.pos.z);
             foxMap = foxMap ? foxMap.name : "(invalid)";
             kryMap = kryMap ? kryMap.name : "(invalid)";
         }
@@ -150,9 +152,9 @@ export default class SaveInfo {
 
         //the map ID field (XXX probably a dir ID)
         let foxMapId = '', kryMapId = '';
-        if(this.app.game.maps) {
-            foxMapId = this.app.game.maps[FP.mapNo];
-            kryMapId = this.app.game.maps[KP.mapNo];
+        if(this.game.maps) {
+            foxMapId = this.game.maps[FP.mapNo];
+            kryMapId = this.game.maps[KP.mapNo];
             foxMapId = foxMapId ? foxMapId.name : "(invalid)";
             kryMapId = kryMapId ? kryMapId.name : "(invalid)";
         }

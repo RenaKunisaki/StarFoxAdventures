@@ -1,14 +1,16 @@
 import { E, clearElement } from "../../lib/Element.js";
-import { CollapseList, downloadXml, hex } from "../../Util.js";
+import { assertType, CollapseList, downloadXml, hex } from "../../Util.js";
 import Table from "./Table.js";
+import Game from "../../game/Game.js";
 
 const XML = 'http://www.w3.org/1999/xhtml';
 
 export default class GameBits {
     /** Displays table of GameBits.
      */
-    constructor(app) {
-        this.app = app;
+    constructor(game) {
+        this.game    = assertType(game, Game);
+        this.app     = game.app;
         this.element = document.getElementById('tab-gameBits');
         this.app.onSaveSlotChanged(slot => this.refresh());
         this.app.onIsoLoaded(iso => this.refresh());
@@ -18,9 +20,9 @@ export default class GameBits {
     } //constructor
 
     refresh() {
-        this.app.game.getBits().then(e => {
+        this.game.getBits().then(e => {
             let tbl = this._makeTable();
-            for(let [id, bit] of Object.entries(this.app.game.bits)) {
+            for(let [id, bit] of Object.entries(this.game.bits)) {
                 tbl.add(this._makeRow(bit));
             }
             if(this.app.saveSlot == null) tbl.hideColumn('value');
@@ -130,12 +132,12 @@ export default class GameBits {
         this.app.progress.show({
             taskText: "Generating XML",
             subText:  "",
-            numSteps: Object.keys(this.app.game.bits).length, stepsDone: 0,
+            numSteps: Object.keys(this.game.bits).length, stepsDone: 0,
         });
 
         const xml = document.implementation.createDocument(XML, "gamebits");
         let i = 0;
-        for(let [id, bit] of Object.entries(this.app.game.bits)) {
+        for(let [id, bit] of Object.entries(this.game.bits)) {
             xml.documentElement.appendChild(bit.toXml());
             if((i++ % 100) == 0) {
                 await this.app.progress.update({stepsDone: i});
