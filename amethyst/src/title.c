@@ -6,34 +6,42 @@
 
 static int (*oldTitleHook)();
 
+static void _loadSaveFile(int slot) {
+    //free some memory. XXX does this actually do any good?
+    //mapUnload(0x3D, 0x2000);
+    mapUnload(0, 0x80000000); //unload all
+
+    //ensure text is loaded properly
+    gameTextLoadDir(GAMETEXT_DIR_Link);
+    while(isDvdDriveBusy) waitNextFrame();
+
+    //OSReport("Loading save 1\n");
+    titleScreenActive = false; //load into the game
+    titleScreen_panAwayFromMovieTimer = 0;
+    titleLoadSaveFiles(); //to get the savegame settings
+
+    //interesting: calling this during the game still works, and replaces your current save
+    //data, so things like your items are reset, but you don't reload or respawn...
+    saveGame_load(slot); //load the actual save file
+    loadSaveSettings(); //apply the settings
+}
+
+static void doStartup() {
+    //check current and previous frame
+    u16 buttons = controllerStates[0].button | controllerStates[4].button;
+    if(buttons & PAD_TRIGGER_R) _loadSaveFile(0);
+}
+
 int titleHook() {
     //do this here due to memory starvation at startup
     enableKrystal = 1;
     krystal_loadAssets();
 
-    //check current and previous frame
-    u16 buttons = controllerStates[0].button | controllerStates[4].button;
-
     //debugPrintf("saveStatus = %d frameCount = %d\n", saveStatus, frameCount);
     //doing it too soon will crash
     if(frameCount > 20 && frameCount < 300
-    && titleScreen_panAwayFromMovieTimer > 0 && buttons & PAD_TRIGGER_R) {
-        //free some memory. XXX does this actually do any good?
-        mapUnload(0x3D, 0x2000);
-
-        //ensure text is loaded properly
-        gameTextLoadDir(GAMETEXT_DIR_Link);
-        while(isDvdDriveBusy) waitNextFrame();
-
-        //OSReport("Loading save 1\n");
-        titleScreenActive = false; //load into the game
-        titleScreen_panAwayFromMovieTimer = 0;
-        titleLoadSaveFiles(); //to get the savegame settings
-
-        //interesting: calling this during the game still works, and replaces your current save
-        //data, so things like your items are reset, but you don't reload or respawn...
-        saveGame_load(0); //load the actual save file
-        loadSaveSettings(); //apply the settings
+    && titleScreen_panAwayFromMovieTimer > 0) {
+        doStartup();
     }
 
     return oldTitleHook();
