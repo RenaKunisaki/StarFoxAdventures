@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <!-- <xs:simpleType name="typeName">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="s8" />
+            <xs:enumeration value="u8" />
+            <xs:enumeration value="s16" />
+            <xs:enumeration value="u16" />
+            <xs:enumeration value="s32" />
+            <xs:enumeration value="u32" />
+            <xs:enumeration value="s32" />
+            <xs:enumeration value="u32" />
+        </xs:restriction>
+    </xs:simpleType> -->
+    <xs:group name="description">
+        <xs:sequence>
+            <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />
+            <xs:element name="note" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:group>
+    <xs:element name="types">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:choice minOccurs="1" maxOccurs="unbounded">
+                    <xs:element name="struct" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:group ref="description" minOccurs="0" maxOccurs="1" />
+                                <xs:choice minOccurs="1" maxOccurs="unbounded">
+                                    <xs:element name="field" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />
+                                                <xs:element name="note" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
+                                            </xs:sequence>
+                                            <xs:attribute name="name" type="xs:string" use="optional" />
+                                            <xs:attribute name="type" type="xs:string" use="required" />
+                                            <xs:attribute name="offset" type="xs:int" use="optional" />
+                                            <xs:attribute name="count" type="xs:positiveInteger" use="optional" default="1" />
+                                        </xs:complexType>
+                                    </xs:element> <!-- field -->
+                                    <xs:element name="padding" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:attribute name="count" type="xs:positiveInteger" use="required" />
+                                        </xs:complexType>
+                                    </xs:element> <!-- padding -->
+                                </xs:choice>
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xs:string" use="required" />
+                        </xs:complexType>
+                    </xs:element> <!-- struct -->
+
+                    <xs:element name="enum" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:sequence>
+                                <xs:group ref="description" minOccurs="0" maxOccurs="1" />
+                                <xs:choice minOccurs="1" maxOccurs="unbounded">
+                                    <xs:element name="item">
+                                        <xs:complexType>
+                                            <xs:sequence>
+                                                <xs:group ref="description" minOccurs="0" maxOccurs="1" />
+                                            </xs:sequence>
+                                            <xs:attribute name="name" type="xs:string" use="required" />
+                                            <xs:attribute name="value" type="xs:int" use="optional" />
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:choice>
+                            </xs:sequence>
+                            <xs:attribute name="name" type="xs:string" use="required" />
+                            <xs:attribute name="type" type="xs:string" use="optional" default="int" />
+                        </xs:complexType>
+                    </xs:element> <!-- enum -->
+                </xs:choice>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

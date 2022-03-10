@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<?xml-model href="../types.xsd"?>
+<types>
+    <struct name="Header">
+        <field name="gameCode" type="char" count="4" />
+        <field name="company" type="char" count="2" />
+        <padding count="1" />
+        <field name="bannerFmt" type="s8" />
+        <field name="fileName" type="char" count="32" />
+        <field name="lastModified" type="u32">
+            <description>seconds since 2000-01-01 00:00:00</description>
+        </field>
+        <field name="iconAddr" type="u32">
+            <description>where in the file to find the icon image</description>
+        </field>
+        <field name="iconFmt" type="u16" />
+        <field name="iconSpeed" type="u16" />
+        <field name="permissions" type="u8">
+            <!-- XXX bitflags -->
+        </field>
+        <field name="copyCount" type="u8" />
+        <field name="block" type="u16">
+            <description>which block this file begins at, plus 5</description>
+        </field>
+        <field name="length" type="u16" />
+        <padding count="2" />
+        <field name="commentAddr" type="u16">
+            <description>where in the file to find the comment string</description>
+        </field>
+    </struct>
+</types>
