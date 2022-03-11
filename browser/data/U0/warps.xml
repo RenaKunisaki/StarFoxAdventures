@@ -13,7 +13,7 @@
         <description>Krazoa Palace out of bounds</description>
     </warp>
     <warp id="0x06">
-        <description>Krazoa Palace between two columns near start</description>
+        <description>Krazoa Palace between two columns near start (unused?)</description>
     </warp>
     <warp id="0x0C">
         <description>Same as 0x00</description>
@@ -36,7 +36,7 @@
         <note>Triggers Arwing landing scene</note>
     </warp>
     <warp id="0x1A">
-        <description>Ice Mountain in midair (marked by hidden N64 logo)</description>
+        <description>Ice Mountain in midair (marked by hidden N64 logo) - maybe bike spawn point?</description>
     </warp>
     <warp id="0x1D">
         <description>DIM Boss where he spits you out</description>
@@ -136,7 +136,7 @@
         <description>Drakor boss entrance</description>
     </warp>
     <warp id="0x55">
-        <description>LightFoot Village near cheat well, inside a tree; you fall through the ground</description>
+        <description>LightFoot Village underground near cheat well</description>
     </warp>
     <warp id="0x57">
         <description>Magic Cave interior</description>

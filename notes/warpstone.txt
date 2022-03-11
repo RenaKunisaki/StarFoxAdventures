@@ -1,10 +1,20 @@
-Bit# Act Map
-0ABA   1 Cape Claw
-0ABD   4 Ocean Force Point
-0ABE   5 LightFoot Village
-0ABF   6 Moon Mountain Pass
-0AC0   7 Volcano Force Point
-0AC1   8 Ice Mountain
+Bit# Act Warp Map
+0ABA   1  35? Cape Claw
+----   2  20  Krazoa Palace
+----   3  0F  ThornTail Hollow
+0ABD   4  73? Ocean Force Point
+0ABE   5  55? LightFoot Village
+0ABF   6  40? Moon Mountain Pass
+0AC0   7  51? Volcano Force Point
+0AC1   8  02  Ice Mountain
+
+35 is CC magic cave
+40 is MMP top warp pad (leads to shrine)
+	- only other warp here is magic cave
+	- possible some warps were replaced with magic caves?
+51 is VFP on a thing that resembles a warp pad but is a spellstone key
+55 is LV underground (out of bounds)
+73 is OFP outdoor
 
 action 1: switch(mapAct)
 	0 => same as 1
