@@ -9,7 +9,7 @@ u8 didTryLoadArgs = 0;
 
 //coords to override save file from args
 vec3f overrideSaveCoords;
-s8 overrideSaveMapLayer = 0x7F; //7F=don't override
+u8 overrideSaveMapLayer = 0x7F; //7F=don't override
 
 int parseArgs(ArgStruct *args) {
     DPRINT("Using args file\n");
@@ -24,10 +24,18 @@ int parseArgs(ArgStruct *args) {
     //    args->loadPos.x, args->loadPos.y, args->loadPos.z);
 
     debugCheats          = args->debugCheats;
-    debugTextFlags       = args->debugTextFlags;
     debugRenderFlags     = args->debugRenderFlags;
-    overrideSaveCoords   = args->loadPos;
-    overrideSaveMapLayer = args->loadMapLayer;
+    if(args->flags & ARG_DEBUG_TEXT) debugTextFlags = args->debugTextFlags;
+    if(args->flags & ARG_SPAWN_POS) {
+        overrideSaveCoords   = args->loadPos;
+        overrideSaveMapLayer = args->loadMapLayer;
+    }
+    else {
+        overrideSaveCoords.x = 0;
+        overrideSaveCoords.y = 0;
+        overrideSaveCoords.z = 0;
+    }
+
     if(debugTextFlags) enableDebugText = 1;
     if(args->loadSave >= 0) {
         DPRINT("arg: loadSave(%d)\n", args->loadSave);

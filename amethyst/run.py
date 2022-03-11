@@ -4,6 +4,9 @@ import subprocess
 import argparse
 import struct
 
+ARG_SPAWN_POS  = (1 <<  0) # loadPos/loadMapLayer are valid
+ARG_DEBUG_TEXT = (1 <<  1) # debugTextFlags is valid
+
 def tInt(n):
     """use as arg type to enable hex input"""
     return int(n, 0)
@@ -27,13 +30,15 @@ parser.add_argument('-s', '--save-slot', type=int, default=0, choices=(0,1,2,3),
     help="Which save slot to load (1-3, 0=none)")
 
 parser.add_argument('-c', '--coords', type=str, default=None,
-    help="Coords to spawn at (X,Y,Z,layer)")
+    help="Coords to spawn at (X,Y,Z[,layer[,angle]])")
 
 parser.add_argument('-w', '--warp', type=tInt, default=None,
     help="Spawn at specified warp index")
 
+parser.add_argument('-d', '--dprint', action='store_true',
+    help="Enable default debug prints (same as holding Z) - overrides all other dprint flags")
+
 debugPrint = (
-    # arg, bit, description
     ('dprint-tricky',        0, "Show Tricky debug text"),
     ('dprint-player-pos',    1, "Show player coords debug text"),
     ('dprint-camera-pos',    2, "Show camera coords debug text"),
@@ -78,26 +83,38 @@ addFlags(debugPrint)
 addFlags(debugRender)
 addFlags(cheats)
 
-loadMapLayer, loadPosX, loadPosY, loadPosZ = 0x7F, 0, 0, 0
+# set this by default. if no debug texts are selected, the field is
+# still valid, turning them all off.
+# passing --dprint turns this off, meaning the game will use whatever
+# default debug texts are enabled by holding Z.
+flags = ARG_DEBUG_TEXT
+
+loadMapLayer, loadPosX, loadPosY, loadPosZ, loadRot = 0, 0, 0, 0, 0
 args = parser.parse_args()
 if args.warp is not None:
     if args.warp < 0 or args.warp > 0x7F:
         raise ValueError("Invalid warp index")
     with open('discroot/files/WARPTAB.bin', 'rb') as warptab:
         warptab.seek(args.warp * 16)
-        loadPosX, loadPosY, loadPosZ, loadMapLayer = struct.unpack(
-            '>fffh', warptab.read(14))
+        loadPosX, loadPosY, loadPosZ, loadMapLayer, loadRot = struct.unpack(
+            '>fffhH', warptab.read(16))
+        loadRot = loadRot / 256 # even though it's 16-bit
+    flags |= ARG_SPAWN_POS
+
 elif args.coords is not None:
     coords = args.coords.split(',')
     loadPosX, loadPosY, loadPosZ = float(coords[0]), float(coords[1]), float(coords[2])
-    loadMapLayer = int(coords[3])
+    if len(coords) > 3: loadMapLayer = int(coords[3])
+    if len(coords) > 4: loadRot = coords[4] / 360
+    flags |= ARG_SPAWN_POS
+
+if args.dprint: flags &= ~ARG_DEBUG_TEXT # use the defaults
 
 with open('amethyst.arg', 'wb') as file:
-    file.write(struct.pack('>IIIIbbbbfff',
+    file.write(struct.pack('>IIIIHbBfff',
         1, # version
         getFlags(cheats), getFlags(debugPrint), getFlags(debugRender),
-        args.save_slot-1, loadMapLayer,
-        0, 0, # padding
+        flags, args.save_slot-1, (loadMapLayer+2) | (int(loadRot*31) << 3),
         loadPosX, loadPosY, loadPosZ,
     ))
 
