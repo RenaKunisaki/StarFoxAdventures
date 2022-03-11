@@ -6,7 +6,7 @@
 
 static int (*oldTitleHook)();
 
-static void _loadSaveFile(int slot) {
+void Amethyst_loadSaveFile(int slot) {
     //free some memory. XXX does this actually do any good?
     //mapUnload(0x3D, 0x2000);
     mapUnload(0, 0x80000000); //unload all
@@ -27,9 +27,19 @@ static void _loadSaveFile(int slot) {
 }
 
 static void doStartup() {
+    if(!didTryLoadArgs) {
+        didTryLoadArgs = 1;
+        ArgStruct *args = loadFileByPath("amethyst.arg", NULL);
+        if(args) {
+            parseArgs(args);
+            free(args);
+        }
+        else DPRINT("No args file\n");
+    }
+
     //check current and previous frame
     u16 buttons = controllerStates[0].button | controllerStates[4].button;
-    if(buttons & PAD_TRIGGER_R) _loadSaveFile(0);
+    if(buttons & PAD_TRIGGER_R) Amethyst_loadSaveFile(0);
 }
 
 int titleHook() {
@@ -72,10 +82,17 @@ int titleSaveLoadHook(int slot) {
         pos->pos.x, pos->pos.y, pos->pos.z);
     if(getButtonsHeld(0) & PAD_BUTTON_START) {
         //go to AnimTest, in case save file is buggered.
-        pos->pos.x =  -9495;
-        pos->pos.y =   -127;
-        pos->pos.z = -19015;
-        pos->mapLayer = 0;
+        pos->pos.x    =  -9495;
+        pos->pos.y    =   -127;
+        pos->pos.z    = -19015;
+        pos->mapLayer =      0;
+    }
+    else if(overrideSaveMapLayer != 0x7F) {
+        pos->mapLayer = overrideSaveMapLayer;
+        pos->pos.x    = overrideSaveCoords.x;
+        pos->pos.y    = overrideSaveCoords.y;
+        pos->pos.z    = overrideSaveCoords.z;
+        overrideSaveMapLayer = 0x7F;
     }
     return res;
 }

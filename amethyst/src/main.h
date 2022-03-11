@@ -31,6 +31,7 @@
         _n < 0 ? -_n : _n; })
 
 #include "alloc.h"
+#include "args.h"
 #include "camera.h"
 #include "debug.h"
 #include "krystal.h"
@@ -243,6 +244,7 @@ const char* T(const char *s);
 void textHookInit();
 
 //title.c
+void Amethyst_loadSaveFile(int slot);
 void titleHooksInit();
 
 //ui.c

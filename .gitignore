@@ -36,6 +36,7 @@ compile_commands.json
 
 # auto generated files
 amethyst/patchfiles/files/bitnames.dat
+**/amethyst.arg
 
 # from https://github.com/github/gitignore
 # Object files

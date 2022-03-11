@@ -211,6 +211,12 @@ void mainLoopHook() {
 
     doHudHacks();
     raceTimerUpdate();
+
+    if(curMapId != 0x3F) {
+        //if not on title screen, reset this flag, so we can
+        //load args again on next reset.
+        didTryLoadArgs = 0;
+    }
 }
 
 /* static u32 oldSaveGameInitialise = 0;
