@@ -29,7 +29,7 @@ parser.add_argument('-s', '--save-slot', type=int, default=0, choices=(0,1,2,3),
 parser.add_argument('-c', '--coords', type=str, default=None,
     help="Coords to spawn at (X,Y,Z,layer)")
 
-parser.add_argument('-w', '--warp', type=tInt, default=None, choices=range(0x80),
+parser.add_argument('-w', '--warp', type=tInt, default=None,
     help="Spawn at specified warp index")
 
 debugPrint = (
@@ -81,6 +81,8 @@ addFlags(cheats)
 loadMapLayer, loadPosX, loadPosY, loadPosZ = 0x7F, 0, 0, 0
 args = parser.parse_args()
 if args.warp is not None:
+    if args.warp < 0 or args.warp > 0x7F:
+        raise ValueError("Invalid warp index")
     with open('discroot/files/WARPTAB.bin', 'rb') as warptab:
         warptab.seek(args.warp * 16)
         loadPosX, loadPosY, loadPosZ, loadMapLayer = struct.unpack(
