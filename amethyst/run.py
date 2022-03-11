@@ -4,6 +4,10 @@ import subprocess
 import argparse
 import struct
 
+def tInt(n):
+    """use as arg type to enable hex input"""
+    return int(n, 0)
+
 def addFlags(tbl):
     for arg in tbl:
         parser.add_argument('--'+arg[0], action='store_true', help=arg[2])
@@ -24,6 +28,9 @@ parser.add_argument('-s', '--save-slot', type=int, default=0, choices=(0,1,2,3),
 
 parser.add_argument('-c', '--coords', type=str, default=None,
     help="Coords to spawn at (X,Y,Z,layer)")
+
+parser.add_argument('-w', '--warp', type=tInt, default=None, choices=range(0x80),
+    help="Spawn at specified warp index")
 
 debugPrint = (
     # arg, bit, description
@@ -73,7 +80,12 @@ addFlags(cheats)
 
 loadMapLayer, loadPosX, loadPosY, loadPosZ = 0x7F, 0, 0, 0
 args = parser.parse_args()
-if args.coords is not None:
+if args.warp is not None:
+    with open('discroot/files/WARPTAB.bin', 'rb') as warptab:
+        warptab.seek(args.warp * 16)
+        loadPosX, loadPosY, loadPosZ, loadMapLayer = struct.unpack(
+            '>fffh', warptab.read(14))
+elif args.coords is not None:
     coords = args.coords.split(',')
     loadPosX, loadPosY, loadPosZ = float(coords[0]), float(coords[1]), float(coords[2])
     loadMapLayer = int(coords[3])

@@ -23,12 +23,12 @@ int parseArgs(ArgStruct *args) {
     //DPRINT("arg pos=%d, %f, %f, %f\n", args->loadMapLayer,
     //    args->loadPos.x, args->loadPos.y, args->loadPos.z);
 
-    //XXX if(debugTextFlags) enable debug text
     debugCheats          = args->debugCheats;
     debugTextFlags       = args->debugTextFlags;
     debugRenderFlags     = args->debugRenderFlags;
     overrideSaveCoords   = args->loadPos;
     overrideSaveMapLayer = args->loadMapLayer;
+    if(debugTextFlags) enableDebugText = 1;
     if(args->loadSave >= 0) {
         DPRINT("arg: loadSave(%d)\n", args->loadSave);
         Amethyst_loadSaveFile(args->loadSave);
