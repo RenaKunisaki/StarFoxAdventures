@@ -5,11 +5,13 @@
 #include "revolution/pad.h"
 
 static int (*oldTitleHook)();
+int titleSaveLoadHook(int slot);
 
 void Amethyst_loadSaveFile(int slot) {
     //free some memory. XXX does this actually do any good?
     //mapUnload(0x3D, 0x2000);
     mapUnload(0, 0x80000000); //unload all
+    waitNextFrame();
 
     //ensure text is loaded properly
     gameTextLoadDir(GAMETEXT_DIR_Link);
@@ -22,7 +24,9 @@ void Amethyst_loadSaveFile(int slot) {
 
     //interesting: calling this during the game still works, and replaces your current save
     //data, so things like your items are reset, but you don't reload or respawn...
-    saveGame_load(slot); //load the actual save file
+    //saveGame_load(slot); //load the actual save file
+    //use the hook which calls this and then applies coord override
+    titleSaveLoadHook(slot);
     loadSaveSettings(); //apply the settings
 }
 
@@ -78,14 +82,19 @@ int titleSaveLoadHook(int slot) {
     //not sure about return type...
     int res = saveGame_load(slot);
     PlayerCharPos *pos = &pCurSaveGame->charPos[pCurSaveGame->character];
-    DPRINT("Loading char %d pos: %f, %f, %f", pCurSaveGame->character,
-        pos->pos.x, pos->pos.y, pos->pos.z);
+    //DPRINT("Loading char %d pos: %f, %f, %f\n", pCurSaveGame->character,
+    //    pos->pos.x, pos->pos.y, pos->pos.z);
+    //DPRINT("Override spawn pos: layer %d, %f, %f, %f\n",
+    //    overrideSaveMapLayer, overrideSaveCoords.x,
+    //    overrideSaveCoords.y, overrideSaveCoords.z);
     if(getButtonsHeld(0) & PAD_BUTTON_START) {
         //go to AnimTest, in case save file is buggered.
         pos->pos.x    =  -9495;
         pos->pos.y    =   -127;
         pos->pos.z    = -19015;
         pos->mapLayer =      0;
+        mapUnload(0, 0x80000000); //unload all
+        waitNextFrame();
     }
     else if(overrideSaveMapLayer != 0x7F) {
         pos->mapLayer = overrideSaveMapLayer;
@@ -93,7 +102,11 @@ int titleSaveLoadHook(int slot) {
         pos->pos.y    = overrideSaveCoords.y;
         pos->pos.z    = overrideSaveCoords.z;
         overrideSaveMapLayer = 0x7F;
+        mapUnload(0, 0x80000000); //unload all
+        waitNextFrame();
     }
+    //don't load some other map from the save data
+    pos->mapId = mapCoordsToId(pos->pos.x, pos->pos.z, pos->mapLayer);
     return res;
 }
 
@@ -104,4 +117,5 @@ void titleHooksInit() {
     WRITE32(0x8031a320, titleHook);
     //hookBranch(0x8011ab74, saveInfoHook, 1);
     hookBranch(0x8011af00, titleSaveLoadHook, 1);
+    //hookBranch(0x80116778, titleSaveLoadHook, 1);
 }
