@@ -17,13 +17,23 @@ int parseArgs(ArgStruct *args) {
         OSReport("Unsupported args file version: 0x%08X\n", args->version);
         return -1;
     }
+    //DPRINT("arg cheat=%08X text=%08X render=%08X save=%d\n",
+    //    args->debugCheats, args->debugTextFlags, args->debugRenderFlags,
+    //    args->loadSave);
+    //DPRINT("arg pos=%d, %f, %f, %f\n", args->loadMapLayer,
+    //    args->loadPos.x, args->loadPos.y, args->loadPos.z);
 
+    //XXX if(debugTextFlags) enable debug text
     debugCheats          = args->debugCheats;
     debugTextFlags       = args->debugTextFlags;
     debugRenderFlags     = args->debugRenderFlags;
     overrideSaveCoords   = args->loadPos;
     overrideSaveMapLayer = args->loadMapLayer;
-    if(args->loadSave >= 0) Amethyst_loadSaveFile(args->loadSave);
+    if(args->loadSave >= 0) {
+        DPRINT("arg: loadSave(%d)\n", args->loadSave);
+        Amethyst_loadSaveFile(args->loadSave);
+    }
+    //else DPRINT("arg: not loading save (%d)\n", args->loadSave);
 
     return 0;
 }
