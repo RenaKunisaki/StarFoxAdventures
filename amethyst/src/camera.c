@@ -15,6 +15,21 @@ static float camOrbitDist  = 50;
 static s16   camOrbitAngXZ = 0;
 static s16   camOrbitAngY  = 0;
 
+//turn camera to look at target
+void _lookAtTarget() {
+    vec3f targetPos;
+    float targetXZ;
+    cameraGetFocusObjDistance(
+        cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0,
+        pCamera, &targetPos.x, &targetPos.y,
+        &targetPos.z, &targetXZ, false);
+    pCamera->pos.rotation.x = -0x8000 - atan2fi(targetPos.x, targetPos.z);
+
+    //tilt to point to player
+    //(Y rotation value, even though it's local X-axis rotation...)
+    pCamera->pos.rotation.y = atan2fi(targetPos.y, targetXZ);
+}
+
 void _camGetStickInput(s8 *outX, s8 *outY) {
     int pad = (cameraFlags & CAM_FLAG_PAD3) ? 2 : 0;
     s8 stickX = controllerStates[pad].substickX & 0xFC;
@@ -27,6 +42,50 @@ void _camGetStickInput(s8 *outX, s8 *outY) {
     if(outY) *outY = stickY;
 }
 
+void _camDoRotateAroundPlayer(u8 stickX, u8 stickY) {
+    //here we want to take the position the camera would be in if
+    //we didn't change it, add an additional rotation around the
+    //player, and use that as the new position.
+    //problem: by changing the camera's actual position we change
+    //what the "position it would have been" is for the next frame...
+    //to fix this maybe we need to revert it after the view matrix
+    //has been calculated?
+    //or hook places that read the position and give our new position
+    //but that might be a lot of places.
+    //this also isn't as simple as adding an offset to an angle in the
+    //position calculation, because the camera isn't calculating its
+    //position based on its angle, but the other way around. it moves
+    //in the world like any object, rotating to point to the player.
+    //it only tries to position itself at a certain angle behind you
+    //when in certain modes (holding L, etc).
+    //maybe check CameraModeForceBehind?
+
+    //get the distance from camera to player
+    float dist;
+    objGetXZAngleDistance((ObjInstance*)pCamera, pCamera->focus, &dist);
+
+    //get the angle in world coords
+    s16 rx = pCamera->pos.rotation.x;
+    debugPrintf("d=%f r=%d\n", dist, rx);
+
+    //add stick angle
+    rx += stickX * 64;
+
+    //compute new position - same distance, new angle
+    float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
+    //s16 rx = ((s16)stickX) + 64 + pCamera->focus->pos.rotation.x;
+    //s16 ry =  (s16)stickY       + pCamera->focus->pos.rotation.y;
+    s16 ry = 0;
+    float mz = sinf(pi * -rx);
+    float mx = cosf(pi * -rx);
+    float my = sinf(pi * -ry / 128.0);
+    float dy = cosf(pi * -ry / 128.0) * dist;
+    //pCamera->pos.pos.x = pCamera->focus->pos.pos.x + dy * mx;
+    //pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + camOrbitDist * my;
+    //pCamera->pos.pos.z = pCamera->focus->pos.pos.z + dy * mz;
+    //_lookAtTarget();
+}
+
 void _camDoCStick() {
     s8 stickX, stickY;
     _camGetStickInput(&stickX, &stickY);
@@ -36,8 +95,13 @@ void _camDoCStick() {
         || debugCameraMode == CAM_MODE_FIRST_PERSON) {
             scale = 8;
         }
-        pCamera->pos.rotation.x += stickX * 128 * scale * timeDelta;
-        pCamera->pos.rotation.y += stickY *  16 * scale * timeDelta;
+        if(cameraFlags & CAM_FLAG_PLAYER_AXIS) {
+            _camDoRotateAroundPlayer(stickX, stickY);
+        }
+        else {
+            pCamera->pos.rotation.x += stickX * 128 * scale * timeDelta;
+            pCamera->pos.rotation.y += stickY *  16 * scale * timeDelta;
+        }
     }
     camOverrideValid = 0;
 }
@@ -72,21 +136,6 @@ void _updateOverride() {
     camOverrideRY = pCamera->pos.rotation.y;
     camOverrideRZ = pCamera->pos.rotation.z;
     camOverrideValid = 1;
-}
-
-//turn camera to look at target
-void _lookAtTarget() {
-    vec3f targetPos;
-    float targetXZ;
-    cameraGetFocusObjDistance(
-        cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0,
-        pCamera, &targetPos.x, &targetPos.y,
-        &targetPos.z, &targetXZ, false);
-    pCamera->pos.rotation.x = -0x8000 - atan2fi(targetPos.x, targetPos.z);
-
-    //tilt to point to player
-    //(Y rotation value, even though it's local X-axis rotation...)
-    pCamera->pos.rotation.y = atan2fi(targetPos.y, targetXZ);
 }
 
 //update camera in Stay and Free modes

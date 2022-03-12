@@ -4,6 +4,7 @@ typedef enum {
     CAM_FLAG_INVERT_Y     = (1 << 2), //invert Y axis movement
     CAM_FLAG_NO_HUD       = (1 << 3), //disable the HUD
     CAM_FLAG_NO_LETTERBOX = (1 << 4), //disable letterboxing in cutscenes
+    CAM_FLAG_PLAYER_AXIS  = (1 << 5), //rotate around player, not own axis
 } CameraFlags; //u8
 
 typedef enum {

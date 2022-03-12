@@ -161,6 +161,7 @@ GLOBALFN void objFree(ObjInstance*);
 GLOBALFN void objFreeAll(void);
 GLOBALFN void objGetAttachPointWorldPos(ObjInstance * obj, int idx, float * outX, float * outY, float * outZ, int noRotate);
 GLOBALFN Model* objGetCurModelPtr(ObjInstance *obj);
+GLOBALFN short objGetXZAngleDistance(ObjInstance *oThis, ObjInstance *oThat, float *outDist); //returns angle diff
 GLOBALFN ObjInstance* objInstantiateCharacter(ObjDef*, u32 flags, int mapId, int objNo, float *matrix);
 GLOBALFN void objLoadPlayerFromSave(); //XXX verify types
 GLOBALFN void objMtxFn_8002b47c (ObjInstance * obj, Mtx44 * mtx, bool useScale);

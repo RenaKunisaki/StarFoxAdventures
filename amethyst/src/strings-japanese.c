@@ -22,6 +22,7 @@ const char *strings_Japanese[] = {
     "境界", //boundaries
     "プレイヤーに向けて移動", //move selected object to player
     "カメラ", //camera settings
+    "カメラ軸", //which axis camera rotates on
     "カメラコントロール", //camera control mode
     "カメラ座標", //camera coordinates
     "カメラ X", //camera control mode for X axis

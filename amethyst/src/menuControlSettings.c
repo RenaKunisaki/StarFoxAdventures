@@ -65,6 +65,19 @@ void menuCamInvY_select(const MenuItem *self, int amount) {
 }
 
 
+void menuCamAxis_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (cameraFlags & CAM_FLAG_PLAYER_AXIS) ?
+        T("Player") : T("Camera"));
+    menuDrawText(str, x, y, selected);
+}
+void menuCamAxis_select(const MenuItem *self, int amount) {
+    cameraFlags ^= CAM_FLAG_PLAYER_AXIS;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+    updateSaveData();
+}
+
+
 void menuAimSnap_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
     sprintf(str, self->fmt, T(self->name), bNoAimSnap ? T("Off") : T("On"));
@@ -97,6 +110,7 @@ Menu menuControlSettings = {
     "Camera Control", "%s: %s %d", menuCamCtrl_draw,      menuCamCtrl_select,
     "Camera X",       "%s: %s",    menuCamInvX_draw,      menuCamInvX_select,
     "Camera Y",       "%s: %s",    menuCamInvY_draw,      menuCamInvY_select,
+    //"Camera Axis",    "%s: %s",    menuCamAxis_draw,      menuCamAxis_select, //broken
     "Aim Snapback",   "%s: %s",    menuAimSnap_draw,      menuAimSnap_select,
     "Aim Sensitivity","%s: %s",    menuAimSensitive_draw, menuAimSensitive_select,
     NULL,

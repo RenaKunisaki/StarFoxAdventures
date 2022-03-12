@@ -34,6 +34,7 @@ const char *strings_English[] = {
     "Bounds", //boundaries
     "Bring To Player", //move selected object to player
     "Camera", //camera settings
+    "Camera Axis", //which axis camera rotates on
     "Camera Control", //camera control mode
     "Camera Coords", //camera coordinates
     "Camera X", //camera control mode for X axis
