@@ -3,13 +3,19 @@
 u8 cameraFlags = 0; //CameraFlags
 s8 debugCameraMode = CAM_MODE_NORMAL; //CameraMode
 
+static void (*origFunc)(Camera *self);
+
 //position to override camera for free/stay modes
 static float camOverrideX, camOverrideY, camOverrideZ, camOverrideDist = 300;
 static s16 camOverrideRX, camOverrideRY, camOverrideRZ;
 static u8 camOverrideValid; //bool
-static void (*origFunc)(Camera *self);
 
-void _camDoCStick() {
+//distance and angle for orbit mode
+static float camOrbitDist  = 50;
+static s16   camOrbitAngXZ = 0;
+static s16   camOrbitAngY  = 0;
+
+void _camGetStickInput(s8 *outX, s8 *outY) {
     int pad = (cameraFlags & CAM_FLAG_PAD3) ? 2 : 0;
     s8 stickX = controllerStates[pad].substickX & 0xFC;
     s8 stickY = controllerStates[pad].substickY & 0xFC;
@@ -17,14 +23,21 @@ void _camDoCStick() {
     if(cameraFlags & CAM_FLAG_INVERT_X) stickX = -stickX;
     if(cameraFlags & CAM_FLAG_INVERT_Y) stickY = -stickY;
 
+    if(outX) *outX = stickX;
+    if(outY) *outY = stickY;
+}
+
+void _camDoCStick() {
+    s8 stickX, stickY;
+    _camGetStickInput(&stickX, &stickY);
     if(!bFreeMove) {
         float scale = 1;
         if(debugCameraMode == CAM_MODE_BIRD
         || debugCameraMode == CAM_MODE_FIRST_PERSON) {
             scale = 8;
         }
-        pCamera->pos.rotation.x += stickX * 128 * scale;
-        pCamera->pos.rotation.y += stickY *  16 * scale;
+        pCamera->pos.rotation.x += stickX * 128 * scale * timeDelta;
+        pCamera->pos.rotation.y += stickY *  16 * scale * timeDelta;
     }
     camOverrideValid = 0;
 }
@@ -79,7 +92,7 @@ void _lookAtTarget() {
 //update camera in Stay and Free modes
 void _doStayOrFree(u32 bHeld, u32 bPressed) {
     //calculate movement scale
-    float scale = (bHeld & PAD_TRIGGER_Z) ? 2 : 1;
+    float scale = ((bHeld & PAD_TRIGGER_Z) ? 2 : 1) * timeDelta;
     float srx = scale * 10.0 * ((cameraFlags & CAM_FLAG_INVERT_X) ? -1.0 : 1.0);
     float sry = scale * 10.0 * ((cameraFlags & CAM_FLAG_INVERT_Y) ? -1.0 : 1.0);
     float spx = scale * -0.25;
@@ -145,7 +158,8 @@ void _doBird(u32 bHeld, u32 bPressed) {
     int tr = controllerStates[3].triggerRight;
     if(tl < CAMERA_TRIGGER_DEADZONE) tl = 0;
     if(tr < CAMERA_TRIGGER_DEADZONE) tr = 0;
-    camOverrideDist += (tr - tl) * ((bHeld & PAD_TRIGGER_Z) ? 2 : 1) * 0.01;
+    float scale = timeDelta * 0.01;
+    camOverrideDist += (tr - tl) * ((bHeld & PAD_TRIGGER_Z) ? 2 : 1) * scale;
     if(tl != tr) debugPrintf("Dist %f\n", camOverrideDist);
 }
 
@@ -172,6 +186,29 @@ void _doFirstPerson(u32 bHeld, u32 bPressed) {
         //if(pCamera->focus->newOpacity > 64) pCamera->focus->newOpacity = 64;
     }
     _camDoCStick();
+}
+
+//handle camera in Orbit mode
+void _doOrbit(u32 bHeld, u32 bPressed) {
+    if(!pCamera->focus) return;
+
+    s8 stickX, stickY;
+    _camGetStickInput(&stickX, &stickY);
+    camOrbitAngXZ += stickX * timeDelta * 10;
+    camOrbitAngY  += stickY * timeDelta * 10;
+    camOrbitDist  += (controllerStates[3].triggerLeft -
+        controllerStates[3].triggerRight) * timeDelta * 0.1;
+
+    float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
+    float mz = sinf(pi * -(camOrbitAngXZ - 0x4000) / 32768.0);
+    float mx = cosf(pi * -(camOrbitAngXZ - 0x4000) / 32768.0);
+    float my = sinf(pi * -camOrbitAngY / 32768.0);
+    float dy = cosf(pi * -camOrbitAngY / 32768.0) * camOrbitDist;
+
+    pCamera->pos.pos.x = pCamera->focus->pos.pos.x + dy * mx;
+    pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + camOrbitDist * my;
+    pCamera->pos.pos.z = pCamera->focus->pos.pos.z + dy * mz;
+    _lookAtTarget();
 }
 
 //replaces a call to the update method of the current camera DLL.
@@ -210,6 +247,7 @@ void cameraUpdateHook() {
         case CAM_MODE_FREE:
             _doStayOrFree(bHeld, bPressed);
             break;
+        case CAM_MODE_ORBIT: _doOrbit(bHeld, bPressed); break;
         case CAM_MODE_BIRD: _doBird(bHeld, bPressed); break;
         case CAM_MODE_FIRST_PERSON: _doFirstPerson(bHeld, bPressed); break;
         default: break;

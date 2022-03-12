@@ -82,8 +82,6 @@ int titleSaveLoadHook(int slot) {
     //not sure about return type...
     int res = saveGame_load(slot);
     PlayerCharPos *pos = &pCurSaveGame->charPos[pCurSaveGame->character];
-    //DPRINT("Loading char %d pos: %f, %f, %f\n", pCurSaveGame->character,
-    //    pos->pos.x, pos->pos.y, pos->pos.z);
     //DPRINT("Override spawn pos: layer %d, %f, %f, %f\n",
     //    overrideSaveMapLayer, overrideSaveCoords.x,
     //    overrideSaveCoords.y, overrideSaveCoords.z);
@@ -96,15 +94,23 @@ int titleSaveLoadHook(int slot) {
         mapUnload(0, 0x80000000); //unload all
         waitNextFrame();
     }
-    else if(overrideSaveMapLayer != 0x7F) {
-        pos->mapLayer = overrideSaveMapLayer;
+    else if(overrideSaveCoords.x || overrideSaveCoords.y
+    || overrideSaveCoords.z) {
+        pos->mapLayer = (overrideSaveMapLayer & 7) - 2;
         pos->pos.x    = overrideSaveCoords.x;
         pos->pos.y    = overrideSaveCoords.y;
         pos->pos.z    = overrideSaveCoords.z;
-        overrideSaveMapLayer = 0x7F;
+        pos->rotX     = (overrideSaveMapLayer & ~7);
+        overrideSaveCoords.x = 0;
+        overrideSaveCoords.y = 0;
+        overrideSaveCoords.z = 0;
         mapUnload(0, 0x80000000); //unload all
         waitNextFrame();
     }
+    DPRINT("Loading char %d pos: %f, %f, %f layer %d rot %d\n",
+        pCurSaveGame->character, pos->pos.x, pos->pos.y, pos->pos.z,
+        pos->mapLayer, pos->rotX);
+
     //don't load some other map from the save data
     pos->mapId = mapCoordsToId(pos->pos.x, pos->pos.z, pos->mapLayer);
     return res;

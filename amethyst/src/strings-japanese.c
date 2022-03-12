@@ -151,6 +151,7 @@ const char *strings_Japanese[] = {
     "Obj Seq", //show object sequences
     "Off", //off
     "On", //on
+    "軌道", //camera mode: orbit around player
     "元の位置", //original position
     "メモリ不足", //out of memory
     "ページ", //move to another page

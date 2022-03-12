@@ -149,8 +149,10 @@ GLOBALFN ModelFileHeader* modelLoad(
     int modelNum,ModelFlags_loadCharacter flags,uint *outSize);
     // if modelNum is negative, don't use MODELIND.bin
 GLOBALFN double modf(double __x, double * __iptr);
+GLOBALFN void mtx44Transpose (Mtx44 *in, Mtx44 *out);
 GLOBALFN void mtxRotateByVec3s(Mtx * mtx, vec3s * rot);
 GLOBALFN void multByObjMtx(double x, double y, double z, float *outX, float *outY, float *outZ, ObjInstance *obj);
+GLOBALFN void multVectorByMatrix(double x, double y, double z, Mtx *m, float *outX, float *outY, float *outZ);
 GLOBALFN float multVectorByObjMtx(float x, float y, float z, float *outX, float *outY, float *outZ, ObjInstance*);
 GLOBALFN void musicTestPlaySong(int song);
 GLOBALFN ObjDef* objAlloc(int size, int type);

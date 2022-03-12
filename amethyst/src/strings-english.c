@@ -163,6 +163,7 @@ const char *strings_English[] = {
     "Obj Seq", //show object sequences
     "Off", //off
     "On", //on
+    "Orbit", //camera mode: orbit around player
     "ORIG", //original position
     "OUT OF MEMORY", //out of memory
     "Page", //move to another page
