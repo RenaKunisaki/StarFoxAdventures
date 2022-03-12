@@ -110,7 +110,7 @@ Menu menuControlSettings = {
     "Camera Control", "%s: %s %d", menuCamCtrl_draw,      menuCamCtrl_select,
     "Camera X",       "%s: %s",    menuCamInvX_draw,      menuCamInvX_select,
     "Camera Y",       "%s: %s",    menuCamInvY_draw,      menuCamInvY_select,
-    //"Camera Axis",    "%s: %s",    menuCamAxis_draw,      menuCamAxis_select, //broken
+    "Camera Axis",    "%s: %s",    menuCamAxis_draw,      menuCamAxis_select,
     "Aim Snapback",   "%s: %s",    menuAimSnap_draw,      menuAimSnap_select,
     "Aim Sensitivity","%s: %s",    menuAimSensitive_draw, menuAimSensitive_select,
     NULL,

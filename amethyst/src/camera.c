@@ -42,48 +42,36 @@ void _camGetStickInput(s8 *outX, s8 *outY) {
     if(outY) *outY = stickY;
 }
 
-void _camDoRotateAroundPlayer(u8 stickX, u8 stickY) {
-    //here we want to take the position the camera would be in if
-    //we didn't change it, add an additional rotation around the
-    //player, and use that as the new position.
-    //problem: by changing the camera's actual position we change
-    //what the "position it would have been" is for the next frame...
-    //to fix this maybe we need to revert it after the view matrix
-    //has been calculated?
-    //or hook places that read the position and give our new position
-    //but that might be a lot of places.
-    //this also isn't as simple as adding an offset to an angle in the
-    //position calculation, because the camera isn't calculating its
-    //position based on its angle, but the other way around. it moves
-    //in the world like any object, rotating to point to the player.
-    //it only tries to position itself at a certain angle behind you
-    //when in certain modes (holding L, etc).
-    //maybe check CameraModeForceBehind?
-
-    //get the distance from camera to player
-    float dist;
-    objGetXZAngleDistance((ObjInstance*)pCamera, pCamera->focus, &dist);
-
-    //get the angle in world coords
-    s16 rx = pCamera->pos.rotation.x;
-    debugPrintf("d=%f r=%d\n", dist, rx);
-
-    //add stick angle
-    rx += stickX * 64;
-
-    //compute new position - same distance, new angle
+void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
+    //get the distance from camera to target
     float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
-    //s16 rx = ((s16)stickX) + 64 + pCamera->focus->pos.rotation.x;
-    //s16 ry =  (s16)stickY       + pCamera->focus->pos.rotation.y;
-    s16 ry = 0;
-    float mz = sinf(pi * -rx);
-    float mx = cosf(pi * -rx);
-    float my = sinf(pi * -ry / 128.0);
-    float dy = cosf(pi * -ry / 128.0) * dist;
-    //pCamera->pos.pos.x = pCamera->focus->pos.pos.x + dy * mx;
-    //pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + camOrbitDist * my;
-    //pCamera->pos.pos.z = pCamera->focus->pos.pos.z + dy * mz;
-    //_lookAtTarget();
+    float dx, dy, dz, dxz;
+    cameraGetFocusObjDistance(height, pCamera, &dx, &dy, &dz, &dxz, true);
+    //we don't need dx and dz here but we can't pass NULL for them.
+
+    //calculate the angle
+    //XXX this doesn't fully work for height.
+    //- it vibrates when moving vertically
+    //- it zooms into the player's head instead of maintaining distance
+    //- it keeps the camera at a set height causing it to dip underground
+    //there's probably a "height above ground" variable we need to find.
+    //if we leave the Y position unchanged it will zoom right into the head...
+    dy = dy - (height - pCamera->pos.pos.y);
+    s16 rx = pCamera->pos.rotation.x;
+    s16 ry = pCamera->pos.rotation.y;
+    rx += stickX * 16 * framesThisStep;
+    ry += stickY * 16 * framesThisStep;
+
+    float mx, my, mz;
+    mz = sinf(pi * (rx - 0x4000) / 32768.0);
+    mx = cosf(pi * (rx - 0x4000) / 32768.0);
+    my = sinf(pi *  ry / 32768.0);
+    dy = cosf(pi *  ry / 32768.0) * dxz;
+
+    pCamera->pos.pos.x = pCamera->focus->pos.pos.x + dy * mx;
+    pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + dy * my;
+    pCamera->pos.pos.z = pCamera->focus->pos.pos.z + dy * mz;
+    _lookAtTarget();
 }
 
 void _camDoCStick() {
