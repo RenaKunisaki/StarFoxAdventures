@@ -152,6 +152,27 @@ export function hsv2rgb(h, s, v) {
     return [r+m, g+m, b+m];
 }
 
+export function rgb2hsv(r, g, b) {
+    /** Convert RGB to Hue, Saturation, Value.
+     *  @param {number} r red value (0..1)
+     *  @param {number} g green value (0..1)
+     *  @param {number} b blue value (0..1)
+     *  @returns {array} [h, s, v] (0..1)
+     *  @note copied from https://en.wikipedia.org/wiki/HSL_and_HSV
+     */
+    let xMax = Math.max(r, g, b);
+    let xMin = Math.min(r, g, b);
+    let v    = xMax;
+    let c    = xMax - xMin;
+    let s    = (v == 0) ? 0 : (c/v);
+    let h;
+    if(c == 0) h = 0;
+    else if(v == r) h =      (g-b)/c;
+    else if(v == g) h = 2 + ((b-r)/c);
+    else if(v == b) h = 4 + ((r-g)/c);
+    return [h, s, v];
+}
+
 export function Table(...rows) {
     /** Create the tr and td elements of a table from some arrays.
      *  @param {array} rows arrays of cell contents.

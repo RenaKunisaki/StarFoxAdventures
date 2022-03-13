@@ -6,6 +6,7 @@ import HexViewer from "./HexViewer.js";
 import TextViewer from "./TextViewer.js";
 import { RomListViewer } from "./RomListViewer.js";
 import { GameTextViewer } from "./GameTextViewer.js";
+import ImageViewer from "./ImageViewer.js";
 import { assertType } from "../../../Util.js";
 import Game from "../../../game/Game.js";
 
@@ -41,6 +42,7 @@ export default class FileViewer {
             E.option(null, "Plain Text", {value:'text'}),
             E.option(null, "RomList",    {value:'romlist'}),
             E.option(null, "GameText",   {value:'gametext'}),
+            E.option(null, "Image",      {value:'image'}),
         );
         this.eFormatSel.addEventListener('change', e => this.refresh());
 
@@ -110,6 +112,10 @@ export default class FileViewer {
             else if((fmt == 'auto' && this.file.path.startsWith('/gametext'))
             || fmt == 'gametext') {
                 this.viewer = new GameTextViewer(this.game, buf);
+            }
+            else if((fmt == 'auto' && this.file.name.startsWith('TEX'))
+            || fmt == 'image') {
+                this.viewer = new ImageViewer(this.game, buf);
             }
             else if(fmt == 'text') {
                 this.viewer = new TextViewer(this.game, buf);

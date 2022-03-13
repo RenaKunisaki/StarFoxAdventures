@@ -1,3 +1,6 @@
+import { read_u16, read_u32, write_u16, write_u32 } from "./bits.js";
+import { convert_rgb565_to_color, convert_color_to_rgb565 } from "./color.js";
+
 export function get_interpolated_cmpr_colors(color_0_rgb565, color_1_rgb565) {
     let r0, g0, b0, r1, g1, b1, _, color_0, color_1, color_2, color_3;
     color_0 = convert_rgb565_to_color(color_0_rgb565);
@@ -6,28 +9,28 @@ export function get_interpolated_cmpr_colors(color_0_rgb565, color_1_rgb565) {
     [r1, g1, b1, _] = color_1;
     if(color_0_rgb565 > color_1_rgb565) {
         color_2 = [
-            Math.floor((2*r0 + 1*r1)/3),
-            Math.floor((2*g0 + 1*g1)/3),
-            Math.floor((2*b0 + 1*b1)/3),
+            Math.trunc((2*r0 + 1*r1)/3),
+            Math.trunc((2*g0 + 1*g1)/3),
+            Math.trunc((2*b0 + 1*b1)/3),
             255
         ];
         color_3 = [
-            Math.floor((1*r0 + 2*r1)/3),
-            Math.floor((1*g0 + 2*g1)/3),
-            Math.floor((1*b0 + 2*b1)/3),
+            Math.trunc((1*r0 + 2*r1)/3),
+            Math.trunc((1*g0 + 2*g1)/3),
+            Math.trunc((1*b0 + 2*b1)/3),
             255
         ];
     }
     else {
         color_2 = [
-            Math.floor(r0/2) + Math.floor(r1/2),
-            Math.floor(g0/2) + Math.floor(g1/2),
-            Math.floor(b0/2) + Math.floor(b1/2),
+            Math.trunc(r0/2) + Math.trunc(r1/2),
+            Math.trunc(g0/2) + Math.trunc(g1/2),
+            Math.trunc(b0/2) + Math.trunc(b1/2),
             255
         ];
         color_3 = [0, 0, 0, 0];
     }
-    colors = [color_0, color_1, color_2, color_3];
+    let colors = [color_0, color_1, color_2, color_3];
     return colors;
 }
 export function get_best_cmpr_key_colors(all_colors) {
@@ -56,7 +59,8 @@ export function get_best_cmpr_key_colors(all_colors) {
         let [r2, g2, b2, a2] = color_2;
         color_2 = [r2, g2, b2, 0xFF];
 
-        if((r1 >> 3) == (r2 >> 3) && (g1 >> 2) == (g2 >> 2) && (b1 >> 3) == (b2 >> 3)) {
+        if((r1 >> 3) == (r2 >> 3) && (g1 >> 2) == (g2 >> 2)
+        && (b1 >> 3) == (b2 >> 3)) {
             if((r1 >> 3) == 0 && (g1 >> 2) == 0 && (b1 >> 3) == 0) {
                 color_2 = [0xFF, 0xFF, 0xFF, 0xFF];
             }
@@ -75,7 +79,7 @@ export function decode_cmpr_block(image_format, image_data, offset, block_data_s
     let subblock_offset = offset;
     for(let subblock_index=0; subblock_index < 4; subblock_index++) {
         let subblock_x = (subblock_index%2)*4;
-        let subblock_y = Math.floor(subblock_index/2)*4;
+        let subblock_y = Math.trunc(subblock_index/2)*4;
 
         let color_0_rgb565 = read_u16(image_data, subblock_offset);
         let color_1_rgb565 = read_u16(image_data, subblock_offset+2);
@@ -87,7 +91,7 @@ export function decode_cmpr_block(image_format, image_data, offset, block_data_s
             let color = colors[color_index];
 
             let x_in_subblock = i % 4;
-            let y_in_subblock = Math.floor(i / 4);
+            let y_in_subblock = Math.trunc(i / 4);
             let pixel_index_in_block = subblock_x + subblock_y*8 + y_in_subblock*8 + x_in_subblock;
             pixel_color_data[pixel_index_in_block] = color;
         }
@@ -97,17 +101,17 @@ export function decode_cmpr_block(image_format, image_data, offset, block_data_s
 }
 
 export function encode_image_to_cmpr_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let subblock_offset = 0;
     for(let subblock_index=0; subblock_index<4; subblock_index++) {
         let subblock_x = block_x + (subblock_index%2)*4;
-        let subblock_y = block_y + Math.floor(subblock_index/2)*4;
+        let subblock_y = block_y + Math.trunc(subblock_index/2)*4;
 
         let all_colors_in_subblock = [];
         let needs_transparent_color = false;
         for(let i=0; i<16; i++) {
             let x_in_subblock = i % 4;
-            let y_in_subblock = Math.floor(i / 4);
+            let y_in_subblock = Math.trunc(i / 4);
             let x = subblock_x+x_in_subblock;
             let y = subblock_y+y_in_subblock;
             if(x >= image_width || y >= image_height) {
@@ -115,7 +119,7 @@ export function encode_image_to_cmpr_block(pixels, colors_to_color_indexes, bloc
                 continue;
             }
 
-            let color = pixels[x,y];
+            let color = pixels.getPixel(x,y);
             let [r, g, b, a] = get_rgba(color);
             if(a < 16) needs_transparent_color = true;
             else all_colors_in_subblock.push(color);
@@ -144,7 +148,7 @@ export function encode_image_to_cmpr_block(pixels, colors_to_color_indexes, bloc
         let color_indexes = 0;
         for(let i=0; i<16; i++) {
             let x_in_subblock = i % 4;
-            let y_in_subblock = Math.floor(i / 4);
+            let y_in_subblock = Math.trunc(i / 4);
             let x = subblock_x+x_in_subblock;
             let y = subblock_y+y_in_subblock;
             if(x >= image_width || y >= image_height) {
@@ -155,10 +159,10 @@ export function encode_image_to_cmpr_block(pixels, colors_to_color_indexes, bloc
             let color = pixels[x,y];
 
             let color_index;
-            if(colors[color] != undefined) color_index = colors.index(color);
+            if(colors[color] != undefined) color_index = colors.indexOf(color);
             else {
                 let new_color = get_nearest_color_fast(color, colors);
-                color_index = colors.index(new_color);
+                color_index = colors.indexOf(new_color);
             }
             color_indexes |= (color_index << ((15-i)*2));
         }

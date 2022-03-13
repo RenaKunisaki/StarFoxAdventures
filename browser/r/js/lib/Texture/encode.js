@@ -1,4 +1,11 @@
+import BytesIO from "./BytesIO.js";
+import { write_bytes, write_u8, write_u16 } from "./bits.js";
+import { encode_image_to_cmpr_block } from "./cmpr.js";
+import { BLOCK_DATA_SIZES, BLOCK_WIDTHS, BLOCK_HEIGHTS } from "./types.js";
+import { encode_palette } from "./palette.js";
+
 function encode_image_from_path(new_image_file_path, image_format, palette_format, mipmap_count=1) {
+    throw new Error("Not implemented");
     let image = Image.open(new_image_file_path); //XXX
     let [image_width, image_height] = image.size;
     let [new_image_data, new_palette_data, encoded_colors] = encode_image(image, image_format, palette_format, mipmap_count=mipmap_count);
@@ -6,7 +13,7 @@ function encode_image_from_path(new_image_file_path, image_format, palette_forma
 }
 
 function encode_image(image, image_format, palette_format, mipmap_count=1) {
-    image = image.convert("RGBA"); //XXX
+    //image = image.convert("RGBA");
     let [image_width, image_height] = image.size;
 
     if(mipmap_count < 1) mipmap_count = 1;
@@ -15,17 +22,17 @@ function encode_image(image, image_format, palette_format, mipmap_count=1) {
 
     let block_width = BLOCK_WIDTHS[image_format];
     let block_height = BLOCK_HEIGHTS[image_format];
-    let block_data_size = BLOCK_DATA_SIZES[image_format];
+    //let block_data_size = BLOCK_DATA_SIZES[image_format];
 
-    let new_image_data = BytesIO(); //XXX
+    let new_image_data = new BytesIO();
     let mipmap_image = image;
     let mipmap_width = image_width;
     let mipmap_height = image_height;
     for(let i=0; i<mipmap_count; i++) {
         if(i != 0) {
-            mipmap_width = Math.floor(mipmap_width / 2);
-            mipmap_height = Math.floor(mipmap_height / 2);
-            mipmap_image = image.resize((mipmap_width, mipmap_height), Image.NEAREST);
+            mipmap_width = Math.trunc(mipmap_width / 2);
+            mipmap_height = Math.trunc(mipmap_height / 2);
+            mipmap_image = image.resize(mipmap_width, mipmap_height, Image.NEAREST);
         }
 
         let mipmap_image_data = encode_mipmap_image(
@@ -44,11 +51,11 @@ function encode_image(image, image_format, palette_format, mipmap_count=1) {
 }
 
 function encode_mipmap_image(image, image_format, colors_to_color_indexes, block_width, block_height, image_width, image_height) {
-    let pixels = image.load(); //XXX
+    let pixels = image;
     let offset_in_image_data = 0;
     let block_x = 0;
     let block_y = 0;
-    let mipmap_image_data = BytesIO(); //XXX
+    let mipmap_image_data = new BytesIO();
     while(block_y < image_height) {
         let block_data = encode_image_to_block(
             image_format,
@@ -69,7 +76,7 @@ function encode_mipmap_image(image, image_format, colors_to_color_indexes, block
 }
 
 function encode_image_to_i4_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
 
     let color_1, color_1_i4, color_2, color_2_i4;
@@ -80,7 +87,7 @@ function encode_image_to_i4_block(pixels, colors_to_color_indexes, block_x, bloc
                 color_1_i4 = 0xF;
             }
             else {
-                color_1 = pixels[x,y];
+                color_1 = pixels.getPixel(x,y);
                 color_1_i4 = convert_color_to_i4(color_1);
                 console.assert(0 <= color_1_i4 <= 0xF);
             }
@@ -90,7 +97,7 @@ function encode_image_to_i4_block(pixels, colors_to_color_indexes, block_x, bloc
                 color_2_i4 = 0xF;
             }
             else {
-                color_2 = pixels[x+1,y];
+                color_2 = pixels.getPixel(x+1,y);
                 color_2_i4 = convert_color_to_i4(color_2);
                 console.assert(0 <= color_2_i4 <= 0xF);
             }
@@ -104,7 +111,7 @@ function encode_image_to_i4_block(pixels, colors_to_color_indexes, block_x, bloc
 }
 
 function encode_image_to_i8_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
 
     let color, i8;
@@ -115,7 +122,7 @@ function encode_image_to_i8_block(pixels, colors_to_color_indexes, block_x, bloc
                 i8 = 0xFF;
             }
             else {
-                color = pixels[x,y];
+                color = pixels.getPixel(x,y);
                 i8 = convert_color_to_i8(color);
                 console.assert(0 <= i8 <= 0xFF);
             }
@@ -128,7 +135,7 @@ function encode_image_to_i8_block(pixels, colors_to_color_indexes, block_x, bloc
 }
 
 function encode_image_to_ia4_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
 
     let ia4, color;
@@ -139,7 +146,7 @@ function encode_image_to_ia4_block(pixels, colors_to_color_indexes, block_x, blo
                 ia4 = 0xFF;
             }
             else {
-                color = pixels[x,y];
+                color = pixels.getPixel(x,y);
                 ia4 = convert_color_to_ia4(color);
                 console.assert(0 <= ia4 <= 0xFF);
             }
@@ -152,7 +159,7 @@ function encode_image_to_ia4_block(pixels, colors_to_color_indexes, block_x, blo
 }
 
 function encode_image_to_ia8_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
 
     let ia8, color;
@@ -163,7 +170,7 @@ function encode_image_to_ia8_block(pixels, colors_to_color_indexes, block_x, blo
                 ia8 = 0xFF;
             }
             else {
-                color = pixels[x,y];
+                color = pixels.getPixel(x,y);
                 ia8 = convert_color_to_ia8(color);
                 console.assert(0 <= ia8 <= 0xFFFF);
             }
@@ -176,7 +183,7 @@ function encode_image_to_ia8_block(pixels, colors_to_color_indexes, block_x, blo
 }
 
 function encode_image_to_rgb563_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
     let color, rgb565;
     for(let y=block_y; y<block_y+block_height; y++) {
@@ -186,7 +193,7 @@ function encode_image_to_rgb563_block(pixels, colors_to_color_indexes, block_x, 
                 rgb565 = 0xFFFF;
             }
             else {
-                color = pixels[x,y];
+                color = pixels.getPixel(x,y);
                 rgb565 = convert_color_to_rgb565(color);
             }
             write_u16(new_data, offset, rgb565);
@@ -198,7 +205,7 @@ function encode_image_to_rgb563_block(pixels, colors_to_color_indexes, block_x, 
 }
 
 function encode_image_to_rgb5a3_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
     let color, rgb5a3;
     for(let y=block_y; y<block_y+block_height; y++) {
@@ -208,7 +215,7 @@ function encode_image_to_rgb5a3_block(pixels, colors_to_color_indexes, block_x, 
                 rgb5a3 = 0xFFFF;
             }
             else {
-                color = pixels[x,y];
+                color = pixels.getPixel(x,y);
                 rgb5a3 = convert_color_to_rgb5a3(color);
             }
             write_u16(new_data, offset, rgb5a3);
@@ -220,17 +227,17 @@ function encode_image_to_rgb5a3_block(pixels, colors_to_color_indexes, block_x, 
 }
 
 function encode_image_to_rgba32_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let r, g, b, a, color;
     for(let i=0; i<16; i++) {
         let x = block_x + (i % block_width);
-        let y = block_y + Math.floor(i / block_width);
+        let y = block_y + Math.trunc(i / block_width);
         if(x >= image_width || y >= image_height) {
             //This block bleeds past the edge of the image
             r = g = b = a = 0xFF;
         }
         else {
-            color = pixels[x, y];
+            color = pixels.getPixel(x, y);
             [r, g, b, a] = color;
         }
         write_u8(new_data, (i*2),    a);
@@ -243,7 +250,7 @@ function encode_image_to_rgba32_block(pixels, colors_to_color_indexes, block_x, 
 }
 
 function encode_image_to_c4_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
 
     let color_1, color_1_index, color_2, color_2_index;
@@ -254,7 +261,7 @@ function encode_image_to_c4_block(pixels, colors_to_color_indexes, block_x, bloc
                 color_1_index = 0xF;
             }
             else {
-                color_1 = pixels[x,y];
+                color_1 = pixels.getPixel(x,y);
                 color_1_index = colors_to_color_indexes[color_1];
                 console.assert(0 <= color_1_index <= 0xF);
             }
@@ -263,7 +270,7 @@ function encode_image_to_c4_block(pixels, colors_to_color_indexes, block_x, bloc
                 color_2_index = 0xF;
             }
             else {
-                color_2 = pixels[x+1,y];
+                color_2 = pixels.getPixel(x+1,y);
                 color_2_index = colors_to_color_indexes[color_2];
                 console.assert(0 <= color_2_index <= 0xF);
             }
@@ -277,7 +284,7 @@ function encode_image_to_c4_block(pixels, colors_to_color_indexes, block_x, bloc
 }
 
 function encode_image_to_c8_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
 
     let color_index, color;
@@ -288,7 +295,7 @@ function encode_image_to_c8_block(pixels, colors_to_color_indexes, block_x, bloc
                 color_index = 0xFF;
             }
             else {
-                color = pixels[x,y];
+                color = pixels.getPixel(x,y);
                 color_index = colors_to_color_indexes[color];
             }
             write_u8(new_data, offset, color_index);
@@ -300,7 +307,7 @@ function encode_image_to_c8_block(pixels, colors_to_color_indexes, block_x, bloc
 }
 
 function encode_image_to_c14x2_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height) {
-    let new_data = BytesIO(); //XXX
+    let new_data = new BytesIO();
     let offset = 0;
 
     let color_index, color;
@@ -311,7 +318,7 @@ function encode_image_to_c14x2_block(pixels, colors_to_color_indexes, block_x, b
                 color_index = 0x3FFF;
             }
             else {
-                color = pixels[x,y];
+                color = pixels.getPixel(x,y);
                 color_index = colors_to_color_indexes[color];
             }
             write_u16(new_data, offset, color_index);

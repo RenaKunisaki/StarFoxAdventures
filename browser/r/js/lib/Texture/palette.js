@@ -1,3 +1,7 @@
+import { IMAGE_FORMATS_THAT_USE_PALETTES, PaletteFormat, MAX_COLORS_FOR_IMAGE_FORMAT } from "./types.js";
+import { read_u16, write_u16 } from "./bits.js";
+import BytesIO from "./BytesIO.js";
+
 export function decode_palettes(palette_data, palette_format, num_colors, image_format) {
     //if not isinstance(image_format, ImageFormat):
     //  raise Exception("Invalid image format: %s" % image_format)
@@ -35,19 +39,19 @@ export function generate_new_palettes_from_image(image, image_format, palette_fo
         return [[],{}];
     }
 
-    let pixels = image.load(); //XXX
+    let pixels = image;
     let [width, height] = image.size;
     let encoded_colors = [];
     let colors_to_color_indexes = {};
     for(let y=0; y<height; y++) {
         for(let x=0; x<width; x++) {
-            let color = pixels[x,y];
+            let color = pixels.getPixel(x,y);
             let encoded_color = encode_color(color, palette_format);
             if(encoded_colors[encoded_color] == undefined) {
                 encoded_colors.push(encoded_color);
             }
             if(colors_to_color_indexes[color] == undefined) {
-                colors_to_color_indexes[color] = encoded_colors.index(encoded_color);
+                colors_to_color_indexes[color] = encoded_colors.indexOf(encoded_color);
             }
         }
     }
@@ -61,14 +65,14 @@ export function generate_new_palettes_from_image(image, image_format, palette_fo
         let colors_to_color_indexes = {};
         for(let y=0; y<height; y++) {
             for(let x=0; x<width; x++) {
-                let color = pixels[x,y];
+                let color = pixels.getPixel(x,y);
                 let new_color = get_nearest_color_fast(color, limited_palette);
                 let encoded_color = encode_color(new_color, palette_format);
                 if(encoded_colors[encoded_color] == undefined) {
                     encoded_colors.push(encoded_color);
                 }
                 if(colors_to_color_indexes[color] == undefined) {
-                    colors_to_color_indexes[color] = encoded_colors.index(encoded_color);
+                    colors_to_color_indexes[color] = encoded_colors.indexOf(encoded_color);
                 }
             }
         }
@@ -101,7 +105,7 @@ export function encode_color(color, palette_format) {
 
 export function encode_palette(encoded_colors, palette_format, image_format) {
     if(IMAGE_FORMATS_THAT_USE_PALETTES[image_format] == undefined) {
-        return BytesIO(); //XXX
+        return new BytesIO();
     }
 
     if(encoded_colors.length > MAX_COLORS_FOR_IMAGE_FORMAT[image_format]) {
@@ -111,7 +115,7 @@ export function encode_palette(encoded_colors, palette_format, image_format) {
     }
 
     let offset = 0;
-    let new_palette_data = BytesIO(); //XXX
+    let new_palette_data = new BytesIO();
     for(let raw_color of encoded_colors) {
         write_u16(new_palette_data, offset, raw_color);
         offset += 2;

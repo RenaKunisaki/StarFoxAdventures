@@ -1,10 +1,17 @@
+import { rgb2hsv, hsv2rgb } from "../../Util.js";
+import { PackRGBA, UnpackRGBA } from "./Image.js";
+import { swizzle_3_bit_to_8_bit, swizzle_4_bit_to_8_bit, swizzle_5_bit_to_8_bit, swizzle_6_bit_to_8_bit } from "./bits.js";
+
 export function get_rgba(color) {
     let r, g, b, a;
+    if(color.length == undefined) {
+        [r, g, b, a] = UnpackRGBA(color);
+    }
     if(color.length == 4) {
-        r, g, b, a = color[0], color[1], color[2], color[3];
+        [r, g, b, a] = color[0], color[1], color[2], color[3];
     }
     else {
-        r, g, b, a = color[0], color[1], color[2], 0xFF;
+        [r, g, b, a] = color[0], color[1], color[2], 0xFF;
     }
     return [r, g, b, a];
 }
@@ -252,7 +259,7 @@ export function get_color_distance_fast(color_1, color_2) {
 //Generates a palette with a certain number of colors or less
 //based on an image (color quantization).
 export function create_limited_palette_from_image(image, max_colors) {
-    let pixels = image.load(); //XXX
+    let pixels = image;
 
     // (2**depth) will be max_colors.
     let depth;
@@ -266,7 +273,7 @@ export function create_limited_palette_from_image(image, max_colors) {
     let all_pixel_colors = [];
     for(let y=0; y<image.height; y++) {
         for(let x=0; x<image.width; x++) {
-            let color = pixels[x, y]
+            let color = pixels.getPixel(x, y);
             all_pixel_colors.push(color);
         }
     }
@@ -276,7 +283,7 @@ export function create_limited_palette_from_image(image, max_colors) {
 }
 
 export function split_colors_into_buckets(all_pixel_colors, depth) {
-    if(depth == 0) return [average_colors_together(all_pixel_colors)];
+    if(depth == 0) return average_colors_together(all_pixel_colors);
 
     let r_range, g_range, b_range;
     let r_min= 99999999, g_min= 99999999, b_min= 99999999;
@@ -309,7 +316,7 @@ export function split_colors_into_buckets(all_pixel_colors, depth) {
     all_pixel_colors.sort(
         (a,b) => a[channel_index_with_highest_range] - b[channel_index_with_highest_range]
     );
-    median_index = Math.floor((all_pixel_colors.length+1)/2);
+    median_index = Math.trunc((all_pixel_colors.length+1)/2);
 
     let palette = [];
     palette += split_colors_into_buckets(all_pixel_colors.slice(0,median_index), depth-1);
@@ -328,15 +335,16 @@ export function average_colors_together(colors) {
     }
 
     let average_color = [
-        Math.floor(r_sum/len(colors)),
-        Math.floor(g_sum/len(colors)),
-        Math.floor(b_sum/len(colors)),
-        Math.floor(a_sum/len(colors)),
+        Math.trunc(r_sum/colors.length),
+        Math.trunc(g_sum/colors.length),
+        Math.trunc(b_sum/colors.length),
+        Math.trunc(a_sum/colors.length),
     ];
     return average_color;
 }
 
 export function color_exchange(image, base_color, replacement_color, mask_path=None, validate_mask_colors=True, ignore_bright=False) {
+    throw new Error("Not implemented");
     let mask_image;
     if(mask_path) {
         mask_image = Image.open(mask_path).convert("RGBA"); //XXX
@@ -351,61 +359,61 @@ export function color_exchange(image, base_color, replacement_color, mask_path=N
     image = image.copy();
 
     let mask_pixels;
-    if(mask_path) mask_pixels = mask_image.load();
+    if(mask_path) mask_pixels = mask_image;
 
     let [base_r, base_g, base_b] = base_color;
-    let [base_h, base_s, base_v] = colorsys.rgb_to_hsv(base_r/255, base_g/255, base_b/255);
-    let base_h = Math.floor(base_h*360);
-    let base_s = Math.floor(base_s*100);
-    let base_v = Math.floor(base_v*100);
+    let [base_h, base_s, base_v] = rgb2hsv(base_r/255, base_g/255, base_b/255);
+    base_h = Math.trunc(base_h*360);
+    base_s = Math.trunc(base_s*100);
+    base_v = Math.trunc(base_v*100);
 
     let [replacement_r, replacement_g, replacement_b] = replacement_color;
-    let [replacement_h, replacement_s, replacement_v] = colorsys.rgb_to_hsv(replacement_r/255, replacement_g/255, replacement_b/255);
-    let replacement_h = Math.floor(replacement_h*360);
-    let replacement_s = Math.floor(replacement_s*100);
-    let replacement_v = Math.floor(replacement_v*100);
+    let [replacement_h, replacement_s, replacement_v] = rgb2hsv(replacement_r/255, replacement_g/255, replacement_b/255);
+    replacement_h = Math.trunc(replacement_h*360);
+    replacement_s = Math.trunc(replacement_s*100);
+    replacement_v = Math.trunc(replacement_v*100);
 
     let s_change = replacement_s - base_s;
     let v_change = replacement_v - base_v;
 
-    let pixels = image.load();
+    let pixels = image.data;
     for(let x=0; x<image.width; x++) {
         for(let y=0; y<image.height; y++) {
             if(mask_path) {
                 if(validate_mask_colors) {
-                    if(mask_pixels[x, y] == [255, 0, 0, 255]) {
+                    if(mask_pixels.getPixel(x, y) == PackRGBA(255, 0, 0, 255)) {
                         //Red, masked
                         //pass
                     }
-                    else if(mask_pixels[x, y] == [255, 255, 255, 255]) {
+                    else if(mask_pixels.getPixel(x, y) == PackRGBA(255, 255, 255, 255)) {
                         //White, unmasked
                         continue;
                     }
-                    else if(mask_pixels[x, y][3] == 0) {
+                    else if(mask_pixels.getPixel(x, y) & 0xFF == 0) {
                         //Completely transparent, unmasked
                         continue;
                     }
                     else {
                         //Not red or white and also not completely transparent,
                         //so this is an invalid color.
-                        let [r, g, b, a] = mask_pixels[x, y]
+                        let [r, g, b, a] = UnpackRGBA(mask_pixels.getPixel(x, y));
                         throw new Error(`Invalid color ${hex(r,2)}${hex(g,2)}${hex(b,2)}${hex(a,2)} in mask ${mask_path}`);
                     }
                 }
                 else {
-                    if(mask_pixels[x, y] != [255, 0, 0, 255]) continue;
+                    if(mask_pixels.getPixel(x, y) != PackRGBA(255, 0, 0, 255)) continue;
                 }
             }
 
-            let [r, g, b, a] = pixels[x, y];
+            let [r, g, b, a] = UnpackRGBA(pixels.getPixel(x, y));
             if(ignore_bright && r > 128 && g > 128 && b > 128 && a == 0xFF) {
                 continue;
             }
 
-            let [h, s, v] = colorsys.rgb_to_hsv(r/255, g/255, b/255);
-            h = Math.floor(h*360);
-            s = Math.floor(s*100);
-            v = Math.floor(v*100);
+            let [h, s, v] = rgb2hsv(r/255, g/255, b/255);
+            h = Math.trunc(h*360);
+            s = Math.trunc(s*100);
+            v = Math.trunc(v*100);
 
             if(s == 0) {
                 //Prevent issues when recoloring black/white/grey parts
@@ -419,27 +427,27 @@ export function color_exchange(image, base_color, replacement_color, mask_path=N
             new_h = new_h % 360;
             new_s = Math.max(0, Math.min(100, new_s));
             new_v = Math.max(0, Math.min(100, new_v));
-            r, g, b = colorsys.hsv_to_rgb(new_h/360, new_s/100, new_v/100);
-            r = Math.floor(r*255);
-            g = Math.floor(g*255);
-            b = Math.floor(b*255);
-            pixels[x, y] = [r, g, b, a]; //XXX
+            [r, g, b] = hsv2rgb(new_h/360, new_s/100, new_v/100);
+            r = Math.trunc(r*255);
+            g = Math.trunc(g*255);
+            b = Math.trunc(b*255);
+            pixels.setPixel(x, y, [r, g, b, a]);
         }
     }
     return image;
 }
 
 export function hsv_shift_image(image, h_shift, v_shift) {
-    let pixels = image.load();
+    let pixels = image;
     for(let x=0; x<image.width; x++) {
         for(let y=0; y<image.height; y++) {
-            pixels[x, y] = hsv_shift_color(pixels[x, y], h_shift, v_shift);
+            pixels.setPixel(x, y, hsv_shift_color(pixels.getPixel(x, y), h_shift, v_shift));
         }
     }
 }
 
 export function hsv_shift_palette(colors, h_shift, v_shift) {
-    for(let [i, color] of Object.items(colors)) {
+    for(let [i, color] of Object.entries(colors)) {
         colors[i] = hsv_shift_color(color, h_shift, v_shift);
     }
     return colors;
@@ -453,10 +461,10 @@ export function hsv_shift_color(color, h_shift, v_shift) {
         a = null;
     }
 
-    let [h, s, v] = colorsys.rgb_to_hsv(r/255, g/255, b/255);
-    h = Math.floor(h*360);
-    s = Math.floor(s*100);
-    v = Math.floor(v*100);
+    let [h, s, v] = rgb2hsv(r/255, g/255, b/255);
+    h = Math.trunc(h*360);
+    s = Math.trunc(s*100);
+    v = Math.trunc(v*100);
 
     h += h_shift;
     h %= 360;
@@ -495,10 +503,10 @@ export function hsv_shift_color(color, h_shift, v_shift) {
     if(s < 5 && orig_s >= 5) s = 5;
     if(s > 80 && orig_s <= 80) s = 80;
 
-    [r, g, b] = colorsys.hsv_to_rgb(h/360, s/100, v/100);
-    r = Math.floor(r*255);
-    g = Math.floor(g*255);
-    b = Math.floor(b*255);
+    [r, g, b] = hsv2rgb(h/360, s/100, v/100);
+    r = Math.trunc(r*255);
+    g = Math.trunc(g*255);
+    b = Math.trunc(b*255);
 
     if(a == null) return [r, g, b];
     else return [r, g, b, a];
