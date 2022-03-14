@@ -9,10 +9,22 @@
     margin-right: 1em; /* don't butt up against border */
     overflow: auto;
     max-height: calc(100vh - 3em);
+    min-width: 20%;
+}
+.fileList ul {
+    padding-left: 1em;
+}
+.fileList li.file {
+    padding-left: 0;
+    /* stop file sizes moving to weird places */
+    position: relative;
+    width: 100%;
+    padding-right: 4em;
 }
 .fileList .list .fileSize {
     position: absolute;
     right: 0;
+    top: 0;
 }
 .fileList li.file:hover {
     color: #08F;
