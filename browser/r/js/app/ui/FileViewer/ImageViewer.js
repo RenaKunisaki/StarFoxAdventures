@@ -15,6 +15,7 @@ export default class ImageViewer {
             this.eCanvas);
         this.ctx = this.eCanvas.getContext('2d');
         this.texture = SfaTexture.fromData(dataView);
+        if(!this.texture) throw new Error("Not an image file");
         console.log("decoded texture", this.texture);
         this.eCanvas.setAttribute('width',  this.texture.width*this.scale);
         this.eCanvas.setAttribute('height', this.texture.height*this.scale);

@@ -127,6 +127,7 @@ export default class SfaTexture {
         self.numMipMaps = header.numMipMaps;
         self.format     = header.format;
         const bpp       = BITS_PER_PIXEL[self.format];
+        if(self.width < 1 || self.height < 1 || bpp == undefined) return null;
         console.assert(self.width > 0 && self.height > 0);
         //const dataLen   = Math.trunc(self.width * self.height * bpp / 8);
         console.log(
