@@ -8,6 +8,7 @@ import {
     convert_ia4_to_color, convert_ia8_to_color,
     convert_rgb565_to_color, convert_rgb5a3_to_color,
 } from "./color.js";
+import { DataError } from "../../app/errors.js";
 
 export function decode_image(image_data, palette_data, image_format,
 palette_format, num_colors, image_width, image_height, offset=0, canvas=null) {
@@ -192,6 +193,6 @@ function decode_block(image_format, image_data, offset, block_data_size, colors)
         case ImageFormat.CMPR:
             return decode_cmpr_block(image_format, image_data, offset, block_data_size, colors);
         default:
-            throw new Error("Unknown image format: " + image_format.name);
+            throw new DataError("Unknown image format: " + image_format.name);
     }
 }

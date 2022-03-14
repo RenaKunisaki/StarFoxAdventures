@@ -19,6 +19,7 @@ import TextList from "./ui/TextList.js";
 import { ISO } from "../types/iso/iso.js";
 import Game from "../game/Game.js";
 import { Language } from "../game/text/Language.js";
+import { StateError } from "./errors.js";
 
 export default class App {
     constructor(parent) {
@@ -171,7 +172,7 @@ export default class App {
     async useSaveSlot(slot) {
         //change active save slot
         if(this.saveGame == null) {
-            throw new Error("Can't change save slot when no save file is loaded");
+            throw new StateError("Can't change save slot when no save file is loaded");
         }
         this.saveSlotIdx = slot;
         this.saveSlot = this.saveGame.saves[this.saveSlotIdx];

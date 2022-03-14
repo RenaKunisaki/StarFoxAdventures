@@ -3,6 +3,7 @@ import BinaryFile from "../../lib/BinaryFile.js";
 import IsoFile from "../../types/iso/isofile.js";
 import Text from "./Text.js";
 import Phrase from "./Phrase.js";
+import { DataError } from "../../app/errors.js";
 
 const CharacterStruct = Struct(
     ['I', 'character'],
@@ -61,7 +62,7 @@ export default class BinaryReader {
         //console.log(`numCharStructs = 0x${hex(numCharStructs)}`);
         //sanity check to avoid hanging
         if(numCharStructs > 10000) {
-            throw new Error("Not a GameText file");
+            throw new DataError("Not a GameText file");
         }
         this.charStructs = this._file.read(CharacterStruct, numCharStructs);
         if(numCharStructs == 1) this.charStructs = [this.charStructs];

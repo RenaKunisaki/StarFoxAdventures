@@ -1,3 +1,5 @@
+import { NotImplementedError } from "../../app/errors.js";
+
 export function PackRGBA(r, g, b, a=255) {
     return (r<<24) | (g<<16) | (b<<8) | a;
 }
@@ -90,6 +92,6 @@ export default class Image {
     }
 
     resize(width, height, mode) {
-        throw new Error("Not implemented");
+        throw new NotImplementedError();
     }
 };

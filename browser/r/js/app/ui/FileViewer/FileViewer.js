@@ -9,6 +9,7 @@ import { GameTextViewer } from "./GameTextViewer.js";
 import ImageViewer from "./ImageViewer.js";
 import { assertType } from "../../../Util.js";
 import Game from "../../../game/Game.js";
+import { DataError } from "../../errors.js";
 
 export default class FileViewer {
     constructor(game, file, showTitle=true) {
@@ -111,6 +112,10 @@ export default class FileViewer {
             || fmt == 'romlist') {
                 this.viewer = new RomListViewer(this.game, buf);
             }
+            else if((fmt == 'auto' && this.file.name.endsWith('.c.new'))
+            || fmt == 'text') {
+                this.viewer = new TextViewer(this.game, buf);
+            }
             else if((fmt == 'auto' && this.file.path.startsWith('/gametext'))
             || fmt == 'gametext') {
                 this.viewer = new GameTextViewer(this.game, buf);
@@ -119,16 +124,16 @@ export default class FileViewer {
             || fmt == 'image') {
                 this.viewer = new ImageViewer(this.game, buf);
             }
-            else if(fmt == 'text') {
-                this.viewer = new TextViewer(this.game, buf);
-            }
             else this.viewer = new HexViewer(this.game, buf);
         }
         catch(ex) {
-            //XXX instead of showing "not a GameText file" when set to Auto,
-            //we should just switch to hex view...
-            console.error(ex);
-            this.viewer = new ErrorMessage(this.game, ex.toString());
+            if(ex instanceof DataError && fmt == 'auto') {
+                this.viewer = new HexViewer(this.game, buf);
+            }
+            else {
+                console.error(ex);
+                this.viewer = new ErrorMessage(this.game, ex.toString());
+            }
         }
     }
 

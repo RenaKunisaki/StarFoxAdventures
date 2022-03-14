@@ -1,6 +1,7 @@
 import { rgb2hsv, hsv2rgb } from "../../Util.js";
 import { PackRGBA, UnpackRGBA } from "./Image.js";
 import { swizzle_3_bit_to_8_bit, swizzle_4_bit_to_8_bit, swizzle_5_bit_to_8_bit, swizzle_6_bit_to_8_bit } from "./bits.js";
+import { BugCheck, DataError, NotImplementedError } from "../../app/errors.js";
 
 export function get_rgba(color) {
     let r, g, b, a;
@@ -267,7 +268,7 @@ export function create_limited_palette_from_image(image, max_colors) {
     else if(max_colors == 256) depth = 8;
     else if(max_colors == 16384) depth = 14;
     else {
-        throw new Error("Unsupported maximum number of colors to generate a palette for: " + max_colors);
+        throw new BugCheck("Unsupported maximum number of colors to generate a palette for: " + max_colors);
     }
 
     let all_pixel_colors = [];
@@ -344,12 +345,12 @@ export function average_colors_together(colors) {
 }
 
 export function color_exchange(image, base_color, replacement_color, mask_path=None, validate_mask_colors=True, ignore_bright=False) {
-    throw new Error("Not implemented");
+    throw new NotImplementedError();
     let mask_image;
     if(mask_path) {
         mask_image = Image.open(mask_path).convert("RGBA"); //XXX
         if(image.size != mask_image.size) {
-            throw new Error("Mask image is not the same size as the texture.");
+            throw new DataError("Mask image is not the same size as the texture.");
         }
     }
 
@@ -397,7 +398,7 @@ export function color_exchange(image, base_color, replacement_color, mask_path=N
                         //Not red or white and also not completely transparent,
                         //so this is an invalid color.
                         let [r, g, b, a] = UnpackRGBA(mask_pixels.getPixel(x, y));
-                        throw new Error(`Invalid color ${hex(r,2)}${hex(g,2)}${hex(b,2)}${hex(a,2)} in mask ${mask_path}`);
+                        throw new DataError(`Invalid color ${hex(r,2)}${hex(g,2)}${hex(b,2)}${hex(a,2)} in mask ${mask_path}`);
                     }
                 }
                 else {

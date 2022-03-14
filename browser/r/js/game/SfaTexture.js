@@ -2,6 +2,7 @@ import { BITS_PER_PIXEL, ImageFormat } from "../lib/Texture/types.js";
 import { decode_image } from "../lib/Texture/decode.js";
 import { hex } from "../Util.js";
 import Struct from "../lib/Struct.js";
+import { DataError } from "../app/errors.js";
 
 const TextureStruct4 = Struct(
     /* 0x00 */ ['b', 'unk00'],
@@ -91,7 +92,7 @@ export default class SfaTexture {
             case 0x13: case 0x16: case 0x23: case 0x2b: case 0x2c: case 0x3c:
                 bitsW = 2; bitsH = 2; break;
             default:
-                throw new Error(`Unsupported texture format 0x${hex(format)}`);
+                throw new DataError(`Unsupported texture format 0x${hex(format)}`);
         }
 
         if(format == TexFmt.RGBA32 || format == 0x16) iVar2 = 0x40;

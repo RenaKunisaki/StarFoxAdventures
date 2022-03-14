@@ -1,6 +1,7 @@
 import { IMAGE_FORMATS_THAT_USE_PALETTES, PaletteFormat, MAX_COLORS_FOR_IMAGE_FORMAT } from "./types.js";
 import { read_u16, write_u16 } from "./bits.js";
 import BytesIO from "./BytesIO.js";
+import { DataError } from "../../app/errors.js";
 
 export function decode_palettes(palette_data, palette_format, num_colors, image_format) {
     //if not isinstance(image_format, ImageFormat):
@@ -109,7 +110,7 @@ export function encode_palette(encoded_colors, palette_format, image_format) {
     }
 
     if(encoded_colors.length > MAX_COLORS_FOR_IMAGE_FORMAT[image_format]) {
-        throw new Error(
+        throw new DataError(
             `Maximum number of colors supported by image format ${image_format.name} is ${MAX_COLORS_FOR_IMAGE_FORMAT[image_format]}, but replacement image has ${encoded_colors.length} colors`
         );
     }
