@@ -2,11 +2,11 @@ import { read_u16, read_u32, write_u16, write_u32 } from "./bits.js";
 import { convert_rgb565_to_color, convert_color_to_rgb565 } from "./color.js";
 
 export function get_interpolated_cmpr_colors(color_0_rgb565, color_1_rgb565) {
-    let r0, g0, b0, r1, g1, b1, _, color_0, color_1, color_2, color_3;
-    color_0 = convert_rgb565_to_color(color_0_rgb565);
-    color_1 = convert_rgb565_to_color(color_1_rgb565);
-    [r0, g0, b0, _] = color_0;
-    [r1, g1, b1, _] = color_1;
+    let color_2, color_3;
+    const color_0 = convert_rgb565_to_color(color_0_rgb565);
+    const color_1 = convert_rgb565_to_color(color_1_rgb565);
+    const [r0, g0, b0] = color_0;
+    const [r1, g1, b1] = color_1;
     if(color_0_rgb565 > color_1_rgb565) {
         color_2 = [
             Math.trunc((2*r0 + 1*r1)/3),
@@ -72,28 +72,26 @@ export function get_best_cmpr_key_colors(all_colors) {
     }
 }
 
-export function decode_cmpr_block(image_format, image_data, offset, block_data_size, colors) {
-    let pixel_color_data = [];
+export function decode_cmpr_block(image_format, image_data, offset,
+block_data_size, colors) {
+    const pixel_color_data = [];
     for(let i=0; i<64; i++) pixel_color_data.push(null);
 
     let subblock_offset = offset;
     for(let subblock_index=0; subblock_index < 4; subblock_index++) {
-        let subblock_x = (subblock_index%2)*4;
-        let subblock_y = Math.trunc(subblock_index/2)*4;
+        const subblock_x = (subblock_index%2)*4;
+        const subblock_y = Math.trunc(subblock_index/2)*4;
 
-        let color_0_rgb565 = read_u16(image_data, subblock_offset);
-        let color_1_rgb565 = read_u16(image_data, subblock_offset+2);
-        let colors = get_interpolated_cmpr_colors(color_0_rgb565, color_1_rgb565);
+        const colors = get_interpolated_cmpr_colors(
+            read_u16(image_data, subblock_offset),
+            read_u16(image_data, subblock_offset+2));
 
-        let color_indexes = read_u32(image_data, subblock_offset+4);
+        const color_indexes = read_u32(image_data, subblock_offset+4);
         for(let i=0; i<16; i++) {
-            let color_index = ((color_indexes >> ((15-i)*2)) & 3);
-            let color = colors[color_index];
-
-            let x_in_subblock = i % 4;
-            let y_in_subblock = Math.trunc(i / 4);
-            let pixel_index_in_block = subblock_x + subblock_y*8 + y_in_subblock*8 + x_in_subblock;
-            pixel_color_data[pixel_index_in_block] = color;
+            const pixel_index_in_block = subblock_x + subblock_y*8 +
+                Math.trunc(i / 4)*8 + (i % 4);
+            pixel_color_data[pixel_index_in_block] =
+                colors[((color_indexes >> ((15-i)*2)) & 3)];
         }
         subblock_offset += 8;
     }

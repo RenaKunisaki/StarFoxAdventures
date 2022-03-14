@@ -40,7 +40,7 @@ export function write_bytes(data, offset, raw_bytes) {
     data.write(raw_bytes);
 }
 export function write_u8(data, offset, new_value) {
-    new_value = struct.pack(">B", new_value);
+    new_value = struct.pack(">B", new_value); //XXX
     data.seek(offset);
     data.write(new_value);
 }

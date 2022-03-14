@@ -122,6 +122,8 @@ export default class FileViewer {
             }
             else if((fmt == 'auto' && this.file.name.startsWith('TEX'))
             || fmt == 'image') {
+                //this comes after the check for being an archive so it
+                //only applies once we select an item within the archive.
                 this.viewer = new ImageViewer(this.game, buf);
             }
             else this.viewer = new HexViewer(this.game, buf);
