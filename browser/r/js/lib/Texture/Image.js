@@ -20,6 +20,21 @@ export default class Image {
         this._canvas = canvas;
         this._ctx    = this._canvas.getContext('2d');
         this._data   = this._ctx.createImageData(this.width, this.height);
+        this._minTouchedX = this.width; //debug, can remove
+        this._maxTouchedX = -1;
+        this._minTouchedY = this.height;
+        this._maxTouchedY = -1;
+
+        for(let y=0; y<this.height; y++) {
+            for(let x=0; x<this.width; x++) {
+                //this.setPixel(x, y, 0xFF00FFFF);
+                const n = ((y*this.width)+x) * 4;
+                this._data.data[n  ] = 0xFF;
+                this._data.data[n+1] = 0x00;
+                this._data.data[n+2] = 0xFF;
+                this._data.data[n+3] = 0xFF;
+            }
+        }
     }
 
     get data() {
@@ -27,26 +42,50 @@ export default class Image {
     }
 
     get canvas() {
+        console.log("put image", this);
+        this._ctx.putImageData(this._data, 0, 0); //XXX move this somewhere
         return this._canvas;
     }
 
     getPixel(x, y) {
         const n = ((y*this.width)+x) * 4;
-        const data = this._data.slice(n, n+4);
-        return (data[0] << 24) | (data[1] << 16) | (data[2] << 8) | data[3]; //RGBA
+        return (
+            //who the fuck designed this shit!?
+            //why does ImageData have its own .data!?
+            //and guess what happens if you access data[x]
+            //instead of data.data[x]... that's right, fuck all!
+            (this._data.data[n  ] << 24) |
+            (this._data.data[n+1] << 16) |
+            (this._data.data[n+2] <<  8) |
+             this._data.data[n+3]); //RGBA
     }
 
     setPixel(x, y, color) {
-        console.assert(color != undefined && color != null);
+        //console.assert(color != undefined && color != null);
+        console.assert(typeof(color) == 'number' || typeof(color) == 'object');
+        console.assert(0 <= x < this.width);
+        console.assert(0 <= y < this.height);
+        this._minTouchedX = Math.min(this._minTouchedX, x);
+        this._minTouchedY = Math.min(this._minTouchedY, y);
+        this._maxTouchedX = Math.max(this._maxTouchedX, x);
+        this._maxTouchedY = Math.max(this._maxTouchedY, y);
         const n = ((y*this.width)+x) * 4;
         if(color.length == undefined) {
-            this._data[n  ] =  color >> 24;
-            this._data[n+1] = (color >> 16) & 0xFF;
-            this._data[n+2] = (color >>  8) & 0xFF;
-            this._data[n+3] =  color        & 0xFF;
+            //color = 0x0000FFFF;
+            this._data.data[n  ] =  color >> 24;
+            this._data.data[n+1] = (color >> 16) & 0xFF;
+            this._data.data[n+2] = (color >>  8) & 0xFF;
+            this._data.data[n+3] =  color        & 0xFF;
         }
         else {
-            for(let i=0; i<color.length; i++) this._data[i+n] = color[i];
+            console.assert(color.length == 3 || color.length == 4);
+            let [r,g,b,a] = color;
+            if(a == undefined) a = 255; //XXX remove?
+            //for(let i=0; i<color.length; i++) this._data.data[i+n] = color[i];
+            this._data.data[n  ] = r;
+            this._data.data[n+1] = g;
+            this._data.data[n+2] = b;
+            this._data.data[n+3] = a;
         }
     }
 

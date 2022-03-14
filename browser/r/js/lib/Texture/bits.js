@@ -18,14 +18,17 @@ export function swizzle_6_bit_to_8_bit(v) {
 }
 export function read_u8(data, offset) {
     if(data instanceof BytesIO) return data.read_u8(offset);
+    if(data instanceof DataView) return data.getUint8(offset);
     return data[offset];
 }
 export function read_u16(data, offset) {
     if(data instanceof BytesIO) return data.read_u16(offset);
+    if(data instanceof DataView) return data.getUint16(offset);
     return (data[offset] << 8) | data[offset+1];
 }
 export function read_u32(data, offset) {
     if(data instanceof BytesIO) return data.read_u32(offset);
+    if(data instanceof DataView) return data.getUint32(offset);
     return (
         (data[offset  ] << 24) |
         (data[offset+1] << 16) |

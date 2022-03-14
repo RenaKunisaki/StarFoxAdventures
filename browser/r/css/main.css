@@ -139,7 +139,8 @@ table .controls {
 
 /* XXX move this */
 .imageView {
-    border: 1px #F0F dotted;
+    border: 1px #F0F solid;
+    background-color: #C0C0C0;
     background-image:
         linear-gradient( 45deg, #808080 25%, transparent 25%),
         linear-gradient(-45deg, #808080 25%, transparent 25%),

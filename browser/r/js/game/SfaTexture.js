@@ -119,7 +119,7 @@ export default class SfaTexture {
         return result;
     }
 
-    static fromData(data) {
+    static fromData(data, canvas=null) {
         const self      = new SfaTexture();
         const header    = new Header(data);
         self.width      = header.width;
@@ -132,13 +132,13 @@ export default class SfaTexture {
         console.log(
             `Texture size ${self.width}x${self.height} `+
             `mips=${self.numMipMaps} fmt=0x${hex(self.format)}`,
-            header);
-        self.image      = decode_image(data.slice(0x60),
+            header, data);
+        self.image      = decode_image(data,
             null, //palette_data
             self.format, //image_format
             null, //palette_format
             0, //num_colors (for palettes)
-            self.width, self.height);
+            self.width, self.height, 0x60);
         return self;
     }
 }

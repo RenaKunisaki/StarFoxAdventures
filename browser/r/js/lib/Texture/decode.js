@@ -9,20 +9,21 @@ import {
     convert_rgb565_to_color, convert_rgb5a3_to_color,
 } from "./color.js";
 
-export function decode_image(image_data, palette_data, image_format, palette_format, num_colors, image_width, image_height) {
+export function decode_image(image_data, palette_data, image_format,
+palette_format, num_colors, image_width, image_height, offset=0, canvas=null) {
     let colors = decode_palettes(palette_data, palette_format, num_colors, image_format);
 
-    let block_width = BLOCK_WIDTHS[image_format];
-    let block_height = BLOCK_HEIGHTS[image_format];
+    let block_width     = BLOCK_WIDTHS    [image_format];
+    let block_height    = BLOCK_HEIGHTS   [image_format];
     let block_data_size = BLOCK_DATA_SIZES[image_format];
 
-    let image   = new Image(image_width, image_height);
+    let image   = new Image(image_width, image_height, canvas);
     let pixels  = image;
-    let offset  = 0;
     let block_x = 0;
     let block_y = 0;
     while(block_y < image_height) {
-        let pixel_color_data = decode_block(image_format, image_data, offset, block_data_size, colors);
+        let pixel_color_data = decode_block(image_format, image_data,
+            offset, block_data_size, colors);
 
         for(let [i, color] of Object.entries(pixel_color_data)) {
             console.assert(color != undefined && color != null);

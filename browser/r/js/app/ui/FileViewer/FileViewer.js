@@ -81,6 +81,8 @@ export default class FileViewer {
         }
         else buf = this.gameFile.getView(offs);
         if(!(buf instanceof DataView)) buf = new DataView(buf);
+        //XXX pass the actual File or what the fuck ever
+        //because this is way too error prone
 
         try {
             if(this.error) {
