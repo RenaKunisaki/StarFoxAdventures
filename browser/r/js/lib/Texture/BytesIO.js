@@ -31,6 +31,23 @@ export default class BytesIO {
         this._length = Math.max(this._length, this._offset);
     }
 
+    write_u8(value, offset=null) {
+        if(offset != null) this.seek(offset);
+        this._data[this._offset] = value;
+    }
+    write_u16(value, offset=null) {
+        if(offset != null) this.seek(offset);
+        this._data[this._offset  ] = value >> 8;
+        this._data[this._offset+1] = value & 0xFF;
+    }
+    write_u32(value, offset=null) {
+        if(offset != null) this.seek(offset);
+        this._data[this._offset  ] =  value >> 24;
+        this._data[this._offset+1] = (value >> 16) & 0xFF;
+        this._data[this._offset+2] = (value >>  8) & 0xFF;
+        this._data[this._offset+3] =  value        & 0xFF;
+    }
+
     read() {
         return this._data.slice(this._offset, this._length - this._offset);
     }

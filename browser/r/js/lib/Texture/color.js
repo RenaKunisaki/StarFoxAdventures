@@ -4,17 +4,12 @@ import { swizzle_3_bit_to_8_bit, swizzle_4_bit_to_8_bit, swizzle_5_bit_to_8_bit,
 import { BugCheck, DataError, NotImplementedError } from "../../app/errors.js";
 
 export function get_rgba(color) {
-    let r, g, b, a;
-    if(color.length == undefined) {
-        [r, g, b, a] = UnpackRGBA(color);
+    switch(color.length) {
+        case undefined: return UnpackRGBA(color);
+        case 4: return color;
+        case 3: return [color[0], color[1], color[2], 0xFF];
+        default: throw new BugCheck(`Unexpected object for color: ${color}`);
     }
-    if(color.length == 4) {
-        [r, g, b, a] = color[0], color[1], color[2], color[3];
-    }
-    else {
-        [r, g, b, a] = color[0], color[1], color[2], 0xFF;
-    }
-    return [r, g, b, a];
 }
 
 export function convert_rgb_to_greyscale(r, g, b) {
@@ -22,24 +17,18 @@ export function convert_rgb_to_greyscale(r, g, b) {
 }
 
 export function convert_rgb565_to_color(rgb565) {
-    let r = ((rgb565 >> 11) & 0x1F);
-    let g = ((rgb565 >> 5) & 0x3F);
-    let b = ((rgb565 >> 0) & 0x1F);
-    r = swizzle_5_bit_to_8_bit(r);
-    g = swizzle_6_bit_to_8_bit(g);
-    b = swizzle_5_bit_to_8_bit(b);
-    return [r, g, b, 255];
+    return [
+        swizzle_5_bit_to_8_bit(((rgb565 >> 11) & 0x1F)),
+        swizzle_6_bit_to_8_bit(((rgb565 >>  5) & 0x3F)),
+        swizzle_5_bit_to_8_bit(( rgb565        & 0x1F)),
+        255];
 }
 export function convert_color_to_rgb565(color) {
-    let [r, g, b, a] = get_rgba(color);
-    r = r >> 3;
-    g = g >> 2;
-    b = b >> 3;
-    let rgb565 = 0x0000;
-    rgb565 |= ((r & 0x1F) << 11);
-    rgb565 |= ((g & 0x3F) << 5);
-    rgb565 |= ((b & 0x1F) << 0);
-    return rgb565;
+    const [r, g, b, a] = get_rgba(color);
+    return (
+        (((r >> 3) & 0x1F) << 11) |
+        (((g >> 2) & 0x3F) <<  5) |
+         ((b >> 3) & 0x1F));
 }
 export function convert_rgb5a3_to_color(rgb5a3) {
     //RGB5A3 format.
@@ -47,110 +36,69 @@ export function convert_rgb5a3_to_color(rgb5a3) {
     //Format depends on the most significant bit. Two possible formats:
     //Top bit is 0: 0AAARRRRGGGGBBBB
     //Top bit is 1: 1RRRRRGGGGGBBBBB (Alpha set to 0xff)
-    let r, g, b, a;
     if((rgb5a3 & 0x8000) == 0) {
-        a = ((rgb5a3 >> 12) & 0x7);
-        r = ((rgb5a3 >> 8) & 0xF);
-        g = ((rgb5a3 >> 4) & 0xF);
-        b = ((rgb5a3 >> 0) & 0xF);
-        a = swizzle_3_bit_to_8_bit(a);
-        r = swizzle_4_bit_to_8_bit(r);
-        g = swizzle_4_bit_to_8_bit(g);
-        b = swizzle_4_bit_to_8_bit(b);
+        return [
+            swizzle_4_bit_to_8_bit(((rgb5a3 >>  8) & 0xF)),
+            swizzle_4_bit_to_8_bit(((rgb5a3 >>  4) & 0xF)),
+            swizzle_4_bit_to_8_bit(( rgb5a3        & 0xF)),
+            swizzle_3_bit_to_8_bit(((rgb5a3 >> 12) & 0x7)) ];
     }
     else {
-        a = 255;
-        r = ((rgb5a3 >> 10) & 0x1F);
-        g = ((rgb5a3 >> 5) & 0x1F);
-        b = ((rgb5a3 >> 0) & 0x1F);
-        r = swizzle_5_bit_to_8_bit(r);
-        g = swizzle_5_bit_to_8_bit(g);
-        b = swizzle_5_bit_to_8_bit(b);
+        return [
+            swizzle_5_bit_to_8_bit(((rgb5a3 >> 10) & 0x1F)),
+            swizzle_5_bit_to_8_bit(((rgb5a3 >>  5) & 0x1F)),
+            swizzle_5_bit_to_8_bit(( rgb5a3        & 0x1F)),
+            255];
     }
-    return [r, g, b, a];
 }
 export function convert_color_to_rgb5a3(color) {
-    let rgb5a3;
-    let [r, g, b, a] = get_rgba(color);
+    const [r, g, b, a] = get_rgba(color);
     if(a != 255) {
-        a = a >> 5;
-        r = r >> 4;
-        g = g >> 4;
-        b = b >> 4;
-        rgb5a3 = 0x0000;
-        rgb5a3 |= ((a & 0x7) << 12);
-        rgb5a3 |= ((r & 0xF) << 8);
-        rgb5a3 |= ((g & 0xF) << 4);
-        rgb5a3 |= ((b & 0xF) << 0);
+        return (
+            (((a >> 5) & 0x7) << 12) |
+            (((r >> 4) & 0xF) <<  8) |
+            (((g >> 4) & 0xF) <<  4) |
+             ((b >> 4) & 0xF));
     }
     else {
-        r = r >> 3;
-        g = g >> 3;
-        b = b >> 3;
-        rgb5a3 = 0x8000;
-        rgb5a3 |= ((r & 0x1F) << 10);
-        rgb5a3 |= ((g & 0x1F) << 5);
-        rgb5a3 |= ((b & 0x1F) << 0);
+        return (0x8000 |
+            (((r >> 3) & 0x1F) << 10) |
+            (((g >> 3) & 0x1F) <<  5) |
+             ((b >> 3) & 0x1F));
     }
-    return rgb5a3;
 }
 export function convert_ia4_to_color(ia4) {
-    let low_nibble = ia4 & 0xF;
-    let high_nibble = (ia4 >> 4) & 0xF;
-
     let r, g, b, a;
-    r = g = b = swizzle_4_bit_to_8_bit(low_nibble);
-    a = swizzle_4_bit_to_8_bit(high_nibble);
-
+    r = g = b = swizzle_4_bit_to_8_bit(ia4 & 0xF);
+    a = swizzle_4_bit_to_8_bit((ia4 >> 4) & 0xF);
     return [r, g, b, a];
 }
 export function convert_color_to_ia4(color) {
-    let [r, g, b, a] = get_rgba(color);
-    let l = convert_rgb_to_greyscale(r, g, b);
-    let ia4 = 0x00;
-    ia4 |= ((l >> 4) & 0xF);
-    ia4 |= (a & 0xF0);
-    return ia4;
+    const [r, g, b, a] = get_rgba(color);
+    return ((convert_rgb_to_greyscale(r, g, b) >> 4) & 0xF) | (a & 0xF0);
 }
 export function convert_ia8_to_color(ia8) {
-    let low_byte = ia8 & 0xFF;
-    let high_byte = (ia8 >> 8) & 0xFF;
-
-    let r, g, b, a;
-    r = g = b = low_byte;
-    a = high_byte;
-
-    return [r, g, b, a];
+    const low_byte = ia8 & 0xFF;
+    return [low_byte, low_byte, low_byte, (ia8 >> 8) & 0xFF];
 }
 export function convert_color_to_ia8(color) {
-    let [r, g, b, a] = get_rgba(color);
-    let l = convert_rgb_to_greyscale(r, g, b);
-    let ia8 = 0x0000;
-    ia8 |= l & 0x00FF;
-    ia8 |= (a << 8) & 0xFF00;
-    return ia8;
+    const [r, g, b, a] = get_rgba(color);
+    return (convert_rgb_to_greyscale(r, g, b) & 0x00FF) | ((a << 8) & 0xFF00);
 }
 export function convert_i4_to_color(i4) {
-    let r, g, b, a;
-    r = g = b = a = swizzle_4_bit_to_8_bit(i4);
-    return [r, g, b, a];
+    const v = swizzle_4_bit_to_8_bit(i4);
+    return [v, v, v, v];
 }
 export function convert_color_to_i4(color) {
-    let [r, g, b, a] = get_rgba(color);
-    let l = convert_rgb_to_greyscale(r, g, b);
-    let i4 = ((l >> 4) & 0xF);
-    return i4;
+    const [r, g, b, a] = get_rgba(color);
+    return ((convert_rgb_to_greyscale(r, g, b) >> 4) & 0xF);
 }
 export function convert_i8_to_color(i8) {
-    let r, g, b, a;
-    r = g = b = a = i8;
-    return [r, g, b, a];
+    return [i8, i8, i8, i8];
 }
 export function convert_color_to_i8(color) {
-    let [r, g, b, a] = get_rgba(color);
-    let l = convert_rgb_to_greyscale(r, g, b);
-    let i8 = l & 0xFF;
-    return i8;
+    const [r, g, b, a] = get_rgba(color);
+    return convert_rgb_to_greyscale(r, g, b) & 0xFF;
 }
 
 //Picks a color from a palette that is visually the closest to the given color.
@@ -231,7 +179,7 @@ export function get_nearest_color_fast(color, palette) {
         }
     }
 
-    let min_dist = 0x7FFFFFFF;
+    let min_dist   = 0x7FFFFFFF;
     let best_color = palette[0];
 
     for(let indexed_color of palette) {
@@ -250,43 +198,37 @@ export function get_nearest_color_fast(color, palette) {
 }
 
 export function get_color_distance_fast(color_1, color_2) {
-    let dist;
-    dist  = Math.abs(color_1[0] - color_2[0]);
-    dist += Math.abs(color_1[1] - color_2[1]);
-    dist += Math.abs(color_1[2] - color_2[2]);
-    return dist;
+    return (
+        Math.abs(color_1[0] - color_2[0]) +
+        Math.abs(color_1[1] - color_2[1]) +
+        Math.abs(color_1[2] - color_2[2]));
 }
 
 //Generates a palette with a certain number of colors or less
 //based on an image (color quantization).
 export function create_limited_palette_from_image(image, max_colors) {
-    let pixels = image;
-
     // (2**depth) will be max_colors.
     let depth;
-    if(max_colors == 16) depth = 4;
-    else if(max_colors == 256) depth = 8;
+    if     (max_colors ==    16) depth =  4;
+    else if(max_colors ==   256) depth =  8;
     else if(max_colors == 16384) depth = 14;
     else {
         throw new BugCheck("Unsupported maximum number of colors to generate a palette for: " + max_colors);
     }
 
-    let all_pixel_colors = [];
+    const all_pixel_colors = [];
     for(let y=0; y<image.height; y++) {
         for(let x=0; x<image.width; x++) {
-            let color = pixels.getPixel(x, y);
-            all_pixel_colors.push(color);
+            all_pixel_colors.push(image.getPixel(x, y));
         }
     }
 
-    let palette = split_colors_into_buckets(all_pixel_colors, depth);
-    return palette;
+    return split_colors_into_buckets(all_pixel_colors, depth);
 }
 
 export function split_colors_into_buckets(all_pixel_colors, depth) {
     if(depth == 0) return average_colors_together(all_pixel_colors);
 
-    let r_range, g_range, b_range;
     let r_min= 99999999, g_min= 99999999, b_min= 99999999;
     let r_max=-99999999, g_max=-99999999, b_max=-99999999;
     for(let c of all_pixel_colors) {
@@ -295,9 +237,9 @@ export function split_colors_into_buckets(all_pixel_colors, depth) {
         g_min = Math.min(g_min, g); g_max = Math.max(g_max, g);
         b_min = Math.min(b_min, b); b_max = Math.max(b_max, b);
     }
-    r_range = r_max - r_min;
-    g_range = g_max - g_min;
-    b_range = b_max - b_min;
+    let r_range = r_max - r_min;
+    let g_range = g_max - g_min;
+    let b_range = b_max - b_min;
     //r_range = max(r for r,g,b,a in all_pixel_colors) - min(r for r,g,b,a in all_pixel_colors)
     //g_range = max(g for r,g,b,a in all_pixel_colors) - min(g for r,g,b,a in all_pixel_colors)
     //b_range = max(b for r,g,b,a in all_pixel_colors) - min(b for r,g,b,a in all_pixel_colors)
@@ -317,31 +259,26 @@ export function split_colors_into_buckets(all_pixel_colors, depth) {
     all_pixel_colors.sort(
         (a,b) => a[channel_index_with_highest_range] - b[channel_index_with_highest_range]
     );
-    median_index = Math.trunc((all_pixel_colors.length+1)/2);
-
-    let palette = [];
-    palette += split_colors_into_buckets(all_pixel_colors.slice(0,median_index), depth-1);
-    palette += split_colors_into_buckets(all_pixel_colors.slice(median_index), depth-1);
-    return palette;
+    const median_index = Math.trunc((all_pixel_colors.length+1)/2);
+    const pA = split_colors_into_buckets(all_pixel_colors.slice(0,median_index), depth-1);
+    const pB = split_colors_into_buckets(all_pixel_colors.slice(median_index), depth-1);
+    return pA.concat(pB);
 }
 
 export function average_colors_together(colors) {
     let r_sum=0, g_sum=0, b_sum=0, a_sum=0;
-    for(let c of colors) {
-        let [r,g,b,a] = c;
-        r_sum += r;
-        g_sum += g;
-        b_sum += b;
-        a_sum += a;
+    for(const c of colors) {
+        r_sum += c[0];
+        g_sum += c[1];
+        b_sum += c[2];
+        a_sum += c[3];
     }
-
-    let average_color = [
+    return [
         Math.trunc(r_sum/colors.length),
         Math.trunc(g_sum/colors.length),
         Math.trunc(b_sum/colors.length),
         Math.trunc(a_sum/colors.length),
     ];
-    return average_color;
 }
 
 export function color_exchange(image, base_color, replacement_color, mask_path=None, validate_mask_colors=True, ignore_bright=False) {
@@ -463,19 +400,16 @@ export function hsv_shift_color(color, h_shift, v_shift) {
     }
 
     let [h, s, v] = rgb2hsv(r/255, g/255, b/255);
-    h = Math.trunc(h*360);
-    s = Math.trunc(s*100);
-    v = Math.trunc(v*100);
-
-    h += h_shift;
-    h %= 360;
+    h = (Math.trunc(h*360) + h_shift) % 360;
+    s =  Math.trunc(s*100);
+    v =  Math.trunc(v*100);
 
     let orig_v = v;
     v += v_shift;
-    if(v < 0) v = 0;
+    if(v <   0) v =   0;
     if(v > 100) v = 100;
-    if(v < 30 && orig_v >= 30) v = 30;
-    if(v > 90 && orig_v <= 90) v = 90;
+    if(v <  30 && orig_v >= 30) v = 30;
+    if(v >  90 && orig_v <= 90) v = 90;
     let v_diff = v - orig_v;
 
     //Instead of shifting saturation separately, we simply make it
@@ -499,10 +433,10 @@ export function hsv_shift_color(color, h_shift, v_shift) {
         }
     }
     else s -= v_diff;
-    if(s < 0) s = 0;
+    if(s <   0) s =   0;
     if(s > 100) s = 100
-    if(s < 5 && orig_s >= 5) s = 5;
-    if(s > 80 && orig_s <= 80) s = 80;
+    if(s <   5 && orig_s >=  5) s =  5;
+    if(s >  80 && orig_s <= 80) s = 80;
 
     [r, g, b] = hsv2rgb(h/360, s/100, v/100);
     r = Math.trunc(r*255);

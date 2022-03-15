@@ -1,5 +1,5 @@
 import { IMAGE_FORMATS_THAT_USE_PALETTES, PaletteFormat, MAX_COLORS_FOR_IMAGE_FORMAT } from "./types.js";
-import { read_u16, write_u16 } from "./bits.js";
+import { write_u16 } from "./bits.js";
 import BytesIO from "./BytesIO.js";
 import { DataError } from "../../app/errors.js";
 
@@ -13,7 +13,7 @@ export function decode_palettes(palette_data, palette_format, num_colors, image_
     let colors = [];
     let offset = 0;
     for(let i=0; i<num_colors; i++) {
-        let raw_color = read_u16(palette_data, offset);
+        let raw_color = palette_data.getUint16(offset);
         let color = decode_color(raw_color, palette_format);
         colors.push(color);
         offset += 2;

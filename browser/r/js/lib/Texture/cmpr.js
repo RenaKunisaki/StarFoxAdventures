@@ -1,4 +1,4 @@
-import { read_u16, read_u32, write_u16, write_u32 } from "./bits.js";
+import { write_u16, write_u32 } from "./bits.js";
 import { convert_rgb565_to_color, convert_color_to_rgb565 } from "./color.js";
 
 export function get_interpolated_cmpr_colors(color_0_rgb565, color_1_rgb565) {
@@ -83,10 +83,10 @@ block_data_size, colors) {
         const subblock_y = Math.trunc(subblock_index/2)*4;
 
         const colors = get_interpolated_cmpr_colors(
-            read_u16(image_data, subblock_offset),
-            read_u16(image_data, subblock_offset+2));
+            image_data.getUint16(subblock_offset),
+            image_data.getUint16(subblock_offset+2));
 
-        const color_indexes = read_u32(image_data, subblock_offset+4);
+        const color_indexes = image_data.getUint32(subblock_offset+4);
         for(let i=0; i<16; i++) {
             const pixel_index_in_block = subblock_x + subblock_y*8 +
                 Math.trunc(i / 4)*8 + (i % 4);
