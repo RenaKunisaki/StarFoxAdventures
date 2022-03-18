@@ -123,7 +123,7 @@ def scanThreads(ram, addr):
     # check against each thread's stack
     for thread in threads:
         stackEnd, stackStart = readStruct(ram, '>II', ptrToOffset(thread)+0x304)
-        name = THREADS.get(thread, '?')
+        #name = THREADS.get(thread, '?')
         #printf("Thread %08X stack %08X - %08X: %s\n",
         #    thread, stackStart, stackEnd, name)
         if addr >= stackStart and addr < stackEnd:

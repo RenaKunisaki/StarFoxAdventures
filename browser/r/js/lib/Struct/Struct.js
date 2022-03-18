@@ -1,0 +1,56 @@
+import Field from "./Field.js";
+
+export default class Struct {
+    constructor(params) {
+        //should be called by parseXmlStructs().
+        this.name         = params.name;
+        this.littleEndian = params.littleEndian;
+        this.notes        = params.notes;
+        this.description  = params.description;
+        this.fields       = params.fields;
+        this.fieldsByName = params.fieldsByName;
+    }
+
+    read(view, offset=0) {
+        /** Read this struct from a DataView.
+         *  @param {DataView} view The view to read from.
+         *  @param {int} offset The byte offset to read from.
+         *  @returns {object} The values read from the view.
+         */
+        const result = {};
+        for(let field of this.fields) {
+            result[field.name] = field.read(view, offset+field.offset);
+        }
+        return result;
+    }
+
+    write(value, view, offset=0) {
+        /** Write this struct to a DataView.
+         *  @param {object} value The values to write.
+         *  @param {DataView} view The view to write to.
+         *  @param {int} offset The byte offset to write to.
+         *  @returns {DataView} The view that was written to.
+         */
+        let result = view;
+        for(let field of this.fields) {
+            result = field.write(value[field.name], view, offset+field.offset);
+        }
+        return result;
+    }
+
+    toString(value) {
+        /** Convert this struct to a string, for debugging.
+         *  @param value Value to convert.
+         *  @returns {string} String representation.
+         */
+        const result = [];
+        const nameLen = Math.max(...this.fields.map(f => f.name.length));
+        for(let field of this.fields) {
+            const name = (field.name+':').padEnd(nameLen+1);
+            const val  = field.type.toString(value[field.name]);
+            result.push(name+val);
+        }
+        return result.join('\n');
+    }
+}
+
