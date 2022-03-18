@@ -27,8 +27,21 @@ import os.path
 import math
 import struct
 
-NUM_HEAPS = 4
+RAM_START  = 0x80000000
+RAM_SIZE   = 0x01800000
+RAM_END    = RAM_START + RAM_SIZE
+NUM_HEAPS  = 4
 HEAP_TABLE = 0x80340698 & 0x1FFFFFFF
+THREAD_QUEUE_HEAD = 0x800000DC
+THREAD_QUEUE_TAIL = 0x800000E0
+
+THREADS = {
+    0x803A54A0: "thpAudio",
+    0x803A6F08: "thpUnk",
+    0x803A8348: "thpMovie",
+    0x803AB118: "bsod",
+    0x803AD848: "main",
+}
 
 # since the mod replaces tag with the location of the alloc call,
 # we can identify the type of most objects by their tag.
@@ -66,12 +79,17 @@ def readStruct(file, fmt, offset=None):
     if len(r) == 1: return r[0] # grumble
     return r
 
+def validPtr(addr):
+    return RAM_START <= addr < RAM_END
+
+def ptrToOffset(addr):
+    return addr - RAM_START
 
 def scanHeap(ram, idx, addr):
     """Search specified heap for specified address."""
     totalSize, usedSize, totalBlocks, usedBlocks, data = \
         readStruct(ram, '>5I', HEAP_TABLE + (idx * 0x14))
-    data = data & 0x1FFFFFFF
+    data = ptrToOffset(data)
     for i in range(usedBlocks):
         entry = readStruct(ram, '>IIHHHHIII', data + (i * 0x1C))
         loc, size = entry[0], entry[1]
@@ -81,6 +99,36 @@ def scanHeap(ram, idx, addr):
         if loc <= addr and (loc + size) > addr:
             return entry, i
     return None, None
+
+
+def scanThreads(ram, addr):
+    """Search thread stacks for specified address."""
+    # make list of threads
+    threads = set()
+
+    def _readThreads(base, offset): # this is dumb
+        pThread = readStruct(ram, '>I', ptrToOffset(base))
+        while validPtr(pThread):
+            threads.add(pThread)
+            pThread = readStruct(ram, '>I', ptrToOffset(pThread)+offset)
+    _readThreads(THREAD_QUEUE_HEAD, 0x2FC) # head
+    _readThreads(THREAD_QUEUE_HEAD, 0x300) # tail
+    _readThreads(THREAD_QUEUE_TAIL, 0x2FC) # head
+    _readThreads(THREAD_QUEUE_TAIL, 0x300) # tail
+
+    # and since that queue only contains active threads and there's
+    # apparently no way to iterate *all* threads...
+    for addr in THREADS.keys(): threads.add(addr)
+
+    # check against each thread's stack
+    for thread in threads:
+        stackEnd, stackStart = readStruct(ram, '>II', ptrToOffset(thread)+0x304)
+        name = THREADS.get(thread, '?')
+        #printf("Thread %08X stack %08X - %08X: %s\n",
+        #    thread, stackStart, stackEnd, name)
+        if addr >= stackStart and addr < stackEnd:
+            return thread
+    return None
 
 
 def checkAddr(ram, addr):
@@ -96,8 +144,10 @@ def checkAddr(ram, addr):
                 addr, i, entryIdx, entry[0], entry[0]+entry[1], entry[1],
                 entry[6], tag, entry[8])
             return
-    printf("0x%08X: not found in heap\n", addr)
-
+    thread = scanThreads(ram, addr)
+    if thread:
+        printf("0x%08X: on stack of thread 0x%08X\n", addr, thread)
+    printf("0x%08X: not found\n", addr)
 
 def main(addrs, dumpPath):
     with open(dumpPath, 'rb') as ram:
