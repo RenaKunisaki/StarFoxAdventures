@@ -7,24 +7,60 @@ import { Type, types } from "./Type.js";
 export default class StructParser {
     constructor() {
         this._parsedPaths = new Set();
-        this.types = {};
+        this.types = {}; //root namespace
         this._namespaceParents = {}; //namespace => parent
         for(let [name, tp] of Object.entries(types)) {
             this.types[name] = new tp();
         }
+
+        //these are the same for several types,
+        //so let's not duplicate them.
+        this._defaultTagHandlers = {
+            description: this._parseDescription,
+            note: this._parseNote,
+        };
     }
 
-    getType(name, namespace=null) {
-        if(namespace == null) namespace = this.types;
-        while(namespace != undefined) {
-            let result = namespace;
-            for(let n of name.split('.')) {
-                result = result[n];
-            }
-            if(result != undefined) return result;
-            namespace = this._namespaceParents[namespace];
+    _parseDescription(obj, elem) {
+        /** Parse a 'description' element. */
+        if(obj.description != null && obj.description != undefined) {
+            throw new Error("Multiple 'description' elements");
         }
-        console.error("Type not found", name);
+        obj.description = elem.textContent;
+    }
+
+    _parseNote(obj, elem) {
+        /** Parse a 'note' element. */
+        obj.notes.push(elem.textContent);
+    }
+
+    _parseGenericTag(obj, elem) {
+        /** Parse a child node that can appear under many
+         *  different parents.
+         */
+        if(elem.tagName == undefined) return; //text (whitespace, etc)
+        else if(this._defaultTagHandlers[elem.tagName]) {
+            this._defaultTagHandlers[elem.tagName](obj, elem);
+        }
+        else throw new TypeError(`Unexpected element: ${elem.tagName}`);
+    }
+
+    _getByteOrder(elem) {
+        /** Parse the 'order' attribute of the given element,
+         *  if it exists.
+         *  @param {Element} elem The element to parse.
+         *  @returns {bool} true if the byte order is little endian;
+         *   false if big endian.
+         */
+        const order = elem.getAttribute('order');
+        switch(order) {
+            //default is same as JS' DataView methods (big endian)
+            case undefined: case null: //default (fall thru)
+            case '>': return false;
+            case '<': return true;
+            default: throw new Error(
+                `Invalid value '${order}' for attribute 'order' in element '${elem.tagName}'`);
+        }
     }
 
     _parseEnumItem(eItem, namespace=null) {
@@ -37,22 +73,7 @@ export default class StructParser {
             notes:        [],
         };
         for(let child of eItem.childNodes) {
-            switch(child.tagName) {
-                case undefined: continue; //text node
-                case 'description':
-                    if(result.description != null) {
-                        throw new Error("Multiple 'description' elements");
-                    }
-                    result.description = child.textContent;
-                    break;
-
-                case 'note':
-                    result.notes.push(child.textContent);
-                    break;
-
-                default: throw new TypeError(
-                    `Unexpected element: ${child.tagName}`);
-            }
+            this._parseGenericTag(result, child);
         }
         return new EnumItem(result);
     }
@@ -81,7 +102,6 @@ export default class StructParser {
         let value = 0;
         for(let child of eEnum.childNodes) {
             switch(child.tagName) {
-                case undefined: continue; //text node
                 case 'item': {
                     let item = this._parseEnumItem(child, namespace);
                     if(item.value != undefined && item.value != null) {
@@ -102,30 +122,18 @@ export default class StructParser {
                     break;
                 }
 
-                case 'description':
-                    if(result.description != null) {
-                        throw new Error("Multiple 'description' elements");
-                    }
-                    result.description = child.textContent;
-                    break;
-
-                case 'note':
-                    result.notes.push(child.textContent);
-                    break;
-
-                default: throw new TypeError(
-                    `Unexpected element: ${child.tagName}`);
+                default: this._parseGenericTag(result, child);
             }
         }
         return new Enum(result);
     }
 
-    _parseField(eField, offset, namespace=null, littleEndian=false) {
-        /** Parse one 'field' element. */
+    _parseStructField(eField, offset, namespace=null, littleEndian=false) {
+        /** Parse one 'field' element for a struct. */
         if(namespace == null) namespace = this.types;
         const field = {
             offset: offset,
-            littleEndian: littleEndian,
+            littleEndian: this._getByteOrder(eField),
             count: int(eField.getAttribute('count'), 1),
             description: null,
             notes: [],
@@ -146,35 +154,9 @@ export default class StructParser {
         if(!name) name = `_${hex(offset,2)}`;
         field.name = name;
 
-        //get byte order
-        const order = eField.getAttribute('order');
-        switch(order) {
-            case undefined: case null:
-                field.littleEndian = false; break;
-            case '>': field.littleEndian = false; break;
-            case '<': field.littleEndian = true; break;
-            default: throw new Error(
-                `Invalid value '${order}' for attribute 'order'`);
-        }
-
         //get notes
         for(let child of eField.childNodes) {
-            switch(child.tagName) {
-                case undefined: continue; //text node
-                case 'description':
-                    if(field.description != null) {
-                        throw new Error("Multiple 'description' elements");
-                    }
-                    field.description = child.textContent;
-                    break;
-
-                case 'note':
-                    field.notes.push(child.textContent);
-                    break;
-
-                default: throw new TypeError(
-                    `Unexpected element: ${child.tagName}`);
-            }
+            this._parseGenericTag(field, child);
         }
 
         return new Field(field);
@@ -189,45 +171,28 @@ export default class StructParser {
             fieldsByName: {},
             notes:        [],
             description:  null,
-            littleEndian: false,
+            littleEndian: this._getByteOrder(eStruct),
         };
+        //anonymous structs are fine
         //if(!result.name) throw new Error("No name specified for struct");
-
-        //get byte order
-        const order = eStruct.getAttribute('order');
-        switch(order) {
-            case undefined: case null: result.littleEndian = false; break;
-            case '>': result.littleEndian = false; break;
-            case '<': result.littleEndian = true; break;
-            default: throw new Error(`Invalid value '${order}' for attribute 'order'`);
-        }
 
         //get elements
         let offset = 0;
         for(let child of eStruct.childNodes) {
             switch(child.tagName) {
-                case undefined: continue; //text node
-                case 'description':
-                    if(result.description != null) {
-                        throw new Error("Multiple 'description' elements");
-                    }
-                    result.description = child.textContent;
-                    break;
-
-                case 'note':
-                    result.notes.push(child.textContent);
-                    break;
-
                 case 'padding':
                     offset += int(child.getAttribute('count'));
                     break;
 
                 case 'field': {
-                    const field = this._parseField(
+                    const field = this._parseStructField(
                         child, offset, namespace, result.littleEndian);
                     console.assert(!isNaN(field.size));
                     if(result.fieldsByName[field.name]) {
-                        throw new Error(`Duplicate field name: ${field.name}`);
+                        let sName = result.name;
+                        if(!sName) sName = '(anonymous)';
+                        throw new Error(
+                            `Duplicate field name: '${field.name}' in struct '${sName}'`);
                     }
                     result.fieldsByName[field.name] = field;
                     result.fields.push(field);
@@ -235,7 +200,7 @@ export default class StructParser {
                     break;
                 }
 
-                default: throw new TypeError(`Unexpected element: ${child.tagName}`);
+                default: this._parseGenericTag(result, child);
             }
         }
         return new Struct(result);
@@ -289,6 +254,31 @@ export default class StructParser {
             }
         }
         return namespace;
+    }
+
+    getType(name, namespace=null) {
+        /** Get the specified type from the given namespace or its ancestors.
+         *  @param {string} name The type name.
+         *  @param {object} namespace The namespace to look in.
+         *  @returns {Type} The type.
+         *  @note Type name can specify a namespace using periods,
+         *   eg "foo.bar.baz".
+         *  @note If name isn't found in the given namespace, it will then
+         *   check the namespace's parent, and so on. If the type isn't found
+         *   in any namespace, an error is thrown.
+         */
+        if(namespace == null) namespace = this.types;
+        while(namespace != undefined) {
+            let result = namespace;
+            for(let n of name.split('.')) {
+                if(result == undefined) break;
+                result = result[n];
+            }
+            if(result != undefined) return result;
+            //console.log("Name", name, "not found in namespace", namespace);
+            namespace = this._namespaceParents[namespace];
+        }
+        throw new Error(`Type '${name}' not found`);
     }
 
     async selfTest() {
