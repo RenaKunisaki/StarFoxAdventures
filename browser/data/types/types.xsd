@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <!-- <xs:simpleType name="typeName">
+    <!-- don't use this because it doesn't allow referring to
+        types the document itself defines.
+        <xs:simpleType name="typeName">
         <xs:restriction base="xs:NMTOKEN">
             <xs:enumeration value="s8" />
             <xs:enumeration value="u8" />
@@ -22,6 +24,12 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:choice minOccurs="1" maxOccurs="unbounded">
+                    <xs:element name="include" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:attribute name="path" type="xs:string" use="required" />
+                        </xs:complexType>
+                    </xs:element> <!-- include -->
+
                     <xs:element name="struct" minOccurs="0" maxOccurs="unbounded">
                         <xs:complexType>
                             <xs:sequence>
@@ -46,7 +54,7 @@
                                     </xs:element> <!-- padding -->
                                 </xs:choice>
                             </xs:sequence>
-                            <xs:attribute name="name" type="xs:string" use="required" />
+                            <xs:attribute name="name" type="xs:string" use="optional" />
                         </xs:complexType>
                     </xs:element> <!-- struct -->
 

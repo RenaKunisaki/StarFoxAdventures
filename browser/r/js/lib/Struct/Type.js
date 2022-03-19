@@ -4,9 +4,11 @@ export class Type {
 
     get size() { return this.constructor._size; } //loljs
 
-    fromBytes(data, offset=0, littleEndian=false) {
+    constructor() { }
+
+    fromBytes(view, offset=0, littleEndian=false) {
         /** Read this type from a data stream.
-         *  @param {DataView} data View to read from.
+         *  @param {DataView} view View to read from.
          *  @param {int} offset Byte offset to read from.
          *  @param {bool} littleEndian whether to use little endian byte order.
          *  @returns The value read from the view.
@@ -14,10 +16,10 @@ export class Type {
         throw new Error("Class has no fromBytes method");
     }
 
-    toBytes(value, data=null, offset=0, littleEndian=false) {
+    toBytes(value, view=null, offset=0, littleEndian=false) {
         /** Pack this type into a data stream.
          *  @param value Value to write.
-         *  @param {DataView} data View to write into.
+         *  @param {DataView} view View to write into.
          *  @param {int} offset Byte offset to write to.
          *  @param {bool} littleEndian whether to use little endian byte order.
          *  @returns The data view.
@@ -34,9 +36,9 @@ export class Type {
         return String(value);
     }
 
-    _getBuf(data) {
-        if(data) return data;
-        return new ArrayBuffer(this.size);
+    _getBuf(view) {
+        if(view) return view;
+        return new DataView(new ArrayBuffer(this.size));
     }
 }
 
@@ -44,155 +46,155 @@ export class Type {
 
 export class s8 extends Type {
     static _size = 1;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getInt8(offset);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getInt8(offset);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setInt8(offset, value);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setInt8(offset, value);
+        return view;
     }
 }
 export class u8 extends Type {
     static _size = 1;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getUint8(offset);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getUint8(offset);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setUint8(offset, value);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setUint8(offset, value);
+        return view;
     }
 }
 export class s16 extends Type {
     static _size = 2;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getInt16(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getInt16(offset, littleEndian);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setInt16(offset, value, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setInt16(offset, value, littleEndian);
+        return view;
     }
 }
 export class u16 extends Type {
     static _size = 2;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getUint16(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getUint16(offset, littleEndian);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setUint16(offset, value, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setUint16(offset, value, littleEndian);
+        return view;
     }
 }
 export class s32 extends Type {
     static _size = 4;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getInt32(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getInt32(offset, littleEndian);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setInt32(offset, value, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setInt32(offset, value, littleEndian);
+        return view;
     }
 }
 export class u32 extends Type {
     static _size = 4;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getUint32(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getUint32(offset, littleEndian);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setUint32(offset, value, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setUint32(offset, value, littleEndian);
+        return view;
     }
 }
 export class s64 extends Type {
     static _size = 8;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getBigInt64(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getBigInt64(offset, littleEndian);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setBigInt64(offset, value, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setBigInt64(offset, value, littleEndian);
+        return view;
     }
 }
 export class u64 extends Type {
     static _size = 8;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getBigUint64(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getBigUint64(offset, littleEndian);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setBigUint64(offset, value, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setBigUint64(offset, value, littleEndian);
+        return view;
     }
 }
 export class float extends Type {
     static _size = 4;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getFloat32(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getFloat32(offset, littleEndian);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setFloat32(offset, value, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setFloat32(offset, value, littleEndian);
+        return view;
     }
 }
 export class double extends Type {
     static _size = 8;
-    fromBytes(data, offset=0, littleEndian=false) {
-        return data.getFloat64(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        return view.getFloat64(offset, littleEndian);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setFloat64(offset, value, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setFloat64(offset, value, littleEndian);
+        return view;
     }
 }
 export class char extends Type {
     static _size = 1;
-    fromBytes(data, offset=0, littleEndian=false) {
-        let res = data.getInt8(offset);
+    fromBytes(view, offset=0, littleEndian=false) {
+        let res = view.getInt8(offset);
         if(res == 0) return '';
         else return String.fromCharCode(res);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
+    toBytes(value, view=null, offset=0, littleEndian=false) {
         if(value == '') value = 0;
         else if(value.length > 1) {
             throw new Error("More than one character specified for char");
         }
         else value = value.charCodeAt(0);
-        data = this._getBuf(data);
-        data.setInt8(offset, value);
-        return data;
+        view = this._getBuf(view);
+        view.setInt8(offset, value);
+        return view;
     }
 }
 export class bool extends Type {
     static _size = 1;
-    fromBytes(data, offset=0, littleEndian=false) {
-        let res = data.getInt8(offset);
+    fromBytes(view, offset=0, littleEndian=false) {
+        let res = view.getInt8(offset);
         return (res != 0);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setInt8(offset, value ? 1 : 0);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setInt8(offset, value ? 1 : 0);
+        return view;
     }
 }
 export class widebool extends Type {
     /** bool padded to 4 bytes, seen often in 32-bit systems */
     static _size = 4;
-    fromBytes(data, offset=0, littleEndian=false) {
-        let res = data.getInt32(offset, littleEndian);
+    fromBytes(view, offset=0, littleEndian=false) {
+        let res = view.getInt32(offset, littleEndian);
         return (res != 0);
     }
-    toBytes(value, data=null, offset=0, littleEndian=false) {
-        data = this._getBuf(data);
-        data.setInt32(offset, value ? 1 : 0, littleEndian);
-        return data;
+    toBytes(value, view=null, offset=0, littleEndian=false) {
+        view = this._getBuf(view);
+        view.setInt32(offset, value ? 1 : 0, littleEndian);
+        return view;
     }
 }
 

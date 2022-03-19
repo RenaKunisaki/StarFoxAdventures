@@ -1,16 +1,128 @@
 import { getXml, hex, int } from "../../Util.js";
 import Struct from "./Struct.js";
 import Field from "./Field.js";
+import { EnumItem, Enum } from "./Enum.js";
 import { Type, types } from "./Type.js";
 
 export default class StructParser {
     constructor() {
-        this.types = {};
         this._parsedPaths = new Set();
+        this.types = {};
+        this._namespaceParents = {}; //namespace => parent
+        for(let [name, tp] of Object.entries(types)) {
+            this.types[name] = new tp();
+        }
     }
 
-    _parseField(eField, offset, littleEndian=false) {
+    getType(name, namespace=null) {
+        if(namespace == null) namespace = this.types;
+        while(namespace != undefined) {
+            let result = namespace;
+            for(let n of name.split('.')) {
+                result = result[n];
+            }
+            if(result != undefined) return result;
+            namespace = this._namespaceParents[namespace];
+        }
+        console.error("Type not found", name);
+    }
+
+    _parseEnumItem(eItem, namespace=null) {
+        /** Parse one 'item' element in an enum. */
+        if(namespace == null) namespace = this.types;
+        const result = {
+            name:         eItem.getAttribute('name'),
+            value:        int(eItem.getAttribute('value')),
+            description:  null,
+            notes:        [],
+        };
+        for(let child of eItem.childNodes) {
+            switch(child.tagName) {
+                case undefined: continue; //text node
+                case 'description':
+                    if(result.description != null) {
+                        throw new Error("Multiple 'description' elements");
+                    }
+                    result.description = child.textContent;
+                    break;
+
+                case 'note':
+                    result.notes.push(child.textContent);
+                    break;
+
+                default: throw new TypeError(
+                    `Unexpected element: ${child.tagName}`);
+            }
+        }
+        return new EnumItem(result);
+    }
+
+    _parseEnum(eEnum, namespace=null) {
+        /** Parse one 'enum' element. */
+        if(namespace == null) namespace = this.types;
+        const result = {
+            name:         eEnum.getAttribute('name'),
+            type:         types.int,
+            fields:       {},
+            fieldsByName: {},
+            description:  null,
+            notes:        [],
+        };
+
+        //get type
+        let tName = eEnum.getAttribute('type');
+        if(tName != null && tName != undefined) {
+            const type = this.getType(tName, namespace);
+            if(type) result.type = type;
+            else throw new Error(`Unknown type: '${tName}'`);
+        }
+
+        //get items
+        let value = 0;
+        for(let child of eEnum.childNodes) {
+            switch(child.tagName) {
+                case undefined: continue; //text node
+                case 'item': {
+                    let item = this._parseEnumItem(child, namespace);
+                    if(item.value != undefined && item.value != null) {
+                        value = item.value;
+                    }
+                    item.value = value++;
+                    if(result.fields[item.value] != undefined) {
+                        throw new Error(
+                            `Multiple instances of value '${item.value}' in enum '${result.name}'`);
+                    }
+                    result.fields[item.value] = item;
+
+                    if(result.fieldsByName[item.name] != undefined) {
+                        throw new Error(
+                            `Multiple instances of name '${item.name}' in enum '${result.name}'`);
+                    }
+                    result.fieldsByName[item.name] = item;
+                    break;
+                }
+
+                case 'description':
+                    if(result.description != null) {
+                        throw new Error("Multiple 'description' elements");
+                    }
+                    result.description = child.textContent;
+                    break;
+
+                case 'note':
+                    result.notes.push(child.textContent);
+                    break;
+
+                default: throw new TypeError(
+                    `Unexpected element: ${child.tagName}`);
+            }
+        }
+        return new Enum(result);
+    }
+
+    _parseField(eField, offset, namespace=null, littleEndian=false) {
         /** Parse one 'field' element. */
+        if(namespace == null) namespace = this.types;
         const field = {
             offset: offset,
             littleEndian: littleEndian,
@@ -19,17 +131,22 @@ export default class StructParser {
             notes: [],
         };
 
+        //get offset
         let offs = eField.getAttribute('offset');
         if(offs == undefined) offs = offset;
-        const tName = eField.getAttribute('type');
-        const type  = types[tName];
-        if(type == undefined) throw new TypeError(`Unknown type: '${tName}'`);
-        field.type = new type();
 
+        //get type
+        const tName = eField.getAttribute('type');
+        const type  = this.getType(tName, namespace);
+        if(type == undefined) throw new TypeError(`Unknown type: '${tName}'`);
+        field.type = type;
+
+        //get name
         let name = eField.getAttribute('name');
         if(!name) name = `_${hex(offset,2)}`;
         field.name = name;
 
+        //get byte order
         const order = eField.getAttribute('order');
         switch(order) {
             case undefined: case null:
@@ -40,6 +157,7 @@ export default class StructParser {
                 `Invalid value '${order}' for attribute 'order'`);
         }
 
+        //get notes
         for(let child of eField.childNodes) {
             switch(child.tagName) {
                 case undefined: continue; //text node
@@ -62,8 +180,9 @@ export default class StructParser {
         return new Field(field);
     }
 
-    _parseStruct(eStruct) {
+    _parseStruct(eStruct, namespace) {
         /** Parse one 'struct' element. */
+        if(namespace == null) namespace = this.types;
         const result = {
             name:         eStruct.getAttribute('name'),
             fields:       [],
@@ -74,6 +193,7 @@ export default class StructParser {
         };
         //if(!result.name) throw new Error("No name specified for struct");
 
+        //get byte order
         const order = eStruct.getAttribute('order');
         switch(order) {
             case undefined: case null: result.littleEndian = false; break;
@@ -82,6 +202,7 @@ export default class StructParser {
             default: throw new Error(`Invalid value '${order}' for attribute 'order'`);
         }
 
+        //get elements
         let offset = 0;
         for(let child of eStruct.childNodes) {
             switch(child.tagName) {
@@ -103,7 +224,7 @@ export default class StructParser {
 
                 case 'field': {
                     const field = this._parseField(
-                        child, offset, result.littleEndian);
+                        child, offset, namespace, result.littleEndian);
                     console.assert(!isNaN(field.size));
                     if(result.fieldsByName[field.name]) {
                         throw new Error(`Duplicate field name: ${field.name}`);
@@ -123,8 +244,8 @@ export default class StructParser {
     async parseFile(path, namespace=null) {
         /** Parse an XML structs document. */
         const parsers = {
-            struct: elem => this._parseStruct(elem),
-            //enum: parseXmlEnum,
+            struct: elem => this._parseStruct(elem, namespace),
+            enum:   elem => this._parseEnum(elem, namespace),
             //typedef: parseXmlTypedef,
         };
 
@@ -136,7 +257,11 @@ export default class StructParser {
         if(namespace == null) namespace = this.types;
         if(nsName != null && nsName != undefined) {
             if(nsName == '') throw new Error("Empty namespace name");
-            if(namespace[nsName] == undefined) namespace[nsName] = {};
+            if(namespace[nsName] == undefined) {
+                const newNs = {};
+                namespace[nsName] = newNs;
+                this._namespaceParents[newNs] = namespace;
+            }
             namespace = namespace[nsName];
         }
 

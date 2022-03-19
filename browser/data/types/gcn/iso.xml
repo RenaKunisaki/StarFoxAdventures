@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="../types.xsd"?>
-<types>
-    <enum name="CountryCode">
+<types namespace="iso">
+    <enum name="CountryCode" type="int">
         <item name="Japan" />
         <item name="Americas" />
         <item name="Europe" />

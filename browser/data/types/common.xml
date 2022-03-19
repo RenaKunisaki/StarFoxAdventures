@@ -18,4 +18,5 @@
         <field name="z" type="s16" />
     </struct>
     <include path="./gcn/gci.xml" />
+    <include path="./gcn/iso.xml" />
 </types>
