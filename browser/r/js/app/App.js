@@ -1,6 +1,6 @@
 import { SaveGame } from "../game/save/SaveGame.js";
 import { getXml } from "../Util.js";
-import getStructs from "../lib/Struct/parse.js";
+import StructParser from "../lib/Struct/parse.js";
 
 import { E } from "../lib/Element.js";
 import TaskProgress from "./ui/TaskProgress.js";
@@ -66,14 +66,8 @@ export default class App {
             };
 
             //test
-            const structs = await getStructs('/data/types/common.xml');
-            const testBuffer = new ArrayBuffer(64);
-            const testView = new DataView(testBuffer);
-            structs.vec3f.write({x:1, y:2, z:3}, testView);
-            const testData = structs.vec3f.read(testView);
-            console.assert(testData.x == 1);
-            console.assert(testData.y == 2);
-            console.assert(testData.z == 3);
+            const parser = new StructParser();
+            await parser.selfTest();
 
             const eLang = document.getElementById('language');
             for(let lang of Object.keys(Language)) {

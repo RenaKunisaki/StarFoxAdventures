@@ -17,4 +17,5 @@
         <field name="y" type="s16" />
         <field name="z" type="s16" />
     </struct>
+    <include path="./gcn/gci.xml" />
 </types>

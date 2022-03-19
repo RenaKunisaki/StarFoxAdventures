@@ -2,24 +2,28 @@ import { Type } from "./Type.js";
 
 export default class Field {
     /** One field of a struct. */
-    constructor(offset, type, name, littleEndian=false, count=1) {
+    constructor(params) {
         /** Construct a Field.
          *  @param {int} offset The byte offset within the struct.
          *  @param {Type} type The data type.
-         *  @param {str} name The field name.
+         *  @param {string} name The field name.
          *  @param {bool} littleEndian whether to use little endian byte order.
          *  @param {int} count The array count, if applicable.
+         *  @param {string} description A description of the field.
+         *  @param {string[]} notes Some notes about the field.
          *  @note This should be called by the parser. You shouldn't
          *   need to call it yourself.
          */
-        console.assert(type instanceof Type);
-        console.assert(type.size);
-        this.offset       = offset;
-        this.type         = type;
-        this.name         = name;
-        this.count        = count;
-        this.littleEndian = littleEndian;
+        console.assert(params.type instanceof Type);
+        console.assert(params.type.size);
+        this.offset       = params.offset;
+        this.type         = params.type;
+        this.name         = params.name;
+        this.count        = params.count;
+        this.littleEndian = params.littleEndian;
         this.size         = this.type.size * this.count;
+        this.description  = params.description;
+        this.notes        = params.notes;
     }
 
     read(view, offset=0, littleEndian=undefined) {

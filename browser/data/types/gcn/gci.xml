@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?xml-model href="../types.xsd"?>
-<types>
+<types namespace="gci">
     <struct name="Header">
         <field name="gameCode" type="char" count="4" />
         <field name="company" type="char" count="2" />
