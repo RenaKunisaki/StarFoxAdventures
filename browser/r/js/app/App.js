@@ -1,6 +1,6 @@
 import { SaveGame } from "../game/save/SaveGame.js";
 import { getXml } from "../Util.js";
-import StructParser from "../lib/Struct/parse.js";
+import StructParser from "../lib/Struct/StructParser.js";
 
 import { E } from "../lib/Element.js";
 import TaskProgress from "./ui/TaskProgress.js";
