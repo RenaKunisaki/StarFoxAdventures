@@ -3913,13 +3913,13 @@
   <bit id="0x09C4" table="0" size="1" offset="0x0191"/>
   <bit id="0x09C5" table="0" size="1" offset="0x0192"/>
   <bit id="0x09C6" table="1" size="1" offset="0x01D2"/>
-  <bit id="0x09C7" table="1" size="1" offset="0x0170"/>
+  <bit id="0x09C7" table="1" size="1" offset="0x0170" name="DR_HighTopSwitch1"/>
   <bit id="0x09C8" table="0" size="1" offset="0x019A"/>
-  <bit id="0x09C9" table="1" size="1" offset="0x0171"/>
+  <bit id="0x09C9" table="1" size="1" offset="0x0171" name="DR_HighTopSwitch2"/>
   <bit id="0x09CA" table="0" size="1" offset="0x019B"/>
-  <bit id="0x09CB" table="1" size="1" offset="0x0172"/>
+  <bit id="0x09CB" table="1" size="1" offset="0x0172" name="DR_HighTopSwitch3"/>
   <bit id="0x09CC" table="2" size="1" offset="0x09CD"/>
-  <bit id="0x09CD" table="1" size="1" offset="0x0173"/>
+  <bit id="0x09CD" table="1" size="1" offset="0x0173" name="DR_HighTopSwitch4"/>
   <bit id="0x09CE" table="2" size="1" offset="0x09CE"/>
   <bit id="0x09CF" table="2" size="1" offset="0x09CF"/>
   <bit id="0x09D0" table="1" size="1" offset="0x0182"/>
