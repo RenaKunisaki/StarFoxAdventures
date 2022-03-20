@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<?xml-model href="../types.xsd"?>
+<types namespace="maps">
+    <struct name="RomListEntry">
+        <description>Common header of romlist entries</description>
+        <field name="objDef" type="ObjDefEnum" />
+        <field name="length" type="u8">
+            <description>Number of 4-byte words in this entry</description>
+        </field>
+        <field name="acts0" type="u8" />
+        <field name="loadFlags" type="u8" />
+        <field name="acts1" type="u8" />
+        <field name="bound" type="u8" />
+        <field name="cullDist" type="u8" />
+        <field name="position" type="vec3f" />
+        <field name="id" type="ObjUniqueId">
+            <description>Globally unique ID of this object</description>
+        </field>
+        <!-- following this is object-specific params -->
+    </struct>
+
+    <struct name="MapsBinEntry0">
+        <description>Entry in MAPS.bin referenced by MapsTabEntry.info</description>
+        <field name="sizeX" type="s16" />
+        <field name="sizeZ" type="s16" />
+        <field name="originX" type="s16" />
+        <field name="originZ" type="s16" />
+        <field name="unk08" type="u32" />
+        <field name="unk0C" type="u32" count="4">
+            <note>rect related? 4 of these, 4 of those...</note>
+        </field>
+        <field name="nBlocks" type="s16" />
+        <field name="unk1E" type="u16">
+            <description>possibly flags</description>
+        </field>
+    </struct>
+
+    <struct name="MapsTabEntry">
+        <description>Entry in MAPS.tab</description>
+        <field name="info" type="u32">
+            <description>offset of MapsBinEntry0</description>
+        </field>
+        <field name="blocks" type="u32">
+            <description>offset of u32[] (block data)</description>
+        </field>
+        <field name="rects" type="u32" count="4">
+            <description>offsets of some rect data</description>
+        </field>
+        <field name="romList" type="u32">
+            <description>offset of a FACEFEED header</description>
+            <note>In old versions this points to the actual list.
+                In the final version this points to a FACEFEED header
+                with no data following (the data is in a separate file);
+                its size tells how much memory to allocate.
+                The final will still load a list from here if there is
+                no external file. (TODO check for maps that have old
+                lists here.)
+            </note>
+        </field>
+    </struct>
+
+    <struct name="MapInfoEntry">
+        <description>Entry in MAPINFO.bin</description>
+        <field name="name" type="char" count="28">
+            <description>Map name displayed in debug menus</description>
+        </field>
+        <field name="type" type="u8">
+            <description>Map type</description>
+        </field>
+        <field name="unk1D" type="u8">
+            <description>Always 6</description>
+        </field>
+        <field name="objType" type="ObjDefEnum">
+            <description>If not zero, use this object type as the player. Not used in final version.</description>
+        </field>
+    </struct>
+
+    <struct name="MapGridItem">
+        <description>Entry in globalma.bin</description>
+        <field name="x" type="s16">
+            <description>Global X coord</description>
+        </field>
+        <field name="z" type="s16">
+            <description>Global Z coord</description>
+        </field>
+        <field name="layer" type="s16">
+            <description>Layer ID (-2 to 2)</description>
+        </field>
+        <field name="link" type="s16" count="2">
+            <description>Linked map IDs</description>
+        </field>
+    </struct>
+
+    <struct name="WarpTabEntry">
+        <field name="pos" type="vec3f" />
+        <field name="layer" type="s16" />
+        <field name="xRot" type="s16" />
+    </struct>
+</types>

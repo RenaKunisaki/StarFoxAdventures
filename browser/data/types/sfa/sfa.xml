@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="../types.xsd"?>
+<types>
+    <enum name="PlayerCharEnum" type="s8">
+        <item name="Krystal" />
+        <item name="Fox" />
+    </enum>
+    <enum name="Language" type="u8">
+        <item name="English" />
+        <item name="French" />
+        <item name="German" />
+        <item name="Italian" />
+        <item name="Japanese" />
+        <item name="Spanish" />
+    </enum>
+    <typedef name="ObjDefEnum" type="s16" />
+    <typedef name="ObjUniqueId" type="int" />
+    <include path="maps.xml" />
+    <include path="objects.xml" />
+    <include path="save.xml" />
+    <include path="text.xml" />
+</types>

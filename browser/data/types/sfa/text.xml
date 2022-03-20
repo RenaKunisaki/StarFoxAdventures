@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<?xml-model href="../types.xsd"?>
+<types namespace="text">
+    <!-- names from source file accidentally included on disc -->
+    <struct name="CharacterStruct">
+        <field name="character" type="u32">
+            <description>unicode number</description>
+        </field>
+        <field name="xpos" type="u16">
+            <description>coordinate of leftmost texel in font bitmap</description>
+        </field>
+        <field name="ypos" type="u16">
+            <description>coordinate of topmost texel in font bitmap</description>
+        </field>
+        <field name="left" type="s8">
+            <description>spacing</description>
+        </field>
+        <field name="right" type="s8">
+            <description>spacing</description>
+        </field>
+        <field name="top" type="s8">
+            <description>spacing</description>
+        </field>
+        <field name="bottom" type="s8">
+            <description>spacing</description>
+        </field>
+        <field name="width" type="u8">
+            <description>size</description>
+        </field>
+        <field name="height" type="u8">
+            <description>size</description>
+        </field>
+        <field name="font" type="u8">
+            <description>Index into GameTextFonts[] in GameTextData.h</description>
+        </field>
+        <field name="texture" type="u8">
+            <description>Index into Textures[] in the binary file</description>
+        </field>
+    </struct>
+
+    <struct name="GameTextStruct">
+        <field name="id" type="u16">
+            <description>which game text is this</description>
+        </field>
+        <field name="nPhrases" type="u16">
+            <description>how many phrases this text has</description>
+        </field>
+        <field name="window" type="u8">
+            <description>preferred window</description>
+        </field>
+        <field name="alignH" type="u8">
+            <description>horizontal alignment</description>
+        </field>
+        <field name="alignV" type="u8">
+            <description>vertical alignment</description>
+        </field>
+        <field name="language" type="u8">
+            <description>LANGUAGE_xxx from GameTextData.h</description>
+        </field>
+        <field name="phrases" type="u32">
+            <description>pointer to &lt;numPhrases&gt; pointers to localised strings</description>
+        </field>
+    </struct>
+
+    <struct name="TextureStruct">
+        <field name="texFmt" type="u16" />
+        <field name="pixFmt" type="u16" />
+        <field name="width" type="u16" />
+        <field name="height" type="u16" />
+    </struct>
+</types>

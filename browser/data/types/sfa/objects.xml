@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<?xml-model href="../types.xsd"?>
+<types namespace="objects">
+    <struct name="ObjectData">
+        <field name="unk00" type="float" />
+        <field name="scale" type="float" />
+        <field name="modelList" type="u32" />
+        <field name="textures" type="u32" />
+        <field name="unk10" type="u32" /><!-- unknown* -->
+        <field name="unk14" type="u32" /><!-- unknown* -->
+        <field name="seqCmds" type="u32" /><!-- ObjSeqCmds* -->
+        <field name="seq" type="u32" /><!-- u16* -->
+        <field name="event" type="u32" /><!-- unknown* -->
+        <field name="hits" type="u32" /><!-- unknown* -->
+        <field name="weaponData" type="u32" /><!-- unknown* -->
+        <field name="attachPoints" type="u32" /><!-- AttachPoint* -->
+        <field name="modLines" type="u32" /><!-- s16* -->
+        <field name="intersectPoints" type="u32" /><!-- unknown* -->
+        <field name="nextIntersectPoint" type="u32" /><!-- unknown* -->
+        <field name="nextIntersectLine" type="u32" /><!-- unknown* -->
+        <field name="aButtonInteraction" type="u32" /><!-- AButtonInteraction* -->
+        <field name="flags" type="u32" /><!-- ObjFileStructFlags44* -->
+        <field name="shadowType" type="u16" /><!-- ObjFileStruct_ShadowType -->
+        <field name="shadowTexture" type="s16" />
+        <field name="unk4C" type="s16" />
+        <field name="hitbox_flags60" type="u16" /><!-- HitboxFlags60 -->
+        <field name="dll_id" type="s16" /><!-- DLL_ID -->
+        <field name="catId" type="u16" /><!-- ObjCatId -->
+        <field name="unk54" type="u8" />
+        <field name="nModels" type="u8" />
+        <field name="nPlayerObjs" type="u8" />
+        <field name="unk57" type="u8" />
+        <field name="nAttachPoints" type="u8" />
+        <field name="nTextures" type="u8" />
+        <field name="nVecs" type="u8" />
+        <field name="unk5B" type="u8" />
+        <field name="modLinesSize" type="u8" />
+        <field name="modLinesIdx" type="u8" />
+        <field name="nSeqs" type="u8" />
+        <field name="flags5F" type="u8" /><!-- ObjFileStructFlags5F -->
+        <field name="hitbox_fieldB0" type="u8" />
+        <field name="hasHitbox" type="u8" />
+        <field name="hitboxSizeXY" type="u8" />
+        <field name="hitbox_field6A" type="u8" />
+        <field name="hitbox_field6B" type="u8" />
+        <field name="hitbox_flags62" type="u8" /><!-- HitboxFlags62 -->
+        <field name="unk66" type="u8" />
+        <field name="hitbox_fieldB5" type="u8" />
+        <field name="hitboxSizeX1" type="s16" />
+        <field name="hitboxSizeY1" type="s16" />
+        <field name="hitboxSizeZ1" type="s16" />
+        <field name="hitboxSizeZ2" type="s16" />
+        <field name="hitbox_fieldB4" type="u8" />
+        <field name="flags71" type="u8" />
+        <field name="nFocusPoints" type="u8" />
+        <field name="cullDistance" type="u8" />
+        <field name="unk74" type="u8" />
+        <field name="unk75" type="u8" />
+        <field name="flags76" type="u8" /><!-- ObjectFileStructFlags76 -->
+        <field name="hitboxSizeZ" type="u8" />
+        <field name="map" type="MapDirIdx16" />
+        <field name="unk7A" type="s16" />
+        <field name="helpTexts" type="GameTextId16" count="4">
+            <note>One per model</note>
+        </field>
+        <field name="unk84" type="s16" />
+        <field name="unk86" type="s16" />
+        <field name="lagVar88" type="float" />
+        <field name="nLights" type="u8" />
+        <field name="lightIdx" type="u8" />
+        <field name="colorIdx" type="u8" />
+        <field name="unk8F" type="u8" />
+        <field name="hitbox_flagsB6" type="u8" /><!-- HitboxFlags62 again -->
+        <field name="name" type="char" count="11" />
+        <!-- following is fields pointed to by the above.
+        only way to determine size is by OBJECTS.TAB -->
+    </struct>
+</types>

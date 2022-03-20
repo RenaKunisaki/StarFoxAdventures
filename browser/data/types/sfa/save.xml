@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<?xml-model href="../types.xsd"?>
+<types namespace="save">
+    <struct name="PlayerCharPos">
+        <description>Saved character position</description>
+        <field name="pos" type="vec3f" />
+        <field name="rotX" type="s8">
+            <description>High byte of an angle (-32768 to 32767)</description>
+        </field>
+        <field name="mapLayer" type="s8" />
+        <field name="mapNo" type="s8">
+            <!-- XXX is this a map ID or a dir ID? -->
+        </field>
+        <field name="unk0F" type="s8">
+            <description>Probably padding</description>
+        </field>
+    </struct>
+
+    <struct name="PlayerCharState">
+        <description>Saved character state</description>
+        <field name="curHealth" type="s8" />
+        <field name="maxHealth" type="s8" />
+        <field name="unk02" type="s8" />
+        <field name="unk03" type="s8" />
+        <field name="curMagic" type="u16" />
+        <field name="maxMagic" type="u16" />
+        <field name="money" type="u8" />
+        <field name="curBafomDads" type="u8" />
+        <field name="maxBafomDads" type="u8" />
+        <field name="unk0B" type="s8">
+            <description>Probably padding</description>
+        </field>
+    </struct>
+
+    <struct name="SavedHighScore">
+        <field name="score" type="u32" />
+        <field name="name" type="char" count="4" />
+        <note>XXX different for Japanese?</note>
+    </struct>
+
+    <struct name="SaveGameSettings">
+        <description>Settings common to all save files</description>
+        <field name="exists" type="bool" />
+        <field name="unused01" type="u8">
+            <note>Amethyst: extra options</note>
+        </field>
+        <field name="bSubtitlesOn" type="bool" />
+        <field name="unusedHudSetting" type="u8">
+            <description>copied to a never-read variable</description>
+            <note>Amethyst: camera options</note>
+        </field>
+        <field name="unusedCameraSetting" type="u8">
+            <description>copied to bitmask 0x18 of camera-&gt;flags_0x141</description>
+        </field>
+        <field name="unused05" type="u8" />
+        <field name="bWidescreen" type="bool" />
+        <field name="unused07" type="u8">
+            <note>Amethyst: current character</note>
+        </field>
+        <field name="bRumbleEnabled" type="bool" />
+        <field name="soundMode" type="u8" />
+        <field name="musicVolume" type="s8" />
+        <field name="sfxVolume" type="s8" />
+        <field name="cutsceneVolume" type="s8" />
+        <field name="unused0D" type="u8">
+            <note>Amethyst: options</note>
+        </field>
+        <field name="unused0E" type="u16">
+            <note>Amethyst: FOV, map opacity</note>
+        </field>
+        <field name="unlockedCheats" type="u32" />
+        <field name="activeCheats" type="u32" />
+        <field name="unk18" type="u32" />
+    </struct>
+
+    <struct name="SaveSettingsAndScores">
+        <field name="settings" type="SaveGameSettings" />
+        <field name="scoresToPlanet" type="SavedHighScore" count="5" />
+        <field name="scoresDarkIce" type="SavedHighScore" count="5" />
+        <field name="scoresCloudRunner" type="SavedHighScore" count="5" />
+        <field name="scoresWallCity" type="SavedHighScore" count="5" />
+        <field name="scoresDragonRock" type="SavedHighScore" count="5" />
+    </struct>
+
+    <struct name="SaveGameEnvState">
+        <field name="timeOfDay" type="float" />
+        <field name="envFxActIdx" type="s16" count="5" />
+        <field name="envFxActIdx2" type="s16" count="3" />
+        <field name="skyObjPos" type="vec3i" count="3" />
+        <field name="unk38" type="s32" count="2" />
+        <field name="flags" type="u8" />
+        <field name="skyObjIdx" type="s8" count="3" />
+    </struct>
+
+    <struct name="SaveGameObjectPos">
+        <note>rarely used</note>
+        <field name="id" type="ObjUniqueId" />
+        <field name="pos" type="vec3f" />
+    </struct>
+
+    <struct name="SaveGameStruct">
+        <description>One in-game save slot</description>
+        <field name="charState" type="PlayerCharState" count="2" />
+        <field name="trickyEnergy" type="s8" />
+        <field name="maxTrickyEnergy" type="s8" />
+        <field name="trickyPlayCount" type="u8" />
+        <field name="unk1B" type="s8" />
+        <field name="name" type="char" count="4" />
+        <field name="character" type="PlayerCharEnum" />
+        <field name="flags21" type="u8" />
+        <field name="flags22" type="u8" />
+        <field name="unk23" type="u8" />
+        <field name="gameBits2" type="u8" count="324" />
+        <field name="objs" type="SaveGameObjectPos" count="63" /><!-- not 64 -->
+        <field name="texts" type="u8" count="5">
+            <description>Add 0xF4 to get hint text IDs to display</description>
+        </field>
+        <field name="completion" type="u8">
+            <note>Out of 187</note>
+        </field>
+        <field name="numTexts" type="u8" />
+        <field name="unk55F" type="u8" />
+        <field name="playTime" type="float">
+            <note>Frame count (so why float!?)</note>
+        </field>
+        <field name="gameBits1" type="u8" count="116" />
+        <field name="gameBits3" type="u8" count="172" />
+        <field name="charPos" type="PlayerCharPos" count="2" />
+        <field name="unk6A4" type="s16">
+            <note>Related to camera</note>
+        </field>
+        <field name="unk6A6" type="s16" />
+        <field name="env" type="SaveGameEnvState" />
+    </struct>
+
+    <struct name="CardIconsAndText">
+        <description>Only used by the console's memory card menu</description>
+        <field name="fileName" type="char" count="32">
+            <note>always "Star Fox Adventures" or Japanese</note>
+        </field>
+        <field name="comment" type="char" count="32">
+            <note>always "Dinosaur Planet" or "STARFOX ADVENTURES"</note>
+        </field>
+        <field name="opening_bnr" type="u8" count="6144">
+            <note>opening.bnr graphic</note>
+        </field>
+        <field name="icon_img" type="u8" count="4096">
+            <note>animated icon frames (4x1024)</note>
+        </field>
+        <field name="icon_pal" type="u8" count="512">
+            <note>icon palette</note>
+        </field>
+        <field name="cksum1" type="u32">
+            <note>checksum</note>
+        </field>
+        <field name="cksum2" type="u32">
+            <note>inverse checksum</note>
+        </field>
+        <field name="unk2A48" type="u32" count="2">
+            <note>probably more checksums</note>
+        </field>
+    </struct>
+
+    <struct name="ActualSaveData">
+        <field name="saves" type="SaveGameStruct" count="3" />
+        <field name="global" type="SaveSettingsAndScores" />
+    </struct>
+
+    <struct name="CardFileStruct">
+        <description>The entire file on the memory card</description>
+        <field name="icons" type="CardIconsAndText" />
+        <field name="data" type="ActualSaveData" />
+        <field name="cksum1" type="u32" />
+        <field name="cksum2" type="u32" />
+    </struct>
+</types>
