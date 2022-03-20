@@ -112,7 +112,7 @@ export default class SaveInfo {
         return E.table('globals',
             E.tr('title', E.th(null, "Settings (all slots)", {colspan:2})),
             ...Table(
-                ["Valid",           settings.exists],
+                ["Valid",           settings.exists ? "Yes" : "No"],
                 ["Subtitles",       settings.bSubtitlesOn ? "On" : "Off"],
                 ["Widescreen",      settings.bWidescreen ? "On" : "Off"],
                 ["Rumble",          settings.bRumbleEnabled ? "On" : "Off"],
