@@ -2,6 +2,7 @@
  *  2022 Rena Kunisaki
  *  Danger, dragons ahead.
  */
+//XXX this lib is obsolete, remove when no longer used
 export const fieldTypes = {
     //type: {size, func}
     //type is the character used to specify this type.

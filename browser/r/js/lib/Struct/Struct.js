@@ -53,7 +53,7 @@ export default class Struct extends Type {
         const result = [];
         const nameLen = Math.max(...this.fields.map(f => f.name.length));
         for(let field of this.fields) {
-            const name = (field.name+':').padEnd(nameLen+1);
+            const name = (field.name+':').padEnd(nameLen+2);
             const val  = field.type.toString(value[field.name]);
             result.push(name+val);
         }

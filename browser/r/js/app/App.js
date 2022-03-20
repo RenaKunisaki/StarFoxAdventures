@@ -65,9 +65,9 @@ export default class App {
                 textList:   new TextList  (this.game),
             };
 
-            //test
-            const parser = new StructParser();
-            await parser.selfTest();
+            //this.progress.update({subText: "Downloading structs..."});
+            this.types = new StructParser();
+            await this.types.selfTest();
 
             const eLang = document.getElementById('language');
             for(let lang of Object.keys(Language)) {

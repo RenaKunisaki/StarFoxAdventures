@@ -308,6 +308,7 @@ export default class StructParser {
     }
 
     async selfTest() {
+        console.log("struct self test begin");
         const structs = await this.parseFile('/data/types/common.xml');
         console.log("structs:", structs);
         const testBuffer = new ArrayBuffer(64);
@@ -317,6 +318,7 @@ export default class StructParser {
         console.assert(testData.x == 1);
         console.assert(testData.y == 2);
         console.assert(testData.z == 3);
+        console.log(structs.vec3f.toString(testData));
         console.log("struct self test passed");
     }
 }
