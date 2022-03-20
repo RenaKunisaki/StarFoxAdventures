@@ -1,22 +1,31 @@
 <?xml version="1.0"?>
 <?xml-model href="types.xsd"?>
 <types>
+    <!-- common typedefs for ghidra -->
+
+    <!-- types used throughout the game -->
+    <struct name="vec2s">
+        <field name="x" type="s16" />
+        <field name="y" type="s16" />
+    </struct>
     <struct name="vec3f">
-        <note>C flat</note>
-        <note>B sharp</note>
         <field name="x" type="float" />
         <field name="y" type="float" />
         <field name="z" type="float" />
     </struct>
-    <struct name="vec2s">
-        <field name="x" type="s16" />
-        <field name="y" type="s16" />
+    <struct name="vec3i">
+        <field name="x" type="int" />
+        <field name="y" type="int" />
+        <field name="z" type="int" />
     </struct>
     <struct name="vec3s">
         <field name="x" type="s16" />
         <field name="y" type="s16" />
         <field name="z" type="s16" />
     </struct>
+
+    <!-- include the rest -->
     <include path="./gcn/gci.xml" />
-    <include path="./gcn/iso.xml" />
+    <include path="./gcn/gci.xml" />
+    <include path="./sfa/sfa.xml" />
 </types>

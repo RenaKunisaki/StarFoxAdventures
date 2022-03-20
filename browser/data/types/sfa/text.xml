@@ -1,6 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="../types.xsd"?>
 <types namespace="text">
+    <!-- TODO generate an enum -->
+    <typedef name="GameTextId16" type="s16" />
+
     <!-- names from source file accidentally included on disc -->
     <struct name="CharacterStruct">
         <field name="character" type="u32">

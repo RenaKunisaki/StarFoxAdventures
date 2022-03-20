@@ -1,17 +1,24 @@
-import Field from "./Field.js";
+import { Type } from "./Type.js";
 
-export default class Struct {
+export default class Struct extends Type {
     constructor(params) {
         //should be called by parseXmlStructs().
+        super();
         this.name         = params.name;
         this.littleEndian = params.littleEndian;
         this.notes        = params.notes;
         this.description  = params.description;
         this.fields       = params.fields;
         this.fieldsByName = params.fieldsByName;
+        this._size = 0;
+        for(let field of this.fields) {
+            this._size = Math.max(this._size, field.offset+field.size);
+        }
     }
 
-    read(view, offset=0) {
+    get size() { return this._size; }
+
+    fromBytes(view, offset=0) {
         /** Read this struct from a DataView.
          *  @param {DataView} view The view to read from.
          *  @param {int} offset The byte offset to read from.
@@ -19,12 +26,12 @@ export default class Struct {
          */
         const result = {};
         for(let field of this.fields) {
-            result[field.name] = field.read(view, offset+field.offset);
+            result[field.name] = field.fromBytes(view, offset+field.offset);
         }
         return result;
     }
 
-    write(value, view, offset=0) {
+    toBytes(value, view, offset=0) {
         /** Write this struct to a DataView.
          *  @param {object} value The values to write.
          *  @param {DataView} view The view to write to.
@@ -33,7 +40,7 @@ export default class Struct {
          */
         let result = view;
         for(let field of this.fields) {
-            result = field.write(value[field.name], view, offset+field.offset);
+            result = field.toBytes(value[field.name], view, offset+field.offset);
         }
         return result;
     }

@@ -14,12 +14,36 @@
             <xs:enumeration value="u32" />
         </xs:restriction>
     </xs:simpleType> -->
+
+    <xs:simpleType name="int">
+        <!-- allows writing int values in hex or decimal -->
+        <xs:union memberTypes="xs:integer">
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:pattern value="0x[0-9A-Fa-f]+"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
+    <xs:simpleType name="uint">
+        <!-- variant that only allows positive values -->
+        <xs:union memberTypes="xs:positiveInteger">
+            <xs:simpleType>
+                <xs:restriction base="xs:token">
+                    <xs:pattern value="0x[0-9A-Fa-f]+"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:union>
+    </xs:simpleType>
+
     <xs:group name="description">
         <xs:sequence>
             <xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1" />
             <xs:element name="note" type="xs:string" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:group>
+
     <xs:element name="types">
         <xs:complexType>
             <xs:sequence>
@@ -27,6 +51,14 @@
                     <xs:element name="include" minOccurs="0" maxOccurs="unbounded">
                         <xs:complexType>
                             <xs:attribute name="path" type="xs:string" use="required" />
+                        </xs:complexType>
+                    </xs:element> <!-- include -->
+
+                    <xs:element name="typedef" minOccurs="0" maxOccurs="unbounded">
+                        <xs:complexType>
+                            <xs:group ref="description" minOccurs="0" maxOccurs="1" />
+                            <xs:attribute name="name" type="xs:string" use="required" />
+                            <xs:attribute name="type" type="xs:string" use="required" />
                         </xs:complexType>
                     </xs:element> <!-- include -->
 
@@ -43,13 +75,13 @@
                                             </xs:sequence>
                                             <xs:attribute name="name" type="xs:string" use="optional" />
                                             <xs:attribute name="type" type="xs:string" use="required" />
-                                            <xs:attribute name="offset" type="xs:int" use="optional" />
-                                            <xs:attribute name="count" type="xs:positiveInteger" use="optional" default="1" />
+                                            <xs:attribute name="offset" type="int" use="optional" />
+                                            <xs:attribute name="count" type="uint" use="optional" default="1" />
                                         </xs:complexType>
                                     </xs:element> <!-- field -->
                                     <xs:element name="padding" minOccurs="0" maxOccurs="unbounded">
                                         <xs:complexType>
-                                            <xs:attribute name="count" type="xs:positiveInteger" use="required" />
+                                            <xs:attribute name="count" type="uint" use="required" />
                                         </xs:complexType>
                                     </xs:element> <!-- padding -->
                                 </xs:choice>
@@ -69,7 +101,7 @@
                                                 <xs:group ref="description" minOccurs="0" maxOccurs="1" />
                                             </xs:sequence>
                                             <xs:attribute name="name" type="xs:string" use="required" />
-                                            <xs:attribute name="value" type="xs:int" use="optional" />
+                                            <xs:attribute name="value" type="int" use="optional" />
                                         </xs:complexType>
                                     </xs:element>
                                 </xs:choice>
@@ -78,6 +110,7 @@
                             <xs:attribute name="type" type="xs:string" use="optional" default="int" />
                         </xs:complexType>
                     </xs:element> <!-- enum -->
+
                 </xs:choice>
             </xs:sequence>
             <xs:attribute name="namespace" type="xs:string" use="optional" />

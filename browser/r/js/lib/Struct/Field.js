@@ -1,6 +1,6 @@
 import { Type } from "./Type.js";
 
-export default class Field {
+export default class Field extends Type {
     /** One field of a struct. */
     constructor(params) {
         /** Construct a Field.
@@ -14,6 +14,7 @@ export default class Field {
          *  @note This should be called by the parser. You shouldn't
          *   need to call it yourself.
          */
+        super();
         console.assert(params.type instanceof Type);
         console.assert(params.type.size);
         this.offset       = params.offset;
@@ -21,12 +22,14 @@ export default class Field {
         this.name         = params.name;
         this.count        = params.count;
         this.littleEndian = params.littleEndian;
-        this.size         = this.type.size * this.count;
+        this._size        = this.type.size * this.count;
         this.description  = params.description;
         this.notes        = params.notes;
     }
 
-    read(view, offset=0, littleEndian=undefined) {
+    get size() { return this._size; }
+
+    fromBytes(view, offset=0, littleEndian=undefined) {
         /** Read this field from a DataView.
          *  @param {DataView} view The view to read from.
          *  @param {int} offset The byte offset to read from.
@@ -46,7 +49,7 @@ export default class Field {
         return result;
     }
 
-    write(value, view, offset=0, littleEndian=undefined) {
+    toBytes(value, view, offset=0, littleEndian=undefined) {
         /** Write this field to a DataView.
         *  @param value Value to write.
          *  @param {DataView} data View to write into.

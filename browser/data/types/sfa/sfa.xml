@@ -13,10 +13,13 @@
         <item name="Japanese" />
         <item name="Spanish" />
     </enum>
-    <typedef name="ObjDefEnum" type="s16" />
+    <typedef name="ObjDefEnum" type="s16" /><!-- XXX generate enum -->
     <typedef name="ObjUniqueId" type="int" />
+    <!-- order is important here since later files can
+    depend on things defined in earlier ones.
+    TODO: come up with a way to handle circular dependencies. -->
     <include path="maps.xml" />
+    <include path="text.xml" />
     <include path="objects.xml" />
     <include path="save.xml" />
-    <include path="text.xml" />
 </types>

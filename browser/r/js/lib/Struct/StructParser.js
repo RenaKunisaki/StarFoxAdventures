@@ -7,8 +7,9 @@ import { Type, types } from "./Type.js";
 export default class StructParser {
     constructor() {
         this._parsedPaths = new Set();
-        this.types = {}; //root namespace
-        this._namespaceParents = {}; //namespace => parent
+        this._namespaceParents = new WeakMap(); //namespace => parent
+        this._namespaceNames = new WeakMap(); //namespace => name
+        this.types = this._newNamespace('root', null);
         for(let [name, tp] of Object.entries(types)) {
             this.types[name] = new tp();
         }
@@ -19,6 +20,13 @@ export default class StructParser {
             description: this._parseDescription,
             note: this._parseNote,
         };
+    }
+
+    _newNamespace(name, parent, contents={}) {
+        const ns = Object.assign({}, contents);
+        this._namespaceParents.set(ns, parent);
+        this._namespaceNames  .set(ns, name);
+        return ns;
     }
 
     _parseDescription(obj, elem) {
@@ -206,12 +214,26 @@ export default class StructParser {
         return new Struct(result);
     }
 
+    _parseTypedef(eDef, namespace) {
+        /** Parse one 'typedef' element. */
+        if(namespace == null) namespace = this.types;
+        const name  = eDef.getAttribute('name');
+        const tName = eDef.getAttribute('type');
+        const type  = this.getType(tName, namespace);
+        if(namespace[name]) {
+            throw new Error(`Duplicate type name: ${name}`);
+        }
+        namespace[name] = type;
+        return null;
+    }
+
     async parseFile(path, namespace=null) {
         /** Parse an XML structs document. */
         const parsers = {
-            struct: elem => this._parseStruct(elem, namespace),
-            enum:   elem => this._parseEnum(elem, namespace),
-            //typedef: parseXmlTypedef,
+            struct:  elem => this._parseStruct (elem, namespace),
+            enum:    elem => this._parseEnum   (elem, namespace),
+            typedef: elem => this._parseTypedef(elem, namespace),
+            //include is a special case
         };
 
         console.log("Parsing", path);
@@ -222,10 +244,10 @@ export default class StructParser {
         if(namespace == null) namespace = this.types;
         if(nsName != null && nsName != undefined) {
             if(nsName == '') throw new Error("Empty namespace name");
+            console.log("new ns", nsName);
             if(namespace[nsName] == undefined) {
-                const newNs = {};
+                const newNs = this._newNamespace(nsName, namespace);
                 namespace[nsName] = newNs;
-                this._namespaceParents[newNs] = namespace;
             }
             namespace = namespace[nsName];
         }
@@ -247,10 +269,12 @@ export default class StructParser {
                     throw new TypeError(`Unexpected element: ${type.tagName}`);
                 }
                 const obj = parser(type);
-                if(namespace[obj.name]) {
-                    throw new Error(`Duplicate type name: ${obj.name}`);
+                if(obj != null) {
+                    if(namespace[obj.name]) {
+                        throw new Error(`Duplicate type name: ${obj.name}`);
+                    }
+                    namespace[obj.name] = obj;
                 }
-                namespace[obj.name] = obj;
             }
         }
         return namespace;
@@ -268,7 +292,7 @@ export default class StructParser {
          *   in any namespace, an error is thrown.
          */
         if(namespace == null) namespace = this.types;
-        while(namespace != undefined) {
+        while(namespace != undefined && namespace != null) {
             let result = namespace;
             for(let n of name.split('.')) {
                 if(result == undefined) break;
@@ -276,7 +300,9 @@ export default class StructParser {
             }
             if(result != undefined) return result;
             //console.log("Name", name, "not found in namespace", namespace);
-            namespace = this._namespaceParents[namespace];
+            let parent = this._namespaceParents.get(namespace);
+            console.assert(parent != namespace);
+            namespace = parent;
         }
         throw new Error(`Type '${name}' not found`);
     }
@@ -286,10 +312,11 @@ export default class StructParser {
         console.log("structs:", structs);
         const testBuffer = new ArrayBuffer(64);
         const testView = new DataView(testBuffer);
-        structs.vec3f.write({x:1, y:2, z:3}, testView);
-        const testData = structs.vec3f.read(testView);
+        structs.vec3f.toBytes({x:1, y:2, z:3}, testView);
+        const testData = structs.vec3f.fromBytes(testView);
         console.assert(testData.x == 1);
         console.assert(testData.y == 2);
         console.assert(testData.z == 3);
+        console.log("struct self test passed");
     }
 }

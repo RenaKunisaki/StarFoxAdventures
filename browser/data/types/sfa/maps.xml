@@ -1,6 +1,84 @@
 <?xml version="1.0"?>
 <?xml-model href="../types.xsd"?>
 <types namespace="maps">
+    <enum name="MapDirIdx16" type="s16">
+        <item name="animtest" />
+        <item name="animtest_01" />
+        <item name="animtest_02" />
+        <item name="arwing" />
+        <item name="dragrock" />
+        <item name="animtest_05" />
+        <item name="dfptop" />
+        <item name="volcano" />
+        <item name="animtest_08" />
+        <item name="mazecave" />
+        <item name="dragrockbot" />
+        <item name="dfalls" />
+        <item name="swaphol" />
+        <item name="shipbattle" />
+        <item name="nwastes" />
+        <item name="warlock" />
+        <item name="shop" />
+        <item name="animtest_11" />
+        <item name="crfort" />
+        <item name="swapholbot" />
+        <item name="wallcity" />
+        <item name="lightfoot" />
+        <item name="cloudtreasure" />
+        <item name="animtest_17" />
+        <item name="clouddungeon" />
+        <item name="mmpass" />
+        <item name="darkicemines" />
+        <item name="animtest_1B" />
+        <item name="desert" />
+        <item name="animtest_1D" />
+        <item name="icemountain" />
+        <item name="animtest_1F" />
+        <item name="animtest_20" />
+        <item name="animtest_21" />
+        <item name="darkicemines2" />
+        <item name="bossgaldon" />
+        <item name="animtest_24" />
+        <item name="insidegal" />
+        <item name="magiccave" />
+        <item name="dfshrine" />
+        <item name="mmshrine" />
+        <item name="ecshrine" />
+        <item name="gpshrine" />
+        <item name="dbshrine" />
+        <item name="nwshrine" />
+        <item name="worldmap" />
+        <item name="animtest_2E" />
+        <item name="capeclaw" />
+        <item name="dbay" />
+        <item name="animtest_31" />
+        <item name="cloudrace" />
+        <item name="bossdrakor" />
+        <item name="animtest_34" />
+        <item name="bosstrex" />
+        <item name="linkb" />
+        <item name="cloudjoin" />
+        <item name="arwingtoplanet" />
+        <item name="arwingdarkice" />
+        <item name="arwingcloud" />
+        <item name="arwingcity" />
+        <item name="arwingdragon" />
+        <item name="gamefront" />
+        <item name="linklevel" />
+        <item name="greatfox" />
+        <item name="linka" />
+        <item name="linkc" />
+        <item name="linkd" />
+        <item name="linke" />
+        <item name="linkf" />
+        <item name="linkg" />
+        <item name="linkh" />
+        <item name="linkj" />
+        <item name="linki" />
+        <item name="NUM_MAPS" value="0x49" />
+        <item name="NO_MAP" value="-1" />
+    </enum>
+
     <struct name="RomListEntry">
         <description>Common header of romlist entries</description>
         <field name="objDef" type="ObjDefEnum" />
