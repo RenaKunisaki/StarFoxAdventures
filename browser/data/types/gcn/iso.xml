@@ -11,7 +11,7 @@
     </enum>
 
     <struct name="Appldr">
-        <field name="buildDate" type="char" count="10" />
+        <field name="buildDate" type="string" count="10" />
         <padding count="16" />
         <field name="entryPoint" type="u32" />
         <field name="dataSize" type="u32" />
@@ -35,15 +35,15 @@
 
     <struct name="BootBin">
         <description>Disc header</description>
-        <field name="gameCode" type="char" count="4" />
-        <field name="company" type="char" count="2" />
+        <field name="gameCode" type="string" count="4" />
+        <field name="company" type="string" count="2" />
         <field name="discNo" type="u8" />
         <field name="version" type="u8" />
         <field name="audioStreaming" type="u8" />
         <field name="streamBufSize" type="u8" />
         <padding count="18" />
         <field name="magic" type="u32" />
-        <field name="gameName" type="char" count="992" />
+        <field name="gameName" type="string" count="992" />
         <field name="debugMonitorOffs" type="u32" />
         <field name="debugMonitorAddr" type="u32" />
         <padding count="24" />

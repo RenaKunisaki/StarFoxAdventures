@@ -38,7 +38,7 @@ export default class App {
         this.saveSlotIdx = 0;
         this.language    = 'English';
         this.game        = new Game(this);
-        this.progress.hide();
+        //this.progress.hide();
     }
 
     async run() {
@@ -65,7 +65,7 @@ export default class App {
                 textList:   new TextList  (this.game),
             };
 
-            //this.progress.update({subText: "Downloading structs..."});
+            this.progress.update({subText: "Downloading structs..."});
             this.types = new StructParser();
             await this.types.selfTest();
 
@@ -91,6 +91,7 @@ export default class App {
 
         await this.setLanguage('English');
         this.ui.gameBits.refresh();
+        this.progress.hide();
     }
 
     async setLanguage(lang) {

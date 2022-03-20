@@ -33,9 +33,9 @@
     </struct>
 
     <struct name="SavedHighScore">
+        <note>XXX different for Japanese?</note>
         <field name="score" type="u32" />
         <field name="name" type="char" count="4" />
-        <note>XXX different for Japanese?</note>
     </struct>
 
     <struct name="SaveGameSettings">

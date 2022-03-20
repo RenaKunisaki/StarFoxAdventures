@@ -40,13 +40,7 @@ export default class Field extends Type {
         if(this.count == 1) {
             return this.type.fromBytes(view, offset, littleEndian);
         }
-        const result = [];
-        const size   = this.type.size;
-        for(let i=0; i<this.count; i++) {
-            result.push(this.type.fromBytes(view, offset, littleEndian));
-            offset += size;
-        }
-        return result;
+        return this.type.arrayFromBytes(view, this.count, offset, littleEndian);
     }
 
     toBytes(value, view, offset=0, littleEndian=undefined) {
@@ -61,16 +55,7 @@ export default class Field extends Type {
         if(this.count == 1) {
             return this.type.toBytes(value, view, offset, littleEndian);
         }
-        else {
-            let result = view;
-            const size = this.type.size;
-            console.assert(value.length == this.count);
-            for(let i=0; i<this.count; i++) {
-                result = this.type.toBytes(value[i], view, offset, littleEndian);
-                offset += size;
-            }
-            return result;
-        }
+        return this.type.arrayToBytes(value, view, offset, littleEndian);
     }
 
     toString(value) {

@@ -139,7 +139,7 @@
 
     <struct name="MapInfoEntry">
         <description>Entry in MAPINFO.bin</description>
-        <field name="name" type="char" count="28">
+        <field name="name" type="string" count="28">
             <description>Map name displayed in debug menus</description>
         </field>
         <field name="type" type="u8">

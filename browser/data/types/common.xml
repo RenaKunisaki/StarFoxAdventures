@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 <?xml-model href="types.xsd"?>
 <types>
-    <!-- common typedefs for ghidra -->
-
     <!-- types used throughout the game -->
     <struct name="vec2s">
         <field name="x" type="s16" />

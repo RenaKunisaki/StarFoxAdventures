@@ -60,7 +60,7 @@
                             <xs:attribute name="name" type="xs:string" use="required" />
                             <xs:attribute name="type" type="xs:string" use="required" />
                         </xs:complexType>
-                    </xs:element> <!-- include -->
+                    </xs:element> <!-- typedef -->
 
                     <xs:element name="struct" minOccurs="0" maxOccurs="unbounded">
                         <xs:complexType>

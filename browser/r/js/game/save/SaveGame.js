@@ -48,7 +48,12 @@ export class SaveGame {
     async _parseGci() {
         //parse GCI image (raw memory card sectors of only this game)
         let buffer = await this._file.arrayBuffer();
-        let header = new Header(buffer);
+        let view   = new DataView(buffer);
+        let header = this.app.types.getType('gci.Header');
+        console.assert(header);
+        header = header.fromBytes(view);
+
+        //let header = new Header(buffer);
         this.gciHeader = header;
         console.log("GCI Header:", header);
         if(!header.gameCode.startsWith('GSA') || header.company != '01') {

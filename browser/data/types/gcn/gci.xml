@@ -2,11 +2,11 @@
 <?xml-model href="../types.xsd"?>
 <types namespace="gci">
     <struct name="Header">
-        <field name="gameCode" type="char" count="4" />
-        <field name="company" type="char" count="2" />
+        <field name="gameCode" type="string" count="4" />
+        <field name="company" type="string" count="2" />
         <padding count="1" />
         <field name="bannerFmt" type="s8" />
-        <field name="fileName" type="char" count="32" />
+        <field name="fileName" type="string" count="32" />
         <field name="lastModified" type="u32">
             <description>seconds since 2000-01-01 00:00:00</description>
         </field>
