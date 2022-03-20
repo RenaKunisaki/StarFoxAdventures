@@ -25,10 +25,11 @@ export class Type {
          *  @returns The values read from the view.
          */
         const size   = this.size;
+        console.assert(size > 0);
         const result = [];
         for(let i=0; i<count; i++) {
             result.push(this.fromBytes(view, offset, littleEndian));
-            offset + size;
+            offset += size;
         }
         return result;
     }

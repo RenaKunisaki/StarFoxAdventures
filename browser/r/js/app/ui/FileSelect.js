@@ -140,7 +140,7 @@ export default class FileSelect {
                     ...Table(
                         ["Game ID", header.gameCode],
                         ["Company", header.company],
-                        ["File Name", header.filename],
+                        ["File Name", header.fileName],
                         ["Last Modified", lastMod.toISOString()],
                         ["Copy Count", header.copyCount],
                         //XXX comment string

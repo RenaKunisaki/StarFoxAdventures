@@ -127,7 +127,7 @@ export default class SaveInfo {
                 ["Unused 07",       hex(settings.unused07, 2)],
                 ["Unused 0D",       hex(settings.unused0D, 2)],
                 ["Unused 0E",       hex(settings.unused0E, 4)],
-                ["Unknown 0E",      hex(settings.unk18, 8)],
+                ["Unknown 18",      hex(settings.unk18, 8)],
                 //XXX cheats
             )
         );

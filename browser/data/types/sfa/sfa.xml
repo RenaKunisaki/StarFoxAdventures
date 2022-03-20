@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <?xml-model href="../types.xsd"?>
-<types>
+<types namespace="sfa">
     <enum name="PlayerCharEnum" type="s8">
         <item name="Krystal" />
         <item name="Fox" />

@@ -1,8 +1,11 @@
-import { Header } from '../../types/gci.js';
 import { assertType } from '../../Util.js';
 import Game from '../Game.js';
-import { ActualSaveData, CardFileStruct, SaveGameStruct } from './types.js';
 import SaveSlot from './SaveSlot.js';
+
+let Header;
+let ActualSaveData;
+let CardFileStruct;
+let SaveGameStruct;
 
 export class SaveGame {
     /** Reads the entire CardFileStruct from a File or Blob.
@@ -11,30 +14,39 @@ export class SaveGame {
         this.game      = assertType(game, Game);
         this.app       = game.app;
         this.gciHeader = null;
+
+        Header = this.app.types.getType('gci.Header');
+        ActualSaveData = this.app.types.getType('sfa.save.ActualSaveData');
+        CardFileStruct = this.app.types.getType('sfa.save.CardFileStruct');
+        SaveGameStruct = this.app.types.getType('sfa.save.SaveGameStruct');
     }
 
     async load(file, version='U0') {
+        /** Load a save file.
+         *  @param {BinaryFile} file The file to load.
+         *  @param {String} version The game version this file belongs to.
+         */
         this._file    = file;
         this._version = version; //game version
         const buffer  = await this._file.arrayBuffer();
+        const view    = new DataView(buffer);
 
-        if(file.size == CardFileStruct._size) {
+        if(file.size == CardFileStruct.size) {
             //parse raw save file
-            this._parseSave(buffer);
+            this._parseSave(view);
         }
         else if(file.size >= 512*1024) {
             //parse RAW memory card image
             throw new Error("RAW memory card image not supported yet");
         }
         else if(file.size >= 0x6040) {
-            await this._parseGci(buffer);
+            await this._parseGci(view);
         }
         else if(file.size == 1772 || file.size == 3952 || file.size == 6144) {
             //3952: save1.bin, a single save slot + a bunch of zeros
             //1772: save[2..5].bin, a single save slot
             //6144: savegame.bin, no idea
-            let buffer = await this._file.arrayBuffer();
-            this._parseOneSlot(buffer);
+            this._parseOneSlot(view);
         }
         else {
             throw new Error("File is too small to be a valid savegame");
@@ -45,15 +57,11 @@ export class SaveGame {
         for(let slot of this.saves) slot.getGameBits();
     }
 
-    async _parseGci() {
-        //parse GCI image (raw memory card sectors of only this game)
-        let buffer = await this._file.arrayBuffer();
-        let view   = new DataView(buffer);
-        let header = this.app.types.getType('gci.Header');
-        console.assert(header);
-        header = header.fromBytes(view);
-
-        //let header = new Header(buffer);
+    async _parseGci(view) {
+        /** Parse GCI image (raw memory card sectors of only this game).
+         *  @param {DataView} view The view to read from.
+         */
+        let header     = Header.fromBytes(view);
         this.gciHeader = header;
         console.log("GCI Header:", header);
         if(!header.gameCode.startsWith('GSA') || header.company != '01') {
@@ -69,13 +77,16 @@ export class SaveGame {
             default: throw new Error(`Unknown version '${header.gameCode}'`);
         }
         //ignore the block field in the header.
-        this._parseSave(buffer.slice(0x40), true);
+        this._parseSave(new DataView(view.buffer.slice(0x40)), true);
     }
 
-    _parseSave(buffer, withIcons) {
-        //parse the actual save data
-        if(withIcons) this.data = new CardFileStruct(buffer).data;
-        else this.data = new ActualSaveData(buffer);
+    _parseSave(view, withIcons) {
+        /** Parse the actual save data.
+         *  @param {DataView} view The view to read from.
+         *  @param {bool} withIcons Whether the view includes the icon data.
+         */
+        if(withIcons) this.data = CardFileStruct.fromBytes(view).data;
+        else this.data = ActualSaveData.fromBytes(view);
         //console.log("this.data=", this.data);
         //console.log("this.data.global.settings.exists=", this.data.global.settings.exists);
         //console.log("this.data.saves=", this.data.saves);
@@ -88,12 +99,14 @@ export class SaveGame {
         ];
     }
 
-    _parseOneSlot(buffer) {
-        //parse a single save slot, from debug savegame/saveN.bin
+    _parseOneSlot(view) {
+        /** Parse a single save slot, from debug savegame/saveN.bin.
+         *  @param {DataView} view The view to read from.
+         */
         this.data   = null;
         this.global = null;
         this.saves  = [
-            new SaveSlot(this.game, 0, new SaveGameStruct(buffer)),
+            new SaveSlot(this.game, 0, SaveGameStruct.fromBytes(view)),
         ];
     }
 }
