@@ -491,6 +491,7 @@ unlockLevel = 0x8004350c;
 updateViewMatrix = 0x8000f564;
 utf8GetNextChar = 0x80015cb8;
 vec3f_distance = 0x80021704;
+vec3f_length = 0x802477f0;
 vec3f_multByMtx = 0x80247494;
 vec3f_multByMtx2 = 0x80022650;
 vec3f_scale = 0x80292c74;

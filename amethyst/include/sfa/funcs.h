@@ -244,6 +244,7 @@ GLOBALFN MapDirIdx32 unlockLevel(MapDirIdx32 mapId,int bucket,BOOL bUnlockAll);
 GLOBALFN void updateViewMatrix(void);
 GLOBALFN int utf8GetNextChar(char *text, int *outSize);
 GLOBALFN float vec3f_distance(vec3f *a, vec3f *b);
+GLOBALFN double vec3f_length(vec3f *vec);
 GLOBALFN void vec3f_multByMtx (Mtx * mtx, vec3f * vIn, vec3f * vOut);
 GLOBALFN void vec3f_multByMtx2(Mtx * mtx, vec3f * vIn, vec3f * vOut);
 GLOBALFN void vec3f_scale(double scale, vec3f *in, vec3f *out);
