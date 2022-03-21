@@ -1,6 +1,126 @@
 <?xml version="1.0"?>
 <?xml-model href="../types.xsd"?>
 <types namespace="maps">
+    <enum name="MapId16" type="s16">
+        <item name="frontend" />
+        <item name="frontend2" />
+        <item name="dragrock" />
+        <item name="krazoapalace" />
+        <item name="temple" />
+        <item name="hightop" />
+        <item name="discovery" />
+        <item name="hollow" />
+        <item name="hollow2" />
+        <item name="mazecave" />
+        <item name="wastes" />
+        <item name="warlock" />
+        <item name="fortress" />
+        <item name="wallcity" />
+        <item name="swapcircle" />
+        <item name="cloudtreasure" />
+        <item name="clouddungeon" />
+        <item name="cloudtrap" />
+        <item name="moonpass" />
+        <item name="snowmines" />
+        <item name="krashrin2" />
+        <item name="kraztest" />
+        <item name="krazchamber" />
+        <item name="newicemount" />
+        <item name="newicemount2" />
+        <item name="newicemount3" />
+        <item name="animtest" />
+        <item name="snowmines2" />
+        <item name="snowmines3" />
+        <item name="capeclaw" />
+        <item name="insidegal" />
+        <item name="dfshrine" />
+        <item name="mmshrine" />
+        <item name="ecshrine" />
+        <item name="gpshrine" />
+        <item name="diamondbay" />
+        <item name="earthwalker" />
+        <item name="willow" />
+        <item name="arwing" />
+        <item name="dbshrine" />
+        <item name="nwshrine" />
+        <item name="ccshrine" />
+        <item name="wgshrine" />
+        <item name="cloudrace" />
+        <item name="finalboss" />
+        <item name="wminsert" />
+        <item name="snowmines4" />
+        <item name="snowmines5" />
+        <item name="trexboss" />
+        <item name="mikelava" />
+        <item name="dfptop" />
+        <item name="swapstore" />
+        <item name="dragbot" />
+        <item name="kamdrag" />
+        <item name="magicave" />
+        <item name="duster" />
+        <item name="linkb" />
+        <item name="cloudjoin" />
+        <item name="arwingtoplanet" />
+        <item name="arwingdarkice" />
+        <item name="arwingcloud" />
+        <item name="arwingcity" />
+        <item name="arwingdragon" />
+        <item name="gamefront" />
+        <item name="linklevel" />
+        <item name="greatfox" />
+        <item name="linka" />
+        <item name="linkc" />
+        <item name="linkd" />
+        <item name="linke" />
+        <item name="linkf" />
+        <item name="linkg" />
+        <item name="linkh" />
+        <item name="linkj" />
+        <item name="linki" />
+        <item name="dfpodium" />
+        <item name="dfcradle" />
+        <item name="dfcavehatch1" />
+        <item name="dfcavehatch2" />
+        <item name="scstatue" />
+        <item name="galleonship" />
+        <item name="cfgalleon" />
+        <item name="cfgangplank" />
+        <item name="nwtreebridge" />
+        <item name="cfdungeonblock" />
+        <item name="cloudrunnermap" />
+        <item name="ccbridge" />
+        <item name="cfcolumn" />
+        <item name="nwboulder" />
+        <item name="cfprisondoor" />
+        <item name="cfprisoncage" />
+        <item name="nwtreebridge2" />
+        <item name="dim2iceblock1" />
+        <item name="dimpushblock" />
+        <item name="dim2iceblock2" />
+        <item name="dimhornplinth" />
+        <item name="nwshcolpush" />
+        <item name="dim2lift" />
+        <item name="dim2icefloe" />
+        <item name="dim2icefloe1" />
+        <item name="dim2icefloe2" />
+        <item name="cfliftplat" />
+        <item name="imspacecraft" />
+        <item name="dimbossgut" />
+        <item name="wmcolrise" />
+        <item name="vfpslide1" />
+        <item name="vfpslide2" />
+        <item name="drpushcart" />
+        <item name="drliftplat" />
+        <item name="dim2stonepillar" />
+        <item name="bossdrakorflatr" />
+        <item name="wcbouncycrate" />
+        <item name="wcpushblock" />
+        <item name="wctemplelift" />
+        <item name="KamColumn" />
+        <item name="dbstepstone" />
+        <item name="vfppushblock" />
+        <item name="NO_MAP" value="-1" />
+    </enum>
     <enum name="MapDirIdx16" type="s16">
         <item name="animtest" />
         <item name="animtest_01" />
@@ -163,6 +283,9 @@
         </field>
         <field name="layer" type="s16">
             <description>Layer ID (-2 to 2)</description>
+        </field>
+        <field name="mapId" type="MapId16">
+            <description>Which map this is</description>
         </field>
         <field name="link" type="s16" count="2">
             <description>Linked map IDs</description>

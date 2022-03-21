@@ -2,10 +2,8 @@ import { assertType } from '../../Util.js';
 import Game from '../Game.js';
 import SaveSlot from './SaveSlot.js';
 
-let Header;
-let ActualSaveData;
-let CardFileStruct;
-let SaveGameStruct;
+//struct types
+let Header, ActualSaveData, CardFileStruct, SaveGameStruct;
 
 export class SaveGame {
     /** Reads the entire CardFileStruct from a File or Blob.

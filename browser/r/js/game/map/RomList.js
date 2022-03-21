@@ -1,27 +1,20 @@
 import GameFile from "../GameFile.js";
-import Struct from "../../lib/Struct.js";
-import { Vec3f } from "../../types/common.js";
 import { assertType } from "../../Util.js";
 import Game from "../Game.js";
 
-export const RomListEntryStruct = Struct(
-    ['h',   'objDef'],
-    ['B',   'length'], //in 4-byte words
-    ['B',   'acts0'],
-    ['B',   'loadFlags'],
-    ['B',   'acts1'],
-    ['B',   'bound'],
-    ['B',   'cullDist'],
-    [Vec3f, 'position'],
-    ['i',   'id'],
-    //following is object-specific params
-);
+//struct types
+let Vec3f, RomListEntryStruct;
 
 class RomListEntry {
     constructor(game, data, offset) {
         this.game       = assertType(game, Game);
         this.app        = game.app;
-        const base      = new RomListEntryStruct(data, offset);
+
+        Vec3f = this.app.types.getType('vec3f');
+        RomListEntryStruct = this.app.types.getType('sfa.maps.RomListEntry');
+
+        const view      = new DataView(data.buffer);
+        const base      = RomListEntryStruct.fromBytes(view, offset);
         console.assert(base.length >= 6);
         this.byteLength = base.length * 4;
         this.objDef     = base.objDef;

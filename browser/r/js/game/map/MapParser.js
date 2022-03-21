@@ -1,10 +1,12 @@
 import RomList from "./RomList.js";
 import GameFile from "./../GameFile.js";
 import { assertType, getAttr, getXml, int } from "../../Util.js";
-import { MapsBinEntry0, MapsTabEntry, MapInfoEntry, MapGridItem } from "./types.js";
 import Map from "./Map.js";
 import Block from "./Block.js";
 import Game from "../Game.js";
+
+//struct types
+let MapsBinEntry0, MapsTabEntry, MapInfoEntry, MapGridItem;
 
 export class MapParser {
     /** Parses MAPS.bin, MAPINFO.bin, romlists, etc for all maps. */
@@ -15,6 +17,11 @@ export class MapParser {
         this.game.mapDirs  = {}; //name => map
         this._mapsByDirId  = {};
         this._usedRomLists = {};
+
+        MapsBinEntry0 = this.app.types.getType('sfa.maps.MapsBinEntry0');
+        MapsTabEntry  = this.app.types.getType('sfa.maps.MapsTabEntry');
+        MapInfoEntry  = this.app.types.getType('sfa.maps.MapInfoEntry');
+        MapGridItem   = this.app.types.getType('sfa.maps.MapGridItem');
     }
     _getMapById(id) {
         let map = this.game.maps[id];
@@ -128,10 +135,11 @@ export class MapParser {
             numSteps: 1, stepsDone: 0,
         });
         this.mapInfo = new GameFile(this.game.iso.getFile('/MAPINFO.bin'));
+        const view = this.mapInfo.getView();
         for(let map of Object.values(this.game.maps)) {
             if(map.id != undefined) {
-                let entry = new MapInfoEntry(this.mapInfo,
-                    map.id * MapInfoEntry._size);
+                let entry = MapInfoEntry.fromBytes(view,
+                    map.id * MapInfoEntry.size);
                 map.name    = entry.name;
                 map.type    = entry.type;
                 map.unk1D   = entry.unk1D;
@@ -145,9 +153,10 @@ export class MapParser {
             numSteps: 1, stepsDone: 0,
         });
         this.game.mapGrid = {}; //layer => array
-        const globalMap = this.game.iso.getFile('/globalma.bin').getData();
+        const globalMap = new GameFile(this.game.iso.getFile('/globalma.bin'));
+        const view = globalMap.getView();
         for(let i=0; ; i++) {
-            let entry = new MapGridItem(globalMap, i * MapGridItem._size);
+            let entry = MapGridItem.fromBytes(view, i * MapGridItem.size);
             if(entry.mapId < 0) break;
             this._parseGlobalMapEntry(entry);
         }
@@ -199,14 +208,16 @@ export class MapParser {
     async parseMapsBin() {
         this.mapsBin = new GameFile(this.game.iso.getFile('/MAPS.bin'));
         this.mapsTab = new GameFile(this.game.iso.getFile('/MAPS.tab'));
-        const nMaps  = Math.floor(this.mapsTab.byteLength / MapsTabEntry._size);
+        const nMaps  = Math.floor(this.mapsTab.byteLength / MapsTabEntry.size);
+        const vBin   = this.mapsBin.getView();
+        const vTab   = this.mapsTab.getView();
         for(let iMap=0; iMap<nMaps; iMap++) {
             await this.app.progress.update({
                 subText:   "Parsing MAPS.bin...",
                 numSteps:  nMaps, stepsDone: iMap,
             });
-            let tab  = new MapsTabEntry (this.mapsTab, iMap * MapsTabEntry._size);
-            let info = new MapsBinEntry0(this.mapsBin, tab.info);
+            let tab  = MapsTabEntry .fromBytes(vTab, iMap * MapsTabEntry.size);
+            let info = MapsBinEntry0.fromBytes(vBin, tab.info);
             let map  = this._getMapById(iMap);
             map.sizeX   = info.sizeX;
             map.sizeZ   = info.sizeZ;
