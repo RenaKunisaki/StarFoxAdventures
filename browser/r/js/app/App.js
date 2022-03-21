@@ -149,7 +149,7 @@ export default class App {
     async loadIso(file) {
         //load given ISO file (type File)
         await this.progress.update({subText: "Parsing..."});
-        const iso = new ISO().readBuffer(await file.arrayBuffer());
+        const iso = new ISO(this).readBuffer(await file.arrayBuffer());
         await this.game.loadIso(iso);
         console.log("ISO loaded", this.game.iso);
 

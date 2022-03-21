@@ -1,7 +1,4 @@
 import DOL from './dol.js';
-import { Appldr } from './appldr.js';
-import { Bi2Bin } from './bi2.js';
-import { BootBin } from './bootbin.js';
 import { FST } from './fst.js';
 import { hex } from '../../Util.js';
 
@@ -10,8 +7,12 @@ import { hex } from '../../Util.js';
 export const DVD_MAGIC = 0xC2339F3D;
 export const BOOT_BIN_SIZE = 0x440;
 
+//struct types
+let Appldr, Bi2Bin, BootBin;
+
 export class ISO {
-    constructor() {
+    constructor(app) {
+        this.app          = app;
         this.bootBin      = null;
         this.bi2bin       = null;
         this.appldr       = null;
@@ -19,6 +20,10 @@ export class ISO {
         this.debugMonitor = null;
         this.mainDol      = null;
         this.files        = [];
+
+        Appldr  = this.app.types.getType('iso.Appldr');
+        Bi2Bin  = this.app.types.getType('iso.Bi2Bin');
+        BootBin = this.app.types.getType('iso.BootBin');
     }
 
     readBuffer(buffer, offset=0) {
@@ -30,15 +35,16 @@ export class ISO {
             buffer  = buffer.buffer;
         }
         console.log("Buffer is", buffer);
+        const view = new DataView(buffer);
 
         console.log(`Read boot.bin from 0x${hex(offset)}`);
-        this.bootBin = new BootBin(buffer, offset);
+        this.bootBin = BootBin.fromBytes(view, offset);
         console.log("boot.bin", this.bootBin);
         if(this.bootBin.magic != DVD_MAGIC) {
             console.error(`Invalid DVD_MAGIC ${hex(this.bootBin.magic)}, expected ${hex(DVD_MAGIC)}`);
             throw new Error("Not a GameCube ISO file");
         }
-        offset += BootBin._size;
+        offset += BootBin.size;
 
         console.log("Game code:", this.bootBin.gameCode);
         console.log("Company code:", this.bootBin.company);
@@ -58,15 +64,15 @@ export class ISO {
             hex(this.bootBin.fileLength));
 
         console.log(`Read bi2.bin  from 0x${hex(offset)}`);
-        this.bi2bin = new Bi2Bin(buffer, offset);
-        offset += Bi2Bin._size;
+        this.bi2bin = Bi2Bin.fromBytes(view, offset);
+        offset += Bi2Bin.size;
 
         console.log(`Read appldr   from 0x${hex(offset)}`);
-        this.appldr = new Appldr(buffer, offset);
-        offset += Appldr._size;
+        this.appldr = Appldr.fromBytes(view, offset);
+        offset += Appldr.size;
 
         console.log(`Read fst.bin  from 0x${hex(this.bootBin.fstOffs)}`);
-        this.fstbin = new FST().read(buffer, this.bootBin.fstOffs);
+        this.fstbin = new FST(this.app).read(buffer, this.bootBin.fstOffs);
 
         //size is found by adding up the sections, so not known here.
         //not sure how it gets loaded, probably appldr just loads a fixed size.

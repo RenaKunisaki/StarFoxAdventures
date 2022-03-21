@@ -23,7 +23,7 @@
     </struct>
 
     <!-- include the rest -->
-    <include path="./gcn/gci.xml" />
+    <include path="./gcn/iso.xml" />
     <include path="./gcn/gci.xml" />
     <include path="./sfa/sfa.xml" />
 </types>

@@ -1,22 +1,21 @@
-import Struct from '../../lib/Struct.js';
 import IsoFile from './isofile.js';
 
 //ISO directory structure
-export const FstEntry = Struct(
-    ['I', 'nameOffs'],
-    ['I', 'fileOffs'],
-    ['I', 'size'],
-);
+let FstEntry;
 
 export class FST {
-    constructor() {
+    constructor(app) {
+        this.app       = app;
         this.files     = [];
         this._entries  = [];
         this._strTable = [];
+
+        FstEntry = this.app.types.getType('iso.FstEntry');
     }
 
     read(buffer, offset=0) {
-        let root = this._readEntry(buffer, offset);
+        const view = new DataView(buffer);
+        let   root = this._readEntry(view, offset);
         if(!root.isDir) {
             throw new Error("ISO root directory is not a directory");
         }
@@ -25,18 +24,18 @@ export class FST {
 
         const nFiles = root.nextIdx;
         const strTabOffs = (nFiles * 0xC) + offset;
-        offset += FstEntry._size;
+        offset += FstEntry.size;
 
         //read _entries
         for(let i=0; i<nFiles-1; i++) {
-            this._entries.push(this._readEntry(buffer, offset));
-            offset += FstEntry._size;
+            this._entries.push(this._readEntry(view, offset));
+            offset += FstEntry.size;
         }
 
         //read names
         for(let i=0; i<this._entries.length; i++) {
             const entry = this._entries[i];
-            let name = this._readString(buffer, strTabOffs + entry.nameOffs);
+            let name = this._readString(view, strTabOffs + entry.nameOffs);
             //XXX name should be encoded to bytes and have null terminator,
             //if we even use this.
             this._strTable.push(name);
@@ -81,13 +80,7 @@ export class FST {
         return idx;
     }
 
-    _readString(buffer, offset, maxLen=1000000) {
-        if(buffer.buffer) {
-            //if given a typed array, get the underlying buffer.
-            offset += buffer.byteOffset;
-            buffer  = buffer.buffer;
-        }
-        const view = new DataView(buffer);
+    _readString(view, offset, maxLen=1000000) {
         let res = '';
         while(res.length < maxLen) {
             let n = view.getUint8(offset++);
@@ -97,8 +90,8 @@ export class FST {
         return res;
     }
 
-    _readEntry(buffer, offset) {
-        const data = new FstEntry(buffer, offset);
+    _readEntry(view, offset) {
+        const data = FstEntry.fromBytes(view, offset);
         const type = (data.nameOffs >> 24) & 0xFF;
         if(type > 1) throw new Error("Corrupted FST");
         //console.log("FST entry", this._entries.length, "@", hex(offset),
