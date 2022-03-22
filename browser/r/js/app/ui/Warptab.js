@@ -38,14 +38,14 @@ export default class Warptab {
     _makeRow(idx, warp) {
         const row = {
             idx:   parseInt(idx),
-            x:     warp.x.toFixed(2),
-            y:     warp.y.toFixed(2),
-            z:     warp.z.toFixed(2),
+            x:     warp.pos.x.toFixed(2),
+            y:     warp.pos.y.toFixed(2),
+            z:     warp.pos.z.toFixed(2),
             layer: warp.layer,
             xRot:  warp.xRot,
         };
         if(this.game.mapGrid) {
-            let map = this.game.getMapAt(warp.layer, warp.x, warp.z);
+            let map = this.game.getMapAt(warp.layer, warp.pos.x, warp.pos.z);
             if(map) row.map = map.name;
             else row.map = '-';
         }

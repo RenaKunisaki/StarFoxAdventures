@@ -112,8 +112,8 @@ export default class MapGrid {
         if(!this.game.warpTab) return;
         for(let [idx, warp] of Object.entries(this.game.warpTab)) {
             if(warp.layer == this.layerNo) {
-                let td = this.cellElems[Math.floor(warp.z / MAP_CELL_SIZE)];
-                if(td) td = td[Math.floor(warp.x / MAP_CELL_SIZE)];
+                let td = this.cellElems[Math.floor(warp.pos.z / MAP_CELL_SIZE)];
+                if(td) td = td[Math.floor(warp.pos.x / MAP_CELL_SIZE)];
                 if(td) {
                     td.classList.add('hasWarp');
                     let title = td.getAttribute('title');
