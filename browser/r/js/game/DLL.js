@@ -107,7 +107,7 @@ export default class DLL {
         this.objParams = {};
         this.objParamOffsets = {};
         let maxOffs = 0;
-        for(let eParam of eParams.getElementsByTagName('param')) {
+        for(let eParam of eParams.getElementsByTagName('field')) {
             let param = {
                 name:   eParam.getAttribute('name'),
                 offset: int(eParam.getAttribute('offset')),
@@ -129,31 +129,6 @@ export default class DLL {
         //create a Struct
         const ns = this.app.types.getType('sfa');
         this.objParamStruct = this.app.types.parseStruct(eParams, ns);
-        /* const structDef = [];
-        let offs = 0x18; //end of common objdef
-        while(offs <= maxOffs) {
-            let prevOffs = offs;
-            let param = this.objParamOffsets[offs];
-            if(param) {
-                console.assert(GhidraTypes[param.type]);
-                const type = GhidraTypes[param.type].type;
-                structDef.push([type, param.name]);
-                const typeInfo = parseType(type);
-                offs += typeInfo.size * typeInfo.count;
-            }
-            else {
-                structDef.push(['b', `_${hex(offs)}`]);
-                offs++;
-            }
-            for(let i=prevOffs+1; i<offs; i++) {
-                if(this.objParamOffsets[i]) {
-                    const p = this.objParamOffsets[i];
-                    console.warn(`Param ${p.name} overlaps another param in DLL ${dllName}`);
-                }
-            }
-        }
-        //console.log("Creating struct", structDef);
-        this.objParamStruct = Struct(...structDef); */
     }
 
     readObjParams(data) {
@@ -164,16 +139,30 @@ export default class DLL {
          *    the 0x18-byte common ObjDef to the end of the parameters.
          */
         if(!this.objParams) return null;
+        let values;
         try {
-            const values = this.objParamStruct.fromBytes(data);
+            values = this.objParamStruct.fromBytes(data);
         }
         catch(ex) {
             if(!(ex instanceof RangeError)) throw ex;
             console.error("Out of range reading params for DLL", this, data);
             return null;
         }
+
+        //XXX this is confusing, sometimes we're using this and
+        //sometimes we're just using the struct directly, and the
+        //generated names for unknown fields don't match.
         const result = {};
-        for(let [name,param] of Object.entries(this.objParams)) {
+        for(let field of this.objParamStruct.fields) {
+            const val = values[field.name];
+            result[field.name] = {
+                param:   this.objParams[field.name],
+                value:   val,
+                display: val.toString(),
+            };
+        }
+
+        /* for(let [name,param] of Object.entries(this.objParams)) {
             const val = values[name];
             result[name] = {
                 param: param,
@@ -203,7 +192,7 @@ export default class DLL {
                 }
             }
             result[name].display = disp;
-        }
+        } */
         return result;
     }
 }

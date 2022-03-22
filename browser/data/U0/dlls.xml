@@ -10760,7 +10760,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
     <objparams>
-      <field type="float" offset="0x1C"></field>
+      <field type="u32" offset="0x1C"></field>
     </objparams>
   </dll>
   <dll address="0x803215D8" dolOffs="0x31E5D8" id="0x0101" interface="object" name="TrickyGuard" unk08="0x00000000" unk0E="0x0000">

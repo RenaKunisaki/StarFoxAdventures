@@ -39,10 +39,11 @@ class RomListEntry {
             //parse the object-specific params
             const dlls = this.game.dlls;
             const dll = dlls ? dlls[this.object.dll_id] : null;
+            //console.log("Object", this, "dll", dll);
             if(dll && dll.objParams) {
                 this.params  = {};
                 const params = dll.readObjParams(this.paramData);
-                for(let [name, param] of Object.entries(dll.objParams)) {
+                for(let [name, param] of Object.entries(params)) {
                     this.params[name] = {
                         //XXX this is gross, we end up with param.param
                         //and value.value

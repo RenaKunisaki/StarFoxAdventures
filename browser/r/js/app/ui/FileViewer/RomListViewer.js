@@ -43,9 +43,17 @@ export class RomListViewer {
                         if(param.param.description) {
                             title += param.param.description;
                         }
+                        let disp = param.value;
+                        if(disp != null && disp != undefined) {
+                            disp = disp.display;
+                            if(disp == null || disp == undefined) {
+                                disp = param.value.value;
+                            }
+                        }
+                        disp = String(disp);
                         const li = E.li(`param param-${param.param.type}`,
                             E.span('name',  name), ': ',
-                            E.span('value', param.value.display),
+                            E.span('value', disp),
                             {title:title},
                         );
                         ul.append(li);
