@@ -3,6 +3,7 @@ export class Type {
     static _size; //number of bytes
 
     get size() { return this.constructor._size; } //loljs
+    get typeName() { return this.constructor.name }
 
     constructor() { }
 
@@ -64,8 +65,15 @@ export class Type {
         return view;
     }
 
-    toString(value) {
-        /** Convert this type to a string, for debugging.
+    toString() {
+        /** Convert this object to a string, for debugging.
+         *  @returns {string} String representation.
+         */
+        return `[Struct.Type.${this.type}]`
+    }
+
+    valueToString(value) {
+        /** Convert a value of this type to a string.
          *  @param value Value to convert.
          *  @returns {string} String representation.
          */

@@ -318,7 +318,7 @@ export default class StructParser {
         console.assert(testData.x == 1);
         console.assert(testData.y == 2);
         console.assert(testData.z == 3);
-        console.log(structs.vec3f.toString(testData));
+        console.log(structs.vec3f.valueToString(testData));
         console.log("struct self test passed");
     }
 }

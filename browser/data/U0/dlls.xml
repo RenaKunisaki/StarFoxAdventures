@@ -7209,7 +7209,7 @@ seemingly only used to track magic plants' growth</description>
     <objparams size="0x36">
       <field type="GameBit16" offset="0x18" name="bit_incOnDeath"></field>
       <field type="GameBit16" offset="0x1A" name="bit_clearOnDeath"></field>
-      <field type="byte" offset="0x27" name="hasWeapon"></field>
+      <field type="byte" offset="0x27" name="weapon"></field>
       <field type="u8" offset="0x28" name="hitbox">
         <description>Sets the WhichParentHitbox flags of the object</description>
       </field>
@@ -13406,7 +13406,7 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
     <objparams size="0x20">
-      <field type="float" offset="0x1C"></field>
+      <field type="u32" offset="0x1C"></field>
     </objparams>
   </dll>
   <dll address="0x80322090" dolOffs="0x31F090" id="0x012F" interface="object" name="BarrelPad" unk08="0x00000000" unk0E="0x0000">

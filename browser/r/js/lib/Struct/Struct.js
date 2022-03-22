@@ -45,7 +45,7 @@ export default class Struct extends Type {
         return result;
     }
 
-    toString(value) {
+    valueToString(value) {
         /** Convert this struct to a string, for debugging.
          *  @param value Value to convert.
          *  @returns {string} String representation.

@@ -28,6 +28,7 @@ export default class Field extends Type {
     }
 
     get size() { return this._size; }
+    get typeName() { return this.type.typeName }
 
     fromBytes(view, offset=0, littleEndian=undefined) {
         /** Read this field from a DataView.
@@ -58,7 +59,7 @@ export default class Field extends Type {
         return this.type.arrayToBytes(value, view, offset, littleEndian);
     }
 
-    toString(value) {
+    valueToString(value) {
         /** Convert this field to a string, for debugging.
          *  @param value Value to convert.
          *  @returns {string} String representation.

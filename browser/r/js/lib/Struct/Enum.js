@@ -51,7 +51,7 @@ export class Enum extends Type {
         return this.fieldsByName[value] != undefined;
     }
 
-    toString(value) {
+    valueToString(value) {
         /** Convert this enum to a string, for debugging.
          *  @param value Value to convert.
          *  @returns {string} String representation.

@@ -1,8 +1,44 @@
 import { assertType, int, hex } from "../Util.js";
-import Struct, { parseType } from "../lib/Struct.js";
-import { GhidraTypes } from "../types/GhidraTypes.js";
-import StructParser from "../lib/Struct/StructParser.js";
 import Game from "./Game.js";
+
+//XXX display logic doesn't belong here
+const objParamTypeFmt = {
+    s8:          (game,val) => `0x${hex(val, 2)}`,
+    byte:        (game,val) => `0x${hex(val, 2)}`,
+    u8:          (game,val) => `0x${hex(val, 2)}`,
+    ubyte:       (game,val) => `0x${hex(val, 2)}`,
+    //undefined:   (game,val) => `0x${hex(val, 2)}`,
+    undefined1:  (game,val) => `0x${hex(val, 2)}`,
+    s16:         (game,val) => `0x${hex(val, 4)}`,
+    short:       (game,val) => `0x${hex(val, 4)}`,
+    u16:         (game,val) => `0x${hex(val, 4)}`,
+    ushort:      (game,val) => `0x${hex(val, 4)}`,
+    undefined2:  (game,val) => `0x${hex(val, 4)}`,
+    s32:         (game,val) => `0x${hex(val, 8)}`,
+    int:         (game,val) => `0x${hex(val, 8)}`,
+    u32:         (game,val) => `0x${hex(val, 8)}`,
+    uint:        (game,val) => `0x${hex(val, 8)}`,
+    undefined4:  (game,val) => `0x${hex(val, 8)}`,
+    s64:         (game,val) => `0x${hex(val,16)}`,
+    u64:         (game,val) => `0x${hex(val,16)}`,
+    float:       (game,val) => val.toFixed(2),
+    double:      (game,val) => val.toFixed(2),
+    GameBit:     (game,val) => `0x${hex(val, 4)}`,
+    GameBit16:   (game,val) => `0x${hex(val, 4)}`,
+    GameBit32:   (game,val) => `0x${hex(val, 4)}`,
+    ObjUniqueId: (game,val) => `0x${hex(val, 8)}`,
+    ObjDefEnum:  (game,val) => {
+        const obj = game.getObject(val);
+        const name = obj ? obj.name : '?';
+        return `0x${hex(val,4)} ${name}`;
+    },
+    MapDirIdx8: (game,val) => {
+        if(game.mapDirs[val]) {
+            return `0x${hex(val,2)} ${game.mapDirs[val].name}`;
+        }
+        else return `0x${hex(val,2)} ?`;
+    },
+};
 
 export default class DLL {
     /** A DLL in the game code.
@@ -17,9 +53,6 @@ export default class DLL {
         this.dolOffs   = int(eDll.getAttribute('dolOffs'));
         this.name      = eDll.getAttribute('name');
         this.interface = eDll.getAttribute('interface');
-        //XXX these fields shouldn't exist (were based on outdated info)
-        //this.unk08     = int(eDll.getAttribute('unk08'));
-        //this.unk0E     = int(eDll.getAttribute('unk0E'));
 
         this.description = '';
         let desc = eDll.getElementsByTagName('description');
@@ -113,7 +146,7 @@ export default class DLL {
                 offset: int(eParam.getAttribute('offset')),
                 type:   eParam.getAttribute('type'),
             };
-            if(param.name == undefined) param.name = `unk${hex(param.offset)}`;
+            if(param.name == undefined) param.name = `_${hex(param.offset)}`;
             let eDesc = eParam.getElementsByTagName('description').item(0);
             if(eDesc) param.description = eDesc.textContent;
             if(this.objParamOffsets[param.offset]) {
@@ -150,49 +183,20 @@ export default class DLL {
         }
 
         //XXX this is confusing, sometimes we're using this and
-        //sometimes we're just using the struct directly, and the
-        //generated names for unknown fields don't match.
+        //sometimes we're just using the struct directly.
         const result = {};
         for(let field of this.objParamStruct.fields) {
             const val = values[field.name];
+            let disp = val.toString();
+            let type = this.objParams[field.name];
+            if(type) type = type.type;
+            type = objParamTypeFmt[type];
             result[field.name] = {
                 param:   this.objParams[field.name],
                 value:   val,
-                display: val.toString(),
+                display: type ? type(this.game, val) : disp,
             };
         }
-
-        /* for(let [name,param] of Object.entries(this.objParams)) {
-            const val = values[name];
-            result[name] = {
-                param: param,
-                value: val,
-            };
-            //make displayed value
-            const type = GhidraTypes[param.type];
-            let disp = String(result[name].value);
-            if(type.disp) disp = type.disp(result[name].value);
-            else switch(param.type) {
-                case 'GameBit': case 'GameBit16': case 'GameBit32': {
-                    disp = `0x${hex(val,4)}`; //XXX link to list
-                    break;
-                }
-                case 'ObjDefEnum': {
-                    const obj = this.game.getObject(val);
-                    const name = obj ? obj.name : '?';
-                    disp = `0x${hex(val,4)} ${name}`;
-                    break;
-                }
-                case 'MapDirIdx8': {
-                    if(this.game.mapDirs[val]) {
-                        disp = `0x${hex(val,2)} ${this.game.mapDirs[val].name}`;
-                    }
-                    else disp = `0x${hex(val,2)} ?`;
-                    break;
-                }
-            }
-            result[name].display = disp;
-        } */
         return result;
     }
 }
