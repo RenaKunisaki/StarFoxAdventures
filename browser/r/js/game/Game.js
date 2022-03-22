@@ -1,4 +1,4 @@
-import { assertType, getXml, int } from "../Util.js";
+import { assertType, downloadXml, getXml, int } from "../Util.js";
 import GameBit from "./GameBit.js";
 import GameObject from "./GameObject.js";
 import DLL from "./DLL.js";

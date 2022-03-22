@@ -1,6 +1,7 @@
 import { assertType, int, hex } from "../Util.js";
 import Struct, { parseType } from "../lib/Struct.js";
 import { GhidraTypes } from "../types/GhidraTypes.js";
+import StructParser from "../lib/Struct/StructParser.js";
 import Game from "./Game.js";
 
 export default class DLL {
@@ -126,7 +127,9 @@ export default class DLL {
         }
 
         //create a Struct
-        const structDef = [];
+        const ns = this.app.types.getType('sfa');
+        this.objParamStruct = this.app.types.parseStruct(eParams, ns);
+        /* const structDef = [];
         let offs = 0x18; //end of common objdef
         while(offs <= maxOffs) {
             let prevOffs = offs;
@@ -150,18 +153,25 @@ export default class DLL {
             }
         }
         //console.log("Creating struct", structDef);
-        this.objParamStruct = Struct(...structDef);
+        this.objParamStruct = Struct(...structDef); */
     }
 
     readObjParams(data) {
         /** Read object params from data.
          *  @param {DataView} data view to read from.
          *  @returns {object} parameter name => value, or null.
-         *  @note Expects data to contain only the bytes following
-         *    the 0x18-byte common ObjDef.
+         *  @note Expects data to contain only the bytes from the beginning of
+         *    the 0x18-byte common ObjDef to the end of the parameters.
          */
         if(!this.objParams) return null;
-        const values = new this.objParamStruct(data);
+        try {
+            const values = this.objParamStruct.fromBytes(data);
+        }
+        catch(ex) {
+            if(!(ex instanceof RangeError)) throw ex;
+            console.error("Out of range reading params for DLL", this, data);
+            return null;
+        }
         const result = {};
         for(let [name,param] of Object.entries(this.objParams)) {
             const val = values[name];

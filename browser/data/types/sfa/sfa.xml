@@ -13,8 +13,17 @@
         <item name="Japanese" />
         <item name="Spanish" />
     </enum>
-    <typedef name="ObjDefEnum" type="s16" /><!-- XXX generate enum -->
+    <!-- TODO generate enums for some of these -->
+    <typedef name="GameBit16" type="s16" />
+    <typedef name="GameBit32" type="s32" />
+    <typedef name="GameTextId16" type="s16" />
+    <typedef name="GameTextId32" type="s32" />
+    <typedef name="MapDirIdx8" type="u8" />
+    <typedef name="ObjDefEnum" type="s16" />
     <typedef name="ObjUniqueId" type="int" />
+    <typedef name="RomListObjLoadFlags" type="u8" />
+    <typedef name="WarpEnum8" type="s8" />
+
     <!-- order is important here since later files can
     depend on things defined in earlier ones.
     TODO: come up with a way to handle circular dependencies. -->

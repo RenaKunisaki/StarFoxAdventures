@@ -25,8 +25,8 @@ class RomListEntry {
         this.position   = base.position;
         this.id         = base.id;
         this.paramData  = new DataView(data.buffer,
-            offset+data.byteOffset+0x18,
-            this.byteLength-0x18);
+            offset+data.byteOffset,
+            this.byteLength);
         this.params     = null;
 
         if(this.game.objects) {

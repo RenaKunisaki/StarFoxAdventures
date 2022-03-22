@@ -50,6 +50,7 @@ export default class Struct extends Type {
          *  @param value Value to convert.
          *  @returns {string} String representation.
          */
+        if(value == undefined) return `[struct ${this.name}]`;
         const result = [];
         const nameLen = Math.max(...this.fields.map(f => f.name.length));
         for(let field of this.fields) {

@@ -86,7 +86,7 @@ export default class StructParser {
         return new EnumItem(result);
     }
 
-    _parseEnum(eEnum, namespace=null) {
+    parseEnum(eEnum, namespace=null) {
         /** Parse one 'enum' element. */
         if(namespace == null) namespace = this.types;
         const result = {
@@ -170,7 +170,7 @@ export default class StructParser {
         return new Field(field);
     }
 
-    _parseStruct(eStruct, namespace) {
+    parseStruct(eStruct, namespace) {
         /** Parse one 'struct' element. */
         if(namespace == null) namespace = this.types;
         const result = {
@@ -214,7 +214,7 @@ export default class StructParser {
         return new Struct(result);
     }
 
-    _parseTypedef(eDef, namespace) {
+    parseTypedef(eDef, namespace) {
         /** Parse one 'typedef' element. */
         if(namespace == null) namespace = this.types;
         const name  = eDef.getAttribute('name');
@@ -230,9 +230,9 @@ export default class StructParser {
     async parseFile(path, namespace=null) {
         /** Parse an XML structs document. */
         const parsers = {
-            struct:  elem => this._parseStruct (elem, namespace),
-            enum:    elem => this._parseEnum   (elem, namespace),
-            typedef: elem => this._parseTypedef(elem, namespace),
+            struct:  elem => this.parseStruct (elem, namespace),
+            enum:    elem => this.parseEnum   (elem, namespace),
+            typedef: elem => this.parseTypedef(elem, namespace),
             //include is a special case
         };
 

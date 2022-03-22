@@ -91,7 +91,7 @@ export class RomListViewer {
 
         let params = [];
         if(entry.params == null || Object.keys(entry.params).length == 0) {
-            for(let xOffs=0; xOffs<entry.paramData.byteLength; xOffs += 4) {
+            for(let xOffs=0x18; xOffs<entry.paramData.byteLength; xOffs += 4) {
                 params.push(hex(entry.paramData.getUint32(xOffs), 8));
             }
             row.params = params.join(' ');

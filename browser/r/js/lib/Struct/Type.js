@@ -294,7 +294,8 @@ export class bool extends Type {
     static _size = 1;
     fromBytes(view, offset=0, littleEndian=false) {
         let res = view.getUint8(offset);
-        if(res > 1) console.warn(`bool value is 0x${res.toString(16)} at offset 0x${offset.toString(16)}`);
+        //if(res > 1) console.warn(`bool value is 0x${res.toString(16)} at offset 0x${offset.toString(16)}`);
+        console.assert(res < 2);
         return (res != 0);
     }
     toBytes(value, view=null, offset=0, littleEndian=false) {
