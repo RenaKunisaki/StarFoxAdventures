@@ -31,4 +31,5 @@
     <include path="text.xml" />
     <include path="objects.xml" />
     <include path="save.xml" />
+    <include path="textures.xml" />
 </types>

@@ -1,4 +1,3 @@
-import Struct from "../../lib/Struct.js";
 import BinaryFile from "../../lib/BinaryFile.js";
 import IsoFile from "../../types/iso/isofile.js";
 import Text from "./Text.js";
