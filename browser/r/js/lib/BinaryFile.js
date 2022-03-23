@@ -1,5 +1,27 @@
-import { fieldTypes } from "./Struct.js";
-import { hex } from "../Util.js";
+//import { hex } from "../Util.js";
+
+const fieldTypes = {
+    //type: {size, func}
+    //type is the character used to specify this type.
+    //size is the number of bytes wide this type is.
+    //func is the function used to read this type from a DataView.
+    //func's params
+    //  view: the view to read from.
+    //  offs: byte offset to read from.
+    //  LE:   true for little-endian, false for big-endian.
+    b: {size:1, func:(view, offs, LE) => view.getInt8     (offs), },
+    B: {size:1, func:(view, offs, LE) => view.getUint8    (offs), },
+    h: {size:2, func:(view, offs, LE) => view.getInt16    (offs, LE), },
+    H: {size:2, func:(view, offs, LE) => view.getUint16   (offs, LE), },
+    i: {size:4, func:(view, offs, LE) => view.getInt32    (offs, LE), },
+    I: {size:4, func:(view, offs, LE) => view.getUint32   (offs, LE), },
+    q: {size:8, func:(view, offs, LE) => view.getBigInt64 (offs, LE), },
+    Q: {size:8, func:(view, offs, LE) => view.getBigUint64(offs, LE), },
+    f: {size:4, func:(view, offs, LE) => view.getFloat32  (offs, LE), },
+    d: {size:8, func:(view, offs, LE) => view.getFloat64  (offs, LE), },
+    c: {size:1, func:(view, offs, LE) =>
+        String.fromCharCode(view.getUint8(offs)), },
+};
 
 export default class BinaryFile {
     /** A wrapper for reading binary data. */
