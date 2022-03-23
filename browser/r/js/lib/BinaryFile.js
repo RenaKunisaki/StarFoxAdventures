@@ -1,4 +1,5 @@
 //import { hex } from "../Util.js";
+import { Type } from "./Struct/Type.js";
 
 const fieldTypes = {
     //type: {size, func}
@@ -116,18 +117,14 @@ export default class BinaryFile {
 
     _readCls(count, cls) {
         /** Read a class defined using Struct */
-        if(cls._size == undefined) {
+        if(!(cls instanceof Type)) {
             throw new TypeError(`Don't know how to read type: ${cls}`);
         }
-        const res = [];
-        for(let i=0; i<count; i++) {
-            //console.log("read", cls, `from 0x${hex(this._readOffs)}`);
-            const r = new cls(this.buffer, this._readOffs+this.byteOffset);
-            //console.log(r);
-            res.push(r);
-            this._readOffs += cls._size;
-        }
-        return (count == 1) ? res[0] : res;
+        let result;
+        if(count == 1) result = cls.fromBytes(this._view, this._readOffs);
+        else result = cls.arrayFromBytes(this._view, count, this._readOffs);
+        this._readOffs += cls.size * count;
+        return result;
     }
 
     _readChars(count) {

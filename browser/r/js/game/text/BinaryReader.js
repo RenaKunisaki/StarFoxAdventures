@@ -5,34 +5,8 @@ import Text from "./Text.js";
 import Phrase from "./Phrase.js";
 import { DataError } from "../../app/errors.js";
 
-const CharacterStruct = Struct(
-    ['I', 'character'],
-    ['H', 'xpos'],
-    ['H', 'ypos'],
-    ['b', 'left'],
-    ['b', 'right'],
-    ['b', 'top'],
-    ['b', 'bottom'],
-    ['B', 'width'],
-    ['B', 'height'],
-    ['B', 'font'],
-    ['B', 'texture'],
-);
-const GameTextStruct = Struct(
-    ['H', 'id'],
-    ['H', 'nPhrases'],
-    ['B', 'window'],
-    ['B', 'alignH'],
-    ['B', 'alignV'],
-    ['B', 'language'],
-    ['I', 'phrases'],
-);
-const TextureStruct = Struct(
-    ['H', 'texFmt'],
-    ['H', 'pixFmt'],
-    ['H', 'width'],
-    ['H', 'height'],
-);
+//struct types
+let CharacterStruct, GameTextStruct, TextureStruct;
 
 export default class BinaryReader {
     /** Reads a GameText binary file. */
@@ -42,6 +16,9 @@ export default class BinaryReader {
         this.app     = app;
         this.data    = data;
         this._file   = new BinaryFile(this.data);
+        CharacterStruct = app.types.getType('sfa.text.CharacterStruct');
+        GameTextStruct  = app.types.getType('sfa.text.GameTextStruct');
+        TextureStruct   = app.types.getType('sfa.text.TextureStruct');
         this.readCharStructs();
         this.readTexts();
         this.readStringTable();
