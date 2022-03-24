@@ -3,15 +3,17 @@ const RADIANS = Math.PI / 180;
 export default class Context {
     /** GL context wrapper.
      */
-    constructor(canvas) {
+    constructor(canvas, drawFunc=null) {
         /** Construct GL context.
          *  @param {HTMLCanvasElement} canvas The canvas to render to.
+         *  @param {function} drawFunc Function to call to render the scene.
          */
         this.fov   = 60; //degrees
         this.zNear = 0.1;
         this.zFar  = 10000;
         this.clearColor = [0.0, 0.5, 0.5, 1.0];
         this.clearDepth = 0.0;
+        this.drawFunc   = drawFunc; //callback to draw the scene
         //XXX add getters/setters for these
         this._gl_extensions = {};
         this.enableTextures = false;
@@ -90,8 +92,6 @@ export default class Context {
         this._initMatrices();
         this._setupViewport();
         //this._setupDepthTexture();
-
-        //this.gx = new GX(this);
     }
 
     _initMatrices() {
@@ -172,13 +172,15 @@ export default class Context {
             this.clearColor[2], this.clearColor[3]);
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        if(this.drawFunc) this.drawFunc();
+
         //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
         /* gl.uniform1i(this.gx.programInfo.uniforms.useLights,
             this.lights.enabled ? 1 : 0);
         gl.uniform1i(this.gx.programInfo.uniforms.useTexture,
             this.enableTextures ? 1 : 0);
         this.renderer.render(); */
-        //this.gx.drawBoundCube();
 
         //now render again to our depth buffer.
         //gl.disable(gl.BLEND);

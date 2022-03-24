@@ -264,3 +264,30 @@ export function downloadXml(xml, name, type='application/xml', pretty=false) {
     if(pretty) data = prettyXml(data);
     download(data, name, type);
 }
+
+export function hexdump(data, offset=0, length=null, cols=16) {
+    /** Create hex dump of data.
+     *  @param {ArrayBuffer} data data to dump.
+     *  @param {int} offset First byte to dump.
+     *  @param {int} length Number of bytes to dump. Default: to end of data.
+     *  @param {int} cols Number of columns.
+     *  @returns an array of lines.
+     */
+    const view = new Uint8Array(data);
+    const res  = [];
+    if(length == null) length = view.byteLength;
+    for(let offs=offset; offs<length; offs += cols) {
+        const line = [offs.toString(16).padStart(4, '0').toUpperCase()+' '];
+        for(let col=0; col<cols && col+offs < length; col++) {
+            const b = view[offs+col].toString(16).padStart(2, '0').toUpperCase();
+            line.push(b+' ');
+            if((col & 3) == 3) line.push(' ');
+        }
+        res.push(line.join(''));
+    }
+    return res; //.join('\n');
+}
+
+export function isPowerOf2(value) {
+    return (value & (value - 1)) == 0;
+}

@@ -99,7 +99,7 @@ export default class Texture {
          *  width, height: Image dimensions.
          */
         const gl    = this.gl;
-        const fmt   = this.context._gl_extensions.compressed_texture_s3tc
+        const fmt   = this.context._gl_extensions.compressed_texture_s3tc;
         this.width  = width;
         this.height = height;
         this.bind();

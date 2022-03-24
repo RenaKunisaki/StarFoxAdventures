@@ -3,6 +3,7 @@ import { assertType } from "../../Util.js";
 import { E, clearElement } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
 import Context from "./gl/Context.js";
+import GX from "./gl/gx/GX.js";
 
 export default class MapView {
     /** Renders map geometry. */
@@ -11,7 +12,7 @@ export default class MapView {
         this.app      = game.app;
         this.element  = document.getElementById('tab-mapView');
         this.canvas   = E.canvas('map-view-canvas');
-        this.gl       = null;
+        this.context  = null;
         this.eMapList = null;
         this.curMap   = null; //current map
         this.app.onIsoLoaded(iso => this.refresh());
@@ -26,9 +27,10 @@ export default class MapView {
             ),
             this.canvas,
         )
-        if(!this.gl) {
-            this.gl = new Context(this.canvas);
-            this.gl.init().then(() => this.gl.redraw());
+        if(!this.context) {
+            this.context = new Context(this.canvas, () => this._draw());
+            this.gx = new GX(this.context);
+            this.context.init().then(() => this.context.redraw());
         }
     }
 
@@ -70,5 +72,10 @@ export default class MapView {
             return;
         }
         this.curMap = map;
+    }
+
+    _draw() {
+        /** Draw the map. Called by Context. */
+        const gl = this.context.gl;
     }
 }
