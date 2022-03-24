@@ -149,3 +149,6 @@ table .controls {
     background-size: 16px 16px;
     background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
 }
+#map-view-canvas {
+    border: 1px #888 solid;
+}

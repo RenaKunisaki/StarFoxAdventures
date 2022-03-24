@@ -14,6 +14,7 @@ import ObjList from "./ui/ObjList.js";
 import DllList from "./ui/DllList.js";
 import MapList from "./ui/MapList.js";
 import MapGrid from "./ui/MapGrid.js";
+import MapView from "./ui/MapView.js";
 import MiscTab from "./ui/MiscTab.js";
 import Warptab from "./ui/Warptab.js";
 import TextList from "./ui/TextList.js";
@@ -60,6 +61,7 @@ export default class App {
                 dllList:    new DllList   (this.game),
                 mapList:    new MapList   (this.game),
                 mapGrid:    new MapGrid   (this.game),
+                mapView:    new MapView   (this.game),
                 miscTab:    new MiscTab   (this.game),
                 warpTab:    new Warptab   (this.game),
                 textList:   new TextList  (this.game),

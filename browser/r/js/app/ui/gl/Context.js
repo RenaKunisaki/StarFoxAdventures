@@ -21,6 +21,11 @@ export default class Context {
         this._setupLights();
     }
 
+    async init() {
+        //load programs etc
+        this._setupState();
+    }
+
     _setupLights() {
         //we could extend this to a Light object but we really don't need it...
         this.lights = {
@@ -55,6 +60,7 @@ export default class Context {
     }
 
     _setupExtensions() {
+        const gl = this.gl;
         //enable DDS textures (though we don't currently use them)
         //https://developer.mozilla.org/en-US/docs/Web/API/WEBGL_compressed_texture_s3tc
         this._gl_extensions.compressed_texture_s3tc = (
@@ -85,7 +91,7 @@ export default class Context {
         this._setupViewport();
         //this._setupDepthTexture();
 
-        this.gx = new GX(this);
+        //this.gx = new GX(this);
     }
 
     _initMatrices() {
@@ -109,9 +115,10 @@ export default class Context {
 
         //we need to set the size through HTML attributes, not CSS,
         //or else it blurs, because lol.
-        //why -32? no idea, but it makes the canvas fit into the viewport.
-        gl.canvas.setAttribute('width', window.innerWidth - 32);
-        gl.canvas.setAttribute('height', window.innerHeight - 32);
+        const rect = gl.canvas.getBoundingClientRect();
+        console.log("GL rect", rect, "win", window.innerWidth, window.innerHeight);
+        gl.canvas.setAttribute('width', window.innerWidth - rect.left);
+        gl.canvas.setAttribute('height', window.innerHeight - rect.top);
 
         const width=gl.canvas.clientWidth, height=gl.canvas.clientHeight;
         gl.viewport(0, 0, width, height);
@@ -166,11 +173,11 @@ export default class Context {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
-        gl.uniform1i(this.gx.programInfo.uniforms.useLights,
+        /* gl.uniform1i(this.gx.programInfo.uniforms.useLights,
             this.lights.enabled ? 1 : 0);
         gl.uniform1i(this.gx.programInfo.uniforms.useTexture,
             this.enableTextures ? 1 : 0);
-        this.renderer.render();
+        this.renderer.render(); */
         //this.gx.drawBoundCube();
 
         //now render again to our depth buffer.
