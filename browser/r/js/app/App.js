@@ -92,6 +92,7 @@ export default class App {
         await this.setLanguage('English');
         this.ui.gameBits.refresh();
         this.progress.hide();
+        this.ui.tabs.showTab('Main');
     }
 
     async setLanguage(lang) {

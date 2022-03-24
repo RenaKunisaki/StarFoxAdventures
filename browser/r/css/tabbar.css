@@ -35,3 +35,7 @@
     border: 1px #444 solid;
     padding: 0.5em;
 }
+
+.tabBody {
+    display: none;
+}

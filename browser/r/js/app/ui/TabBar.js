@@ -18,14 +18,14 @@ export default class TabBar {
     add(label, elem) {
         //add the element
         const isFirst = Object.keys(this.tabs).length == 0;
-        elem = E.div('tabBody', elem);
+        //elem = E.div('tabContainer', elem);
         this.element.append(elem);
         if(!isFirst) elem.style.display = 'none';
 
         //build a tab for the element
         let tab = E.div('tab', label);
         this._eTabBar.append(tab);
-        tab.addEventListener('click', e => this._showTab(label));
+        tab.addEventListener('click', e => this.showTab(label));
         if(isFirst) tab.classList.add('active');
 
         this.tabs[label] = {
@@ -34,7 +34,7 @@ export default class TabBar {
         };
     }
 
-    _showTab(label) {
+    showTab(label) {
         for(let [lbl, tab] of Object.entries(this.tabs)) {
             if(lbl == label) {
                 tab.eTab.classList.add('active');
