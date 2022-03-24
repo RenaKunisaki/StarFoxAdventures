@@ -25,8 +25,7 @@ export default class FileList {
         const elem = E.div('fileList',
             E.div('list', E.h1(null, "Files"), eList),
             this.eRightPane);
-        this.element.replaceWith(elem);
-        this.element = elem;
+        clearElement(this.element).append(elem);
     }
 
     _showFile(file) {

@@ -206,8 +206,7 @@ export default class SaveInfo {
             this._makeCharsTable(slot),
             this._makeScoresTable(save, slot)
         );
-        this.element.replaceWith(elem);
-        this.element = elem;
+        clearElement(this.element).append(elem);
     }
 
     _onSaveSlotChanged(slot) {

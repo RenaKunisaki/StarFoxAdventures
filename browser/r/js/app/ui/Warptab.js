@@ -1,5 +1,5 @@
 import Game from "../../game/Game.js";
-import { E } from "../../lib/Element.js";
+import { E, clearElement } from "../../lib/Element.js";
 import { assertType, hex } from "../../Util.js";
 import Table from "./Table.js";
 
@@ -19,8 +19,7 @@ export default class Warptab {
             tbl.add(this._makeRow(idx, warp));
         }
         const elem = E.div('warpTab', tbl.element);
-        this.element.replaceWith(elem);
-        this.element = elem;
+        clearElement(this.element).append(elem);
     }
 
     _makeTable() {

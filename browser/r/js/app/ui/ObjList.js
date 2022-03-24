@@ -1,5 +1,5 @@
 import Game from "../../game/Game.js";
-import { E } from "../../lib/Element.js";
+import { E, clearElement } from "../../lib/Element.js";
 import { assertType, hex } from "../../Util.js";
 import Table from "./Table.js";
 
@@ -20,8 +20,7 @@ export default class ObjList {
             tbl.add(this._makeRow(obj));
         }
         const elem = E.div('objList', tbl.element);
-        this.element.replaceWith(elem);
-        this.element = elem;
+        clearElement(this.element).append(elem);
     }
 
     _makeTable() {

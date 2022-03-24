@@ -19,8 +19,7 @@ export default class MapList {
             tbl.add(this._makeRow(map));
         }
         const elem = E.div('mapList', tbl.element);
-        this.element.replaceWith(elem);
-        this.element = elem;
+        clearElement(this.element).append(elem);
     }
 
     _makeMapElem(val, td, row, isDir=false) {
