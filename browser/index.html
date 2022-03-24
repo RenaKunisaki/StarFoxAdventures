@@ -17,6 +17,7 @@
         <link rel="stylesheet" href="r/css/taskprogress.css" />
         <script type="module" src="r/js/main.js"></script>
         <script type="module" src="r/js/lib/pako.js"></script>
+        <script type="module" src="r/js/lib/gl-matrix-min.js"></script>
     </head>
     <body>
         <div id="loading">Loading...</div>
@@ -126,6 +127,11 @@
 
         <div id="tab-mapGrid" class="tabBody mapGrid"
         data-tab-name="Map Grid" data-needs-iso="1">
+        </div>
+
+        <div id="tab-mapView" class="tabBody tabMapView" data-needs-iso="1"
+        data-tab-name="Map View">
+            <canvas id="map-view"></canvas>
         </div>
 
         <div id="tab-warpTab" class="tabBody warpTab"
