@@ -299,7 +299,8 @@
     </struct>
 
     <struct name="GCPolygon">
-        <!-- guess: u16 idxs to vtx pos, color, texcoord, texcoord? -->
+        <!-- guess: u16 idxs to vtx pos, color, texcoord, texcoord?
+        one also could be PNMTXIDX, or normals -->
         <field type="undefined" />
         <field type="undefined" />
         <field type="undefined" />

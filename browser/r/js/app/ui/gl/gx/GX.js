@@ -77,9 +77,10 @@ export default class GX {
         const gl = this.gl;
 
         //get shader code and create program
+        const path = '/r/js/app/ui/gl/gx'; //XXX
         this.program = new Program(this.context, {
-            [gl.VERTEX_SHADER]:   (await get('/r/js/gl/gx/vertex.glsl'))  .responseText,
-            [gl.FRAGMENT_SHADER]: (await get('/r/js/gl/gx/fragment.glsl')).responseText,
+            [gl.VERTEX_SHADER]:   (await get(`${path}/vertex.glsl`))  .responseText,
+            [gl.FRAGMENT_SHADER]: (await get(`${path}/fragment.glsl`)).responseText,
         });
 
         //get program info, used to set variables
@@ -106,10 +107,12 @@ export default class GX {
                 ],
             },
         };
+        console.log("GX loadPrograms OK");
     }
 
     beginRender() {
         /** Reset render state for new frame. */
+        const gl = this.gl;
         //reset lights to whatever the user set.
         gl.uniform3iv(this.programInfo.uniforms.ambLightColor,
             this.context.lights.ambient.color);
@@ -121,8 +124,8 @@ export default class GX {
 
     executeDisplayList(list, data) {
         /** Execute display list.
-         *  list: List (ArrayBuffer) to execute.
-         *  data: Dict of data sources for attribute array indices.
+         *  @param {ArrayBuffer} list display list to execute.
+         *  @param {object} data Dict of data sources for attribute array indices.
          */
         this.dlistParser.execute(list, data);
         //dlistParser will refer back to our fields and call our methods
@@ -156,14 +159,14 @@ export default class GX {
 
     _storeVtxsToBuffer(vtxs, mode) {
         /** Store vertices in vertex buffer.
-         *  mode: GX rendering mode.
-         *  Returns: {
+         *  @param mode GX rendering mode.
+         *  @returns {object} {
          *    glMode: GL rendering mode.
          *    glVtxCount: Number of vertices added to buffer.
          *    glOffset: Offset of first vertex added. (Currently always 0.)
          *  }
-         *  Since this method triangulates quads, the mode and vertex count
-         *  can differ from the input.
+         *  @note Since this method triangulates quads, the mode and vertex
+         *   count can differ from the input.
          */
         const gl = this.gl;
         const res = {glMode:null, glVtxCount:vtxs.length, glOffset:0};
@@ -237,9 +240,9 @@ export default class GX {
 
     _doDrawOp(mode, vtxs) {
         /** Execute a draw operation.
-         *  Called from DlistParser.
          *  @param mode Draw mode.
          *  @param vtxs Array of vertices.
+         *  @note Called from DlistParser.
          */
         const gl = this.gl;
         this._recordVtxStats(vtxs);

@@ -23,9 +23,9 @@ export default class XF {
 
     setReg(reg, val) {
         /** Set a register.
-         *  reg: Register ID.
-         *  val: Value, which should be an integer or float, depending
-         *    on the target register.
+         *  @param {int} reg: Register ID.
+         *  @param {int, float} val: Value, which should be an integer or float,
+         *   depending on the target register.
          */
         //while it is allowed to store Inf/NaN on the real GX, there's no reason
         //we should be doing so in this program.
@@ -35,8 +35,8 @@ export default class XF {
 
     getReg(reg) {
         /** Read a register.
-         *  reg: Register ID.
-         *  Returns the value, or null if the register hasn't been set, or
+         *  @param {int} reg Register ID.
+         *  @returns the value, or null if the register hasn't been set, or
          *    undefined if the register doesn't exist. (This is a bit backward,
          *    but JS uses undefined for nonexistent entries, so it's
          *    consistent at least.)
@@ -46,11 +46,11 @@ export default class XF {
 
     getPosMtx(idx) {
         /** Get a position matrix.
-         *  idx: Matrix index.
-         *  Returns a mat4.
-         *  XF Position Matrix Memory is an array of floats, and a matrix can
-         *  begin at any index that's a multiple of 4. So the index is just the
-         *  register ID divided by 4. That means that if matrix index 0 is
+         *  @param {int} idx Matrix index.
+         *  @returns {mat4} The Matrix. (not the movie, though)
+         *  @note XF Position Matrix Memory is an array of floats, and a matrix
+         *  can begin at any index that's a multiple of 4. So the index is just
+         *  the register ID divided by 4. That means that if matrix index 0 is
          *  [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11] then matrix index 1 is
          *  [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].
          *  Note also that these are only 12 entries. GX position matrices are
@@ -68,9 +68,9 @@ export default class XF {
 
     getNrmMtx(idx) {
         /** Get a normal matrix.
-         *  idx: Matrix index.
-         *  Returns a mat3.
-         *  This is similar to position matrices, but these are 3x3.
+         *  @param {int} idx Matrix index.
+         *  @returns {mat3} The Matrix.
+         *  @note This is similar to position matrices, but these are 3x3.
          */
         if(this._mtx.NRM[idx] == undefined) {
             console.error("Normal matrix "+String(idx)+" is undefined");
@@ -83,8 +83,8 @@ export default class XF {
 
     setMtx(idx, mtx) {
         /** Set a matrix.
-         *  idx: Matrix index. (Register ID divided by 4)
-         *  mtx: Matrix (mat4) to set.
+         *  @param {int} idx Matrix index. (Register ID divided by 4)
+         *  @param {mat4} mtx Matrix to set.
          */
         //XXX this only works for 4x4 matrices. what about normals?
         /* mat4 gives us a matrix like:

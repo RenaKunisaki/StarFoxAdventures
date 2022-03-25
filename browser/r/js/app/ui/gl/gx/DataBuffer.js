@@ -5,15 +5,10 @@ export default class DataBuffer {
      */
     constructor(src, order='>') {
         /** Construct DataBuffer.
-         *  src: ArrayBuffer to wrap.
-         *  order: '>' for big endian or '<' for little endian.
+         *  @param {ArrayBuffer} src ArrayBuffer to wrap.
+         *  @param {string} order '>' for big endian or '<' for little endian.
          */
-        try {
-            this.data   = new DataView(src);
-        }
-        catch(ex) {
-            debugger;
-        }
+        this.data   = new DataView(src);
         this.offset = 0;  //current offset to read from
         this.length = this.data.byteLength;
         this.order  = order;
@@ -21,12 +16,12 @@ export default class DataBuffer {
 
     seek(offset, whence=0) {
         /** Set read position.
-         *  offset: What to set position to or adjust position by.
-         *  whence: How to adjust position:
+         *  @param {int} offset What to set position to or adjust position by.
+         *  @param whence How to adjust position:
          *    0 or 'set': position = offset
          *    1 or 'cur': position += offset
          *    2 or 'end': position = EOF - offset
-         *  Returns new offset.
+         *  @returns {int} new offset.
          */
         switch(whence) {
             case 0: //SEEK_SET
@@ -50,6 +45,7 @@ export default class DataBuffer {
 
     get isEof() {
         /** Check if read position is at end of stream.
+         *  @returns {bool} true if at end of stream.
          */
         return this.offset >= this.length;
     }
@@ -57,7 +53,7 @@ export default class DataBuffer {
     nextS8() {
         /** Read next byte from data, increment offset,
          *  and return the byte.
-         *  Return null if at end of data.
+         *  @return {int} the byte, or null if at end of data.
          */
         if(this.offset >= this.length) return null;
         return this.data.getInt8(this.offset++);

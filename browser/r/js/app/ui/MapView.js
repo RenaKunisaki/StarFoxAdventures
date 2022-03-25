@@ -27,11 +27,18 @@ export default class MapView {
             ),
             this.canvas,
         )
-        if(!this.context) {
-            this.context = new Context(this.canvas, () => this._draw());
-            this.gx = new GX(this.context);
-            this.context.init().then(() => this._reloadMap() );
-        }
+        if(!this.context) this._initContext();
+    }
+
+    async _initContext() {
+        if(this.context) return;
+        this.context = new Context(this.canvas, () => this._draw());
+        await this.context.init();
+
+        this.gx = new GX(this.context);
+        await this.gx.loadPrograms();
+
+        this._reloadMap();
     }
 
     _buildMapList() {
@@ -95,6 +102,8 @@ export default class MapView {
             console.error("Map has no blocks", this.map);
             return;
         }
+
+        this.gx.beginRender();
         this._drawBlock(block);
     }
 
@@ -105,5 +114,17 @@ export default class MapView {
         const gl = this.context.gl;
 
         block.load(); //ensure block model is loaded
+
+        //this is wrong (need to use the render instrs, not just
+        //call each list in sequence)
+        //but let's see what happens
+        const data = {
+            POS:  block.vtxPositions,
+            COL0: block.vtxColors,
+            TEX0: block.texCoords,
+        };
+        //for(let list of block.dlists) {
+        //    this.gx.executeDisplayList(list.data, data);
+        //}
     }
 }

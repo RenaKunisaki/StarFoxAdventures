@@ -72,6 +72,7 @@ export default class VertexBuffer {
 
     addVtx(vtx) {
         /** Add a vertex to the buffer.
+         *  @param {object} vtx Vertex to add.
          */
         this._addPos(vtx.POS);
         this._addNormal(vtx.NRM);

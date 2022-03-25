@@ -37,8 +37,8 @@ export default class CP {
 
     setReg(reg, val) {
         /** Set CP register.
-         *  reg: Register ID.
-         *  val: Value, which should be a 32-bit integer.
+         *  @param {int} reg Register ID.
+         *  @param {int} val Value, which should be a 32-bit integer.
          */
         validNumber(reg, val);
         this._rawVals[reg] = val;
