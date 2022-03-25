@@ -299,7 +299,7 @@
     </struct>
 
     <struct name="GCPolygon">
-        <field type="undefined" />
+        <!-- guess: u16 idxs to vtx pos, color, texcoord, texcoord? -->
         <field type="undefined" />
         <field type="undefined" />
         <field type="undefined" />
@@ -390,14 +390,6 @@
         <field type="undefined" />
     </struct>
 
-    <struct name="BitStream">
-        <field type="pointer" name="data" />
-        <field type="int" name="nBytes" />
-        <field type="uint" name="len" />
-        <field type="undefined4" name="len2" />
-        <field type="int" name="pos" />
-    </struct>
-
     <struct name="MapBlock">
         <field type="u32" name="unused00">
             <note>set from 80060b90 - XXX confirm unused</note>
@@ -435,7 +427,7 @@
         <field type="pointer" name="vertexPositions">
             <note>vec3s*</note>
         </field>
-        <field type="pointer" name="vertexColours" />
+        <field type="pointer" name="vertexColors" />
         <field type="pointer" name="vertexTexCoords">
             <note>vec2s*</note>
         </field>
@@ -469,14 +461,13 @@
         <field type="short" name="yMax" />
         <field type="short" name="yOffset" />
         <field type="u16" name="nVtxs" />
-        <field type="undefined" />
+        <field type="undefined" /><!-- most likely u16 n??? -->
         <field type="undefined" />
         <field type="u16" name="nColors" />
         <field type="u16" name="nTexCoords" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="ushort" name="nPolyGroups" />
-        <field type="ushort" name="nHits" />
+        <field type="u16" name="nPolygons" />
+        <field type="u16" name="nPolyGroups" />
+        <field type="u16" name="nHits" />
         <field type="undefined2" name="hitField_9e">
             <note>set to 0 in initHits</note>
         </field>

@@ -30,10 +30,7 @@ export default class MapView {
         if(!this.context) {
             this.context = new Context(this.canvas, () => this._draw());
             this.gx = new GX(this.context);
-            this.context.init().then(() => {
-                this._reloadMap();
-                this.context.redraw();
-            });
+            this.context.init().then(() => this._reloadMap() );
         }
     }
 
@@ -51,6 +48,7 @@ export default class MapView {
             if(nA == nB) return 0;
             return (nA < nB) ? -1 : 1;
         });
+        this.eMapList.append(E.option(null, "(no map selected)", {value:'null'}));
         for(let map of maps) { //build list with placeholder names as needed
             let name = map.map.name;
             if(!name) name = "(no name)";
@@ -65,24 +63,39 @@ export default class MapView {
 
     _reloadMap() {
         /** Load and display the currently selected map. */
+        //don't start until user actually picks a map
+        if(this.eMapList.value == 'null') return;
         const map = this.game.maps[this.eMapList.value];
         if(!map) {
-            console.error("No map selected");
+            console.error("Invalid map selected", this.eMapList.value);
             return;
         }
         console.log("Loading map", map);
         if(!map.dirName) {
-            console.error("Map has no directory");
+            console.error("Map has no directory", map);
             return;
         }
         this.map = map;
+        this.context.redraw();
     }
 
     _draw() {
         /** Draw the map. Called by Context. */
         //XXX
         if(!this.map) return;
-        this._drawBlock(this.map.blocks[9]); //not 0
+        let iBlock = 0;
+        while(iBlock < this.map.blocks.length) {
+            //find a non-empty block
+            if(this.map.blocks[iBlock]
+            && this.map.blocks[iBlock].mod < 0xFF) break;
+            iBlock++;
+        }
+        const block = this.map.blocks[iBlock];
+        if(!block) {
+            console.error("Map has no blocks", this.map);
+            return;
+        }
+        this._drawBlock(block);
     }
 
     _drawBlock(block) {
