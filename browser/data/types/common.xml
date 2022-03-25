@@ -31,6 +31,12 @@
         <field name="y" type="s16" />
         <field name="z" type="s16" />
     </struct>
+    <struct name="Mtx43">
+        <field name="m" count="12" type="float" />
+    </struct>
+    <struct name="Mtx44">
+        <field name="m" count="16" type="float" />
+    </struct>
 
     <!-- include the rest -->
     <include path="./gcn/iso.xml" />

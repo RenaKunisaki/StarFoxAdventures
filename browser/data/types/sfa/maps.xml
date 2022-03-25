@@ -297,4 +297,203 @@
         <field name="layer" type="s16" />
         <field name="xRot" type="s16" />
     </struct>
+
+    <struct name="GCPolygon">
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+    </struct>
+
+    <struct name="PolygonGroup">
+        <field type="ushort" name="firstPolygon" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="short" />
+        <field type="short" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="uint" name="flags">
+            <note>(val &gt;&gt; 16) &amp; 0xFF is something else</note>
+        </field>
+        <field type="ushort" />
+    </struct>
+
+    <struct name="DisplayListPtr">
+        <field type="pointer" name="list">
+            <note>points to GX dlist commands</note>
+        </field>
+        <field type="ushort" name="size" />
+        <field type="vec3s" count="2" name="bbox" />
+        <field type="undefined" />
+        <field type="u8" name="shaderId" />
+        <field type="u16" name="specialBitAddr">
+            <description>offset relating to shaders</description>
+        </field>
+        <field type="u16">
+            <note>offset of some sort</note>
+        </field>
+        <field type="u32">
+            <note>always 07 00 00 00? XXX verify size</note>
+        </field>
+    </struct>
+
+    <struct name="LineHit">
+        <field type="short" />
+        <field type="short" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="short" />
+        <field type="short" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="u8" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+    </struct>
+
+    <struct name="HitsBinEntry">
+        <field type="short">
+            <note>pos or size, range 0-640</note>
+        </field>
+        <field type="short" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="short" />
+        <field type="short" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="u8" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+    </struct>
+
+    <struct name="BitStream">
+        <field type="pointer" name="data" />
+        <field type="int" name="nBytes" />
+        <field type="uint" name="len" />
+        <field type="undefined4" name="len2" />
+        <field type="int" name="pos" />
+    </struct>
+
+    <struct name="MapBlock">
+        <field type="u32" name="unused00">
+            <note>set from 80060b90 - XXX confirm unused</note>
+        </field>
+        <field type="ushort" name="flags_0x4">
+            <note>40=need init hits? 1=toggled on render</note>
+        </field>
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="int" name="length">
+            <description>file size</description>
+        </field>
+        <field type="Mtx43" name="mtx" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="pointer" name="GCpolygons" />
+        <field type="pointer" name="polygonGroups" />
+        <field type="pointer" name="textures">
+            <description>pointer to texture IDs which get changed to pointers</description>
+        </field>
+        <field type="pointer" name="vertexPositions">
+            <note>vec3s*</note>
+        </field>
+        <field type="pointer" name="vertexColours" />
+        <field type="pointer" name="vertexTexCoords">
+            <note>vec2s*</note>
+        </field>
+        <field type="pointer" name="shaders">
+            <note>Shader*</note>
+        </field>
+        <field type="pointer" name="displayLists">
+            <note>DisplayListPtr*</note>
+        </field>
+        <field type="pointer" name="linehits">
+            <note>LineHit*</note>
+        </field>
+        <field type="pointer" name="hits">
+            <note>HitsBinEntry*</note>
+            <note>data from HITS.bin, size from HITS.tab; 0 in file</note>
+        </field>
+        <field type="undefined4">
+            <note>set to 0 in initHits</note>
+        </field>
+        <field type="pointer" name="renderInstrsMain">
+            <note>BitStream*</note>
+        </field>
+        <field type="pointer" name="renderInstrsReflective" />
+        <field type="pointer" name="renderInstrsWater" />
+        <field type="u16" name="nRenderInstrsMain" />
+        <field type="u16" name="nRenderInstrsReflective" />
+        <field type="u16" name="nRenderInstrsWater" />
+        <field type="short" name="yMin">
+            <note>related to bounds</note>
+        </field>
+        <field type="short" name="yMax" />
+        <field type="short" name="yOffset" />
+        <field type="u16" name="nVtxs" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="u16" name="nColors" />
+        <field type="u16" name="nTexCoords" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="ushort" name="nPolyGroups" />
+        <field type="ushort" name="nHits" />
+        <field type="undefined2" name="hitField_9e">
+            <note>set to 0 in initHits</note>
+        </field>
+        <field type="u8" name="nTextures" />
+        <field type="u8" name="nDlists" />
+        <field type="u8" name="nShaders" />
+        <field type="u8" />
+        <field type="string" count="11" name="name">
+            <note>size guessed from OBJECTS.bin</note>
+        </field>
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+    </struct>
 </types>
