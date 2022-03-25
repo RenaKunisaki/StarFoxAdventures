@@ -173,7 +173,14 @@ export default class Context {
         gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        if(this.drawFunc) this.drawFunc();
+        if(this.drawFunc) {
+            try {
+                this.drawFunc();
+            }
+            catch(ex) {
+                console.error("Error redrawing", ex);
+            }
+        }
 
         //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
         /* gl.uniform1i(this.gx.programInfo.uniforms.useLights,

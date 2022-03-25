@@ -14,7 +14,7 @@ export default class MapView {
         this.canvas   = E.canvas('map-view-canvas');
         this.context  = null;
         this.eMapList = null;
-        this.curMap   = null; //current map
+        this.map      = null; //current map
         this.app.onIsoLoaded(iso => this.refresh());
     }
 
@@ -30,7 +30,10 @@ export default class MapView {
         if(!this.context) {
             this.context = new Context(this.canvas, () => this._draw());
             this.gx = new GX(this.context);
-            this.context.init().then(() => this.context.redraw());
+            this.context.init().then(() => {
+                this._reloadMap();
+                this.context.redraw();
+            });
         }
     }
 
@@ -67,15 +70,27 @@ export default class MapView {
             console.error("No map selected");
             return;
         }
+        console.log("Loading map", map);
         if(!map.dirName) {
             console.error("Map has no directory");
             return;
         }
-        this.curMap = map;
+        this.map = map;
     }
 
     _draw() {
         /** Draw the map. Called by Context. */
+        //XXX
+        if(!this.map) return;
+        this._drawBlock(this.map.blocks[9]); //not 0
+    }
+
+    _drawBlock(block) {
+        /** Draw a map block.
+         *  @param {MapBlock} block the block to draw.
+         */
         const gl = this.context.gl;
+
+        block.load(); //ensure block model is loaded
     }
 }

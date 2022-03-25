@@ -234,6 +234,8 @@ export class MapParser {
     _readBlocks(map, offset) {
         const result = [];
         let blocks;
+
+        //read the list of blocks from MAPS.bin
         this.mapsBin.seek(offset);
         try {
             blocks = this.mapsBin.readU32Array(map.sizeX * map.sizeZ);
@@ -247,7 +249,7 @@ export class MapParser {
         }
         let x = 0, z = 0;
         for(let blockData of blocks) {
-            let block = new Block(map, x, z, blockData);
+            let block = new Block(this.game, map, x, z, blockData);
             if(block.mod == 0xFF) block = null;
             result.push(block);
             x++;

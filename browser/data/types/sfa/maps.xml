@@ -350,6 +350,7 @@
     </struct>
 
     <struct name="LineHit">
+        <!-- XXX same as HitsBinEntry? -->
         <field type="short" />
         <field type="short" />
         <field type="undefined" />
