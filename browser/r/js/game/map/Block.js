@@ -1,4 +1,4 @@
-import { assertType } from "../../Util.js";
+import { assertType, hex } from "../../Util.js";
 import GameFile from "../GameFile.js";
 import Game from "../Game.js";
 import Map from "./Map.js";
@@ -55,8 +55,19 @@ export default class Block {
         const blockData = fBlock.getItem(this.sub); //XXX use tab somehow
         const view      = new DataView(blockData);
         this.header     = MapBlock.fromBytes(view);
-        console.log("Map Block Data", this.header);
+        console.log("Map Block Header", this.header);
 
+        this._loadVtxData(view);
+        this._loadPolygons(view);
+        this._loadDlists(view);
+        this._loadRenderInstrs(view);
+
+        //XXX read shaders, textures
+        this.shaders  = [];
+        this.textures = [];
+    }
+
+    _loadVtxData(view) {
         //read vertex data
         const offs = view.byteOffset;
         this.vtxPositions = view.buffer.slice( //vec3s[]
@@ -71,8 +82,11 @@ export default class Block {
             offs + this.header.vertexTexCoords,
             offs + this.header.vertexTexCoords + (this.header.nTexCoords * 4),
         );
+    }
 
+    _loadPolygons(view) {
         //read polygon data
+        const offs = view.byteOffset;
         this.polygons   = [];
         this.polyGroups = [];
         for(let i=0; i<this.header.nPolygons; i++) {
@@ -83,15 +97,29 @@ export default class Block {
             this.polyGroups.push(PolygonGroup.fromBytes(view,
                 offs + this.header.polygonGroups + (i * PolygonGroup.size)));
         }
+    }
 
+    _loadDlists(view) {
         //read display lists
+        const offs = view.byteOffset;
         this.dlists = [];
         for(let i=0; i<this.header.nDlists; i++) {
-            this.dlists.push(new DisplayList(this.game, view,
-                this.header.displayLists + (i * DisplayListPtr.size)));
-        }
+            let list = new DisplayList(this.game, view,
+                this.header.displayLists + (i * DisplayListPtr.size));
+            this.dlists.push(list);
 
+            const bytes = new DataView(list.data);
+            let butt = [];
+            for(let n=0; n<DisplayListPtr.size; n++) {
+                butt.push(hex(bytes.getUint8(n), 2));
+            }
+            console.log("Block Dlist", i, list, butt.join(' '));
+        }
+    }
+
+    _loadRenderInstrs(view) {
         //read render instructions (bit-packed stream)
+        const offs = view.byteOffset;
         this.renderInstrs = {
             main:       view.buffer.slice(
                 offs + this.header.renderInstrsMain,
@@ -106,9 +134,7 @@ export default class Block {
                 offs + this.header.renderInstrsWater + this.header.nRenderInstrsWater,
             ),
         };
-
-        //XXX read shaders, textures
-        this.shaders  = [];
-        this.textures = [];
     }
+
+
 }

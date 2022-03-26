@@ -25,8 +25,8 @@ export default class DlistParser {
 
     execute(list, data) {
         /** Execute display list.
-         *  list: List (ArrayBuffer) to execute.
-         *  data: Dict of data sources for attribute array indices.
+         *  @param {ArrayBuffer} list List to execute.
+         *  @param {object} data Dict of data sources for attribute array indices.
          */
         for(let [field, src] of Object.entries(data)) {
             if(src) {
@@ -184,6 +184,7 @@ export default class DlistParser {
             const vtx = this._nextVertex(vat);
             vtx.index = i;
             vtxs.push(vtx);
+            console.log("draw vtx", vtx, this.gx.cp.getState());
         }
         this.curList.parsedOps.push({
             op:     'Draw'+DrawOpNames[mode],
@@ -361,10 +362,9 @@ export default class DlistParser {
                     break;
                 }
                 case undefined:
-                    throw new Error("VCD format for "+field+" is not defined in VAT "+
-                        String(vat));
+                    throw new Error(`VCD format for ${field} is not defined in VAT ${vat}`);
                     break;
-                default: throw new Error("BUG: impossible VCD format: "+String(fmt));
+                default: throw new Error(`BUG: impossible VCD format: ${fmt}`);
             }
         }
         vtx.dataLength = this.data.dlist.offset - vtx.offset;

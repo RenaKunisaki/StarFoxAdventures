@@ -1,4 +1,26 @@
 import {validNumber} from '../GlUtil.js';
+import { hex } from '../../../../Util.js';
+
+const NUM_VATS = 8;
+export const Reg = {
+    MATINDEX_A: 0x30,
+    MATINDEX_B: 0x40,
+    VCD_LO:     0x50, //0-7
+    VCD_HI:     0x60, //0-7
+    VAT_A:      0x70, //0-7
+    VAT_B:      0x80, //0-7
+    VAT_C:      0x90, //0-7
+    ARRAY_BASE_VTXS:       0xA0,
+    ARRAY_BASE_NORMALS:    0xA1,
+    ARRAY_BASE_COLOR:      0xA2, //0-1
+    ARRAY_BASE_TEXCOORD:   0xA4, //0-7
+    ARRAY_BASE_INDEX:      0xAC, //0-3, general purpose array
+    ARRAY_STRIDE_VTXS:     0xB0,
+    ARRAY_STRIDE_NORMALS:  0xB1,
+    ARRAY_STRIDE_COLOR:    0xB2,
+    ARRAY_STRIDE_TEXCOORD: 0xB4,
+    ARRAY_STRIDE_INDEX:    0xBC,
+};
 
 export default class CP {
     /** Command Processor subsystem for GX.
@@ -21,14 +43,15 @@ export default class CP {
             POS: 0, NRM: 0, COL0:0, COL1:0, TEX0:0, TEX1:0, TEX2:0, TEX3:0,
             TEX4:0, TEX5:0, TEX6:0, TEX7:0, IDXA:0, IDXB:0, IDXC:0, IDXD:0,
         };
-        for(let i=0; i<8; i++) {
+        for(let i=0; i<NUM_VATS; i++) {
             this.vcd.push({});
-            this._setVcdLo(i, 0);
-            this._setVcdHi(i, 0);
-            this._setVcdFmtA(i, 0x40000000);
-            this._setVcdFmtB(i, 0x80000000);
-            this._setVcdFmtC(i, 0);
+            this.setReg(i+Reg.VCD_LO, 0x200);
+            this.setReg(i+Reg.VCD_HI, 0);
+            this.setReg(i+Reg.VAT_A, 0x40000000);
+            this.setReg(i+Reg.VAT_B, 0x80000000);
+            this.setReg(i+Reg.VAT_C, 0);
         }
+        //console.log("CP reset OK");
     }
 
     getReg(reg) {
@@ -41,10 +64,11 @@ export default class CP {
          *  @param {int} val Value, which should be a 32-bit integer.
          */
         validNumber(reg, val);
+        //console.log(`CP SET REG 0x${hex(reg,2)} = 0x${hex(val,8)}`);
         this._rawVals[reg] = val;
         switch(reg) {
-            //0x30: MAXINDEX_A - Texture matrix idx 0-3 XXX
-            //0x40: MAXINDEX_B - Texture matrix idx 4-7
+            //0x30: MATINDEX_A - Texture matrix idx 0-3 XXX
+            //0x40: MATINDEX_B - Texture matrix idx 4-7
             case 0x50: this._setVcdLo(0, val); break;
             case 0x51: this._setVcdLo(1, val); break;
             case 0x52: this._setVcdLo(2, val); break;
@@ -208,5 +232,113 @@ export default class CP {
     _setArrayStride(field, val) { // CP registers 0xB0 - 0xBF
         //not really used, but included for completeness' sake.
         this.arrayStride[field] = val;
+    }
+
+    getState() {
+        /** Return dict of state info for debug. */
+        const r_MATINDEX_A = this.getReg(Reg.MATINDEX_A);
+        const r_MATINDEX_B = this.getReg(Reg.MATINDEX_B);
+        const descrNames = ['-', 'DIR', 'i8', 'i16'];
+
+        const result = {
+            vat:[],
+            MATINDEX_A: {
+                TEX3IDX: (r_MATINDEX_A >> 24) & 0x3F,
+                TEX2IDX: (r_MATINDEX_A >> 18) & 0x3F,
+                TEX1IDX: (r_MATINDEX_A >> 12) & 0x3F,
+                TEX0IDX: (r_MATINDEX_A >>  6) & 0x3F,
+                POSIDX:   r_MATINDEX_A        & 0x3F,
+                _value:  hex(r_MATINDEX_A),
+            },
+            MATINDEX_B: {
+                TEX7IDX: (r_MATINDEX_B >> 18) & 0x3F,
+                TEX6IDX: (r_MATINDEX_B >> 12) & 0x3F,
+                TEX5IDX: (r_MATINDEX_B >>  6) & 0x3F,
+                TEX4IDX:  r_MATINDEX_B        & 0x3F,
+                _value:  hex(r_MATINDEX_B),
+            },
+        };
+        for(let i=0; i<NUM_VATS; i++) {
+            const vcd_lo = this.getReg(Reg.VCD_LO + i);
+            const vcd_hi = this.getReg(Reg.VCD_HI + i);
+            const vatA   = this.getReg(Reg.VAT_A  + i);
+            const vatB   = this.getReg(Reg.VAT_B  + i);
+            const vatC   = this.getReg(Reg.VAT_C  + i);
+            result.vat.push({
+                VCD_LO: {
+                    COL1:   descrNames[(vcd_lo >> 15) & 3], //specular
+                    COL0:   descrNames[(vcd_lo >> 13) & 3], //diffuse
+                    NRM:    descrNames[(vcd_lo >> 11) & 3],
+                    POS:    descrNames[(vcd_lo >>  9) & 3],
+                    T7MIDX: descrNames[(vcd_lo >>  8) & 1],
+                    T6MIDX: descrNames[(vcd_lo >>  7) & 1],
+                    T5MIDX: descrNames[(vcd_lo >>  6) & 1],
+                    T4MIDX: descrNames[(vcd_lo >>  5) & 1],
+                    T3MIDX: descrNames[(vcd_lo >>  4) & 1],
+                    T2MIDX: descrNames[(vcd_lo >>  3) & 1],
+                    T1MIDX: descrNames[(vcd_lo >>  2) & 1],
+                    T0MIDX: descrNames[(vcd_lo >>  1) & 1], //texcoord mtx
+                    PMIDX:  descrNames[ vcd_lo        & 1], //position/normal mtx
+                    _value: hex(vcd_lo),
+                },
+                VCD_HI: { //texture coords
+                    TEX7: descrNames[(vcd_hi >> 14) & 3],
+                    TEX6: descrNames[(vcd_hi >> 12) & 3],
+                    TEX5: descrNames[(vcd_hi >> 10) & 3],
+                    TEX4: descrNames[(vcd_hi >>  8) & 3],
+                    TEX3: descrNames[(vcd_hi >>  6) & 3],
+                    TEX2: descrNames[(vcd_hi >>  4) & 3],
+                    TEX1: descrNames[(vcd_hi >>  2) & 3],
+                    TEX0: descrNames[ vcd_hi        & 3],
+                    _value: hex(vcd_hi),
+                },
+                VAT_A: {
+                    NORMALS:    ((vatA >> 31) & 0x01) ? 1 : 3,
+                    BYTEDEQUANT: (vatA >> 30) & 0x01,
+                    TEX0SHFT:    (vatA >> 25) & 0x1F,
+                    TEX0FMT:     (vatA >> 22) & 0x07,
+                    TEX0CNT:     (vatA >> 21) & 0x01,
+                    COL1FMT:     (vatA >> 18) & 0x07,
+                    COL1CNT:     (vatA >> 17) & 0x01,
+                    COL0FMT:     (vatA >> 14) & 0x07,
+                    COL0CNT:     (vatA >> 13) & 0x01,
+                    NRMFMT:      (vatA >> 10) & 0x07,
+                    NRMCNT:      (vatA >>  9) & 0x01,
+                    POSSHFT:     (vatA >>  4) & 0x1F,
+                    POSFMT:      (vatA >>  1) & 0x07,
+                    POSCNT:       vatA        & 0x01,
+                    _value: hex(vatA),
+                },
+                VAT_B: {
+                    VCACHE_ENHANCE: (vatB >> 31) & 0x01,
+                    TEX4FMT:        (vatB >> 28) & 0x07,
+                    TEX4CNT:        (vatB >> 27) & 0x01,
+                    TEX3SHFT:       (vatB >> 22) & 0x1F,
+                    TEX3FMT:        (vatB >> 19) & 0x07,
+                    TEX3CNT:        (vatB >> 18) & 0x01,
+                    TEX2SHFT:       (vatB >> 13) & 0x1F,
+                    TEX2FMT:        (vatB >> 10) & 0x07,
+                    TEX2CNT:        (vatB >>  9) & 0x01,
+                    TEX1SHFT:       (vatB >>  4) & 0x1F,
+                    TEX1FMT:        (vatB >>  1) & 0x07,
+                    TEX1CNT:         vatB        & 0x01,
+                    _value: hex(vatB),
+                },
+                VAT_C: {
+                    TEX7SHFT:       (vatC >> 27) & 0x1F,
+                    TEX7FMT:        (vatC >> 24) & 0x07,
+                    TEX7CNT:        (vatC >> 23) & 0x01,
+                    TEX6SHFT:       (vatC >> 18) & 0x1F,
+                    TEX6FMT:        (vatC >> 15) & 0x07,
+                    TEX6CNT:        (vatC >> 14) & 0x01,
+                    TEX5SHFT:       (vatC >>  9) & 0x1F,
+                    TEX5FMT:        (vatC >>  6) & 0x07,
+                    TEX5CNT:        (vatC >>  5) & 0x01,
+                    TEX4SHFT:        vatC        & 0x1F,
+                    _value: hex(vatC),
+                },
+            });
+        }
+        return result;
     }
 }

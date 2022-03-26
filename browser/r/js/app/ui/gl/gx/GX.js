@@ -113,6 +113,7 @@ export default class GX {
     beginRender() {
         /** Reset render state for new frame. */
         const gl = this.gl;
+        this.program.use();
         //reset lights to whatever the user set.
         gl.uniform3iv(this.programInfo.uniforms.ambLightColor,
             this.context.lights.ambient.color);

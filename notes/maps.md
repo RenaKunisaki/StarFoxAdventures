@@ -719,46 +719,133 @@ so these two bytes define which map states the object should load in:
     01 unused?
 if bit is set, object will NOT load in that state.
 
-====
+# block header
+for first block in animtest:
+field                  |ofs/val|count|note
+-----------------------|-------|-----|----
+GCpolygons             |   0324|    7|
+displayLists           |     B8|    3|
+flags_0x4              |      8|     |
+hitField_9e            |      0|     |
+hits                   |      0|    0|
+linehits               |      0|     |
+polygonGroups          |   02D4|    3|
+renderInstrsMain       |   01E8|   18|
+renderInstrsReflective |      0|    0|
+renderInstrsWater      |      0|    0|odd, since water looks fine
+shaders                |   0208|    3|
+textures               |   01FC|    3|
+vertexPositions        |   0180|    8|
+vertexColors           |   01B0|    2|
+vertexTexCoords        |   01B4|   13|
+yMax                   |     44|     |
+yMin                   |   -128|     |
+yOffset                |    -42|     |
+can confirm the positions, colors, texcoords fields are correct.
+also we can edit this stuff while the game is running. even vtx positions.
+of course offsets are changed to pointers
 
-HITS.BIN is map hitbox info
-it's read by MapBlock::initHits
+## display lists
+offset   |size|bbox                         |shdr|spcl|????
+0000 0120|0020|0000 FD50 0000 0000 02B0 1400|0000|0000|0011|0700 0000
+0000 0140|0020|0000 FD50 0000 1400 02B0 0000|0001|002D|003E|0700 0000
+0000 0160|0020|0000 FD50 0000 1400 FD50 1400|0002|005A|006B|0700 0000
+bounding box IS used for maps; it determines when the list should be drawn.
+the other fields seem unused
 
-GCPolygon eg:
-0000 0001 0005 01FF
-0000 0005 0003 01FF
-0004 0000 0003 FF01
-0004 0003 0002 FF01
-0000 0004 0006 FFFF
-0004 0007 0006 F8FF
-0001 0000 0006 1FFF
-0000 0000 ...
+FD50 = -688, 2B0 = 688
+apparently this is vec3s[2] so that translates as:
+0, -688, 0 |    0,  688, 5120
+0, -688, 0 | 5120,  688,    0
+0, -688, 0 | 5120, -688, 5120
+
+## polygon data
+
+all 7 GCpolygons:
+    0000 0001 0005 01FF (offset 0x324)
+    0000 0005 0003 01FF
+    0004 0000 0003 FF01
+    0004 0003 0002 FF01
+    0000 0004 0006 FFFF <-- floor
+    0004 0007 0006 F8FF
+    0001 0000 0006 1FFF
+last word looks like packed bits...
+
+these would be referenced by the draw commands
+changing these in memory doesn't seem to do anything...
+but changing the pointer to them = fall through ground
+so these are only for hit detection (unless this map is weird, unlikely but possible)
+they apply to the first quad floor and maybe the walls
+offset 344 is the first triangle we stand on, so that's the 4th idx
+changing things here just makes us fall through
 
 likely u16 x, y, z (vtx idxs)
 then maybe tex coords or flags or hit info
 
+if I change the data in the vertexPositions array it affects both geometry and hit detection.
+first s16 -> 0x1111: the polygons are distorted, and you can't walk on them. the non-distorted ones are fine.
+with smaller changes the vertices move and we can walk through the wall
+if we change Y from FD50 to F050 the vertex does move down and the hit detection somewhat follows it
+as we walk down the slope we don't move smoothly; it acts like big stairs, and about halfway along, we just fall through.
+
+draw commands for this block:
+    Select texture 1
+    Set vfmt: pos=2 col=2 tex= 2
+    init 1 mtxs
+    Execute list 1:
+        9D 00 04: TriStrip, VAT 5, 4 vtxs
+            (POS_idx, COL0_idx? no visible effect, TEX0_idx)
+            this is drawing the rock wall, it is 3 bytes per vtx
+            01 00 06
+            00 00 09
+            05 01 08
+            03 01 07
+        00 00 00 00 00 00 00 00 00 00 00 00 00 NOP (padding)
+    Select texture 2
+    Set vfmt: pos=2 col=2 tex= 2
+    init 1 mtxs
+    Execute list 2:
+        9D 00 04
+            01 00 01
+            06 01 0A
+            00 00 00
+            04 00 0C
+        95 00 03
+            06 01 0A
+            07 01 0B
+            04 00 0C
+        00
+
+## poly groups
+
 animtest's first item (mod6.0) has 3 groups:
-1stP                                         flag
-0001 02 03 04 05 0607 0809 0A 0B 0C 0D 0E 0F 1011 1213 1415
-0000 00 00 02 80 FFAA 0056 00 00 00 00 00 00 0018 0004 0002
-0000 00 00 FF AA 0056 0000 02 80 00 00 00 19 0000 0004 0000
-0280 FF AA FF AA 0000 0280 00 00 00 00 00 04 0007 0000 0000
+   1stP                                    flag
+## 0001 0203 0405 0607 0809 0A0B  0C0D 0E0F 1011 1213 1415
+   .... .... 0280 FFAA 0056 ....  .... .... 0018 0004 0002
+   .... .... FFAA 0056 .... 0280  .... 0019 .... 0004 ....
+   0280 FFAA FFAA .... 0280 ....  .... 0004 0007 .... ....
+0x280 = 640, suspicious
+0xFFAA = -86
+
+# HITS.bin
+HITS.BIN is map hitbox info
+it's read by MapBlock::initHits
 
 first several entries in HITS.bin:
-0001 0203 0405 0607 0809 0A0B 0C0D 0E0F 1011 1213
-00F9 009C F8F3 F8F3 0280 01F8 2828 0E85 FFFF 0000
-009C 011E F8F3 F8F3 01F8 0194 2828 0E85 FFFF 0000
-011E 0125 F8F3 F8F3 0194 0136 2828 0E85 FFFF 0000
-0125 00CC F8F3 F8F3 0136 00E6 2828 0E85 FFFF 0000
-00CC 00CC F8F3 F8F3 00E6 0000 2828 0E85 FFFF 0000
-009C 00F9 F837 F837 01F8 0280 00BB 8E83 FFFF 0000
-0000 0000 0000 0000 01E4 0188 F8F3 F8F3 01F8 0280
-2828 0E85 FFFF 0000 0162 01E4 F8F3 F8F3 0194 01F8
-2828 0E85 FFFF 0000 015B 0162 F8F3 F8F3 0136 0194
-2828 0E85 FFFF 0000 01B8 015B F8F3 F8F3 00E2 0136
-2828 0E85 FFFF 0000 01B4 01B8 F8F3 F8F3 0000 00E2
-2828 0E85 FFFF 0000 0188 01E4 F837 F837 0280 01F8
-00BB 8E83 FFFF 0000 0000 0000 0000 0000 0137 00F9
+## 0001 0203 0405 0607 0809 0A0B 0C0D 0E0F 1011 1213
+   00F9 009C F8F3 F8F3 0280 01F8 2828 0E85 FFFF ....
+   009C 011E F8F3 F8F3 01F8 0194 2828 0E85 FFFF ....
+   011E 0125 F8F3 F8F3 0194 0136 2828 0E85 FFFF ....
+   0125 00CC F8F3 F8F3 0136 00E6 2828 0E85 FFFF ....
+   00CC 00CC F8F3 F8F3 00E6 .... 2828 0E85 FFFF ....
+   009C 00F9 F837 F837 01F8 0280 00BB 8E83 FFFF ....
+   .... .... .... .... 01E4 0188 F8F3 F8F3 01F8 0280
+   2828 0E85 FFFF .... 0162 01E4 F8F3 F8F3 0194 01F8
+   2828 0E85 FFFF .... 015B 0162 F8F3 F8F3 0136 0194
+   2828 0E85 FFFF .... 01B8 015B F8F3 F8F3 00E2 0136
+   2828 0E85 FFFF .... 01B4 01B8 F8F3 F8F3 .... 00E2
+   2828 0E85 FFFF .... 0188 01E4 F837 F837 0280 01F8
+   00BB 8E83 FFFF .... .... .... .... .... 0137 00F9
 this looks like maybe variable length?
 
 HITS.tab: (leading 0000s trimmed)

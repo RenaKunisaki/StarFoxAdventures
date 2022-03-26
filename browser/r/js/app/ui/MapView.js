@@ -4,6 +4,7 @@ import { E, clearElement } from "../../lib/Element.js";
 import { hex } from "../../Util.js";
 import Context from "./gl/Context.js";
 import GX from "./gl/gx/GX.js";
+import BlockRenderer from "../../game/map/BlockRenderer.js";
 
 export default class MapView {
     /** Renders map geometry. */
@@ -90,6 +91,9 @@ export default class MapView {
         /** Draw the map. Called by Context. */
         //XXX
         if(!this.map) return;
+        this.gx.reset();
+        this.blockRenderer = new BlockRenderer(this.gx);
+
         let iBlock = 0;
         while(iBlock < this.map.blocks.length) {
             //find a non-empty block
@@ -103,28 +107,9 @@ export default class MapView {
             return;
         }
 
-        this.gx.beginRender();
-        this._drawBlock(block);
-    }
-
-    _drawBlock(block) {
-        /** Draw a map block.
-         *  @param {MapBlock} block the block to draw.
-         */
-        const gl = this.context.gl;
-
         block.load(); //ensure block model is loaded
-
-        //this is wrong (need to use the render instrs, not just
-        //call each list in sequence)
-        //but let's see what happens
-        const data = {
-            POS:  block.vtxPositions,
-            COL0: block.vtxColors,
-            TEX0: block.texCoords,
-        };
-        //for(let list of block.dlists) {
-        //    this.gx.executeDisplayList(list.data, data);
-        //}
+        this.gx.beginRender();
+        this.blockRenderer.render(block, 'main');
+        console.log("block render OK", this.gx.stats);
     }
 }
