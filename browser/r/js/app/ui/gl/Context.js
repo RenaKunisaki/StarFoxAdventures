@@ -85,8 +85,8 @@ export default class Context {
             this.clearColor[2], this.clearColor[3]);
         gl.clearDepth(this.clearDepth);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        //gl.enable(gl.DEPTH_TEST); // Enable depth testing
-        gl.disable(gl.DEPTH_TEST);
+        gl.enable(gl.DEPTH_TEST); // Enable depth testing
+        //gl.disable(gl.DEPTH_TEST);
         gl.depthFunc(gl.GEQUAL);  // Near things obscure far things
         gl.disable(gl.CULL_FACE);
         //gl.enable(gl.BLEND);
@@ -172,7 +172,7 @@ export default class Context {
         mat4.perspective(this.matProjection, //destination matrix
             this.fov * RADIANS, //to radians
             aspect, this.zNear, this.zFar);
-        console.log("FOV=", this.fov, "Z=", this.zNear, this.zFar);
+        //console.log("FOV=", this.fov, "Z=", this.zNear, this.zFar);
 
         //set up modelview matrix
         //it can help to think of this as moving the "drawing position"
@@ -216,6 +216,6 @@ export default class Context {
         //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
         //this.renderer.renderPickBuffer();
-        gl.flush();
+        //gl.flush();
     }
 }

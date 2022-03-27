@@ -63,7 +63,7 @@ export default class BlockRenderer {
         this.curShader = this.curBlock.shaders[idx];
         //this.curTexture = this.curBlock.textures[this.curShader.layer[0].texture];
         this.curShaderIdx = idx;
-        console.log("Select texture %d", idx, this.curShader);
+        //console.log("Select texture %d", idx, this.curShader);
         //console.log("Select texture %d: shader flags=%s", idx,
         //    this.curShader.attrFlags);
 
@@ -116,7 +116,7 @@ export default class BlockRenderer {
                 ],
             },
         };
-        console.log("Execute list", idx);
+        //console.log("Execute list", idx);
         this.gx.executeDisplayList(this.curBlock.dlists[idx].data, dlistData);
     }
 
@@ -139,8 +139,8 @@ export default class BlockRenderer {
         }
         else TEX[0] = texSize;
 
-        console.log("Set vfmt: pos=%d col=%d tex=%d", posSize, colSize, texSize,
-            whichStream);
+        //console.log("Set vfmt: pos=%d col=%d tex=%d", posSize, colSize, texSize,
+        //    whichStream);
 
         let PNMTXIDX = 0;
         let POS      = posSize;
@@ -179,7 +179,7 @@ export default class BlockRenderer {
         const ops   = this.curOps;
         const count = ops.read(4);
         const idxs  = []; //debug
-        console.log("init %d mtxs", count);
+        //console.log("init %d mtxs", count);
 
         let iVar3 = 0;
         if(count > 8) {

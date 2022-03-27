@@ -123,8 +123,8 @@ export default class MapView {
         block.load(); //ensure block model is loaded
         this.gx.beginRender();
         this.blockRenderer.render(block, 'main');
-        console.log("block render OK", this.gx.stats);
-        this.gx.printStats();
-        console.log("GX logs:", this.gx.program.getLogs());
+        //console.log("block render OK", this.gx.stats);
+        //this.gx.printStats();
+        //console.log("GX logs:", this.gx.program.getLogs());
     }
 }

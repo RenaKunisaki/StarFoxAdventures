@@ -186,7 +186,7 @@ export default class DlistParser {
             vtxs.push(vtx);
             //console.log("draw vtx", vtx, this.gx.cp.getState());
         }
-        console.log("Draw %d vtxs, mode", count, DrawOpNames[mode], vtxs);
+        //console.log("Draw %d vtxs, mode", count, DrawOpNames[mode], vtxs);
         this.curList.parsedOps.push({
             op:     'Draw'+DrawOpNames[mode],
             offset: start,
@@ -392,13 +392,13 @@ export default class DlistParser {
             vtx['debugColor'] = c;
         }
 
-        if(!this.didLogVtx) { //debug: log a vertex for examination
-            console.log("Vtx", vtx);
-            console.log("VCD", vcd);
-            console.log("stride", this.gx.cp.arrayStride);
-            console.log("data", this.data);
-            this.didLogVtx = true;
-        }
+        //if(!this.didLogVtx) { //debug: log a vertex for examination
+        //    console.log("Vtx", vtx);
+        //    console.log("VCD", vcd);
+        //    console.log("stride", this.gx.cp.arrayStride);
+        //    console.log("data", this.data);
+        //    this.didLogVtx = true;
+        //}
 
         //keep stats
         if(this.gx.stats.PNMTXIDX[vtx.PNMTXIDX] == undefined) {
