@@ -35,6 +35,7 @@ export default class MapView {
         if(this.context) return;
         this.context = new Context(this.canvas, () => this._draw());
         await this.context.init();
+        console.log("GL ctx init OK");
 
         this.gx = new GX(this.context);
         await this.gx.loadPrograms();
@@ -89,11 +90,19 @@ export default class MapView {
 
     _draw() {
         /** Draw the map. Called by Context. */
-        //XXX
         if(!this.map) return;
         this.gx.reset();
         this.blockRenderer = new BlockRenderer(this.gx);
 
+        //XXX move this
+        const gl = this.gx.gl;
+        gl.uniform1i(this.gx.programInfo.uniforms.useId, 0);
+        gl.uniform1i(this.gx.programInfo.uniforms.useLights,
+            this.context.lights.enabled ? 1 : 0);
+        gl.uniform1i(this.gx.programInfo.uniforms.useTexture,
+            this.context.enableTextures ? 1 : 0);
+
+        //XXX proper block rendering
         let iBlock = 0;
         while(iBlock < this.map.blocks.length) {
             //find a non-empty block
@@ -111,5 +120,6 @@ export default class MapView {
         this.gx.beginRender();
         this.blockRenderer.render(block, 'main');
         console.log("block render OK", this.gx.stats);
+        this.gx.printStats();
     }
 }

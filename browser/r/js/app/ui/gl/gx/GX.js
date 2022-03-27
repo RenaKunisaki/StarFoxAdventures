@@ -57,6 +57,7 @@ export default class GX {
                 xMax: -99999999, yMax: -99999999, zMax: -99999999,
             },
             PNMTXIDX: {}, //count of each idx
+            drawModeCount: {}, //count of each draw mode (tris, quads...)
         }
     }
 
@@ -70,6 +71,7 @@ export default class GX {
         console.log("XF:", this.xf);
         console.log("CP:", this.cp);
         console.log("PNMTXIDX counts:", S.PNMTXIDX);
+        console.log("Draw mode counts:", S.drawModeCount);
     }
 
     async loadPrograms() {
@@ -172,6 +174,10 @@ export default class GX {
         const gl = this.gl;
         const res = {glMode:null, glVtxCount:vtxs.length, glOffset:0};
         this.vtxBuf.clear();
+        if(this.stats.drawModeCount[mode] == undefined) {
+            this.stats.drawModeCount[mode] = 0;
+        }
+        this.stats.drawModeCount[mode]++;
         switch(mode) {
             case 0: case 1: //quads, also quads
                 //there's no quads mode in modern GL so we need to convert
@@ -214,7 +220,7 @@ export default class GX {
             case 7: res.glMode = gl.POINTS;         break;
             default: throw new Error("Invalid draw op mode: "+String(mode));
         }
-        if(mode != 0 && mode != 1) { //add vtxs to buffer if we didn't already
+        if(mode > 1) { //add vtxs to buffer if we didn't already
             for(let i=0; i<vtxs.length; i++) {
                 const mi = vtxs[i].PNMTXIDX;
                 const pm = (mi==undefined) ? null : this.xf.getPosMtx(mi);
@@ -237,6 +243,9 @@ export default class GX {
             false, this.context.matModelView);
         gl.uniformMatrix4fv(this.programInfo.uniforms.matNormal,
             false, this.context.matNormal);
+        //console.log("mtxs: proj", this.context.matProjection,
+        //    "modelview", this.context.matNormal,
+        //    "normal", this.context.matNormal);
     }
 
     _doDrawOp(mode, vtxs) {
@@ -254,6 +263,8 @@ export default class GX {
         this._setShaderMtxs();
 
         //drawParams.glMode = gl.LINE_LOOP; //DEBUG - wireframe (glitchy)
+        drawParams.glMode = gl.POINTS;
+        //console.log("drawArrays", drawParams);
         gl.drawArrays(drawParams.glMode, drawParams.glOffset, drawParams.glVtxCount);
         this.stats.nDrawCmds++;
     }

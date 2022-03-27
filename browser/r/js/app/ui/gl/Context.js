@@ -59,6 +59,7 @@ export default class Context {
 
         canvas.addEventListener('resize',    e => this._onResize(e));
         canvas.addEventListener('mousemove', e => this._onMouseMove(e));
+        this._setupViewport();
     }
 
     _setupExtensions() {
@@ -84,10 +85,12 @@ export default class Context {
             this.clearColor[2], this.clearColor[3]);
         gl.clearDepth(this.clearDepth);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.enable(gl.DEPTH_TEST); // Enable depth testing
+        //gl.enable(gl.DEPTH_TEST); // Enable depth testing
+        gl.disable(gl.DEPTH_TEST);
         gl.depthFunc(gl.GEQUAL);  // Near things obscure far things
         gl.disable(gl.CULL_FACE);
-        gl.enable(gl.BLEND);
+        //gl.enable(gl.BLEND);
+        gl.disable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         this._initMatrices();
         this._setupViewport();
@@ -101,7 +104,7 @@ export default class Context {
         this.matModelView  = mat4.create();
         this.matNormal     = null; //generated when redrawing
         this.view = {
-            pos:      {x:-10, y:-10, z:-10},
+            pos:      {x:-10, y:-10, z:-100},
             scale:    {x:1,   y:1,   z:1},
             rotation: {x:20,  y:20,  z:0}, //degrees
         };
@@ -115,13 +118,34 @@ export default class Context {
 
         //we need to set the size through HTML attributes, not CSS,
         //or else it blurs, because lol.
+        //and apparently this gives us wrong coords so we need to add some
+        //fudge factor to make it actually fit on screen.
         const rect = gl.canvas.getBoundingClientRect();
         console.log("GL rect", rect, "win", window.innerWidth, window.innerHeight);
-        gl.canvas.setAttribute('width', window.innerWidth - rect.left);
-        gl.canvas.setAttribute('height', window.innerHeight - rect.top);
+        gl.canvas.setAttribute('width', window.innerWidth   - (rect.left + 32));
+        gl.canvas.setAttribute('height', window.innerHeight - (rect.top  + 96));
 
-        const width=gl.canvas.clientWidth, height=gl.canvas.clientHeight;
-        gl.viewport(0, 0, width, height);
+        const tStart = performance.now();
+        const lol = () => {
+            //wait for the size to actually change.
+            //XXX find a less stupid way to do this.
+            //const width=gl.canvas.clientWidth, height=gl.canvas.clientHeight;
+            //MDN example just uses these
+            const width=gl.canvas.width, height=gl.canvas.height;
+            if(width < 1 || height < 1) {
+                if(performance.now() - tStart > 15000) {
+                    //just in case something even more dumb happens,
+                    //don't loop forever wasting CPU power.
+                    console.error("GL canvas not responding to resize");
+                }
+                else window.requestAnimationFrame(lol);
+            }
+            else {
+                console.log("GL viewport", width, height);
+                gl.viewport(0, 0, width, height);
+            }
+        };
+        window.requestAnimationFrame(lol);
     }
 
     _onResize(event) {
@@ -181,13 +205,6 @@ export default class Context {
                 console.error("Error redrawing", ex);
             }
         }
-
-        //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
-        /* gl.uniform1i(this.gx.programInfo.uniforms.useLights,
-            this.lights.enabled ? 1 : 0);
-        gl.uniform1i(this.gx.programInfo.uniforms.useTexture,
-            this.enableTextures ? 1 : 0);
-        this.renderer.render(); */
 
         //now render again to our depth buffer.
         //gl.disable(gl.BLEND);

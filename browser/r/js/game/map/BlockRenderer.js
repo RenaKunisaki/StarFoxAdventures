@@ -1,4 +1,5 @@
 import BitStreamReader from '../BitStreamReader.js';
+import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
 
 export default class BlockRenderer {
     /** Renders map blocks. */
@@ -16,6 +17,14 @@ export default class BlockRenderer {
         this.curBlock = block;
         const ops = new BitStreamReader(this.curBlock.renderInstrs[whichStream]);
         this.curOps = ops;
+
+        //set initial GX params
+        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_VTXS, 6); //sizeof(vec3s)
+        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_COLOR, 2); //sizeof(u16)
+        for(let i=0; i<8; i++) {
+            this.gx.cp.setReg(CPReg.ARRAY_STRIDE_TEXCOORD+i, 4); //sizeof(vec2s)
+        }
+
         let done = false;
         while(!done && !ops.isEof) {
             //this is similar but not identical to the render instructions

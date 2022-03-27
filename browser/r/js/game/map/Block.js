@@ -82,6 +82,28 @@ export default class Block {
             offs + this.header.vertexTexCoords,
             offs + this.header.vertexTexCoords + (this.header.nTexCoords * 4),
         );
+
+        //debug
+        let vtxs=[], colors=[], texCoords=[];
+        for(let i=0; i<this.header.nVtxs; i++) {
+            vtxs.push([
+                view.getInt16(offs + this.header.vertexPositions + (i*6)),
+                view.getInt16(offs + this.header.vertexPositions + (i*6)+2),
+                view.getInt16(offs + this.header.vertexPositions + (i*6)+4),
+            ]);
+        }
+        for(let i=0; i<this.header.nColors; i++) {
+            colors.push(view.getInt16(offs + this.header.vertexColors + (i*2)));
+        }
+        for(let i=0; i<this.header.nTexCoords; i++) {
+            texCoords.push([
+                view.getInt16(offs + this.header.vertexTexCoords + (i*4)),
+                view.getInt16(offs + this.header.vertexTexCoords + (i*4)+2),
+            ]);
+        }
+        console.log("vertexPositions", vtxs);
+        console.log("vertexColors", colors);
+        console.log("texCoords", texCoords);
     }
 
     _loadPolygons(view) {

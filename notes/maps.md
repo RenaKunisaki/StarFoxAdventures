@@ -735,9 +735,9 @@ renderInstrsReflective |      0|    0|
 renderInstrsWater      |      0|    0|odd, since water looks fine
 shaders                |   0208|    3|
 textures               |   01FC|    3|
-vertexPositions        |   0180|    8|
-vertexColors           |   01B0|    2|
-vertexTexCoords        |   01B4|   13|
+vertexPositions        |   0180|    8|vec3s
+vertexColors           |   01B0|    2|u16
+vertexTexCoords        |   01B4|   13|vec2s
 yMax                   |     44|     |
 yMin                   |   -128|     |
 yOffset                |    -42|     |
@@ -788,6 +788,31 @@ with smaller changes the vertices move and we can walk through the wall
 if we change Y from FD50 to F050 the vertex does move down and the hit detection somewhat follows it
 as we walk down the slope we don't move smoothly; it acts like big stairs, and about halfway along, we just fall through.
 
+vtx positions:
+    0:     0,  -688,     0
+    1:  5120,  -688,     0
+    2:     0,   688,  5120
+    3:     0,   688,     0
+    4:     0,  -688,  5120
+    5:  5120,   688,     0
+    6:  5120,  -688,  2560
+    7:  5120,  -688,  5120
+vtx colors: 0xB73F, 0xFFFF
+texcoords:
+     0:  654, 1277
+     1: 1210, -282
+     2: -145,  109
+     3:  401,  256
+     4: -145,  256
+     5:  401,  109
+     6: 1896,    0
+     7:    0,  256
+     8: 1896,  256
+     9:    0,    0
+    10:  430, -560
+    11: -349, -838
+    12: -905,  721
+
 draw commands for this block:
     Select texture 1
     Set vfmt: pos=2 col=2 tex= 2
@@ -796,10 +821,10 @@ draw commands for this block:
         9D 00 04: TriStrip, VAT 5, 4 vtxs
             (POS_idx, COL0_idx? no visible effect, TEX0_idx)
             this is drawing the rock wall, it is 3 bytes per vtx
-            01 00 06
-            00 00 09
-            05 01 08
-            03 01 07
+            01 00 06  [pos:(5120, -688, 0) col:B73F tex:(1896,   0)]
+            00 00 09  [pos:(   0, -688, 0) col:B73F tex:(   0,   0)]
+            05 01 08  [pos:(5120,  688, 0) col:FFFF tex:(1896, 256)]
+            03 01 07  [pos:(   0,  688, 0) col:FFFF tex:(   0, 256)]
         00 00 00 00 00 00 00 00 00 00 00 00 00 NOP (padding)
     Select texture 2
     Set vfmt: pos=2 col=2 tex= 2

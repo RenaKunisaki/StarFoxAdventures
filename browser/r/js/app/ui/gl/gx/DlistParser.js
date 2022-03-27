@@ -184,8 +184,9 @@ export default class DlistParser {
             const vtx = this._nextVertex(vat);
             vtx.index = i;
             vtxs.push(vtx);
-            console.log("draw vtx", vtx, this.gx.cp.getState());
+            //console.log("draw vtx", vtx, this.gx.cp.getState());
         }
+        console.log("Draw %d vtxs, mode", count, DrawOpNames[mode], vtxs);
         this.curList.parsedOps.push({
             op:     'Draw'+DrawOpNames[mode],
             offset: start,
@@ -346,11 +347,19 @@ export default class DlistParser {
                         vtx[field] = null;
                     }
                     else {
-                        if(this.gx.cp.arrayStride[field] == undefined) {
+                        let stride = this.gx.cp.arrayStride[field];
+                        if(stride == undefined) {
                             console.error("No array stride for field", field);
-                            src.seek(idx);
+                            stride = 1;
                         }
-                        else src.seek(idx * this.gx.cp.arrayStride[field]);
+                        else if(stride == 0) {
+                            console.warn("Array stride is zero for field", field);
+                        }
+                        else if(stride < 0) {
+                            console.error("Negative array stride for field", field);
+                            stride = 1;
+                        }
+                        src.seek(idx * stride);
                         vtx[field] = this._nextValue(field, src, vcd);
                     }
 
@@ -363,7 +372,6 @@ export default class DlistParser {
                 }
                 case undefined:
                     throw new Error(`VCD format for ${field} is not defined in VAT ${vat}`);
-                    break;
                 default: throw new Error(`BUG: impossible VCD format: ${fmt}`);
             }
         }
@@ -375,15 +383,16 @@ export default class DlistParser {
             for(const [k,v] of Object.entries(this.data._debug)) vtx[k] = v;
             let c = vtx['COL0'];
             switch(this.data._debug.shaderIdx) {
-                case 0: c = [255,   0,   0, 255]; break;
-                case 1: c = [  0, 255,   0, 255]; break;
-                case 2: c = [  0,   0, 255, 255]; break;
-                case 3: c = [255,   0, 255, 255]; break;
-                case 4: c = [255, 255,   0, 255]; break;
-                case 5: c = [  0, 255, 255, 255]; break;
+                case 0:  c = [255,   0,   0, 255]; break;
+                case 1:  c = [  0, 255,   0, 255]; break;
+                case 2:  c = [  0,   0, 255, 255]; break;
+                case 3:  c = [255,   0, 255, 255]; break;
+                case 4:  c = [255, 255,   0, 255]; break;
+                case 5:  c = [  0, 255, 255, 255]; break;
+                default: c = [255,   0, 255, 255]; break;
             }
             //debugColor overrides normal color, but not texture
-            //vtx['debugColor'] = c;
+            vtx['debugColor'] = c;
         }
 
         if(!this.didLogVtx) { //debug: log a vertex for examination
