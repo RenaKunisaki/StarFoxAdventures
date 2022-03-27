@@ -65,7 +65,7 @@ export default class VertexBuffer {
         if(coord == undefined || coord == null) coord = [0,0];
         const s = validNumber(coord[0]);
         const t = (coord[1] == undefined) ? 0 : validNumber(coord[1]);
-        let v = vec2.fromValues(s, t);
+        const v = vec2.fromValues(s, t);
         if(this.mtxTexCoord) vec2.transformMat4(v, v, this.mtxTexCoord);
         this.datTexCoord.push(v[0]); this.datTexCoord.push(v[1]);
     }

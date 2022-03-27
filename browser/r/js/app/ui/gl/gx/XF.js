@@ -1,4 +1,5 @@
 import {validNumber, validVector, validMatrix} from '../GlUtil.js';
+const MAX_REG = 0x1058;
 
 export default class XF {
     /** Transform Processor subsystem for GX.
@@ -103,7 +104,7 @@ export default class XF {
     }
 
     _makeMat3(reg) {
-        if(reg < 0 || reg >= 0x1058 - 9) {
+        if(reg < 0 || reg >= MAX_REG - 9) {
             throw new Error("Reading matrix from reg", reg);
         }
         const R = this._reg;
@@ -113,7 +114,7 @@ export default class XF {
             R[reg+6], R[reg+7], R[reg+8]);
     }
     _makeMat4(reg) {
-        if(reg < 0 || reg >= 0x1058 - 16) {
+        if(reg < 0 || reg >= MAX_REG - 16) {
             throw new Error("Reading matrix from reg", reg);
         }
         const R = this._reg;

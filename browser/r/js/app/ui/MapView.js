@@ -121,5 +121,6 @@ export default class MapView {
         this.blockRenderer.render(block, 'main');
         console.log("block render OK", this.gx.stats);
         this.gx.printStats();
+        console.log("GX logs:", this.gx.program.getLogs());
     }
 }

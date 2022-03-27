@@ -127,7 +127,8 @@ export default class Context {
 
         const tStart = performance.now();
         const lol = () => {
-            //wait for the size to actually change.
+            //wait for the size to actually change, ie the canvas to actually
+            //be added to the document and the layout recalculated.
             //XXX find a less stupid way to do this.
             //const width=gl.canvas.clientWidth, height=gl.canvas.clientHeight;
             //MDN example just uses these
@@ -141,7 +142,7 @@ export default class Context {
                 else window.requestAnimationFrame(lol);
             }
             else {
-                console.log("GL viewport", width, height);
+                console.log("GL: setting viewport size:", width, height);
                 gl.viewport(0, 0, width, height);
             }
         };
@@ -149,8 +150,9 @@ export default class Context {
     }
 
     _onResize(event) {
+        console.log("resize event");
         this._setupViewport();
-        this._setFramebufferAttachmentSizes();
+        //this._setFramebufferAttachmentSizes();
         this.redraw();
     }
 
@@ -194,7 +196,7 @@ export default class Context {
         gl.disable(gl.BLEND);
         gl.clearColor(this.clearColor[0], this.clearColor[1],
             this.clearColor[2], this.clearColor[3]);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        //gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         if(this.drawFunc) {

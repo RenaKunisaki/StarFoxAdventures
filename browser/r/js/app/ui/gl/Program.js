@@ -58,4 +58,12 @@ export default class Program {
     getUniformLocation(name) {
         return this.gl.getUniformLocation(this.program, name);
     }
+
+    getLogs() {
+        const result = {};
+        for(const [type, shader] of Object.entries(this.shaders)) {
+            result[type] = this.gl.getShaderInfoLog(shader);
+        }
+        return result;
+    }
 }

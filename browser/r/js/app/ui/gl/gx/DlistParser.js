@@ -262,8 +262,7 @@ export default class DlistParser {
         //const shift  = vcd[field+'SHFT'] || 0; //not used for normals
         const format = vcd[field+'FMT']  || 0; //undefined => 0
         const count  = vcd[field+'CNT']  || 0;
-
-        const vals = [];
+        const vals   = [];
         for(let i=0; i<(count ? 9 : 3); i++) {
             let val = null;
             switch(format) {
@@ -287,8 +286,7 @@ export default class DlistParser {
         const shift  = vcd[field+'SHFT'] || 0; //undefined => 0
         const format = vcd[field+'FMT']  || 0;
         const count  = vcd[field+'CNT']  || 0;
-
-        const vals = [];
+        const vals   = [];
         const cntMin = (field.startsWith('TEX') ? 1 : 2);
         for(let i=0; i<count + cntMin; i++) {
             let val = null;
@@ -313,7 +311,6 @@ export default class DlistParser {
         if(field.startsWith('COL')) return this._nextColor(field, src, vcd);
         else if(field.startsWith('NRM')) return this._nextNormal(field, src, vcd);
         else return this._nextCoord(field, src, vcd);
-
     }
 
     _nextVertex(vat) {

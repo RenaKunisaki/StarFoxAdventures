@@ -263,7 +263,7 @@ export default class GX {
         this._setShaderMtxs();
 
         //drawParams.glMode = gl.LINE_LOOP; //DEBUG - wireframe (glitchy)
-        drawParams.glMode = gl.POINTS;
+        //drawParams.glMode = gl.POINTS;
         //console.log("drawArrays", drawParams);
         gl.drawArrays(drawParams.glMode, drawParams.glOffset, drawParams.glVtxCount);
         this.stats.nDrawCmds++;
