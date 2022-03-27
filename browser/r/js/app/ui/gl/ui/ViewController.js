@@ -30,6 +30,52 @@ export default class ViewController {
         this._onChange(null); //trigger an update
     }
 
+    get() {
+        /** Read parameters. */
+        const F = parseFloat;
+        return {
+            pos: {
+                x:F(this.txtPosX.value),
+                y:F(this.txtPosY.value),
+                z:F(this.txtPosZ.value),
+            },
+            rot: {
+                x:F(this.txtRotX.value),
+                y:F(this.txtRotY.value),
+                z:F(this.txtRotZ.value),
+            },
+            scale: {
+                x:F(this.txtScaleX.value),
+                y:F(this.txtScaleY.value),
+                z:F(this.txtScaleZ.value),
+            },
+            zNear: F(this.txtZNear.value),
+            zFar:  F(this.txtZFar.value),
+        };
+    }
+
+    adjust(params) {
+        /** Add to parameters. */
+        if(params.pos) {
+            if(params.pos.x != undefined) this.txtPosX.value += params.pos.x;
+            if(params.pos.y != undefined) this.txtPosY.value += params.pos.y;
+            if(params.pos.z != undefined) this.txtPosZ.value += params.pos.z;
+        }
+        if(params.rot) {
+            if(params.rot.x != undefined) this.txtRotX.value += params.rot.x;
+            if(params.rot.y != undefined) this.txtRotY.value += params.rot.y;
+            if(params.rot.z != undefined) this.txtRotZ.value += params.rot.z;
+        }
+        if(params.scale) {
+            if(params.scale.x != undefined) this.txtScaleX.value += params.scale.x;
+            if(params.scale.y != undefined) this.txtScaleY.value += params.scale.y;
+            if(params.scale.z != undefined) this.txtScaleZ.value += params.scale.z;
+        }
+        if(params.zNear != undefined) this.txtZNear.value += params.zNear;
+        if(params.zFar  != undefined) this.txtZFar .value += params.zFar;
+        this._onChange(null); //trigger an update
+    }
+
     reset() {
         this.txtPosX.value   =     0;
         this.txtPosY.value   =     0;

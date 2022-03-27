@@ -57,8 +57,7 @@ export default class Context {
         }
         console.log("GL init OK");
 
-        canvas.addEventListener('resize',    e => this._onResize(e));
-        canvas.addEventListener('mousemove', e => this._onMouseMove(e));
+        canvas.addEventListener('resize', e => this._onResize(e));
         this._setupViewport();
     }
 
@@ -89,8 +88,8 @@ export default class Context {
         //gl.disable(gl.DEPTH_TEST);
         gl.depthFunc(gl.GEQUAL);  // Near things obscure far things
         gl.disable(gl.CULL_FACE);
-        //gl.enable(gl.BLEND);
-        gl.disable(gl.BLEND);
+        gl.enable(gl.BLEND);
+        //gl.disable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         this._initMatrices();
         this._setupViewport();
@@ -154,9 +153,6 @@ export default class Context {
         this._setupViewport();
         //this._setFramebufferAttachmentSizes();
         this.redraw();
-    }
-
-    _onMouseMove(event) {
     }
 
     redraw() {

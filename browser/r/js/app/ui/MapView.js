@@ -17,6 +17,8 @@ export default class MapView {
         this.context  = null;
         this.eMapList = null;
         this.map      = null; //current map
+        this._prevMousePos  = [0, 0];
+        this._mouseStartPos = null;
         this.app.onIsoLoaded(iso => this.refresh());
     }
 
@@ -43,6 +45,11 @@ export default class MapView {
 
         this.viewController = new ViewController(this.context);
         this.element.append(this.viewController.element);
+        this.canvas.addEventListener('mousemove', e => this._onMouseMove(e));
+        this.canvas.addEventListener('mousedown', e => this._onMouseDown(e));
+        this.canvas.addEventListener('mouseup',   e => this._onMouseUp  (e));
+        //must disable context menu to be able to right-drag
+        this.canvas.addEventListener('contextmenu', e => e.preventDefault());
 
         this._reloadMap();
     }
@@ -126,5 +133,46 @@ export default class MapView {
         //console.log("block render OK", this.gx.stats);
         //this.gx.printStats();
         //console.log("GX logs:", this.gx.program.getLogs());
+    }
+
+    _onMouseDown(event) {
+        event.preventDefault();
+    }
+    _onMouseUp(event) {
+        event.preventDefault();
+    }
+
+    _onMouseMove(event) {
+        //buttons are bitflag: 1=left 2=right 4=mid 8=back 16=fwd
+        if(event.buttons == 1) {
+            if(this._mouseStartView) {
+                this.viewController.set({
+                    rot: {
+                        x: this._mouseStartView.rot.x + (event.y - this._mouseStartPos[1]),
+                        y: this._mouseStartView.rot.y + (event.x - this._mouseStartPos[0]),
+                    },
+                });
+            }
+            else {
+                this._mouseStartView = this.viewController.get();
+                this._mouseStartPos  = [event.x, event.y];
+            }
+        }
+        else if(event.buttons == 2) {
+            if(this._mouseStartView) {
+                this.viewController.set({
+                    pos: {
+                        x: this._mouseStartView.pos.x + (event.x - this._mouseStartPos[0]),
+                        z: this._mouseStartView.pos.z + (event.y - this._mouseStartPos[1]),
+                    },
+                });
+            }
+            else {
+                this._mouseStartView = this.viewController.get();
+                this._mouseStartPos  = [event.x, event.y];
+            }
+        }
+        else this._mouseStartView = null;
+        this._prevMousePos = [event.x, event.y];
     }
 }
