@@ -144,7 +144,7 @@ export default class MapView {
 
     _onMouseMove(event) {
         //buttons are bitflag: 1=left 2=right 4=mid 8=back 16=fwd
-        if(event.buttons == 1) {
+        if(event.buttons == 1) { //rotate
             if(this._mouseStartView) {
                 this.viewController.set({
                     rot: {
@@ -158,7 +158,7 @@ export default class MapView {
                 this._mouseStartPos  = [event.x, event.y];
             }
         }
-        else if(event.buttons == 2) {
+        else if(event.buttons == 2) { //move
             if(this._mouseStartView) {
                 this.viewController.set({
                     pos: {

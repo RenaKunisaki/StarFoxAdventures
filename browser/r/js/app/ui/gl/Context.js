@@ -17,6 +17,7 @@ export default class Context {
         //XXX add getters/setters for these
         this._gl_extensions = {};
         this.enableTextures = false;
+        this.enableBackfaceCulling = true;
 
         this._setupCanvas(canvas);
         this._setupExtensions();
@@ -87,7 +88,6 @@ export default class Context {
         gl.enable(gl.DEPTH_TEST); // Enable depth testing
         //gl.disable(gl.DEPTH_TEST);
         gl.depthFunc(gl.GEQUAL);  // Near things obscure far things
-        gl.disable(gl.CULL_FACE);
         gl.enable(gl.BLEND);
         //gl.disable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -186,6 +186,10 @@ export default class Context {
         this.matNormal = mat4.create();
         mat4.invert(this.matNormal, this.matModelView);
         mat4.transpose(this.matNormal, this.matNormal);
+
+        if(this.enableBackfaceCulling) gl.enable(gl.CULL_FACE);
+        else gl.disable(gl.CULL_FACE);
+        gl.frontFace(gl.CW); //game seems to use this order
 
         //clear buffers and render.
         //gl.enable(gl.BLEND);

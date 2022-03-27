@@ -27,6 +27,12 @@ export default class ViewController {
         }
         if(params.zNear != undefined) this.txtZNear.value = params.zNear;
         if(params.zFar  != undefined) this.txtZFar .value = params.zFar;
+        if(params.enableTextures != undefined) {
+            this.chkEnableTex.checked = params.enableTextures;
+        }
+        if(params.enableBackfaceCulling != undefined) {
+            this.chkEnableBackface.checked = params.enableBackfaceCulling;
+        }
         this._onChange(null); //trigger an update
     }
 
@@ -51,6 +57,8 @@ export default class ViewController {
             },
             zNear: F(this.txtZNear.value),
             zFar:  F(this.txtZFar.value),
+            enableTextures: this.chkEnableTex.checked,
+            enableBackfaceCulling: this.chkEnableBackface.checked,
         };
     }
 
@@ -73,6 +81,12 @@ export default class ViewController {
         }
         if(params.zNear != undefined) this.txtZNear.value += params.zNear;
         if(params.zFar  != undefined) this.txtZFar .value += params.zFar;
+        if(params.enableTextures != undefined) {
+            this.chkEnableTex.checked = params.enableTextures;
+        }
+        if(params.enableBackfaceCulling != undefined) {
+            this.chkEnableBackface.checked = params.enableBackfaceCulling;
+        }
         this._onChange(null); //trigger an update
     }
 
@@ -107,6 +121,7 @@ export default class ViewController {
         this.context.zFar            = F(this.txtZFar.value);
         this.context.fov             = F(this.txtFov.value);
         this.context.enableTextures  = this.chkEnableTex.checked;
+        this.context.enableBackfaceCulling = this.chkEnableBackface.checked;
         this.context.redraw();
     }
 
@@ -144,6 +159,16 @@ export default class ViewController {
         //checkbox to enable textures
         this.chkEnableTex = E.input(null, {type:'checkbox', id:'chkEnableTex'});
         this.lblEnableTex = E.label(null, {'for':'chkEnableTex'}, "Textures");
+        this.chkEnableTex.checked = C.enableTextures;
+        this.chkEnableTex.addEventListener('change', e => this._onChange(e));
+
+        //checkbox to enable backface culling
+        this.chkEnableBackface = E.input(null,
+            {type:'checkbox', id:'chkEnableBcakface'});
+        this.lblEnableBackface = E.label(null,
+            {'for':'chkEnableBackface'}, "Cull Backfaces");
+        this.chkEnableBackface.checked = C.enableBackfaceCulling;
+        this.chkEnableBackface.addEventListener('change', e => this._onChange(e));
 
         //button to reset to default params
         this.btnReset = E.button('reset', "Reset");
@@ -166,17 +191,23 @@ export default class ViewController {
                     E.td(this.txtScaleX), E.td(this.txtScaleY), E.td(this.txtScaleZ),
                 ),
                 E.tr(
-                    E.th(null,'Rot\u00B0'), //degree symbol
+                    E.th(null,'Rot°'),
                     E.td(this.txtRotX), E.td(this.txtRotY), E.td(this.txtRotZ),
                 ),
                 E.tr(
-                    E.th(null, "FOV"),
+                    E.th(null, "FOV°"),
                     E.td(this.txtFov),
-                    E.td(this.chkEnableTex, this.lblEnableTex, {colspan:2}),
+                    E.td(null, " ", {colspan:2}),
                 ),
                 E.tr(
                     E.th(null, "Near"), E.td(null, this.txtZNear),
                     E.th(null, "Far"),  E.td(null, this.txtZFar),
+                ),
+                E.tr(
+                    E.td(this.chkEnableTex, this.lblEnableTex, {colspan:2}),
+                    E.td(this.chkEnableBackface, this.lblEnableBackface, {
+                        colspan:2, title:"Enable backface culling",
+                    }),
                 ),
             ),
         );

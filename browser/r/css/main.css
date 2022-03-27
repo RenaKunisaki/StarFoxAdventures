@@ -159,6 +159,12 @@ table .controls {
     left: 0.5em;
     background: rgba(0, 0, 0, 0.25);
     font-size: 0.8em;
+    border-top: 1px #CCC solid;
+}
+
+.gl-view-control table, .gl-view-control tr,
+.gl-view-control th, .gl-view-control td {
+    background: none;
 }
 
 .gl-view-control input {
