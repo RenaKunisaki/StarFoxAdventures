@@ -19,6 +19,12 @@ export default class Context {
         this.enableTextures = false;
         this.enableBackfaceCulling = true;
         this.frontFaceCW = true; //game seems to use this order
+        this.useSRT = true; //use SRT transform order, not TSR
+            //SRT = the rotation is around the camera position (ideal
+            //for map viewing)
+            //TSR = the rotation is around the origin point (ideal
+            //for character model viewing)
+            //XXX add an Advanced view control setting for this.
 
         this._setupCanvas(canvas);
         this._setupExtensions();
@@ -174,14 +180,27 @@ export default class Context {
         //set up modelview matrix
         //it can help to think of this as moving the "drawing position"
         //rather than thew camera.
-        mat4.translate(this.matModelView, // destination matrix
-            mat4.create(),     // matrix to translate
-            [P.x, P.y, P.z]);  // amount to translate
-        mat4.scale(this.matModelView, this.matModelView,
-            [S.x, S.y, S.z]);
-        mat4.rotateX(this.matModelView, this.matModelView, R.x * RADIANS);
-        mat4.rotateY(this.matModelView, this.matModelView, R.y * RADIANS);
-        mat4.rotateZ(this.matModelView, this.matModelView, R.z * RADIANS);
+        if(this.useSRT) {
+            mat4.scale(this.matModelView, mat4.create(),
+                [S.x, S.y, S.z]);
+            mat4.rotateX(this.matModelView, this.matModelView, R.x * RADIANS);
+            mat4.rotateY(this.matModelView, this.matModelView, R.y * RADIANS);
+            mat4.rotateZ(this.matModelView, this.matModelView, R.z * RADIANS);
+            mat4.translate(this.matModelView, // destination matrix
+                this.matModelView,     // matrix to translate
+                [P.x, P.y, P.z]);  // amount to translate
+        }
+        else {
+            mat4.translate(this.matModelView, // destination matrix
+                mat4.create(),     // matrix to translate
+                [P.x, P.y, P.z]);  // amount to translate
+            mat4.scale(this.matModelView, this.matModelView,
+                [S.x, S.y, S.z]);
+            mat4.rotateX(this.matModelView, this.matModelView, R.x * RADIANS);
+            mat4.rotateY(this.matModelView, this.matModelView, R.y * RADIANS);
+            mat4.rotateZ(this.matModelView, this.matModelView, R.z * RADIANS);
+
+        }
 
         //set up normal matrix, for lighting.
         this.matNormal = mat4.create();
