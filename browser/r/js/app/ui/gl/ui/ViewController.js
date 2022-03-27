@@ -33,6 +33,10 @@ export default class ViewController {
         if(params.enableBackfaceCulling != undefined) {
             this.chkEnableBackface.checked = params.enableBackfaceCulling;
         }
+        if(params.frontFaceCW != undefined) {
+            this.btnFrontFaceCW .checked =  params.frontFaceCW;
+            this.btnFrontFaceCCW.checked = !params.frontFaceCW;
+        }
         this._onChange(null); //trigger an update
     }
 
@@ -59,6 +63,7 @@ export default class ViewController {
             zFar:  F(this.txtZFar.value),
             enableTextures: this.chkEnableTex.checked,
             enableBackfaceCulling: this.chkEnableBackface.checked,
+            frontFaceCW: this.btnFrontFaceCW.checked,
         };
     }
 
@@ -87,6 +92,10 @@ export default class ViewController {
         if(params.enableBackfaceCulling != undefined) {
             this.chkEnableBackface.checked = params.enableBackfaceCulling;
         }
+        if(params.frontFaceCW != undefined) {
+            this.btnFrontFaceCW .checked =  params.frontFaceCW;
+            this.btnFrontFaceCCW.checked = !params.frontFaceCW;
+        }
         this._onChange(null); //trigger an update
     }
 
@@ -103,6 +112,10 @@ export default class ViewController {
         this.txtFov.value    =    60;
         this.txtZNear.value  =     0.1;
         this.txtZFar.value   = 10000;
+        this.chkEnableTex.checked = false;
+        this.chkEnableBackface.checked = true;
+        this.btnFrontFaceCW.checked = true;
+        this.btnFrontFaceCCW.checked = false;
         this._onChange(null);
     }
 
@@ -122,6 +135,7 @@ export default class ViewController {
         this.context.fov             = F(this.txtFov.value);
         this.context.enableTextures  = this.chkEnableTex.checked;
         this.context.enableBackfaceCulling = this.chkEnableBackface.checked;
+        this.context.frontFaceCW = this.btnFrontFaceCW.checked;
         this.context.redraw();
     }
 
@@ -173,6 +187,19 @@ export default class ViewController {
         //button to reset to default params
         this.btnReset = E.button('reset', "Reset");
         this.btnReset.addEventListener('click', e => this.reset());
+
+        //radio buttons to select front face order
+        this.btnFrontFaceCW = E.input({type:'radio', name:'frontFace',
+            id:'frontFaceCW'});
+        this.lblFrontFaceCW = E.label(null, {'for':'frontFaceCW'}, "CW");
+        this.btnFrontFaceCW.checked = C.frontFaceCW;
+        this.btnFrontFaceCW.addEventListener('change', e => this._onChange(e));
+
+        this.btnFrontFaceCCW = E.input({type:'radio', name:'frontFace',
+            id:'frontFaceCCW'});
+        this.lblFrontFaceCCW = E.label(null, {'for':'frontFaceCCW'}, "CCW");
+        this.btnFrontFaceCCW.checked = !C.frontFaceCW;
+        this.btnFrontFaceCCW.addEventListener('change', e => this._onChange(e));
     }
 
     _createMainElement() {
@@ -208,6 +235,18 @@ export default class ViewController {
                     E.td(this.chkEnableBackface, this.lblEnableBackface, {
                         colspan:2, title:"Enable backface culling",
                     }),
+                ),
+            ),
+
+            E.details(null, E.summary(null, "Advanced"),
+                E.table(
+                    E.tr(
+                        E.th(null, "Front Faces"),
+                        E.td(null,
+                            this.btnFrontFaceCW, this.lblFrontFaceCW,
+                            this.btnFrontFaceCCW, this.lblFrontFaceCCW,
+                        ),
+                    ),
                 ),
             ),
         );

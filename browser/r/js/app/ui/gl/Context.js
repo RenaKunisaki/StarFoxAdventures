@@ -18,6 +18,7 @@ export default class Context {
         this._gl_extensions = {};
         this.enableTextures = false;
         this.enableBackfaceCulling = true;
+        this.frontFaceCW = true; //game seems to use this order
 
         this._setupCanvas(canvas);
         this._setupExtensions();
@@ -187,9 +188,9 @@ export default class Context {
         mat4.invert(this.matNormal, this.matModelView);
         mat4.transpose(this.matNormal, this.matNormal);
 
+        gl.frontFace(this.frontFaceCW ? gl.CW : gl.CCW);
         if(this.enableBackfaceCulling) gl.enable(gl.CULL_FACE);
         else gl.disable(gl.CULL_FACE);
-        gl.frontFace(gl.CW); //game seems to use this order
 
         //clear buffers and render.
         //gl.enable(gl.BLEND);
