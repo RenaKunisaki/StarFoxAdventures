@@ -207,6 +207,7 @@ export default class Context {
                 console.error("Error redrawing", ex);
             }
         }
+        gl.flush();
 
         //now render again to our depth buffer.
         //gl.disable(gl.BLEND);
@@ -215,5 +216,6 @@ export default class Context {
         //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
         //this.renderer.renderPickBuffer();
+        gl.flush();
     }
 }
