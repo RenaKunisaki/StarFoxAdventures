@@ -5,6 +5,7 @@ import { hex } from "../../Util.js";
 import Context from "./gl/Context.js";
 import GX from "./gl/gx/GX.js";
 import BlockRenderer from "../../game/map/BlockRenderer.js";
+import ViewController from "./gl/ui/ViewController.js";
 
 export default class MapView {
     /** Renders map geometry. */
@@ -39,6 +40,9 @@ export default class MapView {
 
         this.gx = new GX(this.context);
         await this.gx.loadPrograms();
+
+        this.viewController = new ViewController(this.context);
+        this.element.append(this.viewController.element);
 
         this._reloadMap();
     }
