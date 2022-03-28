@@ -1,7 +1,7 @@
 import DataBuffer from './DataBuffer.js';
 import {hexdump} from '/r/js/Util.js';
 
-const DrawOpNames = ['Quads', 'Quads2', 'Tris', 'TriStrip',
+export const DrawOpNames = ['Quads', 'Quads2', 'Tris', 'TriStrip',
     'TriFan', 'Lines', 'LineStrip', 'Points'];
 
 export default class DlistParser {

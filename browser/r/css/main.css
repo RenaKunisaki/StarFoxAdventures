@@ -153,20 +153,22 @@ table .controls {
     border: 1px #888 solid;
 }
 
+.tabMapView .sidebar {
+    position: fixed;
+    top: 5em;
+    left: 0.5em;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    font-size: 0.8em;
+    border: 1px #CCC solid;
+    overflow: auto;
+}
+
 .tabMapView summary {
     background: linear-gradient(#009DF3, #0000F0);
 }
 
-.tabMapView .map-grid {
-    position: fixed;
-    top: 5em;
-    right: 0.5em;
-    background: rgba(0, 0, 0, 0.5);
-    font-size: 0.8em;
-    border: 1px #CCC solid;
-}
-
-.tabMapView .map-grid td, .tabMapView .map-grid tr {
+.tabMapView .sidebar td, .tabMapView .sidebar tr {
     background: none;
 }
 
@@ -182,21 +184,7 @@ table .controls {
     background: #009DF3;
 }
 
-.gl-view-control {
-    position: fixed;
-    top: 5em;
-    left: 0.5em;
-    background: rgba(0, 0, 0, 0.5);
-    font-size: 0.8em;
-    border: 1px #CCC solid;
-}
-
-.gl-view-control table, .gl-view-control tr,
-.gl-view-control th, .gl-view-control td {
-    background: none;
-}
-
-.gl-view-control tr:first-child th {
+.tabMapView .sidebar tr:first-child th {
     /* override previous rules */
     background: none;
 }

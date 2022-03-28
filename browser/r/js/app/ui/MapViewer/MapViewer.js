@@ -7,19 +7,24 @@ import GX from "../gl/gx/GX.js";
 import BlockRenderer from "../../../game/map/BlockRenderer.js";
 import ViewController from "../gl/ui/ViewController.js";
 import Grid from "./Grid.js";
+import Stats from "./Stats.js";
 
 export default class MapViewer {
     /** Renders map geometry. */
     constructor(game) {
-        this.game     = assertType(game, Game);
-        this.app      = game.app;
-        this.element  = document.getElementById('tab-mapView');
-        this.canvas   = E.canvas('map-view-canvas');
-        this.context  = null;
-        this.eMapList = null;
-        this.map      = null; //current map
-        this.curBlock = null;
-        this.grid     = new Grid(this);
+        this.game      = assertType(game, Game);
+        this.app       = game.app;
+        this.element   = document.getElementById('tab-mapView');
+        this.canvas    = E.canvas('map-view-canvas');
+        this.context   = null;
+        this.eMapList  = null;
+        this.map       = null; //current map
+        this.curBlock  = null;
+
+        this.grid      = new Grid(this);
+        this.stats     = new Stats(this);
+        this.eSidebar  = E.div('sidebar');
+
         this._prevMousePos  = [0, 0];
         this._mouseStartPos = null;
         this.app.onIsoLoaded(iso => this.refresh());
@@ -33,7 +38,7 @@ export default class MapViewer {
                 this.eMapList,
             ),
             this.canvas,
-            this.grid.element,
+            this.eSidebar,
         )
         if(!this.context) this._initContext();
     }
@@ -48,12 +53,15 @@ export default class MapViewer {
         await this.gx.loadPrograms();
 
         this.viewController = new ViewController(this.context);
-        this.element.append(this.viewController.element);
         this.canvas.addEventListener('mousemove', e => this._onMouseMove(e));
         this.canvas.addEventListener('mousedown', e => this._onMouseDown(e));
         this.canvas.addEventListener('mouseup',   e => this._onMouseUp  (e));
         //must disable context menu to be able to right-drag
         this.canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+        this.eSidebar.append(this.viewController.element,
+            this.grid.element, this.stats.element
+        );
 
         this._reloadMap();
     }
@@ -100,12 +108,14 @@ export default class MapViewer {
             return;
         }
         this.map = map;
+        this.curBlock = this._findABlock();
         this.redraw();
     }
 
     redraw() {
         this.grid.refresh();
         this.context.redraw();
+        this.stats.refresh();
     }
 
     _findABlock() {
