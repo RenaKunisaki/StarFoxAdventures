@@ -6,6 +6,7 @@ import Context from "../gl/Context.js";
 import GX from "../gl/gx/GX.js";
 import BlockRenderer from "../../../game/map/BlockRenderer.js";
 import ViewController from "../gl/ui/ViewController.js";
+import Grid from "./Grid.js";
 
 export default class MapViewer {
     /** Renders map geometry. */
@@ -17,6 +18,8 @@ export default class MapViewer {
         this.context  = null;
         this.eMapList = null;
         this.map      = null; //current map
+        this.curBlock = null;
+        this.grid     = new Grid(this);
         this._prevMousePos  = [0, 0];
         this._mouseStartPos = null;
         this.app.onIsoLoaded(iso => this.refresh());
@@ -30,6 +33,7 @@ export default class MapViewer {
                 this.eMapList,
             ),
             this.canvas,
+            this.grid.element,
         )
         if(!this.context) this._initContext();
     }
@@ -96,7 +100,29 @@ export default class MapViewer {
             return;
         }
         this.map = map;
+        this.grid.refresh();
         this.context.redraw();
+    }
+
+    _findABlock() {
+        /** Find a block to start at. */
+        //if there's one at the origin, prefer it.
+        let block = this.map.getBlock(0, 0);
+        if(block) return block;
+
+        //find the first non-empty block.
+        let iBlock = 0;
+        while(iBlock < this.map.blocks.length) {
+            if(this.map.blocks[iBlock]
+            && this.map.blocks[iBlock].mod < 0xFF) break;
+            iBlock++;
+        }
+        block = this.map.blocks[iBlock];
+        if(!block) {
+            console.error("Map has no blocks", this.map);
+            return null;
+        }
+        return block;
     }
 
     _draw() {
@@ -113,23 +139,16 @@ export default class MapViewer {
         gl.uniform1i(this.gx.programInfo.uniforms.useTexture,
             this.context.enableTextures ? 1 : 0);
 
-        //XXX proper block rendering
-        let iBlock = 0;
-        while(iBlock < this.map.blocks.length) {
-            //find a non-empty block
-            if(this.map.blocks[iBlock]
-            && this.map.blocks[iBlock].mod < 0xFF) break;
-            iBlock++;
-        }
-        const block = this.map.blocks[iBlock];
-        if(!block) {
-            console.error("Map has no blocks", this.map);
-            return;
+        if(!this.curBlock) {
+            this.curBlock = this._findABlock();
+            if(!this.curBlock) return;
+            this.grid.refresh();
         }
 
-        block.load(); //ensure block model is loaded
+        this.curBlock.load(); //ensure block model is loaded
+        //console.log("map block", this.curBlock);
         this.gx.beginRender();
-        this.blockRenderer.render(block, 'main');
+        this.blockRenderer.render(this.curBlock, 'main');
         //console.log("block render OK", this.gx.stats);
         //this.gx.printStats();
         //console.log("GX logs:", this.gx.program.getLogs());

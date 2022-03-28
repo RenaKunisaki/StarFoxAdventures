@@ -15,7 +15,7 @@ export default class Block {
         this.game   =  assertType(game, Game)
         this.app    =  this.game.app;
         this.map    =  assertType(map, Map);
-        this.x      =  x;
+        this.x      =  x; //grid coords, relative to map's origin
         this.z      =  z;
         this.unk1   =  val >> 31;
         this.mod    = (val >> 23) & 0x00FF;

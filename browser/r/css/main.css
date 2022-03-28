@@ -153,6 +153,31 @@ table .controls {
     border: 1px #888 solid;
 }
 
+.tabMapView .map-grid {
+    position: fixed;
+    top: 5em;
+    right: 0.5em;
+    background: rgba(0, 0, 0, 0.5);
+    font-size: 0.8em;
+    border: 1px #CCC solid;
+}
+
+.tabMapView .map-grid td, .tabMapView .map-grid tr {
+    background: none;
+}
+
+.tabMapView .map-grid td {
+    width:       25px;
+    height:      25px;
+    font-size:   11px;
+    text-align:  right;
+    font-family: monospace;
+    padding:     1px;
+}
+.tabMapView .map-grid td.current {
+    background: #009DF3;
+}
+
 .gl-view-control {
     position: fixed;
     top: 5em;
