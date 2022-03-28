@@ -1,13 +1,13 @@
-import Game from "../../game/Game.js";
-import { assertType } from "../../Util.js";
-import { E, clearElement } from "../../lib/Element.js";
-import { hex } from "../../Util.js";
-import Context from "./gl/Context.js";
-import GX from "./gl/gx/GX.js";
-import BlockRenderer from "../../game/map/BlockRenderer.js";
-import ViewController from "./gl/ui/ViewController.js";
+import Game from "../../../game/Game.js";
+import { assertType } from "../../../Util.js";
+import { E, clearElement } from "../../../lib/Element.js";
+import { hex } from "../../../Util.js";
+import Context from "../gl/Context.js";
+import GX from "../gl/gx/GX.js";
+import BlockRenderer from "../../../game/map/BlockRenderer.js";
+import ViewController from "../gl/ui/ViewController.js";
 
-export default class MapView {
+export default class MapViewer {
     /** Renders map geometry. */
     constructor(game) {
         this.game     = assertType(game, Game);
