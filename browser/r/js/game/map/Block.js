@@ -25,7 +25,7 @@ export default class Block {
         this._triedLoad = false;
 
         //the game does this for some reason
-        if(this.mod >= 5) this.mod++;
+        if(this.mod >= 5 && this.mod < 255) this.mod++;
 
         if(!MapBlock) {
             MapBlock = this.app.types.getType('sfa.maps.MapBlock');
