@@ -100,6 +100,10 @@ export default class MapViewer {
             return;
         }
         this.map = map;
+        this.redraw();
+    }
+
+    redraw() {
         this.grid.refresh();
         this.context.redraw();
     }

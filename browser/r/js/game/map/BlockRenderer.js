@@ -14,7 +14,12 @@ export default class BlockRenderer {
          *  @param {string} whichStream One of 'main', 'reflective', 'water',
          *   telling which render instruction stream to use.
          */
+        block.load();
         this.curBlock = block;
+        if(!this.curBlock.renderInstrs) {
+            console.error("block has no render instrs", this.curBlock);
+            return;
+        }
         const ops = new BitStreamReader(this.curBlock.renderInstrs[whichStream]);
         this.curOps = ops;
 

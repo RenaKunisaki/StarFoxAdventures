@@ -41,7 +41,10 @@ export default class Grid {
                     cell = E.td('block',
                         E.div(null, block.mod), E.div(null, block.sub));
                     if(block == curBlock) cell.classList.add('current');
-                    //XXX add listener to jump to it on click
+                    cell.addEventListener('click', e => {
+                        this.mapViewer.curBlock = block;
+                        this.mapViewer.redraw();
+                    })
                 }
                 else cell = E.td('empty');
                 row.append(cell);

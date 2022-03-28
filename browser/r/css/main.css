@@ -153,6 +153,10 @@ table .controls {
     border: 1px #888 solid;
 }
 
+.tabMapView summary {
+    background: linear-gradient(#009DF3, #0000F0);
+}
+
 .tabMapView .map-grid {
     position: fixed;
     top: 5em;
