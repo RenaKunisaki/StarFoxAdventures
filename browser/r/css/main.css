@@ -157,9 +157,9 @@ table .controls {
     position: fixed;
     top: 5em;
     left: 0.5em;
-    background: rgba(0, 0, 0, 0.25);
+    background: rgba(0, 0, 0, 0.5);
     font-size: 0.8em;
-    border-top: 1px #CCC solid;
+    border: 1px #CCC solid;
 }
 
 .gl-view-control table, .gl-view-control tr,
@@ -167,7 +167,12 @@ table .controls {
     background: none;
 }
 
-.gl-view-control input {
+.gl-view-control tr:first-child th {
+    /* override previous rules */
+    background: none;
+}
+
+.gl-view-control input[type=number] {
     width: 5em;
     background: rgba(0, 0, 0, 0.25);
     color: #FFF;

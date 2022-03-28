@@ -37,6 +37,10 @@ export default class ViewController {
             this.btnFrontFaceCW .checked =  params.frontFaceCW;
             this.btnFrontFaceCCW.checked = !params.frontFaceCW;
         }
+        if(params.useSRT != undefined) {
+            this.btnRotateCam.checked =  params.useSRT;
+            this.btnRotateOrg.checked = !params.useSRT;
+        }
         this._onChange(null); //trigger an update
     }
 
@@ -64,6 +68,7 @@ export default class ViewController {
             enableTextures: this.chkEnableTex.checked,
             enableBackfaceCulling: this.chkEnableBackface.checked,
             frontFaceCW: this.btnFrontFaceCW.checked,
+            useSRT: this.btnRotateCam.checked,
         };
     }
 
@@ -96,6 +101,10 @@ export default class ViewController {
             this.btnFrontFaceCW .checked =  params.frontFaceCW;
             this.btnFrontFaceCCW.checked = !params.frontFaceCW;
         }
+        if(params.useSRT != undefined) {
+            this.btnRotateCam.checked =  params.useSRT;
+            this.btnRotateOrg.checked = !params.useSRT;
+        }
         this._onChange(null); //trigger an update
     }
 
@@ -116,6 +125,8 @@ export default class ViewController {
         this.chkEnableBackface.checked = true;
         this.btnFrontFaceCW.checked = true;
         this.btnFrontFaceCCW.checked = false;
+        this.btnRotateCam.checked = true;
+        this.btnRotateOrg.checked = false;
         this._onChange(null);
     }
 
@@ -136,6 +147,7 @@ export default class ViewController {
         this.context.enableTextures  = this.chkEnableTex.checked;
         this.context.enableBackfaceCulling = this.chkEnableBackface.checked;
         this.context.frontFaceCW = this.btnFrontFaceCW.checked;
+        this.context.useSRT = this.btnRotateCam.checked;
         this.context.redraw();
     }
 
@@ -200,6 +212,19 @@ export default class ViewController {
         this.lblFrontFaceCCW = E.label(null, {'for':'frontFaceCCW'}, "CCW");
         this.btnFrontFaceCCW.checked = !C.frontFaceCW;
         this.btnFrontFaceCCW.addEventListener('change', e => this._onChange(e));
+
+        //radio buttons to select rotation point
+        this.btnRotateCam = E.input({type:'radio', name:'rotPoint',
+            id:'rotPointCam'});
+        this.lblRotateCam = E.label(null, {'for':'rotPointCam'}, "Camera");
+        this.btnRotateCam.checked = C.useSRT;
+        this.btnRotateCam.addEventListener('change', e => this._onChange(e));
+
+        this.btnRotateOrg = E.input({type:'radio', name:'rotPoint',
+            id:'rotPointOrg'});
+        this.lblRotateOrg = E.label(null, {'for':'rotPointOrg'}, "Origin");
+        this.btnRotateOrg.checked = !C.useSRT;
+        this.btnRotateOrg.addEventListener('change', e => this._onChange(e));
     }
 
     _createMainElement() {
@@ -245,6 +270,13 @@ export default class ViewController {
                         E.td(null,
                             this.btnFrontFaceCW, this.lblFrontFaceCW,
                             this.btnFrontFaceCCW, this.lblFrontFaceCCW,
+                        ),
+                    ),
+                    E.tr(
+                        E.th(null, "Rotation Axis"),
+                        E.td(null,
+                            this.btnRotateCam, this.lblRotateCam,
+                            this.btnRotateOrg, this.lblRotateOrg,
                         ),
                     ),
                 ),
