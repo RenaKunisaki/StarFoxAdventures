@@ -1,6 +1,8 @@
 import BitStreamReader from '../BitStreamReader.js';
 import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
 
+const LogRenderOps = false;
+
 export default class BlockRenderer {
     /** Renders map blocks. */
     constructor(gx) {
@@ -15,6 +17,7 @@ export default class BlockRenderer {
          *   telling which render instruction stream to use.
          */
         block.load();
+        console.log("Shaders", block.shaders);
         this.curBlock = block;
         if(!this.curBlock.renderInstrs) {
             console.error("block has no render instrs", this.curBlock);
@@ -29,6 +32,9 @@ export default class BlockRenderer {
         for(let i=0; i<8; i++) {
             this.gx.cp.setReg(CPReg.ARRAY_STRIDE_TEXCOORD+i, 4); //sizeof(vec2s)
         }
+        //XXX we must be missing some here, and/or defaults aren't
+        //always what we have here.
+        this._setDefaultVtxFmt();
 
         let done = false;
         while(!done && !ops.isEof) {
@@ -68,9 +74,11 @@ export default class BlockRenderer {
         this.curShader = this.curBlock.shaders[idx];
         //this.curTexture = this.curBlock.textures[this.curShader.layer[0].texture];
         this.curShaderIdx = idx;
-        //console.log("Select texture %d", idx, this.curShader);
-        //console.log("Select texture %d: shader flags=%s", idx,
-        //    this.curShader.attrFlags);
+        if(LogRenderOps) {
+            console.log("Select texture %d", idx, this.curShader);
+            //console.log("Select texture %d: shader flags=%s", idx,
+            //    this.curShader.attrFlags);
+        }
 
         if(this.curShader) {
             if(this.curShader.flags & 8) gl.enable(gl.CULL_FACE);
@@ -121,8 +129,25 @@ export default class BlockRenderer {
                 ],
             },
         };
-        //console.log("Execute list", idx);
+        if(LogRenderOps) console.log("Execute list", idx);
         this.gx.executeDisplayList(this.curBlock.dlists[idx].data, dlistData);
+        console.log("executed list", this.curBlock.dlists[idx].data);
+    }
+
+    _setDefaultVtxFmt() {
+        for(let i=0; i<8; i++) {
+            this.gx.cp.setReg(0x50+i, //VCD FMT LO
+                (2 <<  9) | (2 << 13) | (0 << 15));
+            this.gx.cp.setReg(0x60+i, //VCD FMT HI
+                2);
+            this.gx.cp.setReg(0x70+i, //VAT_A
+                (1 << 30) | //BYTEDEQUANT
+                //(0 << 14) | //COL0FMT (RGB565)
+                (3 << 14) | //COL0FMT (RGBA4444)
+                (3 << 1) | //POSFMT (s16)
+                1); //POSCNT (3 values)
+            //shouldn't need to touch B or C
+        }
     }
 
     _renderOpSetVtxFmt(whichStream) {
@@ -136,16 +161,20 @@ export default class BlockRenderer {
         let colSize = ops.read(1) ? INDEX16 : INDEX8;
         let texSize = ops.read(1) ? INDEX16 : INDEX8;
 
-        let TEX = [0, 0, 0, 0, 0, 0, 0, 0];
-        if(this.curShader && !(this.curShader.flags & 0x80000000)) {
-            for(let i=0; i<this.curShader.nLayers; i++) {
-                TEX[i] = texSize;
+        if(whichStream != 'main') {
+            let TEX = [0, 0, 0, 0, 0, 0, 0, 0];
+            if(this.curShader && !(this.curShader.flags & 0x80000000)) {
+                for(let i=0; i<this.curShader.nLayers; i++) {
+                    TEX[i] = texSize;
+                }
             }
+            else TEX[0] = texSize;
         }
-        else TEX[0] = texSize;
 
-        //console.log("Set vfmt: pos=%d col=%d tex=%d", posSize, colSize, texSize,
-        //    whichStream);
+        if(LogRenderOps) {
+            console.log("Set vfmt: pos=%d col=%d tex=%d", posSize, colSize,
+                texSize, whichStream);
+        }
 
         let PNMTXIDX = 0;
         let POS      = posSize;
@@ -153,28 +182,14 @@ export default class BlockRenderer {
 
         //XXX this can't be right. how does the game decide which VAT to set?
         //is it just always 5?
-        for(let i=0; i<8; i++) {
-            if(whichStream != 'main') { //dunno why the game does this
+        if(whichStream != 'main') { //dunno why the game does this
+            for(let i=0; i<8; i++) {
                 this.gx.cp.setReg(0x50+i, //VCD FMT LO
                     (POS <<  9) | (COL[0] << 13) | (COL[1] << 15));
                 this.gx.cp.setReg(0x60+i, //VCD FMT HI
                     TEX[0] | (TEX[1] <<  2) | (TEX[2] <<  4) | (TEX[3] <<  6) |
                     (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
             }
-            else {
-                //XXX move this and find correct values
-                this.gx.cp.setReg(0x50+i, //VCD FMT LO
-                    (2 <<  9) | (2 << 13) | (0 << 15));
-                this.gx.cp.setReg(0x60+i, //VCD FMT HI
-                    2);
-            }
-            this.gx.cp.setReg(0x70+i, //VAT_A
-                (1 << 30) | //BYTEDEQUANT
-                //(0 << 14) | //COL0FMT (RGB565)
-                (3 << 14) | //COL0FMT (RGBA4444)
-                (3 << 1) | //POSFMT (s16)
-                1); //POSCNT (3 values)
-            //shouldn't need to touch B or C
         }
     }
 
@@ -184,7 +199,7 @@ export default class BlockRenderer {
         const ops   = this.curOps;
         const count = ops.read(4);
         const idxs  = []; //debug
-        //console.log("init %d mtxs", count);
+        if(LogRenderOps) console.log("init %d mtxs", count);
 
         let iVar3 = 0;
         if(count > 8) {

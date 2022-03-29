@@ -148,6 +148,8 @@ export default class CP {
     }
 
     _setVcdLo(vcd, val) { // CP registers 0x50 - 0x57
+        //these describe the params of draw commands; whether each
+        //field has nothing, the direct value, or an index.
         this.vcd[vcd].PNMTXIDX =  val        & 1; //Position/Normal Matrix Index (*1)
         this.vcd[vcd].T0MIDX   = (val >>  1) & 1; //Texture Coordinate 0 Matrix Index
         this.vcd[vcd].T1MIDX   = (val >>  2) & 1;
@@ -168,7 +170,6 @@ export default class CP {
          */
     }
     _setVcdHi(vcd, val) { // CP registers 0x60 - 0x67
-        //these define the format of the field within the display list.
         this.vcd[vcd].TEX0   =  val        & 3; //texture coordinate 0
         this.vcd[vcd].TEX1   = (val >>  2) & 3;
         this.vcd[vcd].TEX2   = (val >>  4) & 3;
@@ -179,7 +180,8 @@ export default class CP {
         this.vcd[vcd].TEX7   = (val >> 14) & 3;
     }
     _setVcdFmtA(vcd, val) { // CP registers 0x70 - 0x77
-        //these define the format of the attribute data
+        //these define the format of the attribute data itself.
+        //I think this applies to both direct values and arrays.
         this.vcd[vcd].NORMALINDEX3 = (val >> 31) & 1; //1 or 3 idxs per normal
         this.vcd[vcd].BYTEDEQUANT  = (val >> 30) & 1; //shift applies to u8/s8 (should always be 1)
         this.vcd[vcd].TEX0SHFT     = (val >> 25) & 0x1F;

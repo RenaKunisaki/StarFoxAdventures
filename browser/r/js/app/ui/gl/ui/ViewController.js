@@ -30,6 +30,9 @@ export default class ViewController {
         if(params.enableTextures != undefined) {
             this.chkEnableTex.checked = params.enableTextures;
         }
+        if(params.useWireframe != undefined) {
+            this.chkWireframe.checked = params.useWireframe;
+        }
         if(params.enableBackfaceCulling != undefined) {
             this.chkEnableBackface.checked = params.enableBackfaceCulling;
         }
@@ -66,6 +69,7 @@ export default class ViewController {
             zNear: F(this.txtZNear.value),
             zFar:  F(this.txtZFar.value),
             enableTextures: this.chkEnableTex.checked,
+            useWireframe: this.chkWireframe.checked,
             enableBackfaceCulling: this.chkEnableBackface.checked,
             frontFaceCW: this.btnFrontFaceCW.checked,
             useSRT: this.btnRotateCam.checked,
@@ -94,6 +98,9 @@ export default class ViewController {
         if(params.enableTextures != undefined) {
             this.chkEnableTex.checked = params.enableTextures;
         }
+        if(params.useWireframe != undefined) {
+            this.chkWireframe.checked = params.useWireframe;
+        }
         if(params.enableBackfaceCulling != undefined) {
             this.chkEnableBackface.checked = params.enableBackfaceCulling;
         }
@@ -121,12 +128,13 @@ export default class ViewController {
         this.txtFov.value    =    60;
         this.txtZNear.value  =     0.1;
         this.txtZFar.value   = 10000;
-        this.chkEnableTex.checked = false;
+        this.chkEnableTex.checked      = false;
+        this.chkWireframe.checked      = false;
         this.chkEnableBackface.checked = true;
-        this.btnFrontFaceCW.checked = true;
-        this.btnFrontFaceCCW.checked = false;
-        this.btnRotateCam.checked = true;
-        this.btnRotateOrg.checked = false;
+        this.btnFrontFaceCW.checked    = true;
+        this.btnFrontFaceCCW.checked   = false;
+        this.btnRotateCam.checked      = true;
+        this.btnRotateOrg.checked      = false;
         this._onChange(null);
     }
 
@@ -145,6 +153,7 @@ export default class ViewController {
         this.context.zFar            = F(this.txtZFar.value);
         this.context.fov             = F(this.txtFov.value);
         this.context.enableTextures  = this.chkEnableTex.checked;
+        this.context.useWireframe    = this.chkWireframe.checked;
         this.context.enableBackfaceCulling = this.chkEnableBackface.checked;
         this.context.frontFaceCW = this.btnFrontFaceCW.checked;
         this.context.useSRT = this.btnRotateCam.checked;
@@ -187,6 +196,12 @@ export default class ViewController {
         this.lblEnableTex = E.label(null, {'for':'chkEnableTex'}, "Textures");
         this.chkEnableTex.checked = C.enableTextures;
         this.chkEnableTex.addEventListener('change', e => this._onChange(e));
+
+        //checkbox to enable wireframe
+        this.chkWireframe = E.input(null, {type:'checkbox', id:'chkWireframe'});
+        this.lblWireframe = E.label(null, {'for':'chkWireframe'}, "Wireframe");
+        this.chkWireframe.checked = C.useWireframe;
+        this.chkWireframe.addEventListener('change', e => this._onChange(e));
 
         //checkbox to enable backface culling
         this.chkEnableBackface = E.input(null,
@@ -257,9 +272,7 @@ export default class ViewController {
                 ),
                 E.tr(
                     E.td(this.chkEnableTex, this.lblEnableTex, {colspan:2}),
-                    E.td(this.chkEnableBackface, this.lblEnableBackface, {
-                        colspan:2, title:"Enable backface culling",
-                    }),
+                    E.td(this.chkWireframe, this.lblWireframe, {colspan:2}),
                 ),
             ),
 
@@ -278,6 +291,11 @@ export default class ViewController {
                             this.btnRotateCam, this.lblRotateCam,
                             this.btnRotateOrg, this.lblRotateOrg,
                         ),
+                    ),
+                    E.tr(
+                        E.td(this.chkEnableBackface, this.lblEnableBackface, {
+                            title:"Enable backface culling",
+                        }),
                     ),
                 ),
             ),

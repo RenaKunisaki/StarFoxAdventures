@@ -391,6 +391,67 @@
         <field type="undefined" />
     </struct>
 
+    <struct name="ShaderLayer">
+        <field type="u32" name="texture" />
+        <field type="u8" name="tevMode" />
+        <field type="u8" name="enableTexChainStuff" />
+        <field type="u8" name="scrollingTexMtx" />
+        <field type="undefined" />
+    </struct>
+
+    <struct name="Shader">
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="u8" name="r" />
+        <field type="u8" name="g" />
+        <field type="u8" name="b" />
+        <field type="undefined" />
+        <field type="pointer" name="auxTex0" />
+        <field type="u8" name="alpha" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="pointer" name="auxTex1" />
+        <field type="pointer" name="texture18" />
+        <field type="int">
+            <note>-1 -&gt; 0, -2 -&gt; 0, else -&gt; 1</note>
+        </field>
+        <field type="pointer" />
+        <field type="ShaderLayer" count="2" name="layer" />
+        <field type="pointer" name="auxTex2" />
+        <field type="pointer" name="furTexture" />
+        <field type="u32" name="flags"><!-- ShaderFlags -->
+            <note>may be from beta</note>
+            <!--
+                DevGeometry	0x2
+                Fog	0x4
+                CullBackface	0x8
+                ReflectSkyscape	0x20
+                Caustic	0x40
+                Lava	0x80
+                Reflective	0x100
+                FuzzRelated	0x200
+                AlphaCompare	0x400
+                ShortFur	0x4000
+                MediumFur	0x8000
+                LongFur	0x10000
+                StreamingVideo	0x20000
+                IndoorOutdoorBlend	0x40000
+                ForceBlend	0x40000000
+                Water	0x80000000
+            -->
+        </field>
+        <field type="u8" name="attrFlags" /><!-- ShaderAttrFlags -->
+        <field type="u8" name="nLayers" />
+        <padding count="2" />
+    </struct>
+
     <struct name="MapBlock">
         <field type="u32" name="unused00">
             <note>set from 80060b90 - XXX confirm unused</note>

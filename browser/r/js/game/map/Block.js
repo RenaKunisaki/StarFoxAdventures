@@ -6,7 +6,7 @@ import DisplayList from '../DisplayList.js';
 
 //struct types
 let MapBlock = null;
-let GCPolygon, PolygonGroup, DisplayListPtr;
+let GCPolygon, PolygonGroup, DisplayListPtr, Shader;
 
 export default class Block {
     /** One block of a map.
@@ -32,6 +32,7 @@ export default class Block {
             GCPolygon = this.app.types.getType('sfa.maps.GCPolygon');
             PolygonGroup = this.app.types.getType('sfa.maps.PolygonGroup');
             DisplayListPtr = this.app.types.getType('sfa.maps.DisplayListPtr');
+            Shader = this.app.types.getType('sfa.maps.Shader');
         }
     }
 
@@ -42,7 +43,7 @@ export default class Block {
         //even if loading fails, don't try again
 
         const path = `/${this.map.dirName}/mod${this.mod}`;
-        console.log(`Loading map block ${this.mod}.${this.sub} from`, path, this);
+        //console.log(`Loading map block ${this.mod}.${this.sub} from`, path, this);
         const fTab   = this.game.iso.getFile(`${path}.tab`);
         if(!fTab) {
             console.error("File not found", `${path}.tab`);
@@ -55,15 +56,15 @@ export default class Block {
         const blockData = fBlock.getItem(this.sub); //XXX use tab somehow
         const view      = new DataView(blockData);
         this.header     = MapBlock.fromBytes(view);
-        console.log("Map Block Header", this.header);
+        //console.log("Map Block Header", this.header);
 
         this._loadVtxData(view);
         this._loadPolygons(view);
         this._loadDlists(view);
         this._loadRenderInstrs(view);
+        this._loadShaders(view);
 
-        //XXX read shaders, textures
-        this.shaders  = [];
+        //XXX read textures
         this.textures = [];
     }
 
@@ -101,9 +102,9 @@ export default class Block {
                 view.getInt16(offs + this.header.vertexTexCoords + (i*4)+2),
             ]);
         }
-        console.log("vertexPositions", vtxs);
-        console.log("vertexColors", colors);
-        console.log("texCoords", texCoords);
+        //console.log("vertexPositions", vtxs);
+        //console.log("vertexColors", colors);
+        //console.log("texCoords", texCoords);
     }
 
     _loadPolygons(view) {
@@ -135,7 +136,7 @@ export default class Block {
             for(let n=0; n<DisplayListPtr.size; n++) {
                 butt.push(hex(bytes.getUint8(n), 2));
             }
-            console.log("Block Dlist", i, list, butt.join(' '));
+            //console.log("Block Dlist", i, list, butt.join(' '));
         }
     }
 
@@ -158,5 +159,13 @@ export default class Block {
         };
     }
 
-
+    _loadShaders(view) {
+        //read shader data
+        const offs = view.byteOffset;
+        this.shaders = [];
+        for(let i=0; i<this.header.nShaders; i++) {
+            this.shaders.push(Shader.fromBytes(view,
+                offs + this.header.shaders + (i * Shader.size)));
+        }
+    }
 }

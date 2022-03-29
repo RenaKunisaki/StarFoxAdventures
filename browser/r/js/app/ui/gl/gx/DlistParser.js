@@ -38,11 +38,11 @@ export default class DlistParser {
         this.curList = list;
         this.data.dlist = new DataBuffer(list);
         //we also store the parsed opcodes for later examination.
-        list.parsedOps = [];
+        list.parsedOps = []; //XXX why are we setting properties of ArrayBuffer here?
         const dl = this.data.dlist;
         while(!dl.isEof) {
             const opcode = dl.nextU8();
-            //console.log("DL %s op %s", (dl.offset-1).toString(16), opcode.toString(16));
+            console.log("DL %s op %s", (dl.offset-1).toString(16), opcode.toString(16));
             if(opcode >= 0x80 && opcode < 0xC0) {
                 this.op_draw(opcode);
             }
@@ -161,6 +161,7 @@ export default class DlistParser {
                     console.error("Dlist unknown opcode 0x%s at 0x%s",
                         opcode.toString(16),
                         (dl.offset-1).toString(16),
+                        this,
                         hexdump(this.data.dlist.data));
                     //throw new Error("Unknown dlist opcode 0x"+
                     //    opcode.toString(16) + " at 0x"+
@@ -169,6 +170,7 @@ export default class DlistParser {
                 }
             }
         }
+        console.log("end of list");
     }
 
     op_draw(opcode) {
@@ -186,7 +188,8 @@ export default class DlistParser {
             vtxs.push(vtx);
             //console.log("draw vtx", vtx, this.gx.cp.getState());
         }
-        //console.log("Draw %d vtxs, mode", count, DrawOpNames[mode], vtxs);
+        console.log("Draw %d vtxs, vat %d, mode", count, vat,
+            DrawOpNames[mode], vtxs);
         this.curList.parsedOps.push({
             op:     'Draw'+DrawOpNames[mode],
             offset: start,
@@ -389,7 +392,7 @@ export default class DlistParser {
                 default: c = [255,   0, 255, 255]; break;
             }
             //debugColor overrides normal color, but not texture
-            vtx['debugColor'] = c;
+            //vtx['debugColor'] = c;
         }
 
         //if(!this.didLogVtx) { //debug: log a vertex for examination

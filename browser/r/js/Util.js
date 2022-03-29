@@ -273,7 +273,9 @@ export function hexdump(data, offset=0, length=null, cols=16) {
      *  @param {int} cols Number of columns.
      *  @returns an array of lines.
      */
-    const view = new Uint8Array(data);
+    let view = data;
+    if(view instanceof DataView) view = view.buffer;
+    view = new Uint8Array(view);
     const res  = [];
     if(length == null) length = view.byteLength;
     for(let offs=offset; offs<length; offs += cols) {

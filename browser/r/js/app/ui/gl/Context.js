@@ -17,6 +17,7 @@ export default class Context {
         //XXX add getters/setters for these
         this._gl_extensions = {};
         this.enableTextures = false;
+        this.useWireframe = false; //render in wireframe
         this.enableBackfaceCulling = true;
         this.frontFaceCW = true; //game seems to use this order
         this.useSRT = true; //use SRT transform order, not TSR
