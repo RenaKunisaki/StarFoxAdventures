@@ -31,6 +31,7 @@ input, select, button {
     background: var(--main-bg-color);
     color: var(--main-text-color);
     border: 1px #0FF solid;
+    margin: 1px;
 }
 input:hover, select:hover, button:hover {
     border: 1px #FFF solid;
