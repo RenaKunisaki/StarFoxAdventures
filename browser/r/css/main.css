@@ -1,8 +1,23 @@
+:root {
+    --main-bg-color: #012727;
+    --main-text-color: #0CC;
+    --second-text-color: #006364;
+    --main-text-shadow: none;
+    --border-color: #006364;
+    --border-size: 1px;
+    --border-style: solid;
+    --border: var(--border-size) var(--border-color) var(--border-style);
+    --border-left: var(--border);
+    --border-right: var(--border);
+    --border-top: var(--border);
+    --border-bottom: var(--border);
+}
 html, body {
-    background: #000;
-    color: #FFF;
+    background: var(--main-bg-color);
+    color: var(--main-text-color);
     padding: 0;
     margin: 0;
+    text-shadow: var(--main-text-shadow);
 }
 body {
     /* vw includes scrollbar areas */
@@ -12,14 +27,26 @@ body {
 
 a { color: #00CCFF }
 
+input, select, button {
+    background: var(--main-bg-color);
+    color: var(--main-text-color);
+    border: 1px #0FF solid;
+}
+input:hover, select:hover, button:hover {
+    border: 1px #FFF solid;
+}
+input:active, select:active, button:active {
+    background: #444;
+}
+
 table {
-    border-top: 1px #FFF solid;
-    border-left: 1px #FFF solid;
+    border-top:  var(--border-top);
+    border-left: var(--border-left);
 }
 
 td, th {
-    border-right: 1px #FFF solid;
-    border-bottom: 1px #FFF solid;
+    border-right:  var(--border-right);
+    border-bottom: var(--border-bottom);
     border-collapse: collapse;
     padding: 2px;
 }
@@ -105,14 +132,11 @@ tr.notice {
 .collapseList .count::before { content: '[' }
 .collapseList .count::after { content: '] ' }
 
-table .controls {
-    border-bottom: 1px #FFF solid;
-}
 .columnPicker {
     position: absolute;
     right:    0;
     top:      4px;
-    border:   1px #FFF solid;
+    border:   var(--border);
     background: rgba(53, 31, 31, 0.75);
     list-style-type: none;
     padding: 4px;
@@ -128,71 +152,12 @@ table .controls {
     position: relative;
     height: 1.5em;
     background: linear-gradient(#009DF3, #0000F0);
-    border: 1px #DDD solid;
+    color: #FFF;
+    border: var(--border);
 }
 .table .controls button {
     font-size: 0.8em;
     position: absolute;
     right: 0;
     top: 0;
-}
-
-/* XXX move this */
-.imageView {
-    border: 1px #F0F solid;
-    background-color: #C0C0C0;
-    background-image:
-        linear-gradient( 45deg, #808080 25%, transparent 25%),
-        linear-gradient(-45deg, #808080 25%, transparent 25%),
-        linear-gradient( 45deg, transparent 75%, #808080 75%),
-        linear-gradient(-45deg, transparent 75%, #808080 75%);
-    background-size: 16px 16px;
-    background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
-}
-#map-view-canvas {
-    border: 1px #888 solid;
-}
-
-.tabMapView .sidebar {
-    position: fixed;
-    top: 5em;
-    left: 0.5em;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    font-size: 0.8em;
-    border: 1px #CCC solid;
-    overflow: auto;
-}
-
-.tabMapView summary {
-    background: linear-gradient(#009DF3, #0000F0);
-}
-
-.tabMapView .sidebar td, .tabMapView .sidebar tr {
-    background: none;
-}
-
-.tabMapView .map-grid td {
-    width:       25px;
-    height:      25px;
-    font-size:   11px;
-    text-align:  right;
-    font-family: monospace;
-    padding:     1px;
-}
-.tabMapView .map-grid td.current {
-    background: #009DF3;
-}
-
-.tabMapView .sidebar tr:first-child th {
-    /* override previous rules */
-    background: none;
-}
-
-.gl-view-control input[type=number] {
-    width: 5em;
-    background: rgba(0, 0, 0, 0.25);
-    color: #FFF;
-    font-family: monospace;
-    font-size: 1em;
 }

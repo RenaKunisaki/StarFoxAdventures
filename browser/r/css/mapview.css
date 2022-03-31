@@ -1,0 +1,48 @@
+#map-view-canvas {
+    border: 1px #888 solid;
+}
+
+.tabMapView .sidebar {
+    position: fixed;
+    top: 5em;
+    left: 0.5em;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    color: #FFF;
+    font-size: 0.8em;
+    border: 1px #CCC solid;
+    overflow: auto;
+}
+
+.tabMapView summary {
+    background: linear-gradient(#009DF3, #0000F0);
+}
+
+.tabMapView .sidebar td, .tabMapView .sidebar tr {
+    background: none;
+}
+
+.tabMapView .map-grid td {
+    width:       25px;
+    height:      25px;
+    font-size:   11px;
+    text-align:  right;
+    font-family: monospace;
+    padding:     1px;
+}
+.tabMapView .map-grid td.current {
+    background: #009DF3;
+}
+
+.tabMapView .sidebar tr:first-child th {
+    /* override previous rules */
+    background: none;
+}
+
+.gl-view-control input[type=number] {
+    width: 5em;
+    background: rgba(0, 0, 0, 0.25);
+    color: #FFF;
+    font-family: monospace;
+    font-size: 1em;
+}

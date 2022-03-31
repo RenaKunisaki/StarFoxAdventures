@@ -32,7 +32,7 @@
 }
 
 .tabBar .tabBody {
-    border: 1px #444 solid;
+    border: var(--border);
     padding: 0.5em;
 }
 

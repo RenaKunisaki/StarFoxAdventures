@@ -4,7 +4,7 @@
 }
 
 .fileSelect .row:not(:first-child) {
-    border-top: 1px #FFF solid;
+    border-top: 1px var(--border-color) solid;
     padding-top: 1em;
 }
 
@@ -23,7 +23,7 @@
 }
 .fileSelect .leftPane {
     flex-basis: 50%;
-    border-right: 1px #FFF solid;
+    border-right: 1px var(--border-color) solid;
 }
 .fileSelect .rightPane {
     flex-basis: 50%;
