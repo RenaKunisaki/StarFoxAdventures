@@ -89,6 +89,7 @@ const char *strings_Japanese[] = {
     "ヘッドホン", //sound mode: headphones
     "ヒープの状態", //show details about memory allocation
     "熱表現", //enable a heat wave effect on screen
+    "隠されたポリゴン", //show map geometry that's normally hidden
     "非表示無効", //don't show disabled objects
     "高い", //higher than normal
     "ヒットボックス", //show hit areas

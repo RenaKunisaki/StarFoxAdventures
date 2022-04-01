@@ -60,6 +60,7 @@ debugRender = (
     ('render-map-grid',       0, "Show map grid on screen"),
     ('render-debug-objs',     1, "Show debug objects"),
     ('hide-disabled-objs',    9, "Hide disabled debug objects"),
+    ('render-hidden-polys',  10, "Show hidden map polygons"),
     ('render-perf',           2, "Show performance meters"),
     ('render-rng',            3, "Show RNG graph"),
     ('render-hitboxes',       4, "Show object hitboxes"),

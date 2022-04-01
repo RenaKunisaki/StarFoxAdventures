@@ -76,7 +76,6 @@ static inline void doPadMainLoop() {
 }
 
 static inline void sanityCheck() {
-    //sanity check
     if(furFxMode >= NUM_FURFX_MODES) furFxMode = 0;
     if(backpackMode >= NUM_BACKPACK_MODES) backpackMode = 0;
     if(overridePlayerNo >= NUM_PLAYER_IDS) overridePlayerNo = 0;
@@ -182,6 +181,9 @@ void mainLoopHook() {
 
     WRITE32(0x8000E398, (cameraFlags & CAM_FLAG_NO_LETTERBOX) ? 0x38000000 : 0xA80D96A6);
     iCacheFlush((void*)0x8000E398, 4);
+
+    WRITE32(0x8005ED10, (debugRenderFlags & DEBUGRENDER_DEBUG_MAP_GEOM) ? 0x60000000 : 0x408204B8);
+    iCacheFlush((void*)0x8005ED10, 4);
 
     minimapMainLoopHook();
     mainLoopDebugPrint();

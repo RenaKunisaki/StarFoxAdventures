@@ -67,6 +67,18 @@ void menuDebugRenderHideDisabled_select(const MenuItem *self, int amount) {
 }
 
 
+void menuDebugRenderDebugMapGeom_draw(const MenuItem *self, int x, int y, bool selected) {
+    char str[256];
+    sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_DEBUG_MAP_GEOM) ?
+        T("On") : T("Off"));
+    menuDrawText(str, x, y, selected);
+}
+void menuDebugRenderDebugMapGeom_select(const MenuItem *self, int amount) {
+    debugRenderFlags ^= DEBUGRENDER_DEBUG_MAP_GEOM;
+    audioPlaySound(NULL, MENU_ADJUST_SOUND);
+}
+
+
 void menuDebugRenderPlayerVel_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
     sprintf(str, self->fmt, T(self->name), (debugRenderFlags & DEBUGRENDER_PLAYER_VEL) ?
@@ -142,18 +154,19 @@ void menuDebugRenderRNG_select(const MenuItem *self, int amount) {
 Menu menuDebugRender = {
     "Render", 0,
     genericMenu_run, genericMenu_draw, debugSubMenu_close,
-    "Effects",        "%s", genericMenuItem_draw,             menuDebugRenderEffects_select,
-    "View Textures",  "%s", genericMenuItem_draw,             menuDebugRenderTextures_select,
-    "Map Grid",       _FMT, menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
-    "Perf Meters",    _FMT, menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
-    "RNG",            _FMT, menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,
-    "Debug Objects",  _FMT, menuDebugRenderDebugObjs_draw,    menuDebugRenderDebugObjs_select,
-    "Hide Disabled",  _FMT, menuDebugRenderHideDisabled_draw, menuDebugRenderHideDisabled_select,
-    "Player Velocity",_FMT, menuDebugRenderPlayerVel_draw,    menuDebugRenderPlayerVel_select,
-    "Hitboxes",       _FMT, menuDebugRenderHitboxes_draw,     menuDebugRenderHitboxes_select,
-    "Attach Points",  _FMT, menuDebugRenderAttachPoints_draw, menuDebugRenderAttachPoints_select,
-    "Focus Points",   _FMT, menuDebugRenderFocusPoints_draw,  menuDebugRenderFocusPoints_select,
-    "Unknown Points", _FMT, menuDebugRenderUnkPoints_draw,    menuDebugRenderUnkPoints_select,
+    "Effects",            "%s", genericMenuItem_draw,             menuDebugRenderEffects_select,
+    "View Textures",      "%s", genericMenuItem_draw,             menuDebugRenderTextures_select,
+    "Map Grid",           _FMT, menuDebugRenderMapGrid_draw,      menuDebugRenderMapGrid_select,
+    "Perf Meters",        _FMT, menuDebugRenderPerf_draw,         menuDebugRenderPerf_select,
+    "RNG",                _FMT, menuDebugRenderRNG_draw,          menuDebugRenderRNG_select,
+    "Debug Objects",      _FMT, menuDebugRenderDebugObjs_draw,    menuDebugRenderDebugObjs_select,
+    "Hide Disabled",      _FMT, menuDebugRenderHideDisabled_draw, menuDebugRenderHideDisabled_select,
+    "Hidden Polys",       _FMT, menuDebugRenderDebugMapGeom_draw, menuDebugRenderDebugMapGeom_select,
+    "Player Velocity",    _FMT, menuDebugRenderPlayerVel_draw,    menuDebugRenderPlayerVel_select,
+    "Hitboxes",           _FMT, menuDebugRenderHitboxes_draw,     menuDebugRenderHitboxes_select,
+    "Attach Points",      _FMT, menuDebugRenderAttachPoints_draw, menuDebugRenderAttachPoints_select,
+    "Focus Points",       _FMT, menuDebugRenderFocusPoints_draw,  menuDebugRenderFocusPoints_select,
+    "Unknown Points",     _FMT, menuDebugRenderUnkPoints_draw,    menuDebugRenderUnkPoints_select,
     NULL,
 };
 #undef _FMT
