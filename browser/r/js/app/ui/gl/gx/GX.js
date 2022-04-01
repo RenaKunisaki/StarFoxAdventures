@@ -183,33 +183,45 @@ export default class GX {
                 //there's no quads mode in modern GL so we need to convert
                 //to triangles.
                 res.glVtxCount = 0;
+                res.glMode = gl.TRIANGLES;
                 for(let i=0; i<vtxs.length; i += 4) {
                     //XXX find a more efficient way to do this.
                     //we can probably use index buffers instead of repeating
                     //vertices, use one big buffer instead of refilling a small
                     //one many times, not use gl.STATIC_DRAW, etc.
-                    const v0=vtxs[i], v1=vtxs[i+1], v2=vtxs[i+2], v3=vtxs[i+3];
-                    const mi0=v0.PNMTXIDX, mi1=v1.PNMTXIDX;
-                    const mi2=v2.PNMTXIDX, mi3=v3.PNMTXIDX;
-                    const pm0=(mi0 == undefined) ? null : this.xf.getPosMtx(mi0);
-                    const pm1=(mi1 == undefined) ? null : this.xf.getPosMtx(mi1);
-                    const pm2=(mi2 == undefined) ? null : this.xf.getPosMtx(mi2);
-                    const pm3=(mi3 == undefined) ? null : this.xf.getPosMtx(mi3);
-                    const nm0=null; //this.xf.getNrmMtx(v0.PNMTXIDX);
-                    const nm1=null; //this.xf.getNrmMtx(v1.PNMTXIDX);
-                    const nm2=null; //this.xf.getNrmMtx(v2.PNMTXIDX);
-                    const nm3=null; //this.xf.getNrmMtx(v3.PNMTXIDX);
-                    const m0 = {POS:pm0, NRM:nm0}, m1 = {POS:pm1, NRM:nm1};
-                    const m2 = {POS:pm2, NRM:nm2}, m3 = {POS:pm3, NRM:nm3};
-                    this.vtxBuf.setMtxs(m0); this.vtxBuf.addVtx(v0);
-                    this.vtxBuf.setMtxs(m1); this.vtxBuf.addVtx(v1);
-                    this.vtxBuf.setMtxs(m2); this.vtxBuf.addVtx(v2);
-                    this.vtxBuf.setMtxs(m0); this.vtxBuf.addVtx(v0);
-                    this.vtxBuf.setMtxs(m2); this.vtxBuf.addVtx(v2);
-                    this.vtxBuf.setMtxs(m3); this.vtxBuf.addVtx(v3);
-                    res.glVtxCount += 6;
+                    let v0=vtxs[i], v1=vtxs[i+1], v2=vtxs[i+2], v3=vtxs[i+3];
+                    if(!(v0 && v1 && v2 && v3)) {
+                        const n = (v0 ? 1 : 0) + (v1 ? 1 : 0) +
+                            (v2 ? 1 : 0) + (v3 ? 1 : 0);
+                        console.warn("Quad only has %d vtxs", n);
+                        if(!v1) v1 = v0;
+                        if(!v2) v2 = v1;
+                        if(!v3) v3 = v2;
+                    }
+                    if(v0) {
+                        const mi0=v0 ? v0.PNMTXIDX : undefined;
+                        const mi1=v1 ? v1.PNMTXIDX : undefined;
+                        const mi2=v2 ? v2.PNMTXIDX : undefined;
+                        const mi3=v3 ? v3.PNMTXIDX : undefined;
+                        const pm0=(mi0 == undefined) ? null : this.xf.getPosMtx(mi0);
+                        const pm1=(mi1 == undefined) ? null : this.xf.getPosMtx(mi1);
+                        const pm2=(mi2 == undefined) ? null : this.xf.getPosMtx(mi2);
+                        const pm3=(mi3 == undefined) ? null : this.xf.getPosMtx(mi3);
+                        const nm0=null; //this.xf.getNrmMtx(v0.PNMTXIDX);
+                        const nm1=null; //this.xf.getNrmMtx(v1.PNMTXIDX);
+                        const nm2=null; //this.xf.getNrmMtx(v2.PNMTXIDX);
+                        const nm3=null; //this.xf.getNrmMtx(v3.PNMTXIDX);
+                        const m0 = {POS:pm0, NRM:nm0}, m1 = {POS:pm1, NRM:nm1};
+                        const m2 = {POS:pm2, NRM:nm2}, m3 = {POS:pm3, NRM:nm3};
+                        this.vtxBuf.setMtxs(m0); this.vtxBuf.addVtx(v0);
+                        this.vtxBuf.setMtxs(m1); this.vtxBuf.addVtx(v1);
+                        this.vtxBuf.setMtxs(m2); this.vtxBuf.addVtx(v2);
+                        this.vtxBuf.setMtxs(m0); this.vtxBuf.addVtx(v0);
+                        this.vtxBuf.setMtxs(m2); this.vtxBuf.addVtx(v2);
+                        this.vtxBuf.setMtxs(m3); this.vtxBuf.addVtx(v3);
+                        res.glVtxCount += 6;
+                    }
                 }
-                res.glMode = gl.TRIANGLES;
                 break;
 
             case 2: res.glMode = gl.TRIANGLES;      break;

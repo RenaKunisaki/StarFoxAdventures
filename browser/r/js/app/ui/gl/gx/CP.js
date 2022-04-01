@@ -21,6 +21,55 @@ export const Reg = {
     ARRAY_STRIDE_TEXCOORD: 0xB4,
     ARRAY_STRIDE_INDEX:    0xBC,
 };
+export const Format = { //vertex attribute data
+    Coord: {u8:0, s8:1, u16:2, s16:3, float:4},
+    Normal:{s8:1, s16:3, float:4},
+    Color: {rgb565:0, rgb888:1, rgbx8888:2, rgba4444:3, rgba6666:4, rgba8888:5},
+};
+
+const VAT_MASK = { //[mask, shift]
+    //VAT A
+    POSCNT:        [0x01,  0],
+    POSFMT:        [0x07,  1],
+    POSSHFT:       [0x1F,  4],
+    NRMCNT:        [0x01,  9],
+    NRMFMT:        [0x07, 10],
+    COL0CNT:       [0x01, 13],
+    COL0FMT:       [0x07, 14],
+    COL1CNT:       [0x01, 17],
+    COL1FMT:       [0x07, 18],
+    TEX0CNT:       [0x01, 21],
+    TEX0FMT:       [0x07, 22],
+    TEX0SHFT:      [0x1F, 25],
+    BYTEDEQUANT:   [0x01, 30],
+    NORMALINDEX3:  [0x01, 31],
+
+    //VAT B
+    TEX1CNT:       [0x01,  0],
+    TEX1FMT:       [0x07,  1],
+    TEX1SHFT:      [0x1F,  4],
+    TEX2CNT:       [0x01,  9],
+    TEX2FMT:       [0x07, 10],
+    TEX2SHFT:      [0x1F, 13],
+    TEX3CNT:       [0x01, 18],
+    TEX3FMT:       [0x07, 19],
+    TEX3SHFT:      [0x1F, 22],
+    TEX4CNT:       [0x01, 27],
+    TEX4FMT:       [0x07, 28],
+    VCACHE_ENHANCE:[0x01, 31], //"must always be 1"
+
+    //VAT C
+    TEX4SHFT:      [0x1F,  0],
+    TEX5CNT:       [0x01,  5],
+    TEX5FMT:       [0x07,  6],
+    TEX5SHFT:      [0x1F,  9],
+    TEX6CNT:       [0x01, 14],
+    TEX6FMT:       [0x07, 15],
+    TEX6SHFT:      [0x1F, 18],
+    TEX7CNT:       [0x01, 23],
+    TEX7FMT:       [0x07, 24],
+    TEX7SHFT:      [0x1F, 27],
+};
 
 export default class CP {
     /** Command Processor subsystem for GX.
@@ -234,6 +283,38 @@ export default class CP {
     _setArrayStride(field, val) { // CP registers 0xB0 - 0xBF
         //not really used, but included for completeness' sake.
         this.arrayStride[field] = val;
+    }
+
+    setVatFormat(vat, params) {
+        /** Convenience wrapper for setting up VAT */
+        const fields = {
+            A: ['POSCNT','POSFMT','POSSHFT','NRMCNT','NRMFMT','COL0CNT',
+                'COL0FMT','COL1CNT','COL1FMT','TEX0CNT','TEX0FMT','TEX0SHFT',
+                'BYTEDEQUANT','NORMALINDEX3'],
+            B: ['TEX1CNT','TEX1FMT','TEX1SHFT','TEX2CNT','TEX2FMT','TEX2SHFT',
+                'TEX3CNT','TEX3FMT','TEX3SHFT','TEX4CNT','TEX4FMT',
+                'VCACHE_ENHANCE'],
+            C: ['TEX4SHFT','TEX5CNT','TEX5FMT','TEX5SHFT','TEX6CNT','TEX6FMT',
+                'TEX6SHFT','TEX7CNT','TEX7FMT','TEX7SHFT'],
+        }
+        let regs = {
+            A: this.getReg(vat+0x70),
+            B: this.getReg(vat+0x80),
+            C: this.getReg(vat+0x90),
+        };
+        for(let r of ['A', 'B', 'C']) {
+            for(const name of fields[r]) {
+                let v = regs[r];
+                if(params[name] != undefined) {
+                    const [mask, shift] = VAT_MASK[name];
+                    v = (v & ~(mask << shift)) | (params[name] << shift);
+                }
+                regs[r] = v;
+            }
+        }
+        this.setReg(vat+0x70, regs.A);
+        this.setReg(vat+0x80, regs.B);
+        this.setReg(vat+0x90, regs.C);
     }
 
     getState() {

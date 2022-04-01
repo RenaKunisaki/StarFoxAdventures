@@ -41,8 +41,11 @@ export default class VertexBuffer {
     }
 
     _addPos(pos) {
-        pos = validVector(pos);
-        let v = vec3.fromValues(pos[0], pos[1], pos[2]);
+        //XXX this doesn't necessarily work because it's possible
+        //for the position to only be 2 values.
+        //we need to redesign this buffer system...
+        //pos = validVector(pos);
+        let v = vec3.fromValues(pos[0], pos[1], pos[2] || 0);
         if(this.mtxPos) vec3.transformMat4(v, v, this.mtxPos);
         this.datPos.push(v[0]); this.datPos.push(v[1]); this.datPos.push(v[2]);
     }

@@ -25,6 +25,7 @@ export default class BitStreamReader {
     read(size) {
         /** Read `size` bits from the stream and return them.
          */
+        console.assert(size <= 24);
         const val = this._getU24() & ((1 << size)-1);
         this.offset += size;
         return val;

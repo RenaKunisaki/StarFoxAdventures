@@ -3,6 +3,69 @@ import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
 
 const LogRenderOps = false;
 
+const vatDefaults = [
+    //these are set in videoInit() and almost never change
+    { //VAT 0
+        POSCNT:  1, POSFMT:  3, POSSHFT:   0, //s16
+        COL0CNT: 1, COL0FMT: 5, COL0SHFT:  0, //rgba8888
+        TEX0CNT: 1, TEX0FMT: 3, TEX0SHFT:  7, //s16
+    },
+    { //VAT 1
+        POSCNT:  1, POSFMT:  3, POSSHFT:   2, //s16
+        COL0CNT: 1, COL0FMT: 5, COL0SHFT:  0, //rgba8888
+        TEX0CNT: 1, TEX0FMT: 4, TEX0SHFT:  0, //float
+    },
+    { //VAT 2
+        POSCNT:  1, POSFMT:  4, POSSHFT:   0, //float
+        NRMCNT:  0, NRMFMT:  4, NRMSHFT:   0, //float
+        COL0CNT: 1, COL0FMT: 5, COL0SHFT:  0, //rgba8888
+        TEX0CNT: 1, TEX0FMT: 4, TEX0SHFT:  0, //float
+        TEX1CNT: 1, TEX1FMT: 4, TEX1SHFT:  0, //float
+    },
+    { //VAT 3
+        POSCNT:  1, POSFMT:  3, POSSHFT:   8, // s16
+        NRM3CNT: 1, NRM3FMT: 1, NRM3SHFT:  0, // s8
+        COL0CNT: 1, COL0FMT: 3, COL0SHFT:  0, // rgba4444
+        TEX0CNT: 1, TEX0FMT: 3, TEX0SHFT: 10, // s16
+        TEX1CNT: 1, TEX1FMT: 3, TEX1SHFT: 10, // s16
+        TEX2CNT: 1, TEX2FMT: 3, TEX2SHFT: 10, // s16
+        TEX3CNT: 1, TEX3FMT: 3, TEX3SHFT: 10, // s16
+    },
+    { //VAT 4
+        POSCNT:  1, POSFMT:  4, POSSHFT:   0, //float
+        COL0CNT: 1, COL0FMT: 5, COL0SHFT:  0, //rgba8888
+        TEX0CNT: 1, TEX0FMT: 3, TEX0SHFT:  7, //s16
+        NRMCNT:  0, NRMFMT:  4, NRMSHFT:   0, //float
+    },
+    { //VAT 5
+        POSCNT:  1, POSFMT:  3, POSSHFT:   3, //s16
+        NRMCNT:  0, NRMFMT:  1, NRMSHFT:   0, //s8
+        COL0CNT: 1, COL0FMT: 3, COL0SHFT:  0, //rgba4444
+        TEX0CNT: 1, TEX0FMT: 3, TEX0SHFT:  8, //s16
+        TEX1CNT: 1, TEX1FMT: 3, TEX1SHFT:  8, //s16
+        TEX2CNT: 1, TEX2FMT: 3, TEX2SHFT:  8, //s16
+        TEX3CNT: 1, TEX3FMT: 3, TEX3SHFT:  8, //s16
+    },
+    { //VAT 6
+        POSCNT:  1, POSFMT:  3, POSSHFT:   8, //s16
+        NRMCNT:  0, NRMFMT:  1, NRMSHFT:   0, //s8
+        COL0CNT: 1, COL0FMT: 3, COL0SHFT:  0, //rgba4444
+        TEX0CNT: 1, TEX0FMT: 3, TEX0SHFT: 10, //s16
+        TEX1CNT: 1, TEX1FMT: 3, TEX1SHFT: 10, //s16
+        TEX2CNT: 1, TEX2FMT: 3, TEX2SHFT: 10, //s16
+        TEX3CNT: 1, TEX3FMT: 3, TEX3SHFT: 10, //s16
+    },
+    { //VAT 7
+        POSCNT:  1, POSFMT:  3, POSSHFT:   0, //s16
+        NRMCNT:  0, NRMFMT:  1, NRMSHFT:   0, //s8
+        COL0CNT: 1, COL0FMT: 3, COL0SHFT:  0, //rgba4444
+        TEX0CNT: 1, TEX0FMT: 3, TEX0SHFT: 10, //s16
+        TEX1CNT: 1, TEX1FMT: 3, TEX1SHFT: 10, //s16
+        TEX2CNT: 1, TEX2FMT: 3, TEX2SHFT: 10, //s16
+        TEX3CNT: 1, TEX3FMT: 3, TEX3SHFT: 10, //s16
+    },
+];
+
 export default class BlockRenderer {
     /** Renders map blocks. */
     constructor(gx) {
@@ -16,8 +79,12 @@ export default class BlockRenderer {
          *  @param {string} whichStream One of 'main', 'reflective', 'water',
          *   telling which render instruction stream to use.
          */
+        //console.log("render block", block, "for stream", whichStream);
+        //note, this can fail because some maps do silly things
+        //like refer to blocks they don't actually have, like block
+        //34 in Krazoa Palace which isn't anywhere on the disc...
         block.load();
-        console.log("Shaders", block.shaders);
+        //console.log("Shaders", block.shaders);
         this.curBlock = block;
         if(!this.curBlock.renderInstrs) {
             console.error("block has no render instrs", this.curBlock);
@@ -27,13 +94,6 @@ export default class BlockRenderer {
         this.curOps = ops;
 
         //set initial GX params
-        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_VTXS, 6); //sizeof(vec3s)
-        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_COLOR, 2); //sizeof(u16)
-        for(let i=0; i<8; i++) {
-            this.gx.cp.setReg(CPReg.ARRAY_STRIDE_TEXCOORD+i, 4); //sizeof(vec2s)
-        }
-        //XXX we must be missing some here, and/or defaults aren't
-        //always what we have here.
         this._setDefaultVtxFmt();
 
         let done = false;
@@ -42,7 +102,7 @@ export default class BlockRenderer {
             //used for character models.
             const op = ops.read(4);
             switch(op) {
-                case 1: this._renderOpTexture();   break;
+                case 1: this._renderOpTexture(whichStream);   break;
                 case 2: this._renderOpCallList();  break;
                 case 3: this._renderOpSetVtxFmt(whichStream); break;
                 case 0: //unused, but should be same as 4
@@ -52,18 +112,18 @@ export default class BlockRenderer {
                     console.error("Premature end of stream at bit 0x%s",
                         ops.offset.toString(16));
                 case 5: //end
-                    //console.log("Done rendering");
+                    //console.log("Done rendering", whichStream);
                     done = true;
                     break;
 
                 default:
-                    console.error("Unknown render op %d at bit 0x%s", ops,
+                    console.error("Unknown render op %d at bit 0x%s", op,
                         (ops.offset-4).toString(16));
             }
         }
     }
 
-    _renderOpTexture() {
+    _renderOpTexture(whichStream) {
         /** Select a texture and shader.
          *  This can affect how later commands are interpreted.
          */
@@ -71,6 +131,8 @@ export default class BlockRenderer {
         const gl  = this.gx.gl;
         const ops = this.curOps;
         const idx = ops.read(6);
+        if(whichStream != 'main') return;
+
         this.curShader = this.curBlock.shaders[idx];
         //this.curTexture = this.curBlock.textures[this.curShader.layer[0].texture];
         this.curShaderIdx = idx;
@@ -131,22 +193,17 @@ export default class BlockRenderer {
         };
         if(LogRenderOps) console.log("Execute list", idx);
         this.gx.executeDisplayList(this.curBlock.dlists[idx].data, dlistData);
-        console.log("executed list", this.curBlock.dlists[idx].data);
+        if(LogRenderOps) {
+            console.log("executed list", this.curBlock.dlists[idx].data);
+        }
     }
 
     _setDefaultVtxFmt() {
+        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_VTXS,  6); //sizeof(vec3s)
+        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_COLOR, 2); //sizeof(u16)
         for(let i=0; i<8; i++) {
-            this.gx.cp.setReg(0x50+i, //VCD FMT LO
-                (2 <<  9) | (2 << 13) | (0 << 15));
-            this.gx.cp.setReg(0x60+i, //VCD FMT HI
-                2);
-            this.gx.cp.setReg(0x70+i, //VAT_A
-                (1 << 30) | //BYTEDEQUANT
-                //(0 << 14) | //COL0FMT (RGB565)
-                (3 << 14) | //COL0FMT (RGBA4444)
-                (3 << 1) | //POSFMT (s16)
-                1); //POSCNT (3 values)
-            //shouldn't need to touch B or C
+            this.gx.cp.setReg(CPReg.ARRAY_STRIDE_TEXCOORD+i, 4); //sizeof(vec2s)
+            this.gx.cp.setVatFormat(i, vatDefaults[i]);
         }
     }
 
@@ -154,15 +211,15 @@ export default class BlockRenderer {
         /** Change the vertex data format.
          */
         const INDEX8 = 2, INDEX16 = 3;
-        const ops   = this.curOps;
-        let posSize = ops.read(1) ? INDEX16 : INDEX8;
+        const ops    = this.curOps;
+        let posSize  = ops.read(1) ? INDEX16 : INDEX8;
         //for character models, 1 bit for normals here.
         //map blocks don't have normals.
-        let colSize = ops.read(1) ? INDEX16 : INDEX8;
-        let texSize = ops.read(1) ? INDEX16 : INDEX8;
+        let colSize  = ops.read(1) ? INDEX16 : INDEX8;
+        let texSize  = ops.read(1) ? INDEX16 : INDEX8;
 
-        if(whichStream != 'main') {
-            let TEX = [0, 0, 0, 0, 0, 0, 0, 0];
+        let TEX = [0, 0, 0, 0, 0, 0, 0, 0];
+        if(whichStream == 'main') {
             if(this.curShader && !(this.curShader.flags & 0x80000000)) {
                 for(let i=0; i<this.curShader.nLayers; i++) {
                     TEX[i] = texSize;
@@ -180,16 +237,12 @@ export default class BlockRenderer {
         let POS      = posSize;
         let COL      = [colSize, 0];
 
-        //XXX this can't be right. how does the game decide which VAT to set?
-        //is it just always 5?
-        if(whichStream != 'main') { //dunno why the game does this
-            for(let i=0; i<8; i++) {
-                this.gx.cp.setReg(0x50+i, //VCD FMT LO
-                    (POS <<  9) | (COL[0] << 13) | (COL[1] << 15));
-                this.gx.cp.setReg(0x60+i, //VCD FMT HI
-                    TEX[0] | (TEX[1] <<  2) | (TEX[2] <<  4) | (TEX[3] <<  6) |
-                    (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
-            }
+        if(whichStream == 'main') { //dunno why the game does this
+            this.gx.cp.setReg(0x55, //VCD FMT LO (VAT 5)
+                (POS <<  9) | (COL[0] << 13) | (COL[1] << 15));
+            this.gx.cp.setReg(0x65, //VCD FMT HI (VAT 5)
+                TEX[0] | (TEX[1] <<  2) | (TEX[2] <<  4) | (TEX[3] <<  6) |
+                (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
         }
     }
 
@@ -198,18 +251,11 @@ export default class BlockRenderer {
          */
         const ops   = this.curOps;
         const count = ops.read(4);
-        const idxs  = []; //debug
-        if(LogRenderOps) console.log("init %d mtxs", count);
-
-        let iVar3 = 0;
-        if(count > 8) {
-            let n = (count - 1) >> 3;
-            let mtxData = ops.read(0x40 * n);
-            iVar3 = n * 8;
+        const mtxs  = [];
+        for(let i=0; i<count; i++) {
+            //can't read more than 24 bits at once
+            mtxs.push(ops.read(8))
         }
-        let iVar2 = count - iVar3;
-        if(iVar3 < count) {
-            ops.read(8 * iVar2); //XXX what is this?
-        }
+        if(LogRenderOps) console.log("init %d mtxs", count, mtxs);
     }
 }

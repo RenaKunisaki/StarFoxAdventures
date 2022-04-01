@@ -1,0 +1,59 @@
+videoInit:
+  GXClearVtxDesc();
+  GXSetVtxDesc(PMIDX,DIRECT);
+  GXSetVtxDesc(POS,DIRECT);
+  GXSetVtxDesc(COL0,DIRECT);
+  GXSetVtxDesc(TEX0,DIRECT);
+gxSetVatParam(uint vat,VtxDescrBit what,VtxDescrVal mode,int fmt,uint shift)
+
+V  What  C  F  S  FmtName  (C:CompCnt, F:Fmt, S:Shift)
+0  POS   1  3  0  s16
+0  COL0  1  5  0  rgba8888
+0  TEX0  1  3  7  s16
+
+1  POS   1  3  2  s16
+1  COL0  1  5  0  rgba8888
+1  TEX0  1  4  0  float
+
+2  POS   1  4  0  float
+2  NRM   0  4  0  float
+2  COL0  1  5  0  rgba8888
+2  TEX0  1  4  0  float
+2  TEX1  1  4  0  float
+
+3  POS   1  3  8  s16
+3  NRM3  1  1  0  s8
+3  COL0  1  3  0  rgba4444
+3  TEX0  1  3 10  s16
+3  TEX1  1  3 10  s16
+3  TEX2  1  3 10  s16
+3  TEX3  1  3 10  s16
+
+4  POS   1  4  0  float
+4  COL0  1  5  0  rgba8888
+4  TEX0  1  3  7  s16
+4  NRM   0  4  0  float
+
+5  POS   1  3  3  s16
+5  NRM   0  1  0  s8
+5  COL0  1  3  0  rgba4444
+5  TEX0  1  3  8  s16
+5  TEX1  1  3  8  s16
+5  TEX2  1  3  8  s16
+5  TEX3  1  3  8  s16
+
+6  POS   1  3  8  s16
+6  NRM   0  1  0  s8
+6  COL0  1  3  0  rgba4444
+6  TEX0  1  3 10  s16
+6  TEX1  1  3 10  s16
+6  TEX2  1  3 10  s16
+6  TEX3  1  3 10  s16
+
+7  POS   1  3   0  s16
+7  NRM   0  1   0  s8
+7  COL0  1  3   0  rgba4444
+7  TEX0  1  3  10  s16
+7  TEX1  1  3  10  s16
+7  TEX2  1  3  10  s16
+7  TEX3  1  3  10  s16

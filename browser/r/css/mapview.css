@@ -29,6 +29,7 @@
     text-align:  right;
     font-family: monospace;
     padding:     1px;
+    color:       #FFF;
 }
 .tabMapView .map-grid td.current {
     background: #009DF3;

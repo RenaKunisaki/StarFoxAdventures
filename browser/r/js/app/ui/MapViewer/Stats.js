@@ -36,6 +36,7 @@ export default class Stats {
         );
 
         //build the table
+        if(!curBlock.header) return;
         clearElement(this._tbl).append(
             Int('RenderOpsMain', curBlock.header.nRenderInstrsMain),
             Int('RenderOpsRefl', curBlock.header.nRenderInstrsReflective),

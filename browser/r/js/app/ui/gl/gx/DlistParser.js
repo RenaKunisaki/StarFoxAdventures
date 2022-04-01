@@ -42,7 +42,7 @@ export default class DlistParser {
         const dl = this.data.dlist;
         while(!dl.isEof) {
             const opcode = dl.nextU8();
-            console.log("DL %s op %s", (dl.offset-1).toString(16), opcode.toString(16));
+            //console.log("DL %s op %s", (dl.offset-1).toString(16), opcode.toString(16));
             if(opcode >= 0x80 && opcode < 0xC0) {
                 this.op_draw(opcode);
             }
@@ -170,7 +170,7 @@ export default class DlistParser {
                 }
             }
         }
-        console.log("end of list");
+        //console.log("end of list");
     }
 
     op_draw(opcode) {
@@ -188,8 +188,8 @@ export default class DlistParser {
             vtxs.push(vtx);
             //console.log("draw vtx", vtx, this.gx.cp.getState());
         }
-        console.log("Draw %d vtxs, vat %d, mode", count, vat,
-            DrawOpNames[mode], vtxs);
+        //console.log("Draw %d vtxs, vat %d, mode", count, vat,
+        //    DrawOpNames[mode], vtxs);
         this.curList.parsedOps.push({
             op:     'Draw'+DrawOpNames[mode],
             offset: start,
