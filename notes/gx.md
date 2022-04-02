@@ -2,7 +2,7 @@
 
 Op|Name       |Params               |Description
 --|-----------|---------------------|-----------
-08|LOAD_CP_REG|rr vvvvvvvv          |BP REG rr = vvvvvvvv
+08|LOAD_CP_REG|rr vvvvvvvv          |CP REG rr = vvvvvvvv
 10|LOAD_XF_REG|nnnn aaaa vvvvvvvv...|Write XF regs
 61|LOAD_BP_REG|vvvvvvvv             |write vvvvvvvv to BP
 

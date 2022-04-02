@@ -400,33 +400,33 @@
     </struct>
 
     <struct name="Shader">
+        <field type="undefined" /><!-- 00 -->
         <field type="undefined" />
         <field type="undefined" />
         <field type="undefined" />
-        <field type="undefined" />
-        <field type="u8" name="r" />
+        <field type="u8" name="r" /><!-- 04 -->
         <field type="u8" name="g" />
         <field type="u8" name="b" />
         <field type="undefined" />
-        <field type="pointer" name="auxTex0" />
-        <field type="u8" name="alpha" />
+        <field type="pointer" name="auxTex0" /><!-- 08 -->
+        <field type="u8" name="alpha" /><!-- 0C -->
         <field type="undefined" />
         <field type="undefined" />
         <field type="undefined" />
+        <field type="undefined" /><!-- 10 -->
         <field type="undefined" />
         <field type="undefined" />
         <field type="undefined" />
-        <field type="undefined" />
-        <field type="pointer" name="auxTex1" />
-        <field type="pointer" name="texture18" />
-        <field type="int">
+        <field type="pointer" name="auxTex1" /><!-- 14 -->
+        <field type="pointer" name="texture18" /><!-- 18 -->
+        <field type="int"><!-- 1C -->
             <note>-1 -&gt; 0, -2 -&gt; 0, else -&gt; 1</note>
         </field>
-        <field type="pointer" />
-        <field type="ShaderLayer" count="2" name="layer" />
-        <field type="pointer" name="auxTex2" />
-        <field type="pointer" name="furTexture" />
-        <field type="u32" name="flags"><!-- ShaderFlags -->
+        <field type="pointer" /><!-- 20 -->
+        <field type="ShaderLayer" count="2" name="layer" /><!-- 24 -->
+        <field type="pointer" name="auxTex2" /><!-- 34 -->
+        <field type="pointer" name="furTexture" /><!-- 38 -->
+        <field type="u32" name="flags"><!-- 3C ShaderFlags -->
             <note>may be from beta</note>
             <!--
                 DevGeometry	0x2
@@ -447,9 +447,9 @@
                 Water	0x80000000
             -->
         </field>
-        <field type="u8" name="attrFlags" /><!-- ShaderAttrFlags -->
-        <field type="u8" name="nLayers" />
-        <padding count="2" />
+        <field type="u8" name="attrFlags" /><!-- 40 ShaderAttrFlags -->
+        <field type="s8" name="nLayers" /><!-- 41 -->
+        <padding count="2" /><!-- 42 -->
     </struct>
 
     <struct name="MapBlock">

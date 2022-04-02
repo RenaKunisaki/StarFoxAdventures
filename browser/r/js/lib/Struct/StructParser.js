@@ -190,6 +190,10 @@ export default class StructParser {
             switch(child.tagName) {
                 case 'padding':
                     offset += int(child.getAttribute('count'));
+                    //BUG: we still need to create a field or something,
+                    //else this causes the final struct size to be WRONG
+                    //when padding is at the end. (also it would be ideal
+                    //if we could raise a warning when padding isn't zero)
                     break;
 
                 case 'field': {

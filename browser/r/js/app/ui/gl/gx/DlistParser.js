@@ -180,7 +180,8 @@ export default class DlistParser {
         const start = this.data.dlist.offset - 1;
         const mode  = (opcode & 0x78) >> 3;
         const vat   = opcode & 7;
-        const count = this.data.dlist.nextU16();
+        let   count = this.data.dlist.nextU16();
+        //if(mode < 2) count &= ~3; //hack for truncated quads
         const vtxs  = [];
         for(let i=0; i<count; i++) {
             const vtx = this._nextVertex(vat);

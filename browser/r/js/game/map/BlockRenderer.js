@@ -3,6 +3,37 @@ import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
 
 const LogRenderOps = false;
 
+//from noclip
+/* export enum ShaderAttrFlags {
+    NRM = 0x1,
+    CLR = 0x2,
+}
+export const enum NormalFlags {
+    HasVertexColor = 0x2,
+    NBT = 0x8,
+    HasVertexAlpha = 0x10,
+}
+
+export const enum LightFlags {
+    OverrideLighting = 0x2,
+}
+export enum ShaderFlags {
+    DevGeometry = 0x2,
+    Fog = 0x4,
+    CullBackface = 0x8,
+    ReflectSkyscape = 0x20, // ???
+    Caustic = 0x40,
+    Lava = 0x80,
+    Reflective = 0x100, // Occurs on Krazoa Palace reflective floors
+    AlphaCompare = 0x400,
+    ShortFur = 0x4000, // 4 layers
+    MediumFur = 0x8000, // 8 layers
+    LongFur = 0x10000, // 16 layers
+    StreamingVideo = 0x20000, // Occurs on video panels in Great Fox. Used to display preview video.
+    IndoorOutdoorBlend = 0x40000, // Occurs near cave entrances and windows. Requires special handling for lighting.
+    Water = 0x80000000,
+} */
+
 const vatDefaults = [
     //these are set in videoInit() and almost never change
     { //VAT 0
@@ -84,7 +115,7 @@ export default class BlockRenderer {
         //like refer to blocks they don't actually have, like block
         //34 in Krazoa Palace which isn't anywhere on the disc...
         block.load();
-        //console.log("Shaders", block.shaders);
+        console.log("Shaders", block.shaders);
         this.curBlock = block;
         if(!this.curBlock.renderInstrs) {
             console.error("block has no render instrs", this.curBlock);
@@ -102,9 +133,9 @@ export default class BlockRenderer {
             //used for character models.
             const op = ops.read(4);
             switch(op) {
-                case 1: this._renderOpTexture(whichStream);   break;
-                case 2: this._renderOpCallList();  break;
-                case 3: this._renderOpSetVtxFmt(whichStream); break;
+                case 1: this._renderOpTexture(false);   break;
+                case 2: this._renderOpCallList(false);  break;
+                case 3: this._renderOpSetVtxFmt(false); break;
                 case 0: //unused, but should be same as 4
                 case 4: this._renderOpMatrix();    break;
 
@@ -123,7 +154,7 @@ export default class BlockRenderer {
         }
     }
 
-    _renderOpTexture(whichStream) {
+    _renderOpTexture(isGrass) {
         /** Select a texture and shader.
          *  This can affect how later commands are interpreted.
          */
@@ -131,7 +162,7 @@ export default class BlockRenderer {
         const gl  = this.gx.gl;
         const ops = this.curOps;
         const idx = ops.read(6);
-        if(whichStream != 'main') return;
+        if(isGrass) return;
 
         this.curShader = this.curBlock.shaders[idx];
         //this.curTexture = this.curBlock.textures[this.curShader.layer[0].texture];
@@ -162,7 +193,7 @@ export default class BlockRenderer {
         }
     }
 
-    _renderOpCallList() {
+    _renderOpCallList(isGrass) {
         /** Call one of the block's display lists.
          */
         const ops = this.curOps;
@@ -170,18 +201,25 @@ export default class BlockRenderer {
         if(this.curBlock.dlists[idx] == undefined) {
             throw new Error(`Calling list ${idx} but max is ${this.curBlock.dlists.length}`);
         }
+
+        if(isGrass) {
+            if(this.curShader && (this.curShader.flags & 0x2000)) return;
+        }
+        //apparently also the ground in animtest!? but it does show up!?
+        //if(this.curShader && (this.curShader.flags & 2)) return; //invisible polys
+
         const dlistData = {
             POS:  this.curBlock.vtxPositions,
             //NRM:  this.curBlock.normals,
             COL0: this.curBlock.vtxColors,
             TEX0: this.curBlock.texCoords,
             TEX1: this.curBlock.texCoords,
-            //TEX2: this.curBlock.texCoords,
-            //TEX3: this.curBlock.texCoords,
-            //TEX4: this.curBlock.texCoords,
-            //TEX5: this.curBlock.texCoords,
-            //TEX6: this.curBlock.texCoords,
-            //TEX7: this.curBlock.texCoords,
+            TEX2: this.curBlock.texCoords,
+            TEX3: this.curBlock.texCoords,
+            TEX4: this.curBlock.texCoords,
+            TEX5: this.curBlock.texCoords,
+            TEX6: this.curBlock.texCoords,
+            TEX7: this.curBlock.texCoords,
             _debug: {
                 shader:    this.curShader,
                 shaderIdx: this.curShaderIdx,
@@ -207,43 +245,48 @@ export default class BlockRenderer {
         }
     }
 
-    _renderOpSetVtxFmt(whichStream) {
+    _renderOpSetVtxFmt(isGrass) {
         /** Change the vertex data format.
          */
         const INDEX8 = 2, INDEX16 = 3;
         const ops    = this.curOps;
         let posSize  = ops.read(1) ? INDEX16 : INDEX8;
-        //for character models, 1 bit for normals here.
-        //map blocks don't have normals.
-        let colSize  = ops.read(1) ? INDEX16 : INDEX8;
+        let colSize=0, nrmSize=0;
+        //only for character models; maps don't have normals
+        //if((!this.curShader) || this.curShader.attrFlags & 1) {
+        //    nrmSize = ops.read(1) ? INDEX16 : INDEX8;
+        //}
+        //noclip has this but it doesn't match what I see in the code
+        //and doesn't seem to work (???)
+        //if((!this.curShader) || (this.curShader.attrFlags & 2)) {
+            colSize = ops.read(1) ? INDEX16 : INDEX8;
+        //}
         let texSize  = ops.read(1) ? INDEX16 : INDEX8;
+        if(isGrass) return;
 
         let TEX = [0, 0, 0, 0, 0, 0, 0, 0];
-        if(whichStream == 'main') {
-            if(this.curShader && !(this.curShader.flags & 0x80000000)) {
-                for(let i=0; i<this.curShader.nLayers; i++) {
-                    TEX[i] = texSize;
-                }
+        if(this.curShader && !(this.curShader.flags & 0x80000000)) {
+            for(let i=0; i<this.curShader.nLayers; i++) {
+                TEX[i] = texSize;
             }
-            else TEX[0] = texSize;
         }
+        else TEX[0] = texSize;
 
         if(LogRenderOps) {
             console.log("Set vfmt: pos=%d col=%d tex=%d", posSize, colSize,
-                texSize, whichStream);
+                texSize);
         }
 
         let PNMTXIDX = 0;
         let POS      = posSize;
+        let NRM      = nrmSize;
         let COL      = [colSize, 0];
 
-        if(whichStream == 'main') { //dunno why the game does this
-            this.gx.cp.setReg(0x55, //VCD FMT LO (VAT 5)
-                (POS <<  9) | (COL[0] << 13) | (COL[1] << 15));
-            this.gx.cp.setReg(0x65, //VCD FMT HI (VAT 5)
-                TEX[0] | (TEX[1] <<  2) | (TEX[2] <<  4) | (TEX[3] <<  6) |
-                (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
-        }
+        this.gx.cp.setReg(0x55, //VCD FMT LO (VAT 5)
+            (NRM << 11) | (POS <<  9) | (COL[0] << 13) | (COL[1] << 15));
+        this.gx.cp.setReg(0x65, //VCD FMT HI (VAT 5)
+            TEX[0] | (TEX[1] <<  2) | (TEX[2] <<  4) | (TEX[3] <<  6) |
+            (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
     }
 
     _renderOpMatrix() {

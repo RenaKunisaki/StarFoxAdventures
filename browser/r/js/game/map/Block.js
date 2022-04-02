@@ -163,6 +163,7 @@ export default class Block {
         //read shader data
         const offs = view.byteOffset;
         this.shaders = [];
+        console.assert(Shader.size == 0x44);
         for(let i=0; i<this.header.nShaders; i++) {
             this.shaders.push(Shader.fromBytes(view,
                 offs + this.header.shaders + (i * Shader.size)));
