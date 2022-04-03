@@ -261,15 +261,7 @@ export default class ViewController {
                     E.th(null,'Rot°'),
                     E.td(this.txtRotX), E.td(this.txtRotY), E.td(this.txtRotZ),
                 ),
-                E.tr(
-                    E.th(null, "FOV°"),
-                    E.td(this.txtFov),
-                    E.td(null, " ", {colspan:2}),
-                ),
-                E.tr(
-                    E.th(null, "Near"), E.td(null, this.txtZNear),
-                    E.th(null, "Far"),  E.td(null, this.txtZFar),
-                ),
+
                 E.tr(
                     E.td(this.chkEnableTex, this.lblEnableTex, {colspan:2}),
                     E.td(this.chkWireframe, this.lblWireframe, {colspan:2}),
@@ -279,21 +271,31 @@ export default class ViewController {
             E.details(null, E.summary(null, "Advanced"),
                 E.table(
                     E.tr(
-                        E.th(null, "Front Faces"),
-                        E.td(null,
+                        E.th(null, "FOV°"),
+                        E.td(this.txtFov),
+                        E.td(null, " ", {colspan:2}),
+                    ),
+                    E.tr(
+                        E.th(null, "Near"), E.td(null, this.txtZNear),
+                        E.th(null, "Far"),  E.td(null, this.txtZFar),
+                    ),
+                    E.tr(
+                        E.th(null, "Front Faces", {colspan:2}),
+                        E.td({colspan:2},
                             this.btnFrontFaceCW, this.lblFrontFaceCW,
                             this.btnFrontFaceCCW, this.lblFrontFaceCCW,
                         ),
                     ),
                     E.tr(
-                        E.th(null, "Rotation Axis"),
-                        E.td(null,
+                        E.th(null, "Rotation Axis", {colspan:2}),
+                        E.td({colspan:2},
                             this.btnRotateCam, this.lblRotateCam,
                             this.btnRotateOrg, this.lblRotateOrg,
                         ),
                     ),
                     E.tr(
-                        E.td(this.chkEnableBackface, this.lblEnableBackface, {
+                        E.td({colspan:2},
+                            this.chkEnableBackface, this.lblEnableBackface, {
                             title:"Enable backface culling",
                         }),
                     ),

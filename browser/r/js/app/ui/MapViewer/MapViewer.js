@@ -8,6 +8,7 @@ import BlockRenderer from "../../../game/map/BlockRenderer.js";
 import ViewController from "../gl/ui/ViewController.js";
 import Grid from "./Grid.js";
 import Stats from "./Stats.js";
+import LayerChooser from "./LayerChooser.js";
 
 export default class MapViewer {
     /** Renders map geometry. */
@@ -20,10 +21,18 @@ export default class MapViewer {
         this.eMapList  = null;
         this.map       = null; //current map
         this.curBlock  = null;
+        this.layers    = { //which layers to show
+            mainGeometry: true, //normal geometry
+            waterGeometry: false, //translucent polygons
+            reflectiveGeometry: false, //opaque reflectve polygons
+            hiddenGeometry: false, //normally hidden polygons
+            objects: false, //object positions
+        };
 
-        this.grid      = new Grid(this);
-        this.stats     = new Stats(this);
-        this.eSidebar  = E.div('sidebar');
+        this.grid         = new Grid(this);
+        this.stats        = new Stats(this);
+        this.layerChooser = new LayerChooser(this);
+        this.eSidebar     = E.div('sidebar');
 
         this._prevMousePos  = [0, 0];
         this._mouseStartPos = null;
@@ -61,7 +70,8 @@ export default class MapViewer {
         this.canvas.addEventListener('contextmenu', e => e.preventDefault());
 
         this.eSidebar.append(this.viewController.element,
-            this.stats.element
+            this.layerChooser.element,
+            this.stats.element,
         );
 
         this._reloadMap();
@@ -163,7 +173,22 @@ export default class MapViewer {
         this.curBlock.load(); //ensure block model is loaded
         //console.log("map block", this.curBlock);
         this.gx.beginRender();
-        this.blockRenderer.render(this.curBlock, 'main');
+
+        const params = {
+            showHidden: this.layers.hiddenGeometry,
+            isGrass: false, //draw the grass effect instead of the geometry
+        };
+        if(this.layers.mainGeometry) {
+            this.blockRenderer.render(this.curBlock, 'main', params);
+        }
+        if(this.layers.waterGeometry) {
+            this.blockRenderer.render(this.curBlock, 'water', params);
+        }
+        if(this.layers.reflectiveGeometry) {
+            this.blockRenderer.render(this.curBlock, 'reflective', params);
+        }
+        //XXX objects
+
         //console.log("block render OK", this.gx.stats);
         //this.gx.printStats();
         //console.log("GX logs:", this.gx.program.getLogs());

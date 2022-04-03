@@ -104,40 +104,45 @@ export default class BlockRenderer {
         this.gl = gx.gl;
     }
 
-    render(block, whichStream) {
+    render(block, whichStream, params={}) {
         /** Render the block.
          *  @param {Block} block The block to render.
-         *  @param {string} whichStream One of 'main', 'reflective', 'water',
-         *   telling which render instruction stream to use.
+         *  @param {string} whichStream One of 'main', 'water', 'reflective'
+         *   specifying which bitstream to use.
+         *  @param {object} params Render parameters.
          */
         //console.log("render block", block, "for stream", whichStream);
         //note, this can fail because some maps do silly things
         //like refer to blocks they don't actually have, like block
         //34 in Krazoa Palace which isn't anywhere on the disc...
         block.load();
+
         //console.log("Shaders", block.shaders);
+        this.params   = params;
         this.curBlock = block;
         if(!this.curBlock.renderInstrs) {
             console.error("block has no render instrs", this.curBlock);
             return;
         }
+
         const ops = new BitStreamReader(this.curBlock.renderInstrs[whichStream]);
         this.curOps = ops;
 
         //set initial GX params
         this._setDefaultVtxFmt();
 
+        const isGrass = params.isGrass;
         let done = false;
         while(!done && !ops.isEof) {
             //this is similar but not identical to the render instructions
             //used for character models.
             const op = ops.read(4);
             switch(op) {
-                case 1: this._renderOpTexture(false);   break;
-                case 2: this._renderOpCallList(false);  break;
-                case 3: this._renderOpSetVtxFmt(false); break;
+                case 1: this._renderOpTexture(isGrass);   break;
+                case 2: this._renderOpCallList(isGrass);  break;
+                case 3: this._renderOpSetVtxFmt(isGrass); break;
                 case 0: //unused, but should be same as 4
-                case 4: this._renderOpMatrix();    break;
+                case 4: this._renderOpMatrix(isGrass);    break;
 
                 case null: //reached end of stream
                     console.error("Premature end of stream at bit 0x%s",
@@ -205,8 +210,10 @@ export default class BlockRenderer {
         if(isGrass) {
             if(this.curShader && (this.curShader.flags & 0x2000)) return;
         }
-        //apparently also the ground in animtest!? but it does show up!?
-        //if(this.curShader && (this.curShader.flags & 2)) return; //invisible polys
+        if(!this.params.showHidden) {
+            //don't render hidden polys
+            if(this.curShader && (this.curShader.flags & 2)) return;
+        }
 
         const dlistData = {
             POS:  this.curBlock.vtxPositions,
@@ -289,7 +296,7 @@ export default class BlockRenderer {
             (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
     }
 
-    _renderOpMatrix() {
+    _renderOpMatrix(isGrass) {
         /** Load one of the block's matrices into GX XF registers.
          */
         const ops   = this.curOps;
