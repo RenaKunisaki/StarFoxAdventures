@@ -1,4 +1,8 @@
 import { E } from "../../../../lib/Element.js";
+const CLAMP_ANGLE = r => {
+    while(r < 0) r += 360;
+    return r % 360;
+};
 
 export default class ViewController {
     /** Controls the "camera" of a GL context. */
@@ -10,15 +14,19 @@ export default class ViewController {
     set(params) {
         /** Manually change parameters.
          */
+        //XXX this doesn't always reflect the actual values. eg if we rotate
+        //enough the actual rotation value can be -1 but we'll be displaying
+        //it as 359. not a huge problem but could become one if something
+        //expects these to display the real values...
         if(params.pos) {
             if(params.pos.x != undefined) this.txtPosX.value = params.pos.x;
             if(params.pos.y != undefined) this.txtPosY.value = params.pos.y;
             if(params.pos.z != undefined) this.txtPosZ.value = params.pos.z;
         }
         if(params.rot) {
-            if(params.rot.x != undefined) this.txtRotX.value = params.rot.x;
-            if(params.rot.y != undefined) this.txtRotY.value = params.rot.y;
-            if(params.rot.z != undefined) this.txtRotZ.value = params.rot.z;
+            if(params.rot.x != undefined) this.txtRotX.value = CLAMP_ANGLE(params.rot.x);
+            if(params.rot.y != undefined) this.txtRotY.value = CLAMP_ANGLE(params.rot.y);
+            if(params.rot.z != undefined) this.txtRotZ.value = CLAMP_ANGLE(params.rot.z);
         }
         if(params.scale) {
             if(params.scale.x != undefined) this.txtScaleX.value = params.scale.x;
@@ -143,9 +151,9 @@ export default class ViewController {
         this.context.view.pos.x      = F(this.txtPosX.value);
         this.context.view.pos.y      = F(this.txtPosY.value);
         this.context.view.pos.z      = F(this.txtPosZ.value);
-        this.context.view.rotation.x = F(this.txtRotX.value);
-        this.context.view.rotation.y = F(this.txtRotY.value);
-        this.context.view.rotation.z = F(this.txtRotZ.value);
+        this.context.view.rotation.x = CLAMP_ANGLE(F(this.txtRotX.value));
+        this.context.view.rotation.y = CLAMP_ANGLE(F(this.txtRotY.value));
+        this.context.view.rotation.z = CLAMP_ANGLE(F(this.txtRotZ.value));
         this.context.view.scale.x    = F(this.txtScaleX.value);
         this.context.view.scale.y    = F(this.txtScaleY.value);
         this.context.view.scale.z    = F(this.txtScaleZ.value);
@@ -166,8 +174,10 @@ export default class ViewController {
         this._createMainElement();
     }
 
-    _createNumericEntry(cls, step, val) {
+    _createNumericEntry(cls, step, val, min=null, max=null) {
         const elem = E.input(cls, {type:'number',step:step,value:val});
+        if(min != null) elem.setAttribute('min', min);
+        if(max != null) elem.setAttribute('max', max);
         //input event fires for *every* change.
         //change event only fires when committing, eg pressing Enter.
         elem.addEventListener('input', e => this._onChange(e));
@@ -187,8 +197,8 @@ export default class ViewController {
         this.txtRotX  =F('x angle float',   15,    C.view.rotation.x);
         this.txtRotY  =F('y angle float',   15,    C.view.rotation.y);
         this.txtRotZ  =F('z angle float',   15,    C.view.rotation.z);
-        this.txtFov   =F('fov angle float',  5,    C.fov);
-        this.txtZNear =F('znear coord float',5,    C.zNear);
+        this.txtFov   =F('fov angle float',  5,    C.fov, 1, 360);
+        this.txtZNear =F('znear coord float',0.01, C.zNear);
         this.txtZFar  =F('zfar coord float', 5,    C.zFar);
 
         //checkbox to enable textures

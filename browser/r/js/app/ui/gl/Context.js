@@ -25,7 +25,6 @@ export default class Context {
             //for map viewing)
             //TSR = the rotation is around the origin point (ideal
             //for character model viewing)
-            //XXX add an Advanced view control setting for this.
 
         this._setupCanvas(canvas);
         this._setupExtensions();
@@ -113,7 +112,7 @@ export default class Context {
         this.view = {
             pos:      {x:-10, y:-10, z:-100},
             scale:    {x:1,   y:1,   z:1},
-            rotation: {x:20,  y:20,  z:0}, //degrees
+            rotation: {x:20,  y:120, z:0}, //degrees
         };
     }
 

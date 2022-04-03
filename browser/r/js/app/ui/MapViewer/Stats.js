@@ -8,7 +8,7 @@ export default class Stats {
         this.game      = mapViewer.game;
         this.app       = mapViewer.game.app;
         this._tbl      = E.table();
-        this.element   = E.details('render-stats',
+        this.element   = E.details('render-stats', {open:'open'},
             E.summary(null, "Stats"),
             this._tbl,
         );

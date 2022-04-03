@@ -5,9 +5,9 @@
     left: calc(50% - 20em);
     right: calc(50% - 20em);
     padding: 1em;
-    border: 3px #888 ridge;
-    background-color: rgba(0, 64, 128, 0.75);
-    color: #FFF;
+    border: 3px var(--border-color) ridge;
+    background-color: rgba(2, 74, 92, 0.75);
+    /* color: #FFF; */
     box-shadow: 4px 4px 2px #444;
     text-align: center;
 }

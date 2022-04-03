@@ -7,7 +7,7 @@ export default class LayerChooser {
         this.mapViewer = mapViewer;
         this.game      = mapViewer.game;
         this.app       = mapViewer.game.app;
-        this.element   = E.details('map-layers',
+        this.element   = E.details('map-layers', {open:'open'},
             E.summary(null, "Layers"),
             this._makeElems(),
         );
