@@ -254,10 +254,6 @@ export default class ViewController {
                     E.td(this.txtPosX), E.td(this.txtPosY), E.td(this.txtPosZ),
                 ),
                 E.tr(
-                    E.th(null,'Scale'),
-                    E.td(this.txtScaleX), E.td(this.txtScaleY), E.td(this.txtScaleZ),
-                ),
-                E.tr(
                     E.th(null,'Rot°'),
                     E.td(this.txtRotX), E.td(this.txtRotY), E.td(this.txtRotZ),
                 ),
@@ -270,6 +266,10 @@ export default class ViewController {
 
             E.details(null, E.summary(null, "Advanced"),
                 E.table(
+                    E.tr(
+                        E.th(null,'Scale'),
+                        E.td(this.txtScaleX), E.td(this.txtScaleY), E.td(this.txtScaleZ),
+                    ),
                     E.tr(
                         E.th(null, "FOV°"),
                         E.td(this.txtFov),

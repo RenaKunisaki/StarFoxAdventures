@@ -213,8 +213,8 @@ export default class Context {
         else gl.disable(gl.CULL_FACE);
 
         //clear buffers and render.
-        //gl.enable(gl.BLEND);
-        gl.disable(gl.BLEND);
+        gl.enable(gl.BLEND);
+        //gl.disable(gl.BLEND);
         gl.clearColor(this.clearColor[0], this.clearColor[1],
             this.clearColor[2], this.clearColor[3]);
         //gl.bindFramebuffer(gl.FRAMEBUFFER, null);

@@ -9,10 +9,9 @@
 
 .tabMapView .sidebar, .tabMapView .map-grid {
     position: fixed;
-    top: 4.5em;
+    top: 3.5em;
     background: rgba(0, 0, 0, 0.5);
     color: #FFF;
-    font-size: 0.8em;
     border: 1px #CCC solid;
     overflow: auto;
 }
@@ -23,6 +22,7 @@
 }
 
 .tabMapView summary {
+    font-size: 0.8em;
     background: linear-gradient(#009DF3, #0000F0);
 }
 

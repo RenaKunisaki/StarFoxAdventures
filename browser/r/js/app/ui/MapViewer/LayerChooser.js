@@ -32,22 +32,23 @@ export default class LayerChooser {
 
     _makeElems() {
         /** Build the elements for this widget. */
+        const L = this.mapViewer.layers;
         return E.div(
             this._makeCheck("Main Geometry",
                 e => this._toggleMainGeometry(),
-                "Non-translucent, non-reflective polygons", true),
+                "Non-translucent, non-reflective polygons", L.mainGeometry),
             this._makeCheck("Water Geometry",
                 e => this._toggleWaterGeometry(),
-                "Translucent polygons"),
+                "Translucent polygons", L.waterGeometry),
             this._makeCheck("Reflective Geometry",
                 e => this._toggleReflectiveGeometry(),
-                "Opaque reflective polygons"),
+                "Opaque reflective polygons", L.reflectiveGeometry),
             this._makeCheck("Hidden Geometry",
                 e => this._toggleHiddenGeometry(),
-                "Polygons normally not shown in-game"),
+                "Polygons normally not shown in-game", L.hiddenGeometry),
             this._makeCheck("Objects",
                 e => this._toggleObjects(),
-                "Object positions"),
+                "Object positions", L.objects),
         );
     }
 

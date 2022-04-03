@@ -263,11 +263,9 @@ export default class BlockRenderer {
         //if((!this.curShader) || this.curShader.attrFlags & 1) {
         //    nrmSize = ops.read(1) ? INDEX16 : INDEX8;
         //}
-        //noclip has this but it doesn't match what I see in the code
-        //and doesn't seem to work (???)
-        //if((!this.curShader) || (this.curShader.attrFlags & 2)) {
+        if((!this.curShader) || (this.curShader.attrFlags & 2)) {
             colSize = ops.read(1) ? INDEX16 : INDEX8;
-        //}
+        }
         let texSize  = ops.read(1) ? INDEX16 : INDEX8;
         if(isGrass) return;
 

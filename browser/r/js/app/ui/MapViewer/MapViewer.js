@@ -22,11 +22,11 @@ export default class MapViewer {
         this.map       = null; //current map
         this.curBlock  = null;
         this.layers    = { //which layers to show
-            mainGeometry: true, //normal geometry
-            waterGeometry: false, //translucent polygons
-            reflectiveGeometry: false, //opaque reflectve polygons
-            hiddenGeometry: false, //normally hidden polygons
-            objects: false, //object positions
+            mainGeometry:       true, //normal geometry
+            waterGeometry:      true, //translucent polygons
+            reflectiveGeometry: true, //opaque reflectve polygons
+            hiddenGeometry:     false, //normally hidden polygons
+            objects:            true, //object positions
         };
 
         this.grid         = new Grid(this);
