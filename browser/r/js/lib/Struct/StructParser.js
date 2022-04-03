@@ -2,7 +2,8 @@ import { getXml, hex, int } from "../../Util.js";
 import Struct from "./Struct.js";
 import Field from "./Field.js";
 import { EnumItem, Enum } from "./Enum.js";
-import { Type, types } from "./Type.js";
+import { types } from "./Type.js";
+import Padding from "./Padding.js";
 
 export default class StructParser {
     constructor() {
@@ -139,17 +140,18 @@ export default class StructParser {
     _parseStructField(eField, offset, namespace=null, littleEndian=false) {
         /** Parse one 'field' element for a struct. */
         if(namespace == null) namespace = this.types;
+
+        //get offset
+        let offs = eField.getAttribute('offset');
+        if(offs == undefined) offs = offset;
+
         const field = {
-            offset: offset,
+            offset: offs,
             littleEndian: this._getByteOrder(eField),
             count: int(eField.getAttribute('count'), 1),
             description: null,
             notes: [],
         };
-
-        //get offset
-        let offs = eField.getAttribute('offset');
-        if(offs == undefined) offs = offset;
 
         //get type
         const tName = eField.getAttribute('type');
@@ -170,6 +172,28 @@ export default class StructParser {
         return new Field(field);
     }
 
+    _parsePaddingField(ePadding, offset) {
+        /** Parse one 'padding' element for a struct. */
+        //get offset
+        let offs = ePadding.getAttribute('offset');
+        if(offs == undefined) offs = offset;
+
+        const padding = new Padding({
+            offset: offs,
+            count: int(ePadding.getAttribute('count'), 1),
+            value: int(ePadding.getAttribute('value'), undefined),
+            description: null,
+            notes: [],
+        })
+
+        //get notes
+        for(let child of ePadding.childNodes) {
+            this._parseGenericTag(padding, child);
+        }
+
+        return new Padding(padding);
+    }
+
     parseStruct(eStruct, namespace) {
         /** Parse one 'struct' element. */
         if(namespace == null) namespace = this.types;
@@ -188,13 +212,13 @@ export default class StructParser {
         let offset = 0;
         for(let child of eStruct.childNodes) {
             switch(child.tagName) {
-                case 'padding':
-                    offset += int(child.getAttribute('count'));
-                    //BUG: we still need to create a field or something,
-                    //else this causes the final struct size to be WRONG
-                    //when padding is at the end. (also it would be ideal
-                    //if we could raise a warning when padding isn't zero)
+                case 'padding': {
+                    const field = this._parsePaddingField(child, offset);
+                    offset = field.offset + field.size;
+                    console.assert(!isNaN(field.size));
+                    result.fields.push(field);
                     break;
+                }
 
                 case 'field': {
                     const field = this._parseStructField(

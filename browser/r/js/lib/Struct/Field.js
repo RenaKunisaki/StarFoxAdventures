@@ -46,7 +46,7 @@ export default class Field extends Type {
 
     toBytes(value, view, offset=0, littleEndian=undefined) {
         /** Write this field to a DataView.
-        *  @param value Value to write.
+         *  @param value Value to write.
          *  @param {DataView} data View to write into.
          *  @param {int} offset Byte offset to write to.
          *  @param {bool} littleEndian whether to use little endian byte order.
