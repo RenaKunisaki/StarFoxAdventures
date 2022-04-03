@@ -115,7 +115,7 @@ export default class BlockRenderer {
         //like refer to blocks they don't actually have, like block
         //34 in Krazoa Palace which isn't anywhere on the disc...
         block.load();
-        console.log("Shaders", block.shaders);
+        //console.log("Shaders", block.shaders);
         this.curBlock = block;
         if(!this.curBlock.renderInstrs) {
             console.error("block has no render instrs", this.curBlock);

@@ -39,6 +39,7 @@ export default class MapViewer {
             ),
             this.canvas,
             this.eSidebar,
+            this.grid.element,
         )
         if(!this.context) this._initContext();
     }
@@ -60,7 +61,7 @@ export default class MapViewer {
         this.canvas.addEventListener('contextmenu', e => e.preventDefault());
 
         this.eSidebar.append(this.viewController.element,
-            this.grid.element, this.stats.element
+            this.stats.element
         );
 
         this._reloadMap();

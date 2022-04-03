@@ -129,8 +129,8 @@ export default class Context {
         //fudge factor to make it actually fit on screen.
         const rect = gl.canvas.getBoundingClientRect();
         console.log("GL rect", rect, "win", window.innerWidth, window.innerHeight);
-        gl.canvas.setAttribute('width', window.innerWidth   - (rect.left + 32));
-        gl.canvas.setAttribute('height', window.innerHeight - (rect.top  + 96));
+        gl.canvas.setAttribute('width', window.innerWidth   - (rect.left +  2));
+        gl.canvas.setAttribute('height', window.innerHeight - (rect.top  + 80));
 
         const tStart = performance.now();
         const lol = () => {

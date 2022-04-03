@@ -2,16 +2,24 @@
     border: 1px #888 solid;
 }
 
-.tabMapView .sidebar {
+#tab-mapView {
+    margin: 0;
+    padding: 0;
+}
+
+.tabMapView .sidebar, .tabMapView .map-grid {
     position: fixed;
-    top: 5em;
-    left: 0.5em;
-    bottom: 0;
+    top: 4.5em;
     background: rgba(0, 0, 0, 0.5);
     color: #FFF;
     font-size: 0.8em;
     border: 1px #CCC solid;
     overflow: auto;
+}
+
+.tabMapView .sidebar {
+    left: 0.5em;
+    bottom: 0;
 }
 
 .tabMapView summary {
@@ -22,6 +30,12 @@
     background: none;
 }
 
+.tabMapView .map-grid {
+    right: 0.5em;
+}
+.tabMapView .map-grid td, .tabMapView .map-grid tr {
+    background: none;
+}
 .tabMapView .map-grid td {
     width:       25px;
     height:      25px;
