@@ -334,6 +334,100 @@ A4|AB|ARRAY_BASE  |TexCoord 0..7
 AC|AF|ARRAY_BASE  |IndexRegA..D - general purpose array ptr
 B0|BF|ARRAY_STRIDE|size of each array
 
+## VCD_LO
+Bit|Size|Name    |Description
+---|----|--------|-----------
+  0|   1|PNMTXIDX|Position/Normal Matrix Index (*1)
+  1|   1|T0MIDX  |Texture Coordinate 0 Matrix Index
+  2|   1|T1MIDX  |Texture Coordinate 1 Matrix Index
+  3|   1|T2MIDX  |Texture Coordinate 2 Matrix Index
+  4|   1|T3MIDX  |Texture Coordinate 3 Matrix Index
+  5|   1|T4MIDX  |Texture Coordinate 4 Matrix Index
+  6|   1|T5MIDX  |Texture Coordinate 5 Matrix Index
+  7|   1|T6MIDX  |Texture Coordinate 6 Matrix Index
+  8|   1|T7MIDX  |Texture Coordinate 7 Matrix Index
+  9|   2|POS     |Position value
+ 11|   2|NRM     |Normal or Normal/Binormal/Tangent
+ 13|   2|COL0    |Color0 (Diffused)
+ 15|   2|COL1    |Color1 (Specular)
+
+(*1) position and normal matrices are stored in 2 seperate areas of
+internal XF memory, but there is a one to one correspondence between
+normal and position index. If index 'A' is used for the position,
+then index 'A' needs to be used for the normal as well.
+
+## VCD_HI
+Bit|Size|Name    |Description
+---|----|--------|-----------
+  0|   2|TEX0    |Texture Coordinate 0 Value
+  2|   2|TEX1    |Texture Coordinate 1 Value
+  4|   2|TEX2    |Texture Coordinate 2 Value
+  6|   2|TEX3    |Texture Coordinate 3 Value
+  8|   2|TEX4    |Texture Coordinate 4 Value
+ 10|   2|TEX5    |Texture Coordinate 5 Value
+ 12|   2|TEX6    |Texture Coordinate 6 Value
+ 14|   2|TEX7    |Texture Coordinate 7 Value
+
+VCD entries define the format of the field within the display list itself:
+0: not present
+1: direct (format specified by VAT)
+2: u8 index
+3: u16 index
+Note, matrix indices are only 1 bit, so can't be indexed.
+
+## VAT_A
+Bit|Size|Name        |Description
+---|----|------------|-----------
+  0|   1|POSCNT      |Number of POS values
+  1|   3|POSFMT      |Type of POS values
+  4|   5|POSSHFT     |Shift of POS values
+  9|   1|NRMCNT      |
+ 10|   3|NRMFMT      |
+ 13|   1|COL0CNT     |
+ 14|   3|COL0FMT     |
+ 17|   1|COL1CNT     |
+ 18|   3|COL1FMT     |
+ 21|   1|TEX0CNT     |
+ 22|   3|TEX0FMT     |
+ 25|   5|TEX0SHFT    |
+ 30|   1|BYTEDEQUANT |shift applies to u8/s8 (should always be 1)
+ 31|   1|NORMALINDEX3|1 or 3 idxs per normal
+
+when nine-normals are selected in indirect mode, input will be
+treated as three staggered indices (one per triple biased by
+components size), into normal table (note: first index internally
+biased by 0, second by 1, third by 2)
+
+## VAT_B
+Bit|Size|Name          |Description
+---|----|--------------|-----------
+  0|   1|TEX1CNT       |
+  1|   3|TEX1FMT       |
+  4|   5|TEX1SHFT      |
+  9|   1|TEX2CNT       |
+ 10|   3|TEX2FMT       |
+ 13|   5|TEX2SHFT      |
+ 18|   1|TEX3CNT       |
+ 19|   3|TEX3FMT       |
+ 22|   5|TEX3SHFT      |
+ 27|   1|TEX4CNT       |
+ 28|   3|TEX4FMT       |
+ 31|   1|VCACHE_ENHANCE|must be 1 (or else ???)
+
+## VAT_C
+Bit|Size|Name        |Description
+---|----|------------|-----------
+  0|   5|TEX4SHFT    |
+  5|   1|TEX5CNT     |
+  6|   3|TEX5FMT     |
+  9|   5|TEX5SHFT    |
+ 14|   1|TEX6CNT     |
+ 15|   3|TEX6FMT     |
+ 18|   5|TEX6SHFT    |
+ 23|   1|TEX7CNT     |
+ 24|   3|TEX7FMT     |
+ 27|   5|TEX7SHFT    |
+
 
 # Display list processing
 - Submit the CALL_DL opcode (0x40) followed by pointer to list (u32) and list length in bytes(?) (u32)
@@ -390,3 +484,4 @@ before we even execute the lists we must already know the size of each external 
 
 this is proving much more complicated than expected
 if I just modify the GX sim to be able to return the generated buffers instead of rendering them it should have the same effect much more easily
+but even that seems quite difficult

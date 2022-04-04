@@ -1,6 +1,4 @@
-import DataBuffer from './DataBuffer.js';
 import BinaryFile from '../../../../lib/BinaryFile.js';
-import {hexdump} from '/r/js/Util.js';
 import { VAT_FIELD_ORDER } from './GX.js';
 
 export const DrawOpNames = ['Quads', 'Quads2', 'Tris', 'TriStrip',
