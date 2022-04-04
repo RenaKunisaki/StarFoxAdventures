@@ -6,6 +6,13 @@ import Program from '../Program.js';
 import Texture from '../Texture.js';
 import {get} from '/r/js/Util.js';
 
+//the order the fields appear in in a display list. this never changes.
+export const VAT_FIELD_ORDER = [
+    'PNMTXIDX', 'T0MIDX', 'T1MIDX', 'T2MIDX', 'T3MIDX', 'T4MIDX',
+    'T5MIDX', 'T6MIDX', 'T7MIDX', 'POS', 'NRM', 'COL0', 'COL1',
+    'TEX0', 'TEX1', 'TEX2', 'TEX3', 'TEX4', 'TEX5', 'TEX6',
+    'TEX7'];
+
 export default class GX {
     /** GameCube GPU simulator.
      *  While nowhere near precise enough to be considered an emulator, this
@@ -17,23 +24,14 @@ export default class GX {
         this.context = context;
         this.gl      = context.gl;
         this.blankTexture = new Texture(context);
-        this.blankTexture.makeSolidColor(255, 255, 255, 0);
+        this.blankTexture.makeSolidColor(255, 0, 255, 0);
         //if changing this we need to also add more samplers in the fragment
         //shader and update loadPrograms()
         this.MAX_TEXTURES = 2;
-
-        //the order the fields appear in in a display list.
-        //this never changes, but is here so that other classes can
-        //easily access it.
-        this.vatFieldOrder = [
-            'PNMTXIDX', 'T0MIDX', 'T1MIDX', 'T2MIDX', 'T3MIDX', 'T4MIDX',
-            'T5MIDX', 'T6MIDX', 'T7MIDX', 'POS', 'NRM', 'COL0', 'COL1',
-            'TEX0', 'TEX1', 'TEX2', 'TEX3', 'TEX4', 'TEX5', 'TEX6',
-            'TEX7'];
-        this.cp          = new CP(this);
-        this.xf          = new XF(this);
-        this.vtxBuf      = new VertexBuffer(this);
-        this.dlistParser = new DlistParser(this);
+        this.cp           = new CP(this);
+        this.xf           = new XF(this);
+        this.vtxBuf       = new VertexBuffer(this);
+        this.dlistParser  = new DlistParser(this);
     }
 
     reset() {

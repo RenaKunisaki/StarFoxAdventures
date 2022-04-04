@@ -1,5 +1,7 @@
 import DataBuffer from './DataBuffer.js';
+import BinaryFile from '../../../../lib/BinaryFile.js';
 import {hexdump} from '/r/js/Util.js';
+import { VAT_FIELD_ORDER } from './GX.js';
 
 export const DrawOpNames = ['Quads', 'Quads2', 'Tris', 'TriStrip',
     'TriFan', 'Lines', 'LineStrip', 'Points'];
@@ -31,143 +33,64 @@ export default class DlistParser {
         for(let [field, src] of Object.entries(data)) {
             if(src) {
                 if(field == '_debug') this.data[field] = src;
-                else this.data[field] = new DataBuffer(src);
+                else this.data[field] = new BinaryFile(src);
             }
             else console.error("Field", field, "is", src);
         }
         this.curList = list;
-        this.data.dlist = new DataBuffer(list);
-        //we also store the parsed opcodes for later examination.
-        list.parsedOps = []; //XXX why are we setting properties of ArrayBuffer here?
-        const dl = this.data.dlist;
-        while(!dl.isEof) {
-            const opcode = dl.nextU8();
-            //console.log("DL %s op %s", (dl.offset-1).toString(16), opcode.toString(16));
+        const dl = new BinaryFile(list);
+        this.data.dlist = dl;
+        while(!dl.isEof()) {
+            const opcode = dl.readU8();
             if(opcode >= 0x80 && opcode < 0xC0) {
                 this.op_draw(opcode);
             }
             else switch(opcode) {
-                case 0x00: { //NOP
-                    let lastOp = null;
-                    if(list.parsedOps.length) {
-                        //if the previous op was also a NOP, condense them.
-                        lastOp = list.parsedOps[list.parsedOps.length-1];
-                        if(lastOp.op != 'NOP') lastOp = null;
-                    }
-                    if(lastOp) lastOp.length++;
-                    else list.parsedOps.push({
-                        op:     'NOP',
-                        offset: dl.offset - 1,
-                        length: 1,
-                    });
-                    break;
-                }
+                case 0x00: break; //NOP
                 case 0x08: { //load CP reg
-                    const reg = dl.nextU8();
-                    const val = dl.nextU32();
-                    list.parsedOps.push({
-                        op:     'LoadCP',
-                        offset: dl.offset - 6,
-                        length: 6,
-                        params: {reg:reg, val:val},
-                    });
+                    const reg = dl.readU8();
+                    const val = dl.readU32();
                     console.log("SET CP %s to %s",
                         reg.toString(16), val.toString(16));
                     this.gx.cp.setReg(reg, val);
                     break;
                 }
                 case 0x10: { //load XF reg
-                    const start  = dl.offset - 1;
-                    const count  = (dl.nextU16() & 0xF) + 1;
-                    const offs   = dl.nextU16();
-                    const params = [];
+                    const count  = (dl.readU16() & 0xF) + 1;
+                    const offs   =  dl.readU16();
                     for(let i=0; i<count; i++) {
-                        const val = dl.nextU32();
-                        params.push(val);
-                        this.gx.xf.setReg(i+offs, val);
+                        this.gx.xf.setReg(i+offs, dl.readU32());
                     }
-                    list.parsedOps.push({
-                        op:     'LoadXF',
-                        offset: start,
-                        length: dl.offset - start,
-                        params: {reg:offs, data:params},
-                    });
                     break;
                 }
                 case 0x20:   //load IndxA (position mtx)
                 case 0x28:   //load IndxB (normal mtx)
                 case 0x30:   //load IndxC (post mtxs)
                 case 0x38: { //load IndxD (lights)
-                    const start = dl.offset - 1;
-                    const idx   = dl.nextU16();
-                    let   offs  = dl.nextU16();
+                    const idx   = dl.readU16();
+                    let   offs  = dl.readU16();
                     const size  = (offs >> 12) + 1;
                     offs = offs & 0x0FFF;
                     //XXX what to do with these?
                     console.log("SET INDX 0x%s offs 0x%s count %d",
                         ((opcode >> 3) - 4).toString(16), offs.toString(16), size);
-                    list.parsedOps.push({
-                        op:     'SetIndx',
-                        offset: dl.offset - 5,
-                        length: 5,
-                        params: {idx:idx, offs:offs, size:size},
-                    });
                     break;
                 }
-                case 0x40: { //call dlist
-                    //XXX can we do anything useful?
-                    let offs = dl.offset - 1;
-                    let addr = dl.nextU32();
-                    let size = dl.nextU32();
-                    console.log("CALL DLIST from %s to %s size %s",
-                        offs.toString(16), addr.toString(16), size.toString(16));
-                    list.parsedOps.push({
-                        op:     'Call',
-                        offset: offs,
-                        length: 9,
-                        params: {addr:addr, size:size},
-                    });
-                    break;
-                }
-                case 0x48: { //Invalidate vtx cache
+                case 0x40: //call dlist (not allowed within a dlist)
+                    throw new Error(`Recursive display list call at offset 0x${hex(listData.tell(),4)}`);
+                case 0x48: //Invalidate vtx cache
                     //nothing to do
-                    list.parsedOps.push({
-                        op:     'InvCache',
-                        offset: dl.offset - 1,
-                        length: 1,
-                    });
                     break;
-                }
                 case 0x61: { //load BP reg
-                    //XXX
-                    const val = dl.nextU32();
-                    console.log("SET BP %s to %s",
-                        (val >> 24).toString(16), (val & 0xFFFFFF).toString(16));
-                    list.parsedOps.push({
-                        op:     'LoadBP',
-                        offset: dl.offset - 5,
-                        length: 5,
-                        params: {reg: val >> 24, val: val & 0xFFFFFF},
-                    });
+                    let val = listData.readU32();
+                    const reg = val >> 24;
+                    val &= 0xFFFFFF;
+                    console.log(`SET BP 0x${hex(reg,2)} to 0x${hex(val,6)}`);
+                    //XXX do something
                     break;
                 }
-                default: {
-                    list.parsedOps.push({
-                        op:     'Unknown',
-                        offset: dl.offset - 1,
-                        length: 1,
-                        params: {op:opcode},
-                    });
-                    console.error("Dlist unknown opcode 0x%s at 0x%s",
-                        opcode.toString(16),
-                        (dl.offset-1).toString(16),
-                        this,
-                        hexdump(this.data.dlist.data));
-                    //throw new Error("Unknown dlist opcode 0x"+
-                    //    opcode.toString(16) + " at 0x"+
-                    //    (dl.offset-1).toString(16));
-                    return;
-                }
+                default:
+                    throw new Error(`Unknown display list opcode 0x${hex(opcode,2)} at offset 0x${hex(listData.tell(),4)}`);
             }
         }
         //console.log("end of list");
@@ -177,26 +100,15 @@ export default class DlistParser {
         /** Execute draw opcode.
          *  Called from execute().
          */
-        const start = this.data.dlist.offset - 1;
         const mode  = (opcode & 0x78) >> 3;
         const vat   = opcode & 7;
-        let   count = this.data.dlist.nextU16();
-        //if(mode < 2) count &= ~3; //hack for truncated quads
+        let   count = this.data.dlist.readU16();
         const vtxs  = [];
         for(let i=0; i<count; i++) {
             const vtx = this._nextVertex(vat);
             vtx.index = i;
             vtxs.push(vtx);
-            //console.log("draw vtx", vtx, this.gx.cp.getState());
         }
-        //console.log("Draw %d vtxs, vat %d, mode", count, vat,
-        //    DrawOpNames[mode], vtxs);
-        this.curList.parsedOps.push({
-            op:     'Draw'+DrawOpNames[mode],
-            offset: start,
-            length: this.data.dlist.offset - start,
-            params: {vat:vat, count:count},
-        });
         this.gx._doDrawOp(mode, vtxs);
     }
 
@@ -210,27 +122,27 @@ export default class DlistParser {
         let r=0, g=0, b=0, a=255;
         switch(format) {
             case 0: { //RGB565
-                let v = src.nextU16();
+                let v = src.readU16();
                 b = ( v        & 0x1F) * (255/31);
                 g = ((v >>  5) & 0x3F) * (255/63);
                 r = ((v >> 11) & 0x1F) * (255/31);
                 break;
             }
             case 1: { //RGB888
-                r = src.nextU8();
-                g = src.nextU8();
-                b = src.nextU8();
+                r = src.readU8();
+                g = src.readU8();
+                b = src.readU8();
                 break;
             }
             case 2: { //RGBX8888
-                r = src.nextU8();
-                g = src.nextU8();
-                b = src.nextU8();
-                src.nextU8(); //discard
+                r = src.readU8();
+                g = src.readU8();
+                b = src.readU8();
+                src.readU8(); //discard
                 break;
             }
             case 3: { //RGBA4444
-                let v = src.nextU16();
+                let v = src.readU16();
                 a = ( v        & 0xF) * (255/15);
                 b = ((v >>  4) & 0xF) * (255/15);
                 g = ((v >>  8) & 0xF) * (255/15);
@@ -238,7 +150,7 @@ export default class DlistParser {
                 break;
             }
             case 4: { //RGBA6666
-                let v = (src.nextU8() << 16) | src.nextU16();
+                let v = (src.readU8() << 16) | src.readU16();
                 a = ( v        & 0x3F) * (255/63);
                 b = ((v >>  6) & 0x3F) * (255/63);
                 g = ((v >> 12) & 0x3F) * (255/63);
@@ -246,10 +158,10 @@ export default class DlistParser {
                 break;
             }
             case 5: { //RGBA8888
-                r = src.nextU8();
-                g = src.nextU8();
-                b = src.nextU8();
-                a = src.nextU8();
+                r = src.readU8();
+                g = src.readU8();
+                b = src.readU8();
+                a = src.readU8();
                 break;
             }
             default:
@@ -271,9 +183,9 @@ export default class DlistParser {
             let val = null;
             switch(format) {
                 //u8, u16 are not valid for normals
-                case 1: val = src.nextS8()  / (1<< 6); break;
-                case 3: val = src.nextS16() / (1<<14); break;
-                case 4: val = src.nextFloat();     break;
+                case 1: val = src.readS8()  / (1<< 6); break;
+                case 3: val = src.readS16() / (1<<14); break;
+                case 4: val = src.readFloat();     break;
                 default:
                     console.error("Invalid format for attribute %s (fmt=%s count=%s)",
                         field, format, count);
@@ -288,24 +200,24 @@ export default class DlistParser {
         //read one (X,Y) or (X,Y,Z) set, depending on count.
         //return as an array [X,Y] or [X,Y,Z]
         const shift  = vcd[field+'SHFT'] || 0; //undefined => 0
-        const format = vcd[field+'FMT']  || 0;
+        const fmt    = vcd[field+'FMT']  || 0;
         const count  = vcd[field+'CNT']  || 0;
         const vals   = [];
         const cntMin = (field.startsWith('TEX') ? 1 : 2);
         for(let i=0; i<count + cntMin; i++) {
             let val = null;
-            switch(format) {
-                case 0: val = src.nextU8();    break;
-                case 1: val = src.nextS8();    break;
-                case 2: val = src.nextU16();   break;
-                case 3: val = src.nextS16();   break;
-                case 4: val = src.nextFloat(); break;
+            switch(fmt) {
+                case 0: val = src.readU8();    break;
+                case 1: val = src.readS8();    break;
+                case 2: val = src.readU16();   break;
+                case 3: val = src.readS16();   break;
+                case 4: val = src.readFloat(); break;
                 default: console.error(
                     "Invalid format for attribute %s (fmt=%s count=%s shift=%s)",
-                    field, format, count, shift);
+                    field, fmt, count, shift);
             }
-            if((format == 0 || format == 1) && vcd.BYTEDEQUANT) val /= (1 << shift);
-            else if(format == 2 || format == 3) val /= (1 << shift);
+            if((fmt == 0 || fmt == 1) && vcd.BYTEDEQUANT) val /= (1 << shift);
+            else if(fmt == 2 || fmt == 3) val /= (1 << shift);
             vals.push(val);
         }
         return vals;
@@ -330,18 +242,20 @@ export default class DlistParser {
         };
         const vcd = this.gx.cp.vcd[vat];
         const dl  = this.data.dlist;
-        for(const field of this.gx.vatFieldOrder) {
+        for(const field of VAT_FIELD_ORDER) {
             const fmt = vcd[field];
             if(field.endsWith('IDX')) { //always 8-bit direct
-                if(fmt) vtx[field] = dl.nextU8();
+                if(fmt) vtx[field] = dl.readU8();
                 //else, no data
             }
             else switch(fmt) {
                 case 0: break; //no data
-                case 1: vtx[field] = this._nextValue(field, dl, vcd); break; //direct
+                case 1: //direct
+                    vtx[field] = this._nextValue(field, dl, vcd);
+                    break;
                 case 2:   //8-bit index
                 case 3: { //16-bit index
-                    const idx = (fmt == 2 ? dl.nextU8() : dl.nextU16());
+                    const idx = (fmt == 2 ? dl.readU8() : dl.readU16());
                     const src = this.data[field];
                     if(src == null) {
                         //throw new Error("Field is null: " + String(field));
@@ -377,7 +291,7 @@ export default class DlistParser {
             }
         }
         vtx.dataLength = this.data.dlist.offset - vtx.offset;
-        if(!vtx.POS) debugger;
+        console.assert(vtx.POS);
 
         //debug: color by shader ID
         if(this.data._debug) {
@@ -395,14 +309,6 @@ export default class DlistParser {
             //debugColor overrides normal color, but not texture
             //vtx['debugColor'] = c;
         }
-
-        //if(!this.didLogVtx) { //debug: log a vertex for examination
-        //    console.log("Vtx", vtx);
-        //    console.log("VCD", vcd);
-        //    console.log("stride", this.gx.cp.arrayStride);
-        //    console.log("data", this.data);
-        //    this.didLogVtx = true;
-        //}
 
         //keep stats
         if(this.gx.stats.PNMTXIDX[vtx.PNMTXIDX] == undefined) {

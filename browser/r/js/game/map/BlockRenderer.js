@@ -217,7 +217,7 @@ export default class BlockRenderer {
 
         const dlistData = {
             POS:  this.curBlock.vtxPositions,
-            //NRM:  this.curBlock.normals,
+            //NRM:  this.curBlock.normals, //map blocks don't have normals
             COL0: this.curBlock.vtxColors,
             TEX0: this.curBlock.texCoords,
             TEX1: this.curBlock.texCoords,

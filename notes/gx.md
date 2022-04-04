@@ -2,13 +2,61 @@
 
 Op|Name       |Params               |Description
 --|-----------|---------------------|-----------
+00|NOP        |none                 |No Operation
 08|LOAD_CP_REG|rr vvvvvvvv          |CP REG rr = vvvvvvvv
-10|LOAD_XF_REG|nnnn aaaa vvvvvvvv...|Write XF regs
-61|LOAD_BP_REG|vvvvvvvv             |write vvvvvvvv to BP
+10|LOAD_XF_REG|nnnn aaaa vvvvvvvv...|write n+1 u32 values to XF regs a, a+1...
+20|LOAD_INDX_A|?                    |
+28|LOAD_INDX_B|?                    |
+30|LOAD_INDX_C|?                    |
+38|LOAD_INDX_D|?                    |
+40|CALL_DL    |aaaaaaaa ssssssss    |Call display list, address a, length s
+48|INVAL_CACHE|?                    |Invalidate vertex cache
+61|LOAD_BP_REG|vvvvvvvv             |write vvvvvvvv to BP ("SU_ByPassCmd")
 
-## Write XF regs:
-10 nnnn aaaa vvvvvvvv vvvvvvvv...
-write nnnn+1 values (32 bits each) to XF regs starting at reg aaaa
+## Drawing Commands
+Opcodes 0x80 and above are drawing commands. The low 3 bits specify which VAT to use. The other bits specify the drawing mode.
+
+Op|Name      |Description
+--|----------|-----------
+80|QUADS     |Draws pairs of tris sharing an edge (need not be coplanar)
+88|QUADS2    |Same as QUADS, not normally used
+90|TRIANGLES |Draw individual triangles
+98|TRI_STRIP |Each triangle (after 1st) shares an edge with previous
+A0|TRI_FAN   |Like TRI_STRIP but also sharing 1st vtx (eg a,b,c; a,c,d; a,d,e...)
+A8|LINES     |Draw individual lines
+B0|LINE_STRIP|Draw several connected vertices
+B8|POINTS    |Draw individual points
+
+After every draw opcode is number of vertices (u16) then vertex data.
+
+### Vertex Data
+For each vertex the fields are in a fixed order. The VCD tells whether each field is omitted, direct, or indexed; the VAT tells the data type of the field.
+
+F#|Name      |Description
+--|----------|------------
+ 0|PNMTXIDX  |Position/Normal Matrix Index
+ 1|TEX0MTXIDX|Texture 0 Matrix Index
+ 2|TEX1MTXIDX|Texture 1 Matrix Index
+ 3|TEX2MTXIDX|Texture 2 Matrix Index
+ 4|TEX3MTXIDX|Texture 3 Matrix Index
+ 5|TEX4MTXIDX|Texture 4 Matrix Index
+ 6|TEX5MTXIDX|Texture 5 Matrix Index
+ 7|TEX6MTXIDX|Texture 6 Matrix Index
+ 8|TEX7MTXIDX|Texture 7 Matrix Index
+ 9|POS       |Position Vector
+10|NRM       |Normal or NBT - Binormal vector (T, B)
+11|CLR0      |Color0 (Diffused)
+12|CLR1      |Color1 (Specular)
+13|TEX0      |Texture 0 data
+14|TEX1      |Texture 1 data
+15|TEX2      |Texture 2 data
+16|TEX3      |Texture 3 data
+17|TEX4      |Texture 4 data
+18|TEX5      |Texture 5 data
+19|TEX6      |Texture 6 data
+20|TEX7      |Texture 7 data
+
+Notice that the Position/Normal and Texture Matrix Indices are different from the other data in that they are 8 bit and must always be sent as direct data.
 
 # BP Regs
 R#|Name               |Description
@@ -285,3 +333,60 @@ A0|A3|ARRAY_BASE  |Vtxs, Normals, Color0, Color1
 A4|AB|ARRAY_BASE  |TexCoord 0..7
 AC|AF|ARRAY_BASE  |IndexRegA..D - general purpose array ptr
 B0|BF|ARRAY_STRIDE|size of each array
+
+
+# Display list processing
+- Submit the CALL_DL opcode (0x40) followed by pointer to list (u32) and list length in bytes(?) (u32)
+- Bytes are automatically read from the given address and handled the same as if they had been written to the FIFO manually, so you can have any opcode in a display list
+    - Exception: you cannot call a list from another list
+        - (what happens if you do? no idea)
+
+Drawing:
+- for n=0 to #vtxs:
+    - read vtx according to VCD/VAT
+    - draw vtx
+notes:
+    - VCD/VAT can never change during a draw op
+    - there are 8 sets of VCDs and 8 sets of VATs
+    - VCD and VAT are paired (if using VAT n, you're also using VCD n)
+    - thus there are max 8 possible data formats at once
+        - they can be changed between draw ops
+    - vtx attr data can be in separate buffers or directly in the dlist
+        - or omitted entirely
+        - in both cases, can be in various formats (float, s16, s8...)
+            - possible formats depend on the attribute
+
+so for shaders we can use a few approaches:
+- have them use one format and convert the buffers to that format when they're selected
+    - similar to what we do now but without duplicating vtxs
+    - only need to do it when first loading, not every frame
+    - could have dlist parser just build buffers, not render them
+- give them the raw buffer data and VAT/VCD data and let them read it as needed
+    - complex
+    - maybe slow
+    - complicated with direct attrs (ie in the dlist itself)
+        - can present the dlist itself as an interleaved buffer?
+- bind several attrs to the same buffer with different types
+    - eg: vtxpos_float, vtxpos_s16...
+    - might be too many variations?
+
+let's go with just converting everything to float
+- what buffers does parser need to create/fill?
+    - PNMTXIDX
+    - TEXnMTXIDX (n=0..7)
+    - POS
+    - NRM
+    - CLRn (n=0..1)
+    - TEXn (n=0..7)
+    - vtx index buffer (which vtxs to draw)
+    - list of draw ops
+        - eg: "3 triangles starting at entry 42 in the index buffer"
+
+how should we handle direct attrs?
+we can just append them to the data buffers but that kinda defeats the purpose of using indexed buffers...
+could append them to separate data buffers, then concat them at the end, but that means going back through all the indices and adjusting them
+since we know the formats we know whether the buffer data should be coming from an external buffer or the embedded params.
+before we even execute the lists we must already know the size of each external buffer, so we can convert them ahead of time.
+
+this is proving much more complicated than expected
+if I just modify the GX sim to be able to return the generated buffers instead of rendering them it should have the same effect much more easily
