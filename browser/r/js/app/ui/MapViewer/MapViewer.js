@@ -120,13 +120,24 @@ export default class MapViewer {
         }
         this.map = map;
         this.curBlock = this._findABlock();
+        this.grid.refresh();
+        this._updatedStats = false;
         this.redraw();
     }
 
     redraw() {
-        this.grid.refresh();
-        this.context.redraw();
-        this.stats.refresh();
+        if(this._pendingDraw) return;
+        this._pendingDraw = true;
+        window.requestAnimationFrame(() => {
+            this._pendingDraw = false;
+            //this.grid.refresh();
+            this.context.redraw();
+            //this.stats.refresh();
+            if(!this._updatedStats) {
+                this._updatedStats = true;
+                this.stats.refresh();
+            }
+        });
     }
 
     _findABlock() {
