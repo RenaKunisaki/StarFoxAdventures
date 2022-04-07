@@ -1,5 +1,7 @@
 import BitStreamReader from '../BitStreamReader.js';
 import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
+import DlistParser from '../../app/ui/gl/gx/NewDlistParser.js';
+import RenderBatch from '../../app/ui/gl/gx/RenderBatch.js';
 
 const LogRenderOps = false;
 
@@ -102,30 +104,24 @@ export default class BlockRenderer {
     constructor(gx) {
         this.gx = gx;
         this.gl = gx.gl;
+        this.dlistParser = new DlistParser(gx);
     }
 
-    render(block, whichStream, params={}) {
-        /** Render the block.
+    parse(block, whichStream, params={}) {
+        /** Parse the display lists.
          *  @param {Block} block The block to render.
          *  @param {string} whichStream One of 'main', 'water', 'reflective'
          *   specifying which bitstream to use.
          *  @param {object} params Render parameters.
          */
-        //console.log("render block", block, "for stream", whichStream);
-        //note, this can fail because some maps do silly things
-        //like refer to blocks they don't actually have, like block
-        //34 in Krazoa Palace which isn't anywhere on the disc...
-        block.load();
+        if(!block.load()) return;
+        const key = `${whichStream},${params.isGrass}`;
+        if(block.batchOps[key]) return block.batchOps[key];
 
-        //console.log("Shaders", block.shaders);
-        this.params   = params;
-        this.curBlock = block;
-        if(!this.curBlock.renderInstrs) {
-            console.error("block has no render instrs", this.curBlock);
-            return;
-        }
+        this.curBatch = new RenderBatch(this.gx);
+        block.batchOps[key] = this.curBatch;
 
-        const ops = new BitStreamReader(this.curBlock.renderInstrs[whichStream]);
+        const ops = new BitStreamReader(block.renderInstrs[whichStream]);
         this.curOps = ops;
 
         //set initial GX params
@@ -157,6 +153,30 @@ export default class BlockRenderer {
                         (ops.offset-4).toString(16));
             }
         }
+        return block.batchOps[key];
+    }
+
+    render(block, whichStream, params={}) {
+        /** Render the block.
+         *  @param {Block} block The block to render.
+         *  @param {string} whichStream One of 'main', 'water', 'reflective'
+         *   specifying which bitstream to use.
+         *  @param {object} params Render parameters.
+         */
+        this.curBlock = block;
+        this.params   = params;
+        const batch = this.parse(block, whichStream, params);
+        if(!batch) return;
+        this.gx.reset();
+        this.gx.beginRender();
+        const ctx = this.gx.context;
+        const stats = batch.execute(this.gx.programInfo, {
+            projection: ctx.matProjection,
+            modelView:  ctx.matModelView,
+            normal:     ctx.matNormal,
+        });
+        this.gx.gl.flush();
+        //console.log("render stats for stream", whichStream, stats);
     }
 
     _renderOpTexture(isGrass) {
@@ -179,8 +199,10 @@ export default class BlockRenderer {
         }
 
         if(this.curShader) {
-            if(this.curShader.flags & 8) gl.enable(gl.CULL_FACE);
-            else gl.disable(gl.CULL_FACE);
+            if(this.curShader.flags & 8) {
+                this.curBatch.addFunction(() => gl.enable(gl.CULL_FACE));
+            }
+            else this.curBatch.addFunction(() => gl.disable(gl.CULL_FACE));
         }
 
         const nLayers = this.curShader ? this.curShader.nLayers : 0;
@@ -192,10 +214,17 @@ export default class BlockRenderer {
                     tex = this.curBlock.textures[idx];
                 }
             }
-            gl.activeTexture(gl.TEXTURE0 + i);
-            tex.bind();
-            gl.uniform1i(gx.programInfo.uniforms.uSampler[i], i);
+            this.curBatch.addFunction(this._makeSetTextureCmd(i, tex));
         }
+    }
+
+    _makeSetTextureCmd(slot, tex) {
+        const gl = this.gl;
+        return () => {
+            gl.activeTexture(gl.TEXTURE0 + slot);
+            tex.bind();
+            gl.uniform1i(this.gx.programInfo.uniforms.uSampler[slot], slot);
+        };
     }
 
     _renderOpCallList(isGrass) {
@@ -227,17 +256,19 @@ export default class BlockRenderer {
             TEX5: this.curBlock.texCoords,
             TEX6: this.curBlock.texCoords,
             TEX7: this.curBlock.texCoords,
-            _debug: {
+            /* _debug: {
                 shader:    this.curShader,
                 shaderIdx: this.curShaderIdx,
                 textureIdx:[
                     this.curShader ? this.curShader.layer[0].texture : null,
                     this.curShader ? this.curShader.layer[1].texture : null,
                 ],
-            },
+            }, */
         };
         if(LogRenderOps) console.log("Execute list", idx);
-        this.gx.executeDisplayList(this.curBlock.dlists[idx].data, dlistData);
+        //this.gx.executeDisplayList(this.curBlock.dlists[idx].data, dlistData);
+        this.curBatch.addFunction(
+            this.dlistParser.parse(this.curBlock.dlists[idx].data, dlistData));
         if(LogRenderOps) {
             console.log("executed list", this.curBlock.dlists[idx].data);
         }
@@ -302,8 +333,9 @@ export default class BlockRenderer {
         const mtxs  = [];
         for(let i=0; i<count; i++) {
             //can't read more than 24 bits at once
-            mtxs.push(ops.read(8))
+            mtxs.push(ops.read(8)); //idxs into mtxs (XXX where are they?)
         }
+        //XXX which XF reg do we write to?
         if(LogRenderOps) console.log("init %d mtxs", count, mtxs);
     }
 }

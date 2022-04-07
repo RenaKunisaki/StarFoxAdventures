@@ -22,7 +22,8 @@ export default class Block {
         this.sub    = (val >> 17) & 0x003F;
         this.unk2   =  val        & 0x01FF;
         this.header = null;
-        this._triedLoad = false;
+        this._triedLoad = undefined;
+        this.batchOps = {}; //filled in by BlockRenderer
 
         //the game does this for some reason
         if(this.mod >= 5 && this.mod < 255) this.mod++;
@@ -37,17 +38,21 @@ export default class Block {
     }
 
     load() {
-        /** Load the block model from disc. */
-        if(this._triedLoad) return;
-        this._triedLoad = true;
-        //even if loading fails, don't try again
+        /** Load the block model from disc.
+         *  @returns {boolean} Whether the block loaded successfully.
+         *  @note It's normal for some blocks to fail to load, since some
+         *   maps have blocks (eg #34) out of bounds, that don't actually
+         *   exist anywhere on the disc.
+         */
+        if(this._triedLoad != undefined) return this._triedLoad;
 
         const path = `/${this.map.dirName}/mod${this.mod}`;
         //console.log(`Loading map block ${this.mod}.${this.sub} from`, path, this);
         const fTab   = this.game.iso.getFile(`${path}.tab`);
         if(!fTab) {
             console.error("File not found", `${path}.tab`);
-            return;
+            this._triedLoad = false;
+            return false;
         }
         const dTab   = fTab.getData();
         const fBlock = new GameFile(this.game.iso.getFile(
@@ -66,6 +71,8 @@ export default class Block {
 
         //XXX read textures
         this.textures = [];
+        this._triedLoad = true;
+        return true;
     }
 
     _loadVtxData(view) {
@@ -85,7 +92,7 @@ export default class Block {
         );
 
         //debug
-        let vtxs=[], colors=[], texCoords=[];
+        /* let vtxs=[], colors=[], texCoords=[];
         for(let i=0; i<this.header.nVtxs; i++) {
             vtxs.push([
                 view.getInt16(offs + this.header.vertexPositions + (i*6)),
@@ -102,9 +109,9 @@ export default class Block {
                 view.getInt16(offs + this.header.vertexTexCoords + (i*4)+2),
             ]);
         }
-        //console.log("vertexPositions", vtxs);
-        //console.log("vertexColors", colors);
-        //console.log("texCoords", texCoords);
+        console.log("vertexPositions", vtxs);
+        console.log("vertexColors", colors);
+        console.log("texCoords", texCoords); */
     }
 
     _loadPolygons(view) {

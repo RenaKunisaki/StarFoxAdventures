@@ -77,7 +77,7 @@ export default class GX {
         const gl = this.gl;
 
         //get shader code and create program
-        const path = '/r/js/app/ui/gl/gx'; //XXX
+        const path = '/r/js/app/ui/gl/gx';
         this.program = new Program(this.context, {
             [gl.VERTEX_SHADER]:   (await get(`${path}/vertex.glsl`))  .responseText,
             [gl.FRAGMENT_SHADER]: (await get(`${path}/fragment.glsl`)).responseText,
@@ -87,11 +87,11 @@ export default class GX {
         this.programInfo = {
             program: this.program,
             attribs: {
-                vtxPos:      this.program.getAttribLocation('vtxPos'),
-                vtxColor:    this.program.getAttribLocation('vtxColor'),
-                vtxNormal:   this.program.getAttribLocation('vtxNormal'),
-                vtxId:       this.program.getAttribLocation('vtxId'),
-                vtxTexCoord: this.program.getAttribLocation('vtxTexCoord'),
+                POS:  this.program.getAttribLocation('vtxPos'),
+                COL0: this.program.getAttribLocation('vtxColor'),
+                NRM:  this.program.getAttribLocation('vtxNormal'),
+                //ID:   this.program.getAttribLocation('vtxId'),
+                TEX0: this.program.getAttribLocation('vtxTexCoord'),
             },
             uniforms: {
                 matProjection: this.program.getUniformLocation('matProjection'),
