@@ -41,6 +41,7 @@ export default class Grid {
                     cell = E.td('block',
                         E.div(null, block.mod), E.div(null, block.sub));
                     if(block == curBlock) cell.classList.add('current');
+                    if(!block.load()) cell.classList.add('invalid');
                     cell.addEventListener('click', e => {
                         this.mapViewer.curBlock = block;
                         this.mapViewer.redraw();

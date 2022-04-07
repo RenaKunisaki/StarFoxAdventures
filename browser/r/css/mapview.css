@@ -48,6 +48,9 @@
 .tabMapView .map-grid td.current {
     background: #009DF3;
 }
+.tabMapView .map-grid td.invalid {
+    background: #800000;
+}
 
 .tabMapView .sidebar tr:first-child th {
     /* override previous rules */
