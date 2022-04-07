@@ -44,8 +44,8 @@ export default class Grid {
                     if(!block.load()) cell.classList.add('invalid');
                     cell.addEventListener('click', e => {
                         this.mapViewer.curBlock = block;
+                        this.mapViewer.reset();
                         this.mapViewer.redraw();
-                        this.refresh();
                     })
                 }
                 else cell = E.td('empty');

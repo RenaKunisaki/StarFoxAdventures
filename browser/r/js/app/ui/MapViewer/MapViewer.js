@@ -120,9 +120,15 @@ export default class MapViewer {
         }
         this.map = map;
         this.curBlock = this._findABlock();
+        this.reset();
+        this.redraw();
+    }
+
+    reset() {
+        /** Reset for displaying another block. */
         this.grid.refresh();
         this._updatedStats = false;
-        this.redraw();
+        this._pendingDraw  = false;
     }
 
     redraw() {
