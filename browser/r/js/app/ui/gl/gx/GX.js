@@ -47,6 +47,10 @@ export default class GX {
         this.gl.uniform1i(this.programInfo.uniforms.useLights, 0);
         this.gl.uniform1i(this.programInfo.uniforms.useTexture, 0);
         this.vtxLog = []; //log all drawn vertices for picker
+        this.resetStats();
+    }
+
+    resetStats() {
         this.stats = {
             nVtxs:     0, //total vtxs sent to GPU
             nPolys:    0, //total polygons drawn

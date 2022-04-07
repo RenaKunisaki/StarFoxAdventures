@@ -195,16 +195,37 @@ export default class MapViewer {
             showHidden: this.layers.hiddenGeometry,
             isGrass: false, //draw the grass effect instead of the geometry
         };
-        if(this.layers.mainGeometry) {
-            this.blockRenderer.render(this.curBlock, 'main', params);
+        const stats = {
+            block: this.curBlock,
+            xMin: 999999, xMax: -999999,
+            yMin: 999999, yMax: -999999,
+            zMin: 999999, zMax: -999999,
+        };
+
+        const streams = [
+            ['main', this.layers.mainGeometry],
+            ['water', this.layers.waterGeometry],
+            ['reflective', this.layers.reflectiveGeometry],
+        ];
+
+        for(const [name, stream] of streams) {
+            this.gx.resetStats();
+            if(stream) {
+                const batch = this.blockRenderer.render(
+                    this.curBlock, name, params);
+                stats.xMin = Math.min(stats.xMin, batch.geomBounds.x[0]);
+                stats.xMax = Math.max(stats.xMax, batch.geomBounds.x[1]);
+                stats.yMin = Math.min(stats.yMin, batch.geomBounds.y[0]);
+                stats.yMax = Math.max(stats.yMax, batch.geomBounds.y[1]);
+                stats.zMin = Math.min(stats.zMin, batch.geomBounds.z[0]);
+                stats.zMax = Math.max(stats.zMax, batch.geomBounds.z[1]);
+            }
+            stats[name] = this.gx.stats;
         }
-        if(this.layers.waterGeometry) {
-            this.blockRenderer.render(this.curBlock, 'water', params);
-        }
-        if(this.layers.reflectiveGeometry) {
-            this.blockRenderer.render(this.curBlock, 'reflective', params);
-        }
+
+        this.gx.resetStats();
         //XXX objects
+        this.stats.updateDrawCounts(stats);
 
         //console.log("block render OK", this.gx.stats);
         //this.gx.printStats();

@@ -31,6 +31,11 @@ export default class RenderBatch {
         this._idxs   = []; //index buffer data
         this.data    = {};
         this.buffers = {}; //GL buffer objects
+        this.geomBounds = {
+            x: [999999, -999999], //[min, max]
+            y: [999999, -999999],
+            z: [999999, -999999],
+        };
         this._isFinished = false;
         for(const field of VAT_FIELD_ORDER) {
             this.data[field] = [];
@@ -123,6 +128,12 @@ export default class RenderBatch {
                 }
                 else this.addFunction(op);
             }
+            this.geomBounds.x[0] = Math.min(this.geomBounds.x[0], func.geomBounds.x[0]);
+            this.geomBounds.x[1] = Math.max(this.geomBounds.x[1], func.geomBounds.x[1]);
+            this.geomBounds.y[0] = Math.min(this.geomBounds.y[0], func.geomBounds.y[0]);
+            this.geomBounds.y[1] = Math.max(this.geomBounds.y[1], func.geomBounds.y[1]);
+            this.geomBounds.z[0] = Math.min(this.geomBounds.z[0], func.geomBounds.z[0]);
+            this.geomBounds.z[1] = Math.max(this.geomBounds.z[1], func.geomBounds.z[1]);
         }
         else this.ops.push(func);
     }
@@ -149,6 +160,12 @@ export default class RenderBatch {
          *  @note Normalizes the attribute data to a consistent
          *   size and type and stores it in the buffers.
          */
+        this.geomBounds.x[0] = Math.min(this.geomBounds.x[0], vtx.POS[0]);
+        this.geomBounds.x[1] = Math.max(this.geomBounds.x[1], vtx.POS[0]);
+        this.geomBounds.y[0] = Math.min(this.geomBounds.y[0], vtx.POS[1]);
+        this.geomBounds.y[1] = Math.max(this.geomBounds.y[1], vtx.POS[1]);
+        this.geomBounds.z[0] = Math.min(this.geomBounds.z[0], vtx.POS[2]);
+        this.geomBounds.z[1] = Math.max(this.geomBounds.z[1], vtx.POS[2]);
         for(const field of VAT_FIELD_ORDER) {
             const count = AttrCounts[field];
             let val = vtx[field];

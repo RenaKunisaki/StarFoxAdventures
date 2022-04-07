@@ -162,6 +162,7 @@ export default class BlockRenderer {
          *  @param {string} whichStream One of 'main', 'water', 'reflective'
          *   specifying which bitstream to use.
          *  @param {object} params Render parameters.
+         *  @returns {RenderBatch} The render batch.
          */
         this.curBlock = block;
         this.params   = params;
@@ -169,6 +170,7 @@ export default class BlockRenderer {
         if(!batch) return;
         this.gx.executeBatch(batch);
         this.gx.gl.flush();
+        return batch;
     }
 
     _renderOpTexture(isGrass) {

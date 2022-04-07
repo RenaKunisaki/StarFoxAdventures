@@ -7,6 +7,11 @@
     padding: 0;
 }
 
+.tabMapView .sidebar .number {
+    font-family: monospace;
+    text-align: right;
+}
+
 .tabMapView .sidebar, .tabMapView .map-grid {
     position: fixed;
     top: 3.5em;
