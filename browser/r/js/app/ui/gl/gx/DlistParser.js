@@ -1,119 +1,242 @@
 import BinaryFile from '../../../../lib/BinaryFile.js';
 import { VAT_FIELD_ORDER } from './GX.js';
-
-export const DrawOpNames = ['Quads', 'Quads2', 'Tris', 'TriStrip',
-    'TriFan', 'Lines', 'LineStrip', 'Points'];
+import RenderBatch from './RenderBatch.js';
 
 export default class DlistParser {
-    /** GameCube GX display list parser.
-     *  This is a companion class of the main GX class.
-     *  Give it a display list, and it parses the list and calls methods of
-     *  the parent GX instance.
-     */
     constructor(gx) {
-        this.gx   = gx;
-        this.data = {
-            dlist: null, //display list being interpreted
-            PNMTXIDX: null, //indexed attribute data
-            T0MIDX:null, T1MIDX:null, T2MIDX:null, T3MIDX:null,
-            T4MIDX:null, T5MIDX:null, T6MIDX:null, T7MIDX:null,
-            POS:   null, NRM:   null, COL0:  null, COL1:  null,
-            TEX0:  null, TEX1:  null, TEX2:  null, TEX3:  null,
-            TEX4:  null, TEX5:  null, TEX6:  null, TEX7:  null,
-        };
+        this.gx = gx;
+        this.gl = gx.gl;
     }
-
-    execute(list, data) {
-        /** Execute display list.
-         *  @param {ArrayBuffer} list List to execute.
-         *  @param {object} data Dict of data sources for attribute array indices.
+    parse(list, buffers) {
+        /** Parse a display list.
+         *  @param {ArrayBuffer} list Display list to parse.
+         *  @param {object} buffers Dict of vertex attribute buffers.
+         *  @returns {RenderBatch} Generated render batch object.
          */
-        for(let [field, src] of Object.entries(data)) {
-            if(src) {
-                if(field == '_debug') this.data[field] = src;
-                else this.data[field] = new BinaryFile(src);
-            }
-            else console.error("Field", field, "is", src);
+        list = new BinaryFile(list);
+        this.buffers = {};
+        for(const [name, buf] of Object.entries(buffers)) {
+            console.assert(buf instanceof ArrayBuffer);
+            this.buffers[name] = new BinaryFile(buf);
         }
-        this.curList = list;
-        const dl = new BinaryFile(list);
-        this.data.dlist = dl;
-        while(!dl.isEof()) {
-            const opcode = dl.readU8();
-            if(opcode >= 0x80 && opcode < 0xC0) {
-                this.op_draw(opcode);
+
+        this.result = new RenderBatch(this.gx);
+        while(!list.isEof()) {
+            const op = list.readU8();
+            if(op >= 0x80 && op <= 0xC0) {
+                this._parseDrawOp(op, list);
             }
-            else switch(opcode) {
+            else switch(op) {
                 case 0x00: break; //NOP
-                case 0x08: { //load CP reg
-                    const reg = dl.readU8();
-                    const val = dl.readU32();
-                    console.log("SET CP %s to %s",
-                        reg.toString(16), val.toString(16));
-                    this.gx.cp.setReg(reg, val);
+                case 0x08: { //LOAD_CP_REG
+                    this.gx.cp.setReg(list.readU8(), list.readU32());
                     break;
                 }
-                case 0x10: { //load XF reg
-                    const count  = (dl.readU16() & 0xF) + 1;
-                    const offs   =  dl.readU16();
-                    for(let i=0; i<count; i++) {
-                        this.gx.xf.setReg(i+offs, dl.readU32());
+                case 0x10: { //LOAD_XF_REG
+                    const nVals = (list.readU16() & 0xF) + 1;
+                    const reg   = list.readU16();
+                    for(let i=0; i<nVals; i++) {
+                        this.gx.xf.setReg(reg+i, list.readU32());
                     }
                     break;
                 }
-                case 0x20:   //load IndxA (position mtx)
-                case 0x28:   //load IndxB (normal mtx)
-                case 0x30:   //load IndxC (post mtxs)
-                case 0x38: { //load IndxD (lights)
+                case 0x20: //LOAD_INDX_A
+                case 0x28: //LOAD_INDX_B
+                case 0x30: //LOAD_INDX_C
+                case 0x38: { //LOAD_INDX_D
                     const idx   = dl.readU16();
                     let   offs  = dl.readU16();
                     const size  = (offs >> 12) + 1;
                     offs = offs & 0x0FFF;
                     //XXX what to do with these?
-                    console.log("SET INDX 0x%s offs 0x%s count %d",
-                        ((opcode >> 3) - 4).toString(16), offs.toString(16), size);
                     break;
                 }
-                case 0x40: //call dlist (not allowed within a dlist)
-                    throw new Error(`Recursive display list call at offset 0x${hex(listData.tell(),4)}`);
-                case 0x48: //Invalidate vtx cache
-                    //nothing to do
-                    break;
-                case 0x61: { //load BP reg
+                case 0x40: //CALL_DL
+                    //we're already parsing a dlist so this is invalid
+                    throw new Error(`Recursive display list call at offset 0x${hex(list.tell(),4)}`);
+                case 0x48: //INVAL_CACHE
+                    break; //nothing to do
+
+                case 0x61: { //LOAD_BP_REG
                     let val = listData.readU32();
                     const reg = val >> 24;
                     val &= 0xFFFFFF;
-                    console.log(`SET BP 0x${hex(reg,2)} to 0x${hex(val,6)}`);
-                    //XXX do something
+                    //this.regs.bp[reg] = val; XXX
                     break;
                 }
                 default:
-                    throw new Error(`Unknown display list opcode 0x${hex(opcode,2)} at offset 0x${hex(listData.tell(),4)}`);
+                    throw new Error(`Unknown display list opcode 0x${hex(op,2)} at offset 0x${hex(list.tell(),4)}`);
             }
         }
-        //console.log("end of list");
+        this.result.finish();
+        return this.result;
     }
-
-    op_draw(opcode) {
-        /** Execute draw opcode.
-         *  Called from execute().
+    _parseDrawOp(op, list) {
+        /** Parse a draw operation and add the vertices to this.result.
+         *  @param {integer} op Opcode to parse.
+         *  @param {BinaryFile} list List to read from.
          */
-        const mode  = (opcode & 0x78) >> 3;
-        const vat   = opcode & 7;
-        let   count = this.data.dlist.readU16();
-        const vtxs  = [];
-        for(let i=0; i<count; i++) {
-            const vtx = this._nextVertex(vat);
-            vtx.index = i;
-            vtxs.push(vtx);
+        const vat   = op & 7;
+        const nVtxs = list.readU16();
+        const gl    = this.gl;
+        switch(op & ~7) {
+            case 0x80: case 0x88: this._drawQuads(vat, list, nVtxs);      break;
+            case 0x90: this._drawPolys(vat,list,nVtxs,gl.TRIANGLES);      break;
+            case 0x98: this._drawPolys(vat,list,nVtxs,gl.TRIANGLE_STRIP); break;
+            case 0xA0: this._drawPolys(vat,list,nVtxs,gl.TRIANGLE_FAN);   break;
+            case 0xA8: this._drawPolys(vat,list,nVtxs,gl.LINES);          break;
+            case 0xB0: this._drawPolys(vat,list,nVtxs,gl.LINE_STRIP);     break;
+            case 0xB8: this._drawPolys(vat,list,nVtxs,gl.POINTS);         break;
         }
-        this.gx._doDrawOp(mode, vtxs);
     }
-
-    _nextColor(field, src, vcd) {
-        //read one color value.
-        //return as an array [R, G, B, A].
-        //const shift  = vcd[field+'SHFT'] || 0; //not used for colors
+    _drawQuads(vat, list, nVtxs) {
+        /** Parse a QUADS draw operation.
+         *  @param {integer} vat Which VAT to use.
+         *  @param {BinaryFile} list List to read from.
+         *  @param {integer} nVtxs Number of vertices to read.
+         *  @note Reads vertices and converts to triangles.
+         */
+        const vtxs = [];
+        for(let i=0; i<nVtxs; i += 4) {
+            const v0 = this._readVertex(vat, list);
+            const v1 = this._readVertex(vat, list);
+            const v2 = this._readVertex(vat, list);
+            const v3 = this._readVertex(vat, list);
+            vtxs.push(v0, v1, v2, v1, v2, v3);
+        }
+        this._drawPoly(this.gl.TRIANGLES, ...vtxs);
+    }
+    _drawPolys(vat, list, nVtxs, mode) {
+        /** Parse a draw operation other than QUADS.
+         *  @param {integer} vat Which VAT to use.
+         *  @param {BinaryFile} list List to read from.
+         *  @param {integer} nVtxs Number of vertices to read.
+         *  @param {integer} mode Which GL drawing mode to use.
+         */
+        const vtxs = [];
+        for(let i=0; i<nVtxs; i++) {
+            vtxs.push(this._readVertex(vat, list));
+        }
+        this.result.addVertices(mode, ...vtxs);
+    }
+    _readVertex(vat, list) {
+        /** Read a vertex from the display list.
+         *  @param {integer} vat Which VAT to use.
+         *  @param {BinaryFile} list List to read from.
+         *  @returns {object} The vertex attributes.
+         */
+        const vtx = {};
+        const vcd = this.gx.cp.vcd[vat];
+        for(const field of VAT_FIELD_ORDER) {
+            const fmt = vcd[field];
+            let val = null;
+            switch(fmt) {
+                case 0: break; //no data
+                case 1: //direct
+                    val = this._readAttr(field, list, vcd);
+                    break;
+                case 2:   //8-bit index
+                case 3: { //16-bit index
+                    const idx = (fmt == 2 ? list.readU8() : list.readU16());
+                    const src = this.buffers[field];
+                    if(src != null) {
+                        let stride = this.gx.cp.arrayStride[field];
+                        if(stride == undefined) {
+                            console.error("No array stride for field", field);
+                            stride = 1;
+                        }
+                        else if(stride == 0) {
+                            console.warn("Array stride is zero for field", field);
+                        }
+                        else if(stride < 0) {
+                            console.error("Negative array stride for field", field);
+                            stride = 1;
+                        }
+                        src.seek(idx * stride);
+                        val = this._readAttr(field, src, vcd);
+                    }
+                }
+            }
+            vtx[field] = val;
+        }
+        return vtx;
+    }
+    _readAttr(field, src, vcd) {
+        /** Read an attribute value from the given source.
+         *  @param {string} field Attribute name to read.
+         *  @param {BinaryFile} src Source to read from.
+         *  @param {object} vcd The VCD to use.
+         *  @returns {Array} Attribute value.
+         */
+        if(field.startsWith('COL')) return this._readColor(field, src, vcd);
+        else if(field.startsWith('NRM')) return this._readNormal(field, src, vcd);
+        else return this._readCoord(field, src, vcd);
+    }
+    _readCoord(field, src, vcd) {
+        /** Read a coordinate value from the given source.
+         *  @param {string} field Attribute name to read.
+         *  @param {BinaryFile} src Source to read from.
+         *  @param {object} vcd The VCD to use.
+         *  @returns {Array} Either [X,Y] or [X,Y,Z] depending on VCD.
+         */
+        const shift  = vcd[field+'SHFT'] || 0; //undefined => 0
+        const fmt    = vcd[field+'FMT']  || 0;
+        const count  = vcd[field+'CNT']  || 0;
+        const vals   = [];
+        const cntMin = (field.startsWith('TEX') ? 1 : 2);
+        for(let i=0; i<count + cntMin; i++) {
+            let val = null;
+            switch(fmt) {
+                case 0: val = src.readU8();    break;
+                case 1: val = src.readS8();    break;
+                case 2: val = src.readU16();   break;
+                case 3: val = src.readS16();   break;
+                case 4: val = src.readFloat(); break;
+                default: console.error(
+                    "Invalid format for attribute %s (fmt=%s count=%s shift=%s)",
+                    field, fmt, count, shift);
+            }
+            if((fmt == 0 || fmt == 1) && vcd.BYTEDEQUANT) val /= (1 << shift);
+            else if(fmt == 2 || fmt == 3) val /= (1 << shift);
+            vals.push(val);
+        }
+        return vals;
+    }
+    _readNormal(field, src, vcd) {
+        /** Read a normal-vector value from the given source.
+         *  @param {string} field Attribute name to read.
+         *  @param {BinaryFile} src Source to read from.
+         *  @param {object} vcd The VCD to use.
+         *  @returns {Array} Either [X,Y,Z] or [X,Y,Z,X,Y,Z,X,Y,Z]
+         *   depending on VCD.
+         */
+        //const shift  = vcd[field+'SHFT'] || 0; //not used for normals
+        const format = vcd[field+'FMT']  || 0; //undefined => 0
+        const count  = vcd[field+'CNT']  || 0;
+        const vals   = [];
+        for(let i=0; i<(count ? 9 : 3); i++) {
+            let val = null;
+            switch(format) {
+                //u8, u16 are not valid for normals
+                case 1: val = src.readS8()  / (1<< 6); break;
+                case 3: val = src.readS16() / (1<<14); break;
+                case 4: val = src.readFloat();     break;
+                default:
+                    console.error("Invalid format for attribute %s (fmt=%s count=%s)",
+                        field, format, count);
+            }
+            vals.push(val);
+        }
+        return vals;
+    }
+    _readColor(field, src, vcd) {
+        /** Read a color value from the given source.
+         *  @param {string} field Attribute name to read.
+         *  @param {BinaryFile} src Source to read from.
+         *  @param {object} vcd The VCD to use.
+         *  @returns {Array} [R, G, B, A].
+         */
+        //const shift  = vat[field+'SHFT'] || 0; //not used for colors
         const format = vcd[field+'FMT']  || 0; //undefined => 0
         const count  = vcd[field+'CNT']  || 0; //XXX how does this work for color?
 
@@ -168,151 +291,5 @@ export default class DlistParser {
                 return null;
         }
         return [r, g, b, a];
-    }
-
-    _nextNormal(field, src, vcd) {
-        //read one or three (X,Y,Z) sets, depending on count.
-        //return as an array [X,Y,Z] or [X,Y,Z,X,Y,Z,X,Y,Z].
-        //const shift  = vcd[field+'SHFT'] || 0; //not used for normals
-        const format = vcd[field+'FMT']  || 0; //undefined => 0
-        const count  = vcd[field+'CNT']  || 0;
-        const vals   = [];
-        for(let i=0; i<(count ? 9 : 3); i++) {
-            let val = null;
-            switch(format) {
-                //u8, u16 are not valid for normals
-                case 1: val = src.readS8()  / (1<< 6); break;
-                case 3: val = src.readS16() / (1<<14); break;
-                case 4: val = src.readFloat();     break;
-                default:
-                    console.error("Invalid format for attribute %s (fmt=%s count=%s)",
-                        field, format, count);
-                    console.log("VCD:", vcd);
-            }
-            vals.push(val);
-        }
-        return vals;
-    }
-
-    _nextCoord(field, src, vcd) {
-        //read one (X,Y) or (X,Y,Z) set, depending on count.
-        //return as an array [X,Y] or [X,Y,Z]
-        const shift  = vcd[field+'SHFT'] || 0; //undefined => 0
-        const fmt    = vcd[field+'FMT']  || 0;
-        const count  = vcd[field+'CNT']  || 0;
-        const vals   = [];
-        const cntMin = (field.startsWith('TEX') ? 1 : 2);
-        for(let i=0; i<count + cntMin; i++) {
-            let val = null;
-            switch(fmt) {
-                case 0: val = src.readU8();    break;
-                case 1: val = src.readS8();    break;
-                case 2: val = src.readU16();   break;
-                case 3: val = src.readS16();   break;
-                case 4: val = src.readFloat(); break;
-                default: console.error(
-                    "Invalid format for attribute %s (fmt=%s count=%s shift=%s)",
-                    field, fmt, count, shift);
-            }
-            if((fmt == 0 || fmt == 1) && vcd.BYTEDEQUANT) val /= (1 << shift);
-            else if(fmt == 2 || fmt == 3) val /= (1 << shift);
-            vals.push(val);
-        }
-        return vals;
-    }
-
-    _nextValue(field, src, vcd) {
-        if(field.startsWith('COL')) return this._nextColor(field, src, vcd);
-        else if(field.startsWith('NRM')) return this._nextNormal(field, src, vcd);
-        else return this._nextCoord(field, src, vcd);
-    }
-
-    _nextVertex(vat) {
-        /** Read vertex data from current offset using format
-         *  specified by current VAT.
-         */
-        const vtx = {
-            //these fields aren't really needed, just for debug.
-            offset:    this.data.dlist.offset,
-            vat:       vat,
-            shader:    this.data.shader,
-            shaderIdx: this.data.shaderIdx,
-        };
-        const vcd = this.gx.cp.vcd[vat];
-        const dl  = this.data.dlist;
-        for(const field of VAT_FIELD_ORDER) {
-            const fmt = vcd[field];
-            if(field.endsWith('IDX')) { //always 8-bit direct
-                if(fmt) vtx[field] = dl.readU8();
-                //else, no data
-            }
-            else switch(fmt) {
-                case 0: break; //no data
-                case 1: //direct
-                    vtx[field] = this._nextValue(field, dl, vcd);
-                    break;
-                case 2:   //8-bit index
-                case 3: { //16-bit index
-                    const idx = (fmt == 2 ? dl.readU8() : dl.readU16());
-                    const src = this.data[field];
-                    if(src == null) {
-                        //throw new Error("Field is null: " + String(field));
-                        vtx[field] = null;
-                    }
-                    else {
-                        let stride = this.gx.cp.arrayStride[field];
-                        if(stride == undefined) {
-                            console.error("No array stride for field", field);
-                            stride = 1;
-                        }
-                        else if(stride == 0) {
-                            console.warn("Array stride is zero for field", field);
-                        }
-                        else if(stride < 0) {
-                            console.error("Negative array stride for field", field);
-                            stride = 1;
-                        }
-                        src.seek(idx * stride);
-                        vtx[field] = this._nextValue(field, src, vcd);
-                    }
-
-                    //DEBUG - record more info for later examination
-                    vtx[field+'_idx']   = idx;
-                    vtx[field+'_fmt']   = fmt;
-                    vtx[field+'_shift'] = vcd[field+'SHFT'];
-                    vtx[field+'_cnt']   = vcd[field+'CNT'];
-                    break;
-                }
-                case undefined:
-                    throw new Error(`VCD format for ${field} is not defined in VAT ${vat}`);
-                default: throw new Error(`BUG: impossible VCD format: ${fmt}`);
-            }
-        }
-        vtx.dataLength = this.data.dlist.offset - vtx.offset;
-        console.assert(vtx.POS);
-
-        //debug: color by shader ID
-        if(this.data._debug) {
-            for(const [k,v] of Object.entries(this.data._debug)) vtx[k] = v;
-            let c = vtx['COL0'];
-            switch(this.data._debug.shaderIdx) {
-                case 0:  c = [255,   0,   0, 255]; break;
-                case 1:  c = [  0, 255,   0, 255]; break;
-                case 2:  c = [  0,   0, 255, 255]; break;
-                case 3:  c = [255,   0, 255, 255]; break;
-                case 4:  c = [255, 255,   0, 255]; break;
-                case 5:  c = [  0, 255, 255, 255]; break;
-                default: c = [255,   0, 255, 255]; break;
-            }
-            //debugColor overrides normal color, but not texture
-            //vtx['debugColor'] = c;
-        }
-
-        //keep stats
-        if(this.gx.stats.PNMTXIDX[vtx.PNMTXIDX] == undefined) {
-            this.gx.stats.PNMTXIDX[vtx.PNMTXIDX] = 0;
-        }
-        this.gx.stats.PNMTXIDX[vtx.PNMTXIDX]++;
-        return vtx;
     }
 }

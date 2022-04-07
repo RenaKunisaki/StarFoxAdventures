@@ -1,5 +1,5 @@
 import { clearElement, E } from "../../../lib/Element.js";
-import { DrawOpNames } from "../gl/gx/DlistParser.js";
+//import { DrawOpNames } from "../gl/gx/DlistParser.js";
 
 export default class Stats {
     /** Widget displaying render stats. */

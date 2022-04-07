@@ -1,6 +1,6 @@
 import BitStreamReader from '../BitStreamReader.js';
 import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
-import DlistParser from '../../app/ui/gl/gx/NewDlistParser.js';
+import DlistParser from '../../app/ui/gl/gx/DlistParser.js';
 import RenderBatch from '../../app/ui/gl/gx/RenderBatch.js';
 
 const LogRenderOps = false;
