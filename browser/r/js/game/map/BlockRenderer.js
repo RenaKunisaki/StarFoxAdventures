@@ -169,14 +169,8 @@ export default class BlockRenderer {
         if(!batch) return;
         this.gx.reset();
         this.gx.beginRender();
-        const ctx = this.gx.context;
-        const stats = batch.execute(this.gx.programInfo, {
-            projection: ctx.matProjection,
-            modelView:  ctx.matModelView,
-            normal:     ctx.matNormal,
-        });
+        this.gx.executeBatch(batch);
         this.gx.gl.flush();
-        //console.log("render stats for stream", whichStream, stats);
     }
 
     _renderOpTexture(isGrass) {

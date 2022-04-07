@@ -5,6 +5,7 @@ import DlistParser from './DlistParser.js';
 import Program from '../Program.js';
 import Texture from '../Texture.js';
 import {get} from '/r/js/Util.js';
+import RenderBatch from './RenderBatch.js';
 
 //the order the fields appear in in a display list. this never changes.
 export const VAT_FIELD_ORDER = [
@@ -48,14 +49,15 @@ export default class GX {
         this.vtxLog = []; //log all drawn vertices for picker
         this.stats = {
             nVtxs:     0, //total vtxs sent to GPU
+            nPolys:    0, //total polygons drawn
             nDrawCmds: 0, //total draw commands issued
-            nDlists:   0, //total display lists executed
-            geomBound: { //min/max value of each vtx axis
-                xMin:  99999999, yMin:  99999999, zMin:  99999999,
-                xMax: -99999999, yMax: -99999999, zMax: -99999999,
-            },
-            PNMTXIDX: {}, //count of each idx
-            drawModeCount: {}, //count of each draw mode (tris, quads...)
+            //nDlists:   0, //total display lists executed
+            //geomBound: { //min/max value of each vtx axis
+            //    xMin:  99999999, yMin:  99999999, zMin:  99999999,
+            //    xMax: -99999999, yMax: -99999999, zMax: -99999999,
+            //},
+            //PNMTXIDX: {}, //count of each idx
+            //drawModeCount: {}, //count of each draw mode (tris, quads...)
         }
     }
 
@@ -63,13 +65,13 @@ export default class GX {
         /** Print stats to console for debug. */
         const S = this.stats;
         console.log("nVtxs=%d nDrawCmds=%d nDlists=%d", S.nVtxs, S.nDrawCmds, S.nDlists);
-        console.log("X bound: %d - %d", S.geomBound.xMin, S.geomBound.xMax);
-        console.log("Y bound: %d - %d", S.geomBound.yMin, S.geomBound.yMax);
-        console.log("Z bound: %d - %d", S.geomBound.zMin, S.geomBound.zMax);
+        //console.log("X bound: %d - %d", S.geomBound.xMin, S.geomBound.xMax);
+        //console.log("Y bound: %d - %d", S.geomBound.yMin, S.geomBound.yMax);
+        //console.log("Z bound: %d - %d", S.geomBound.zMin, S.geomBound.zMax);
         console.log("XF:", this.xf);
         console.log("CP:", this.cp);
-        console.log("PNMTXIDX counts:", S.PNMTXIDX);
-        console.log("Draw mode counts:", S.drawModeCount);
+        //console.log("PNMTXIDX counts:", S.PNMTXIDX);
+        //console.log("Draw mode counts:", S.drawModeCount);
     }
 
     async loadPrograms() {
@@ -123,15 +125,19 @@ export default class GX {
             this.context.lights.directional.vector);
     }
 
-    executeDisplayList(list, data) {
-        /** Execute display list.
-         *  @param {ArrayBuffer} list display list to execute.
-         *  @param {object} data Dict of data sources for attribute array indices.
+    executeBatch(batch) {
+        /** Execute render batch.
+         *  @param {RenderBatch} batch Render batch to execute.
          */
-        this.dlistParser.execute(list, data);
-        //dlistParser will refer back to our fields and call our methods
-        //to perform the commands from the display list.
-        this.stats.nDlists++;
+        const ctx = this.context;
+        const stats = batch.execute(this.programInfo, {
+            projection: ctx.matProjection,
+            modelView:  ctx.matModelView,
+            normal:     ctx.matNormal,
+        });
+        this.stats.nVtxs     += stats.nVtxs;
+        this.stats.nDrawCmds += stats.nOps;
+        this.stats.nPolys    += stats.nPolys;
     }
 
     _recordVtxStats(vtxs) {

@@ -52,7 +52,7 @@ export default class Stats {
             E.tr(E.th(null, 'BlockName'),
                 E.td('string', curBlock.header.name, {colspan:2}),
             ),
-            E.tr(E.th(null, 'X Bound'),
+            /*E.tr(E.th(null, 'X Bound'),
                 E.td('float x-coord coord', stats.geomBound.xMin.toFixed(2)),
                 E.td('float x-coord coord', stats.geomBound.xMax.toFixed(2)),
             ),
@@ -63,15 +63,16 @@ export default class Stats {
             E.tr(E.th(null, 'Z Bound'),
                 E.td('float z-coord coord', stats.geomBound.zMin.toFixed(2)),
                 E.td('float z-coord coord', stats.geomBound.zMax.toFixed(2)),
-            ),
+            ),*/
             Int('VtxsDrawn', stats.nVtxs),
-            Int('Draw Ops', stats.nDrawCmds),
-            Int('Dlists', stats.nDlists),
+            Int('PolysDrawn', stats.nPolys),
+            Int('DrawOps', stats.nDrawCmds),
+            //Int('Dlists', stats.nDlists),
         );
-        for(const [mode, count] of Object.entries(stats.drawModeCount)) {
+        /* for(const [mode, count] of Object.entries(stats.drawModeCount)) {
             this._tbl.append(E.tr(E.th(null, DrawOpNames[mode]),
                 E.td('int', count.toLocaleString(), {colspan:2}),
             ));
-        }
+        } */
     }
 }
