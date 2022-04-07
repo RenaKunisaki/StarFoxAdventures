@@ -167,8 +167,6 @@ export default class BlockRenderer {
         this.params   = params;
         const batch = this.parse(block, whichStream, params);
         if(!batch) return;
-        this.gx.reset();
-        this.gx.beginRender();
         this.gx.executeBatch(batch);
         this.gx.gl.flush();
     }

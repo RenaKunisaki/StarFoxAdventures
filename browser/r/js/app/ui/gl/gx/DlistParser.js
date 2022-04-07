@@ -68,7 +68,7 @@ export default class DlistParser {
                     throw new Error(`Unknown display list opcode 0x${hex(op,2)} at offset 0x${hex(list.tell(),4)}`);
             }
         }
-        this.result.finish();
+        //this.result.finish();
         return this.result;
     }
     _parseDrawOp(op, list) {

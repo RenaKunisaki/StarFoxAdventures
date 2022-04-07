@@ -112,8 +112,10 @@ export default class GX {
         console.log("GX loadPrograms OK");
     }
 
-    beginRender() {
-        /** Reset render state for new frame. */
+    beginRender(mtxs) {
+        /** Reset render state for new frame.
+         *  @param {object} mtxs A dict of matrices to set.
+         */
         const gl = this.gl;
         this.program.use();
         //reset lights to whatever the user set.
@@ -123,18 +125,25 @@ export default class GX {
             this.context.lights.directional.color);
         gl.uniform3fv(this.programInfo.uniforms.dirLightVector,
             this.context.lights.directional.vector);
+
+        gl.uniform1i(this.programInfo.uniforms.useId, 0);
+        gl.uniform1i(this.programInfo.uniforms.useLights,
+            this.context.lights.enabled ? 1 : 0);
+        gl.uniform1i(this.programInfo.uniforms.useTexture,
+            this.context.enableTextures ? 1 : 0);
+
+        const unif = this.programInfo.uniforms;
+        gl.uniformMatrix4fv(unif.matProjection, false, mtxs.projection);
+        gl.uniformMatrix4fv(unif.matModelView,  false, mtxs.modelView);
+        gl.uniformMatrix4fv(unif.matNormal,     false, mtxs.normal);
+
     }
 
     executeBatch(batch) {
         /** Execute render batch.
          *  @param {RenderBatch} batch Render batch to execute.
          */
-        const ctx = this.context;
-        const stats = batch.execute(this.programInfo, {
-            projection: ctx.matProjection,
-            modelView:  ctx.matModelView,
-            normal:     ctx.matNormal,
-        });
+        const stats = batch.execute(this.programInfo);
         this.stats.nVtxs     += stats.nVtxs;
         this.stats.nDrawCmds += stats.nOps;
         this.stats.nPolys    += stats.nPolys;

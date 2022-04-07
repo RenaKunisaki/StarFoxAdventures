@@ -29,7 +29,7 @@ export default class RenderBatch {
         this.gl = gx.gl;
         this.ops = [];
         this._isFinished = false;
-        this._maxVtxs = 0; //most vtxs in one call
+        this._idxs = []; //index buffer data
         this.data = {};
         this.buffers = {}; //GL buffer objects
         for(const field of VAT_FIELD_ORDER) {
@@ -40,15 +40,15 @@ export default class RenderBatch {
         //this._vao = this.gl.createVertexArray();
     }
 
-    execute(programInfo, mtxs) {
+    execute(programInfo, _depth=0) {
         /** Execute the batch operation.
          *  @param {object} programInfo A dict of the shader program's
          *    uniform and attribute objects.
-         *  @param {object} mtxs A dict of matrices to set.
          */
         const gl = this.gl;
         CHECK_ERROR(gl);
         if(!this._isFinished) this.finish();
+        console.assert(_depth < 10);
 
         const stats = {
             nOps:   0, //total operations
@@ -57,11 +57,8 @@ export default class RenderBatch {
         };
 
         //set the matrices and attribute buffers
-        const unif = programInfo.uniforms;
-        gl.uniformMatrix4fv(unif.matProjection, false, mtxs.projection);
-        gl.uniformMatrix4fv(unif.matModelView,  false, mtxs.modelView);
-        gl.uniformMatrix4fv(unif.matNormal,     false, mtxs.normal);
-        CHECK_ERROR(gl);
+        //XXX merge all recursive batches into one big set of buffers
+        //and don't re-bind and re-upload them needlessly.
         this._bindAttrBuffers(programInfo);
 
         //execute the operations
@@ -70,7 +67,7 @@ export default class RenderBatch {
             //console.log("exec batch op", cmd);
             if(typeof(cmd) == 'function') cmd();
             else if(cmd instanceof RenderBatch) {
-                let stats2 = cmd.execute(programInfo, mtxs);
+                let stats2 = cmd.execute(programInfo, _depth+1);
                 for(const [k,v] of Object.entries(stats2)) {
                     stats[k] += v;
                 }
@@ -94,8 +91,8 @@ export default class RenderBatch {
         this.data = result;
 
         //build vtx index buffer
-        console.assert(this._maxVtxs < 65536);
-        this._idxBuf = new Uint16Array(this._maxVtxs);
+        console.assert(this._idxs.length < 65536);
+        this._idxBuf = new Uint16Array(this._idxs);
         this._isFinished = true;
     }
 
@@ -105,7 +102,22 @@ export default class RenderBatch {
          *  @note The function will be called (with no arguments) at the
          *   point it's inserted, whenever the batch is executed.
          */
-        this.ops.push(func);
+        //XXX fix this to avoid excess buffer shit
+        /*if(func instanceof RenderBatch) {
+            const startIdx = this._idxs.length;
+            for(const [field, data] of Object.entries(func.data)) {
+                this.data[field] = this.data[field].concat(data);
+            }
+            for(let op of func.ops) {
+                if(Array.isArray(op)) {
+                    //mode, index, count
+                    let [mode, index, count] = op;
+                    this.ops.push([mode, index+startIdx, count]);
+                }
+                else this.addFunction(op);
+            }
+        }
+        else*/ this.ops.push(func);
     }
 
     addVertices(drawMode, ...vtxs) {
@@ -114,12 +126,13 @@ export default class RenderBatch {
          *  @param {object} vtxs Vertices to draw.
          */
         console.assert(!this._isFinished);
-        this._maxVtxs = Math.max(this._maxVtxs, vtxs.length);
-        const poly = [drawMode];
+        //mode, index, count
+        const poly = [drawMode, this._idxs.length, vtxs.length];
         for(const vtx of vtxs) {
             //since buffers are normalized/padded, all indices are the same
             //for all attributes. we use POS because it has to be present.
-            poly.push(this.data.POS.length / 3); //POS is 3 entries per vtx
+            this._idxs.push(this.data.POS.length / 3);
+            //poly.push(this.data.POS.length / 3); //POS is 3 entries per vtx
             this._storeVertex(vtx);
         }
         this.ops.push(poly);
@@ -153,6 +166,13 @@ export default class RenderBatch {
 
     _bindAttrBuffers(programInfo) {
         const gl = this.gl;
+
+        //XXX
+        //const curBuf = gl.get(gl.ARRAY_BUFFER_BINDING);
+        //for(const buf of Object.values(this.buffers)) {
+        //    if(buf == curBuf) return; //already bound
+        //}
+
         for(const [field, buf] of Object.entries(this.buffers)) {
             const count = AttrCounts[field];
             if(count == undefined) {
@@ -178,40 +198,39 @@ export default class RenderBatch {
             gl.enableVertexAttribArray(attr);
             CHECK_ERROR(gl);
         }
+
+        //vertex index buffer
+        //the way this is currently implemented, the indices are
+        //always N, N+1, N+2... so we could use gl.drawArrays()
+        //instead. however I might change this in the future.
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._idxBufObj);
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this._idxBuf, gl.STATIC_DRAW);
+        CHECK_ERROR(gl);
     }
 
     _doDrawOp(cmd, stats) {
         const gl = this.gl;
-        //the way this is currently implemented, the indices are
-        //always N, N+1, N+2... so we could use gl.drawArrays()
-        //instead. however I might change this in the future.
-        for(let i=1; i<cmd.length; i++) {
-            this._idxBuf[i-1] = cmd[i];
-        }
-
-        //debug
-        /* const vals = {};
-        for(const field of VAT_FIELD_ORDER) {
-            const data = this.data[field];
-            vals[field] = [];
-            let count = AttrCounts[field];
-            for(let i=1; i<cmd.length; i++) {
-                for(let j=0; j<count; j++) {
-                    vals[field].push(data[(cmd[i]*count)+j]);
-                }
-            }
-        }
-        console.log("render op", cmd, vals); */
-
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._idxBufObj);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this._idxBuf, gl.STATIC_DRAW);
-        //let size = gl.getBufferParameter(gl.ELEMENT_ARRAY_BUFFER, gl.BUFFER_SIZE);
-        //we may be able to use bufferSubData() on subsequent calls
-        //to improve performance.
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._idxBufObj);
-        gl.drawElements(cmd[0], cmd.length-1, gl.UNSIGNED_SHORT, 0);
+        const [mode, index, count] = cmd;
+        //index * sizeof(unsigned short)
+        gl.drawElements(mode, count, gl.UNSIGNED_SHORT, index*2);
+        CHECK_ERROR(gl);
         //gl.drawArrays(cmd[0], cmd[1], cmd.length - 1);
         stats.nPolys++;
         stats.nVtxs += cmd.length - 1;
+        /* for future reference:
+        "vertex buffer not big enough for draw call" means one of the
+        indices in the buffer is beyond the number of items in the
+        attribtue buffers.
+        supposedly there's bugs in some platforms that cause this when
+        using DYNAMIC_DRAW as well?
+        "insufficient buffer size" means index and/or count exceed the
+        number of elements in the index buffer.
+        having nothing drawn might mean all zeroes were passed for colors
+        and blending is enabled (everything is invisible), or that your
+        viewport's size is zero because you didn't wait for the canvas
+        to be actually laid out and given a size before reading its size,
+        or that culling and/or depth testing are hiding everything.
+        */
     }
 }
