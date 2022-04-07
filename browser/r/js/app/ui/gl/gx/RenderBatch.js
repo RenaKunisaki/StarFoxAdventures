@@ -25,19 +25,18 @@ export default class RenderBatch {
      *  is created wrapping all of a model's display lists.
      */
     constructor(gx) {
-        this.gx = gx;
-        this.gl = gx.gl;
-        this.ops = [];
-        this._isFinished = false;
-        this._idxs = []; //index buffer data
-        this.data = {};
+        this.gx      = gx;
+        this.gl      = gx.gl;
+        this.ops     = []; //array of either function or [mode, idx, count]
+        this._idxs   = []; //index buffer data
+        this.data    = {};
         this.buffers = {}; //GL buffer objects
+        this._isFinished = false;
         for(const field of VAT_FIELD_ORDER) {
             this.data[field] = [];
             this.buffers[field] = this.gl.createBuffer();
         }
         this._idxBufObj = this.gl.createBuffer();
-        //this._vao = this.gl.createVertexArray();
     }
 
     execute(programInfo, _depth=0) {
@@ -47,7 +46,7 @@ export default class RenderBatch {
          */
         const gl = this.gl;
         CHECK_ERROR(gl);
-        if(!this._isFinished) this.finish();
+        if(!this._isFinished) this._finish(programInfo);
         console.assert(_depth < 10);
 
         const stats = {
@@ -57,29 +56,32 @@ export default class RenderBatch {
         };
 
         //set the matrices and attribute buffers
-        //XXX merge all recursive batches into one big set of buffers
-        //and don't re-bind and re-upload them needlessly.
-        this._bindAttrBuffers(programInfo);
+        this._bindBuffers(programInfo);
 
         //execute the operations
         for(let cmd of this.ops) {
             stats.nOps++;
-            //console.log("exec batch op", cmd);
             if(typeof(cmd) == 'function') cmd();
-            else if(cmd instanceof RenderBatch) {
+            //we merge recursive batches, so this shouldn't happen.
+            /* else if(cmd instanceof RenderBatch) {
                 let stats2 = cmd.execute(programInfo, _depth+1);
                 for(const [k,v] of Object.entries(stats2)) {
                     stats[k] += v;
                 }
-            }
+            } */
             else this._doDrawOp(cmd, stats);
             CHECK_ERROR(gl);
         }
         return stats;
     }
 
-    finish() {
-        /** Convert the data buffers to typed arrays. */
+    _finish(programInfo) {
+        /** Convert the data buffers to typed arrays and
+         *  upload them to GL.
+         *  @note After this, no more operations can be added.
+         *   This is done automatically the first time the
+         *   batch is executed.
+         */
         if(this._isFinished) return;
 
         //convert data buffers
@@ -94,6 +96,8 @@ export default class RenderBatch {
         console.assert(this._idxs.length < 65536);
         this._idxBuf = new Uint16Array(this._idxs);
         this._isFinished = true;
+
+        this._uploadBuffers(programInfo);
     }
 
     addFunction(func) {
@@ -102,22 +106,25 @@ export default class RenderBatch {
          *  @note The function will be called (with no arguments) at the
          *   point it's inserted, whenever the batch is executed.
          */
-        //XXX fix this to avoid excess buffer shit
-        /*if(func instanceof RenderBatch) {
+        if(func instanceof RenderBatch) {
+            //merge into this one, to avoid excess buffer operations
+            //during rendering.
             const startIdx = this._idxs.length;
+            for(const idx of func._idxs) {
+                this._idxs.push(idx+startIdx);
+            }
             for(const [field, data] of Object.entries(func.data)) {
                 this.data[field] = this.data[field].concat(data);
             }
-            for(let op of func.ops) {
+            for(const op of func.ops) {
                 if(Array.isArray(op)) {
-                    //mode, index, count
-                    let [mode, index, count] = op;
+                    const [mode, index, count] = op;
                     this.ops.push([mode, index+startIdx, count]);
                 }
                 else this.addFunction(op);
             }
         }
-        else*/ this.ops.push(func);
+        else this.ops.push(func);
     }
 
     addVertices(drawMode, ...vtxs) {
@@ -126,13 +133,11 @@ export default class RenderBatch {
          *  @param {object} vtxs Vertices to draw.
          */
         console.assert(!this._isFinished);
-        //mode, index, count
-        const poly = [drawMode, this._idxs.length, vtxs.length];
+        const poly = [drawMode, this._idxs.length, vtxs.length]; //mode, idx, count
         for(const vtx of vtxs) {
             //since buffers are normalized/padded, all indices are the same
             //for all attributes. we use POS because it has to be present.
-            this._idxs.push(this.data.POS.length / 3);
-            //poly.push(this.data.POS.length / 3); //POS is 3 entries per vtx
+            this._idxs.push(this.data.POS.length / 3); //POS is 3 entries per vtx
             this._storeVertex(vtx);
         }
         this.ops.push(poly);
@@ -164,14 +169,12 @@ export default class RenderBatch {
         }
     }
 
-    _bindAttrBuffers(programInfo) {
+    _uploadBuffers(programInfo) {
+        /** Upload the attribute/index buffer data
+         *  to the given program.
+         */
         const gl = this.gl;
-
-        //XXX
-        //const curBuf = gl.get(gl.ARRAY_BUFFER_BINDING);
-        //for(const buf of Object.values(this.buffers)) {
-        //    if(buf == curBuf) return; //already bound
-        //}
+        console.log("uploading buffer data");
 
         for(const [field, buf] of Object.entries(this.buffers)) {
             const count = AttrCounts[field];
@@ -187,15 +190,6 @@ export default class RenderBatch {
             const data = this.data[field];
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
             gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-            const type = field.endsWith('IDX') ? gl.UNSIGNED_INT : gl.FLOAT;
-            //console.log("Bind attr", field, attr, data, "count", count, "type", type);
-            gl.vertexAttribPointer(attr,
-                count,    //number of values per vertex
-                type,     //data type in buffer
-                false,    //don't normalize
-                0,        //stride (0=use type and numComponents)
-                0);       //offset in bytes to start from in buffer
-            gl.enableVertexAttribArray(attr);
             CHECK_ERROR(gl);
         }
 
@@ -208,14 +202,44 @@ export default class RenderBatch {
         CHECK_ERROR(gl);
     }
 
-    _doDrawOp(cmd, stats) {
+    _bindBuffers(programInfo) {
+        /** Bind the attribute/index buffers. */
         const gl = this.gl;
+        for(const [field, buf] of Object.entries(this.buffers)) {
+            const count = AttrCounts[field];
+            if(count == undefined) {
+                //console.warn("No attrib count for", field);
+                continue; //not an attribute
+            }
+            const attr = programInfo.attribs[field];
+            if(attr == undefined) {
+                //console.warn("No shader attrib found for", field);
+                continue; //no such attribute in shader
+            }
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            const type = field.endsWith('IDX') ? gl.UNSIGNED_INT : gl.FLOAT;
+            gl.vertexAttribPointer(attr,
+                count,    //number of values per vertex
+                type,     //data type in buffer
+                false,    //don't normalize
+                0,        //stride (0=use type and numComponents)
+                0);       //offset in bytes to start from in buffer
+            gl.enableVertexAttribArray(attr);
+        }
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._idxBufObj);
+    }
+
+    _doDrawOp(cmd, stats) {
+        /** Execute a draw operation.
+         *  @param {Array} cmd Operation to execute: [mode, index, count]
+         *  @param {object} stats Dict of stats to update.
+         */
+        const gl = this.gl;
         const [mode, index, count] = cmd;
         //index * sizeof(unsigned short)
         gl.drawElements(mode, count, gl.UNSIGNED_SHORT, index*2);
-        CHECK_ERROR(gl);
         //gl.drawArrays(cmd[0], cmd[1], cmd.length - 1);
+        CHECK_ERROR(gl);
         stats.nPolys++;
         stats.nVtxs += cmd.length - 1;
         /* for future reference:
