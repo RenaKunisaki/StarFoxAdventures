@@ -143,7 +143,8 @@ export default class MapGrid {
         title += `\nMap relative: ${cell.relX}, ${cell.relZ}`;
         title += `\nWorld pos: ${cell.worldX*MAP_CELL_SIZE}, ${cell.worldZ*MAP_CELL_SIZE}`;
 
-        let bg = mapIdToColor(cell.mapId);
+        //let bg = mapIdToColor(cell.mapId);
+        let bg = mapIdToColor(block ? block.mod : 0);
         let td = E.td('cell'+cls, text, {
             title: title,
             style: `background-color: rgb(${bg[0]}, ${bg[1]}, ${bg[2]})`,
