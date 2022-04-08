@@ -194,18 +194,23 @@ export default class Block {
         this.textures = [];
         console.log("Block has %d textures", this.header.nTextures);
         for(let i=0; i<this.header.nTextures; i++) {
-            let texId = view.getInt32(this.header.textures + (i*4));
-            texId = -(texId|0x8000); //game's odd way to use TEX1 by default
-            const gTex = this.game.loadTexture(texId, dir);
-            if(gTex) {
-                const tex = new Texture(this.gx.context);
-                tex.loadGameTexture(gTex);
-                //tex.loadFromImage('/r/f-texture.png');
-                this.textures.push(tex);
+            try {
+                let texId = view.getInt32(this.header.textures + (i*4));
+                texId = -(texId|0x8000); //game's odd way to use TEX1 by default
+                const gTex = this.game.loadTexture(texId, dir);
+                if(gTex) {
+                    const tex = new Texture(this.gx.context);
+                    tex.loadGameTexture(gTex);
+                    //tex.loadFromImage('/r/f-texture.png');
+                    this.textures.push(tex);
+                }
+                else {
+                    console.warn(`Failed loading texture 0x${hex(texId)}`);
+                    this.textures.push(null); //keep correct indexing
+                }
             }
-            else {
-                console.warn(`Failed loading texture 0x${hex(texId)}`);
-                this.textures.push(null); //keep correct indexing
+            catch(ex) {
+                console.error("Failed loading texture", i, ex);
             }
         }
         console.log("Block textures", this.textures);

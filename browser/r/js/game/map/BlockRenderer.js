@@ -2,8 +2,29 @@ import BitStreamReader from '../BitStreamReader.js';
 import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
 import DlistParser from '../../app/ui/gl/gx/DlistParser.js';
 import RenderBatch from '../../app/ui/gl/gx/RenderBatch.js';
+import GX from '../../app/ui/gl/gx/GX.js';
 
 const LogRenderOps = false;
+const ShaderFlags = {
+    Hidden:             (1<< 1), //invisible, exploded walls, etc
+    Fog:                (1<< 2), //enable fog
+    CullBackface:       (1<< 3),
+    ReflectSkyscape:    (1<< 5),
+    Caustic:            (1<< 6),
+    Lava:               (1<< 7),
+    Reflective:         (1<< 8), //Occurs on Krazoa Palace reflective floors
+    FuzzRelated:        (1<< 9),
+    AlphaCompare:       (1<<10),
+    TranspRelated2000:  (1<<13),
+    ShortFur:           (1<<14), //4 layers
+    MediumFur:          (1<<15), //8 layers
+    LongFur:            (1<<16), //16 layers
+    StreamingVideo:     (1<<17), //Occurs on video panels in Great Fox. Used to display preview video.
+    IndoorOutdoorBlend: (1<<18), //Occurs near cave entrances and windows. Requires special handling for lighting.
+    BlendFlag29:        (1<<29),
+    ForceBlend:         (1<<30),
+    Water:              (1<<31),
+};
 
 //from noclip
 /* export enum ShaderAttrFlags {
@@ -15,25 +36,8 @@ export const enum NormalFlags {
     NBT = 0x8,
     HasVertexAlpha = 0x10,
 }
-
 export const enum LightFlags {
     OverrideLighting = 0x2,
-}
-export enum ShaderFlags {
-    DevGeometry = 0x2,
-    Fog = 0x4,
-    CullBackface = 0x8,
-    ReflectSkyscape = 0x20, // ???
-    Caustic = 0x40,
-    Lava = 0x80,
-    Reflective = 0x100, // Occurs on Krazoa Palace reflective floors
-    AlphaCompare = 0x400,
-    ShortFur = 0x4000, // 4 layers
-    MediumFur = 0x8000, // 8 layers
-    LongFur = 0x10000, // 16 layers
-    StreamingVideo = 0x20000, // Occurs on video panels in Great Fox. Used to display preview video.
-    IndoorOutdoorBlend = 0x40000, // Occurs near cave entrances and windows. Requires special handling for lighting.
-    Water = 0x80000000,
 } */
 
 const vatDefaults = [
@@ -192,10 +196,16 @@ export default class BlockRenderer {
         }
 
         if(this.curShader) {
-            if(this.curShader.flags & 8) {
-                this.curBatch.addFunction(() => gl.enable(gl.CULL_FACE));
-            }
-            else this.curBatch.addFunction(() => gl.disable(gl.CULL_FACE));
+            this._handleShaderFlags();
+        }
+        else {
+            this.curBatch.addFunction(() => {
+                gx.setBlendMode(GX.BlendMode.NONE,
+                    GX.BlendFactor.ONE,
+                    GX.BlendFactor.ZERO,
+                    GX.LogicOp.NOOP);
+                gx.setZMode(true, GX.CompareMode.LEQUAL, true);
+            });
         }
 
         const nLayers = this.curShader ? this.curShader.nLayers : 0;
@@ -209,6 +219,53 @@ export default class BlockRenderer {
                 }
             }
             this.curBatch.addFunction(this._makeSetTextureCmd(i, tex));
+        }
+    }
+
+    _handleShaderFlags() {
+        const gx    = this.gx;
+        const gl    = this.gx.gl;
+        const flags = this.curShader.flags;
+        if(flags & ShaderFlags.CullBackface) {
+            this.curBatch.addFunction(() => gl.enable(gl.CULL_FACE));
+        }
+        else this.curBatch.addFunction(() => gl.disable(gl.CULL_FACE));
+
+        if(((flags & ShaderFlags.ForceBlend) == 0)
+        && ((flags & ShaderFlags.BlendFlag29) == 0)) {
+            if (((flags & ShaderFlags.AlphaCompare) == 0)
+            || ((flags & ShaderFlags.Lava) != 0)) {
+                this.curBatch.addFunction(() => {
+                    gx.setBlendMode(GX.BlendMode.NONE,
+                        GX.BlendFactor.ONE,
+                        GX.BlendFactor.ZERO,
+                        GX.LogicOp.NOOP);
+                    gx.setZMode(true, GX.CompareMode.LEQUAL, true);
+                    //XXX
+                    //gx.setPeControl_ZCompLoc_(1);
+                    //gx.setTevAlphaIn(7,0,0,7,0); //stage, a, b, c, d
+                });
+            }
+            else {
+                this.curBatch.addFunction(() => {
+                    gx.setBlendMode(GX.BlendMode.NONE,
+                        GX.BlendFactor.ONE,
+                        GX.BlendFactor.ZERO,
+                        GX.LogicOp.NOOP);
+                    gx.setZMode(true, GX.CompareMode.LEQUAL, true);
+                    //gx.setPeControl_ZCompLoc_(0);
+                    //gx.setTevAlphaIn(4,0,0,4,0);
+                });
+            }
+        }
+        else {
+            gx.setBlendMode(GX.BlendMode.BLEND,
+                GX.BlendFactor.SRCALPHA,
+                GX.BlendFactor.INVSRCALPHA,
+                GX.LogicOp.NOOP);
+            gx.setZMode(true, GX.CompareMode.LEQUAL, false);
+            //gx.setPeControl_ZCompLoc_(1);
+            //gx.setTevAlphaIn(7,0,0,7,0);
         }
     }
 
@@ -232,11 +289,13 @@ export default class BlockRenderer {
         }
 
         if(isGrass) {
-            if(this.curShader && (this.curShader.flags & 0x2000)) return;
+            if(this.curShader
+            && (this.curShader.flags & ShaderFlags.TranspRelated2000)) return;
         }
         if(!this.params.showHidden) {
             //don't render hidden polys
-            if(this.curShader && (this.curShader.flags & 2)) return;
+            if(this.curShader
+            && (this.curShader.flags & ShaderFlags.Hidden)) return;
         }
 
         const dlistData = {
@@ -296,7 +355,7 @@ export default class BlockRenderer {
         if(isGrass) return;
 
         let TEX = [0, 0, 0, 0, 0, 0, 0, 0];
-        if(this.curShader && !(this.curShader.flags & 0x80000000)) {
+        if(this.curShader && !(this.curShader.flags & ShaderFlags.Water)) {
             for(let i=0; i<this.curShader.nLayers; i++) {
                 TEX[i] = texSize;
             }

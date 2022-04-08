@@ -12,7 +12,7 @@ export default class Context {
         this.zNear = 0.1;
         this.zFar  = 10000;
         this.clearColor = [0.0, 0.5, 0.5, 1.0];
-        this.clearDepth = 0.0;
+        this.clearDepth = 1.0;
         this.drawFunc   = drawFunc; //callback to draw the scene
         //XXX add getters/setters for these
         this._gl_extensions = {};
