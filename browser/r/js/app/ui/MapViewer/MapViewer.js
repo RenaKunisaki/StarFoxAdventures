@@ -152,14 +152,16 @@ export default class MapViewer {
         /** Find a block to start at. */
         //if there's one at the origin, prefer it.
         let block = this.map.getBlock(0, 0);
-        if(block && block.load()) return block;
+        console.assert(this.gx);
+        console.assert(this.gx.context);
+        if(block && block.load(this.gx)) return block;
 
         //find the first non-empty, non-missing block.
         let iBlock = 0;
         while(iBlock < this.map.blocks.length) {
             if(this.map.blocks[iBlock]
             && this.map.blocks[iBlock].mod < 0xFF
-            && this.map.blocks[iBlock].load()) break;
+            && this.map.blocks[iBlock].load(this.gx)) break;
             iBlock++;
         }
         block = this.map.blocks[iBlock];
@@ -182,7 +184,7 @@ export default class MapViewer {
             this.reset();
         }
 
-        this.curBlock.load(); //ensure block model is loaded
+        this.curBlock.load(this.gx); //ensure block model is loaded
         //console.log("map block", this.curBlock);
         const ctx = this.gx.context;
         const mtxs = {

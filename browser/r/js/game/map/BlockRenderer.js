@@ -2,7 +2,6 @@ import BitStreamReader from '../BitStreamReader.js';
 import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
 import DlistParser from '../../app/ui/gl/gx/DlistParser.js';
 import RenderBatch from '../../app/ui/gl/gx/RenderBatch.js';
-import Texture from '../../app/ui/gl/Texture.js'
 
 const LogRenderOps = false;
 
@@ -106,7 +105,6 @@ export default class BlockRenderer {
         this.gx = gx;
         this.gl = gx.gl;
         this.dlistParser = new DlistParser(gx);
-        this.textures = [];
     }
 
     parse(block, whichStream, params={}) {
@@ -116,17 +114,9 @@ export default class BlockRenderer {
          *   specifying which bitstream to use.
          *  @param {object} params Render parameters.
          */
-        if(!block.load()) return;
+        if(!block.load(this.gx)) return;
         const key = `${whichStream},${params.isGrass}`;
         if(block.batchOps[key]) return block.batchOps[key];
-
-        //convert the textures
-        for(let gTex of block.textures) {
-            const tex = new Texture(this.gx.context);
-            tex.loadGameTexture(gTex);
-            //tex.loadFromImage('/r/f-texture.png');
-            this.textures.push(tex);
-        }
 
         this.curBatch = new RenderBatch(this.gx);
         block.batchOps[key] = this.curBatch;
@@ -194,7 +184,6 @@ export default class BlockRenderer {
         if(isGrass) return;
 
         this.curShader = this.curBlock.shaders[idx];
-        //this.curTexture = this.curBlock.textures[this.curShader.layer[0].texture];
         this.curShaderIdx = idx;
         if(LogRenderOps) {
             console.log("Select texture %d", idx, this.curShader);
@@ -215,8 +204,8 @@ export default class BlockRenderer {
             if(i < nLayers) {
                 const idx = this.curShader.layer[i].texture;
                 //console.log("select texture", idx, this.textures[idx]);
-                if(idx >= 0 && this.textures[idx]) {
-                    tex = this.textures[idx];
+                if(idx >= 0 && this.curBlock.textures[idx]) {
+                    tex = this.curBlock.textures[idx];
                 }
             }
             this.curBatch.addFunction(this._makeSetTextureCmd(i, tex));

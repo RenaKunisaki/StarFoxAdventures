@@ -4,6 +4,7 @@ import Game from "../Game.js";
 import Map from "./Map.js";
 import DisplayList from '../DisplayList.js';
 import SfaTexture from '../SfaTexture.js';
+import Texture from '../../app/ui/gl/Texture.js'
 
 //struct types
 let MapBlock = null;
@@ -38,14 +39,16 @@ export default class Block {
         }
     }
 
-    load() {
+    load(gx) {
         /** Load the block model from disc.
+         *  @param {GX} gx The GX instance to use.
          *  @returns {boolean} Whether the block loaded successfully.
          *  @note It's normal for some blocks to fail to load, since some
          *   maps have blocks (eg #34) out of bounds, that don't actually
          *   exist anywhere on the disc.
          */
         if(this._triedLoad != undefined) return this._triedLoad;
+        this.gx = gx;
         this._triedLoad = true;
         this._loadModel();
         return true;
@@ -193,7 +196,17 @@ export default class Block {
         for(let i=0; i<this.header.nTextures; i++) {
             let texId = view.getInt32(this.header.textures + (i*4));
             texId = -(texId|0x8000); //game's odd way to use TEX1 by default
-            this.textures.push(this.game.loadTexture(texId, dir));
+            const gTex = this.game.loadTexture(texId, dir);
+            if(gTex) {
+                const tex = new Texture(this.gx.context);
+                tex.loadGameTexture(gTex);
+                //tex.loadFromImage('/r/f-texture.png');
+                this.textures.push(tex);
+            }
+            else {
+                console.warn(`Failed loading texture 0x${hex(texId)}`);
+                this.textures.push(null); //keep correct indexing
+            }
         }
         console.log("Block textures", this.textures);
     }

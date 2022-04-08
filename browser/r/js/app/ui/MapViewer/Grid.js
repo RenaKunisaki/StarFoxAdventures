@@ -23,7 +23,7 @@ export default class Grid {
         let zMin = 999999, zMax = -999999;
         for(let block of map.blocks) {
             if((!block) || block.mod >= 0xFF) continue;
-            block.load(); //no-op if already loaded
+            block.load(this.mapViewer.gx); //no-op if already loaded
             xMin = Math.min(xMin, block.x);
             zMin = Math.min(zMin, block.z);
             xMax = Math.max(xMax, block.x);
@@ -41,7 +41,9 @@ export default class Grid {
                     cell = E.td('block',
                         E.div(null, block.mod), E.div(null, block.sub));
                     if(block == curBlock) cell.classList.add('current');
-                    if(!block.load()) cell.classList.add('invalid');
+                    if(!block.load(this.mapViewer.gx)) {
+                        cell.classList.add('invalid');
+                    }
                     cell.addEventListener('click', e => {
                         this.mapViewer.curBlock = block;
                         this.mapViewer.reset();
