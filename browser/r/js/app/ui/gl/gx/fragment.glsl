@@ -23,7 +23,7 @@ void main() {
         highp vec4 tex0 = texture2D(uSampler0, vTexCoord);
         highp vec4 tex1 = texture2D(uSampler1, vTexCoord);
         highp vec4 col;
-        if(useTexture) col  = mix(tex0, tex1, (1.0-tex0.a) * tex1.a) * vColor;
+        if(useTexture) col = mix(tex0, tex1, (1.0-tex0.a) * tex1.a) * vColor;
         else col = vColor;
         if(useLights) gl_FragColor = vec4(col.rgb * vLighting, col.a);
         else gl_FragColor = col.rgba;

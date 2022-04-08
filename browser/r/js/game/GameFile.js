@@ -24,7 +24,7 @@ export default class GameFile extends BinaryFile {
         const header = this._readArchiveHeader(offset);
         if(header == null) return null;
         this.seek(header.fileOffset);
-        //console.log("Decoding", header);
+        //console.log(`Decoding header at 0x${hex(offset,6)}`, header);
         switch(header.fmt) {
             case 'raw': case 'padding': {
                 return this.readBytes(header.packedSize);

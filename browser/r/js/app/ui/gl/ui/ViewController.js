@@ -136,7 +136,7 @@ export default class ViewController {
         this.txtFov.value    =    60;
         this.txtZNear.value  =     0.1;
         this.txtZFar.value   = 10000;
-        this.chkEnableTex.checked      = false;
+        this.chkEnableTex.checked      = true;
         this.chkWireframe.checked      = false;
         this.chkEnableBackface.checked = true;
         this.btnFrontFaceCW.checked    = true;

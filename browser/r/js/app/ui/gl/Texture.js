@@ -95,8 +95,10 @@ export default class Texture {
 
     loadDXT1(data, width, height) {
         /** Construct from raw DDS DXT1/BC1 data.
-         *  data: ArrayBuffer containing image data.
-         *  width, height: Image dimensions.
+         *  @param {ArrayBuffer} data image data.
+         *  @param {integer} width image width.
+         *  @param {integer} height image height.
+         *  @returns {Texture} this.
          */
         const gl    = this.gl;
         const fmt   = this.context._gl_extensions.compressed_texture_s3tc;
@@ -108,6 +110,27 @@ export default class Texture {
             data.byteLength, data);
         gl.compressedTexImage2D(gl.TEXTURE_2D, 0,
             fmt.COMPRESSED_RGBA_S3TC_DXT1_EXT, width, height, 0, data);
+        return this;
+    }
+
+    loadGameTexture(tex) {
+        /** Construct from game's texture asset.
+         *  @param {SfaTexture} tex Texture asset to load.
+         *  @returns {Texture} this.
+         */
+        const gl    = this.gl;
+        this.width  = tex.width;
+        this.height = tex.height;
+        this.internalFormat = gl.RGBA;
+        this.border    = 0;
+        this.srcFormat = gl.RGBA;
+        this.srcType   = gl.UNSIGNED_BYTE;
+        this.bind();
+        //console.log("load game tex", tex.image.data.data);
+        gl.texImage2D(gl.TEXTURE_2D, this.level, this.internalFormat,
+            this.width, this.height, this.border, this.srcFormat, this.srcType,
+            tex.image.data);
+        this._buildMipMaps();
         return this;
     }
 }

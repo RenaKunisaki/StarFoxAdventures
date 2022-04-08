@@ -73,7 +73,6 @@ export default class Stats {
             }
             this._statElems[`${stat}.total`].innerText = stats.total[stat];
         }
-
         this._statElems.xMin.innerText = stats.xMin.toFixed(2);
         this._statElems.xMax.innerText = stats.xMax.toFixed(2);
         this._statElems.yMin.innerText = stats.yMin.toFixed(2);

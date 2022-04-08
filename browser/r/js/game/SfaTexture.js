@@ -64,7 +64,7 @@ export default class SfaTexture {
         return result;
     }
 
-    static fromData(game, data, canvas=null) {
+    static fromData(game, data) {
         const self      = new SfaTexture(game);
         const header    = Header.fromBytes(data);
         self.width      = header.width;
@@ -72,6 +72,7 @@ export default class SfaTexture {
         self.numMipMaps = header.numMipMaps;
         self.format     = header.format;
         const bpp       = BITS_PER_PIXEL[self.format];
+        console.log("texture", header, bpp, data);
         if(self.width < 1 || self.height < 1 || bpp == undefined) return null;
         console.assert(self.width > 0 && self.height > 0);
         //const dataLen   = Math.trunc(self.width * self.height * bpp / 8);

@@ -213,12 +213,14 @@ export default class MapViewer {
             if(stream) {
                 const batch = this.blockRenderer.render(
                     this.curBlock, name, params);
-                stats.xMin = Math.min(stats.xMin, batch.geomBounds.x[0]);
-                stats.xMax = Math.max(stats.xMax, batch.geomBounds.x[1]);
-                stats.yMin = Math.min(stats.yMin, batch.geomBounds.y[0]);
-                stats.yMax = Math.max(stats.yMax, batch.geomBounds.y[1]);
-                stats.zMin = Math.min(stats.zMin, batch.geomBounds.z[0]);
-                stats.zMax = Math.max(stats.zMax, batch.geomBounds.z[1]);
+                if(batch) { //there was in fact a block to render
+                    stats.xMin = Math.min(stats.xMin, batch.geomBounds.x[0]);
+                    stats.xMax = Math.max(stats.xMax, batch.geomBounds.x[1]);
+                    stats.yMin = Math.min(stats.yMin, batch.geomBounds.y[0]);
+                    stats.yMax = Math.max(stats.yMax, batch.geomBounds.y[1]);
+                    stats.zMin = Math.min(stats.zMin, batch.geomBounds.z[0]);
+                    stats.zMax = Math.max(stats.zMax, batch.geomBounds.z[1]);
+                }
             }
             stats[name] = this.gx.stats;
         }

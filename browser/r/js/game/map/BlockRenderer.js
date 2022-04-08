@@ -2,6 +2,7 @@ import BitStreamReader from '../BitStreamReader.js';
 import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
 import DlistParser from '../../app/ui/gl/gx/DlistParser.js';
 import RenderBatch from '../../app/ui/gl/gx/RenderBatch.js';
+import Texture from '../../app/ui/gl/Texture.js'
 
 const LogRenderOps = false;
 
@@ -105,6 +106,7 @@ export default class BlockRenderer {
         this.gx = gx;
         this.gl = gx.gl;
         this.dlistParser = new DlistParser(gx);
+        this.textures = [];
     }
 
     parse(block, whichStream, params={}) {
@@ -117,6 +119,14 @@ export default class BlockRenderer {
         if(!block.load()) return;
         const key = `${whichStream},${params.isGrass}`;
         if(block.batchOps[key]) return block.batchOps[key];
+
+        //convert the textures
+        for(let gTex of block.textures) {
+            const tex = new Texture(this.gx.context);
+            tex.loadGameTexture(gTex);
+            //tex.loadFromImage('/r/f-texture.png');
+            this.textures.push(tex);
+        }
 
         this.curBatch = new RenderBatch(this.gx);
         block.batchOps[key] = this.curBatch;
@@ -204,8 +214,9 @@ export default class BlockRenderer {
             let tex = gx.blankTexture;
             if(i < nLayers) {
                 const idx = this.curShader.layer[i].texture;
-                if(idx >= 0 && this.curBlock.textures[idx]) {
-                    tex = this.curBlock.textures[idx];
+                //console.log("select texture", idx, this.textures[idx]);
+                if(idx >= 0 && this.textures[idx]) {
+                    tex = this.textures[idx];
                 }
             }
             this.curBatch.addFunction(this._makeSetTextureCmd(i, tex));
@@ -215,6 +226,7 @@ export default class BlockRenderer {
     _makeSetTextureCmd(slot, tex) {
         const gl = this.gl;
         return () => {
+            //console.log("using texture", slot, tex);
             gl.activeTexture(gl.TEXTURE0 + slot);
             tex.bind();
             gl.uniform1i(this.gx.programInfo.uniforms.uSampler[slot], slot);

@@ -3,6 +3,7 @@ import GameFile from "../GameFile.js";
 import Game from "../Game.js";
 import Map from "./Map.js";
 import DisplayList from '../DisplayList.js';
+import SfaTexture from '../SfaTexture.js';
 
 //struct types
 let MapBlock = null;
@@ -45,34 +46,41 @@ export default class Block {
          *   exist anywhere on the disc.
          */
         if(this._triedLoad != undefined) return this._triedLoad;
+        this._triedLoad = true;
+        this._loadModel();
+        return true;
+    }
 
-        const path = `/${this.map.dirName}/mod${this.mod}`;
-        //console.log(`Loading map block ${this.mod}.${this.sub} from`, path, this);
-        const fTab   = this.game.iso.getFile(`${path}.tab`);
+    _loadModel() {
+        //TRKBLK.tab gives an offset per map dir ID, to add to the block
+        //sub idx to get the actual offset within the modN.tab file.
+        //I have no idea why this mechanic exists.
+        const trkBlk     = this.game.iso.getFile(`/TRKBLK.tab`).getData();
+        const firstBlock = trkBlk.getUint16(this.map.dirId*2);
+        const modPath    = `/${this.map.dirName}/mod${this.mod}`;
+        const fTab       = this.game.iso.getFile(`${modPath}.tab`);
         if(!fTab) {
-            console.error("File not found", `${path}.tab`);
+            console.error("File not found", `${modPath}.tab`);
             this._triedLoad = false;
             return false;
         }
         const dTab   = fTab.getData();
-        const fBlock = new GameFile(this.game.iso.getFile(
-            `${path}.zlb.bin`));
-        const offsBlock = dTab.getUint32(this.sub*4) & 0xFFFFFF;
-        const blockData = fBlock.getItem(this.sub); //XXX use tab somehow
+        const fBlock = new GameFile(this.game.iso.getFile(`${modPath}.zlb.bin`));
+
+        //get the data for this block
+        const offsBlock = dTab.getUint32((this.sub+firstBlock)*4) & 0xFFFFFF;
+        const blockData = fBlock.decompress(offsBlock);
         const view      = new DataView(blockData);
         this.header     = MapBlock.fromBytes(view);
         //console.log("Map Block Header", this.header);
 
+        //read the block's data
         this._loadVtxData(view);
         this._loadPolygons(view);
         this._loadDlists(view);
         this._loadRenderInstrs(view);
         this._loadShaders(view);
-
-        //XXX read textures
-        this.textures = [];
-        this._triedLoad = true;
-        return true;
+        this._loadTextures(view);
     }
 
     _loadVtxData(view) {
@@ -175,5 +183,63 @@ export default class Block {
             this.shaders.push(Shader.fromBytes(view,
                 offs + this.header.shaders + (i * Shader.size)));
         }
+    }
+
+    _loadTextures(view) {
+        //load the texture files for this map
+        const dir = `/${this.map.dirName}`;
+        let   fTab0  = this.game.iso.getFile(`${dir}/TEX0.tab`);
+        let   fBin0  = this.game.iso.getFile(`${dir}/TEX0.bin`);
+        let   fTab1  = this.game.iso.getFile(`${dir}/TEX1.tab`);
+        let   fBin1  = this.game.iso.getFile(`${dir}/TEX1.bin`);
+        if(!fTab0) {
+            console.error("Texture files not found in", dir);
+            return false;
+        }
+        fBin0 = new GameFile(fBin0);
+        fBin1 = new GameFile(fBin1);
+        fTab0 = new GameFile(fTab0);
+        fTab1 = new GameFile(fTab1);
+
+        const texTable = new GameFile(this.game.iso.getFile('/TEXTABLE.bin'));
+        const fTab2 = new GameFile(this.game.iso.getFile('/TEXPRE.tab'));
+        const fBin2 = new GameFile(this.game.iso.getFile('/TEXPRE.bin'));
+
+        const bins = [fBin0, fBin1, fBin2];
+        const tabs = [fTab0, fTab1, fTab2];
+
+        //load the textures
+        this.textures = [];
+        console.log("Block has %d textures", this.header.nTextures);
+        for(let i=0; i<this.header.nTextures; i++) {
+            let texId = view.getInt32(this.header.textures + (i*4));
+            texId = -(texId|0x8000); //game's odd way to use TEX1 by default
+            if(texId < 0) texId = -texId;
+            else {
+                texTable.seek(texId*2);
+                const newId = texTable.readU16();
+                console.log(`texId 0x${hex(texId,4)} => 0x${hex(newId,4)}`)
+                texId = newId + (((texId < 3000) || (newId == 0)) ? 0 : 1);
+            }
+            let tblIdx = 0;
+            if     (texId & 0x8000) { tblIdx = 1; texId &= 0x7FFF; }
+            else if(texId >=  3000) { tblIdx = 2; }
+            const fBin=bins[tblIdx], fTab=tabs[tblIdx];
+
+            fTab.seek(texId*4);
+            let texOffs = fTab.readU32();
+            //console.log(`Load texture ${texId} from offs 0x${hex(texOffs,8)} tbl ${tblIdx}`);
+
+            //XXX investigate high byte of tab, something to do with mipmaps
+            //and/or animation frames
+            let unkCount = 0; //((texOffs >> 24) & 0x3F) + 1;
+            texOffs = (texOffs & 0xFFFFFF) * 2;
+            const data = fBin.decompress(texOffs + (unkCount*4));
+            console.log(`texId=0x${hex(texId)} tbl=${tblIdx} texOffs=0x${hex(texOffs,6)} unkCount=${unkCount}`, data);
+            const texView = new DataView(data, 0x10); //no idea
+            const tex = SfaTexture.fromData(this.game, texView);
+            this.textures.push(tex);
+        }
+        console.log("Block textures", this.textures);
     }
 }

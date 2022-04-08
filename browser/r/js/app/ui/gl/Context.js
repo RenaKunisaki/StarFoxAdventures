@@ -16,7 +16,7 @@ export default class Context {
         this.drawFunc   = drawFunc; //callback to draw the scene
         //XXX add getters/setters for these
         this._gl_extensions = {};
-        this.enableTextures = false;
+        this.enableTextures = true;
         this.useWireframe = false; //render in wireframe
         this.enableBackfaceCulling = true;
         this.frontFaceCW = true; //game seems to use this order

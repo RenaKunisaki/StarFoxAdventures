@@ -44,8 +44,10 @@ export default class GX {
         this.vtxBuf.clear();
         this.program.use();
         this.gl.uniform1i(this.programInfo.uniforms.useId, 0);
-        this.gl.uniform1i(this.programInfo.uniforms.useLights, 0);
-        this.gl.uniform1i(this.programInfo.uniforms.useTexture, 0);
+        this.gl.uniform1i(this.programInfo.uniforms.useLights,
+            this.context.lights.enabled ? 1 : 0);
+        this.gl.uniform1i(this.programInfo.uniforms.useTexture,
+            this.context.enableTextures ? 1 : 0);
         this.vtxLog = []; //log all drawn vertices for picker
         this.resetStats();
     }
@@ -104,10 +106,11 @@ export default class GX {
                 matModelView:  this.program.getUniformLocation('matModelView'),
                 matNormal:     this.program.getUniformLocation('matNormal'),
                 useId:         this.program.getUniformLocation('useId'),
+                useTexture:    this.program.getUniformLocation('useTexture'),
                 ambLightColor: this.program.getUniformLocation('ambLightColor'),
                 dirLightColor: this.program.getUniformLocation('dirLightColor'),
                 dirLightVector:this.program.getUniformLocation('dirLightVector'),
-                uSampler:      [
+                uSampler: [
                     this.program.getUniformLocation('uSampler0'),
                     this.program.getUniformLocation('uSampler1'),
                 ],
