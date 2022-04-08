@@ -119,6 +119,7 @@ export default class MapViewer {
             console.error("Map has no directory", map);
             return;
         }
+        this.game.unloadTextures();
         this.map = map;
         this.curBlock = this._findABlock();
         this.reset();

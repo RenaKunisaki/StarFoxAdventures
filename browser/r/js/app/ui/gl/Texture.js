@@ -100,6 +100,7 @@ export default class Texture {
          *  @param {integer} height image height.
          *  @returns {Texture} this.
          */
+        //XXX does this work? is it used?
         const gl    = this.gl;
         const fmt   = this.context._gl_extensions.compressed_texture_s3tc;
         this.width  = width;
@@ -110,6 +111,7 @@ export default class Texture {
             data.byteLength, data);
         gl.compressedTexImage2D(gl.TEXTURE_2D, 0,
             fmt.COMPRESSED_RGBA_S3TC_DXT1_EXT, width, height, 0, data);
+        this._buildMipMaps();
         return this;
     }
 

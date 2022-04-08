@@ -1,4 +1,4 @@
-import { assertType, downloadXml, getXml, int } from "../Util.js";
+import { assertType, downloadXml, getXml, int, hex } from "../Util.js";
 import GameBit from "./GameBit.js";
 import GameObject from "./GameObject.js";
 import DLL from "./DLL.js";
@@ -7,6 +7,8 @@ import Text from "./text/Text.js";
 import parseWarpTab from "./Warptab.js";
 import App from "../app/App.js";
 import { ISO } from "../types/iso/iso.js";
+import GameFile from "./GameFile.js";
+import SfaTexture from "./SfaTexture.js";
 
 export const MAP_CELL_SIZE = 640;
 export const TEXT_LANGUAGES = ['English', 'French',
@@ -58,6 +60,10 @@ export default class Game {
         this.mapsByDirId = {};
         this.warpTab     = null;
         this.texts       = null;
+        this.loadedTextures = {}; //ID => Texture
+        this.texTable    = null;
+        this.texPreTab   = null;
+        this.texPreBin   = null;
 
         this.setVersion('U0');
         this.app.onLanguageChanged(lang => this._loadTexts(lang));
@@ -154,6 +160,69 @@ export default class Game {
         if(defNo < 0) obj = this.objects[-defNo];
         else obj = this.objects[this.objIndex[defNo]];
         return obj;
+    }
+
+    loadTexture(id, dir) {
+        if(this.loadedTextures[id]) return this.loadedTextures[id];
+
+        //ensure the global texture files are loaded
+        if(this.texTable == null) {
+            this.texTable    = new GameFile(this.iso.getFile('/TEXTABLE.bin'));
+            this.texPreTab   = new GameFile(this.iso.getFile('/TEXPRE.tab'));
+            this.texPreBin   = new GameFile(this.iso.getFile('/TEXPRE.bin'));
+        }
+
+        //load the texture files for the given directory
+        let   fTab0  = this.iso.getFile(`${dir}/TEX0.tab`);
+        let   fBin0  = this.iso.getFile(`${dir}/TEX0.bin`);
+        let   fTab1  = this.iso.getFile(`${dir}/TEX1.tab`);
+        let   fBin1  = this.iso.getFile(`${dir}/TEX1.bin`);
+        if(!fTab0) {
+            console.error("Texture files not found in", dir);
+            return null;
+        }
+        fTab0 = new GameFile(fTab0);
+        fBin0 = new GameFile(fBin0);
+        fTab1 = new GameFile(fTab1);
+        fBin1 = new GameFile(fBin1);
+        const bins = [fBin0, fBin1, this.texPreBin];
+        const tabs = [fTab0, fTab1, this.texPreTab];
+
+        //translate the ID
+        const origId = id;
+        if(id < 0) id = -id;
+        else {
+            this.texTable.seek(id*2);
+            const newId = this.texTable.readU16();
+            console.log(`texId 0x${hex(id,4)} => 0x${hex(newId,4)}`)
+            id = newId + (((id < 3000) || (newId == 0)) ? 0 : 1);
+        }
+        let tblIdx = 0;
+        if     (id & 0x8000) { tblIdx = 1; id &= 0x7FFF; }
+        else if(id >=  3000) { tblIdx = 2; }
+
+        //find the texture
+        const fBin=bins[tblIdx], fTab=tabs[tblIdx];
+        fTab.seek(id*4);
+        let texOffs = fTab.readU32();
+        //console.log(`Load texture ${id} from offs 0x${hex(texOffs,8)} tbl ${tblIdx}`);
+
+        //load the texture
+        //XXX investigate high byte of tab, something to do with mipmaps
+        //and/or animation frames
+        let unkCount = 0; //((texOffs >> 24) & 0x3F) + 1;
+        texOffs = (texOffs & 0xFFFFFF) * 2;
+        const data = fBin.decompress(texOffs + (unkCount*4));
+        console.log(`texId=0x${hex(id)} tbl=${tblIdx} texOffs=0x${hex(texOffs,6)} unkCount=${unkCount}`, data);
+        const texView = new DataView(data, 0x10); //no idea where this +0x10 comes from
+        const tex = SfaTexture.fromData(this, texView);
+
+        this.loadedTextures[origId] = tex;
+        return tex;
+    }
+
+    unloadTextures() {
+        this.loadedTextures = {};
     }
 
     /* _getObjName(defNo) {
