@@ -86,23 +86,24 @@ export default class ViewController {
 
     adjust(params) {
         /** Add to parameters. */
+        const F = parseFloat;
         if(params.pos) {
-            if(params.pos.x != undefined) this.txtPosX.value += params.pos.x;
-            if(params.pos.y != undefined) this.txtPosY.value += params.pos.y;
-            if(params.pos.z != undefined) this.txtPosZ.value += params.pos.z;
+            if(params.pos.x != undefined) this.txtPosX.value = F(this.txtPosX.value)+params.pos.x;
+            if(params.pos.y != undefined) this.txtPosY.value = F(this.txtPosY.value)+params.pos.y;
+            if(params.pos.z != undefined) this.txtPosZ.value = F(this.txtPosZ.value)+params.pos.z;
         }
         if(params.rot) {
-            if(params.rot.x != undefined) this.txtRotX.value += params.rot.x;
-            if(params.rot.y != undefined) this.txtRotY.value += params.rot.y;
-            if(params.rot.z != undefined) this.txtRotZ.value += params.rot.z;
+            if(params.rot.x != undefined) this.txtRotX.value = F(this.txtRotX.value)+params.rot.x;
+            if(params.rot.y != undefined) this.txtRotY.value = F(this.txtRotY.value)+params.rot.y;
+            if(params.rot.z != undefined) this.txtRotZ.value = F(this.txtRotZ.value)+params.rot.z;
         }
         if(params.scale) {
-            if(params.scale.x != undefined) this.txtScaleX.value += params.scale.x;
-            if(params.scale.y != undefined) this.txtScaleY.value += params.scale.y;
-            if(params.scale.z != undefined) this.txtScaleZ.value += params.scale.z;
+            if(params.scale.x != undefined) this.txtScaleX.value = F(this.txtScaleX.value)+params.scale.x;
+            if(params.scale.y != undefined) this.txtScaleY.value = F(this.txtScaleY.value)+params.scale.y;
+            if(params.scale.z != undefined) this.txtScaleZ.value = F(this.txtScaleZ.value)+params.scale.z;
         }
-        if(params.zNear != undefined) this.txtZNear.value += params.zNear;
-        if(params.zFar  != undefined) this.txtZFar .value += params.zFar;
+        if(params.zNear != undefined) this.txtZNear.value = F(this.txtZNear.value) + params.zNear;
+        if(params.zFar  != undefined) this.txtZFar .value = F(this.txtZFar .value) + params.zFar;
         if(params.enableTextures != undefined) {
             this.chkEnableTex.checked = params.enableTextures;
         }

@@ -65,9 +65,10 @@ export default class MapViewer {
         await this.gx.loadPrograms();
 
         this.viewController = new ViewController(this.context);
-        this.canvas.addEventListener('mousemove', e => this._onMouseMove(e));
-        this.canvas.addEventListener('mousedown', e => this._onMouseDown(e));
-        this.canvas.addEventListener('mouseup',   e => this._onMouseUp  (e));
+        this.canvas.addEventListener('mousemove', e => this._onMouseMove (e));
+        this.canvas.addEventListener('mousedown', e => this._onMouseDown (e));
+        this.canvas.addEventListener('mouseup',   e => this._onMouseUp   (e));
+        this.canvas.addEventListener('wheel',     e => this._onMouseWheel(e));
         //must disable context menu to be able to right-drag
         this.canvas.addEventListener('contextmenu', e => e.preventDefault());
 
@@ -290,5 +291,9 @@ export default class MapViewer {
         }
         else this._mouseStartView = null;
         this._prevMousePos = [event.x, event.y];
+    }
+
+    _onMouseWheel(event) {
+        this.viewController.adjust({pos:{y: event.deltaY}});
     }
 }
