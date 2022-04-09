@@ -218,7 +218,11 @@ export default class GX {
         gl.uniformMatrix4fv(unif.matProjection, false, mtxs.projection);
         gl.uniformMatrix4fv(unif.matModelView,  false, mtxs.modelView);
         gl.uniformMatrix4fv(unif.matNormal,     false, mtxs.normal);
+    }
 
+    setModelViewMtx(mtx) {
+        this.gl.uniformMatrix4fv(this.programInfo.uniforms.matModelView,
+            false, mtx);
     }
 
     executeBatch(batch) {

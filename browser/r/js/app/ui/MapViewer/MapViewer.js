@@ -10,6 +10,8 @@ import Grid from "./Grid.js";
 import Stats from "./Stats.js";
 import LayerChooser from "./LayerChooser.js";
 
+const BLOCK_SIZE = 640; //grid cell size
+
 export default class MapViewer {
     /** Renders map geometry. */
     constructor(game) {
@@ -184,7 +186,6 @@ export default class MapViewer {
             this.reset();
         }
 
-        this.curBlock.load(this.gx); //ensure block model is loaded
         //console.log("map block", this.curBlock);
         const ctx = this.gx.context;
         const mtxs = {
@@ -192,6 +193,7 @@ export default class MapViewer {
             modelView:  ctx.matModelView,
             normal:     ctx.matNormal,
         };
+        this.gx.resetStats();
         this.gx.beginRender(mtxs);
 
         const params = {
@@ -204,18 +206,38 @@ export default class MapViewer {
             yMin: 999999, yMax: -999999,
             zMin: 999999, zMax: -999999,
         };
-
         const streams = [
             ['main', this.layers.mainGeometry],
             ['water', this.layers.waterGeometry],
             ['reflective', this.layers.reflectiveGeometry],
         ];
 
+        this.gx.resetStats();
+        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+            const block = this.map.blocks[iBlock];
+            if(!block || (block.mod >= 0xFF) || !block.load()) continue;
+            this._drawBlock(block, params, streams, stats);
+        }
+        //XXX objects
+        this.stats.updateDrawCounts(stats);
+
+        //console.log("block render OK", this.gx.stats);
+        //this.gx.printStats();
+        //console.log("GX logs:", this.gx.program.getLogs());
+    }
+
+    _drawBlock(block, params, streams, stats) {
+        const gl = this.gx.gl;
+        block.load(this.gx); //ensure block model is loaded
+
+        let mv = mat4.clone(this.gx.context.matModelView);
+        mat4.translate(mv, mv, vec3.fromValues(
+            block.x*BLOCK_SIZE, 0, block.z*BLOCK_SIZE));
+        this.gx.setModelViewMtx(mv);
+
         for(const [name, stream] of streams) {
-            this.gx.resetStats();
             if(stream) {
-                const batch = this.blockRenderer.render(
-                    this.curBlock, name, params);
+                const batch = this.blockRenderer.render(block, name, params);
                 if(batch) { //there was in fact a block to render
                     stats.xMin = Math.min(stats.xMin, batch.geomBounds.x[0]);
                     stats.xMax = Math.max(stats.xMax, batch.geomBounds.x[1]);
@@ -227,14 +249,6 @@ export default class MapViewer {
             }
             stats[name] = this.gx.stats;
         }
-
-        this.gx.resetStats();
-        //XXX objects
-        this.stats.updateDrawCounts(stats);
-
-        //console.log("block render OK", this.gx.stats);
-        //this.gx.printStats();
-        //console.log("GX logs:", this.gx.program.getLogs());
     }
 
     _onMouseDown(event) {

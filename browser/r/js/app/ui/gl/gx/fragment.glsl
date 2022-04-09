@@ -28,6 +28,6 @@ void main() {
         if(useLights) col = vec4(col.rgb * vLighting, col.a);
         //XXX there's probably a shader flag that controls this.
         if(col.a <= 0.0) discard;
-        gl_FragColor = col.rgba;
+        else gl_FragColor = col.rgba;
     }
 }
