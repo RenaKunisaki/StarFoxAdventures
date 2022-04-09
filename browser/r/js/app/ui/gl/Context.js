@@ -187,13 +187,13 @@ export default class Context {
             mat4.rotateY(this.matModelView, this.matModelView, R.y * RADIANS);
             mat4.rotateZ(this.matModelView, this.matModelView, R.z * RADIANS);
             mat4.translate(this.matModelView, // destination matrix
-                this.matModelView,     // matrix to translate
-                [P.x, P.y, P.z]);  // amount to translate
+                this.matModelView,    // matrix to translate
+                [-P.x, -P.y, -P.z]);  // amount to translate
         }
         else {
             mat4.translate(this.matModelView, // destination matrix
-                mat4.create(),     // matrix to translate
-                [P.x, P.y, P.z]);  // amount to translate
+                mat4.create(),       // matrix to translate
+                [-P.x, -P.y, -P.z]); // amount to translate
             mat4.scale(this.matModelView, this.matModelView,
                 [S.x, S.y, S.z]);
             mat4.rotateX(this.matModelView, this.matModelView, R.x * RADIANS);

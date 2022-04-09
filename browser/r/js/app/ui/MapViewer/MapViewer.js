@@ -1,4 +1,4 @@
-import Game from "../../../game/Game.js";
+import Game, {MAP_CELL_SIZE} from "../../../game/Game.js";
 import { assertType } from "../../../Util.js";
 import { E, clearElement } from "../../../lib/Element.js";
 import { hex } from "../../../Util.js";
@@ -9,8 +9,6 @@ import ViewController from "../gl/ui/ViewController.js";
 import Grid from "./Grid.js";
 import Stats from "./Stats.js";
 import LayerChooser from "./LayerChooser.js";
-
-const BLOCK_SIZE = 640; //grid cell size
 
 export default class MapViewer {
     /** Renders map geometry. */
@@ -233,7 +231,7 @@ export default class MapViewer {
 
         let mv = mat4.clone(this.gx.context.matModelView);
         mat4.translate(mv, mv, vec3.fromValues(
-            block.x*BLOCK_SIZE, 0, block.z*BLOCK_SIZE));
+            block.x*MAP_CELL_SIZE, 0, block.z*MAP_CELL_SIZE));
         this.gx.setModelViewMtx(mv);
 
         for(const [name, stream] of streams) {

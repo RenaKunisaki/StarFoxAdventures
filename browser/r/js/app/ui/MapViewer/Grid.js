@@ -1,3 +1,4 @@
+import {MAP_CELL_SIZE} from "../../../game/Game.js";
 import { clearElement, E } from "../../../lib/Element.js";
 
 export default class Grid {
@@ -46,6 +47,10 @@ export default class Grid {
                     }
                     cell.addEventListener('click', e => {
                         this.mapViewer.curBlock = block;
+                        this.mapViewer.viewController.set({pos:{
+                            x: MAP_CELL_SIZE * block.x,
+                            z: MAP_CELL_SIZE * block.z,
+                        }});
                         this.mapViewer.reset();
                         this.mapViewer.redraw();
                     })
