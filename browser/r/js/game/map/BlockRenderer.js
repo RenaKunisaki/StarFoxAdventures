@@ -119,7 +119,7 @@ export default class BlockRenderer {
          *  @param {object} params Render parameters.
          */
         if(!block.load(this.gx)) return;
-        const key = `${whichStream},${params.isGrass}`;
+        const key = `${whichStream},${params.isGrass},${params.showHidden}`;
         if(block.batchOps[key]) return block.batchOps[key];
 
         this.curBatch = new RenderBatch(this.gx);
