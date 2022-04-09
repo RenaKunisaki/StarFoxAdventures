@@ -25,7 +25,9 @@ void main() {
         highp vec4 col;
         if(useTexture) col = mix(tex0, tex1, (1.0-tex0.a) * tex1.a) * vColor;
         else col = vColor;
-        if(useLights) gl_FragColor = vec4(col.rgb * vLighting, col.a);
-        else gl_FragColor = col.rgba;
+        if(useLights) col = vec4(col.rgb * vLighting, col.a);
+        //XXX there's probably a shader flag that controls this.
+        if(col.a <= 0.0) discard;
+        gl_FragColor = col.rgba;
     }
 }
