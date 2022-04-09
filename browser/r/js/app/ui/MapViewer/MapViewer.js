@@ -231,7 +231,7 @@ export default class MapViewer {
 
         let mv = mat4.clone(this.gx.context.matModelView);
         mat4.translate(mv, mv, vec3.fromValues(
-            block.x*MAP_CELL_SIZE, 0, block.z*MAP_CELL_SIZE));
+            block.x*MAP_CELL_SIZE, block.header.yOffset, block.z*MAP_CELL_SIZE));
         this.gx.setModelViewMtx(mv);
 
         for(const [name, stream] of streams) {
