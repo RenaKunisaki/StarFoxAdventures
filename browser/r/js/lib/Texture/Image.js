@@ -65,8 +65,7 @@ export default class Image {
     setPixel(x, y, color) {
         //console.assert(color != undefined && color != null);
         console.assert(typeof(color) == 'number' || typeof(color) == 'object');
-        console.assert(0 <= x < this.width);
-        console.assert(0 <= y < this.height);
+        if(x < 0 || x >= this.width || y < 0 || y >= this.height) return;
         this._minTouchedX = Math.min(this._minTouchedX, x);
         this._minTouchedY = Math.min(this._minTouchedY, y);
         this._maxTouchedX = Math.max(this._maxTouchedX, x);

@@ -303,12 +303,13 @@ export default class ViewController {
                             this.btnRotateOrg, this.lblRotateOrg,
                         ),
                     ),
-                    E.tr(
+                    //we override this with shaders anyway
+                    /* E.tr(
                         E.td({colspan:2},
                             this.chkEnableBackface, this.lblEnableBackface, {
                             title:"Enable backface culling",
                         }),
-                    ),
+                    ), */
                 ),
             ),
         );

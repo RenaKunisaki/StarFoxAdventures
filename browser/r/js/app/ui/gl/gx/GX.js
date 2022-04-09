@@ -73,6 +73,8 @@ export default class GX {
         this._buildGlTables();
         this.blankTexture = new Texture(context);
         this.blankTexture.makeSolidColor(255, 0, 255, 0);
+        this.missingTexture = new Texture(context);
+        this.missingTexture.loadFromImage('/r/missing-texture.png');
         //if changing this we need to also add more samplers in the fragment
         //shader and update loadPrograms()
         this.MAX_TEXTURES = 2;

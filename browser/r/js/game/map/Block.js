@@ -68,7 +68,13 @@ export default class Block {
             return false;
         }
         const dTab   = fTab.getData();
-        const fBlock = new GameFile(this.game.iso.getFile(`${modPath}.zlb.bin`));
+        let   fBlock = this.game.iso.getFile(`${modPath}.zlb.bin`);
+        if(!fBlock) {
+            console.error("File not found", `${modPath}.zlb.bin`);
+            this._triedLoad = false;
+            return false;
+        }
+        fBlock = new GameFile(fBlock);
 
         //get the data for this block
         const offsBlock = dTab.getUint32((this.sub+firstBlock)*4) & 0xFFFFFF;
@@ -192,12 +198,14 @@ export default class Block {
         //load the texture files for this map
         const dir = `/${this.map.dirName}`;
         this.textures = [];
+        const gameTextures = []; //debug
         console.log("Block has %d textures", this.header.nTextures);
         for(let i=0; i<this.header.nTextures; i++) {
             try {
                 let texId = view.getInt32(this.header.textures + (i*4));
                 texId = -(texId|0x8000); //game's odd way to use TEX1 by default
                 const gTex = this.game.loadTexture(texId, dir);
+                gameTextures.push(gTex);
                 if(gTex) {
                     const tex = new Texture(this.gx.context);
                     tex.loadGameTexture(gTex);
@@ -206,13 +214,13 @@ export default class Block {
                 }
                 else {
                     console.warn(`Failed loading texture 0x${hex(texId)}`);
-                    this.textures.push(null); //keep correct indexing
+                    this.textures.push(gx.missingTexture);
                 }
             }
             catch(ex) {
                 console.error("Failed loading texture", i, ex);
             }
         }
-        console.log("Block textures", this.textures);
+        console.log("Block textures", this.textures, gameTextures);
     }
 }
