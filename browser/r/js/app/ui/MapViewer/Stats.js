@@ -11,14 +11,19 @@ const statNames = {
     nVtxs: "Vtxs",
     nPolys: "Polys",
     nDrawCmds: "Ops",
+    nBufferUploads: "BufOps",
+    nBufferBytes: "BufBytes",
+    nBufferSwaps: "BufSwaps",
+    renderTime:   "Msec",
 };
-const statOrder = ['nVtxs', 'nPolys', 'nDrawCmds'];
+const statOrder = ['nVtxs', 'nPolys', 'nDrawCmds', 'nBufferUploads',
+    'nBufferBytes', 'nBufferSwaps', 'renderTime'];
 
 const blockPropNames = {
-    nRenderInstrsMain:       'RenderOpsMain',
-    nRenderInstrsReflective: 'RenderOpsRefl',
-    nRenderInstrsWater:      'RenderOpsWatr',
-    nVtxs:                   'VtxPositions',
+    nRenderInstrsMain:       'OpsMain',
+    nRenderInstrsReflective: 'OpsRefl',
+    nRenderInstrsWater:      'OpsWatr',
+    nVtxs:                   'VtxPoss',
     nUnk:                    'Unknown',
     nColors:                 'Colors',
     nTextures:               'Textures',

@@ -176,6 +176,7 @@ export default class MapViewer {
     _draw() {
         /** Draw the map. Called by Context. */
         if(!this.map) return;
+        const tStart = performance.now();
         this.gx.context.resetStats();
         this.gx.reset();
 
@@ -205,20 +206,40 @@ export default class MapViewer {
             ['reflective', this.layers.reflectiveGeometry],
         ];
 
-        const blockStats = {};
+        const blockStats = {totals:{}};
         for(const [name, stream] of streams) {
             blockStats[name] = [];
             for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
                 const block = this.map.blocks[iBlock];
                 if(!block || (block.mod >= 0xFF) || !block.load()) continue;
-                if(stream) this._drawBlock(block, params, name);
+                let batch = null;
+                if(stream) batch = this._drawBlock(block, params, name);
+                this.gx.context.stats.renderTime = performance.now() -
+                    this.gx.context.stats.renderStartTime;
                 this.gx.context.stats.block = block;
+                this.gx.context.stats.batch = batch;
                 blockStats[name].push(this.gx.context.stats);
                 this.gx.context.resetStats();
             }
         }
         //XXX objects
-        console.log("RENDER STATS", blockStats);
+
+        blockStats.streamTimes = {};
+        const tEnd = performance.now();
+        for(const [name, stream] of streams) {
+            blockStats.streamTimes[name] = 0;
+            for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+                const obj = blockStats[name][iBlock];
+                if(!obj) continue;
+                blockStats.streamTimes[name] += obj.renderTime;
+                for(const [k,v] of Object.entries(obj)) {
+                    if(isNaN(v)) continue;
+                    if(blockStats.totals[k] == undefined) blockStats.totals[k] = v;
+                    else blockStats.totals[k] += v;
+                }
+            }
+        }
+        console.log("Render msec:", tEnd-tStart, "stats:", blockStats);
         this.stats.updateDrawCounts(blockStats);
 
         //console.log("block render OK", this.gx.context.stats);
@@ -246,6 +267,7 @@ export default class MapViewer {
             gb.zMin = Math.min(gb.zMin, batch.geomBounds.zMin+offsZ);
             gb.zMax = Math.max(gb.zMax, batch.geomBounds.zMax+offsZ);
         }
+        return batch; //for stats
     }
 
     _onMouseDown(event) {

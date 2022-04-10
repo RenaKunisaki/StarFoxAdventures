@@ -12,7 +12,7 @@ export default class Context {
         this.zNear = 0.1;
         this.zFar  = 10000;
         this.clearColor = [0.0, 0.5, 0.5, 1.0];
-        this.clearDepth = 1.0;
+        this.clearDepth = 1.0; //game uses lower = nearer
         this.drawFunc   = drawFunc; //callback to draw the scene
         //XXX add getters/setters for these
         this._gl_extensions = {};
@@ -94,7 +94,7 @@ export default class Context {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.enable(gl.DEPTH_TEST); // Enable depth testing
         //gl.disable(gl.DEPTH_TEST);
-        gl.depthFunc(gl.GEQUAL);  // Near things obscure far things
+        gl.depthFunc(gl.GEQUAL);  // lower depth value = nearer to camera
         gl.enable(gl.BLEND);
         //gl.disable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -165,6 +165,8 @@ export default class Context {
     resetStats() {
         this.stats = {
             nBufferUploads: 0, //# glBufferData/glBufferSubData calls
+            nBufferBytes: 0, //# bytes uploaded
+            nBufferSwaps: 0, //# times buffer binding changed
             nPolys: 0, //# polygons drawn
             nVtxs: 0, //# vtxs drawn
             nDrawCmds: 0, //# draw commands executed
@@ -225,14 +227,16 @@ export default class Context {
         mat4.transpose(this.matNormal, this.matNormal);
 
         gl.frontFace(this.frontFaceCW ? gl.CW : gl.CCW);
-        if(this.enableBackfaceCulling) gl.enable(gl.CULL_FACE);
-        else gl.disable(gl.CULL_FACE);
+        //our code overrides this, so this is a waste
+        //if(this.enableBackfaceCulling) gl.enable(gl.CULL_FACE);
+        //else gl.disable(gl.CULL_FACE);
 
         //clear buffers and render.
         gl.enable(gl.BLEND);
         //gl.disable(gl.BLEND);
         gl.clearColor(this.clearColor[0], this.clearColor[1],
             this.clearColor[2], this.clearColor[3]);
+        gl.clearDepth(this.clearDepth);
         //gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 

@@ -204,6 +204,8 @@ export default class GX {
         this.context.stats.nVtxs     += stats.nVtxs;
         this.context.stats.nDrawCmds += stats.nOps;
         this.context.stats.nPolys    += stats.nPolys;
+        this.context.stats.nBufferUploads += stats.nBufferUploads;
+        this.context.stats.nBufferBytes += stats.nBufferBytes;
         const gb = this.context.stats.geomBounds;
         gb.xMin = Math.min(gb.xMin, batch.geomBounds.xMin);
         gb.xMax = Math.max(gb.xMax, batch.geomBounds.xMax);

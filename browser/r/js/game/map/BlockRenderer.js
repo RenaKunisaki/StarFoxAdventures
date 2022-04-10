@@ -103,6 +103,13 @@ const vatDefaults = [
     },
 ];
 
+function _setShaderParams(gl, gx, cull, blendMode, sFactor, dFactor, logicOp,
+compareEnable, compareFunc, updateEnable) {
+    if(cull) gl.enable(gl.CULL_FACE); else gl.disable(gl.CULL_FACE);
+    gx.setBlendMode(blendMode, sFactor, dFactor, logicOp);
+    gx.setZMode(compareEnable, compareFunc, updateEnable);
+}
+
 export default class BlockRenderer {
     /** Renders map blocks. */
     constructor(gx) {
@@ -131,18 +138,25 @@ export default class BlockRenderer {
         //set initial GX params
         this._setDefaultVtxFmt();
 
-        const isGrass = params.isGrass;
+        //set initial render modes (XXX verify)
+        this.curBatch.addFunction(() => {_setShaderParams(
+            this.gx.gl, this.gx, true, //culling enabled
+            GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
+            GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
+            true, GX.CompareMode.LEQUAL, true); //depth test+update enabled
+        });
+
         let done = false;
         while(!done && !ops.isEof) {
             //this is similar but not identical to the render instructions
             //used for character models.
             const op = ops.read(4);
             switch(op) {
-                case 1: this._renderOpTexture(isGrass);   break;
-                case 2: this._renderOpCallList(isGrass);  break;
-                case 3: this._renderOpSetVtxFmt(isGrass); break;
+                case 1: this._renderOpTexture();   break;
+                case 2: this._renderOpCallList();  break;
+                case 3: this._renderOpSetVtxFmt(); break;
                 case 0: //unused, but should be same as 4
-                case 4: this._renderOpMatrix(isGrass);    break;
+                case 4: this._renderOpMatrix();    break;
 
                 case null: //reached end of stream
                     console.error("Premature end of stream at bit 0x%s",
@@ -168,16 +182,18 @@ export default class BlockRenderer {
          *  @param {object} params Render parameters.
          *  @returns {RenderBatch} The render batch.
          */
-        this.curBlock = block;
-        this.params   = params;
-        const batch = this.parse(block, whichStream, params);
+        this.curShaderIdx = null;
+        this.curBlock     = block;
+        this.curStream    = whichStream;
+        this.params       = params;
+        const batch       = this.parse(block, whichStream, params);
         if(!batch) return;
         this.gx.executeBatch(batch);
         this.gx.gl.flush();
         return batch;
     }
 
-    _renderOpTexture(isGrass) {
+    _renderOpTexture() {
         /** Select a texture and shader.
          *  This can affect how later commands are interpreted.
          */
@@ -185,7 +201,8 @@ export default class BlockRenderer {
         const gl  = this.gx.gl;
         const ops = this.curOps;
         const idx = ops.read(6);
-        if(isGrass) return;
+        if(this.params.isGrass) return;
+        if(this.curShaderIdx == idx) return;
 
         this.curShader = this.curBlock.shaders[idx];
         this.curShaderIdx = idx;
@@ -198,14 +215,29 @@ export default class BlockRenderer {
         if(this.curShader) {
             this._handleShaderFlags();
         }
+        else if(this.curStream == 'water') { //XXX verify these
+            this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
+                true, //cull backfaces
+                GX.BlendMode.BLEND, //blend mode
+                GX.BlendFactor.SRCALPHA, //sFactor
+                GX.BlendFactor.INVSRCALPHA, //dFactor
+                GX.LogicOp.NOOP, //logicOp
+                true, //compareEnable
+                GX.CompareMode.LEQUAL, //compareFunc
+                false, //updateEnable
+            )});
+        }
         else {
-            this.curBatch.addFunction(() => {
-                gx.setBlendMode(GX.BlendMode.NONE,
-                    GX.BlendFactor.ONE,
-                    GX.BlendFactor.ZERO,
-                    GX.LogicOp.NOOP);
-                gx.setZMode(true, GX.CompareMode.LEQUAL, true);
-            });
+            this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
+                true, //cull backfaces
+                GX.BlendMode.NONE, //blend mode
+                GX.BlendFactor.ONE, //sFactor
+                GX.BlendFactor.ZERO, //dFactor
+                GX.LogicOp.NOOP, //logicOp
+                true, //compareEnable
+                GX.CompareMode.LEQUAL, //compareFunc
+                true, //updateEnable
+            )});
         }
 
         const nLayers = this.curShader ? this.curShader.nLayers : 0;
@@ -226,47 +258,54 @@ export default class BlockRenderer {
         const gx    = this.gx;
         const gl    = this.gx.gl;
         const flags = this.curShader.flags;
-        if(flags & ShaderFlags.CullBackface) {
-            this.curBatch.addFunction(() => gl.enable(gl.CULL_FACE));
-        }
-        else this.curBatch.addFunction(() => gl.disable(gl.CULL_FACE));
+        const cull  = flags & ShaderFlags.CullBackface;
+        let blendMode, sFactor, dFactor, logicOp,
+            compareEnable, compareFunc, updateEnable;
 
         if(((flags & ShaderFlags.ForceBlend) == 0)
         && ((flags & ShaderFlags.BlendFlag29) == 0)) {
             if (((flags & ShaderFlags.AlphaCompare) == 0)
             || ((flags & ShaderFlags.Lava) != 0)) {
-                this.curBatch.addFunction(() => {
-                    gx.setBlendMode(GX.BlendMode.NONE,
-                        GX.BlendFactor.ONE,
-                        GX.BlendFactor.ZERO,
-                        GX.LogicOp.NOOP);
-                    gx.setZMode(true, GX.CompareMode.LEQUAL, true);
-                    //XXX
-                    //gx.setPeControl_ZCompLoc_(1);
-                    //gx.setTevAlphaIn(7,0,0,7,0); //stage, a, b, c, d
-                });
+                blendMode     = GX.BlendMode.NONE;
+                sFactor       = GX.BlendFactor.ONE;
+                dFactor       = GX.BlendFactor.ZERO;
+                logicOp       = GX.LogicOp.NOOP;
+                compareEnable = true;
+                compareFunc   = GX.CompareMode.LEQUAL;
+                updateEnable  = true;
+                //XXX
+                //gx.setPeControl_ZCompLoc_(1);
+                //gx.setTevAlphaIn(7,0,0,7,0); //stage, a, b, c, d
             }
             else {
-                this.curBatch.addFunction(() => {
-                    gx.setBlendMode(GX.BlendMode.NONE,
-                        GX.BlendFactor.ONE,
-                        GX.BlendFactor.ZERO,
-                        GX.LogicOp.NOOP);
-                    gx.setZMode(true, GX.CompareMode.LEQUAL, true);
-                    //gx.setPeControl_ZCompLoc_(0);
-                    //gx.setTevAlphaIn(4,0,0,4,0);
-                });
+                blendMode     = GX.BlendMode.NONE;
+                sFactor       = GX.BlendFactor.ONE;
+                dFactor       = GX.BlendFactor.ZERO;
+                logicOp       = GX.LogicOp.NOOP;
+                compareEnable = true;
+                compareFunc   = GX.CompareMode.LEQUAL;
+                updateEnable  = true;
+                //gx.setPeControl_ZCompLoc_(0);
+                //gx.setTevAlphaIn(4,0,0,4,0);
             }
         }
         else {
-            gx.setBlendMode(GX.BlendMode.BLEND,
-                GX.BlendFactor.SRCALPHA,
-                GX.BlendFactor.INVSRCALPHA,
-                GX.LogicOp.NOOP);
-            gx.setZMode(true, GX.CompareMode.LEQUAL, false);
+            blendMode     = GX.BlendMode.BLEND;
+            sFactor       = GX.BlendFactor.SRCALPHA;
+            dFactor       = GX.BlendFactor.INVSRCALPHA;
+            logicOp       = GX.LogicOp.NOOP;
+            compareEnable = true;
+            compareFunc   = GX.CompareMode.LEQUAL;
+            updateEnable  = false;
             //gx.setPeControl_ZCompLoc_(1);
             //gx.setTevAlphaIn(7,0,0,7,0);
         }
+
+        //condense these into one function for hopefully better speed
+        this.curBatch.addFunction(() => {
+            _setShaderParams(gl, gx, cull, blendMode, sFactor, dFactor, logicOp,
+                compareEnable, compareFunc, updateEnable);
+        });
     }
 
     _makeSetTextureCmd(slot, tex) {
@@ -279,7 +318,7 @@ export default class BlockRenderer {
         };
     }
 
-    _renderOpCallList(isGrass) {
+    _renderOpCallList() {
         /** Call one of the block's display lists.
          */
         const ops = this.curOps;
@@ -288,7 +327,7 @@ export default class BlockRenderer {
             throw new Error(`Calling list ${idx} but max is ${this.curBlock.dlists.length}`);
         }
 
-        if(isGrass) {
+        if(this.params.isGrass) {
             if(this.curShader
             && (this.curShader.flags & ShaderFlags.TranspRelated2000)) return;
         }
@@ -337,7 +376,7 @@ export default class BlockRenderer {
         }
     }
 
-    _renderOpSetVtxFmt(isGrass) {
+    _renderOpSetVtxFmt() {
         /** Change the vertex data format.
          */
         const INDEX8 = 2, INDEX16 = 3;
@@ -352,7 +391,7 @@ export default class BlockRenderer {
             colSize = ops.read(1) ? INDEX16 : INDEX8;
         }
         let texSize  = ops.read(1) ? INDEX16 : INDEX8;
-        if(isGrass) return;
+        if(this.params.isGrass) return;
 
         let TEX = [0, 0, 0, 0, 0, 0, 0, 0];
         if(this.curShader && !(this.curShader.flags & ShaderFlags.Water)) {
@@ -379,7 +418,7 @@ export default class BlockRenderer {
             (TEX[4] <<  8) | (TEX[5] << 10) | (TEX[6] << 12) | (TEX[7] << 14));
     }
 
-    _renderOpMatrix(isGrass) {
+    _renderOpMatrix() {
         /** Load one of the block's matrices into GX XF registers.
          */
         const ops   = this.curOps;

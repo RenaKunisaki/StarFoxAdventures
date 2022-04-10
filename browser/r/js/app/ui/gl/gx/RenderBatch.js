@@ -17,6 +17,8 @@ function CHECK_ERROR(gl) {
     console.assert(!err);
 }
 
+let _curBufs = null; //RenderBatch that last bound its buffers
+
 export default class RenderBatch {
     /** A collection of render operations and data, that
      *  can be executed to render a complex model.
@@ -51,17 +53,21 @@ export default class RenderBatch {
          */
         const gl = this.gl;
         CHECK_ERROR(gl);
-        if(!this._isFinished) this._finish(programInfo);
-        console.assert(_depth < 10);
 
         const stats = {
             nOps:   0, //total operations
             nVtxs:  0, //total vertices drawn
             nPolys: 0, //total polygons drawn
+            nBufferUploads: 0, //total buffer data ops
+            nBufferBytes:   0, //total buffer data size uploaded
+            nBufferSwaps:   0, //# times buffer binding changed
         };
 
+        if(!this._isFinished) this._finish(programInfo, stats);
+        console.assert(_depth < 10);
+
         //set the matrices and attribute buffers
-        this._bindBuffers(programInfo);
+        this._bindBuffers(programInfo, stats);
 
         //execute the operations
         for(let cmd of this.ops) {
@@ -77,11 +83,11 @@ export default class RenderBatch {
             else this._doDrawOp(cmd, stats);
             CHECK_ERROR(gl);
         }
-        console.log("render batch stats", stats);
+        //console.log("render batch stats", stats);
         return stats;
     }
 
-    _finish(programInfo) {
+    _finish(programInfo, stats) {
         /** Convert the data buffers to typed arrays and
          *  upload them to GL.
          *  @note After this, no more operations can be added.
@@ -103,7 +109,7 @@ export default class RenderBatch {
         this._idxBuf = new Uint16Array(this._idxs);
         this._isFinished = true;
 
-        this._uploadBuffers(programInfo);
+        this._uploadBuffers(programInfo, stats);
     }
 
     addFunction(func) {
@@ -189,12 +195,12 @@ export default class RenderBatch {
         }
     }
 
-    _uploadBuffers(programInfo) {
+    _uploadBuffers(programInfo, stats) {
         /** Upload the attribute/index buffer data
          *  to the given program.
          */
         const gl = this.gl;
-        console.log("uploading buffer data");
+        //console.log("uploading buffer data");
 
         for(const [field, buf] of Object.entries(this.buffers)) {
             const count = AttrCounts[field];
@@ -211,6 +217,8 @@ export default class RenderBatch {
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
             gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
             CHECK_ERROR(gl);
+            stats.nBufferUploads++;
+            stats.nBufferBytes += data.byteLength;
         }
 
         //vertex index buffer
@@ -220,10 +228,14 @@ export default class RenderBatch {
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._idxBufObj);
         gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this._idxBuf, gl.STATIC_DRAW);
         CHECK_ERROR(gl);
+        stats.nBufferUploads++;
+        stats.nBufferBytes += this._idxBuf.byteLength;
     }
 
-    _bindBuffers(programInfo) {
+    _bindBuffers(programInfo, stats) {
         /** Bind the attribute/index buffers. */
+        if(_curBufs == this) return;
+        _curBufs = this;
         const gl = this.gl;
         for(const [field, buf] of Object.entries(this.buffers)) {
             const count = AttrCounts[field];
@@ -236,6 +248,7 @@ export default class RenderBatch {
                 //console.warn("No shader attrib found for", field);
                 continue; //no such attribute in shader
             }
+            stats.nBufferSwaps++;
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
             const type = field.endsWith('IDX') ? gl.UNSIGNED_INT : gl.FLOAT;
             gl.vertexAttribPointer(attr,
@@ -246,6 +259,7 @@ export default class RenderBatch {
                 0);       //offset in bytes to start from in buffer
             gl.enableVertexAttribArray(attr);
         }
+        stats.nBufferSwaps++;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._idxBufObj);
     }
 
