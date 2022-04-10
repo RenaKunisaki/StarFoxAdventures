@@ -162,6 +162,21 @@ export default class Context {
         this.redraw();
     }
 
+    resetStats() {
+        this.stats = {
+            nBufferUploads: 0, //# glBufferData/glBufferSubData calls
+            nPolys: 0, //# polygons drawn
+            nVtxs: 0, //# vtxs drawn
+            nDrawCmds: 0, //# draw commands executed
+            geomBounds: {
+                xMin: 999999999, xMax: -999999999,
+                yMin: 999999999, yMax: -999999999,
+                zMin: 999999999, zMax: -999999999,
+            },
+            renderStartTime: performance.now(),
+        };
+    }
+
     redraw() {
         /** Redraw the scene.
          */
@@ -170,6 +185,8 @@ export default class Context {
         const S  = this.view.scale;
         const R  = this.view.rotation;
         const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+
+        this.resetStats();
 
         //set up projection matrix
         mat4.perspective(this.matProjection, //destination matrix
@@ -228,6 +245,8 @@ export default class Context {
             }
         }
         gl.flush();
+
+        this.stats.renderTime = performance.now() - this.stats.renderStartTime;
 
         //now render again to our depth buffer.
         //gl.disable(gl.BLEND);

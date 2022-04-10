@@ -63,22 +63,50 @@ export default class Stats {
         );
     }
 
-    updateDrawCounts(stats) {
-        stats.total = {};
-        for(const stat of statOrder) {
-            stats.total[stat] = 0;
-            for(const key of streamOrder) {
-                stats.total[stat] += stats[key][stat];
-                this._statElems[`${stat}.${key}`].innerText = stats[key][stat];
+    updateDrawCounts(blocks) {
+        const curBlock = this.mapViewer.curBlock;
+        const gb = {
+            xMin: 999999999, xMax: -999999999,
+            yMin: 999999999, yMax: -999999999,
+            zMin: 999999999, zMax: -999999999,
+        };
+        const totals = {allStreams:{}};
+        for(let stat of statOrder) totals.allStreams[stat] = 0;
+        for(let stream of streamOrder) {
+            totals[stream] = {};
+            for(let stat of statOrder) totals[stream][stat] = 0;
+            for(let block of blocks[stream]) {
+                if(block.block == curBlock) {
+                    //...
+                }
+                for(let stat of statOrder) {
+                    totals[stream][stat] += block[stat];
+                }
+                gb.xMin = Math.min(gb.xMin, block.geomBounds.xMin);
+                gb.xMax = Math.max(gb.xMax, block.geomBounds.xMax);
+                gb.yMin = Math.min(gb.yMin, block.geomBounds.yMin);
+                gb.yMax = Math.max(gb.yMax, block.geomBounds.yMax);
+                gb.zMin = Math.min(gb.zMin, block.geomBounds.zMin);
+                gb.zMax = Math.max(gb.zMax, block.geomBounds.zMax);
             }
-            this._statElems[`${stat}.total`].innerText = stats.total[stat];
+            for(let stat of statOrder) {
+                this._statElems[`${stat}.${stream}`].innerText = totals[stream][stat];
+            }
         }
-        this._statElems.xMin.innerText = stats.xMin.toFixed(2);
-        this._statElems.xMax.innerText = stats.xMax.toFixed(2);
-        this._statElems.yMin.innerText = stats.yMin.toFixed(2);
-        this._statElems.yMax.innerText = stats.yMax.toFixed(2);
-        this._statElems.zMin.innerText = stats.zMin.toFixed(2);
-        this._statElems.zMax.innerText = stats.zMax.toFixed(2);
+        for(let stream of streamOrder) {
+            for(let stat of statOrder) {
+                totals.allStreams[stat] += totals[stream][stat];
+            }
+        }
+        for(let stat of statOrder) {
+            this._statElems[`${stat}.total`].innerText = totals.allStreams[stat];
+        }
+        this._statElems.xMin.innerText = gb.xMin.toFixed(2);
+        this._statElems.xMax.innerText = gb.xMax.toFixed(2);
+        this._statElems.yMin.innerText = gb.yMin.toFixed(2);
+        this._statElems.yMax.innerText = gb.yMax.toFixed(2);
+        this._statElems.zMin.innerText = gb.zMin.toFixed(2);
+        this._statElems.zMax.innerText = gb.zMax.toFixed(2);
     }
 
     refresh() {
@@ -107,6 +135,7 @@ export default class Stats {
             Int('RenderOpsRefl', curBlock.header.nRenderInstrsReflective),
             Int('RenderOpsWatr', curBlock.header.nRenderInstrsWater),
             Int('VtxPositions',  curBlock.header.nVtxs),
+            Int('Unknown',       curBlock.header.nUnk),
             Int('Colors',        curBlock.header.nColors),
             Int('Textures',      curBlock.header.nTextures),
             Int('TexCoords',     curBlock.header.nTexCoords),

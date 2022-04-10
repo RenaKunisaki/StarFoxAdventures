@@ -176,6 +176,7 @@ export default class MapViewer {
     _draw() {
         /** Draw the map. Called by Context. */
         if(!this.map) return;
+        this.gx.context.resetStats();
         this.gx.reset();
 
         const gl = this.gx.gl;
@@ -192,18 +193,11 @@ export default class MapViewer {
             modelView:  ctx.matModelView,
             normal:     ctx.matNormal,
         };
-        this.gx.resetStats();
         this.gx.beginRender(mtxs);
 
         const params = {
             showHidden: this.layers.hiddenGeometry,
             isGrass: false, //draw the grass effect instead of the geometry
-        };
-        const stats = {
-            block: this.curBlock,
-            xMin: 999999, xMax: -999999,
-            yMin: 999999, yMax: -999999,
-            zMin: 999999, zMax: -999999,
         };
         const streams = [
             ['main', this.layers.mainGeometry],
@@ -211,42 +205,46 @@ export default class MapViewer {
             ['reflective', this.layers.reflectiveGeometry],
         ];
 
-        this.gx.resetStats();
-        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
-            const block = this.map.blocks[iBlock];
-            if(!block || (block.mod >= 0xFF) || !block.load()) continue;
-            this._drawBlock(block, params, streams, stats);
+        const blockStats = {};
+        for(const [name, stream] of streams) {
+            blockStats[name] = [];
+            for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+                const block = this.map.blocks[iBlock];
+                if(!block || (block.mod >= 0xFF) || !block.load()) continue;
+                if(stream) this._drawBlock(block, params, name);
+                this.gx.context.stats.block = block;
+                blockStats[name].push(this.gx.context.stats);
+                this.gx.context.resetStats();
+            }
         }
         //XXX objects
-        this.stats.updateDrawCounts(stats);
+        console.log("RENDER STATS", blockStats);
+        this.stats.updateDrawCounts(blockStats);
 
-        //console.log("block render OK", this.gx.stats);
-        //this.gx.printStats();
+        //console.log("block render OK", this.gx.context.stats);
         //console.log("GX logs:", this.gx.program.getLogs());
     }
 
-    _drawBlock(block, params, streams, stats) {
+    _drawBlock(block, params, stream) {
         const gl = this.gx.gl;
         block.load(this.gx); //ensure block model is loaded
 
+        const offsX = block.x*MAP_CELL_SIZE;
+        const offsY = block.header.yOffset;
+        const offsZ = block.z*MAP_CELL_SIZE;
         let mv = mat4.clone(this.gx.context.matModelView);
-        mat4.translate(mv, mv, vec3.fromValues(
-            block.x*MAP_CELL_SIZE, block.header.yOffset, block.z*MAP_CELL_SIZE));
+        mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
         this.gx.setModelViewMtx(mv);
 
-        for(const [name, stream] of streams) {
-            if(stream) {
-                const batch = this.blockRenderer.render(block, name, params);
-                if(batch) { //there was in fact a block to render
-                    stats.xMin = Math.min(stats.xMin, batch.geomBounds.x[0]);
-                    stats.xMax = Math.max(stats.xMax, batch.geomBounds.x[1]);
-                    stats.yMin = Math.min(stats.yMin, batch.geomBounds.y[0]);
-                    stats.yMax = Math.max(stats.yMax, batch.geomBounds.y[1]);
-                    stats.zMin = Math.min(stats.zMin, batch.geomBounds.z[0]);
-                    stats.zMax = Math.max(stats.zMax, batch.geomBounds.z[1]);
-                }
-            }
-            stats[name] = this.gx.stats;
+        const batch = this.blockRenderer.render(block, stream, params);
+        if(batch) { //there was in fact a block to render
+            const gb = this.gx.context.stats.geomBounds;
+            gb.xMin = Math.min(gb.xMin, batch.geomBounds.xMin+offsX);
+            gb.xMax = Math.max(gb.xMax, batch.geomBounds.xMax+offsX);
+            gb.yMin = Math.min(gb.yMin, batch.geomBounds.yMin+offsY);
+            gb.yMax = Math.max(gb.yMax, batch.geomBounds.yMax+offsY);
+            gb.zMin = Math.min(gb.zMin, batch.geomBounds.zMin+offsZ);
+            gb.zMax = Math.max(gb.zMax, batch.geomBounds.zMax+offsZ);
         }
     }
 

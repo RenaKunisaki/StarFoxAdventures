@@ -523,8 +523,7 @@
         <field type="short" name="yMax" />
         <field type="short" name="yOffset" />
         <field type="u16" name="nVtxs" />
-        <field type="undefined" /><!-- most likely u16 n??? -->
-        <field type="undefined" />
+        <field type="u16" name="nUnk" /><!-- most likely u16 n??? -->
         <field type="u16" name="nColors" />
         <field type="u16" name="nTexCoords" />
         <field type="u16" name="nPolygons" />
