@@ -14,6 +14,27 @@ const statNames = {
 };
 const statOrder = ['nVtxs', 'nPolys', 'nDrawCmds'];
 
+const blockPropNames = {
+    nRenderInstrsMain:       'RenderOpsMain',
+    nRenderInstrsReflective: 'RenderOpsRefl',
+    nRenderInstrsWater:      'RenderOpsWatr',
+    nVtxs:                   'VtxPositions',
+    nUnk:                    'Unknown',
+    nColors:                 'Colors',
+    nTextures:               'Textures',
+    nTexCoords:              'TexCoords',
+    nShaders:                'Shaders',
+    nPolygons:               'Polys',
+    nPolyGroups:             'PolyGroups',
+    nDlists:                 'Dlists',
+    nHits:                   'Hits',
+};
+const blockPropOrder = ['nRenderInstrsMain', 'nRenderInstrsReflective',
+    'nRenderInstrsWater', 'nVtxs', 'nUnk', 'nColors', 'nTextures',
+    'nTexCoords', 'nShaders', 'nPolygons', 'nPolyGroups', 'nDlists',
+    'nHits',
+];
+
 export default class Stats {
     /** Widget displaying render stats. */
     constructor(mapViewer) {
@@ -61,9 +82,27 @@ export default class Stats {
             E.tr(E.th(null, "Y"), this._statElems.yMin, this._statElems.yMax),
             E.tr(E.th(null, "Z"), this._statElems.zMin, this._statElems.zMax),
         );
+
+        this._blockPropElems = {};
+        this._tbl.append(E.tr(
+            E.th(null, "BlockInfo"),
+            E.th(null, "Selected", {colspan:2}),
+            E.th(null, "Total",    {colspan:2}),
+        ));
+        for(const op of blockPropOrder) {
+            const eCur   = E.td('number', {colspan:2});
+            const eTotal = E.td('number', {colspan:2});
+            this._blockPropElems[op] = {cur:eCur, total:eTotal};
+            this._tbl.append(E.tr(null,
+                E.th(null, blockPropNames[op]), eCur, eTotal));
+        }
     }
 
     updateDrawCounts(blocks) {
+        //update things that could change on each draw.
+        //XXX really they should only change depending on settings like
+        //which things are enabled, so we don't really need to do this
+        //on every redraw.
         const curBlock = this.mapViewer.curBlock;
         const gb = {
             xMin: 999999999, xMax: -999999999,
@@ -71,7 +110,9 @@ export default class Stats {
             zMin: 999999999, zMax: -999999999,
         };
         const totals = {allStreams:{}};
+        for(const op of blockPropOrder) totals[op] = 0;
         for(let stat of statOrder) totals.allStreams[stat] = 0;
+
         for(let stream of streamOrder) {
             totals[stream] = {};
             for(let stat of statOrder) totals[stream][stat] = 0;
@@ -90,32 +131,38 @@ export default class Stats {
                 gb.zMax = Math.max(gb.zMax, block.geomBounds.zMax);
             }
             for(let stat of statOrder) {
-                this._statElems[`${stat}.${stream}`].innerText = totals[stream][stat];
+                this._statElems[`${stat}.${stream}`].innerText =
+                    totals[stream][stat].toLocaleString();
             }
         }
+
         for(let stream of streamOrder) {
             for(let stat of statOrder) {
                 totals.allStreams[stat] += totals[stream][stat];
             }
         }
         for(let stat of statOrder) {
-            this._statElems[`${stat}.total`].innerText = totals.allStreams[stat];
+            this._statElems[`${stat}.total`].innerText =
+                totals.allStreams[stat].toLocaleString();
         }
-        this._statElems.xMin.innerText = gb.xMin.toFixed(2);
-        this._statElems.xMax.innerText = gb.xMax.toFixed(2);
-        this._statElems.yMin.innerText = gb.yMin.toFixed(2);
-        this._statElems.yMax.innerText = gb.yMax.toFixed(2);
-        this._statElems.zMin.innerText = gb.zMin.toFixed(2);
-        this._statElems.zMax.innerText = gb.zMax.toFixed(2);
+
+        this._statElems.xMin.innerText = gb.xMin.toLocaleString();
+        this._statElems.xMax.innerText = gb.xMax.toLocaleString();
+        this._statElems.yMin.innerText = gb.yMin.toLocaleString();
+        this._statElems.yMax.innerText = gb.yMax.toLocaleString();
+        this._statElems.zMin.innerText = gb.zMin.toLocaleString();
+        this._statElems.zMax.innerText = gb.zMax.toLocaleString();
     }
 
     refresh() {
+        //update things that only change when switching maps/blocks.
         const map = this.mapViewer.map;
         const curBlock = this.mapViewer.curBlock;
 
-        //ensure blocks are loaded, and find bounds
-        let xMin = 999999, xMax = -999999;
-        let zMin = 999999, zMax = -999999;
+        let xMin = 999999999, xMax = -999999999;
+        let zMin = 999999999, zMax = -999999999;
+        const totals = {};
+        for(const prop of blockPropOrder) totals[prop] = 0;
         for(let block of map.blocks) {
             if((!block) || block.mod >= 0xFF) continue;
             block.load(); //no-op if already loaded
@@ -123,43 +170,16 @@ export default class Stats {
             zMin = Math.min(zMin, block.z);
             xMax = Math.max(xMax, block.x);
             zMax = Math.max(zMax, block.z);
+            for(const prop of blockPropOrder) {
+                if(block == curBlock) {
+                    this._blockPropElems[prop].cur.innerText =
+                        block.header[prop].toLocaleString();
+                }
+                totals[prop] += block.header[prop];
+            }
         }
-        const Int = (name, val) => E.tr(E.th(null, name),
-            E.td('int', val.toLocaleString(), {colspan:2}),
-        );
-
-        //build the table
-        if(!(curBlock && curBlock.header)) return;
-        clearElement(this._tBlock).append(
-            Int('RenderOpsMain', curBlock.header.nRenderInstrsMain),
-            Int('RenderOpsRefl', curBlock.header.nRenderInstrsReflective),
-            Int('RenderOpsWatr', curBlock.header.nRenderInstrsWater),
-            Int('VtxPositions',  curBlock.header.nVtxs),
-            Int('Unknown',       curBlock.header.nUnk),
-            Int('Colors',        curBlock.header.nColors),
-            Int('Textures',      curBlock.header.nTextures),
-            Int('TexCoords',     curBlock.header.nTexCoords),
-            Int('Shaders',       curBlock.header.nShaders),
-            Int('Polys',         curBlock.header.nPolygons),
-            Int('PolyGroups',    curBlock.header.nPolyGroups),
-            Int('Dlists',        curBlock.header.nDlists),
-            Int('Hits',          curBlock.header.nHits),
-            Int('yMin',          curBlock.header.yMin),
-            Int('yMax',          curBlock.header.yMax),
-            Int('yOffset',       curBlock.header.yOffset),
-            E.tr(E.th(null, 'BlockName'),
-                E.td('string', curBlock.header.name, {colspan:2}),
-            ),
-
-            //Int('VtxsDrawn', stats.nVtxs),
-            //Int('PolysDrawn', stats.nPolys),
-            //Int('DrawOps', stats.nDrawCmds),
-            //Int('Dlists', stats.nDlists),
-        );
-        /* for(const [mode, count] of Object.entries(stats.drawModeCount)) {
-            this._tbl.append(E.tr(E.th(null, DrawOpNames[mode]),
-                E.td('int', count.toLocaleString(), {colspan:2}),
-            ));
-        } */
+        for(const prop of blockPropOrder) {
+            this._blockPropElems[prop].total.innerText = totals[prop].toLocaleString();
+        }
     }
 }
