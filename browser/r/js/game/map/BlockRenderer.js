@@ -129,6 +129,7 @@ export default class BlockRenderer {
         const key = `${whichStream},${params.isGrass},${params.showHidden}`;
         if(block.batchOps[key]) return block.batchOps[key];
 
+        console.log("parsing", block, whichStream);
         this.curBatch = new RenderBatch(this.gx);
         block.batchOps[key] = this.curBatch;
 
@@ -189,7 +190,7 @@ export default class BlockRenderer {
         const batch       = this.parse(block, whichStream, params);
         if(!batch) return;
         this.gx.executeBatch(batch);
-        this.gx.gl.flush();
+        //this.gx.gl.flush();
         return batch;
     }
 
@@ -241,6 +242,7 @@ export default class BlockRenderer {
         }
 
         const nLayers = this.curShader ? this.curShader.nLayers : 0;
+        const params  = []; //batch these ops
         for(let i=0; i<gx.MAX_TEXTURES; i++) {
             let tex = gx.blankTexture;
             if(i < nLayers) {
@@ -250,8 +252,10 @@ export default class BlockRenderer {
                     tex = this.curBlock.textures[idx];
                 }
             }
-            this.curBatch.addFunction(this._makeSetTextureCmd(i, tex));
+            params.push([i, tex]);
         }
+        if(params.length > 0)
+            this.curBatch.addFunction(this._makeSetTextureCmd(params));
     }
 
     _handleShaderFlags() {
@@ -308,13 +312,15 @@ export default class BlockRenderer {
         });
     }
 
-    _makeSetTextureCmd(slot, tex) {
+    _makeSetTextureCmd(params) {
         const gl = this.gl;
         return () => {
-            //console.log("using texture", slot, tex);
-            gl.activeTexture(gl.TEXTURE0 + slot);
-            tex.bind();
-            gl.uniform1i(this.gx.programInfo.uniforms.uSampler[slot], slot);
+            for(let [slot, tex] of params) {
+                //console.log("using texture", slot, tex);
+                gl.activeTexture(gl.TEXTURE0 + slot);
+                tex.bind();
+                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[slot], slot);
+            }
         };
     }
 

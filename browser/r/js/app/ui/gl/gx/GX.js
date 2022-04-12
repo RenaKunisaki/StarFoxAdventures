@@ -201,11 +201,12 @@ export default class GX {
          *  @param {RenderBatch} batch Render batch to execute.
          */
         const stats = batch.execute(this.programInfo);
-        this.context.stats.nVtxs     += stats.nVtxs;
-        this.context.stats.nDrawCmds += stats.nOps;
-        this.context.stats.nPolys    += stats.nPolys;
-        this.context.stats.nBufferUploads += stats.nBufferUploads;
-        this.context.stats.nBufferBytes += stats.nBufferBytes;
+        for(let [k,v] of Object.entries(stats)) {
+            if(this.context.stats[k] == undefined) {
+                this.context.stats[k] = v;
+            }
+            else this.context.stats[k] += v;
+        }
         const gb = this.context.stats.geomBounds;
         gb.xMin = Math.min(gb.xMin, batch.geomBounds.xMin);
         gb.xMax = Math.max(gb.xMax, batch.geomBounds.xMax);

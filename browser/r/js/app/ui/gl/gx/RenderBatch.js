@@ -15,8 +15,9 @@ const AttrCounts = { //number of elements expected per attribute
 const NoMergeModes = new Set();
 
 function CHECK_ERROR(gl) {
-    let err = gl.getError();
-    console.assert(!err);
+    //extremely slow! every call takes ~11ms
+    //let err = gl.getError();
+    //console.assert(!err);
 }
 
 let _curBufs = null; //RenderBatch that last bound its buffers
@@ -64,13 +65,18 @@ export default class RenderBatch {
         this._programInfo = programInfo;
 
         const stats = {
-            nOps:   0, //total operations
-            nVtxs:  0, //total vertices drawn
-            nPolys: 0, //total polygons drawn
+            nOps:           0, //total operations
+            nVtxs:          0, //total vertices drawn
+            nPolys:         0, //total polygons drawn
             nBufferUploads: 0, //total buffer data ops
             nBufferBytes:   0, //total buffer data size uploaded
             nBufferSwaps:   0, //# times buffer binding changed
+            timeBind:       0, //msec spent binding buffers
+            timeUpload:     0, //msec spent uploading buffers
+            timeDraw:       0, //msec spent doing draw ops
+            timeFunc:       0, //msec spent in non-draw ops
         };
+        this.stats = stats;
 
         if(!this._isFinished) this._finish(programInfo, stats);
         console.assert(_depth < 10);
@@ -81,14 +87,11 @@ export default class RenderBatch {
         //execute the operations
         for(let cmd of this.ops) {
             stats.nOps++;
-            if(typeof(cmd) == 'function') cmd();
-            //we merge recursive batches, so this shouldn't happen.
-            /* else if(cmd instanceof RenderBatch) {
-                let stats2 = cmd.execute(programInfo, _depth+1);
-                for(const [k,v] of Object.entries(stats2)) {
-                    stats[k] += v;
-                }
-            } */
+            if(typeof(cmd) == 'function') {
+                const tStart = performance.now();
+                cmd();
+                stats.timeFunc += performance.now() - tStart;
+            }
             else this._doDrawOp(cmd, stats);
             CHECK_ERROR(gl);
         }
@@ -219,6 +222,7 @@ export default class RenderBatch {
          *  to the given program.
          */
         const gl = this.gl;
+        const tStart = performance.now();
         for(const [field, buf] of Object.entries(this.buffers)) {
             const count = AttrCounts[field];
             if(count == undefined) {
@@ -248,11 +252,13 @@ export default class RenderBatch {
         CHECK_ERROR(gl);
         stats.nBufferUploads++;
         stats.nBufferBytes += this._idxBuf.byteLength;
+        stats.timeUpload += (performance.now() - tStart);
     }
 
     _bindBuffers(programInfo, stats) {
         /** Bind the attribute/index buffers. */
         if(_curBufs == this) return;
+        const tStart = performance.now();
         _curBufs = this;
         const gl = this.gl;
         for(const [field, buf] of Object.entries(this.buffers)) {
@@ -279,6 +285,7 @@ export default class RenderBatch {
         }
         stats.nBufferSwaps++;
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this._idxBufObj);
+        stats.timeBind += (performance.now() - tStart);
     }
 
     _doDrawOp(cmd, stats) {
@@ -286,6 +293,7 @@ export default class RenderBatch {
          *  @param {Array} cmd Operation to execute: [mode, index, count]
          *  @param {object} stats Dict of stats to update.
          */
+        const tStart = performance.now();
         const gl = this.gl;
         const [mode, index, count] = cmd;
 
@@ -327,5 +335,6 @@ export default class RenderBatch {
         to be actually laid out and given a size before reading its size,
         or that culling and/or depth testing are hiding everything.
         */
+        stats.timeDraw += (performance.now() - tStart);
     }
 }

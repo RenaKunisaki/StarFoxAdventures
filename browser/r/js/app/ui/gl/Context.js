@@ -164,12 +164,15 @@ export default class Context {
 
     resetStats() {
         this.stats = {
-            nBufferUploads: 0, //# glBufferData/glBufferSubData calls
-            nBufferBytes: 0, //# bytes uploaded
-            nBufferSwaps: 0, //# times buffer binding changed
-            nPolys: 0, //# polygons drawn
-            nVtxs: 0, //# vtxs drawn
-            nDrawCmds: 0, //# draw commands executed
+            nOps:           0, //total operations
+            nVtxs:          0, //total vertices drawn
+            nPolys:         0, //total polygons drawn
+            nBufferUploads: 0, //total buffer data ops
+            nBufferBytes:   0, //total buffer data size uploaded
+            nBufferSwaps:   0, //# times buffer binding changed
+            timeBind:       0, //msec spent binding buffers
+            timeUpload:     0, //msec spent uploading buffers
+            timeDraw:       0, //msec spent doing draw ops
             geomBounds: {
                 xMin: 999999999, xMax: -999999999,
                 yMin: 999999999, yMax: -999999999,
@@ -182,6 +185,15 @@ export default class Context {
     redraw() {
         /** Redraw the scene.
          */
+        if(this._pendingDraw) return;
+        this._pendingDraw = true;
+        window.requestAnimationFrame(() => {
+            this._pendingDraw = false;
+            this._redraw();
+        });
+    }
+
+    _redraw() {
         const gl = this.gl;
         const P  = this.view.pos;
         const S  = this.view.scale;

@@ -239,7 +239,7 @@ export default class MapViewer {
                 }
             }
         }
-        console.log("Render msec:", tEnd-tStart, "stats:", blockStats);
+        //console.log("Render msec:", tEnd-tStart, "stats:", blockStats);
         this.stats.updateDrawCounts(blockStats);
 
         //console.log("block render OK", this.gx.context.stats);
@@ -279,6 +279,7 @@ export default class MapViewer {
 
     _onMouseMove(event) {
         //buttons are bitflag: 1=left 2=right 4=mid 8=back 16=fwd
+        //viewController.set() will redraw the scene.
         if(event.buttons == 1) { //rotate
             if(this._mouseStartView) {
                 this.viewController.set({

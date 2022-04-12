@@ -10,14 +10,19 @@ const streamOrder = ['main', 'water', 'reflective'];
 const statNames = {
     nVtxs: "Vtxs",
     nPolys: "Polys",
-    nDrawCmds: "Ops",
+    nOps: "Ops",
     nBufferUploads: "BufOps",
     nBufferBytes: "BufBytes",
     nBufferSwaps: "BufSwaps",
     renderTime:   "Msec",
+    timeUpload:   "Upload",
+    timeBind:     "Bind",
+    timeDraw:     "Draw",
+    timeFunc:     "Func",
 };
-const statOrder = ['nVtxs', 'nPolys', 'nDrawCmds', 'nBufferUploads',
-    'nBufferBytes', 'nBufferSwaps', 'renderTime'];
+const statOrder = ['nVtxs', 'nPolys', 'nOps', 'nBufferUploads',
+    'nBufferBytes', 'nBufferSwaps', 'renderTime', 'timeUpload',
+    'timeBind', 'timeDraw', 'timeFunc'];
 
 const blockPropNames = {
     nRenderInstrsMain:       'OpsMain',
@@ -122,11 +127,10 @@ export default class Stats {
             totals[stream] = {};
             for(let stat of statOrder) totals[stream][stat] = 0;
             for(let block of blocks[stream]) {
-                if(block.block == curBlock) {
-                    //...
-                }
                 for(let stat of statOrder) {
-                    totals[stream][stat] += block[stat];
+                    if(!isNaN(block[stat])) {
+                        totals[stream][stat] += block[stat];
+                    }
                 }
                 gb.xMin = Math.min(gb.xMin, block.geomBounds.xMin);
                 gb.xMax = Math.max(gb.xMax, block.geomBounds.xMax);
@@ -136,19 +140,23 @@ export default class Stats {
                 gb.zMax = Math.max(gb.zMax, block.geomBounds.zMax);
             }
             for(let stat of statOrder) {
-                this._statElems[`${stat}.${stream}`].innerText =
-                    totals[stream][stat].toLocaleString();
+                let v = totals[stream][stat];
+                v = isNaN(v) ? '-' : v.toLocaleString();
+                this._statElems[`${stat}.${stream}`].innerText = v;
             }
         }
 
         for(let stream of streamOrder) {
             for(let stat of statOrder) {
-                totals.allStreams[stat] += totals[stream][stat];
+                if(!isNaN(totals[stream][stat])) {
+                    totals.allStreams[stat] += totals[stream][stat];
+                }
             }
         }
         for(let stat of statOrder) {
-            this._statElems[`${stat}.total`].innerText =
-                totals.allStreams[stat].toLocaleString();
+            let v = totals.allStreams[stat];
+            v = isNaN(v) ? '-' : v.toLocaleString();
+            this._statElems[`${stat}.total`].innerText = v.toLocaleString();
         }
 
         this._statElems.xMin.innerText = gb.xMin.toLocaleString();
@@ -176,11 +184,13 @@ export default class Stats {
             xMax = Math.max(xMax, block.x);
             zMax = Math.max(zMax, block.z);
             for(const prop of blockPropOrder) {
-                if(block == curBlock) {
+                if(block == curBlock && block.header) {
                     this._blockPropElems[prop].cur.innerText =
                         block.header[prop].toLocaleString();
                 }
-                totals[prop] += block.header[prop];
+                if(block.header && !isNaN(block.header[prop])) {
+                    totals[prop] += block.header[prop];
+                }
             }
         }
         for(const prop of blockPropOrder) {
