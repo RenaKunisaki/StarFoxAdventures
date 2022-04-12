@@ -18,7 +18,7 @@ class RomListEntry {
         console.assert(base.length >= 6);
         this.byteLength = base.length * 4;
         this.objDef     = base.objDef;
-        this.acts       = [base.acts0, base.acts1]; //XXX parse
+        this.acts       = [false]; //act 0 loads no objects
         this.loadFlags  = base.loadFlags;
         this.bound      = base.bound;
         this.cullDist   = base.cullDist;
@@ -28,6 +28,13 @@ class RomListEntry {
             offset+data.byteOffset,
             this.byteLength);
         this.params     = null;
+
+        for(let i=1; i<16; i++) {
+            let disp = 0;
+            if(i >= 9) disp = base.acts1 & (1 << (7-(i-9)));
+            else disp = base.acts0 & (1 << (i-1));
+            this.acts.push(disp != 0);
+        }
 
         if(this.game.objects) {
             //get the object

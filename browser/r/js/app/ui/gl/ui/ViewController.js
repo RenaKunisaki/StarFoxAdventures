@@ -135,8 +135,8 @@ export default class ViewController {
         this.txtRotY.value   =     0;
         this.txtRotZ.value   =     0;
         this.txtFov.value    =    60;
-        this.txtZNear.value  =     0.1;
-        this.txtZFar.value   = 10000;
+        this.txtZNear.value  =     1;
+        this.txtZFar.value   = 50000;
         this.chkEnableTex.checked      = true;
         this.chkWireframe.checked      = false;
         this.chkEnableBackface.checked = true;

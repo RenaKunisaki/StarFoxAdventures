@@ -19,43 +19,40 @@ export default class Grid {
         const map = this.mapViewer.map;
         const curBlock = this.mapViewer.curBlock;
 
-        //ensure blocks are loaded, and find bounds
-        let xMin = 999999, xMax = -999999;
-        let zMin = 999999, zMax = -999999;
-        for(let block of map.blocks) {
-            if((!block) || block.mod >= 0xFF) continue;
-            block.load(this.mapViewer.gx); //no-op if already loaded
-            xMin = Math.min(xMin, block.x);
-            zMin = Math.min(zMin, block.z);
-            xMax = Math.max(xMax, block.x);
-            zMax = Math.max(zMax, block.z);
-        }
-
         //build the grid
         clearElement(this._tbl);
-        for(let z=zMax; z>=zMin; z--) {
+        for(let z=map.sizeZ-1; z>=0; z--) {
             let row = E.tr();
-            for(let x=xMin; x<=xMax; x++) {
+            for(let x=0; x<map.sizeX; x++) {
                 let cell;
                 let block = map.getBlock(x, z);
+                let name  = "(no block)";
                 if(block) {
+                    block.load(this.mapViewer.gx);
                     cell = E.td('block',
                         E.div(null, block.mod), E.div(null, block.sub));
                     if(block == curBlock) cell.classList.add('current');
                     if(!block.load(this.mapViewer.gx)) {
                         cell.classList.add('invalid');
+                        name = "(missing)";
                     }
+                    else name = block.header.name;
                     cell.addEventListener('click', e => {
                         this.mapViewer.curBlock = block;
                         this.mapViewer.viewController.set({pos:{
                             x: MAP_CELL_SIZE * block.x,
+                            y: block.header.yOffset + 1000,
                             z: MAP_CELL_SIZE * block.z,
-                        }});
+                        }, rot:{x:90, y:0, z:0}});
                         this.mapViewer.reset();
                         this.mapViewer.redraw();
                     })
                 }
                 else cell = E.td('empty');
+                let rx = x - map.originX;
+                let rz = z - map.originZ;
+                if(!(rx || rz)) cell.classList.add('origin');
+                cell.setAttribute('title', `${rx},${rz}: ${name}`);
                 row.append(cell);
             }
             this._tbl.append(row);

@@ -33,6 +33,19 @@ export default class LayerChooser {
     _makeElems() {
         /** Build the elements for this widget. */
         const L = this.mapViewer.layers;
+
+        const eAct = E.select(
+            E.option(null, "None", {value:0}),
+        );
+        for(let i=1; i<16; i++) {
+            eAct.append(E.option(null, `Act ${i}`, {value:i}));
+        }
+        eAct.append(E.option(null, "All Acts", {value:'all'}));
+        eAct.addEventListener('change', e => {
+            this.mapViewer.layers.actNo = eAct.value;
+            this.mapViewer.redraw();
+        });
+
         return E.div(
             this._makeCheck("Main Geometry",
                 e => this._toggleMainGeometry(),
@@ -46,9 +59,10 @@ export default class LayerChooser {
             this._makeCheck("Hidden Geometry",
                 e => this._toggleHiddenGeometry(),
                 "Polygons normally not shown in-game", L.hiddenGeometry),
-            this._makeCheck("Objects",
-                e => this._toggleObjects(),
-                "Object positions", L.objects),
+            E.div(null, "Objects:", eAct),
+            this._makeCheck("Hidden Objects",
+                e => this._toggleHiddenObjects(),
+                "Objects normally not shown in-game", L.hiddenObjects),
         );
     }
 
@@ -68,8 +82,8 @@ export default class LayerChooser {
         this.mapViewer.layers.hiddenGeometry = !this.mapViewer.layers.hiddenGeometry;
         this.mapViewer.redraw();
     }
-    _toggleObjects() {
-        this.mapViewer.layers.objects = !this.mapViewer.layers.objects;
+    _toggleHiddenObjects() {
+        this.mapViewer.layers.hiddenObjects = !this.mapViewer.layers.hiddenObjects;
         this.mapViewer.redraw();
     }
 }
