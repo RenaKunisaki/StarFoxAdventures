@@ -38,11 +38,12 @@ export default class Grid {
                     }
                     else name = block.header.name;
                     cell.addEventListener('click', e => {
+                        const y = (block && block.header ? block.header.yOffset : 0);
                         this.mapViewer.curBlock = block;
                         this.mapViewer.viewController.set({pos:{
-                            x: MAP_CELL_SIZE * block.x,
-                            y: block.header.yOffset + 1000,
-                            z: MAP_CELL_SIZE * block.z,
+                            x: MAP_CELL_SIZE * x,
+                            y: y + 1000,
+                            z: MAP_CELL_SIZE * z,
                         }, rot:{x:90, y:0, z:0}});
                         this.mapViewer.reset();
                         this.mapViewer.redraw();

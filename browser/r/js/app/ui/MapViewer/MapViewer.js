@@ -128,6 +128,7 @@ export default class MapViewer {
 
         this.curBlock = this._findABlock();
         this.reset();
+        this.layerChooser.refresh();
         this.redraw();
     }
 
@@ -290,6 +291,8 @@ export default class MapViewer {
         if(act == 0) return;
         if(!this.map.romList) return;
 
+        const batch = new RenderBatch(this.gx);
+
         let mv = mat4.clone(gx.context.matModelView);
         mat4.translate(mv, mv, vec3.fromValues(
             (this.map.originX * MAP_CELL_SIZE), 0,
@@ -301,7 +304,14 @@ export default class MapViewer {
             GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
         gx.setZMode(true, GX.CompareMode.LEQUAL, true);
 
-        const batch = new RenderBatch(this.gx);
+        batch.addFunction(() => {
+            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
+                gl.activeTexture(gl.TEXTURE0 + i);
+                this.gx.whiteTexture.bind();
+                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
+            }
+        });
+
         for(let entry of this.map.romList.entries) {
             if(act == 'all' || entry.acts[act]) {
                 batch.addFunction(this._drawObject(entry));
@@ -319,7 +329,7 @@ export default class MapViewer {
         const x = entry.position.x;
         const y = entry.position.y;
         const z = entry.position.z;
-        const s = entry.object.scale * 20;
+        const s = Math.max(entry.object.scale, 10);
         //console.log("draw obj", entry, "at", x, y, z, "scale", s)
 
         //just draw a cube
@@ -334,14 +344,14 @@ export default class MapViewer {
             [x-s, y+s, z+s], //[7] bot left front
         ];
         const vtxColors = [ //r, g, b, a
-            [0x00, 0x00, 0x00, 0xFF], //[0] top left back
-            [0xFF, 0x00, 0x00, 0xFF], //[1] top right back
-            [0xFF, 0xFF, 0x00, 0xFF], //[2] top right front
-            [0x00, 0xFF, 0x00, 0xFF], //[3] top left front
-            [0x00, 0x00, 0xFF, 0xFF], //[4] bot left back
-            [0xFF, 0x00, 0xFF, 0xFF], //[5] bot right back
-            [0xFF, 0xFF, 0xFF, 0xFF], //[6] bot right front
-            [0x00, 0xFF, 0xFF, 0xFF], //[7] bot left front
+            [0x00, 0x00, 0x00, 0xCF], //[0] top left back
+            [0xFF, 0x00, 0x00, 0xCF], //[1] top right back
+            [0xFF, 0xFF, 0x00, 0xCF], //[2] top right front
+            [0x00, 0xFF, 0x00, 0xCF], //[3] top left front
+            [0x00, 0x00, 0xFF, 0xCF], //[4] bot left back
+            [0xFF, 0x00, 0xFF, 0xCF], //[5] bot right back
+            [0xFF, 0xFF, 0xFF, 0xCF], //[6] bot right front
+            [0x00, 0xFF, 0xFF, 0xCF], //[7] bot left front
         ];
         const vtxIdxs = [
             0,1,3, 1,2,3, //top
@@ -359,13 +369,6 @@ export default class MapViewer {
                 COL1: vtxColors[idx],
             });
         }
-        /*batch.addFunction(() => {
-            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
-                gl.activeTexture(gl.TEXTURE0 + i);
-                this.gx.blankTexture.bind();
-                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
-            }
-        })*/
         batch.addVertices(...vtxs);
         return batch;
     }

@@ -71,8 +71,15 @@ export default class GX {
         this.context = context;
         this.gl      = context.gl;
         this._buildGlTables();
+        //used for when we want an invisible texture (eg to fill unused
+        //texture slots)
         this.blankTexture = new Texture(context);
         this.blankTexture.makeSolidColor(255, 0, 255, 0);
+        //used for when we want a plain white texture (eg to render polygons
+        //without any textures)
+        this.whiteTexture = new Texture(context);
+        this.whiteTexture.makeSolidColor(255, 255, 255, 255);
+        //used for when a texture can't be loaded.
         this.missingTexture = new Texture(context);
         this.missingTexture.loadFromImage('/r/missing-texture.png');
         //if changing this we need to also add more samplers in the fragment

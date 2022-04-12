@@ -13,6 +13,28 @@ export default class LayerChooser {
         );
     }
 
+    refresh() {
+        const objCounts = []; //act# => obj count
+        for(let i=0; i<16; i++) objCounts.push(0);
+        let objs = this.mapViewer.map.romList;
+        if(objs) objs = objs.entries;
+        if(!objs) objs = [];
+        for(let obj of objs) {
+            for(let i=1; i<16; i++) {
+                if(obj.acts[i]) objCounts[i]++;
+            }
+        }
+
+        clearElement(this.eActList);
+        this.eActList.append(E.option(null, "None", {value:0}));
+        for(let i=1; i<16; i++) {
+            this.eActList.append(E.option(null,
+                `Act ${i} (${objCounts[i]})`, {value:i}));
+        }
+        this.eActList.append(E.option(null,
+            `All Acts (${objs.length})`, {value:'all'}));
+    }
+
     _makeCheck(name, cbFunc, title=null, checked=false) {
         /** Make a checkbox.
          *  @param {string} name The name text to display in the label.
@@ -34,15 +56,9 @@ export default class LayerChooser {
         /** Build the elements for this widget. */
         const L = this.mapViewer.layers;
 
-        const eAct = E.select(
-            E.option(null, "None", {value:0}),
-        );
-        for(let i=1; i<16; i++) {
-            eAct.append(E.option(null, `Act ${i}`, {value:i}));
-        }
-        eAct.append(E.option(null, "All Acts", {value:'all'}));
-        eAct.addEventListener('change', e => {
-            this.mapViewer.layers.actNo = eAct.value;
+        this.eActList = E.select();
+        this.eActList.addEventListener('change', e => {
+            this.mapViewer.layers.actNo = this.eActList.value;
             this.mapViewer.redraw();
         });
 
@@ -59,7 +75,7 @@ export default class LayerChooser {
             this._makeCheck("Hidden Geometry",
                 e => this._toggleHiddenGeometry(),
                 "Polygons normally not shown in-game", L.hiddenGeometry),
-            E.div(null, "Objects:", eAct),
+            E.div(null, "Objects:", this.eActList),
             this._makeCheck("Hidden Objects",
                 e => this._toggleHiddenObjects(),
                 "Objects normally not shown in-game", L.hiddenObjects),
