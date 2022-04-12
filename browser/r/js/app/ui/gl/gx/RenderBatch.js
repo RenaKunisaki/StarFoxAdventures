@@ -12,6 +12,8 @@ const AttrCounts = { //number of elements expected per attribute
 //values per vertex. probably we'd want to use three buffers
 //for the 3 normal vectors.
 
+const NoMergeModes = new Set();
+
 function CHECK_ERROR(gl) {
     let err = gl.getError();
     console.assert(!err);
@@ -44,6 +46,12 @@ export default class RenderBatch {
             this.buffers[field] = this.gl.createBuffer();
         }
         this._idxBufObj = this.gl.createBuffer();
+        this.prevDrawOp = null;
+
+        NoMergeModes.add(this.gl.LINE_STRIP);
+        NoMergeModes.add(this.gl.LINE_LOOP);
+        NoMergeModes.add(this.gl.TRIANGLE_STRIP);
+        NoMergeModes.add(this.gl.TRIANGLE_FAN);
     }
 
     execute(programInfo, _depth=0) {
@@ -53,6 +61,7 @@ export default class RenderBatch {
          */
         const gl = this.gl;
         CHECK_ERROR(gl);
+        this._programInfo = programInfo;
 
         const stats = {
             nOps:   0, //total operations
@@ -118,6 +127,7 @@ export default class RenderBatch {
          *  @note The function will be called (with no arguments) at the
          *   point it's inserted, whenever the batch is executed.
          */
+        this.prevDrawOp = null;
         if(func instanceof RenderBatch) {
             //merge into this one, to avoid excess buffer operations
             //during rendering.
@@ -152,14 +162,23 @@ export default class RenderBatch {
          *  @param {object} vtxs Vertices to draw.
          */
         console.assert(!this._isFinished);
-        const poly = [drawMode, this._idxs.length, vtxs.length]; //mode, idx, count
+        //[mode, idx, count]
+        const poly = [drawMode, this._idxs.length, vtxs.length];
         for(const vtx of vtxs) {
             //since buffers are normalized/padded, all indices are the same
             //for all attributes. we use POS because it has to be present.
             this._idxs.push(this.data.POS.length / 3); //POS is 3 entries per vtx
             this._storeVertex(vtx);
         }
-        this.ops.push(poly);
+        if(drawMode == this.prevDrawOp && !NoMergeModes.has(drawMode)) {
+            //merge into previous op
+            const op = this.ops[this.ops.length-1];
+            op[2] += vtxs.length;
+        }
+        else {
+            this.ops.push(poly);
+        }
+        this.prevDrawOp = drawMode;
     }
 
     _storeVertex(vtx) {
@@ -200,8 +219,6 @@ export default class RenderBatch {
          *  to the given program.
          */
         const gl = this.gl;
-        //console.log("uploading buffer data");
-
         for(const [field, buf] of Object.entries(this.buffers)) {
             const count = AttrCounts[field];
             if(count == undefined) {
@@ -214,6 +231,7 @@ export default class RenderBatch {
                 continue; //no such attribute in shader
             }
             const data = this.data[field];
+            //console.log("uploading buffer", field, data);
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
             gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
             CHECK_ERROR(gl);
@@ -270,6 +288,25 @@ export default class RenderBatch {
          */
         const gl = this.gl;
         const [mode, index, count] = cmd;
+
+        //debug
+        console.assert(_curBufs == this);
+        //UNSIGNED_INT and FLOAT are both 4 bytes
+        /* const bEnd = ((index + count) - 1) * 4;
+        for(const [field, buf] of Object.entries(this.buffers)) {
+            if(AttrCounts[field] == undefined) continue;
+            if(this._programInfo.attribs[field] == undefined) continue; //no such attribute in shader
+            const length = this.data[field].byteLength;
+            console.assert(bEnd <= length);
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            const boundSize = gl.getBufferParameter(
+                gl.ARRAY_BUFFER, gl.BUFFER_SIZE);
+            console.assert(boundSize == length);
+        }
+        const boundSize = gl.getBufferParameter(
+            gl.ELEMENT_ARRAY_BUFFER, gl.BUFFER_SIZE);
+        console.assert(boundSize == this._idxBuf.byteLength); */
+
         //index * sizeof(unsigned short)
         gl.drawElements(mode, count, gl.UNSIGNED_SHORT, index*2);
         //gl.drawArrays(cmd[0], cmd[1], cmd.length - 1);
