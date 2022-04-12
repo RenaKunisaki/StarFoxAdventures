@@ -138,7 +138,10 @@ export default class Context {
             //XXX find a less stupid way to do this.
             //const width=gl.canvas.clientWidth, height=gl.canvas.clientHeight;
             //MDN example just uses these
-            const width=gl.canvas.width, height=gl.canvas.height;
+            //const width=gl.canvas.width, height=gl.canvas.height;
+            //but apparently it's better to use these in case the GPU has
+            //a small size limit
+            const width=gl.drawingBufferWidth, height=gl.drawingBufferHeight;
             if(width < 1 || height < 1) {
                 if(performance.now() - tStart > 15000) {
                     //just in case something even more dumb happens,
@@ -199,6 +202,15 @@ export default class Context {
         const S  = this.view.scale;
         const R  = this.view.rotation;
         const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+
+        //ensure canvas size matches displayed size
+        const width  = gl.canvas.clientWidth;
+        const height = gl.canvas.clientHeight;
+        if(gl.canvas.width != width || gl.canvas.height != height) {
+            gl.canvas.width = width;
+            gl.canvas.height = height;
+        }
+        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         this.resetStats();
 

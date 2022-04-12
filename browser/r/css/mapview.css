@@ -18,7 +18,7 @@
     background: rgba(0, 0, 0, 0.5);
     color: #FFF;
     border: 1px #CCC solid;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .tabMapView .sidebar {
@@ -37,7 +37,6 @@
 
 .tabMapView .map-grid {
     right: 0.5em;
-    overflow: auto;
 }
 .tabMapView .map-grid td, .tabMapView .map-grid tr {
     background: none;

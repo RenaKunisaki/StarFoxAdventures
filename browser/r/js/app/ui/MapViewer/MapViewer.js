@@ -333,15 +333,20 @@ export default class MapViewer {
         //console.log("draw obj", entry, "at", x, y, z, "scale", s)
 
         //just draw a cube
+        batch.addVertices(...this._makeCube(x, y, z, s));
+        return batch;
+    }
+
+    _makeCube(x, y, z, scale) {
         const vtxPositions = [ //x, y, z
-            [x-s, y-s, z-s], //[0] top left back
-            [x+s, y-s, z-s], //[1] top right back
-            [x+s, y+s, z-s], //[2] top right front
-            [x-s, y+s, z-s], //[3] top left front
-            [x-s, y-s, z+s], //[4] bot left back
-            [x+s, y-s, z+s], //[5] bot right back
-            [x+s, y+s, z+s], //[6] bot right front
-            [x-s, y+s, z+s], //[7] bot left front
+            [x-scale, y-scale, z-scale], //[0] top left back
+            [x+scale, y-scale, z-scale], //[1] top right back
+            [x+scale, y+scale, z-scale], //[2] top right front
+            [x-scale, y+scale, z-scale], //[3] top left front
+            [x-scale, y-scale, z+scale], //[4] bot left back
+            [x+scale, y-scale, z+scale], //[5] bot right back
+            [x+scale, y+scale, z+scale], //[6] bot right front
+            [x-scale, y+scale, z+scale], //[7] bot left front
         ];
         const vtxColors = [ //r, g, b, a
             [0x00, 0x00, 0x00, 0xCF], //[0] top left back
@@ -369,8 +374,7 @@ export default class MapViewer {
                 COL1: vtxColors[idx],
             });
         }
-        batch.addVertices(...vtxs);
-        return batch;
+        return vtxs;
     }
 
     _onMouseDown(event) {
