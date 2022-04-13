@@ -11,6 +11,9 @@ import Stats from "./Stats.js";
 import LayerChooser from "./LayerChooser.js";
 import RenderBatch from "../gl/gx/RenderBatch.js";
 
+const PI_OVER_180 = Math.PI / 180.0; //rad = deg * PI_OVER_180
+const PI_UNDER_180 = 180.0 / Math.PI; //deg = rad * PI_UNDER_180
+
 export default class MapViewer {
     /** Renders map geometry. */
     constructor(game) {
@@ -379,15 +382,17 @@ export default class MapViewer {
 
     _onMouseDown(event) {
         event.preventDefault();
+        this._mouseStartView = null;
     }
     _onMouseUp(event) {
         event.preventDefault();
+        this._mouseStartView = null;
     }
 
     _onMouseMove(event) {
         //buttons are bitflag: 1=left 2=right 4=mid 8=back 16=fwd
         //viewController.set() will redraw the scene.
-        if(event.buttons == 1) { //rotate
+        if(event.buttons == 4) { //rotate
             if(this._mouseStartView) {
                 this.viewController.set({
                     rot: {
@@ -403,12 +408,7 @@ export default class MapViewer {
         }
         else if(event.buttons == 2) { //move
             if(this._mouseStartView) {
-                this.viewController.set({
-                    pos: {
-                        x: this._mouseStartView.pos.x + (event.x - this._mouseStartPos[0]),
-                        z: this._mouseStartView.pos.z + (event.y - this._mouseStartPos[1]),
-                    },
-                });
+                this._doMouseCamMove(event);
             }
             else {
                 this._mouseStartView = this.viewController.get();
@@ -417,6 +417,23 @@ export default class MapViewer {
         }
         else this._mouseStartView = null;
         this._prevMousePos = [event.x, event.y];
+    }
+
+    _doMouseCamMove(event) {
+        const scale = 1;
+        const dx = (event.x - this._mouseStartPos[0]) * scale;
+        const dz = (event.y - this._mouseStartPos[1]) * scale;
+
+        const view = this.viewController.get();
+        const ry = ((view.rot.y % 360) - 180) * PI_OVER_180;
+        //const rz = view.rot.z * PI_OVER_180;
+        const sinRX = Math.sin(ry);
+        const cosRX = Math.cos(ry);
+        const x = this._mouseStartView.pos.x + ((dx * cosRX) - (dz * sinRX));
+        const z = this._mouseStartView.pos.z + ((dx * sinRX) + (dz * cosRX));
+        //TODO y
+
+        this.viewController.set({pos: {x:x, z:z}});
     }
 
     _onMouseWheel(event) {

@@ -18,10 +18,11 @@ export default class ViewController {
         //enough the actual rotation value can be -1 but we'll be displaying
         //it as 359. not a huge problem but could become one if something
         //expects these to display the real values...
+        const R = Math.round;
         if(params.pos) {
-            if(params.pos.x != undefined) this.txtPosX.value = params.pos.x;
-            if(params.pos.y != undefined) this.txtPosY.value = params.pos.y;
-            if(params.pos.z != undefined) this.txtPosZ.value = params.pos.z;
+            if(params.pos.x != undefined) this.txtPosX.value = R(params.pos.x);
+            if(params.pos.y != undefined) this.txtPosY.value = R(params.pos.y);
+            if(params.pos.z != undefined) this.txtPosZ.value = R(params.pos.z);
         }
         if(params.rot) {
             if(params.rot.x != undefined) this.txtRotX.value = CLAMP_ANGLE(params.rot.x);
