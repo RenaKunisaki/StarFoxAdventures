@@ -33,7 +33,7 @@ class RomListEntry {
             let disp = 0;
             if(i >= 9) disp = base.acts1 & (1 << (7-(i-9)));
             else disp = base.acts0 & (1 << (i-1));
-            this.acts.push(disp != 0);
+            this.acts.push(disp == 0); //bit set = do NOT show in this act
         }
 
         if(this.game.objects) {
