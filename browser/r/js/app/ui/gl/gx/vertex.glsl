@@ -1,54 +1,53 @@
 #version 300 es
 /** Vertex shader for GX.
  */
-in vec4 vtxColor;      //vertex color
-in vec3 vtxPos;        //vertex position
-in vec3 vtxNormal;     //vertex normal
-in vec2 vtxTexCoord;   //texture coord
-in uint vtxId;         //ID for picker
+//inputs from CPU
+in vec4 in_COL0; //vertex color
+in vec3 in_POS;  //vertex position
+in vec3 in_NRM;  //vertex normal
+in vec2 in_TEX0; //texture coord
+in uint in_ID;   //ID for picker
 
-uniform mat4  matModelView;   //modelview matrix
-uniform mat4  matProjection;  //projection matrix
-uniform mat4  matNormal;      //normal matrix
-uniform ivec3 ambLightColor;  //ambient light color
-uniform ivec3 dirLightColor;  //directional light color
-uniform vec3  dirLightVector; //directional light direction vector
+//uniforms
+uniform mat4  u_matModelView;   //modelview matrix
+uniform mat4  u_matProjection;  //projection matrix
+uniform mat4  u_matNormal;      //normal matrix
+uniform ivec3 u_ambLightColor;  //ambient light color
+uniform ivec3 u_dirLightColor;  //directional light color
+uniform vec3  u_dirLightVector; //directional light direction vector
 
-out lowp  vec4 vColor;    //vertex color
-out highp vec3 vLighting; //light color output
-out highp vec2 vTexCoord; //texture coord
-flat out uvec4 vId;       //ID for picker
+//outputs to next stage
+out vec4 vtx_Color;      //vertex color
+out vec3 vtx_LightColor; //light color output
+out vec2 vtx_TexCoord;   //texture coord
+flat out uint  vtx_Id;         //ID for picker
 
 void main() {
     //position gets fed through matrices
-    gl_Position = matProjection * matModelView * vec4(vtxPos.xyz, 1);
+    gl_Position = u_matProjection * u_matModelView * vec4(in_POS.xyz, 1);
     //gl_PointSize = 4.0;
 
     //color gets normalized
-    vColor = vec4(vtxColor.r/255.0, vtxColor.g/255.0,
-        vtxColor.b/255.0, vtxColor.a/255.0);
+    vtx_Color = vec4(in_COL0.r/255.0, in_COL0.g/255.0,
+        in_COL0.b/255.0, in_COL0.a/255.0);
 
     //these just pass through
-    vTexCoord = vtxTexCoord;
-    vId = uvec4(
-         int(vtxId) >> 24,
-        (int(vtxId) >> 16) & 0xFF,
-        (int(vtxId) >>  8) & 0xFF,
-         int(vtxId)        & 0xFF);
+    vtx_TexCoord = in_TEX0;
+    vtx_Id = in_ID;
 
     //normalize the light vectors
-    highp vec3 ambientLight = vec3(
-        float(ambLightColor.r) / 255.0,
-        float(ambLightColor.g) / 255.0,
-        float(ambLightColor.b) / 255.0);
-    highp vec3 directionalLightColor = vec3(
-        float(dirLightColor.r) / 255.0,
-        float(dirLightColor.g) / 255.0,
-        float(dirLightColor.b) / 255.0);
-    highp vec3 directionalVector = normalize(dirLightVector);
+    vec3 ambientLight = vec3(
+        float(u_ambLightColor.r) / 255.0,
+        float(u_ambLightColor.g) / 255.0,
+        float(u_ambLightColor.b) / 255.0);
+    vec3 directionalLightColor = vec3(
+        float(u_dirLightColor.r) / 255.0,
+        float(u_dirLightColor.g) / 255.0,
+        float(u_dirLightColor.b) / 255.0);
+    vec3 directionalVector = normalize(u_dirLightVector);
 
     //compute this vertex's light color
-    highp vec4 transformedNormal = matNormal * vec4(vtxNormal, 1.0);
-    highp float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
-    vLighting = ambientLight + (directionalLightColor * directional);
+    vec4 transformedNormal = u_matNormal * vec4(in_NRM, 1.0);
+    float directional = max(dot(transformedNormal.xyz, directionalVector), 0.0);
+    vtx_LightColor = ambientLight + (directionalLightColor * directional);
 }

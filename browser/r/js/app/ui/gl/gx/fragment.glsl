@@ -2,35 +2,43 @@
 /** Fragment shader for GX.
  */
 precision mediump float;
-in      lowp  vec4 vColor;    //vertex color
-in      highp vec3 vLighting; //light color
-in      highp vec2 vTexCoord; //texture coord
-flat in uvec4      vId;       //ID for picker
-uniform sampler2D  uSampler0; //texture 0
-uniform sampler2D  uSampler1; //texture 1
-uniform bool       useId;     //are we rendering for picker?
-uniform bool       useLights; //enable lighting?
-uniform bool       useTexture; //enable textures?
-out     vec4       outColor;
+
+//inputs from previous stage
+in vec4 vtx_Color;    //vertex color
+in vec3 vtx_LightColor; //light color
+in vec2 vtx_TexCoord; //texture coord
+flat in uint  vtx_Id;       //ID for picker
+
+//textures
+uniform sampler2D u_texture0; //texture 0
+uniform sampler2D u_texture1; //texture 1
+
+//settings
+uniform bool u_useId;      //are we rendering for picker?
+uniform bool u_useLights;  //enable lighting?
+uniform bool u_useTexture; //enable textures?
+
+//outputs
+out vec4 out_Color; //fragment color
 
 void main() {
-    if(useId) {
+    if(u_useId) {
         //render for picker buffer. vertex color = its ID.
-        outColor = vec4(
-            float(vId.r) / 255.0,
-            float(vId.g) / 255.0,
-            float(vId.b) / 255.0,
-            float(vId.a) / 255.0);
+        out_Color = vec4(
+            float( int(vtx_Id) >> 24) / 255.0,
+            float((int(vtx_Id) >> 16) & 0xFF) / 255.0,
+            float((int(vtx_Id) >>  8) & 0xFF) / 255.0,
+            float( int(vtx_Id)        & 0xFF) / 255.0);
     }
     else { //render for display.
-        highp vec4 tex0 = texture(uSampler0, vTexCoord);
-        highp vec4 tex1 = texture(uSampler1, vTexCoord);
-        highp vec4 col;
-        if(useTexture) col = mix(tex0, tex1, (1.0-tex0.a) * tex1.a) * vColor;
-        else col = vColor;
-        if(useLights) col = vec4(col.rgb * vLighting, col.a);
-        //XXX there's probably a shader flag that controls this.
+        vec4 tex0 = texture(u_texture0, vtx_TexCoord);
+        vec4 tex1 = texture(u_texture1, vtx_TexCoord);
+        vec4 col;
+        if(u_useTexture) col = mix(tex0, tex1, (1.0-tex0.a) * tex1.a) * vtx_Color;
+        else col = vtx_Color;
+        if(u_useLights) col = vec4(col.rgb * vtx_LightColor, col.a);
+        //XXX there's probably a game-shader flag that controls this.
         if(col.a <= 0.0) discard;
-        else outColor = col.rgba;
+        else out_Color = col.rgba;
     }
 }

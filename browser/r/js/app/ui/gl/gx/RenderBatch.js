@@ -260,12 +260,7 @@ export default class RenderBatch {
                 //console.warn("No shader attrib found for", field);
                 continue; //no such attribute in shader
             }
-            let data = this.data[field];
-            /*if(field == 'id') {
-                const len = data.length;
-                data = new Uint32Array(len);
-                for(let i=0; i<len; i++) data[i] = 0x100;
-            }*/
+            const data = this.data[field];
             //console.log("uploading buffer", field, data);
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
             gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
