@@ -7,10 +7,11 @@ export default class DlistParser {
         this.gx = gx;
         this.gl = gx.gl;
     }
-    parse(list, buffers) {
+    parse(list, buffers, id=0) {
         /** Parse a display list.
          *  @param {ArrayBuffer} list Display list to parse.
          *  @param {object} buffers Dict of vertex attribute buffers.
+         *  @param {integer} id ID to assign to vertices for picker.
          *  @returns {RenderBatch} Generated render batch object.
          */
         list = new BinaryFile(list);
@@ -20,6 +21,7 @@ export default class DlistParser {
             this.buffers[name] = new BinaryFile(buf);
         }
 
+        this._pickerId = id;
         this.result = new RenderBatch(this.gx);
         while(!list.isEof()) {
             const op = list.readU8();
@@ -124,7 +126,7 @@ export default class DlistParser {
          *  @param {BinaryFile} list List to read from.
          *  @returns {object} The vertex attributes.
          */
-        const vtx = {};
+        const vtx = {id:this._pickerId};
         const vcd = this.gx.cp.vcd[vat];
         for(const field of VAT_FIELD_ORDER) {
             const fmt = vcd[field];

@@ -8,6 +8,11 @@ import Texture from '../Texture.js';
 import {get} from '/r/js/Util.js';
 import RenderBatch from './RenderBatch.js';
 
+function CHECK_ERROR(gl) {
+    const err = gl.getError();
+    console.assert(!err);
+}
+
 //the order the fields appear in in a display list. this never changes.
 export const VAT_FIELD_ORDER = [
     'PNMTXIDX', 'T0MIDX', 'T1MIDX', 'T2MIDX', 'T3MIDX', 'T4MIDX',
@@ -143,6 +148,7 @@ export default class GX {
             [gl.VERTEX_SHADER]:   (await get(`${path}/vertex.glsl`))  .responseText,
             [gl.FRAGMENT_SHADER]: (await get(`${path}/fragment.glsl`)).responseText,
         });
+        CHECK_ERROR(gl);
 
         //get program info, used to set variables
         this.programInfo = {
@@ -151,8 +157,8 @@ export default class GX {
                 POS:  this.program.getAttribLocation('vtxPos'),
                 COL0: this.program.getAttribLocation('vtxColor'),
                 NRM:  this.program.getAttribLocation('vtxNormal'),
-                //ID:   this.program.getAttribLocation('vtxId'),
                 TEX0: this.program.getAttribLocation('vtxTexCoord'),
+                id:   this.program.getAttribLocation('vtxId'),
             },
             uniforms: {
                 matProjection: this.program.getUniformLocation('matProjection'),
@@ -169,12 +175,14 @@ export default class GX {
                 ],
             },
         };
+        CHECK_ERROR(gl);
         console.log("GX loadPrograms OK");
     }
 
-    beginRender(mtxs) {
+    beginRender(mtxs, isPicker=false) {
         /** Reset render state for new frame.
          *  @param {object} mtxs A dict of matrices to set.
+         *  @param {bool} isPicker Whether we're rendering to the pick buffer.
          */
         const gl = this.gl;
         this.program.use();
@@ -186,7 +194,8 @@ export default class GX {
         gl.uniform3fv(this.programInfo.uniforms.dirLightVector,
             this.context.lights.directional.vector);
 
-        gl.uniform1i(this.programInfo.uniforms.useId, 0);
+        gl.uniform1i(this.programInfo.uniforms.useId,
+            isPicker ? 1 : 0);
         gl.uniform1i(this.programInfo.uniforms.useLights,
             this.context.lights.enabled ? 1 : 0);
         gl.uniform1i(this.programInfo.uniforms.useTexture,

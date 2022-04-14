@@ -4,7 +4,7 @@ attribute vec4 vtxColor;      //vertex color
 attribute vec3 vtxPos;        //vertex position
 attribute vec3 vtxNormal;     //vertex normal
 attribute vec2 vtxTexCoord;   //texture coord
-//attribute vec4 vtxId;         //ID for picker
+attribute vec4 vtxId;         //ID for picker
 
 uniform mat4  matModelView;   //modelview matrix
 uniform mat4  matProjection;  //projection matrix
@@ -29,8 +29,7 @@ void main() {
 
     //these just pass through
     vTexCoord = vtxTexCoord;
-    //vId = vtxId;
-    vId = vec4(255.0, 255.0, 255.0, 255.0);
+    vId = vtxId;
 
     //normalize the light vectors
     highp vec3 ambientLight = vec3(

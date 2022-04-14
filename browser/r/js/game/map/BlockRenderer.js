@@ -116,6 +116,7 @@ export default class BlockRenderer {
         this.gx = gx;
         this.gl = gx.gl;
         this.dlistParser = new DlistParser(gx);
+        this.pickerIds = {}; //id => list
     }
 
     parse(block, whichStream, params={}) {
@@ -126,10 +127,22 @@ export default class BlockRenderer {
          *  @param {object} params Render parameters.
          */
         if(!block.load(this.gx)) return;
-        const key = `${whichStream},${params.isGrass},${params.showHidden}`;
+
+        //check if we already parsed this
+        const key = ([whichStream,
+            params.isGrass ? 1 : 0,
+            params.showHidden ? 1 : 0,
+            params.isPicker ? 1 : 0,
+        ]).join(',');
         if(block.batchOps[key]) return block.batchOps[key];
 
-        console.log("parsing", block, whichStream);
+        this._isDrawingForPicker = params.isPicker;
+        if(this._isDrawingForPicker) {
+            this.pickerIds = {}; //id => list
+            this._pickerIdBase = params.pickerIdBase;
+        }
+
+        //console.log("parsing", block, whichStream);
         this.curBatch = new RenderBatch(this.gx);
         block.batchOps[key] = this.curBatch;
 
@@ -140,7 +153,15 @@ export default class BlockRenderer {
         this._setDefaultVtxFmt();
 
         //set initial render modes (XXX verify)
-        this.curBatch.addFunction(() => {_setShaderParams(
+        if(this._isDrawingForPicker) {
+            this.curBatch.addFunction(() => {_setShaderParams(
+                this.gx.gl, this.gx, true, //culling enabled
+                GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
+                GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
+                true, GX.CompareMode.LEQUAL, true); //depth test+update enabled
+            });
+        }
+        else this.curBatch.addFunction(() => {_setShaderParams(
             this.gx.gl, this.gx, true, //culling enabled
             GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
             GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
@@ -213,7 +234,10 @@ export default class BlockRenderer {
             //    this.curShader.attrFlags);
         }
 
-        if(this.curShader) {
+        if(this._isDrawingForPicker) {
+            //do nothing
+        }
+        else if(this.curShader) {
             this._handleShaderFlags();
         }
         else if(this.curStream == 'water') { //XXX verify these
@@ -241,21 +265,23 @@ export default class BlockRenderer {
             )});
         }
 
-        const nLayers = this.curShader ? this.curShader.nLayers : 0;
-        const params  = []; //batch these ops
-        for(let i=0; i<gx.MAX_TEXTURES; i++) {
-            let tex = gx.blankTexture;
-            if(i < nLayers) {
-                const idx = this.curShader.layer[i].texture;
-                //console.log("select texture", idx, this.textures[idx]);
-                if(idx >= 0 && this.curBlock.textures[idx]) {
-                    tex = this.curBlock.textures[idx];
+        if(!this._isDrawingForPicker) {
+            const nLayers = this.curShader ? this.curShader.nLayers : 0;
+            const params  = []; //batch these ops
+            for(let i=0; i<gx.MAX_TEXTURES; i++) {
+                let tex = gx.blankTexture;
+                if(i < nLayers) {
+                    const idx = this.curShader.layer[i].texture;
+                    //console.log("select texture", idx, this.textures[idx]);
+                    if(idx >= 0 && this.curBlock.textures[idx]) {
+                        tex = this.curBlock.textures[idx];
+                    }
                 }
+                params.push([i, tex]);
             }
-            params.push([i, tex]);
+            if(params.length > 0)
+                this.curBatch.addFunction(this._makeSetTextureCmd(params));
         }
-        if(params.length > 0)
-            this.curBatch.addFunction(this._makeSetTextureCmd(params));
     }
 
     _handleShaderFlags() {
@@ -355,19 +381,16 @@ export default class BlockRenderer {
             TEX5: this.curBlock.texCoords,
             TEX6: this.curBlock.texCoords,
             TEX7: this.curBlock.texCoords,
-            /* _debug: {
-                shader:    this.curShader,
-                shaderIdx: this.curShaderIdx,
-                textureIdx:[
-                    this.curShader ? this.curShader.layer[0].texture : null,
-                    this.curShader ? this.curShader.layer[1].texture : null,
-                ],
-            }, */
         };
         if(LogRenderOps) console.log("Execute list", idx);
-        //this.gx.executeDisplayList(this.curBlock.dlists[idx].data, dlistData);
-        this.curBatch.addFunction(
-            this.dlistParser.parse(this.curBlock.dlists[idx].data, dlistData));
+
+        let id = this._isDrawingForPicker ? (this._pickerIdBase++) : 0;
+        const list = this.dlistParser.parse(
+            this.curBlock.dlists[idx].data, dlistData, id);
+        if(this._isDrawingForPicker) {
+            this.pickerIds[id] = list;
+        }
+        this.curBatch.addFunction(list);
         if(LogRenderOps) {
             console.log("executed list", this.curBlock.dlists[idx].data);
         }

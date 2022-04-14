@@ -39,6 +39,7 @@ export default class MapViewer {
         this.layerChooser = new LayerChooser(this);
         this.eSidebar     = E.div('sidebar');
 
+        this._pickerIds     = {};
         this._prevMousePos  = [0, 0];
         this._mouseStartPos = null;
         this.app.onIsoLoaded(iso => this.refresh());
@@ -60,7 +61,8 @@ export default class MapViewer {
 
     async _initContext() {
         if(this.context) return;
-        this.context = new Context(this.canvas, () => this._draw());
+        this.context = new Context(this.canvas,
+            (isPicker) => this._draw(isPicker));
         await this.context.init();
         console.log("GL ctx init OK");
 
@@ -129,6 +131,9 @@ export default class MapViewer {
             console.error("Map has no directory", map);
         }
 
+        this._pickerIds = {}; //id => info
+        this._nextPickerId = 1;
+
         this.curBlock = this._findABlock();
         this.reset();
         this.layerChooser.refresh();
@@ -181,10 +186,13 @@ export default class MapViewer {
         return block;
     }
 
-    _draw() {
+    _draw(isPicker) {
         /** Draw the map. Called by Context. */
         if(!this.map) return;
-        const tStart = performance.now();
+
+        this._isDrawingForPicker = isPicker;
+
+        //const tStart = performance.now();
         const blockStreams = [
             ['main', this.layers.mainGeometry],
             ['water', this.layers.waterGeometry],
@@ -198,13 +206,11 @@ export default class MapViewer {
         this._finishRender(blockStats, blockStreams);
         //console.log("block render OK", this.gx.context.stats);
         //console.log("GX logs:", this.gx.program.getLogs());
+        //if(isPicker) console.log("picker IDs", this._pickerIds);
     }
 
     _beginRender() {
-        this.gx.context.resetStats();
-        this.gx.reset();
-
-        const gl = this.gx.gl;
+        //const gl = this.gx.gl;
         if(!this.curBlock) {
             this.curBlock = this._findABlock();
             if(!this.curBlock) return;
@@ -218,7 +224,10 @@ export default class MapViewer {
             modelView:  ctx.matModelView,
             normal:     ctx.matNormal,
         };
-        this.gx.beginRender(mtxs);
+
+        this.gx.context.resetStats();
+        this.gx.reset();
+        this.gx.beginRender(mtxs, this._isDrawingForPicker);
     }
 
     _finishRender(blockStats, blockStreams) {
@@ -245,6 +254,7 @@ export default class MapViewer {
         const params = {
             showHidden: this.layers.hiddenGeometry,
             isGrass: false, //draw the grass effect instead of the geometry
+            isPicker: this._isDrawingForPicker,
         };
         for(const [name, stream] of blockStreams) {
             blockStats[name] = [];
@@ -274,6 +284,8 @@ export default class MapViewer {
         mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
         this.gx.setModelViewMtx(mv);
 
+        params.pickerIdBase = this._nextPickerId;
+
         const batch = this.blockRenderer.render(block, stream, params);
         if(batch) { //there was in fact a block to render
             const gb = this.gx.context.stats.geomBounds;
@@ -283,6 +295,19 @@ export default class MapViewer {
             gb.yMax = Math.max(gb.yMax, batch.geomBounds.yMax+offsY);
             gb.zMin = Math.min(gb.zMin, batch.geomBounds.zMin+offsZ);
             gb.zMax = Math.max(gb.zMax, batch.geomBounds.zMax+offsZ);
+
+            if(this._isDrawingForPicker) {
+                for(const [id,list] of Object.entries(this.blockRenderer.pickerIds)) {
+                    console.assert(this._pickerIds[id] == undefined);
+                    this._pickerIds[id] = {
+                        type: 'block-dlist',
+                        block: block,
+                        stream: stream,
+                        list: list,
+                    };
+                    this._nextPickerId++;
+                }
+            }
         }
         return batch; //for stats
     }
@@ -335,12 +360,21 @@ export default class MapViewer {
         const s = Math.max(entry.object.scale, 10);
         //console.log("draw obj", entry, "at", x, y, z, "scale", s)
 
+        let id = 0;
+        if(this._isDrawingForPicker) {
+            id = this._nextPickerId++;
+            this._pickerIds[id] = {
+                type: 'object',
+                obj: entry,
+            };
+        }
+
         //just draw a cube
-        batch.addVertices(...this._makeCube(x, y, z, s));
+        batch.addVertices(...this._makeCube(x, y, z, s, id));
         return batch;
     }
 
-    _makeCube(x, y, z, scale) {
+    _makeCube(x, y, z, scale, id) {
         const vtxPositions = [ //x, y, z
             [x-scale, y-scale, z-scale], //[0] top left back
             [x+scale, y-scale, z-scale], //[1] top right back
@@ -372,12 +406,26 @@ export default class MapViewer {
         const vtxs = [this.gx.gl.TRIANGLES];
         for(const idx of vtxIdxs) {
             vtxs.push({
-                POS:  vtxPositions[idx],
-                COL0: vtxColors[idx],
-                COL1: vtxColors[idx],
+                POS:   vtxPositions[idx],
+                COL0:  vtxColors[idx],
+                COL1:  vtxColors[idx],
+                vtxId: id,
             });
         }
         return vtxs;
+    }
+
+    _getObjAt(x, y) {
+        /** Get object at given screen coords.
+         *  @param {integer} x X coordinate relative to canvas.
+         *  @param {integer} y Y coordinate relative to canvas.
+         *  @returns {object} Dict explaining what's at this coordinate,
+         *   or null.
+         */
+        const id = this.gx.context.readPickBuffer(x, y);
+        const obj = this._pickerIds[id];
+        console.log("pick", x, y, hex(id,8), id, obj);
+        return obj;
     }
 
     _onMouseDown(event) {
@@ -415,7 +463,10 @@ export default class MapViewer {
                 this._mouseStartPos  = [event.x, event.y];
             }
         }
-        else this._mouseStartView = null;
+        else {
+            this._mouseStartView = null;
+            const obj = this._getObjAt(event.clientX, event.clientY);
+        }
         this._prevMousePos = [event.x, event.y];
     }
 

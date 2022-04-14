@@ -1,5 +1,10 @@
 const RADIANS = Math.PI / 180;
 
+function CHECK_ERROR(gl) {
+    const err = gl.getError();
+    console.assert(!err);
+}
+
 export default class Context {
     /** GL context wrapper.
      */
@@ -67,6 +72,7 @@ export default class Context {
 
         canvas.addEventListener('resize', e => this._onResize(e));
         this._setupViewport();
+        CHECK_ERROR(this.gl);
     }
 
     _setupExtensions() {
@@ -93,14 +99,102 @@ export default class Context {
         gl.clearDepth(this.clearDepth);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         gl.enable(gl.DEPTH_TEST); // Enable depth testing
-        //gl.disable(gl.DEPTH_TEST);
         gl.depthFunc(gl.GEQUAL);  // lower depth value = nearer to camera
         gl.enable(gl.BLEND);
-        //gl.disable(gl.BLEND);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         this._initMatrices();
+        CHECK_ERROR(this.gl);
         this._setupViewport();
-        //this._setupDepthTexture();
+        CHECK_ERROR(this.gl);
+    }
+
+    _setupDepthTexture() {
+        /** Set up depth-render-to-texture for picking.
+         */
+        const gl = this.gl;
+
+        this._gl_extensions.depth_texture = gl.getExtension('WEBGL_depth_texture');
+
+        // Create a texture to render to
+        this._targetTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, this._targetTexture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        CHECK_ERROR(this.gl);
+
+        // create a depth renderbuffer
+        this._depthBuffer = gl.createRenderbuffer();
+        gl.bindRenderbuffer(gl.RENDERBUFFER, this._depthBuffer);
+        CHECK_ERROR(this.gl);
+
+        this._setFramebufferAttachmentSizes();
+
+        // Create and bind the framebuffer
+        this._frameBuffer = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
+        CHECK_ERROR(this.gl);
+
+        // attach the texture as the first color attachment
+        const attachmentPoint = gl.COLOR_ATTACHMENT0;
+        const level = 0;
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, attachmentPoint, gl.TEXTURE_2D,
+            this._targetTexture, level);
+        CHECK_ERROR(this.gl);
+
+        // make a depth buffer and the same size as the targetTexture
+        gl.framebufferRenderbuffer(gl.FRAMEBUFFER, gl.DEPTH_ATTACHMENT,
+            gl.RENDERBUFFER, this._depthBuffer);
+        CHECK_ERROR(this.gl);
+        console.log("Created depth texture", this._depthBuffer);
+    }
+
+    _setFramebufferAttachmentSizes() {
+        /** Set up framebuffer after window is resized.
+         *  Required for depth buffer picker.
+         */
+        const gl = this.gl;
+        const width=gl.drawingBufferWidth, height=gl.drawingBufferHeight;
+        if(width < 1 || height < 1) return;
+
+        gl.bindTexture(gl.TEXTURE_2D, this._targetTexture);
+        // define size and format of level 0
+        const level          = 0;
+        const internalFormat = gl.RGBA;
+        const border         = 0;
+        const format         = gl.RGBA;
+        const type           = gl.UNSIGNED_BYTE;
+        const data           = null;
+        gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+            width, height, border, format, type, data);
+        gl.bindRenderbuffer(gl.RENDERBUFFER, this._depthBuffer);
+        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH_COMPONENT16,
+            width, height);
+        CHECK_ERROR(this.gl);
+        console.log("Setup pick buffer, size", width, height);
+    }
+
+    readPickBuffer(x, y) {
+        /** Read pick buffer.
+         *  @param {integer} x X coordinate to read.
+         *  @param {integer} y Y coordinate to read.
+         *  @returns {integer} Value from pick buffer.
+         */
+        const gl     = this.gl;
+        const data   = new Uint8Array(4);
+        const rect   = gl.canvas.getBoundingClientRect();
+        const mouseX = x - rect.left;
+        const mouseY = y - rect.top;
+        const pixelX = Math.trunc(mouseX * gl.canvas.width / gl.canvas.clientWidth);
+        const pixelY = Math.trunc(gl.canvas.height - mouseY * gl.canvas.height / gl.canvas.clientHeight - 1);
+        gl.readPixels(
+            pixelX, pixelY, 1, 1, // x, y, width, height
+            gl.RGBA,              // format
+            gl.UNSIGNED_BYTE,     // type
+            data);                // typed array to hold result
+        //console.log("Read picker", x, y, "=>", pixelX, pixelY, "data", data);
+        return data[3] | (data[2] << 8) | (data[1] << 16) | (data[0] << 24);
+        //return data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
     }
 
     _initMatrices() {
@@ -153,6 +247,9 @@ export default class Context {
             else {
                 console.log("GL: setting viewport size:", width, height);
                 gl.viewport(0, 0, width, height);
+                CHECK_ERROR(this.gl);
+                this._setupDepthTexture();
+                CHECK_ERROR(this.gl);
             }
         };
         window.requestAnimationFrame(lol);
@@ -161,7 +258,7 @@ export default class Context {
     _onResize(event) {
         console.log("resize event");
         this._setupViewport();
-        //this._setFramebufferAttachmentSizes();
+        this._setFramebufferAttachmentSizes();
         this.redraw();
     }
 
@@ -257,16 +354,15 @@ export default class Context {
 
         //clear buffers and render.
         gl.enable(gl.BLEND);
-        //gl.disable(gl.BLEND);
         gl.clearColor(this.clearColor[0], this.clearColor[1],
             this.clearColor[2], this.clearColor[3]);
         gl.clearDepth(this.clearDepth);
-        //gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
         if(this.drawFunc) {
             try {
-                this.drawFunc();
+                this.drawFunc(false);
             }
             catch(ex) {
                 console.error("Error redrawing", ex);
@@ -276,13 +372,19 @@ export default class Context {
 
         this.stats.renderTime = performance.now() - this.stats.renderStartTime;
 
-        //now render again to our depth buffer.
-        //gl.disable(gl.BLEND);
-        //gl.clearColor(1.0, 1.0, 1.0, 1.0);
-        //gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
-        //gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        //gl.uniform1i(this.gx.programInfo.uniforms.useId, 1);
-        //this.renderer.renderPickBuffer();
-        //gl.flush();
+        //now render again to our picker buffer.
+        gl.disable(gl.BLEND);
+        gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        if(this.drawFunc) {
+            try {
+                this.drawFunc(true);
+            }
+            catch(ex) {
+                console.error("Error drawing pick buffer", ex);
+            }
+        }
+        gl.flush();
     }
 }

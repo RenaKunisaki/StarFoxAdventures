@@ -7,6 +7,7 @@ const AttrCounts = { //number of elements expected per attribute
     POS:   3, NRM:   3, COL0:  4, COL1:  4,
     TEX0:  2, TEX1:  2, TEX2:  2, TEX3:  2,
     TEX4:  2, TEX5:  2, TEX6:  2, TEX7:  2,
+    id:    1, //pseudo-attribute for picker ID
 };
 //XXX support 9-normals mode. WebGL doesn't allow more than 4
 //values per vertex. probably we'd want to use three buffers
@@ -14,10 +15,16 @@ const AttrCounts = { //number of elements expected per attribute
 
 const NoMergeModes = new Set();
 
+let enableErrorChecking = false;
 function CHECK_ERROR(gl) {
-    //extremely slow! every call takes ~11ms
-    //let err = gl.getError();
-    //console.assert(!err);
+    //extremely slow! every call takes ~11ms.
+    //at the end of a frame we check for errors and if there
+    //are any, we enable this so that we can hopefully
+    //catch them here in the next frame.
+    if(enableErrorChecking) {
+        let err = gl.getError();
+        console.assert(!err);
+    }
 }
 
 let _curBufs = null; //RenderBatch that last bound its buffers
@@ -44,9 +51,8 @@ export default class RenderBatch {
         this._isFinished = false;
         for(const field of VAT_FIELD_ORDER) {
             this.data[field] = [];
-            this.buffers[field] = this.gl.createBuffer();
         }
-        this._idxBufObj = this.gl.createBuffer();
+        this.pickerIds = []; //buffer for IDs
         this.prevDrawOp = null;
 
         NoMergeModes.add(this.gl.LINE_STRIP);
@@ -96,6 +102,13 @@ export default class RenderBatch {
             CHECK_ERROR(gl);
         }
         //console.log("render batch stats", stats);
+
+        const err = gl.getError();
+        if(err) {
+            console.error("GL error detected at end of render batch", err);
+            //enable more in-depth (very slow) error checking for next frame.
+            enableErrorChecking = true;
+        }
         return stats;
     }
 
@@ -108,6 +121,12 @@ export default class RenderBatch {
          */
         if(this._isFinished) return;
 
+        for(const field of VAT_FIELD_ORDER) {
+            this.buffers[field] = this.gl.createBuffer();
+        }
+        this._idxBufObj    = this.gl.createBuffer();
+        this.buffers['id'] = this.gl.createBuffer();
+
         //convert data buffers
         const result = {};
         for(const [field, data] of Object.entries(this.data)) {
@@ -115,6 +134,7 @@ export default class RenderBatch {
             else result[field] = Float32Array.from(data);
         }
         this.data = result;
+        this.data['id'] = Uint32Array.from(this.pickerIds);
 
         //build vtx index buffer
         console.assert(this._idxs.length < 65536);
@@ -155,6 +175,7 @@ export default class RenderBatch {
             gb.yMax = Math.max(gb.yMax, func.geomBounds.yMax);
             gb.zMin = Math.min(gb.zMin, func.geomBounds.zMin);
             gb.zMax = Math.max(gb.zMax, func.geomBounds.zMax);
+            this.pickerIds = this.pickerIds.concat(func.pickerIds);
         }
         else this.ops.push(func);
     }
@@ -215,6 +236,7 @@ export default class RenderBatch {
                 this.data[field].push(v);
             }
         }
+        this.pickerIds.push(isNaN(vtx.id) ? -1 : vtx.id);
     }
 
     _uploadBuffers(programInfo, stats) {
@@ -235,7 +257,7 @@ export default class RenderBatch {
                 continue; //no such attribute in shader
             }
             const data = this.data[field];
-            //console.log("uploading buffer", field, data);
+            console.log("uploading buffer", field, data);
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
             gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
             CHECK_ERROR(gl);
@@ -252,6 +274,7 @@ export default class RenderBatch {
         CHECK_ERROR(gl);
         stats.nBufferUploads++;
         stats.nBufferBytes += this._idxBuf.byteLength;
+
         stats.timeUpload += (performance.now() - tStart);
     }
 
@@ -274,7 +297,8 @@ export default class RenderBatch {
             }
             stats.nBufferSwaps++;
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-            const type = field.endsWith('IDX') ? gl.UNSIGNED_INT : gl.FLOAT;
+            const type = (field.endsWith('IDX') || field == 'id') ?
+                gl.UNSIGNED_INT : gl.FLOAT;
             gl.vertexAttribPointer(attr,
                 count,    //number of values per vertex
                 type,     //data type in buffer
