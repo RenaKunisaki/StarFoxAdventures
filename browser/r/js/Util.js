@@ -86,8 +86,9 @@ export function hex(n, size=1) {
      */
     if(typeof(n) == 'string') n = parseInt(n);
     if(n == null || n == undefined) return String(n);
-    if(n < 0) n = (((1 << (size*4)) - 1) ^ -n) + 1;
-    return n.toString(16).toUpperCase().padStart(size, '0');
+    const lol = new Uint32Array(1);
+    lol[0] = n; //to handle negatives
+    return lol[0].toString(16).toUpperCase().padStart(size, '0');
 }
 export function int(n, dflt=null) {
     /** Convert string `n` to int, returning `dflt` for null/undefined.
