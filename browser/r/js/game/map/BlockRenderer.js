@@ -214,7 +214,7 @@ export default class BlockRenderer {
     render(block, whichStream, params={}) {
         /** Render the block.
          *  @param {Block} block The block to render.
-         *  @param {string} whichStream One of 'main', 'water', 'reflective'
+         *  @param {string} whichStr{eam One of 'main', 'water', 'reflective'
          *   specifying which bitstream to use.
          *  @param {object} params Render parameters.
          *  @returns {RenderBatch} The render batch.

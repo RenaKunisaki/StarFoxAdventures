@@ -29,6 +29,7 @@ export default class GameObject {
         const header  = ObjectData.fromBytes(this.data);
         this.header   = header;
         this.index    = null; //from OBJINDEX.bin
+        this.dll      = this.game.dlls[this.header.dll_id];
 
         return new Proxy(this, {
             get: function(instance, key) {

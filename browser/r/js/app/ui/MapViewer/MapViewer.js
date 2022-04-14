@@ -9,6 +9,7 @@ import ViewController from "../gl/ui/ViewController.js";
 import Grid from "./Grid.js";
 import Stats from "./Stats.js";
 import LayerChooser from "./LayerChooser.js";
+import InfoWidget from "./InfoWidget.js";
 import RenderBatch from "../gl/gx/RenderBatch.js";
 
 const PI_OVER_180 = Math.PI / 180.0; //rad = deg * PI_OVER_180
@@ -37,6 +38,7 @@ export default class MapViewer {
         this.grid         = new Grid(this);
         this.stats        = new Stats(this);
         this.layerChooser = new LayerChooser(this);
+        this.infoWidget   = new InfoWidget(this);
         this.eSidebar     = E.div('sidebar');
 
         this._pickerIds     = {};
@@ -79,6 +81,7 @@ export default class MapViewer {
 
         this.eSidebar.append(this.viewController.element,
             this.layerChooser.element,
+            this.infoWidget.element,
             this.stats.element,
         );
 
@@ -406,10 +409,10 @@ export default class MapViewer {
         const vtxs = [this.gx.gl.TRIANGLES];
         for(const idx of vtxIdxs) {
             vtxs.push({
-                POS:   vtxPositions[idx],
-                COL0:  vtxColors[idx],
-                COL1:  vtxColors[idx],
-                vtxId: id,
+                POS:  vtxPositions[idx],
+                COL0: vtxColors[idx],
+                COL1: vtxColors[idx],
+                id:   id,
             });
         }
         return vtxs;
@@ -423,14 +426,21 @@ export default class MapViewer {
          *   or null.
          */
         const id = this.gx.context.readPickBuffer(x, y);
-        const obj = this._pickerIds[id];
+        let   obj = this._pickerIds[id];
+        if(obj == undefined) obj = null;
         console.log("pick", x, y, hex(id,8), id, obj);
         return obj;
     }
 
     _onMouseDown(event) {
-        event.preventDefault();
-        this._mouseStartView = null;
+        if(event.buttons == 1) {
+            const obj = this._getObjAt(event.clientX, event.clientY);
+            this.infoWidget.show(obj);
+        }
+        else {
+            event.preventDefault();
+            this._mouseStartView = null;
+        }
     }
     _onMouseUp(event) {
         event.preventDefault();
@@ -465,7 +475,6 @@ export default class MapViewer {
         }
         else {
             this._mouseStartView = null;
-            const obj = this._getObjAt(event.clientX, event.clientY);
         }
         this._prevMousePos = [event.x, event.y];
     }

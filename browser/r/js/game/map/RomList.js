@@ -6,9 +6,17 @@ import Game from "../Game.js";
 let Vec3f, RomListEntryStruct;
 
 class RomListEntry {
-    constructor(game, data, offset) {
+    constructor(game, data, offset, idx) {
+        /** Construct RomListEntry.
+         *  @param {Game} game Game instance this belongs to.
+         *  @param {DataView} data Data to construct from.
+         *  @param {integer} offset Offset to read from.
+         *  @param {integer} idx Which index in the list this is.
+         *    Only used to display in the UI.
+         */
         this.game       = assertType(game, Game);
         this.app        = game.app;
+        this.idx        = idx;
 
         Vec3f = this.app.types.getType('vec3f');
         RomListEntryStruct = this.app.types.getType('sfa.maps.RomListEntry');
@@ -75,7 +83,8 @@ export default class RomList {
         if(view instanceof GameFile) view = new DataView(view.decompress());
         if(view instanceof ArrayBuffer) view = new DataView(view);
         for(let offs=0; offs<view.byteLength;) {
-            let entry = new RomListEntry(this.game, view, offs);
+            let entry = new RomListEntry(this.game, view, offs,
+                this.entries.length);
             this.entries.push(entry);
             offs += entry.byteLength;
         }

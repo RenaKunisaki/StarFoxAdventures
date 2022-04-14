@@ -135,7 +135,7 @@ export default class RenderBatch {
         }
         this.data = result;
         this.data['id'] = Uint32Array.from(this.pickerIds);
-        console.log("picker IDs", this.pickerIds, this.data['id']);
+        //console.log("picker IDs", this.pickerIds, this.data['id']);
 
         //build vtx index buffer
         console.assert(this._idxs.length < 65536);
@@ -246,7 +246,7 @@ export default class RenderBatch {
         /** Upload the attribute/index buffer data
          *  to the given program.
          */
-        console.log("uploadBuffers", programInfo, this.data);
+        //console.log("uploadBuffers", programInfo, this.data);
         const gl = this.gl;
         const tStart = performance.now();
         for(const [field, buf] of Object.entries(this.buffers)) {
