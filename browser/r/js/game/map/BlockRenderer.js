@@ -196,8 +196,8 @@ export default class BlockRenderer {
         return block.batchOps[key];
     }
 
-    render(block, whichStream, params={}) {
-        /** Render the block.
+    renderToBatch(block, whichStream, params={}) {
+        /** Create a RenderBatch for the block.
          *  @param {Block} block The block to render.
          *  @param {string} whichStream One of 'main', 'water', 'reflective'
          *   specifying which bitstream to use.
@@ -208,10 +208,22 @@ export default class BlockRenderer {
         this.curBlock     = block;
         this.curStream    = whichStream;
         this.params       = params;
-        const batch       = this.parse(block, whichStream, params);
-        if(!batch) return;
-        this.gx.executeBatch(batch);
-        //this.gx.gl.flush();
+        return this.parse(block, whichStream, params);
+    }
+
+    render(block, whichStream, params={}) {
+        /** Render the block.
+         *  @param {Block} block The block to render.
+         *  @param {string} whichStream One of 'main', 'water', 'reflective'
+         *   specifying which bitstream to use.
+         *  @param {object} params Render parameters.
+         *  @returns {RenderBatch} The render batch.
+         */
+        const batch = this.renderToBatch(block, whichStream, params);
+        if(batch) {
+            this.gx.executeBatch(batch);
+            //this.gx.gl.flush();
+        }
         return batch;
     }
 
@@ -332,10 +344,12 @@ export default class BlockRenderer {
         }
 
         //condense these into one function for hopefully better speed
-        this.curBatch.addFunction(() => {
-            _setShaderParams(gl, gx, cull, blendMode, sFactor, dFactor, logicOp,
-                compareEnable, compareFunc, updateEnable);
-        });
+        if(!this._isDrawingForPicker) {
+            this.curBatch.addFunction(() => {
+                _setShaderParams(gl, gx, cull, blendMode, sFactor, dFactor,
+                    logicOp, compareEnable, compareFunc, updateEnable);
+            });
+        }
     }
 
     _makeSetTextureCmd(params) {

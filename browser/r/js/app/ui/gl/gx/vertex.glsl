@@ -1,10 +1,11 @@
+#version 300 es
 /** Vertex shader for GX.
  */
-attribute vec4 vtxColor;      //vertex color
-attribute vec3 vtxPos;        //vertex position
-attribute vec3 vtxNormal;     //vertex normal
-attribute vec2 vtxTexCoord;   //texture coord
-attribute vec4 vtxId;         //ID for picker
+in vec4 vtxColor;      //vertex color
+in vec3 vtxPos;        //vertex position
+in vec3 vtxNormal;     //vertex normal
+in vec2 vtxTexCoord;   //texture coord
+in uint vtxId;         //ID for picker
 
 uniform mat4  matModelView;   //modelview matrix
 uniform mat4  matProjection;  //projection matrix
@@ -13,10 +14,10 @@ uniform ivec3 ambLightColor;  //ambient light color
 uniform ivec3 dirLightColor;  //directional light color
 uniform vec3  dirLightVector; //directional light direction vector
 
-varying lowp  vec4 vColor;    //vertex color
-varying highp vec3 vLighting; //light color output
-varying highp vec2 vTexCoord; //texture coord
-varying highp vec4 vId;       //ID for picker
+out lowp  vec4 vColor;    //vertex color
+out highp vec3 vLighting; //light color output
+out highp vec2 vTexCoord; //texture coord
+flat out uvec4 vId;       //ID for picker
 
 void main() {
     //position gets fed through matrices
@@ -29,7 +30,11 @@ void main() {
 
     //these just pass through
     vTexCoord = vtxTexCoord;
-    vId = vtxId;
+    vId = uvec4(
+         int(vtxId) >> 24,
+        (int(vtxId) >> 16) & 0xFF,
+        (int(vtxId) >>  8) & 0xFF,
+         int(vtxId)        & 0xFF);
 
     //normalize the light vectors
     highp vec3 ambientLight = vec3(

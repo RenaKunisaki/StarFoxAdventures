@@ -135,13 +135,16 @@ export default class RenderBatch {
         }
         this.data = result;
         this.data['id'] = Uint32Array.from(this.pickerIds);
+        console.log("picker IDs", this.pickerIds, this.data['id']);
 
         //build vtx index buffer
         console.assert(this._idxs.length < 65536);
         this._idxBuf = new Uint16Array(this._idxs);
         this._isFinished = true;
 
-        this._uploadBuffers(programInfo, stats);
+        if(this._idxs.length > 0) {
+            this._uploadBuffers(programInfo, stats);
+        }
     }
 
     addFunction(func) {
@@ -243,6 +246,7 @@ export default class RenderBatch {
         /** Upload the attribute/index buffer data
          *  to the given program.
          */
+        console.log("uploadBuffers", programInfo, this.data);
         const gl = this.gl;
         const tStart = performance.now();
         for(const [field, buf] of Object.entries(this.buffers)) {
@@ -256,8 +260,13 @@ export default class RenderBatch {
                 //console.warn("No shader attrib found for", field);
                 continue; //no such attribute in shader
             }
-            const data = this.data[field];
-            console.log("uploading buffer", field, data);
+            let data = this.data[field];
+            /*if(field == 'id') {
+                const len = data.length;
+                data = new Uint32Array(len);
+                for(let i=0; i<len; i++) data[i] = 0x100;
+            }*/
+            //console.log("uploading buffer", field, data);
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
             gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
             CHECK_ERROR(gl);
@@ -297,9 +306,16 @@ export default class RenderBatch {
             }
             stats.nBufferSwaps++;
             gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-            const type = (field.endsWith('IDX') || field == 'id') ?
-                gl.UNSIGNED_INT : gl.FLOAT;
-            gl.vertexAttribPointer(attr,
+            const isInt = field.endsWith('IDX') || field == 'id';
+            const type = isInt ? gl.UNSIGNED_INT : gl.FLOAT;
+            if(isInt) {
+                gl.vertexAttribIPointer(attr,
+                    count,    //number of values per vertex
+                    type,     //data type in buffer
+                    0,        //stride (0=use type and numComponents)
+                    0);       //offset in bytes to start from in buffer
+            }
+            else gl.vertexAttribPointer(attr,
                 count,    //number of values per vertex
                 type,     //data type in buffer
                 false,    //don't normalize
