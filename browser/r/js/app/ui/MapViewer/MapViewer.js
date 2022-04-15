@@ -41,7 +41,6 @@ export default class MapViewer {
         this.eSidebar        = E.div('sidebar');
         this._eventHandler   = new EventHandler(this);
 
-        this._pickerIds     = {};
         this._prevMousePos  = [0, 0];
         this._mouseStartPos = null;
         this.app.onIsoLoaded(iso => this.refresh());
@@ -128,9 +127,8 @@ export default class MapViewer {
             console.error("Map has no directory", map);
         }
 
-        this._pickerIds = {}; //id => info
-        this._nextPickerId = 1;
-
+        this.gx.resetPicker();
+        this._objectRenderer.reset();
         this.curBlock = this._findABlock();
         this.reset();
         this.layerChooser.refresh();
@@ -199,11 +197,11 @@ export default class MapViewer {
         const blockStats = {totals:{}};
         this._beginRender();
         this._drawBlocks(blockStats, blockStreams);
-        this._objectRenderer.drawObjects();
+        this._objectRenderer.drawObjects(isPicker);
         this._finishRender(blockStats, blockStreams);
         //console.log("block render OK", this.gx.context.stats);
         //console.log("GX logs:", this.gx.program.getLogs());
-        //if(isPicker) console.log("picker IDs", this._pickerIds);
+        //if(isPicker) console.log("picker IDs", this.gx.pickerObjs);
     }
 
     _beginRender() {
@@ -281,8 +279,6 @@ export default class MapViewer {
         mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
         this.gx.setModelViewMtx(mv);
 
-        params.pickerIdBase = this._nextPickerId;
-
         const batch = this.blockRenderer.render(block, stream, params);
         if(batch) { //there was in fact a block to render
             const gb = this.gx.context.stats.geomBounds;
@@ -292,19 +288,6 @@ export default class MapViewer {
             gb.yMax = Math.max(gb.yMax, batch.geomBounds.yMax+offsY);
             gb.zMin = Math.min(gb.zMin, batch.geomBounds.zMin+offsZ);
             gb.zMax = Math.max(gb.zMax, batch.geomBounds.zMax+offsZ);
-
-            if(this._isDrawingForPicker) {
-                for(const [id,list] of Object.entries(this.blockRenderer.pickerIds)) {
-                    console.assert(this._pickerIds[id] == undefined);
-                    this._pickerIds[id] = {
-                        type: 'block-dlist',
-                        block: block,
-                        stream: stream,
-                        list: list,
-                    };
-                    this._nextPickerId++;
-                }
-            }
         }
         return batch; //for stats
     }
@@ -317,7 +300,7 @@ export default class MapViewer {
          *   or null.
          */
         const id = this.gx.context.readPickBuffer(x, y);
-        let   obj = this._pickerIds[id];
+        let   obj = this.gx.getPickerObj(id);
         if(obj == undefined) obj = null;
         console.log("pick", x, y, hex(id,8), id, obj);
         return obj;

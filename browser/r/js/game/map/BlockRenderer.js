@@ -137,10 +137,6 @@ export default class BlockRenderer {
         if(block.batchOps[key]) return block.batchOps[key];
 
         this._isDrawingForPicker = params.isPicker;
-        if(this._isDrawingForPicker) {
-            this.pickerIds = {}; //id => list
-            this._pickerIdBase = params.pickerIdBase;
-        }
 
         //console.log("parsing", block, whichStream);
         this.curBatch = new RenderBatch(this.gx);
@@ -398,12 +394,17 @@ export default class BlockRenderer {
         };
         if(LogRenderOps) console.log("Execute list", idx);
 
-        let id = this._isDrawingForPicker ? (this._pickerIdBase++) : 0;
+        let id = 0;
+        if(this._isDrawingForPicker) {
+            id = this.gx.addPickerObj({
+                type:   'mapBlockDlist',
+                block:  this.curBlock,
+                list:   idx,
+                params: this.params,
+            });
+        }
         const list = this.dlistParser.parse(
             this.curBlock.dlists[idx].data, dlistData, id);
-        if(this._isDrawingForPicker) {
-            this.pickerIds[id] = list;
-        }
         this.curBatch.addFunction(list);
         if(LogRenderOps) {
             console.log("executed list", this.curBlock.dlists[idx].data);

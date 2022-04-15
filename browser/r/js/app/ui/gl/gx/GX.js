@@ -95,6 +95,7 @@ export default class GX {
         this.xf           = new XF(this);
         this.vtxBuf       = new VertexBuffer(this);
         this.dlistParser  = new DlistParser(this);
+        this.pickerObjs   = []; //idx => obj
     }
 
     _buildGlTables() {
@@ -135,7 +136,6 @@ export default class GX {
             this.context.lights.enabled ? 1 : 0);
         this.gl.uniform1i(this.programInfo.uniforms.useTexture,
             this.context.enableTextures ? 1 : 0);
-        this.vtxLog = []; //log all drawn vertices for picker
     }
 
     async loadPrograms() {
@@ -185,6 +185,8 @@ export default class GX {
          *  @param {bool} isPicker Whether we're rendering to the pick buffer.
          */
         const gl = this.gl;
+        this._isDrawingForPicker = isPicker;
+
         this.program.use();
         //reset lights to whatever the user set.
         gl.uniform3iv(this.programInfo.uniforms.ambLightColor,
@@ -232,6 +234,17 @@ export default class GX {
         gb.zMax = Math.max(gb.zMax, batch.geomBounds.zMax);
     }
 
+    resetPicker() {
+        this.pickerObjs = [];
+    }
+    addPickerObj(obj) {
+        this.pickerObjs.push(obj);
+        return this.pickerObjs.length - 1;
+    }
+    getPickerObj(idx) {
+        return this.pickerObjs[idx];
+    }
+
     setBlendMode(blendMode, srcFactor, destFactor, logicOp) {
         /** Implement GC SDK's gxSetBlendMode().
          *  @param {BlendMode} blendMode blend mode.
@@ -239,6 +252,7 @@ export default class GX {
          *  @param {BlendFactor} destFactor destination blend factor.
          *  @param {LogicOp} logicOp how to blend.
          */
+        if(this._isDrawingForPicker) return;
         const gl = this.gl;
         gl.blendFunc(this.BlendFactorMap[srcFactor],
             this.BlendFactorMap[destFactor]);
@@ -256,7 +270,7 @@ export default class GX {
                 //buffer they're about to modify, so we can't implement
                 //the various logic blend modes correctly.
                 //for now we'll use this as a placeholder. should investigate
-                //how Dolphin manages this.
+                //how Dolphin manages this. (probably glLogicOp)
                 gl.blendEquation(gl.FUNC_REVERSE_SUBTRACT);
                 break;
             case GX.BlendMode.SUBTRACT:

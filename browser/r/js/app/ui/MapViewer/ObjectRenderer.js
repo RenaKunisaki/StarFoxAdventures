@@ -7,9 +7,18 @@ export default class ObjectRenderer {
     constructor(mapViewer) {
         this.mapViewer = mapViewer;
         this.gx = this.mapViewer.gx;
+
+        //keep track of picker IDs assigned to objects
+        //so we don't keep making up new ones
+        this.pickerIds = {}; //entry idx => picker ID
     }
 
-    drawObjects() {
+    reset() {
+        /** Reset state for new map. */
+        this.pickerIds = {};
+    }
+
+    drawObjects(isPicker) {
         /** Draw all enabled objects. */
         const gx  = this.gx;
         const gl  = this.gx.gl;
@@ -19,6 +28,7 @@ export default class ObjectRenderer {
         const map = this.mapViewer.map;
         if(!map.romList) return;
 
+        this._isDrawingForPicker = isPicker;
         const batch = new RenderBatch(this.gx);
 
         let mv = mat4.clone(gx.context.matModelView);
@@ -62,11 +72,14 @@ export default class ObjectRenderer {
 
         let id = 0;
         if(this._isDrawingForPicker) {
-            id = this._nextPickerId++;
-            this._pickerIds[id] = {
-                type: 'object',
-                obj: entry,
-            };
+            id = this.pickerIds[entry.idx];
+            if(id == undefined) {
+                id = this.gx.addPickerObj({
+                    type: 'object',
+                    obj:  entry,
+                });
+                this.pickerIds[entry.idx] = id;
+            }
         }
 
         //just draw a cube

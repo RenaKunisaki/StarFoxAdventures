@@ -28,7 +28,7 @@ export default class InfoWidget {
         }
 
         switch(info.type) {
-            case 'block-dlist':
+            case 'mapBlockDlist':
                 this._showBlockDlist(info);
                 break;
 
