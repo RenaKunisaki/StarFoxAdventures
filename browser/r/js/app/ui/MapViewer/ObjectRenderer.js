@@ -6,8 +6,13 @@ export default class ObjectRenderer {
     /** Handles object rendering for map viewer. */
     constructor(mapViewer) {
         this.mapViewer = mapViewer;
+        this.app = this.mapViewer.app;
         this.gx = this.mapViewer.gx;
+        this.reset();
+    }
 
+    reset() {
+        /** Reset state for new map. */
         //keep track of picker IDs assigned to objects
         //so we don't keep making up new ones
         this.pickerIds = {}; //entry idx => picker ID
@@ -16,20 +21,36 @@ export default class ObjectRenderer {
         this.batches = {}; //key => batch
     }
 
-    reset() {
-        /** Reset state for new map. */
-        this.pickerIds = {};
-        this.batches   = {};
+    async loadObjects() {
+        /** Load object models and prepare batches. */
+        const map = this.mapViewer.map;
+        if(!map.romList) return; //nothing to render
+
+        for(let i=0; i<map.romList.entries.length; i++) {
+            if(!(i & 0xF)) {
+                await this.app.progress.update({
+                    taskText:  "Loading Map",
+                    subText:   "Decoding object models...",
+                    stepsDone: i,
+                    numSteps:  map.romList.entries.length,
+                });
+            }
+
+            //pre-render the object
+            const entry = map.romList.entries[i];
+            const batch = this.drawObject(entry);
+            this.batches[`obj${entry.idx}`] = batch;
+        }
     }
 
-    drawObjects(isPicker) {
+    async drawObjects(act, isPicker) {
         /** Draw all enabled objects.
+         *  @param {integer} act Which act number to draw.
          *  @param {bool} isPicker Whether we're rendering for picker buffer.
          *  @returns {RenderBatch} Batch that renders the objects.
          */
-        const gx  = this.gx;
-        const gl  = this.gx.gl;
-        const act = this.mapViewer.layers.actNo;
+        const gx = this.gx;
+        const gl = this.gx.gl;
         this._isDrawingForPicker = isPicker;
 
         const cacheKey = [isPicker, act].join(':');
@@ -37,6 +58,7 @@ export default class ObjectRenderer {
         //if we already generated a batch, use it.
         if(this.batches[cacheKey]) return this.batches[cacheKey];
 
+        console.log("Creating object batch", cacheKey);
         const batch = new RenderBatch(this.gx);
         this.batches[cacheKey] = batch;
 
@@ -45,30 +67,36 @@ export default class ObjectRenderer {
         const map = this.mapViewer.map;
         if(!map.romList) return batch; //nothing to render
 
-        //set up render params
-        batch.addFunction(() => {
-            gl.enable(gl.CULL_FACE);
-        });
-        if(!this._isDrawingForPicker) {
-            batch.addFunction(() => {
-                gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
-                    GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
-                gx.setZMode(true, GX.CompareMode.LEQUAL, true);
+        const objs = [];
+        for(let entry of map.romList.entries) {
+            //act -1 = all objects (same as in game, even though
+            //it's not possible to actually set the act to -1
+            //in the game)
+            if(act == -1 || entry.acts[act]) {
+                objs.push(this.batches[`obj${entry.idx}`])
+            }
+        }
 
-                for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
-                    gl.activeTexture(gl.TEXTURE0 + i);
-                    this.gx.whiteTexture.bind();
-                    gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
-                }
+        //generating a batch can take a while
+        if(!isPicker) {
+            this.app.progress.show({
+                taskText:  "Loading Map",
+                subText:   "Rendering objects...",
+                stepsDone: 0,
+                numSteps:  objs.length * 2,
             });
         }
 
-        //draw enabled objects
-        for(let entry of map.romList.entries) {
-            if(act == 'all' || entry.acts[act]) {
-                batch.addFunction(this.drawObject(entry));
+        //render the objects (XXX why does this take so long?)
+        this._setupRenderParams(batch);
+        const offs = isPicker ? objs.length : 0;
+        for(let i=0; i<objs.length; i++) {
+            batch.addFunction(objs[i]);
+            if(!(i & 0xF)) {
+                await this.app.progress.update({stepsDone: i + offs});
             }
         }
+        if(isPicker) this.app.progress.hide();
 
         return batch;
     }
@@ -85,21 +113,42 @@ export default class ObjectRenderer {
         const s = Math.max(entry.object.scale, 10);
         //console.log("draw obj", entry, "at", x, y, z, "scale", s)
 
-        let id = 0;
-        if(this._isDrawingForPicker) {
-            id = this.pickerIds[entry.idx];
-            if(id == undefined) {
-                id = this.gx.addPickerObj({
-                    type: 'object',
-                    obj:  entry,
-                });
-                this.pickerIds[entry.idx] = id;
-            }
+        let id = this.pickerIds[entry.idx];
+        if(id == undefined) {
+            id = this.gx.addPickerObj({
+                type: 'object',
+                obj:  entry,
+            });
+            this.pickerIds[entry.idx] = id;
         }
 
         //just draw a cube
         batch.addVertices(...this._makeCube(x, y, z, s, id));
         return batch;
+    }
+
+    _setupRenderParams(batch) {
+        /** Set up the render params to render objects.
+         *  @param {RenderBatch} batch Batch to render to.
+         */
+        const gx = this.gx;
+        const gl = this.gx.gl;
+        batch.addFunction(() => {
+            gl.enable(gl.CULL_FACE);
+        });
+        if(!this._isDrawingForPicker) {
+            batch.addFunction(() => {
+                gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
+                    GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+                gx.setZMode(true, GX.CompareMode.LEQUAL, true);
+
+                for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
+                    gl.activeTexture(gl.TEXTURE0 + i);
+                    this.gx.whiteTexture.bind();
+                    gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
+                }
+            });
+        }
     }
 
     _makeCube(x, y, z, scale, id) {

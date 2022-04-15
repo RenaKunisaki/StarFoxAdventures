@@ -294,7 +294,7 @@ export default class Context {
         });
     }
 
-    _redraw() {
+    async _redraw() {
         const gl = this.gl;
         const P  = this.view.pos;
         const S  = this.view.scale;
@@ -363,7 +363,7 @@ export default class Context {
 
         if(this.drawFunc) {
             try {
-                this.drawFunc(false);
+                await this.drawFunc(false);
             }
             catch(ex) {
                 console.error("Error redrawing", ex);
@@ -382,7 +382,7 @@ export default class Context {
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         if(this.drawFunc) {
             try {
-                this.drawFunc(true);
+                await this.drawFunc(true);
             }
             catch(ex) {
                 console.error("Error drawing pick buffer", ex);

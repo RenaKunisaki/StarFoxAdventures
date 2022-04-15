@@ -41,8 +41,7 @@ export default class MapViewer {
         this.eSidebar        = E.div('sidebar');
         this._eventHandler   = new EventHandler(this);
 
-        this._prevMousePos  = [0, 0];
-        this._mouseStartPos = null;
+        this._isFirstDrawAfterLoadingMap = true;
         this.app.onIsoLoaded(iso => this.refresh());
     }
 
@@ -127,6 +126,7 @@ export default class MapViewer {
             console.error("Map has no directory", map);
         }
 
+        this._isFirstDrawAfterLoadingMap = true;
         this.gx.resetPicker();
         this._objectRenderer.reset();
         this.curBlock = this._findABlock();
@@ -142,9 +142,30 @@ export default class MapViewer {
         this._pendingDraw  = false;
     }
 
-    redraw() {
+    async _loadMap() {
+        this.app.progress.show({
+            taskText:  "Loading Map",
+            subText:   "Loading block textures...",
+            stepsDone: 0,
+            numSteps:  this.map.blocks.length,
+        });
+
+        //load block data
+        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+            const block = this.map.blocks[iBlock];
+            await this.app.progress.update({stepsDone:iBlock});
+            if(block && block.mod < 0xFF) block.load(this.gx);
+        }
+
+        //load object data
+        await this._objectRenderer.loadObjects();
+    }
+
+    async redraw() {
         if(this._pendingDraw) return;
         this._pendingDraw = true;
+        if(this._isFirstDrawAfterLoadingMap) await this._loadMap();
+
         window.requestAnimationFrame(() => {
             this._pendingDraw = false;
             //this.grid.refresh();
@@ -153,6 +174,10 @@ export default class MapViewer {
             if(!this._updatedStats) {
                 this._updatedStats = true;
                 this.stats.refresh();
+            }
+            if(this._isFirstDrawAfterLoadingMap) {
+                this.app.progress.hide();
+                this._isFirstDrawAfterLoadingMap = false;
             }
         });
     }
@@ -181,7 +206,7 @@ export default class MapViewer {
         return block;
     }
 
-    _draw(isPicker) {
+    async _draw(isPicker) {
         /** Draw the map. Called by Context. */
         if(!this.map) return;
 
@@ -197,7 +222,7 @@ export default class MapViewer {
         const blockStats = {totals:{}};
         this._beginRender();
         this._drawBlocks(blockStats, blockStreams);
-        this._drawObjects();
+        await this._drawObjects();
         this._finishRender(blockStats, blockStreams);
         //console.log("block render OK", this.gx.context.stats);
         //console.log("GX logs:", this.gx.program.getLogs());
@@ -292,13 +317,14 @@ export default class MapViewer {
         return batch; //for stats
     }
 
-    _drawObjects() {
+    async _drawObjects() {
         let mv = mat4.clone(this.gx.context.matModelView);
         mat4.translate(mv, mv, vec3.fromValues(
             (this.map.originX * MAP_CELL_SIZE), 0,
             (this.map.originZ * MAP_CELL_SIZE) ));
         this.gx.setModelViewMtx(mv);
-        const batch = this._objectRenderer.drawObjects(this._isDrawingForPicker);
+        const batch = await this._objectRenderer.drawObjects(
+            this.layers.actNo, this._isDrawingForPicker);
         if(batch) this.gx.executeBatch(batch);
     }
 

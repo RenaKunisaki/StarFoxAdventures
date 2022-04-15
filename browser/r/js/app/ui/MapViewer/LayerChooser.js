@@ -33,7 +33,7 @@ export default class LayerChooser {
                 `Act ${i} (${objCounts[i]})`, {value:i}));
         }
         this.eActList.append(E.option(null,
-            `All Acts (${objs.length})`, {value:'all'}));
+            `All Acts (${objs.length})`, {value:-1}));
 
         //when list is empty, value is the empty string
         if(oldAct !== '') this.eActList.value = oldAct;
