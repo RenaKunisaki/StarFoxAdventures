@@ -11,9 +11,7 @@ import Stats from "./Stats.js";
 import LayerChooser from "./LayerChooser.js";
 import InfoWidget from "./InfoWidget.js";
 import RenderBatch from "../gl/gx/RenderBatch.js";
-
-const PI_OVER_180 = Math.PI / 180.0; //rad = deg * PI_OVER_180
-const PI_UNDER_180 = 180.0 / Math.PI; //deg = rad * PI_UNDER_180
+import EventHandler from "./EventHandler.js";
 
 export default class MapViewer {
     /** Renders map geometry. */
@@ -40,6 +38,7 @@ export default class MapViewer {
         this.layerChooser = new LayerChooser(this);
         this.infoWidget   = new InfoWidget(this);
         this.eSidebar     = E.div('sidebar');
+        this._eventHandler= new EventHandler(this);
 
         this._pickerIds     = {};
         this._prevMousePos  = [0, 0];
@@ -72,13 +71,6 @@ export default class MapViewer {
         await this.gx.loadPrograms();
 
         this.viewController = new ViewController(this.context);
-        this.canvas.addEventListener('mousemove', e => this._onMouseMove (e));
-        this.canvas.addEventListener('mousedown', e => this._onMouseDown (e));
-        this.canvas.addEventListener('mouseup',   e => this._onMouseUp   (e));
-        this.canvas.addEventListener('wheel',     e => this._onMouseWheel(e));
-        //must disable context menu to be able to right-drag
-        this.canvas.addEventListener('contextmenu', e => e.preventDefault());
-
         this.eSidebar.append(this.viewController.element,
             this.layerChooser.element,
             this.infoWidget.element,
@@ -430,73 +422,5 @@ export default class MapViewer {
         if(obj == undefined) obj = null;
         console.log("pick", x, y, hex(id,8), id, obj);
         return obj;
-    }
-
-    _onMouseDown(event) {
-        if(event.buttons == 1) {
-            const obj = this._getObjAt(event.clientX, event.clientY);
-            this.infoWidget.show(obj);
-        }
-        else {
-            event.preventDefault();
-            this._mouseStartView = null;
-        }
-    }
-    _onMouseUp(event) {
-        event.preventDefault();
-        this._mouseStartView = null;
-    }
-
-    _onMouseMove(event) {
-        //buttons are bitflag: 1=left 2=right 4=mid 8=back 16=fwd
-        //viewController.set() will redraw the scene.
-        if(event.buttons == 4) { //rotate
-            if(this._mouseStartView) {
-                this.viewController.set({
-                    rot: {
-                        x: this._mouseStartView.rot.x + (event.y - this._mouseStartPos[1]),
-                        y: this._mouseStartView.rot.y + (event.x - this._mouseStartPos[0]),
-                    },
-                });
-            }
-            else {
-                this._mouseStartView = this.viewController.get();
-                this._mouseStartPos  = [event.x, event.y];
-            }
-        }
-        else if(event.buttons == 2) { //move
-            if(this._mouseStartView) {
-                this._doMouseCamMove(event);
-            }
-            else {
-                this._mouseStartView = this.viewController.get();
-                this._mouseStartPos  = [event.x, event.y];
-            }
-        }
-        else {
-            this._mouseStartView = null;
-        }
-        this._prevMousePos = [event.x, event.y];
-    }
-
-    _doMouseCamMove(event) {
-        const scale = 1;
-        const dx = (event.x - this._mouseStartPos[0]) * scale;
-        const dz = (event.y - this._mouseStartPos[1]) * scale;
-
-        const view = this.viewController.get();
-        const ry = ((view.rot.y % 360) - 180) * PI_OVER_180;
-        //const rz = view.rot.z * PI_OVER_180;
-        const sinRX = Math.sin(ry);
-        const cosRX = Math.cos(ry);
-        const x = this._mouseStartView.pos.x + ((dx * cosRX) - (dz * sinRX));
-        const z = this._mouseStartView.pos.z + ((dx * sinRX) + (dz * cosRX));
-        //TODO y
-
-        this.viewController.set({pos: {x:x, z:z}});
-    }
-
-    _onMouseWheel(event) {
-        this.viewController.adjust({pos:{y: event.deltaY}});
     }
 }
