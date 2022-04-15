@@ -11,51 +11,66 @@ export default class ObjectRenderer {
         //keep track of picker IDs assigned to objects
         //so we don't keep making up new ones
         this.pickerIds = {}; //entry idx => picker ID
+
+        //cache created batches
+        this.batches = {}; //key => batch
     }
 
     reset() {
         /** Reset state for new map. */
         this.pickerIds = {};
+        this.batches   = {};
     }
 
     drawObjects(isPicker) {
-        /** Draw all enabled objects. */
+        /** Draw all enabled objects.
+         *  @param {bool} isPicker Whether we're rendering for picker buffer.
+         *  @returns {RenderBatch} Batch that renders the objects.
+         */
         const gx  = this.gx;
         const gl  = this.gx.gl;
         const act = this.mapViewer.layers.actNo;
-        if(act == 0) return;
-
-        const map = this.mapViewer.map;
-        if(!map.romList) return;
-
         this._isDrawingForPicker = isPicker;
+
+        const cacheKey = [isPicker, act].join(':');
+
+        //if we already generated a batch, use it.
+        if(this.batches[cacheKey]) return this.batches[cacheKey];
+
         const batch = new RenderBatch(this.gx);
+        this.batches[cacheKey] = batch;
 
-        let mv = mat4.clone(gx.context.matModelView);
-        mat4.translate(mv, mv, vec3.fromValues(
-            (map.originX * MAP_CELL_SIZE), 0,
-            (map.originZ * MAP_CELL_SIZE) ));
-        gx.setModelViewMtx(mv);
+        //act 0 = no objects (same as in game)
+        if(act == 0) return batch;
+        const map = this.mapViewer.map;
+        if(!map.romList) return batch; //nothing to render
 
-        gl.enable(gl.CULL_FACE);
-        gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
-            GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
-        gx.setZMode(true, GX.CompareMode.LEQUAL, true);
-
+        //set up render params
         batch.addFunction(() => {
-            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
-                gl.activeTexture(gl.TEXTURE0 + i);
-                this.gx.whiteTexture.bind();
-                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
-            }
+            gl.enable(gl.CULL_FACE);
         });
+        if(!this._isDrawingForPicker) {
+            batch.addFunction(() => {
+                gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
+                    GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+                gx.setZMode(true, GX.CompareMode.LEQUAL, true);
 
+                for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
+                    gl.activeTexture(gl.TEXTURE0 + i);
+                    this.gx.whiteTexture.bind();
+                    gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
+                }
+            });
+        }
+
+        //draw enabled objects
         for(let entry of map.romList.entries) {
             if(act == 'all' || entry.acts[act]) {
                 batch.addFunction(this.drawObject(entry));
             }
         }
-        this.gx.executeBatch(batch);
+
+        return batch;
     }
 
     drawObject(entry) {

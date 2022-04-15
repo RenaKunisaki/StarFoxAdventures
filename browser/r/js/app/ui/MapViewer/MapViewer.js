@@ -197,7 +197,7 @@ export default class MapViewer {
         const blockStats = {totals:{}};
         this._beginRender();
         this._drawBlocks(blockStats, blockStreams);
-        this._objectRenderer.drawObjects(isPicker);
+        this._drawObjects();
         this._finishRender(blockStats, blockStreams);
         //console.log("block render OK", this.gx.context.stats);
         //console.log("GX logs:", this.gx.program.getLogs());
@@ -290,6 +290,16 @@ export default class MapViewer {
             gb.zMax = Math.max(gb.zMax, batch.geomBounds.zMax+offsZ);
         }
         return batch; //for stats
+    }
+
+    _drawObjects() {
+        let mv = mat4.clone(this.gx.context.matModelView);
+        mat4.translate(mv, mv, vec3.fromValues(
+            (this.map.originX * MAP_CELL_SIZE), 0,
+            (this.map.originZ * MAP_CELL_SIZE) ));
+        this.gx.setModelViewMtx(mv);
+        const batch = this._objectRenderer.drawObjects(this._isDrawingForPicker);
+        if(batch) this.gx.executeBatch(batch);
     }
 
     _getObjAt(x, y) {

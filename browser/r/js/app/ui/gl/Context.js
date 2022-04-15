@@ -30,6 +30,7 @@ export default class Context {
             //for map viewing)
             //TSR = the rotation is around the origin point (ideal
             //for character model viewing)
+        this.showPickBuffer = false; //debug: render the picker buffer
 
         this._setupCanvas(canvas);
         this._setupExtensions();
@@ -375,7 +376,9 @@ export default class Context {
         //now render again to our picker buffer.
         gl.disable(gl.BLEND);
         gl.clearColor(1.0, 1.0, 1.0, 1.0);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
+        if(!this.showPickBuffer) {
+            gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
+        }
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         if(this.drawFunc) {
             try {

@@ -45,6 +45,9 @@ export default class ViewController {
         if(params.enableBackfaceCulling != undefined) {
             this.chkEnableBackface.checked = params.enableBackfaceCulling;
         }
+        if(params.showPickBuffer != undefined) {
+            this.chkShowPickBuffer.checked = params.showPickBuffer;
+        }
         if(params.frontFaceCW != undefined) {
             this.btnFrontFaceCW .checked =  params.frontFaceCW;
             this.btnFrontFaceCCW.checked = !params.frontFaceCW;
@@ -80,6 +83,7 @@ export default class ViewController {
             enableTextures: this.chkEnableTex.checked,
             useWireframe: this.chkWireframe.checked,
             enableBackfaceCulling: this.chkEnableBackface.checked,
+            showPickBuffer: this.chkShowPickBuffer.checked,
             frontFaceCW: this.btnFrontFaceCW.checked,
             useSRT: this.btnRotateCam.checked,
         };
@@ -114,6 +118,9 @@ export default class ViewController {
         if(params.enableBackfaceCulling != undefined) {
             this.chkEnableBackface.checked = params.enableBackfaceCulling;
         }
+        if(params.showPickBuffer != undefined) {
+            this.chkShowPickBuffer.checked = params.showPickBuffer;
+        }
         if(params.frontFaceCW != undefined) {
             this.btnFrontFaceCW .checked =  params.frontFaceCW;
             this.btnFrontFaceCCW.checked = !params.frontFaceCW;
@@ -141,6 +148,7 @@ export default class ViewController {
         this.chkEnableTex.checked      = true;
         this.chkWireframe.checked      = false;
         this.chkEnableBackface.checked = true;
+        this.chkShowPickBuffer.checked = false;
         this.btnFrontFaceCW.checked    = true;
         this.btnFrontFaceCCW.checked   = false;
         this.btnRotateCam.checked      = true;
@@ -165,6 +173,7 @@ export default class ViewController {
         this.context.enableTextures  = this.chkEnableTex.checked;
         this.context.useWireframe    = this.chkWireframe.checked;
         this.context.enableBackfaceCulling = this.chkEnableBackface.checked;
+        this.context.showPickBuffer = this.chkShowPickBuffer.checked;
         this.context.frontFaceCW = this.btnFrontFaceCW.checked;
         this.context.useSRT = this.btnRotateCam.checked;
         this.context.redraw();
@@ -222,6 +231,12 @@ export default class ViewController {
             {'for':'chkEnableBackface'}, "Cull Backfaces");
         this.chkEnableBackface.checked = C.enableBackfaceCulling;
         this.chkEnableBackface.addEventListener('change', e => this._onChange(e));
+
+        //checkbox to display pick buffer
+        this.chkShowPickBuffer = E.input(null, {type:'checkbox', id:'chkShowPickBuffer'});
+        this.lblShowPickBuffer = E.label(null, {'for':'chkShowPickBuffer'}, "Show Pick Buffer");
+        this.chkShowPickBuffer.checked = C.showPickBuffer;
+        this.chkShowPickBuffer.addEventListener('change', e => this._onChange(e));
 
         //button to reset to default params
         this.btnReset = E.button('reset', "Reset");
@@ -312,6 +327,12 @@ export default class ViewController {
                             title:"Enable backface culling",
                         }),
                     ), */
+                    E.tr(
+                        E.td({colspan:2},
+                            this.chkShowPickBuffer, this.lblShowPickBuffer, {
+                            title:"Render the pick buffer for debug",
+                        }),
+                    ),
                 ),
             ),
         );
