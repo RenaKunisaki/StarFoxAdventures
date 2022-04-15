@@ -108,27 +108,12 @@ export default class Block {
             offs + this.header.vertexTexCoords + (this.header.nTexCoords * 4),
         );
 
-        //debug
-        /* let vtxs=[], colors=[], texCoords=[];
-        for(let i=0; i<this.header.nVtxs; i++) {
-            vtxs.push([
-                view.getInt16(offs + this.header.vertexPositions + (i*6)),
-                view.getInt16(offs + this.header.vertexPositions + (i*6)+2),
-                view.getInt16(offs + this.header.vertexPositions + (i*6)+4),
-            ]);
-        }
-        for(let i=0; i<this.header.nColors; i++) {
-            colors.push(view.getInt16(offs + this.header.vertexColors + (i*2)));
-        }
-        for(let i=0; i<this.header.nTexCoords; i++) {
-            texCoords.push([
-                view.getInt16(offs + this.header.vertexTexCoords + (i*4)),
-                view.getInt16(offs + this.header.vertexTexCoords + (i*4)+2),
-            ]);
-        }
-        console.log("vertexPositions", vtxs);
-        console.log("vertexColors", colors);
-        console.log("texCoords", texCoords); */
+        //here we could make a GL buffer for each of these. the problem is,
+        //the attribute format can change during a render stream, so we don't
+        //know what the actual values being read from the buffer are until
+        //we parse the display lists, and the same value could even possibly
+        //be used multiple times as different formats. (unlikely, but
+        //it can be done.)
     }
 
     _loadPolygons(view) {

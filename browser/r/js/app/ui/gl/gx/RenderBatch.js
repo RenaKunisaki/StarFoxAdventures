@@ -334,21 +334,6 @@ export default class RenderBatch {
 
         //debug
         console.assert(_curBufs == this);
-        //UNSIGNED_INT and FLOAT are both 4 bytes
-        /* const bEnd = ((index + count) - 1) * 4;
-        for(const [field, buf] of Object.entries(this.buffers)) {
-            if(AttrCounts[field] == undefined) continue;
-            if(this._programInfo.attribs[field] == undefined) continue; //no such attribute in shader
-            const length = this.data[field].byteLength;
-            console.assert(bEnd <= length);
-            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-            const boundSize = gl.getBufferParameter(
-                gl.ARRAY_BUFFER, gl.BUFFER_SIZE);
-            console.assert(boundSize == length);
-        }
-        const boundSize = gl.getBufferParameter(
-            gl.ELEMENT_ARRAY_BUFFER, gl.BUFFER_SIZE);
-        console.assert(boundSize == this._idxBuf.byteLength); */
 
         //index * sizeof(unsigned short)
         gl.drawElements(mode, count, gl.UNSIGNED_SHORT, index*2);
