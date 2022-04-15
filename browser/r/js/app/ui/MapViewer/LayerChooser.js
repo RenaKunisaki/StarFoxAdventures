@@ -25,6 +25,7 @@ export default class LayerChooser {
             }
         }
 
+        const oldAct = this.eActList.value;
         clearElement(this.eActList);
         this.eActList.append(E.option(null, "None", {value:0}));
         for(let i=1; i<16; i++) {
@@ -33,6 +34,9 @@ export default class LayerChooser {
         }
         this.eActList.append(E.option(null,
             `All Acts (${objs.length})`, {value:'all'}));
+
+        //when list is empty, value is the empty string
+        if(oldAct !== '') this.eActList.value = oldAct;
     }
 
     _makeCheck(name, cbFunc, title=null, checked=false) {
