@@ -107,6 +107,14 @@ export default class InfoWidget {
                     (dll ? dll.name : '-')),
             ),
         ];
+        let params = entry.params;
+        if(params == null) params = {};
+        for(const [name, param] of Object.entries(params)) {
+            rows.push(E.tr(
+                E.th('objparam', name),
+                E.tg(null, param.value.display),
+            ))
+        }
         this._tbl.append(...rows);
     }
 }

@@ -184,6 +184,8 @@ export default class DLL {
 
         //XXX this is confusing, sometimes we're using this and
         //sometimes we're just using the struct directly.
+        //also it seems to be giving bogus data... all fields are
+        //being read from offset 0
         const result = {};
         for(let field of this.objParamStruct.fields) {
             const val = values[field.name];
