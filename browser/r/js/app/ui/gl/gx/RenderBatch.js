@@ -277,7 +277,7 @@ export default class RenderBatch {
             this._storeVertex(vtx);
         }
         if(drawMode == this.prevDrawOp && !NoMergeModes.has(drawMode)) {
-            //merge into previous op
+            //merge into previous op for possibly some performance boost?
             const op = this.ops[this.ops.length-1];
             op[2] += vtxs.length;
         }
@@ -409,7 +409,9 @@ export default class RenderBatch {
          */
         const tStart = performance.now();
         const gl = this.gl;
-        const [mode, index, count] = cmd;
+        let [mode, index, count] = cmd;
+
+        if(this.gx.context.useWireframe) mode = gl.LINE_LOOP;
 
         //debug
         console.assert(_curBufs == this);
