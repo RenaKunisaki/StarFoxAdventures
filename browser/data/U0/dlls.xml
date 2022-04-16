@@ -9847,7 +9847,7 @@ seemingly only used to track magic plants' growth</description>
     </functions>
     <objparams size="0x22">
       <field type="s8" offset="0x18" name="rotX"></field>
-      <field type="WarpEnum8" offset="0x1A" name="warpIdx">
+      <field type="sfa.maps.WarpId" offset="0x1A" name="warpIdx">
         <description>index to WARPTAB.BIN</description>
       </field>
       <field type="s8" offset="0x1B"></field>
@@ -12527,8 +12527,8 @@ seemingly only used to track magic plants' growth</description>
       <field type="GameBit16" offset="0x1C" name="Visible"></field>
       <field type="MapDirIdx8" offset="0x1E" name="destMap"></field>
       <field type="MapDirIdx8" offset="0x1F" name="map2"></field>
-      <field type="WarpEnum8" offset="0x20" name="DestWarpIdx"></field>
-      <field type="WarpEnum8" offset="0x21" name="ExitWarpidx"></field>
+      <field type="sfa.maps.WarpId" offset="0x20" name="DestWarpIdx"></field>
+      <field type="sfa.maps.WarpId" offset="0x21" name="ExitWarpidx"></field>
       <field type="u8" offset="0x22">
         <description>if 0, lock this-&gt;mapId and map2; else lock destMap in both buckets</description>
       </field>
