@@ -184,19 +184,31 @@ export default class DLL {
 
         //XXX this is confusing, sometimes we're using this and
         //sometimes we're just using the struct directly.
-        //also it seems to be giving bogus data... all fields are
-        //being read from offset 0
         const result = {};
         for(let field of this.objParamStruct.fields) {
             const val = values[field.name];
             let disp = val.toString();
-            let type = this.objParams[field.name];
-            if(type) type = type.type;
-            type = objParamTypeFmt[type];
+
+            //const fullType = this.objParams[field.name]; //eg sfa.maps.WarpId
+            let type = field.type;
+            //if(type && type.type) type = type.type; //ugh
+            //if(field.name == 'thisWarp') debugger;
+            if(type) {
+                let found = true;
+                if(type.valueToString) disp = type.valueToString(val);
+                else if(type.type.valueToString) disp = type.type.valueToString(val);
+                else if(objParamTypeFmt[type]) {
+                    disp = objParamTypeFmt[type](this.game, val);
+                }
+                else found = false;
+                if(found) disp = `${disp} (${val})`;
+            }
+
             result[field.name] = {
+                //type:    field,
                 param:   this.objParams[field.name],
                 value:   val,
-                display: type ? type(this.game, val) : disp,
+                display: disp,
             };
         }
         return result;

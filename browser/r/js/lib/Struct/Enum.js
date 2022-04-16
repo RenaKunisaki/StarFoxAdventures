@@ -56,7 +56,12 @@ export class Enum extends Type {
          *  @param value Value to convert.
          *  @returns {string} String representation.
          */
-        if(this.isValidValue(value)) return this.fields[value].name;
+        if(typeof(value) == 'number') {
+            if(this.fields[value] != undefined) {
+                return this.fields[value].name;
+            }
+        }
+        else if(this.isValidValue(value)) return this.fields[value].name;
         else return String(value);
     }
 }
