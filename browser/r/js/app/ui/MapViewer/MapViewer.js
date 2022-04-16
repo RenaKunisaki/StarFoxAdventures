@@ -184,6 +184,10 @@ export default class MapViewer {
 
     _findABlock() {
         /** Find a block to start at. */
+        if(!this.map.blocks) {
+            console.error("Map has no blocks", this.map);
+            return null;
+        }
         //if there's one at the origin, prefer it.
         let block = this.map.getBlock(0, 0);
         console.assert(this.gx);
