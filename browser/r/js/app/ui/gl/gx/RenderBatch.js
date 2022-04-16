@@ -103,12 +103,12 @@ export default class RenderBatch {
         }
         //console.log("render batch stats", stats);
 
-        const err = gl.getError();
+        /*const err = gl.getError();
         if(err) {
             console.error("GL error detected at end of render batch", err);
             //enable more in-depth (very slow) error checking for next frame.
             enableErrorChecking = true;
-        }
+        }*/
         return stats;
     }
 
@@ -181,6 +181,85 @@ export default class RenderBatch {
             this.pickerIds = this.pickerIds.concat(func.pickerIds);
         }
         else this.ops.push(func);
+    }
+
+    addBatches(...batches) {
+        /** Merge multiple batches into this one.
+         *  @param {RenderBatch} batches One or more batches to add.
+         *  @note This is considerably faster than using addFunction()
+         *    repeatedly, since it avoids the need to resize arrays
+         *    for every batch added.
+         */
+        this.prevDrawOp = null;
+        const arrays    = {};
+        const arrCounts = {};
+        const idxs      = [];
+        let   nIdxs     = 0;
+        const ids       = [];
+        let   nIds      = 0;
+
+        //get all the arrays being added to this one
+        for(const batch of batches) {
+            for(const [field, data] of Object.entries(batch.data)) {
+                if(arrays[field] == undefined) {
+                    arrays[field] = [];
+                    arrCounts[field] = 0;
+                }
+                arrays[field].push(data);
+                arrCounts[field] += data.length;
+            }
+            idxs.push(batch._idxs);
+            nIdxs += batch._idxs.length;
+
+            ids.push(batch.pickerIds);
+            nIds += batch.pickerIds.length;
+        }
+
+        //extend our arrays and splice the new ones into them
+        for(const [field, data] of Object.entries(arrays)) {
+            let start = this.data[field].length;
+            this.data[field].length += arrCounts[field];
+            for(const arr of data) {
+                this.data[field].splice(start, arr.length, ...arr);
+                start += arr.length;
+            }
+        }
+
+        //add the operations of each batch
+        //this could probably still be improved but it's
+        //fast enough now so I'm not bothering.
+        let startIdx = this._idxs.length;
+        for(const batch of batches) {
+            let tCount=0;
+            for(const op of batch.ops) {
+                if(Array.isArray(op)) {
+                    const [mode, index, count] = op;
+                    this.ops.push([mode, index+startIdx, count]);
+                    tCount += count;
+                }
+                else this.addFunction(op);
+            }
+            startIdx += tCount;
+        }
+
+        //add the picker IDs
+        startIdx = this.pickerIds.length;
+        this.pickerIds.length += nIds;
+        for(const arr of ids) {
+            this.pickerIds.splice(startIdx, arr.length, ...arr);
+            startIdx += arr.length;
+        }
+
+        //add the index buffers
+        startIdx = this._idxs.length;
+        let n = startIdx;
+        this._idxs.length += nIdxs;
+        for(const arr of idxs) {
+            for(const idx of arr) {
+                this._idxs[n++] = idx+startIdx;
+            }
+            startIdx += arr.length;
+        }
     }
 
     addVertices(drawMode, ...vtxs) {
@@ -337,7 +416,7 @@ export default class RenderBatch {
 
         //index * sizeof(unsigned short)
         gl.drawElements(mode, count, gl.UNSIGNED_SHORT, index*2);
-        //gl.drawArrays(cmd[0], cmd[1], cmd.length - 1);
+        //gl.drawArrays(cmd[0], cmd[1], cmd[2]);
         CHECK_ERROR(gl);
         stats.nPolys++;
         stats.nVtxs += cmd.length - 1;

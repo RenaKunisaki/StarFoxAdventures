@@ -77,26 +77,8 @@ export default class ObjectRenderer {
             }
         }
 
-        //generating a batch can take a while
-        if(!isPicker) {
-            this.app.progress.show({
-                taskText:  "Loading Map",
-                subText:   "Rendering objects...",
-                stepsDone: 0,
-                numSteps:  objs.length * 2,
-            });
-        }
-
-        //render the objects (XXX why does this take so long?)
         this._setupRenderParams(batch);
-        const offs = isPicker ? objs.length : 0;
-        for(let i=0; i<objs.length; i++) {
-            batch.addFunction(objs[i]);
-            if(!(i & 0xF)) {
-                await this.app.progress.update({stepsDone: i + offs});
-            }
-        }
-        if(isPicker) this.app.progress.hide();
+        batch.addBatches(...objs);
 
         return batch;
     }
