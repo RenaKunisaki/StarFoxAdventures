@@ -276,7 +276,8 @@ export default class RenderBatch {
             this._idxs.push(this.data.POS.length / 3); //POS is 3 entries per vtx
             this._storeVertex(vtx);
         }
-        if(drawMode == this.prevDrawOp && !NoMergeModes.has(drawMode)) {
+        if(drawMode == this.prevDrawOp && !NoMergeModes.has(drawMode)
+        && this.ops.length > 0 && Array.isArray(this.ops[this.ops.length-1])) {
             //merge into previous op for possibly some performance boost?
             const op = this.ops[this.ops.length-1];
             op[2] += vtxs.length;
