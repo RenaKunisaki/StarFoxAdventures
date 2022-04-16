@@ -298,6 +298,86 @@
         <field name="xRot" type="s16" />
     </struct>
 
+    <enum name="WarpId" type="u8">
+        <note>Names made up</note>
+        <item value="0x00" name="CR_Dungeon" />
+        <item value="0x02" name="IM_Teleporter" />
+        <item value="0x03" name="TTH_EggCave" />
+        <item value="0x06" name="KP_Top" />
+        <item value="0x0C" name="CR_Dungeon0C">
+            <note>Same as 0x00</note>
+        </item>
+        <item value="0x0F" name="TTH_WarpStone" />
+        <item value="0x10" name="MMP_MagicCave" />
+        <item value="0x12" name="TitleScreen" />
+        <item value="0x13" name="WC_FrontOfPyramid" />
+        <item value="0x15" name="WC_MagicCave" />
+        <item value="0x1A" name="IM_Top" />
+        <item value="0x1D" name="Boss_Galdon" />
+        <item value="0x1E" name="Boss_Galdon1E" />
+        <item value="0x20" name="KP_WarpStonePad" />
+        <item value="0x22" name="KP_InnerWarp" />
+        <item value="0x24" name="dfshrine" />
+        <item value="0x25" name="nwshrine" />
+        <item value="0x26" name="dbshrine" />
+        <item value="0x28" name="KP_InnerWarp2" />
+        <item value="0x2A" name="WC_2A" />
+        <item value="0x2B" name="mmshrine" />
+        <item value="0x32" name="Boss_Andross" />
+        <item value="0x33" name="MazeCave" />
+        <item value="0x34" name="TTH_BombSporeCave" />
+        <item value="0x35" name="CC_MagicCave" />
+        <item value="0x36" name="Boss_Galdon36" />
+        <item value="0x40" name="MMP_EndWarp" />
+        <item value="0x41" name="KP_FinalBossWarp" />
+        <item value="0x42" name="NW_ShrineWarp" />
+        <item value="0x44" name="ecshrine" />
+        <item value="0x46" name="WC_Top" />
+        <item value="0x47" name="LV_ShrineWarp" />
+        <item value="0x48" name="Volcano" />
+        <item value="0x49" name="CRF_Race" />
+        <item value="0x4A" name="CRF_4A" />
+        <item value="0x4B" name="desert4B" />
+        <item value="0x4C" name="desert4C" />
+        <item value="0x4E" name="KP_LandingPad" />
+        <item value="0x50" name="LV_Plateau" />
+        <item value="0x51" name="VFP_SpellStoneSeal" />
+        <item value="0x53" name="dragrockbot" />
+        <item value="0x54" name="Boss_Drakor" />
+        <item value="0x55" name="LV_OutOfBounds" />
+        <item value="0x57" name="MagicCave" />
+        <item value="0x5A" name="Boss_Trex" />
+        <item value="0x5B" name="WC_BossEntrance" />
+        <item value="0x5C" name="Boss_Galdon5C" />
+        <item value="0x5D" name="OldKP_5D" />
+        <item value="0x5E" name="OldKP_5E" />
+        <item value="0x5F" name="TTH_Bottom" />
+        <item value="0x60" name="WorldMap" />
+        <item value="0x63" name="CRF_LandingPad" />
+        <item value="0x66" name="TTH_MagicCave" />
+        <item value="0x67" name="NW_MagicCave" />
+        <item value="0x68" name="OFP_Top" />
+        <item value="0x69" name="desert69" />
+        <item value="0x6C" name="TTH_LandingPad" />
+        <item value="0x6D" name="Boss_Trex6D" />
+        <item value="0x6E" name="Arwing_ToCRF" />
+        <item value="0x6F" name="Arwing_ToTTH" />
+        <item value="0x71" name="desert71" />
+        <item value="0x72" name="desert72" />
+        <item value="0x73" name="OFP_73" />
+        <item value="0x74" name="Arwing_ToDIM" />
+        <item value="0x75" name="Arwing_ToDR" />
+        <item value="0x76" name="Arwing_ToWC" />
+        <item value="0x77" name="DIM_LandingPad" />
+        <item value="0x78" name="WC_LandingPad" />
+        <item value="0x79" name="DR_LandingPad" />
+        <item value="0x7A" name="VFP_Centre" />
+        <item value="0x7B" name="VFP_SpellStonePillar" />
+        <item value="0x7C" name="VFP_7C" />
+        <item value="0x7E" name="WarpStoneLink" />
+        <item value="0x7F" name="GreatFox" />
+    </enum>
+
     <struct name="GCPolygon">
         <!-- guess: u16 idxs to vtx pos, color, texcoord, texcoord?
         one also could be PNMTXIDX, or normals -->

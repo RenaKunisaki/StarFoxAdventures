@@ -13258,10 +13258,10 @@ seemingly only used to track magic plants' growth</description>
       <field type="s8" offset="0x18" name="rotation">
         <description>Player rotation upon arrival</description>
       </field>
-      <field type="u8" offset="0x19" name="thisWarp">
+      <field type="sfa.maps.WarpId" offset="0x19" name="thisWarp">
         <description>Index into WARPTAB.bin of this warp</description>
       </field>
-      <field type="u8" offset="0x1A" name="destWarp">
+      <field type="sfa.maps.WarpId" offset="0x1A" name="destWarp">
         <description>Destination index in WARPTAB.bin</description>
         <note>If destination coords are 0, 0, 0, it uses AnimTest, but doesn't place you at the correct coords to actually be there.</note>
       </field>
