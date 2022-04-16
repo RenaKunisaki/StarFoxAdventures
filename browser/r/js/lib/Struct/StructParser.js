@@ -142,8 +142,7 @@ export default class StructParser {
         if(namespace == null) namespace = this.types;
 
         //get offset
-        let offs = eField.getAttribute('offset');
-        if(offs == undefined) offs = offset;
+        const offs = int(eField.getAttribute('offset'), offset);
 
         const field = {
             offset: offs,
