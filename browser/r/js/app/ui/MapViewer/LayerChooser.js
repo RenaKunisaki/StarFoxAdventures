@@ -83,6 +83,9 @@ export default class LayerChooser {
             this._makeCheck("Hidden Objects",
                 e => this._toggleHiddenObjects(),
                 "Objects normally not shown in-game", L.hiddenObjects),
+            this._makeCheck("Block Bounds",
+                e => this._toggleBlockBounds(),
+                "Map block boundary boxes", L.blockBounds),
         );
     }
 
@@ -104,6 +107,10 @@ export default class LayerChooser {
     }
     _toggleHiddenObjects() {
         this.mapViewer.layers.hiddenObjects = !this.mapViewer.layers.hiddenObjects;
+        this.mapViewer.redraw();
+    }
+    _toggleBlockBounds() {
+        this.mapViewer.layers.blockBounds = !this.mapViewer.layers.blockBounds;
         this.mapViewer.redraw();
     }
 }

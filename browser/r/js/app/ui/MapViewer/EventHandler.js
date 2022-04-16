@@ -81,6 +81,7 @@ export default class EventHandler {
     }
 
     _onMouseWheel(event) {
+        event.preventDefault();
         this.mapViewer.viewController.adjust({pos:{y: event.deltaY}});
     }
 }

@@ -13,6 +13,7 @@ import InfoWidget from "./InfoWidget.js";
 import RenderBatch from "../gl/gx/RenderBatch.js";
 import EventHandler from "./EventHandler.js";
 import ObjectRenderer from "./ObjectRenderer.js";
+import { makeCube } from "../gl/GlUtil.js";
 
 export default class MapViewer {
     /** Renders map geometry. */
@@ -32,6 +33,7 @@ export default class MapViewer {
             hiddenGeometry:     false, //normally hidden polygons
             actNo:              0,  //act number (which objects)
             hiddenObjects:      false, //normally hidden objects
+            blockBounds:        false, //block boundary boxes
         };
 
         this.grid            = new Grid(this);
@@ -227,6 +229,9 @@ export default class MapViewer {
         this._beginRender();
         this._drawBlocks(blockStats, blockStreams);
         await this._drawObjects();
+        if(this.layers.blockBounds && !this._isDrawingForPicker) {
+            this._drawBlockBounds();
+        }
         this._finishRender(blockStats, blockStreams);
         //console.log("block render OK", this.gx.context.stats);
         //console.log("GX logs:", this.gx.program.getLogs());
@@ -319,6 +324,86 @@ export default class MapViewer {
             gb.zMax = Math.max(gb.zMax, batch.geomBounds.zMax+offsZ);
         }
         return batch; //for stats
+    }
+
+    _drawBlockBounds() {
+        /** Draw the bounding boxes for each block. */
+        const gx = this.gx;
+        const gl = this.gx.gl;
+        const batch = new RenderBatch(gx);
+
+        let mv = mat4.clone(this.gx.context.matModelView);
+        this.gx.setModelViewMtx(mv);
+
+        batch.addFunction(() => {
+            gl.disable(gl.CULL_FACE);
+            gl.enable(gl.BLEND);
+            gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
+                GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+            gx.setZMode(true, GX.CompareMode.LEQUAL, true);
+
+            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
+                gl.activeTexture(gl.TEXTURE0 + i);
+                this.gx.whiteTexture.bind();
+                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
+            }
+        });
+
+        //not using makeCube() because it's not necessarily a cube
+        const vtxIdxs = [
+            //top          //front        //left
+            0,1,3, 1,2,3,  3,2,6, 3,6,7,  0,3,4, 3,7,4,
+            //right        //bottom       //back
+            2,1,5, 2,5,6,  7,5,4, 7,6,5,  1,0,5, 0,4,5,
+        ];
+        const colors = [ //r, g, b, a
+            [0x00, 0x00, 0x00, 0x7F], //[0] top left back
+            [0xFF, 0x00, 0x00, 0x7F], //[1] top right back
+            [0xFF, 0xFF, 0x00, 0x7F], //[2] top right front
+            [0x00, 0xFF, 0x00, 0x7F], //[3] top left front
+            [0x00, 0x00, 0xFF, 0x7F], //[4] bot left back
+            [0xFF, 0x00, 0xFF, 0x7F], //[5] bot right back
+            [0xFF, 0xFF, 0xFF, 0x7F], //[6] bot right front
+            [0x00, 0xFF, 0xFF, 0x7F], //[7] bot left front
+        ];
+        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+            const block = this.map.blocks[iBlock];
+            if(!block || (block.mod >= 0xFF)) continue;
+
+            //top left
+            const x1 = (block.x * MAP_CELL_SIZE);
+            const y1 = (block && block.header) ? block.header.yMax :  1;
+            const z1 = block.z * MAP_CELL_SIZE;
+
+            //bottom right
+            const x2 = (block.x+1) * MAP_CELL_SIZE;
+            const y2 = (block && block.header) ? block.header.yMin : -1;
+            const z2 = (block.z+1) * MAP_CELL_SIZE;
+
+            const vtxPositions = [ //x, y, z
+                [x1, y1, z1], //[0] top left back
+                [x2, y1, z1], //[1] top right back
+                [x2, y2, z1], //[2] top right front
+                [x1, y2, z1], //[3] top left front
+                [x1, y1, z2], //[4] bot left back
+                [x2, y1, z2], //[5] bot right back
+                [x2, y2, z2], //[6] bot right front
+                [x1, y2, z2], //[7] bot left front
+            ];
+
+            const vtxs = [this.gx.gl.TRIANGLES];
+            for(const idx of vtxIdxs) {
+                vtxs.push({
+                    POS:  vtxPositions[idx],
+                    COL0: colors[idx],
+                    COL1: colors[idx],
+                    id:   -1,
+                });
+            }
+            batch.addVertices(...vtxs);
+        }
+        this.gx.executeBatch(batch);
+        return batch;
     }
 
     async _drawObjects() {
