@@ -26,17 +26,6 @@ export default class MapViewer {
         this.eMapList  = null;
         this.map       = null; //current map
         this.curBlock  = null;
-        this.layers    = { //which layers to show
-            mainGeometry:       true,  //normal geometry
-            waterGeometry:      true,  //translucent polygons
-            reflectiveGeometry: true,  //opaque reflectve polygons
-            hiddenGeometry:     false, //normally hidden polygons
-            actNo:              0,     //act number (which objects)
-            hiddenObjects:      false, //normally hidden objects
-            blockBounds:        false, //block boundary boxes
-            warps:              false, //WARPTAB entries
-        };
-
         this.grid            = new Grid(this);
         this.stats           = new Stats(this);
         this.layerChooser    = new LayerChooser(this);
@@ -226,18 +215,19 @@ export default class MapViewer {
         this._isDrawingForPicker = isPicker;
 
         //const tStart = performance.now();
+        const LC = this.layerChooser;
         const blockStreams = [
-            ['main', this.layers.mainGeometry],
-            ['water', this.layers.waterGeometry],
-            ['reflective', this.layers.reflectiveGeometry],
+            ['main',       LC.getLayer('mainGeometry')],
+            ['water',      LC.getLayer('waterGeometry')],
+            ['reflective', LC.getLayer('reflectiveGeometry')],
         ];
 
         const blockStats = {totals:{}};
         this._beginRender();
         this._drawBlocks(blockStats, blockStreams);
         await this._drawObjects();
-        if(this.layers.warps) this._drawWarps();
-        if(this.layers.blockBounds && !this._isDrawingForPicker) {
+        if(LC.getLayer('warps')) this._drawWarps();
+        if(LC.getLayer('blockBounds') && !this._isDrawingForPicker) {
             this._drawBlockBounds();
         }
         this._finishRender(blockStats, blockStreams);
@@ -289,7 +279,7 @@ export default class MapViewer {
 
     _drawBlocks(blockStats, blockStreams) {
         const params = {
-            showHidden: this.layers.hiddenGeometry,
+            showHidden: this.layerChooser.getLayer('hiddenGeometry'),
             isGrass: false, //draw the grass effect instead of the geometry
             isPicker: this._isDrawingForPicker,
         };
@@ -485,7 +475,7 @@ export default class MapViewer {
             (this.map.originZ * MAP_CELL_SIZE) ));
         this.gx.setModelViewMtx(mv);
         const batch = await this._objectRenderer.drawObjects(
-            this.layers.actNo, this._isDrawingForPicker);
+            this.layerChooser.getLayer('actNo'), this._isDrawingForPicker);
         if(batch) this.gx.executeBatch(batch);
     }
 

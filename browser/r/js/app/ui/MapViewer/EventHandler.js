@@ -116,22 +116,22 @@ export default class EventHandler {
                 //put camera at top looking down or something
                 break;
             case 'a_Press': //case 'half_a_Press':
-                C.toggleWaterGeometry();
+                C.toggleLayer('waterGeometry');
                 break;
             case 'b_Press':
-                C.toggleBlockBounds();
+                C.toggleLayer('blockBounds');
                 break;
             case 'h_Press':
-                C.toggleHiddenGeometry();
+                C.toggleLayer('hiddenGeometry');
                 break;
             case 'm_Press':
-                C.toggleMainGeometry();
+                C.toggleLayer('mainGeometry');
                 break;
             case 't_Press':
-                C.toggleReflectiveGeometry();
+                C.toggleLayer('reflectiveGeometry');
                 break;
             case 'w_Press':
-                C.toggleWarps();
+                C.toggleLayer('warps');
                 break;
         }
     }
