@@ -73,6 +73,11 @@ export default class Context {
 
         canvas.addEventListener('resize', e => this._onResize(e));
         this._setupViewport();
+
+        if(canvas.getAttribute('tabindex') == null) {
+            //allow the canvas to receive focus for key input
+            canvas.setAttribute('tabindex', '1');
+        }
         CHECK_ERROR(this.gl);
     }
 

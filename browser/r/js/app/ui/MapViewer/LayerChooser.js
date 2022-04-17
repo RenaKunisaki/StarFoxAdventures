@@ -68,55 +68,56 @@ export default class LayerChooser {
 
         return E.div(
             this._makeCheck("Main Geometry",
-                e => this._toggleMainGeometry(),
+                e => this.toggleMainGeometry(),
                 "Non-translucent, non-reflective polygons", L.mainGeometry),
             this._makeCheck("Water Geometry",
-                e => this._toggleWaterGeometry(),
+                e => this.toggleWaterGeometry(),
                 "Translucent polygons", L.waterGeometry),
             this._makeCheck("Reflective Geometry",
-                e => this._toggleReflectiveGeometry(),
+                e => this.toggleReflectiveGeometry(),
                 "Opaque reflective polygons", L.reflectiveGeometry),
             this._makeCheck("Hidden Geometry",
-                e => this._toggleHiddenGeometry(),
+                e => this.toggleHiddenGeometry(),
                 "Polygons normally not shown in-game", L.hiddenGeometry),
             E.div(null, "Objects:", this.eActList),
             this._makeCheck("Hidden Objects",
-                e => this._toggleHiddenObjects(),
+                e => this.toggleHiddenObjects(),
                 "Objects normally not shown in-game", L.hiddenObjects),
             this._makeCheck("Block Bounds",
-                e => this._toggleBlockBounds(),
+                e => this.toggleBlockBounds(),
                 "Map block boundary boxes", L.blockBounds),
             this._makeCheck("Warps",
-                e => this._toggleWarps(),
+                e => this.toggleWarps(),
                 "WARPTAB entries", L.warps),
         );
     }
 
-    _toggleMainGeometry() {
+    toggleMainGeometry() {
+        //XXX update checkboxes in these
         this.mapViewer.layers.mainGeometry = !this.mapViewer.layers.mainGeometry;
         this.mapViewer.redraw();
     }
-    _toggleWaterGeometry() {
+    toggleWaterGeometry() {
         this.mapViewer.layers.waterGeometry = !this.mapViewer.layers.waterGeometry;
         this.mapViewer.redraw();
     }
-    _toggleReflectiveGeometry() {
+    toggleReflectiveGeometry() {
         this.mapViewer.layers.reflectiveGeometry = !this.mapViewer.layers.reflectiveGeometry;
         this.mapViewer.redraw();
     }
-    _toggleHiddenGeometry() {
+    toggleHiddenGeometry() {
         this.mapViewer.layers.hiddenGeometry = !this.mapViewer.layers.hiddenGeometry;
         this.mapViewer.redraw();
     }
-    _toggleHiddenObjects() {
+    toggleHiddenObjects() {
         this.mapViewer.layers.hiddenObjects = !this.mapViewer.layers.hiddenObjects;
         this.mapViewer.redraw();
     }
-    _toggleBlockBounds() {
+    toggleBlockBounds() {
         this.mapViewer.layers.blockBounds = !this.mapViewer.layers.blockBounds;
         this.mapViewer.redraw();
     }
-    _toggleWarps() {
+    toggleWarps() {
         this.mapViewer.layers.warps = !this.mapViewer.layers.warps;
         this.mapViewer.redraw();
     }

@@ -83,6 +83,8 @@ export default class MapViewer {
 
         this.blockRenderer = new BlockRenderer(this.gx);
         this._objectRenderer = new ObjectRenderer(this);
+
+        this.context.canvas.focus();
         this._reloadMap();
     }
 

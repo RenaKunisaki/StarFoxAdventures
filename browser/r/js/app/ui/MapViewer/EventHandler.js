@@ -9,12 +9,20 @@ export default class EventHandler {
         this._prevMousePos  = [0, 0];
         this._mouseStartPos = null;
 
-        this.canvas.addEventListener('mousemove', e => this._onMouseMove (e));
-        this.canvas.addEventListener('mousedown', e => this._onMouseDown (e));
-        this.canvas.addEventListener('mouseup',   e => this._onMouseUp   (e));
-        this.canvas.addEventListener('wheel',     e => this._onMouseWheel(e));
-        //must disable context menu to be able to right-drag
-        this.canvas.addEventListener('contextmenu', e => e.preventDefault());
+        const canvas = this.canvas;
+        canvas.addEventListener('mousemove', e => this._onMouseMove (e));
+        canvas.addEventListener('mousedown', e => this._onMouseDown (e));
+        canvas.addEventListener('mouseup',   e => this._onMouseUp   (e));
+        canvas.addEventListener('wheel',     e => this._onMouseWheel(e));
+        //must disable context menu to be able to right-drag.
+        //can still use alt+right to open it.
+        canvas.addEventListener('contextmenu', e => {
+            if(!e.altKey) e.preventDefault();
+        });
+
+        //XXX move some of this to a generic class?
+        canvas.addEventListener('keydown', e => this._onKey(e, true));
+        canvas.addEventListener('keyup',   e => this._onKey(e, false));
     }
 
     _onMouseDown(event) {
@@ -83,5 +91,48 @@ export default class EventHandler {
     _onMouseWheel(event) {
         event.preventDefault();
         this.mapViewer.viewController.adjust({pos:{y: event.deltaY}});
+    }
+
+    _onKey(event, isDown) {
+        const locations = {
+            [KeyboardEvent.DOM_KEY_LOCATION_STANDARD]: '',
+            [KeyboardEvent.DOM_KEY_LOCATION_LEFT]:     'L_',
+            [KeyboardEvent.DOM_KEY_LOCATION_RIGHT]:    'R_',
+            [KeyboardEvent.DOM_KEY_LOCATION_NUMPAD]:   'KP_',
+        };
+        const code = [
+            locations[event.location],
+            event.key,
+            event.shiftKey ? '_Shift' : '',
+            event.ctrlKey  ? '_Ctrl'  : '',
+            event.altKey   ? '_Alt'   : '',
+            event.metaKey  ? '_Meta'  : '',
+            isDown ? '_Press' : '_Release'].join('');
+        console.log("KEY EVENT", code, event);
+
+        const C = this.mapViewer.layerChooser;
+        switch(code) {
+            case 'KP_8_Press':
+                //put camera at top looking down or something
+                break;
+            case 'a_Press': //case 'half_a_Press':
+                C.toggleWaterGeometry();
+                break;
+            case 'b_Press':
+                C.toggleBlockBounds();
+                break;
+            case 'h_Press':
+                C.toggleHiddenGeometry();
+                break;
+            case 'm_Press':
+                C.toggleMainGeometry();
+                break;
+            case 't_Press':
+                C.toggleReflectiveGeometry();
+                break;
+            case 'w_Press':
+                C.toggleWarps();
+                break;
+        }
     }
 }
