@@ -34,6 +34,7 @@ export default class MapViewer {
         this._eventHandler   = new EventHandler(this);
         this._warpBatch      = null;
         this._warpBatchPicker= null;
+        this._hitPolyBatch   = null;
 
         this._isFirstDrawAfterLoadingMap = true;
         this.app.onIsoLoaded(iso => this._onIsoLoaded());
@@ -128,6 +129,7 @@ export default class MapViewer {
 
         this._warpBatch = null;
         this._warpBatchPicker = null;
+        this._hitPolyBatch = null;
         this._isFirstDrawAfterLoadingMap = true;
         this.gx.resetPicker();
         this._objectRenderer.reset();
@@ -228,6 +230,7 @@ export default class MapViewer {
         this._drawBlocks(blockStats, blockStreams);
         await this._drawObjects();
         if(LC.getLayer('warps')) this._drawWarps();
+        if(LC.getLayer('hitPolys')) this._drawHitPolys();
         if(LC.getLayer('blockBounds') && !this._isDrawingForPicker) {
             this._drawBlockBounds();
         }
@@ -482,6 +485,74 @@ export default class MapViewer {
         const batch = await this._objectRenderer.drawObjects(
             this.layerChooser.getLayer('actNo'), this._isDrawingForPicker);
         if(batch) this.gx.executeBatch(batch);
+    }
+
+    _drawHitPolys() {
+        /** Draw hit detect polygons. */
+        const gx = this.gx;
+        const gl = this.gx.gl;
+
+        if(this._isDrawingForPicker) return;
+        if(this._hitPolyBatch != null) {
+            gx.executeBatch(this._hitPolyBatch);
+            return;
+        }
+
+        const batch = new RenderBatch(gx);
+        this._hitPolyBatch = batch;
+
+        batch.addFunction(() => {
+            gl.enable(gl.BLEND);
+            gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
+                GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+            gl.disable(gl.CULL_FACE);
+            gx.setZMode(true, GX.CompareMode.LEQUAL, true);
+            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
+                gl.activeTexture(gl.TEXTURE0 + i);
+                this.gx.whiteTexture.bind();
+                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
+            }
+        });
+
+        //XXX this only works because we rendered the blocks first
+        //and the shift was left from that.
+        const POSSHFT = gx.cp.vcd[5].POSSHFT;
+        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+            const block = this.map.blocks[iBlock];
+            if(!block || (block.mod >= 0xFF) || !block.polygons) continue;
+
+            batch.addFunction(() => {
+                const offsX = block.x*MAP_CELL_SIZE;
+                const offsY = block.header.yOffset;
+                const offsZ = block.z*MAP_CELL_SIZE;
+                let mv = mat4.clone(this.gx.context.matModelView);
+                mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
+                this.gx.setModelViewMtx(mv);
+            });
+
+            const vtxs = [gl.TRIANGLES];
+            for(let poly of block.polygons) {
+                const positions = new DataView(block.vtxPositions);
+                const color = [
+                    Math.trunc((((poly._06 >> 11) & 0x1F) / 31) * 255),
+                    Math.trunc((((poly._06 >>  5) & 0x3F) / 63) * 255),
+                    Math.trunc((((poly._06 >>  0) & 0x1F) / 31) * 255),
+                    0xC0];
+                for(let i=0; i<3; i++) {
+                    let pIdx = poly.vtxs[i] * 6;
+                    vtxs.push({
+                        POS: [
+                            positions.getInt16(pIdx)   >> POSSHFT,
+                            positions.getInt16(pIdx+2) >> POSSHFT,
+                            positions.getInt16(pIdx+4) >> POSSHFT,
+                        ],
+                        COL0: color, COL1: color, id: -1,
+                    });
+                }
+            }
+            batch.addVertices(...vtxs);
+        }
+        gx.executeBatch(batch);
     }
 
     _getObjAt(x, y) {

@@ -189,10 +189,7 @@ export default class DLL {
             const val = values[field.name];
             let disp = val.toString();
 
-            //const fullType = this.objParams[field.name]; //eg sfa.maps.WarpId
             let type = field.type;
-            //if(type && type.type) type = type.type; //ugh
-            //if(field.name == 'thisWarp') debugger;
             if(type) {
                 let found = true;
                 if(type.valueToString) disp = type.valueToString(val);

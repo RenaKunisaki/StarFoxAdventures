@@ -379,19 +379,13 @@
     </enum>
 
     <struct name="GCPolygon">
-        <!-- guess: u16 idxs to vtx pos, color, texcoord, texcoord?
-        one also could be PNMTXIDX, or normals -->
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
+        <!-- looks like 3 vtx idxs and an angle? -->
+        <field type="u16" count="3" name="vtxs" />
+        <field type="u16" />
     </struct>
 
     <struct name="PolygonGroup">
+        <!-- this field seems wrong since I see 0, 0, 640 -->
         <field type="ushort" name="firstPolygon" />
         <field type="undefined" />
         <field type="undefined" />

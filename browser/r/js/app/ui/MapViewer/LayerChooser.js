@@ -31,6 +31,8 @@ export default class LayerChooser {
         this._addLayer('boolean', 'blockBounds', "Block Bounds",
             false, "Map block boundary boxes");
         this._addLayer('boolean', 'warps', "Warps", false, "WARPTAB entries");
+        this._addLayer('boolean', 'hitPolys', "Hit Polys", true,
+            "Hit detect mesh");
     }
 
     _addLayer(type, name, displayName, value=undefined, tooltip='') {
