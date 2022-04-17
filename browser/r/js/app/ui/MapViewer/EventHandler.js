@@ -68,6 +68,8 @@ export default class EventHandler {
         }
         else {
             this._mouseStartView = null;
+            //const obj = this.mapViewer._getObjAt(event.clientX, event.clientY);
+            //this.mapViewer.infoWidget.show(obj);
         }
         this._prevMousePos = [event.x, event.y];
     }

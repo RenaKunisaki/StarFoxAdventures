@@ -127,6 +127,7 @@ export default class MapViewer {
         this._isFirstDrawAfterLoadingMap = true;
         this.gx.resetPicker();
         this._objectRenderer.reset();
+        this.blockRenderer.reset();
         this.curBlock = this._findABlock();
         this.reset();
         this.layerChooser.refresh();

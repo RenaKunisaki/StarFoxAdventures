@@ -116,7 +116,12 @@ export default class BlockRenderer {
         this.gx = gx;
         this.gl = gx.gl;
         this.dlistParser = new DlistParser(gx);
+        this.reset();
+    }
+
+    reset() {
         this.pickerIds = {}; //id => list
+        this._batches  = {};
     }
 
     parse(block, whichStream, params={}) {
@@ -129,18 +134,19 @@ export default class BlockRenderer {
         if(!block.load(this.gx)) return;
 
         //check if we already parsed this
-        const key = ([whichStream,
+        const key = ([
+            whichStream, block.x, block.z,
             params.isGrass ? 1 : 0,
             params.showHidden ? 1 : 0,
             params.isPicker ? 1 : 0,
         ]).join(',');
-        if(block.batchOps[key]) return block.batchOps[key];
+        if(this._batches[key]) return this._batches[key];
 
         this._isDrawingForPicker = params.isPicker;
 
         //console.log("parsing", block, whichStream);
         this.curBatch = new RenderBatch(this.gx);
-        block.batchOps[key] = this.curBatch;
+        this._batches[key] = this.curBatch;
 
         const ops = new BitStreamReader(block.renderInstrs[whichStream]);
         this.curOps = ops;
@@ -189,7 +195,7 @@ export default class BlockRenderer {
                         (ops.offset-4).toString(16));
             }
         }
-        return block.batchOps[key];
+        return this._batches[key];
     }
 
     renderToBatch(block, whichStream, params={}) {
