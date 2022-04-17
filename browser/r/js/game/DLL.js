@@ -201,7 +201,9 @@ export default class DLL {
                     disp = objParamTypeFmt[type](this.game, val);
                 }
                 else found = false;
-                if(found && disp != val) disp = `${disp} (${val})`;
+                if(found && disp != val && typeof(val) != 'object') {
+                    disp = `${disp} (${val})`;
+                }
             }
 
             result[field.name] = {
