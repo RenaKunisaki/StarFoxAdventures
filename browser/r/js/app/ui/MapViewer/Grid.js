@@ -45,7 +45,6 @@ export default class Grid {
                             y: y + 1000,
                             z: MAP_CELL_SIZE * z,
                         }, rot:{x:90, y:180, z:0}});
-                        this.mapViewer.reset();
                         this.mapViewer.redraw();
                     })
                 }

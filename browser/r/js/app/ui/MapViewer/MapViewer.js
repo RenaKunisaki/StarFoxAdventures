@@ -36,10 +36,11 @@ export default class MapViewer {
         this._warpBatchPicker= null;
 
         this._isFirstDrawAfterLoadingMap = true;
-        this.app.onIsoLoaded(iso => this.refresh());
+        this.app.onIsoLoaded(iso => this._onIsoLoaded());
     }
 
-    refresh() {
+    _onIsoLoaded() {
+        /** Set up the map viewer. */
         this._buildMapList();
         clearElement(this.element).append(
             E.div('controls',
@@ -54,6 +55,7 @@ export default class MapViewer {
     }
 
     async _initContext() {
+        /** Set up the GL context. */
         if(this.context) return;
         this.context = new Context(this.canvas,
             (isPicker) => this._draw(isPicker));
@@ -72,12 +74,12 @@ export default class MapViewer {
 
         this._blockRenderer  = new BlockRenderer(this.gx);
         this._objectRenderer = new ObjectRenderer(this);
-
         this.context.canvas.focus();
-        this._reloadMap();
+        this._reset();
     }
 
     _buildMapList() {
+        /** Build the map list widget. */
         this.eMapList = E.select({id:'mapview-map-list'});
         const maps = [];
         for(let [id, map] of Object.entries(this.game.maps)) {
@@ -101,11 +103,11 @@ export default class MapViewer {
             this.eMapList.append(E.option(null, `${id} ${name}`,
                 {value:map.id}));
         }
-        this.eMapList.addEventListener('change', e => this._reloadMap());
+        this.eMapList.addEventListener('change', e => this._reset());
     }
 
-    _reloadMap() {
-        /** Load and display the currently selected map. */
+    _reset() {
+        /** Reset viewer to display another map. */
         //don't start until user actually picks a map
         if(this.eMapList.value == 'null') return;
         this.game.unloadTextures();
@@ -120,6 +122,8 @@ export default class MapViewer {
         this.map = map;
         if(!map.dirName) {
             console.error("Map has no directory", map);
+            //continue, so we can examine the romlists that
+            //don't have any corresponding geometry.
         }
 
         this._warpBatch = null;
@@ -129,19 +133,14 @@ export default class MapViewer {
         this._objectRenderer.reset();
         this._blockRenderer.reset();
         this.curBlock = this._findABlock();
-        this.reset();
         this.layerChooser.refresh();
-        this.redraw();
-    }
-
-    reset() {
-        /** Reset for displaying another block. */
         this.grid.refresh();
+        this.redraw();
         this._updatedStats = false;
-        this._pendingDraw  = false;
     }
 
     async _loadMap() {
+        /** Load the map data. */
         this.app.progress.show({
             taskText:  "Loading Map",
             subText:   "Loading block textures...",
@@ -158,27 +157,6 @@ export default class MapViewer {
 
         //load object data
         await this._objectRenderer.loadObjects();
-    }
-
-    async redraw() {
-        if(this._pendingDraw) return;
-        this._pendingDraw = true;
-        if(this._isFirstDrawAfterLoadingMap) await this._loadMap();
-
-        window.requestAnimationFrame(() => {
-            this._pendingDraw = false;
-            //this.grid.refresh();
-            this.context.redraw();
-            //this.stats.refresh();
-            if(!this._updatedStats) {
-                this._updatedStats = true;
-                this.stats.refresh();
-            }
-            if(this._isFirstDrawAfterLoadingMap) {
-                this.app.progress.hide();
-                this._isFirstDrawAfterLoadingMap = false;
-            }
-        });
     }
 
     _findABlock() {
@@ -207,6 +185,28 @@ export default class MapViewer {
             return null;
         }
         return block;
+    }
+
+    async redraw() {
+        /** Signal the map viewer to redraw. */
+        if(this._pendingDraw) return;
+        this._pendingDraw = true;
+        if(this._isFirstDrawAfterLoadingMap) await this._loadMap();
+
+        window.requestAnimationFrame(() => {
+            this._pendingDraw = false;
+            //this.grid.refresh();
+            this.context.redraw();
+            //this.stats.refresh();
+            if(!this._updatedStats) {
+                this._updatedStats = true;
+                this.stats.refresh();
+            }
+            if(this._isFirstDrawAfterLoadingMap) {
+                this.app.progress.hide();
+                this._isFirstDrawAfterLoadingMap = false;
+            }
+        });
     }
 
     async _draw(isPicker) {
@@ -238,11 +238,11 @@ export default class MapViewer {
     }
 
     _beginRender() {
+        /** Set up to render a frame. */
         //const gl = this.gx.gl;
         if(!this.curBlock) {
             this.curBlock = this._findABlock();
             if(!this.curBlock) return;
-            this.reset();
         }
 
         //console.log("map block", this.curBlock);
@@ -259,6 +259,7 @@ export default class MapViewer {
     }
 
     _finishRender(blockStats, blockStreams) {
+        /** Finish rendering and record stats. */
         blockStats.streamTimes = {};
         const tEnd = performance.now();
         for(const [name, stream] of blockStreams) {
@@ -279,6 +280,7 @@ export default class MapViewer {
     }
 
     _drawBlocks(blockStats, blockStreams) {
+        /** Draw the map geometry. */
         const params = {
             showHidden: this.layerChooser.getLayer('hiddenGeometry'),
             isGrass: false, //draw the grass effect instead of the geometry
@@ -302,6 +304,7 @@ export default class MapViewer {
     }
 
     _drawBlock(block, params, stream) {
+        /** Draw one map block. */
         const gl = this.gx.gl;
         block.load(this.gx); //ensure block model is loaded
 
@@ -470,6 +473,7 @@ export default class MapViewer {
     }
 
     async _drawObjects() {
+        /** Draw object positions. */
         let mv = mat4.clone(this.gx.context.matModelView);
         mat4.translate(mv, mv, vec3.fromValues(
             (this.map.originX * MAP_CELL_SIZE), 0,
