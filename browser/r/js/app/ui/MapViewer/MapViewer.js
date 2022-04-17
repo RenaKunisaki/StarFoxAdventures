@@ -31,9 +31,10 @@ export default class MapViewer {
             waterGeometry:      true,  //translucent polygons
             reflectiveGeometry: true,  //opaque reflectve polygons
             hiddenGeometry:     false, //normally hidden polygons
-            actNo:              0,  //act number (which objects)
+            actNo:              0,     //act number (which objects)
             hiddenObjects:      false, //normally hidden objects
             blockBounds:        false, //block boundary boxes
+            warps:              false, //WARPTAB entries
         };
 
         this.grid            = new Grid(this);
@@ -42,6 +43,8 @@ export default class MapViewer {
         this.infoWidget      = new InfoWidget(this);
         this.eSidebar        = E.div('sidebar');
         this._eventHandler   = new EventHandler(this);
+        this._warpBatch      = null;
+        this._warpBatchPicker= null;
 
         this._isFirstDrawAfterLoadingMap = true;
         this.app.onIsoLoaded(iso => this.refresh());
@@ -128,6 +131,8 @@ export default class MapViewer {
             console.error("Map has no directory", map);
         }
 
+        this._warpBatch = null;
+        this._warpBatchPicker = null;
         this._isFirstDrawAfterLoadingMap = true;
         this.gx.resetPicker();
         this._objectRenderer.reset();
@@ -229,6 +234,7 @@ export default class MapViewer {
         this._beginRender();
         this._drawBlocks(blockStats, blockStreams);
         await this._drawObjects();
+        if(this.layers.warps) this._drawWarps();
         if(this.layers.blockBounds && !this._isDrawingForPicker) {
             this._drawBlockBounds();
         }
@@ -381,14 +387,9 @@ export default class MapViewer {
             const z2 = (block.z+1) * MAP_CELL_SIZE;
 
             const vtxPositions = [ //x, y, z
-                [x1, y1, z1], //[0] top left back
-                [x2, y1, z1], //[1] top right back
-                [x2, y2, z1], //[2] top right front
-                [x1, y2, z1], //[3] top left front
-                [x1, y1, z2], //[4] bot left back
-                [x2, y1, z2], //[5] bot right back
-                [x2, y2, z2], //[6] bot right front
-                [x1, y2, z2], //[7] bot left front
+                //back left, back right, front right, front left
+                [x1, y1, z1], [x2, y1, z1], [x2, y2, z1], [x1, y2, z1], //top
+                [x1, y1, z2], [x2, y1, z2], [x2, y2, z2], [x1, y2, z2], //bot
             ];
 
             const vtxs = [this.gx.gl.TRIANGLES];
@@ -404,6 +405,75 @@ export default class MapViewer {
         }
         this.gx.executeBatch(batch);
         return batch;
+    }
+
+    _drawWarps() {
+        /** Draw WARPTAB entries. */
+        const gx = this.gx;
+        const gl = this.gx.gl;
+
+        let mv = mat4.clone(this.gx.context.matModelView);
+        this.gx.setModelViewMtx(mv);
+
+        if(this._isDrawingForPicker) {
+            if(this._warpBatchPicker) {
+                this.gx.executeBatch(this._warpBatchPicker);
+                return;
+            }
+        }
+        else if(this._warpBatch) {
+            if(this._warpBatch) {
+                this.gx.executeBatch(this._warpBatch);
+                return;
+            }
+        }
+
+        const batch = new RenderBatch(this.gx);
+        if(this._isDrawingForPicker) {
+            this._warpBatchPicker = batch;
+            batch.addFunction(() => {
+                gl.disable(gl.BLEND);
+                gx.setBlendMode(GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
+                    GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+            });
+        }
+        else {
+            this._warpBatch = batch;
+            batch.addFunction(() => {
+                gl.enable(gl.BLEND);
+                gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
+                    GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+            });
+        }
+        batch.addFunction(() => {
+            gl.enable(gl.CULL_FACE);
+            gx.setZMode(true, GX.CompareMode.LEQUAL, true);
+            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
+                gl.activeTexture(gl.TEXTURE0 + i);
+                this.gx.whiteTexture.bind();
+                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
+            }
+        });
+
+        for(let [idx, warp] of Object.entries(this.game.warpTab)) {
+            const map = this.game.getMapAt(warp.layer, warp.pos.x, warp.pos.z);
+            if(map != this.map) continue;
+            const id = this.gx.addPickerObj({
+                type: 'warp',
+                warp: warp,
+                idx:  idx,
+            });
+            const x = warp.pos.x - this.map.worldOrigin[0];
+            const y = warp.pos.y;
+            const z = warp.pos.z - this.map.worldOrigin[1];
+            batch.addVertices(...makeCube(
+                gl, x, y, z, 10, id, [[0xFF, 0x00, 0x00, 0xC0]]));
+            //console.log("add warp", hex(idx), x, y, z, "orig", warp.pos);
+        }
+        batch.addVertices(...makeCube( //map origin
+            gl, this.map.worldOrigin[0], 0, this.map.worldOrigin[1],
+            10, -1, [[0x00, 0xFF, 0x00, 0xC0]]));
+        this.gx.executeBatch(batch);
     }
 
     async _drawObjects() {

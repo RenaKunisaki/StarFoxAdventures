@@ -28,14 +28,9 @@ export default class InfoWidget {
         }
 
         switch(info.type) {
-            case 'mapBlockDlist':
-                this._showBlockDlist(info);
-                break;
-
-            case 'object':
-                this._showObject(info);
-                break;
-
+            case 'mapBlockDlist': this._showBlockDlist(info); break;
+            case 'object': this._showObject(info); break;
+            case 'warp': this._showWarp(info); break;
             default:
                 this._tbl.append(E.tr(
                     E.th('error', `Unknown object type: "${info.type}"`),
@@ -115,6 +110,26 @@ export default class InfoWidget {
                 E.td(null, param.value.display),
             ))
         }
+        this._tbl.append(...rows);
+    }
+
+    _showWarp(info) {
+        /** Display info about a WARPTAB entry.
+         *  @param {object} info The warp info.
+         */
+        console.log("show warp", info);
+        const warp = info.warp;
+        const rows = [
+            E.tr(E.th(null, `Warp #0x${hex(info.idx,2)}`, {colspan:2})),
+            E.tr( E.th(null, "X"), E.td('float', warp.pos.x) ),
+            E.tr( E.th(null, "Y"), E.td('float', warp.pos.y) ),
+            E.tr( E.th(null, "Z"), E.td('float', warp.pos.z) ),
+            E.tr(
+                E.th(null, "Angle"),
+                E.td('int',
+                    `${Math.round((warp.xRot / 65536)*360)}\u00B0 (0x${hex(warp.xRot,4)})`),
+            ),
+        ];
         this._tbl.append(...rows);
     }
 }

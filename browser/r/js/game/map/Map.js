@@ -1,5 +1,5 @@
 import { assertType } from "../../Util.js";
-import Game from "../Game.js";
+import Game, { MAP_CELL_SIZE } from "../Game.js";
 import Block from "./Block.js";
 
 export default class Map {
@@ -42,6 +42,13 @@ export default class Map {
         //following are added manually, not present in the game data
         this.description = params.description; //description
         this.isUsed      = params.isUsed;      //is used in game?
+    }
+
+    get worldOrigin() {
+        return [
+            (this.worldX - this.originX) * MAP_CELL_SIZE,
+            (this.worldZ - this.originZ) * MAP_CELL_SIZE,
+        ];
     }
 
     getBlock(x, z) {

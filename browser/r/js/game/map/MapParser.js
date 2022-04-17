@@ -179,11 +179,13 @@ export class MapParser {
 
                 let relX = x - map.originX;
                 let relZ = z - map.originZ;
+                if(!(relX || relZ)) {
+                    map.worldX = cx;
+                    map.worldZ = cz;
+                }
 
                 //maps can overlap
                 if(map.blocks[iBlock] != null || !(layer[cx][cz])) {
-                    map.worldX = cx;
-                    map.worldZ = cz;
                     map.layer  = entry.layer;
                     layer[cx][cz] = {
                         worldX: cx,

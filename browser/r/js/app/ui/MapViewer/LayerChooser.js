@@ -86,6 +86,9 @@ export default class LayerChooser {
             this._makeCheck("Block Bounds",
                 e => this._toggleBlockBounds(),
                 "Map block boundary boxes", L.blockBounds),
+            this._makeCheck("Warps",
+                e => this._toggleWarps(),
+                "WARPTAB entries", L.warps),
         );
     }
 
@@ -111,6 +114,10 @@ export default class LayerChooser {
     }
     _toggleBlockBounds() {
         this.mapViewer.layers.blockBounds = !this.mapViewer.layers.blockBounds;
+        this.mapViewer.redraw();
+    }
+    _toggleWarps() {
+        this.mapViewer.layers.warps = !this.mapViewer.layers.warps;
         this.mapViewer.redraw();
     }
 }
