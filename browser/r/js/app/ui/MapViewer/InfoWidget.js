@@ -45,11 +45,7 @@ export default class InfoWidget {
         console.log("show block dlist", info);
         const block = info.block;
         const rows = [
-            E.tr(E.th(null, "Map Block", {colspan:2})),
-            E.tr(
-                E.th(null, "Name"),
-                E.td('string objName', block.header.name),
-            ),
+            E.tr(E.th(null, `Block "${block.header.name}"`, {colspan:2})),
             E.tr(
                 E.th(null, "Y range"),
                 E.td('float', `${block.header.yMin}, ${block.header.yMax}`),
@@ -61,6 +57,34 @@ export default class InfoWidget {
             E.tr(
                 E.th(null, "Stream"),
                 E.td('string', info.stream),
+            ),
+            E.tr(
+                E.th(null, "Polygons"),
+                E.td('int', block.header.nPolygons),
+            ),
+            E.tr(
+                E.th(null, "PolyGroups"),
+                E.td('int', block.header.nPolyGroups),
+            ),
+            E.tr(
+                E.th(null, "Dlists"),
+                E.td('int', block.header.nDlists),
+            ),
+            E.tr(
+                E.th(null, "Shaders"),
+                E.td('int', block.header.nShaders),
+            ),
+            E.tr(
+                E.th(null, "Textures"),
+                E.td('int', block.header.nTextures),
+            ),
+            E.tr(
+                E.th(null, "Vertices"),
+                E.td('int', block.header.nVtxs),
+            ),
+            E.tr(
+                E.th(null, "Flags 04"),
+                E.td('hex', hex(block.header.flags_0x4, 2)),
             ),
         ];
         this._tbl.append(...rows);
@@ -75,7 +99,7 @@ export default class InfoWidget {
         const entry = info.obj;
         const dll   = entry.object.dll;
         const rows = [
-            E.tr(E.th(null, "Game Object", {colspan:2})),
+            E.tr(E.th(null, `Object ID 0x${hex(entry.id, 8)}`, {colspan:2})),
             E.tr(
                 E.th(null, "Name"),
                 E.td('string objName', entry.object.header.name),
@@ -87,10 +111,6 @@ export default class InfoWidget {
             E.tr(
                 E.th(null, "Def#"),
                 E.td('hex objDefNo', `0x${hex(entry.objDef, 4)}`),
-            ),
-            E.tr(
-                E.th(null, "UniqueID"),
-                E.td('hex objUniqueId', `0x${hex(entry.id, 8)}`),
             ),
             E.tr(
                 E.th(null, "Position"),

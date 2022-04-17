@@ -400,6 +400,8 @@ export default class BlockRenderer {
                 type:   'mapBlockDlist',
                 block:  this.curBlock,
                 list:   idx,
+                stream: this.curStream,
+                shader: this.curShader,
                 params: this.params,
             });
         }
