@@ -1,8 +1,8 @@
-import BitStreamReader from '../BitStreamReader.js';
-import { Reg as CPReg } from '../../app/ui/gl/gx/CP.js';
-import DlistParser from '../../app/ui/gl/gx/DlistParser.js';
-import RenderBatch from '../../app/ui/gl/gx/RenderBatch.js';
-import GX from '../../app/ui/gl/gx/GX.js';
+import BitStreamReader from '../../../game/BitStreamReader.js';
+import { Reg as CPReg } from '../gl/gx/CP.js';
+import DlistParser from '../gl/gx/DlistParser.js';
+import RenderBatch from '../gl/gx/RenderBatch.js';
+import GX from '../gl/gx/GX.js';
 
 const LogRenderOps = false;
 const ShaderFlags = {

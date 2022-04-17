@@ -4,7 +4,7 @@ import { E, clearElement } from "../../../lib/Element.js";
 import { hex } from "../../../Util.js";
 import Context from "../gl/Context.js";
 import GX from "../gl/gx/GX.js";
-import BlockRenderer from "../../../game/map/BlockRenderer.js";
+import BlockRenderer from "./BlockRenderer.js";
 import ViewController from "../gl/ui/ViewController.js";
 import Grid from "./Grid.js";
 import Stats from "./Stats.js";
