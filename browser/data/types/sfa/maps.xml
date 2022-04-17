@@ -379,8 +379,9 @@
     </enum>
 
     <struct name="GCPolygon">
-        <!-- looks like 3 vtx idxs and an angle? -->
-        <field type="u16" count="3" name="vtxs" />
+        <field type="u16" count="3" name="vtxs">
+            <description>Indices into block.vtxPositions</description>
+        </field>
         <field type="u16" />
     </struct>
 

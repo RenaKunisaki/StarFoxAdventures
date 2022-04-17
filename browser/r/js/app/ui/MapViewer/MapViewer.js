@@ -516,7 +516,9 @@ export default class MapViewer {
 
         //XXX this only works because we rendered the blocks first
         //and the shift was left from that.
-        const POSSHFT = gx.cp.vcd[5].POSSHFT;
+        //and even then, only if this was enabled when we rendered those.
+        //const POSSHFT = gx.cp.vcd[5].POSSHFT;
+        const POSSHFT = 3; //hopefully always this...
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF) || !block.polygons) continue;
