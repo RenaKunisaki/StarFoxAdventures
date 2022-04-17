@@ -96,6 +96,10 @@ export default class Context {
             lose.loseContext();
         });
         //XXX lose context when switching tabs? (our UI tabs + browser tabs)
+
+        //allow u32 index buffers
+        this._gl_extensions.OES_element_index_uint = gl.getExtension(
+            "OES_element_index_uint");
     }
 
     _setupState() {

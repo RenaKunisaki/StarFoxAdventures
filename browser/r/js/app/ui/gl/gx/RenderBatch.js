@@ -138,8 +138,7 @@ export default class RenderBatch {
         //console.log("picker IDs", this.pickerIds, this.data['id']);
 
         //build vtx index buffer
-        console.assert(this._idxs.length < 65536);
-        this._idxBuf = new Uint16Array(this._idxs);
+        this._idxBuf = new Uint32Array(this._idxs);
         this._isFinished = true;
 
         if(this._idxs.length > 0) {
@@ -417,8 +416,8 @@ export default class RenderBatch {
         //debug
         console.assert(_curBufs == this);
 
-        //index * sizeof(unsigned short)
-        gl.drawElements(mode, count, gl.UNSIGNED_SHORT, index*2);
+        //index * sizeof(unsigned int)
+        gl.drawElements(mode, count, gl.UNSIGNED_INT, index*4);
         //gl.drawArrays(cmd[0], cmd[1], cmd[2]);
         CHECK_ERROR(gl);
         stats.nPolys++;
