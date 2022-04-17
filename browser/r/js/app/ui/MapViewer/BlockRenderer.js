@@ -130,8 +130,9 @@ export default class BlockRenderer {
          *  @param {string} whichStream One of 'main', 'water', 'reflective'
          *   specifying which bitstream to use.
          *  @param {object} params Render parameters.
+         *  @returns {RenderBatch} Parsed render batch.
          */
-        if(!block.load(this.gx)) return;
+        if(!block.load(this.gx)) return null;
 
         //check if we already parsed this
         const key = ([
@@ -142,35 +143,16 @@ export default class BlockRenderer {
         ]).join(',');
         if(this._batches[key]) return this._batches[key];
 
-        this._isDrawingForPicker = params.isPicker;
-
         //console.log("parsing", block, whichStream);
         this.curBatch = new RenderBatch(this.gx);
         this._batches[key] = this.curBatch;
+        this._isDrawingForPicker = params.isPicker;
 
         const ops = new BitStreamReader(block.renderInstrs[whichStream]);
         this.curOps = ops;
 
-        //set initial GX params
-        this._setDefaultVtxFmt();
-
-        //set initial render modes (XXX verify)
-        if(this._isDrawingForPicker) {
-            this.curBatch.addFunction(() => {_setShaderParams(
-                this.gx.gl, this.gx, true, //culling enabled
-                GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
-                GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
-                true, GX.CompareMode.LEQUAL, true); //depth test+update enabled
-            });
-        }
-        else this.curBatch.addFunction(() => {_setShaderParams(
-            this.gx.gl, this.gx, true, //culling enabled
-            GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
-            GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
-            true, GX.CompareMode.LEQUAL, true); //depth test+update enabled
-        });
-
         let done = false;
+        this._setInitialGxParams();
         while(!done && !ops.isEof) {
             //this is similar but not identical to the render instructions
             //used for character models.
@@ -198,21 +180,6 @@ export default class BlockRenderer {
         return this._batches[key];
     }
 
-    renderToBatch(block, whichStream, params={}) {
-        /** Create a RenderBatch for the block.
-         *  @param {Block} block The block to render.
-         *  @param {string} whichStream One of 'main', 'water', 'reflective'
-         *   specifying which bitstream to use.
-         *  @param {object} params Render parameters.
-         *  @returns {RenderBatch} The render batch.
-         */
-        this.curShaderIdx = null;
-        this.curBlock     = block;
-        this.curStream    = whichStream;
-        this.params       = params;
-        return this.parse(block, whichStream, params);
-    }
-
     render(block, whichStream, params={}) {
         /** Render the block.
          *  @param {Block} block The block to render.
@@ -221,7 +188,11 @@ export default class BlockRenderer {
          *  @param {object} params Render parameters.
          *  @returns {RenderBatch} The render batch.
          */
-        const batch = this.renderToBatch(block, whichStream, params);
+        this.curShaderIdx = null;
+        this.curBlock     = block;
+        this.curStream    = whichStream;
+        this.params       = params;
+        const batch       = this.parse(block, whichStream, params);
         if(batch) {
             this.gx.executeBatch(batch);
             //this.gx.gl.flush();
@@ -229,73 +200,30 @@ export default class BlockRenderer {
         return batch;
     }
 
-    _renderOpTexture() {
-        /** Select a texture and shader.
-         *  This can affect how later commands are interpreted.
-         */
-        const gx  = this.gx;
-        const gl  = this.gx.gl;
-        const ops = this.curOps;
-        const idx = ops.read(6);
-        if(this.params.isGrass) return;
-        if(this.curShaderIdx == idx) return;
-
-        this.curShader = this.curBlock.shaders[idx];
-        this.curShaderIdx = idx;
-        if(LogRenderOps) {
-            console.log("Select texture %d", idx, this.curShader);
-            //console.log("Select texture %d: shader flags=%s", idx,
-            //    this.curShader.attrFlags);
+    _setInitialGxParams() {
+        //set default vtx formats
+        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_VTXS,  6); //sizeof(vec3s)
+        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_COLOR, 2); //sizeof(u16)
+        for(let i=0; i<8; i++) {
+            this.gx.cp.setReg(CPReg.ARRAY_STRIDE_TEXCOORD+i, 4); //sizeof(vec2s)
+            this.gx.cp.setVatFormat(i, vatDefaults[i]);
         }
 
+        //set initial render modes (XXX verify)
         if(this._isDrawingForPicker) {
-            //do nothing
+            this.curBatch.addFunction(() => {_setShaderParams(
+                this.gx.gl, this.gx, true, //culling enabled
+                GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
+                GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
+                true, GX.CompareMode.LEQUAL, true); //depth test+update enabled
+            });
         }
-        else if(this.curShader) {
-            this._handleShaderFlags();
-        }
-        else if(this.curStream == 'water') { //XXX verify these
-            this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
-                true, //cull backfaces
-                GX.BlendMode.BLEND, //blend mode
-                GX.BlendFactor.SRCALPHA, //sFactor
-                GX.BlendFactor.INVSRCALPHA, //dFactor
-                GX.LogicOp.NOOP, //logicOp
-                true, //compareEnable
-                GX.CompareMode.LEQUAL, //compareFunc
-                false, //updateEnable
-            )});
-        }
-        else {
-            this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
-                true, //cull backfaces
-                GX.BlendMode.NONE, //blend mode
-                GX.BlendFactor.ONE, //sFactor
-                GX.BlendFactor.ZERO, //dFactor
-                GX.LogicOp.NOOP, //logicOp
-                true, //compareEnable
-                GX.CompareMode.LEQUAL, //compareFunc
-                true, //updateEnable
-            )});
-        }
-
-        if(!this._isDrawingForPicker) {
-            const nLayers = this.curShader ? this.curShader.nLayers : 0;
-            const params  = []; //batch these ops
-            for(let i=0; i<gx.MAX_TEXTURES; i++) {
-                let tex = gx.blankTexture;
-                if(i < nLayers) {
-                    const idx = this.curShader.layer[i].texture;
-                    //console.log("select texture", idx, this.textures[idx]);
-                    if(idx >= 0 && this.curBlock.textures[idx]) {
-                        tex = this.curBlock.textures[idx];
-                    }
-                }
-                params.push([i, tex]);
-            }
-            if(params.length > 0)
-                this.curBatch.addFunction(this._makeSetTextureCmd(params));
-        }
+        else this.curBatch.addFunction(() => {_setShaderParams(
+            this.gx.gl, this.gx, true, //culling enabled
+            GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
+            GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
+            true, GX.CompareMode.LEQUAL, true); //depth test+update enabled
+        });
     }
 
     _handleShaderFlags() {
@@ -366,6 +294,76 @@ export default class BlockRenderer {
         };
     }
 
+    _renderOpTexture() {
+        /** Select a texture and shader.
+         *  This can affect how later commands are interpreted.
+         */
+        const gx  = this.gx;
+        const gl  = this.gx.gl;
+        const ops = this.curOps;
+        const idx = ops.read(6);
+        if(this.params.isGrass) return;
+        if(this.curShaderIdx == idx) return;
+
+        this.curShader = this.curBlock.shaders[idx];
+        this.curShaderIdx = idx;
+        if(LogRenderOps) {
+            console.log("Select texture %d", idx, this.curShader);
+            //console.log("Select texture %d: shader flags=%s", idx,
+            //    this.curShader.attrFlags);
+        }
+
+        if(this._isDrawingForPicker) {
+            //do nothing
+        }
+        else if(this.curShader) {
+            this._handleShaderFlags();
+        }
+        else if(this.curStream == 'water'
+        || this.curStream == 'reflective') { //XXX verify these
+            this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
+                true, //cull backfaces
+                GX.BlendMode.BLEND, //blend mode
+                GX.BlendFactor.SRCALPHA, //sFactor
+                GX.BlendFactor.INVSRCALPHA, //dFactor
+                GX.LogicOp.NOOP, //logicOp
+                true, //compareEnable
+                GX.CompareMode.LEQUAL, //compareFunc
+                false, //updateEnable
+            )});
+        }
+        else {
+            this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
+                true, //cull backfaces
+                GX.BlendMode.NONE, //blend mode
+                GX.BlendFactor.ONE, //sFactor
+                GX.BlendFactor.ZERO, //dFactor
+                GX.LogicOp.NOOP, //logicOp
+                true, //compareEnable
+                GX.CompareMode.LEQUAL, //compareFunc
+                true, //updateEnable
+            )});
+        }
+
+        if(!this._isDrawingForPicker) { //select the textures
+            const nLayers = this.curShader ? this.curShader.nLayers : 0;
+            const params  = []; //batch these ops
+            for(let i=0; i<gx.MAX_TEXTURES; i++) {
+                let tex = gx.blankTexture;
+                if(i < nLayers) {
+                    const idx = this.curShader.layer[i].texture;
+                    //console.log("select texture", idx, this.textures[idx]);
+                    if(idx >= 0 && this.curBlock.textures[idx]) {
+                        tex = this.curBlock.textures[idx];
+                    }
+                }
+                params.push([i, tex]);
+            }
+            if(params.length > 0)
+                this.curBatch.addFunction(this._makeSetTextureCmd(params));
+        }
+    }
+
     _renderOpCallList() {
         /** Call one of the block's display lists.
          */
@@ -416,15 +414,6 @@ export default class BlockRenderer {
         this.curBatch.addFunction(list);
         if(LogRenderOps) {
             console.log("executed list", this.curBlock.dlists[idx].data);
-        }
-    }
-
-    _setDefaultVtxFmt() {
-        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_VTXS,  6); //sizeof(vec3s)
-        this.gx.cp.setReg(CPReg.ARRAY_STRIDE_COLOR, 2); //sizeof(u16)
-        for(let i=0; i<8; i++) {
-            this.gx.cp.setReg(CPReg.ARRAY_STRIDE_TEXCOORD+i, 4); //sizeof(vec2s)
-            this.gx.cp.setVatFormat(i, vatDefaults[i]);
         }
     }
 

@@ -25,7 +25,6 @@ export default class Block {
         this.unk2   =  val        & 0x01FF;
         this.header = null;
         this._triedLoad = undefined;
-        this.batchOps = {}; //filled in by BlockRenderer
 
         //the game does this for some reason
         if(this.mod >= 5 && this.mod < 255) this.mod++;
@@ -114,6 +113,8 @@ export default class Block {
         //we parse the display lists, and the same value could even possibly
         //be used multiple times as different formats. (unlikely, but
         //it can be done.)
+        //(maybe we can make a new buffer containing all values in the new
+        //format whenever the format changes?)
     }
 
     _loadPolygons(view) {

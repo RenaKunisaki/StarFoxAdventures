@@ -70,7 +70,7 @@ export default class MapViewer {
             this.stats.element,
         );
 
-        this.blockRenderer = new BlockRenderer(this.gx);
+        this._blockRenderer  = new BlockRenderer(this.gx);
         this._objectRenderer = new ObjectRenderer(this);
 
         this.context.canvas.focus();
@@ -127,7 +127,7 @@ export default class MapViewer {
         this._isFirstDrawAfterLoadingMap = true;
         this.gx.resetPicker();
         this._objectRenderer.reset();
-        this.blockRenderer.reset();
+        this._blockRenderer.reset();
         this.curBlock = this._findABlock();
         this.reset();
         this.layerChooser.refresh();
@@ -312,7 +312,7 @@ export default class MapViewer {
         mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
         this.gx.setModelViewMtx(mv);
 
-        const batch = this.blockRenderer.render(block, stream, params);
+        const batch = this._blockRenderer.render(block, stream, params);
         if(batch) { //there was in fact a block to render
             const gb = this.gx.context.stats.geomBounds;
             gb.xMin = Math.min(gb.xMin, batch.geomBounds.xMin+offsX);
