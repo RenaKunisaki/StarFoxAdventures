@@ -293,6 +293,23 @@ export default class GX {
         gl.depthMask(updateEnable);
     }
 
+    disableTextures(blendMode=GX.BlendMode.BLEND, cull=true) {
+        /** Disable textures and change blending and culling params.
+         *  Used for various non-textured rendering such as collision meshes.
+         *  @param {GX.BlendMode} blendMode Which blending mode to use.
+         *  @param {bool} cull Whether to use backface culling.
+         */
+        const gl = this.gl;
+        this.setBlendMode(blendMode, GX.BlendFactor.SRCALPHA,
+            GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+        if(cull) gl.enable(gl.CULL_FACE); else gl.disable(gl.CULL_FACE);
+        for(let i=0; i<this.MAX_TEXTURES; i++) {
+            gl.activeTexture(gl.TEXTURE0 + i);
+            this.whiteTexture.bind();
+            gl.uniform1i(this.programInfo.uniforms.uSampler[i], i);
+        }
+    }
+
     _setShaderMtxs() {
         /** Send the current projection, modelview, and normal matrices
          *  to the shaders.

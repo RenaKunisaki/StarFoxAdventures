@@ -13,30 +13,26 @@ import InfoWidget from "./InfoWidget.js";
 import RenderBatch from "../gl/gx/RenderBatch.js";
 import EventHandler from "./EventHandler.js";
 import ObjectRenderer from "./ObjectRenderer.js";
-import { makeCube } from "../gl/GlUtil.js";
+import { makeCube, makeBox } from "../gl/GlUtil.js";
 
 export default class MapViewer {
     /** Renders map geometry. */
     constructor(game) {
-        this.game      = assertType(game, Game);
-        this.app       = game.app;
-        this.element   = document.getElementById('tab-mapView');
-        this.canvas    = E.canvas('map-view-canvas');
-        this.context   = null;
-        this.eMapList  = null;
-        this.map       = null; //current map
-        this.curBlock  = null;
-        this.grid            = new Grid(this);
-        this.stats           = new Stats(this);
-        this.layerChooser    = new LayerChooser(this);
-        this.infoWidget      = new InfoWidget(this);
-        this.eSidebar        = E.div('sidebar');
-        this._eventHandler   = new EventHandler(this);
-        this._warpBatch      = null;
-        this._warpBatchPicker= null;
-        this._hitPolyBatch   = null;
-
-        this._isFirstDrawAfterLoadingMap = true;
+        this.game          = assertType(game, Game);
+        this.app           = game.app;
+        this.element       = document.getElementById('tab-mapView');
+        this.canvas        = E.canvas('map-view-canvas');
+        this.context       = null;
+        this.eMapList      = null;
+        this.map           = null; //current map
+        this.curBlock      = null;
+        this.grid          = new Grid(this);
+        this.stats         = new Stats(this);
+        this.layerChooser  = new LayerChooser(this);
+        this.infoWidget    = new InfoWidget(this);
+        this.eSidebar      = E.div('sidebar');
+        this._eventHandler = new EventHandler(this);
+        this._reset();
         this.app.onIsoLoaded(iso => this._onIsoLoaded());
     }
 
@@ -109,6 +105,13 @@ export default class MapViewer {
 
     _reset() {
         /** Reset viewer to display another map. */
+        this._warpBatch       = null;
+        this._warpBatchPicker = null;
+        this._hitPolyBatch    = null;
+        this._polyGroupBatch  = null;
+        this._isFirstDrawAfterLoadingMap = true;
+
+        if(!this.context) return; //don't start if not initialized
         //don't start until user actually picks a map
         if(this.eMapList.value == 'null') return;
         this.game.unloadTextures();
@@ -127,10 +130,6 @@ export default class MapViewer {
             //don't have any corresponding geometry.
         }
 
-        this._warpBatch = null;
-        this._warpBatchPicker = null;
-        this._hitPolyBatch = null;
-        this._isFirstDrawAfterLoadingMap = true;
         this.gx.resetPicker();
         this._objectRenderer.reset();
         this._blockRenderer.reset();
@@ -231,6 +230,7 @@ export default class MapViewer {
         await this._drawObjects();
         if(LC.getLayer('warps')) this._drawWarps();
         if(LC.getLayer('hitPolys')) this._drawHitPolys();
+        if(LC.getLayer('polyGroups')) this._drawPolyGroups();
         if(LC.getLayer('blockBounds') && !this._isDrawingForPicker) {
             this._drawBlockBounds();
         }
@@ -354,23 +354,6 @@ export default class MapViewer {
             }
         });
 
-        //not using makeCube() because it's not necessarily a cube
-        const vtxIdxs = [
-            //top          //front        //left
-            0,1,3, 1,2,3,  3,2,6, 3,6,7,  0,3,4, 3,7,4,
-            //right        //bottom       //back
-            2,1,5, 2,5,6,  7,5,4, 7,6,5,  1,0,5, 0,4,5,
-        ];
-        const colors = [ //r, g, b, a
-            [0x00, 0x00, 0x00, 0x7F], //[0] top left back
-            [0xFF, 0x00, 0x00, 0x7F], //[1] top right back
-            [0xFF, 0xFF, 0x00, 0x7F], //[2] top right front
-            [0x00, 0xFF, 0x00, 0x7F], //[3] top left front
-            [0x00, 0x00, 0xFF, 0x7F], //[4] bot left back
-            [0xFF, 0x00, 0xFF, 0x7F], //[5] bot right back
-            [0xFF, 0xFF, 0xFF, 0x7F], //[6] bot right front
-            [0x00, 0xFF, 0xFF, 0x7F], //[7] bot left front
-        ];
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF)) continue;
@@ -385,22 +368,7 @@ export default class MapViewer {
             const y2 = (block && block.header) ? block.header.yMin : -1;
             const z2 = (block.z+1) * MAP_CELL_SIZE;
 
-            const vtxPositions = [ //x, y, z
-                //back left, back right, front right, front left
-                [x1, y1, z1], [x2, y1, z1], [x2, y2, z1], [x1, y2, z1], //top
-                [x1, y1, z2], [x2, y1, z2], [x2, y2, z2], [x1, y2, z2], //bot
-            ];
-
-            const vtxs = [this.gx.gl.TRIANGLES];
-            for(const idx of vtxIdxs) {
-                vtxs.push({
-                    POS:  vtxPositions[idx],
-                    COL0: colors[idx],
-                    COL1: colors[idx],
-                    id:   -1,
-                });
-            }
-            batch.addVertices(...vtxs);
+            batch.addVertices(...makeBox(gl, [x1,y1,z1], [x2,y2,z2], -1));
         }
         this.gx.executeBatch(batch);
         return batch;
@@ -493,44 +461,19 @@ export default class MapViewer {
         const gl = this.gx.gl;
 
         if(this._isDrawingForPicker) return;
-        if(this._hitPolyBatch != null) {
+        if(this._hitPolyBatch) {
             gx.executeBatch(this._hitPolyBatch);
             return;
         }
-
         const batch = new RenderBatch(gx);
         this._hitPolyBatch = batch;
 
-        batch.addFunction(() => {
-            gl.enable(gl.BLEND);
-            gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
-                GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
-            gl.disable(gl.CULL_FACE);
-            gx.setZMode(true, GX.CompareMode.LEQUAL, true);
-            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
-                gl.activeTexture(gl.TEXTURE0 + i);
-                this.gx.whiteTexture.bind();
-                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
-            }
-        });
-
-        //XXX this only works because we rendered the blocks first
-        //and the shift was left from that.
-        //and even then, only if this was enabled when we rendered those.
-        //const POSSHFT = gx.cp.vcd[5].POSSHFT;
-        const POSSHFT = 3; //hopefully always this...
+        //blending on, face culling off
+        batch.addFunction(() => { gx.disableTextures(GX.BlendMode.BLEND, false) });
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF) || !block.polygons) continue;
-
-            batch.addFunction(() => {
-                const offsX = block.x*MAP_CELL_SIZE;
-                const offsY = block.header.yOffset;
-                const offsZ = block.z*MAP_CELL_SIZE;
-                let mv = mat4.clone(this.gx.context.matModelView);
-                mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
-                this.gx.setModelViewMtx(mv);
-            });
+            batch.addFunction(() => { this._setMtxForBlock(block) });
 
             const vtxs = [gl.TRIANGLES];
             for(let poly of block.polygons) {
@@ -542,11 +485,12 @@ export default class MapViewer {
                     0xC0];
                 for(let i=0; i<3; i++) {
                     let pIdx = poly.vtxs[i] * 6;
+                    //division by 8 is hardcoded, not derived from POSSHFT
                     vtxs.push({
                         POS: [
-                            positions.getInt16(pIdx)   >> POSSHFT,
-                            positions.getInt16(pIdx+2) >> POSSHFT,
-                            positions.getInt16(pIdx+4) >> POSSHFT,
+                            positions.getInt16(pIdx)   / 8,
+                            positions.getInt16(pIdx+2) / 8,
+                            positions.getInt16(pIdx+4) / 8,
                         ],
                         COL0: color, COL1: color, id: -1,
                     });
@@ -555,6 +499,68 @@ export default class MapViewer {
             batch.addVertices(...vtxs);
         }
         gx.executeBatch(batch);
+    }
+
+    _drawPolyGroups() {
+        /** Draw poly group bounds. */
+        const gx = this.gx;
+        const gl = this.gx.gl;
+
+        if(this._isDrawingForPicker) return;
+        if(this._polyGroupBatch) {
+            gx.executeBatch(this._polyGroupBatch);
+            return;
+        }
+        const batch = new RenderBatch(gx);
+        this._polyGroupBatch = batch;
+
+        //blending on, face culling off
+        batch.addFunction(() => { gx.disableTextures(GX.BlendMode.BLEND, false) });
+        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+            const block = this.map.blocks[iBlock];
+            if(!block || (block.mod >= 0xFF) || !block.polyGroups) continue;
+            batch.addFunction(() => { this._setMtxForBlock(block) });
+
+            let vtxs = [gl.TRIANGLES];
+            vtxs.length += block.polyGroups.length * 36;
+            let iVtx = 1;
+            for(let group of block.polyGroups) {
+                const color = [
+                    //neither of these work well. they're nearly always 0.
+                    Math.trunc((((group.id >> 5) & 0x07) / 7) * 255),
+                    Math.trunc((((group.id >> 2) & 0x07) / 7) * 255),
+                    Math.trunc((((group.id >> 0) & 0x03) / 3) * 255),
+                    //Math.trunc((((group.flags >> 11) & 0x1F) / 31) * 255),
+                    //Math.trunc((((group.flags >>  5) & 0x3F) / 63) * 255),
+                    //Math.trunc((((group.flags >>  0) & 0x1F) / 31) * 255),
+                    0x80];
+                let box = makeBox(gl,
+                    [group.x1, group.y1, group.z1],
+                    [group.x2, group.y2, group.z2],
+                    -1/*, color*/);
+                //box.shift(); //remove TRIANGLES
+                //vtxs.splice(iVtx, 36, ...box);
+                //iVtx += 36;
+                //console.log("polyGroup",group, box);
+                batch.addVertices(...box);
+            }
+            //batch.addVertices(...vtxs);
+        }
+        gx.executeBatch(batch);
+    }
+
+    _setMtxForBlock(block) {
+        /** Set the ModelView matrix to position at a block.
+         *  @param {MapBlock} block Block to position at.
+         */
+        let mv = mat4.clone(this.gx.context.matModelView);
+        if(block) {
+            const offsX = block.x*MAP_CELL_SIZE;
+            const offsY = block.header.yOffset;
+            const offsZ = block.z*MAP_CELL_SIZE;
+            mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
+        }
+        this.gx.setModelViewMtx(mv);
     }
 
     _getObjAt(x, y) {

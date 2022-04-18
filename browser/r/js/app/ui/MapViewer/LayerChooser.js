@@ -33,6 +33,8 @@ export default class LayerChooser {
         this._addLayer('boolean', 'warps', "Warps", false, "WARPTAB entries");
         this._addLayer('boolean', 'hitPolys', "Hit Polys", false,
             "Hit detect mesh");
+        this._addLayer('boolean', 'polyGroups', "Poly Groups", false,
+            "Polygon group boxes");
     }
 
     _addLayer(type, name, displayName, value=undefined, tooltip='') {

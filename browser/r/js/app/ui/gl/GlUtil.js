@@ -87,13 +87,59 @@ export function makeCube(gl, x, y, z, scale, id, colors=null) {
         [0xFF, 0xFF, 0xFF, 0xCF], //[6] bot right front
         [0x00, 0xFF, 0xFF, 0xCF], //[7] bot left front
     ];
+    //if only one color is given, use it properly.
+    if(!Array.isArray(colors[0])) colors = [colors];
     const vtxIdxs = [
-        0,1,3, 1,2,3, //top
-        3,2,6, 3,6,7, //front
-        0,3,4, 3,7,4, //left
-        2,1,5, 2,5,6, //right
-        7,5,4, 7,6,5, //bottom
-        1,0,5, 0,4,5, //back
+        //top          //front        //left
+        0,1,3, 1,2,3,  3,2,6, 3,6,7,  0,3,4, 3,7,4,
+        //right        //bottom       //back
+        2,1,5, 2,5,6,  7,5,4, 7,6,5,  1,0,5, 0,4,5,
+    ];
+    const vtxs = [gl.TRIANGLES];
+    for(const idx of vtxIdxs) {
+        vtxs.push({
+            POS:  vtxPositions[idx],
+            COL0: colors[idx % colors.length],
+            COL1: colors[idx % colors.length],
+            id:   id,
+        });
+    }
+    return vtxs;
+}
+
+export function makeBox(gl, p1, p2, id, colors=null) {
+    /** Generate a box between two points.
+     *  @param {WebGL2RenderingContext} gl WebGL instance to use.
+     *  @param {Array} p1 Position [x,y,z] of first corner.
+     *  @param {Array} p2 Position [x,y,z] of opposite corner.
+     *  @param {integer} id Vertex ID for picker.
+     *  @param {Array} colors Array of vertex colors.
+     *  @returns {Array} vertex data.
+     */
+    const [x1, y1, z1] = p1;
+    const [x2, y2, z2] = p2;
+    const vtxPositions = [ //x, y, z
+        //back left, back right, front right, front left
+        [x1, y1, z1], [x2, y1, z1], [x2, y2, z1], [x1, y2, z1], //top
+        [x1, y1, z2], [x2, y1, z2], [x2, y2, z2], [x1, y2, z2], //bot
+    ];
+    if(!colors) colors = [ //r, g, b, a
+        [0x00, 0x00, 0x00, 0xCF], //[0] top left back
+        [0xFF, 0x00, 0x00, 0xCF], //[1] top right back
+        [0xFF, 0xFF, 0x00, 0xCF], //[2] top right front
+        [0x00, 0xFF, 0x00, 0xCF], //[3] top left front
+        [0x00, 0x00, 0xFF, 0xCF], //[4] bot left back
+        [0xFF, 0x00, 0xFF, 0xCF], //[5] bot right back
+        [0xFF, 0xFF, 0xFF, 0xCF], //[6] bot right front
+        [0x00, 0xFF, 0xFF, 0xCF], //[7] bot left front
+    ];
+    //if only one color is given, use it properly.
+    if(!Array.isArray(colors[0])) colors = [colors];
+    const vtxIdxs = [
+        //top          //front        //left
+        0,1,3, 1,2,3,  3,2,6, 3,6,7,  0,3,4, 3,7,4,
+        //right        //bottom       //back
+        2,1,5, 2,5,6,  7,5,4, 7,6,5,  1,0,5, 0,4,5,
     ];
     const vtxs = [gl.TRIANGLES];
     for(const idx of vtxIdxs) {

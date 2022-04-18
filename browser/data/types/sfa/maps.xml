@@ -386,24 +386,22 @@
     </struct>
 
     <struct name="PolygonGroup">
-        <!-- this field seems wrong since I see 0, 0, 640 -->
-        <field type="ushort" name="firstPolygon" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="short" />
-        <field type="short" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="uint" name="flags">
-            <note>(val &gt;&gt; 16) &amp; 0xFF is something else</note>
+        <field type="ushort" name="firstPolygon">
+            <note>Ends at next group's first polygon</note>
         </field>
-        <field type="ushort" />
+        <field type="s16" name="x1" />
+        <field type="s16" name="x2" />
+        <field type="s16" name="y1" />
+        <field type="s16" name="y2" />
+        <field type="s16" name="z1" />
+        <field type="s16" name="z2" />
+        <field type="undefined" />
+        <field type="undefined" />
+        <field type="u8" name="id">
+            <note>Game accesses these 4 bytes as u32</note>
+        </field>
+        <field type="u8" />
+        <field type="u16" name="flags" />
     </struct>
 
     <struct name="DisplayListPtr">
