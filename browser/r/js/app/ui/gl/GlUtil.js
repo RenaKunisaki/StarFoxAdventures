@@ -123,15 +123,20 @@ export function makeBox(gl, p1, p2, id, colors=null) {
         [x1, y1, z1], [x2, y1, z1], [x2, y2, z1], [x1, y2, z1], //top
         [x1, y1, z2], [x2, y1, z2], [x2, y2, z2], [x1, y2, z2], //bot
     ];
+    let alpha = 0xCF;
+    if(!Array.isArray(colors)) { //HACK
+        alpha = colors;
+        colors = null;
+    }
     if(!colors) colors = [ //r, g, b, a
-        [0x00, 0x00, 0x00, 0xCF], //[0] top left back
-        [0xFF, 0x00, 0x00, 0xCF], //[1] top right back
-        [0xFF, 0xFF, 0x00, 0xCF], //[2] top right front
-        [0x00, 0xFF, 0x00, 0xCF], //[3] top left front
-        [0x00, 0x00, 0xFF, 0xCF], //[4] bot left back
-        [0xFF, 0x00, 0xFF, 0xCF], //[5] bot right back
-        [0xFF, 0xFF, 0xFF, 0xCF], //[6] bot right front
-        [0x00, 0xFF, 0xFF, 0xCF], //[7] bot left front
+        [0x00, 0x00, 0x00, alpha], //[0] top left back
+        [0xFF, 0x00, 0x00, alpha], //[1] top right back
+        [0xFF, 0xFF, 0x00, alpha], //[2] top right front
+        [0x00, 0xFF, 0x00, alpha], //[3] top left front
+        [0x00, 0x00, 0xFF, alpha], //[4] bot left back
+        [0xFF, 0x00, 0xFF, alpha], //[5] bot right back
+        [0xFF, 0xFF, 0xFF, alpha], //[6] bot right front
+        [0x00, 0xFF, 0xFF, alpha], //[7] bot left front
     ];
     //if only one color is given, use it properly.
     if(!Array.isArray(colors[0])) colors = [colors];

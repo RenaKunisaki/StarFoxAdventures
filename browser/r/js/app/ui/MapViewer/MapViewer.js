@@ -533,11 +533,11 @@ export default class MapViewer {
                     //Math.trunc((((group.flags >> 11) & 0x1F) / 31) * 255),
                     //Math.trunc((((group.flags >>  5) & 0x3F) / 63) * 255),
                     //Math.trunc((((group.flags >>  0) & 0x1F) / 31) * 255),
-                    0x80];
+                    0x40];
                 let box = makeBox(gl,
                     [group.x1, group.y1, group.z1],
                     [group.x2, group.y2, group.z2],
-                    -1/*, color*/);
+                    -1, 0x40);
                 //box.shift(); //remove TRIANGLES
                 //vtxs.splice(iVtx, 36, ...box);
                 //iVtx += 36;
