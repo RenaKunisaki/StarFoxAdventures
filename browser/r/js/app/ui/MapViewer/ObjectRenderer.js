@@ -120,15 +120,8 @@ export default class ObjectRenderer {
         });
         if(!this._isDrawingForPicker) {
             batch.addFunction(() => {
-                gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
-                    GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
-                gx.setZMode(true, GX.CompareMode.LEQUAL, true);
-
-                for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
-                    gl.activeTexture(gl.TEXTURE0 + i);
-                    this.gx.whiteTexture.bind();
-                    gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
-                }
+                //blending on, face culling off
+                gx.disableTextures(GX.BlendMode.BLEND, false);
             });
         }
     }

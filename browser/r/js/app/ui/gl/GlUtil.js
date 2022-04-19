@@ -68,34 +68,30 @@ export function makeCube(gl, x, y, z, scale, id, colors=null) {
      *  @returns {Array} vertex data.
      */
     const vtxPositions = [ //x, y, z
-        [x-scale, y-scale, z-scale], //[0] top left back
-        [x+scale, y-scale, z-scale], //[1] top right back
-        [x+scale, y+scale, z-scale], //[2] top right front
-        [x-scale, y+scale, z-scale], //[3] top left front
-        [x-scale, y-scale, z+scale], //[4] bot left back
-        [x+scale, y-scale, z+scale], //[5] bot right back
-        [x+scale, y+scale, z+scale], //[6] bot right front
-        [x-scale, y+scale, z+scale], //[7] bot left front
+        [x+scale, y+scale, z+scale],
+        [x-scale, y+scale, z+scale],
+        [x+scale, y+scale, z-scale],
+        [x-scale, y+scale, z-scale],
+        [x+scale, y-scale, z+scale],
+        [x-scale, y-scale, z+scale],
+        [x-scale, y-scale, z-scale],
+        [x+scale, y-scale, z-scale],
     ];
+    // Declares the Elements Array, where the indexs to be drawn are stored
     if(!colors) colors = [ //r, g, b, a
-        [0x00, 0x00, 0x00, 0xCF], //[0] top left back
-        [0xFF, 0x00, 0x00, 0xCF], //[1] top right back
-        [0xFF, 0xFF, 0x00, 0xCF], //[2] top right front
-        [0x00, 0xFF, 0x00, 0xCF], //[3] top left front
-        [0x00, 0x00, 0xFF, 0xCF], //[4] bot left back
-        [0xFF, 0x00, 0xFF, 0xCF], //[5] bot right back
-        [0xFF, 0xFF, 0xFF, 0xCF], //[6] bot right front
-        [0x00, 0xFF, 0xFF, 0xCF], //[7] bot left front
+        [0xFF, 0xFF, 0xFF, 0xCF],
+        [0x00, 0xFF, 0xFF, 0xCF],
+        [0xFF, 0xFF, 0x00, 0xCF],
+        [0x00, 0xFF, 0x00, 0xCF],
+        [0xFF, 0x00, 0xFF, 0xCF],
+        [0x00, 0x00, 0xFF, 0xCF],
+        [0x00, 0x00, 0x00, 0xCF],
+        [0xFF, 0x00, 0x00, 0xCF],
     ];
     //if only one color is given, use it properly.
     if(!Array.isArray(colors[0])) colors = [colors];
-    const vtxIdxs = [
-        //top          //front        //left
-        0,1,3, 1,2,3,  3,2,6, 3,6,7,  0,3,4, 3,7,4,
-        //right        //bottom       //back
-        2,1,5, 2,5,6,  7,5,4, 7,6,5,  1,0,5, 0,4,5,
-    ];
-    const vtxs = [gl.TRIANGLES];
+    const vtxIdxs = [3,2,6,7,4,2,0,3,1,6,5,4,1,0];
+    const vtxs = [gl.TRIANGLE_STRIP];
     for(const idx of vtxIdxs) {
         vtxs.push({
             POS:  vtxPositions[idx],
