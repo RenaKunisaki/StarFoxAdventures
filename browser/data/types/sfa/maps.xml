@@ -452,7 +452,7 @@
         <field type="s16" name="z2" />
         <field type="u8" />
         <field type="u8" /><!-- type? -->
-        <field type="u8" name="flags0E" />
+        <field type="u8" name="flags0E" /><!-- these two bytes control your interaction (blocks you, lets you jump off, lets you fall off... -->
         <field type="u8" name="flags" />
         <field type="s16" count="2" name="iPoint" />
     </struct>

@@ -6,6 +6,9 @@ import GX from '../gl/gx/GX.js';
 import { makeBox } from '../gl/GlUtil.js';
 import { MAP_CELL_SIZE } from '../../../game/Game.js';
 
+//struct types
+let HitsBinEntry;
+
 const LogRenderOps = false;
 const ShaderFlags = {
     Hidden:             (1<< 1), //invisible, exploded walls, etc
@@ -114,7 +117,9 @@ compareEnable, compareFunc, updateEnable) {
 
 export default class BlockRenderer {
     /** Renders map blocks. */
-    constructor(gx) {
+    constructor(game, gx) {
+        this.game = game;
+        HitsBinEntry = game.app.types.getType('sfa.maps.HitsBinEntry');
         this.gx = gx;
         this.gl = gx.gl;
         this.dlistParser = new DlistParser(gx);
@@ -221,7 +226,15 @@ export default class BlockRenderer {
         const offsX = block.x*MAP_CELL_SIZE;
         const offsY = 0; //block.header.yOffset;
         const offsZ = block.z*MAP_CELL_SIZE;
-        batch.addFunction(() => {
+
+        if(params.isPicker) batch.addFunction(() => {
+            //blend off, face culling off
+            gx.disableTextures(GX.BlendMode.NONE, false);
+            let mv = mat4.clone(gx.context.matModelView);
+            mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
+            gx.setModelViewMtx(mv);
+        });
+        else batch.addFunction(() => {
             //blend on, face culling off
             gx.disableTextures(GX.BlendMode.BLEND, false);
             let mv = mat4.clone(gx.context.matModelView);
@@ -229,10 +242,26 @@ export default class BlockRenderer {
             gx.setModelViewMtx(mv);
         });
 
-        for(const hit of block.hits) {
-            batch.addVertices(...makeBox(gl,
-                [hit.x1,hit.y1,hit.z1],
-                [hit.x2,hit.y2,hit.z2], -1, [
+        for(let i=0; i<block.hits.length; i++) {
+            const hit = block.hits[i];
+            let id = 0;
+            if(this._isDrawingForPicker) {
+                id = gx.addPickerObj({
+                    type:   'blockHit',
+                    idx:    i,
+                    offset: block.hitsOffset + (i * HitsBinEntry.size),
+                    block:  block,
+                    hit:    hit,
+                });
+            }
+            const d  = 0.001;
+            const v1 = [hit.x1,hit.y1,hit.z1];
+            const v2 = [hit.x2,hit.y2,hit.z2];
+            //offset Z slightly so height isn't zero and so it
+            //won't be hidden by the geometry
+            if(v1[2] > v2[2]) { v1[2] += d; v2[2] -= d; }
+            else { v1[2] -= d; v2[2] += d; }
+            batch.addVertices(...makeBox(gl, v1, v2, id, [
                     (hit._0C & 0xF) << 4,
                     (hit._0D & 0xF) << 4,
                     hit.flags0E,
@@ -357,7 +386,16 @@ export default class BlockRenderer {
         }
 
         if(this._isDrawingForPicker) {
-            //do nothing
+            this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
+                true, //cull backfaces
+                GX.BlendMode.NONE, //blend mode
+                GX.BlendFactor.ONE, //sFactor
+                GX.BlendFactor.ZERO, //dFactor
+                GX.LogicOp.NOOP, //logicOp
+                true, //compareEnable
+                GX.CompareMode.LEQUAL, //compareFunc
+                true, //updateEnable
+            )});
         }
         else if(this.curShader) {
             this._handleShaderFlags();

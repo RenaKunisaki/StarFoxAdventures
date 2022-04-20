@@ -69,7 +69,7 @@ export default class MapViewer {
             this.stats.element,
         );
 
-        this._blockRenderer  = new BlockRenderer(this.gx);
+        this._blockRenderer  = new BlockRenderer(this.game, this.gx);
         this._objectRenderer = new ObjectRenderer(this);
         this.context.canvas.focus();
         this._reset();
@@ -333,7 +333,6 @@ export default class MapViewer {
 
     _drawBlockHits() {
         /** Draw the hitboxes for each block. */
-        if(this._isDrawingForPicker) return;
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF)) continue;

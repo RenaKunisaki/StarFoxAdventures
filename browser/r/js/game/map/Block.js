@@ -216,16 +216,16 @@ export default class Block {
 
     _loadHits(view) {
         //read HITS.bin
-        const fTab     = this.game.iso.getFile('/HITS.tab');
-        const fBin     = this.game.iso.getFile('/HITS.bin');
-        const dTab     = fTab.getData();
-        const dBin     = fBin.getData();
-        const offset   = dTab.getUint32(this.index*4) & 0xFFFFFF;
-        const nextoffs = dTab.getUint32((this.index+1)*4) & 0xFFFFFF;
-        const size     = nextoffs - offset;
-        const count    = Math.trunc(size / HitsBinEntry.size);
-        const offsBin  = dBin.byteOffset;
-        this.hits      = [];
+        const fTab      = this.game.iso.getFile('/HITS.tab');
+        const fBin      = this.game.iso.getFile('/HITS.bin');
+        const dTab      = fTab.getData();
+        const dBin      = fBin.getData();
+        const offset    = dTab.getUint32(this.index*4) & 0xFFFFFF;
+        const nextoffs  = dTab.getUint32((this.index+1)*4) & 0xFFFFFF;
+        const size      = nextoffs - offset;
+        const count     = Math.trunc(size / HitsBinEntry.size);
+        this.hitsOffset = offset;
+        this.hits       = [];
         for(let iHit=0; iHit<count; iHit++) {
             this.hits.push(HitsBinEntry.fromBytes(dBin,
                 offset + (iHit * HitsBinEntry.size)));
