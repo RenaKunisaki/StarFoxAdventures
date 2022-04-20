@@ -67,40 +67,9 @@ export function makeCube(gl, x, y, z, scale, id, colors=null) {
      *  @param {Array} colors Array of vertex colors.
      *  @returns {Array} vertex data.
      */
-    const vtxPositions = [ //x, y, z
-        [x+scale, y+scale, z+scale],
-        [x-scale, y+scale, z+scale],
-        [x+scale, y+scale, z-scale],
-        [x-scale, y+scale, z-scale],
-        [x+scale, y-scale, z+scale],
-        [x-scale, y-scale, z+scale],
-        [x-scale, y-scale, z-scale],
-        [x+scale, y-scale, z-scale],
-    ];
-    // Declares the Elements Array, where the indexs to be drawn are stored
-    if(!colors) colors = [ //r, g, b, a
-        [0xFF, 0xFF, 0xFF, 0xCF],
-        [0x00, 0xFF, 0xFF, 0xCF],
-        [0xFF, 0xFF, 0x00, 0xCF],
-        [0x00, 0xFF, 0x00, 0xCF],
-        [0xFF, 0x00, 0xFF, 0xCF],
-        [0x00, 0x00, 0xFF, 0xCF],
-        [0x00, 0x00, 0x00, 0xCF],
-        [0xFF, 0x00, 0x00, 0xCF],
-    ];
-    //if only one color is given, use it properly.
-    if(!Array.isArray(colors[0])) colors = [colors];
-    const vtxIdxs = [3,2,6,7,4,2,0,3,1,6,5,4,1,0];
-    const vtxs = [gl.TRIANGLE_STRIP];
-    for(const idx of vtxIdxs) {
-        vtxs.push({
-            POS:  vtxPositions[idx],
-            COL0: colors[idx % colors.length],
-            COL1: colors[idx % colors.length],
-            id:   id,
-        });
-    }
-    return vtxs;
+    return makeBox(gl,
+        [x-scale, y-scale, z-scale], [x+scale, y+scale, z+scale],
+        id, colors);
 }
 
 export function makeBox(gl, p1, p2, id, colors=null) {
@@ -115,34 +84,34 @@ export function makeBox(gl, p1, p2, id, colors=null) {
     const [x1, y1, z1] = p1;
     const [x2, y2, z2] = p2;
     const vtxPositions = [ //x, y, z
-        //back left, back right, front right, front left
-        [x1, y1, z1], [x2, y1, z1], [x2, y2, z1], [x1, y2, z1], //top
-        [x1, y1, z2], [x2, y1, z2], [x2, y2, z2], [x1, y2, z2], //bot
+        [x2, y2, z2],
+        [x1, y2, z2],
+        [x2, y2, z1],
+        [x1, y2, z1],
+        [x2, y1, z2],
+        [x1, y1, z2],
+        [x1, y1, z1],
+        [x2, y1, z1],
     ];
     let alpha = 0xCF;
-    if(!Array.isArray(colors)) { //HACK
+    if(typeof(colors) == 'number') {
         alpha = colors;
         colors = null;
     }
     if(!colors) colors = [ //r, g, b, a
-        [0x00, 0x00, 0x00, alpha], //[0] top left back
-        [0xFF, 0x00, 0x00, alpha], //[1] top right back
-        [0xFF, 0xFF, 0x00, alpha], //[2] top right front
-        [0x00, 0xFF, 0x00, alpha], //[3] top left front
-        [0x00, 0x00, 0xFF, alpha], //[4] bot left back
-        [0xFF, 0x00, 0xFF, alpha], //[5] bot right back
-        [0xFF, 0xFF, 0xFF, alpha], //[6] bot right front
-        [0x00, 0xFF, 0xFF, alpha], //[7] bot left front
+        [0xFF, 0xFF, 0xFF, alpha],
+        [0x00, 0xFF, 0xFF, alpha],
+        [0xFF, 0xFF, 0x00, alpha],
+        [0x00, 0xFF, 0x00, alpha],
+        [0xFF, 0x00, 0xFF, alpha],
+        [0x00, 0x00, 0xFF, alpha],
+        [0x00, 0x00, 0x00, alpha],
+        [0xFF, 0x00, 0x00, alpha],
     ];
     //if only one color is given, use it properly.
     if(!Array.isArray(colors[0])) colors = [colors];
-    const vtxIdxs = [
-        //top          //front        //left
-        0,1,3, 1,2,3,  3,2,6, 3,6,7,  0,3,4, 3,7,4,
-        //right        //bottom       //back
-        2,1,5, 2,5,6,  7,5,4, 7,6,5,  1,0,5, 0,4,5,
-    ];
-    const vtxs = [gl.TRIANGLES];
+    const vtxIdxs = [3,2,6,7,4,2,0,3,1,6,5,4,1,0];
+    const vtxs = [gl.TRIANGLE_STRIP];
     for(const idx of vtxIdxs) {
         vtxs.push({
             POS:  vtxPositions[idx],

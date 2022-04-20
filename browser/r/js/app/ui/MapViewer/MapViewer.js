@@ -105,10 +105,11 @@ export default class MapViewer {
 
     _reset() {
         /** Reset viewer to display another map. */
-        this._warpBatch       = null;
-        this._warpBatchPicker = null;
-        this._hitPolyBatch    = null;
-        this._polyGroupBatch  = null;
+        this._warpBatch        = null;
+        this._warpBatchPicker  = null;
+        this._hitPolyBatch     = null;
+        this._polyGroupBatch   = null;
+        this._blockBoundsBatch = null;
         this._isFirstDrawAfterLoadingMap = true;
 
         if(!this.context) return; //don't start if not initialized
@@ -231,9 +232,7 @@ export default class MapViewer {
         if(LC.getLayer('warps')) this._drawWarps();
         if(LC.getLayer('hitPolys')) this._drawHitPolys();
         if(LC.getLayer('polyGroups')) this._drawPolyGroups();
-        if(LC.getLayer('blockBounds') && !this._isDrawingForPicker) {
-            this._drawBlockBounds();
-        }
+        if(LC.getLayer('blockBounds')) this._drawBlockBounds();
         this._finishRender(blockStats, blockStreams);
         //console.log("block render OK", this.gx.context.stats);
         //console.log("GX logs:", this.gx.program.getLogs());
@@ -335,25 +334,20 @@ export default class MapViewer {
         /** Draw the bounding boxes for each block. */
         const gx = this.gx;
         const gl = this.gx.gl;
-        const batch = new RenderBatch(gx);
+        if(this._isDrawingForPicker) return;
 
         let mv = mat4.clone(this.gx.context.matModelView);
         this.gx.setModelViewMtx(mv);
+        let batch = this._blockBoundsBatch;
+        if(batch) {
+            this.gx.executeBatch(batch);
+            return batch;
+        }
+        batch = new RenderBatch(gx);
+        this._blockBoundsBatch = batch;
 
-        batch.addFunction(() => {
-            gl.disable(gl.CULL_FACE);
-            gl.enable(gl.BLEND);
-            gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
-                GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
-            gx.setZMode(true, GX.CompareMode.LEQUAL, true);
-
-            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
-                gl.activeTexture(gl.TEXTURE0 + i);
-                this.gx.whiteTexture.bind();
-                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
-            }
-        });
-
+        //blend on, face culling off
+        batch.addFunction(() => { gx.disableTextures(GX.BlendMode.BLEND, false) });
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF)) continue;
@@ -368,7 +362,7 @@ export default class MapViewer {
             const y2 = (block && block.header) ? block.header.yMin : -1;
             const z2 = (block.z+1) * MAP_CELL_SIZE;
 
-            batch.addVertices(...makeBox(gl, [x1,y1,z1], [x2,y2,z2], -1));
+            batch.addVertices(...makeBox(gl, [x1,y1,z1], [x2,y2,z2], -1, 0x80));
         }
         this.gx.executeBatch(batch);
         return batch;
