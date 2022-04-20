@@ -228,6 +228,7 @@ export default class MapViewer {
         const blockStats = {totals:{}};
         this._beginRender();
         this._drawBlocks(blockStats, blockStreams);
+        if(LC.getLayer('blockHits')) this._drawBlockHits();
         await this._drawObjects();
         if(LC.getLayer('warps')) this._drawWarps();
         if(LC.getLayer('hitPolys')) this._drawHitPolys();
@@ -330,14 +331,24 @@ export default class MapViewer {
         return batch; //for stats
     }
 
+    _drawBlockHits() {
+        /** Draw the hitboxes for each block. */
+        if(this._isDrawingForPicker) return;
+        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+            const block = this.map.blocks[iBlock];
+            if(!block || (block.mod >= 0xFF)) continue;
+            this._blockRenderer.renderHits(block, {
+                isPicker: this._isDrawingForPicker,
+            });
+        }
+    }
+
     _drawBlockBounds() {
         /** Draw the bounding boxes for each block. */
         const gx = this.gx;
         const gl = this.gx.gl;
         if(this._isDrawingForPicker) return;
 
-        let mv = mat4.clone(this.gx.context.matModelView);
-        this.gx.setModelViewMtx(mv);
         let batch = this._blockBoundsBatch;
         if(batch) {
             this.gx.executeBatch(batch);
@@ -346,8 +357,11 @@ export default class MapViewer {
         batch = new RenderBatch(gx);
         this._blockBoundsBatch = batch;
 
-        //blend on, face culling off
-        batch.addFunction(() => { gx.disableTextures(GX.BlendMode.BLEND, false) });
+        batch.addFunction(() => {
+            //blend on, face culling off
+            gx.disableTextures(GX.BlendMode.BLEND, false);
+            gx.setModelViewMtx(mat4.clone(gx.context.matModelView));
+        });
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF)) continue;
@@ -401,21 +415,11 @@ export default class MapViewer {
         else {
             this._warpBatch = batch;
             batch.addFunction(() => {
-                gl.enable(gl.BLEND);
-                gx.setBlendMode(GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
-                    GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+                //blend on, face culling off
+                gx.disableTextures(GX.BlendMode.BLEND, false);
+                gx.setModelViewMtx(mat4.clone(gx.context.matModelView));
             });
         }
-        batch.addFunction(() => {
-            gl.enable(gl.CULL_FACE);
-            gx.setZMode(true, GX.CompareMode.LEQUAL, true);
-            for(let i=0; i<this.gx.MAX_TEXTURES; i++) {
-                gl.activeTexture(gl.TEXTURE0 + i);
-                this.gx.whiteTexture.bind();
-                gl.uniform1i(this.gx.programInfo.uniforms.uSampler[i], i);
-            }
-        });
-
         for(let [idx, warp] of Object.entries(this.game.warpTab)) {
             const map = this.game.getMapAt(warp.layer, warp.pos.x, warp.pos.z);
             if(map != this.map) continue;

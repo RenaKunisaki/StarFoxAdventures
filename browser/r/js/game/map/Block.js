@@ -8,7 +8,7 @@ import Texture from '../../app/ui/gl/Texture.js'
 
 //struct types
 let MapBlock = null;
-let GCPolygon, PolygonGroup, DisplayListPtr, Shader;
+let GCPolygon, PolygonGroup, DisplayListPtr, Shader, HitsBinEntry;
 
 export default class Block {
     /** One block of a map.
@@ -19,6 +19,7 @@ export default class Block {
         this.map    =  assertType(map, Map);
         this.x      =  x; //grid coords, relative to map's origin
         this.z      =  z;
+        this.index  = null; //index into tables (HITS, modxx.tab...)
         this.unk1   =  val >> 31;
         this.mod    = (val >> 23) & 0x00FF;
         this.sub    = (val >> 17) & 0x003F;
@@ -35,6 +36,7 @@ export default class Block {
             PolygonGroup = this.app.types.getType('sfa.maps.PolygonGroup');
             DisplayListPtr = this.app.types.getType('sfa.maps.DisplayListPtr');
             Shader = this.app.types.getType('sfa.maps.Shader');
+            HitsBinEntry = this.app.types.getType('sfa.maps.HitsBinEntry');
         }
     }
 
@@ -56,7 +58,7 @@ export default class Block {
     _loadModel() {
         //TRKBLK.tab gives an offset per map dir ID, to add to the block
         //sub idx to get the actual offset within the modN.tab file.
-        //I have no idea why this mechanic exists.
+        //I have no idea why this mechanic exists. maybe because of HITS.bin
         const trkBlk     = this.game.iso.getFile(`/TRKBLK.tab`).getData();
         const firstBlock = trkBlk.getUint16(this.map.dirId*2);
         const modPath    = `/${this.map.dirName}/mod${this.mod}`;
@@ -76,7 +78,8 @@ export default class Block {
         fBlock = new GameFile(fBlock);
 
         //get the data for this block
-        const offsBlock = dTab.getUint32((this.sub+firstBlock)*4) & 0xFFFFFF;
+        this.index      = firstBlock + this.sub;
+        const offsBlock = dTab.getUint32(this.index*4) & 0xFFFFFF;
         const blockData = fBlock.decompress(offsBlock);
         const view      = new DataView(blockData);
         this.header     = MapBlock.fromBytes(view);
@@ -89,6 +92,7 @@ export default class Block {
         this._loadRenderInstrs(view);
         this._loadShaders(view);
         this._loadTextures(view);
+        this._loadHits(view);
     }
 
     _loadVtxData(view) {
@@ -208,5 +212,23 @@ export default class Block {
             }
         }
         console.log("Block textures", this.textures, gameTextures);
+    }
+
+    _loadHits(view) {
+        //read HITS.bin
+        const fTab     = this.game.iso.getFile('/HITS.tab');
+        const fBin     = this.game.iso.getFile('/HITS.bin');
+        const dTab     = fTab.getData();
+        const dBin     = fBin.getData();
+        const offset   = dTab.getUint32(this.index*4) & 0xFFFFFF;
+        const nextoffs = dTab.getUint32((this.index+1)*4) & 0xFFFFFF;
+        const size     = nextoffs - offset;
+        const count    = Math.trunc(size / HitsBinEntry.size);
+        const offsBin  = dBin.byteOffset;
+        this.hits      = [];
+        for(let iHit=0; iHit<count; iHit++) {
+            this.hits.push(HitsBinEntry.fromBytes(dBin,
+                offset + (iHit * HitsBinEntry.size)));
+        }
     }
 }

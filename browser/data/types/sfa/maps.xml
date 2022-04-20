@@ -444,24 +444,17 @@
     </struct>
 
     <struct name="HitsBinEntry">
-        <field type="short">
-            <note>pos or size, range 0-640</note>
-        </field>
-        <field type="short" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="short" />
-        <field type="short" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
+        <field type="s16" name="x1" />
+        <field type="s16" name="x2" />
+        <field type="s16" name="y1" />
+        <field type="s16" name="y2" />
+        <field type="s16" name="z1" />
+        <field type="s16" name="z2" />
         <field type="u8" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
-        <field type="undefined" />
+        <field type="u8" /><!-- type? -->
+        <field type="u8" name="flags0E" />
+        <field type="u8" name="flags" />
+        <field type="s16" count="2" name="iPoint" />
     </struct>
 
     <struct name="ShaderLayer">

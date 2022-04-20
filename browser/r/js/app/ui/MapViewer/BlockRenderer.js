@@ -3,6 +3,8 @@ import { Reg as CPReg } from '../gl/gx/CP.js';
 import DlistParser from '../gl/gx/DlistParser.js';
 import RenderBatch from '../gl/gx/RenderBatch.js';
 import GX from '../gl/gx/GX.js';
+import { makeBox } from '../gl/GlUtil.js';
+import { MAP_CELL_SIZE } from '../../../game/Game.js';
 
 const LogRenderOps = false;
 const ShaderFlags = {
@@ -197,6 +199,47 @@ export default class BlockRenderer {
             this.gx.executeBatch(batch);
             //this.gx.gl.flush();
         }
+        return batch;
+    }
+
+    renderHits(block, params) {
+        /** Render the block's hitboxes. */
+        if(!block.hits) return null;
+
+        const key = ([
+            'hits', block.x, block.z, params.isPicker ? 1 : 0]).join(',');
+        let batch = this._batches[key];
+        if(batch) {
+            this.gx.executeBatch(batch);
+            return batch;
+        }
+        batch = new RenderBatch(this.gx);
+        this._batches[key] = batch;
+
+        const gx = this.gx;
+        const gl = this.gx.gl;
+        const offsX = block.x*MAP_CELL_SIZE;
+        const offsY = 0; //block.header.yOffset;
+        const offsZ = block.z*MAP_CELL_SIZE;
+        batch.addFunction(() => {
+            //blend on, face culling off
+            gx.disableTextures(GX.BlendMode.BLEND, false);
+            let mv = mat4.clone(gx.context.matModelView);
+            mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
+            gx.setModelViewMtx(mv);
+        });
+
+        for(const hit of block.hits) {
+            batch.addVertices(...makeBox(gl,
+                [hit.x1,hit.y1,hit.z1],
+                [hit.x2,hit.y2,hit.z2], -1, [
+                    (hit._0C & 0xF) << 4,
+                    (hit._0D & 0xF) << 4,
+                    hit.flags0E,
+                    0xC0 ]));
+        }
+
+        this.gx.executeBatch(batch);
         return batch;
     }
 

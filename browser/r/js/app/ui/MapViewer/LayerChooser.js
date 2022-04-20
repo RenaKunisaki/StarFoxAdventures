@@ -35,6 +35,8 @@ export default class LayerChooser {
             "Hit detect mesh");
         this._addLayer('boolean', 'polyGroups', "Poly Groups", false,
             "Polygon group boxes");
+        this._addLayer('boolean', 'blockHits', "Block Hits", false,
+            "Data from HITS.bin");
     }
 
     _addLayer(type, name, displayName, value=undefined, tooltip='') {
