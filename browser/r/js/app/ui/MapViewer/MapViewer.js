@@ -197,7 +197,7 @@ export default class MapViewer {
 
         window.requestAnimationFrame(() => {
             this._pendingDraw = false;
-            //this.grid.refresh();
+            this.grid.refresh();
             this.context.redraw();
             //this.stats.refresh();
             if(!this._updatedStats) {
@@ -286,14 +286,17 @@ export default class MapViewer {
         /** Draw the map geometry. */
         const params = {
             showHidden: this.layerChooser.getLayer('hiddenGeometry'),
-            isGrass: false, //draw the grass effect instead of the geometry
-            isPicker: this._isDrawingForPicker,
+            isGrass:    false, //draw the grass effect instead of the geometry
+            isPicker:   this._isDrawingForPicker,
+            dlist:      this.layerChooser.eWhichList.value,
         };
+        const showAll = !this.grid.eChkOnlyCur.checked;
         for(const [name, stream] of blockStreams) {
             blockStats[name] = [];
             for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
                 const block = this.map.blocks[iBlock];
                 if(!block || (block.mod >= 0xFF) || !block.load()) continue;
+                if(!(showAll || block == this.curBlock)) continue;
                 let batch = null;
                 if(stream) batch = this._drawBlock(block, params, name);
                 this.gx.context.stats.renderTime = performance.now() -

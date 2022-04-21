@@ -103,7 +103,7 @@ export default class DlistParser {
             const v1 = this._readVertex(vat, list);
             const v2 = this._readVertex(vat, list);
             const v3 = this._readVertex(vat, list);
-            vtxs.push(v0, v1, v2, v1, v2, v3);
+            vtxs.push(v0, v1, v2, v2, v3, v0);
         }
         this._drawPoly(this.gl.TRIANGLES, ...vtxs);
     }
@@ -160,6 +160,9 @@ export default class DlistParser {
             }
             vtx[field] = val;
         }
+        //vtx.COL0[0] = (vtx.id >> 16) & 0xFF;
+        //vtx.COL0[1] = (vtx.id >>  8) & 0xFF;
+        //vtx.COL0[2] = (vtx.id >>  0) & 0xFF;
         return vtx;
     }
     _readAttr(field, src, vcd) {

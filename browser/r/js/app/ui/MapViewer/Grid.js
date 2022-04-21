@@ -4,15 +4,22 @@ import { clearElement, E } from "../../../lib/Element.js";
 export default class Grid {
     /** Widget displaying the grid of this map's blocks. */
     constructor(mapViewer) {
-        this.mapViewer = mapViewer;
-        this.game      = mapViewer.game;
-        this.app       = mapViewer.game.app;
-        this.curBlock  = null;
-        this._tbl      = E.table();
-        this.element   = E.details('map-grid',
+        this.mapViewer   = mapViewer;
+        this.game        = mapViewer.game;
+        this.app         = mapViewer.game.app;
+        this.curBlock    = null;
+        this._tbl        = E.table();
+        this.eChkOnlyCur = E.input({type:'checkbox', id:'mapview-chkOnlyCur'});
+        this.element     = E.details('map-grid',
             E.summary(null, "Grid"),
             this._tbl,
+            E.div('checkbox', this.eChkOnlyCur,
+                E.label(null, {'for':'mapview-chkOnlyCur'}, "Only show Current")
+            ),
         );
+        this.eChkOnlyCur.addEventListener('change', e => {
+            this.mapViewer.redraw();
+        });
     }
 
     refresh() {

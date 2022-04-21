@@ -144,13 +144,6 @@ export default class Block {
             let list = new DisplayList(this.game, view,
                 this.header.displayLists + (i * DisplayListPtr.size));
             this.dlists.push(list);
-
-            const bytes = new DataView(list.data);
-            let butt = [];
-            for(let n=0; n<DisplayListPtr.size; n++) {
-                butt.push(hex(bytes.getUint8(n), 2));
-            }
-            //console.log("Block Dlist", i, list, butt.join(' '));
         }
     }
 
@@ -177,7 +170,7 @@ export default class Block {
         //read shader data
         const offs = view.byteOffset;
         this.shaders = [];
-        console.assert(Shader.size == 0x44);
+        //console.assert(Shader.size == 0x44);
         for(let i=0; i<this.header.nShaders; i++) {
             this.shaders.push(Shader.fromBytes(view,
                 offs + this.header.shaders + (i * Shader.size)));

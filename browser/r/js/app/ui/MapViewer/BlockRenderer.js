@@ -109,10 +109,11 @@ const vatDefaults = [
 ];
 
 function _setShaderParams(gl, gx, cull, blendMode, sFactor, dFactor, logicOp,
-compareEnable, compareFunc, updateEnable) {
+compareEnable, compareFunc, updateEnable, alphaTest) {
     if(cull) gl.enable(gl.CULL_FACE); else gl.disable(gl.CULL_FACE);
     gx.setBlendMode(blendMode, sFactor, dFactor, logicOp);
     gx.setZMode(compareEnable, compareFunc, updateEnable);
+    gx.setUseAlphaTest(alphaTest);
 }
 
 export default class BlockRenderer {
@@ -147,6 +148,7 @@ export default class BlockRenderer {
             params.isGrass ? 1 : 0,
             params.showHidden ? 1 : 0,
             params.isPicker ? 1 : 0,
+            params.dlist,
         ]).join(',');
         if(this._batches[key]) return this._batches[key];
 
@@ -287,14 +289,16 @@ export default class BlockRenderer {
                 this.gx.gl, this.gx, true, //culling enabled
                 GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
                 GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
-                true, GX.CompareMode.LEQUAL, true); //depth test+update enabled
+                true, GX.CompareMode.LEQUAL, true, //depth test+update enabled
+                true); //alpha test enabled
             });
         }
         else this.curBatch.addFunction(() => {_setShaderParams(
             this.gx.gl, this.gx, true, //culling enabled
             GX.BlendMode.BLEND, GX.BlendFactor.SRCALPHA,
             GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
-            true, GX.CompareMode.LEQUAL, true); //depth test+update enabled
+            true, GX.CompareMode.LEQUAL, true, //depth test+update enabled
+            true); //alpha test enabled
         });
     }
 
@@ -306,6 +310,7 @@ export default class BlockRenderer {
         let blendMode, sFactor, dFactor, logicOp,
             compareEnable, compareFunc, updateEnable;
 
+        let alphaTest = (flags & ShaderFlags.AlphaCompare) != 0;
         if(((flags & ShaderFlags.ForceBlend) == 0)
         && ((flags & ShaderFlags.BlendFlag29) == 0)) {
             if (((flags & ShaderFlags.AlphaCompare) == 0)
@@ -349,7 +354,8 @@ export default class BlockRenderer {
         if(!this._isDrawingForPicker) {
             this.curBatch.addFunction(() => {
                 _setShaderParams(gl, gx, cull, blendMode, sFactor, dFactor,
-                    logicOp, compareEnable, compareFunc, updateEnable);
+                    logicOp, compareEnable, compareFunc, updateEnable,
+                    alphaTest);
             });
         }
     }
@@ -385,7 +391,7 @@ export default class BlockRenderer {
             //    this.curShader.attrFlags);
         }
 
-        if(this._isDrawingForPicker) {
+        /*if(this._isDrawingForPicker) {
             this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
                 true, //cull backfaces
                 GX.BlendMode.NONE, //blend mode
@@ -395,9 +401,10 @@ export default class BlockRenderer {
                 true, //compareEnable
                 GX.CompareMode.LEQUAL, //compareFunc
                 true, //updateEnable
+                true, //alphaTest
             )});
         }
-        else if(this.curShader) {
+        else*/ if(this.curShader) {
             this._handleShaderFlags();
         }
         else if(this.curStream == 'water'
@@ -411,6 +418,7 @@ export default class BlockRenderer {
                 true, //compareEnable
                 GX.CompareMode.LEQUAL, //compareFunc
                 false, //updateEnable
+                true, //alphaTest
             )});
         }
         else {
@@ -423,10 +431,11 @@ export default class BlockRenderer {
                 true, //compareEnable
                 GX.CompareMode.LEQUAL, //compareFunc
                 true, //updateEnable
+                true, //alphaTest
             )});
         }
 
-        if(!this._isDrawingForPicker) { //select the textures
+        //if(!this._isDrawingForPicker) { //select the textures
             const nLayers = this.curShader ? this.curShader.nLayers : 0;
             const params  = []; //batch these ops
             for(let i=0; i<gx.MAX_TEXTURES; i++) {
@@ -440,9 +449,10 @@ export default class BlockRenderer {
                 }
                 params.push([i, tex]);
             }
-            if(params.length > 0)
+            if(params.length > 0) {
                 this.curBatch.addFunction(this._makeSetTextureCmd(params));
-        }
+            }
+        //}
     }
 
     _renderOpCallList() {
@@ -479,7 +489,7 @@ export default class BlockRenderer {
         };
         if(LogRenderOps) console.log("Execute list", idx);
 
-        let id = 0;
+        let id = -1;
         if(this._isDrawingForPicker) {
             id = this.gx.addPickerObj({
                 type:   'mapBlockDlist',
@@ -492,7 +502,9 @@ export default class BlockRenderer {
         }
         const list = this.dlistParser.parse(
             this.curBlock.dlists[idx].data, dlistData, id);
-        this.curBatch.addFunction(list);
+        if(this.params.dlist < 0 || this.params.dlist == idx) {
+            this.curBatch.addFunction(list);
+        }
         if(LogRenderOps) {
             console.log("executed list", this.curBlock.dlists[idx].data);
         }

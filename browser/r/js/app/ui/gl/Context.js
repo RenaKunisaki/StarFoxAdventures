@@ -193,16 +193,19 @@ export default class Context {
         const gl     = this.gl;
         const data   = new Uint8Array(4);
         const rect   = gl.canvas.getBoundingClientRect();
-        const mouseX = x - rect.left;
-        const mouseY = y - rect.top;
-        const pixelX = Math.trunc(mouseX * gl.canvas.width / gl.canvas.clientWidth);
-        const pixelY = Math.trunc(gl.canvas.height - mouseY * gl.canvas.height / gl.canvas.clientHeight - 1);
+        const mouseX = Math.round(x - rect.left);
+        const mouseY = Math.round(y - rect.top);
+        const pixelX = Math.trunc(mouseX * (gl.canvas.width / gl.canvas.clientWidth));
+        const pixelY = Math.trunc((gl.canvas.height - mouseY) * (gl.canvas.height / gl.canvas.clientHeight));
+        gl.readBuffer(gl.COLOR_ATTACHMENT0);
         gl.readPixels(
             pixelX, pixelY, 1, 1, // x, y, width, height
             gl.RGBA,              // format
             gl.UNSIGNED_BYTE,     // type
             data);                // typed array to hold result
-        //console.log("Read picker", x, y, "=>", pixelX, pixelY, "data", data);
+        console.log("Read picker", x, y, "=>", pixelX, pixelY, "data", data,
+            "rect", rect, "client", gl.canvas.clientWidth, gl.canvas.clientHeight,
+            "wh", gl.canvas.width, gl.canvas.height);
         return data[3] | (data[2] << 8) | (data[1] << 16) | (data[0] << 24);
         //return data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24);
     }

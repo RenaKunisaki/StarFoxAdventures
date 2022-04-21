@@ -37,6 +37,13 @@ export default class LayerChooser {
             "Polygon group boxes");
         this._addLayer('boolean', 'blockHits', "Block Hits", false,
             "Data from HITS.bin");
+
+        //debug
+        this.eWhichList = E.input(null, {type:'number', value:-1});
+        this.eWhichList.addEventListener('change', e => this.mapViewer.redraw());
+        this.element.append(E.div('debug',
+            E.span('label', "Dlist:"), this.eWhichList,
+        ));
     }
 
     _addLayer(type, name, displayName, value=undefined, tooltip='') {

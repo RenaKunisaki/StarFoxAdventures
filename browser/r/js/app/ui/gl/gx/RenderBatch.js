@@ -103,12 +103,12 @@ export default class RenderBatch {
         }
         //console.log("render batch stats", stats);
 
-        /*const err = gl.getError();
+        const err = gl.getError();
         if(err) {
             console.error("GL error detected at end of render batch", err);
             //enable more in-depth (very slow) error checking for next frame.
             enableErrorChecking = true;
-        }*/
+        }
         return stats;
     }
 
@@ -312,7 +312,7 @@ export default class RenderBatch {
                 if(v == null || v == undefined) {
                     //paradoxically, the value NaN is, in fact, a "number",
                     //so it can be stored in a Float32Array.
-                    if(field.endsWith('IDX')) v = -1;
+                    if(field.endsWith('IDX') || field == 'id') v = -1;
                     else v = NaN;
                 }
                 this.data[field].push(v);
@@ -357,7 +357,6 @@ export default class RenderBatch {
         CHECK_ERROR(gl);
         stats.nBufferUploads++;
         stats.nBufferBytes += this._idxBuf.byteLength;
-
         stats.timeUpload += (performance.now() - tStart);
     }
 

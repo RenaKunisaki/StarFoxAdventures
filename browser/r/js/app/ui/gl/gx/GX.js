@@ -166,6 +166,7 @@ export default class GX {
                 matNormal:     this.program.getUniformLocation('u_matNormal'),
                 useId:         this.program.getUniformLocation('u_useId'),
                 useTexture:    this.program.getUniformLocation('u_useTexture'),
+                useAlphaTest:  this.program.getUniformLocation('u_useAlphaTest'),
                 ambLightColor: this.program.getUniformLocation('u_ambLightColor'),
                 dirLightColor: this.program.getUniformLocation('u_dirLightColor'),
                 dirLightVector:this.program.getUniformLocation('u_dirLightVector'),
@@ -291,6 +292,12 @@ export default class GX {
         if(compareEnable) gl.enable(gl.DEPTH_TEST); else gl.disable(gl.DEPTH_TEST);
         gl.depthFunc(this.CompareModeMap[compareFunc]);
         gl.depthMask(updateEnable);
+    }
+
+    setUseAlphaTest(enable) {
+        //XXX find the corresponding SDK method
+        this.gl.uniform1i(this.programInfo.uniforms.useAlphaTest,
+            enable ? 1 : 0);
     }
 
     disableTextures(blendMode=GX.BlendMode.BLEND, cull=true) {
