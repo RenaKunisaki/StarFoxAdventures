@@ -230,11 +230,19 @@ export default class BlockRenderer {
         const offsZ = block.z*MAP_CELL_SIZE;
 
         if(params.isPicker) batch.addFunction(() => {
+            _setShaderParams(
+                this.gx.gl, this.gx, false, //culling disabled
+                GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
+                GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP,
+                true, GX.CompareMode.LEQUAL, true, //depth test+update enabled
+                true); //alpha test enabled
             //blend off, face culling off
             gx.disableTextures(GX.BlendMode.NONE, false);
             let mv = mat4.clone(gx.context.matModelView);
             mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
             gx.setModelViewMtx(mv);
+            gl.enable(gl.POLYGON_OFFSET_FILL);
+            gl.polygonOffset(-10, 10);
         });
         else batch.addFunction(() => {
             //blend on, face culling off
