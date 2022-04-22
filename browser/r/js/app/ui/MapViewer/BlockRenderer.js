@@ -242,6 +242,9 @@ export default class BlockRenderer {
             let mv = mat4.clone(gx.context.matModelView);
             mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
             gx.setModelViewMtx(mv);
+            gl.enable(gl.POLYGON_OFFSET_FILL);
+            gl.polygonOffset(-10, 10);
+            //XXX this still doesn't work perfectly
         });
 
         for(let i=0; i<block.hits.length; i++) {
@@ -269,6 +272,10 @@ export default class BlockRenderer {
                     hit.flags0E,
                     0xC0 ]));
         }
+
+        batch.addFunction(() => {
+            gl.disable(gl.POLYGON_OFFSET_FILL);
+        })
 
         this.gx.executeBatch(batch);
         return batch;
