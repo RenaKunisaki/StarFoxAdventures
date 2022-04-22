@@ -412,6 +412,8 @@ export default class MapViewer {
                 gl.disable(gl.BLEND);
                 gx.setBlendMode(GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
                     GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
+                //blend off, face culling off
+                gx.disableTextures(GX.BlendMode.NONE, false);
             });
         }
         else {
