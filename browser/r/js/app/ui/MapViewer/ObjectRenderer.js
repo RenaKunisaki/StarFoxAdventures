@@ -115,10 +115,13 @@ export default class ObjectRenderer {
          */
         const gx = this.gx;
         const gl = this.gx.gl;
-        batch.addFunction(() => {
-            gl.enable(gl.CULL_FACE);
-        });
-        if(!this._isDrawingForPicker) {
+        if(this._isDrawingForPicker) {
+            batch.addFunction(() => {
+                //blending off, face culling off
+                gx.disableTextures(GX.BlendMode.NONE, false);
+            });
+        }
+        else {
             batch.addFunction(() => {
                 //blending on, face culling off
                 gx.disableTextures(GX.BlendMode.BLEND, false);

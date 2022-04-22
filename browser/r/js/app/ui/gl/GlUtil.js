@@ -111,6 +111,7 @@ export function makeBox(gl, p1, p2, id, colors=null) {
     //if only one color is given, use it properly.
     if(!Array.isArray(colors[0])) colors = [colors];
     const vtxIdxs = [3,2,6,7,4,2,0,3,1,6,5,4,1,0];
+    //const vtxIdxs = [0,1,4,5,6,1,3,0,2,4,7,6,2,3];
     const vtxs = [gl.TRIANGLE_STRIP];
     for(const idx of vtxIdxs) {
         vtxs.push({
