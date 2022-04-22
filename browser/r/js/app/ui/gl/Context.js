@@ -63,7 +63,7 @@ export default class Context {
             throw new Error("Invalid or missing canvas");
         }
         this.canvas = canvas;
-        this.gl = canvas.getContext("webgl2");
+        this.gl = canvas.getContext("webgl2", {preserveDrawingBuffer: true});
 
         if(this.gl === null) {
             alert("Unable to initialize WebGL");
@@ -184,7 +184,7 @@ export default class Context {
         console.log("Setup pick buffer, size", width, height);
     }
 
-    readPickBuffer(x, y) {
+    async readPickBuffer(x, y) {
         /** Read pick buffer.
          *  @param {integer} x X coordinate to read.
          *  @param {integer} y Y coordinate to read.
@@ -197,6 +197,7 @@ export default class Context {
         const mouseY = Math.round(y - rect.top);
         const pixelX = Math.trunc(mouseX * (gl.canvas.width / gl.canvas.clientWidth));
         const pixelY = Math.trunc((gl.canvas.height - mouseY) * (gl.canvas.height / gl.canvas.clientHeight));
+        await this._drawPicker();
         gl.readBuffer(gl.COLOR_ATTACHMENT0);
         gl.readPixels(
             pixelX, pixelY, 1, 1, // x, y, width, height
@@ -307,6 +308,56 @@ export default class Context {
     }
 
     async _redraw() {
+        this.resetStats();
+        await this._drawScreen();
+        this.stats.renderTime = performance.now() - this.stats.renderStartTime;
+    }
+
+    async _drawScreen() {
+        /** Draw the visible scene. */
+        const gl = this.gl;
+        this._setupFrame();
+        gl.enable(gl.BLEND);
+        gl.clearColor(this.clearColor[0], this.clearColor[1],
+            this.clearColor[2], this.clearColor[3]);
+        gl.clearDepth(this.clearDepth);
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        if(this.drawFunc) {
+            try {
+                await this.drawFunc(false);
+            }
+            catch(ex) {
+                console.error("Error redrawing", ex);
+            }
+        }
+        gl.flush();
+    }
+
+    async _drawPicker() {
+        /** Draw the picker buffer. */
+        const gl = this.gl;
+        this._setupFrame();
+        gl.disable(gl.BLEND);
+        gl.clearColor(1.0, 1.0, 1.0, 1.0);
+        if(!this.showPickBuffer) {
+            gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
+        }
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+        if(this.drawFunc) {
+            try {
+                await this.drawFunc(true);
+            }
+            catch(ex) {
+                console.error("Error drawing pick buffer", ex);
+            }
+        }
+        gl.flush();
+    }
+
+    _setupFrame() {
+        /** Prepare to render a frame. */
         const gl = this.gl;
         const P  = this.view.pos;
         const S  = this.view.scale;
@@ -321,8 +372,6 @@ export default class Context {
             gl.canvas.height = height;
         }
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-
-        this.resetStats();
 
         //set up projection matrix
         mat4.perspective(this.matProjection, //destination matrix
@@ -364,42 +413,5 @@ export default class Context {
         //our code overrides this, so this is a waste
         //if(this.enableBackfaceCulling) gl.enable(gl.CULL_FACE);
         //else gl.disable(gl.CULL_FACE);
-
-        //clear buffers and render.
-        gl.enable(gl.BLEND);
-        gl.clearColor(this.clearColor[0], this.clearColor[1],
-            this.clearColor[2], this.clearColor[3]);
-        gl.clearDepth(this.clearDepth);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-        if(this.drawFunc) {
-            try {
-                await this.drawFunc(false);
-            }
-            catch(ex) {
-                console.error("Error redrawing", ex);
-            }
-        }
-        gl.flush();
-
-        this.stats.renderTime = performance.now() - this.stats.renderStartTime;
-
-        //now render again to our picker buffer.
-        gl.disable(gl.BLEND);
-        gl.clearColor(1.0, 1.0, 1.0, 1.0);
-        if(!this.showPickBuffer) {
-            gl.bindFramebuffer(gl.FRAMEBUFFER, this._frameBuffer);
-        }
-        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        if(this.drawFunc) {
-            try {
-                await this.drawFunc(true);
-            }
-            catch(ex) {
-                console.error("Error drawing pick buffer", ex);
-            }
-        }
-        gl.flush();
     }
 }

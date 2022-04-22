@@ -221,8 +221,8 @@ export default class MapViewer {
         const LC = this.layerChooser;
         const blockStreams = [
             ['main',       LC.getLayer('mainGeometry')],
-            ['water',      LC.getLayer('waterGeometry')],
             ['reflective', LC.getLayer('reflectiveGeometry')],
+            ['water',      LC.getLayer('waterGeometry')],
         ];
 
         const blockStats = {totals:{}};
@@ -565,14 +565,14 @@ export default class MapViewer {
         this.gx.setModelViewMtx(mv);
     }
 
-    _getObjAt(x, y) {
+    async _getObjAt(x, y) {
         /** Get object at given screen coords.
          *  @param {integer} x X coordinate relative to canvas.
          *  @param {integer} y Y coordinate relative to canvas.
          *  @returns {object} Dict explaining what's at this coordinate,
          *   or null.
          */
-        const id = this.gx.context.readPickBuffer(x, y);
+        const id = await this.gx.context.readPickBuffer(x, y);
         let   obj = this.gx.getPickerObj(id);
         if(obj == undefined) obj = null;
         console.log("pick", x, y, hex(id,8), id, obj);

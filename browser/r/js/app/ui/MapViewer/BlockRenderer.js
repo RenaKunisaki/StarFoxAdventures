@@ -142,6 +142,9 @@ export default class BlockRenderer {
          */
         if(!block.load(this.gx)) return null;
 
+        const gx = this.gx;
+        const gl = this.gx.gl;
+
         //check if we already parsed this
         const key = ([
             whichStream, block.x, block.z,
@@ -186,6 +189,19 @@ export default class BlockRenderer {
                         (ops.offset-4).toString(16));
             }
         }
+
+        this.curBatch.addFunction(() => {_setShaderParams(gl, gx,
+            true, //cull backfaces
+            GX.BlendMode.NONE, //blend mode
+            GX.BlendFactor.ONE, //sFactor
+            GX.BlendFactor.ZERO, //dFactor
+            GX.LogicOp.NOOP, //logicOp
+            true, //compareEnable
+            GX.CompareMode.LEQUAL, //compareFunc
+            true, //updateEnable
+            true, //alphaTest
+        )});
+
         return this._batches[key];
     }
 

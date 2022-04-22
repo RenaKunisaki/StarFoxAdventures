@@ -25,9 +25,9 @@ export default class EventHandler {
         canvas.addEventListener('keyup',   e => this._onKey(e, false));
     }
 
-    _onMouseDown(event) {
+    async _onMouseDown(event) {
         if(event.buttons == 1) {
-            const obj = this.mapViewer._getObjAt(event.clientX, event.clientY);
+            const obj = await this.mapViewer._getObjAt(event.clientX, event.clientY);
             this.mapViewer.infoWidget.show(obj);
         }
         else {
