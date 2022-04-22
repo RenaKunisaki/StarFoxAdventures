@@ -410,6 +410,8 @@ export default class RenderBatch {
         const gl = this.gl;
         let [mode, index, count] = cmd;
 
+        //gl.polygonMode isn't a thing for webgl because lol
+        //XXX use a geometry shader: https://stackoverflow.com/a/54171768
         if(this.gx.context.useWireframe) mode = gl.LINE_LOOP;
 
         //debug

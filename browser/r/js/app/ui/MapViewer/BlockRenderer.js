@@ -242,8 +242,8 @@ export default class BlockRenderer {
             let mv = mat4.clone(gx.context.matModelView);
             mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
             gx.setModelViewMtx(mv);
-            gl.enable(gl.POLYGON_OFFSET_FILL);
-            gl.polygonOffset(-10, 10);
+            //gl.enable(gl.POLYGON_OFFSET_FILL);
+            //gl.polygonOffset(-10, 10);
             //XXX this still doesn't work perfectly
         });
 
@@ -259,13 +259,13 @@ export default class BlockRenderer {
                     hit:    hit,
                 });
             }
-            const d  = 0.001;
+            const d  = 0.1;
             const v1 = [hit.x1,hit.y1,hit.z1];
             const v2 = [hit.x2,hit.y2,hit.z2];
-            //offset Z slightly so height isn't zero and so it
+            //offset Y slightly so height isn't zero and so it
             //won't be hidden by the geometry
-            if(v1[2] > v2[2]) { v1[2] += d; v2[2] -= d; }
-            else { v1[2] -= d; v2[2] += d; }
+            if(v1[1] > v2[1]) { v1[1] += d; v2[1] -= d; }
+            else { v1[1] -= d; v2[1] += d; }
             batch.addVertices(...makeBox(gl, v1, v2, id, [
                     (hit._0C & 0xF) << 4,
                     (hit._0D & 0xF) << 4,
