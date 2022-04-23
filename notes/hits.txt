@@ -1,0 +1,66 @@
+FF: normal (no interaction, or blocked)
+0: climb ladder
+4: jump up to ledge
+5: climb up short ledge
+6: push a block
+7: jump off a ledge
+8: drop down off a ledge and hold on with left hand
+9: climbing wall (or climbing up/down onto it)
+B: crawl into a tunnel
+C: nothing? can walk around
+D: shove something away
+
+messing with block at 0x0152D0
+which is the hitbox responsible for letting you jump up the ledge at the edge of TTH (around -6713, -762, -3372)
+the offset is 0x50 + 0x812fd940 which is where it's loading the appropriate chunk of HITS.bin at the moment
+byte 0C [00]: any change = can no longer jump up
+0D [2F]:
+	00: can't jump up
+	2E: can jump up
+	20: you kinda float up
+	10: weird float up through the ledge
+	3F: you jump up past the ledge, gripping the air, and sinking down to the ledge
+	4F: can't jump up
+	47: can't jump up
+	43: can't jump up
+	40: same as 3F
+	this byre seems to be height or something
+0E [8E]:
+	00: you float up through the ledge again
+	FF: can't jump up
+	BF: can't jump up
+	9F: can't jump up
+	91: can't jump up
+	80: you jump up slightly above it
+0F [06]:
+	00: can't jump up
+	05: can't jump up
+	07: can't jump up
+	FF: can't jump up
+	seems like mask 3F is "# funcs"
+	46: can't jump up
+	86: no change
+	C6: can't jump up
+	0x11 has a special meaning but again, can't jump up
+10 [FFFF]:
+	0000: can't jump up
+	FFFE: no change
+	FFF0: no change
+	FF00: no change
+	8000: no change
+	7FFF: no change
+	0001: can't jump up
+	00FF: no change
+	007F: no change
+	003F: no change
+	001F: no change
+	000F: no change
+	0007: no change
+	0003: no change
+	0002: no change
+12 [0000]:
+	FFFF: no change
+	1111: no change
+
+these blocks are involved with intersectPoint
+they're not so much boxes as lines

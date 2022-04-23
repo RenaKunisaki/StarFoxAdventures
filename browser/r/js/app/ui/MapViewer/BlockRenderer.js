@@ -268,7 +268,6 @@ export default class BlockRenderer {
             gx.setModelViewMtx(mv);
             gl.enable(gl.POLYGON_OFFSET_FILL);
             gl.polygonOffset(-10, 10);
-            //XXX this still doesn't work perfectly
         });
 
         for(let i=0; i<block.hits.length; i++) {
@@ -302,11 +301,49 @@ export default class BlockRenderer {
                 if(v1[2] < v2[2]) { v1[2] -= d; v2[2] += d; }
                 else { v2[2] -= d; v1[2] += d; }
             }
-            batch.addVertices(...makeBox(gl, v1, v2, id, [
-                    (hit._0C & 0xF) << 4,
-                    (hit._0D & 0xF) << 4,
-                    0xC0,
-                    0xC0 ]));
+            //XXX these are lines, not boxes.
+            //drawing lines here is difficult because of course
+            //gl.LINES is basically worthless since it doesn't
+            //guarantee a size greater than 1px.
+            //we can either try to figure out the math to generate a
+            //plane from a normal vector and draw one box to simulate
+            //the line, or fake it by drawing a bunch of boxes along
+            //the line...
+            //if we rotated the boxes this might not look too bad.
+            //but then we'd just be doing the same plane-from-normal thing.
+            //also this is super inefficient and seems to be making some
+            //lines disappear entirely.
+            const length = Math.sqrt(((hit.x1+hit.x2)**2) +
+                ((hit.y1+hit.y2)**2) + ((hit.z1+hit.z2)**2));
+            const segs = Math.max(1, Math.round(length / 64));
+            const mX = (v2[0] - v1[0]) / segs;
+            const mY = (v2[1] - v1[1]) / segs;
+            const mZ = (v2[2] - v1[2]) / segs;
+            let vA = [v1[0], v1[1], v1[2]];
+            for(let iSeg=1; iSeg<segs; iSeg++) {
+                let vB = [vA[0] + mX, vA[1] + mY, vA[2] + mZ];
+                batch.addVertices(...makeBox(gl, vA, vB, id, [
+                        (hit._0C & 0xF) << 4,
+                        (hit._0D & 0xF) << 4,
+                        0xC0,
+                        0xC0 ]));
+                vA = vB;
+            }
+
+            //or there's this approach which is probably closer to right
+            //but matrix maths hurt my brain
+            /*let vA = vec3.fromValues(...v1);
+            let vB = vec3.fromValues(...v2);
+            let M = mat4.create();
+            mat4.targetTo(M, vec3.fromValues(...v1),
+                vec3.fromValues(...v2), vec3.fromValues(0, -1, 0));
+            vec3.transformMat4(vA, vA, M);
+            vec3.transformMat4(vB, vB, M);
+            batch.addVertices(...makeBox(gl, vA, vB, id, [
+                (hit._0C & 0xF) << 4,
+                (hit._0D & 0xF) << 4,
+                0xC0,
+                0xC0 ]));*/
         }
 
         batch.addFunction(() => {
