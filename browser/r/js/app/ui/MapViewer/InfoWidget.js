@@ -52,6 +52,14 @@ export default class InfoWidget {
             E.tr(E.th(null, `Hit Tri #${info.idx}`, {colspan:2})),
             E.tr( E.th(null, "Block"), E.td('string', block.header.name) ),
             E.tr(
+                E.th(null, "Offset"),
+                E.td('hex', `0x${hex(poly.offset, 6)}`),
+            ),
+            E.tr(
+                E.th(null, "Idx"),
+                E.td('hex', poly.index),
+            ),
+            E.tr(
                 E.th(null, "Vtxs"),
                 E.td('string', `${poly.vtxs[0]}, ${poly.vtxs[1]}, ${poly.vtxs[2]}`),
             ),
@@ -59,7 +67,7 @@ export default class InfoWidget {
                 E.th(null, "ID"),
                 E.td('hex', `0x${hex(poly._06, 4)}`),
             ),
-            E.tr(E.th(null, `Group (#${poly.groupIdx})`, {colspan:2})),
+            E.tr(E.th(null, `Hit Group #${poly.groupIdx}`, {colspan:2})),
             ...this._makeBlockPolyGroupInfo(block, poly.group),
         ];
         this._tbl.append(...rows);
@@ -148,6 +156,7 @@ export default class InfoWidget {
         const group = info.group;
         const rows = [
             E.tr(E.th(null, `Hit Group #${info.idx}`, {colspan:2})),
+            E.tr( E.th(null, "Block"), E.td('string', block.header.name) ),
             ...this._makeBlockPolyGroupInfo(block, group),
         ];
         this._tbl.append(...rows);
@@ -158,7 +167,14 @@ export default class InfoWidget {
         const sy    = Math.abs(group.y1 - group.y2);
         const sz    = Math.abs(group.z1 - group.z2);
         return [
-            E.tr( E.th(null, "Block"), E.td('string', block.header.name) ),
+            E.tr(
+                E.th(null, "Offset"),
+                E.td('hex', `0x${hex(group.offset, 6)}`),
+            ),
+            E.tr(
+                E.th(null, "Idx"),
+                E.td('hex', group.index),
+            ),
             E.tr(
                 E.th(null, "ID"),
                 E.td('hex', `0x${hex(group.id, 2)}`),

@@ -127,12 +127,18 @@ export default class Block {
         this.polygons   = [];
         this.polyGroups = [];
         for(let i=0; i<this.header.nPolygons; i++) {
-            this.polygons.push(GCPolygon.fromBytes(view,
-                offs + this.header.GCpolygons + (i * GCPolygon.size)));
+            const offset = offs + this.header.GCpolygons + (i * GCPolygon.size);
+            const poly   = GCPolygon.fromBytes(view, offset);
+            poly.offset  = offset;
+            poly.index   = i;
+            this.polygons.push(poly);
         }
         for(let i=0; i<this.header.nPolyGroups; i++) {
-            this.polyGroups.push(PolygonGroup.fromBytes(view,
-                offs + this.header.polygonGroups + (i * PolygonGroup.size)));
+            const offset = offs + this.header.polygonGroups + (i * PolygonGroup.size);
+            const group  = PolygonGroup.fromBytes(view, offset);
+            group.offset = offset;
+            group.index  = i;
+            this.polyGroups.push(group);
         }
         for(let i=0; i<this.header.nPolyGroups-1; i++) {
             const group = this.polyGroups[i];
