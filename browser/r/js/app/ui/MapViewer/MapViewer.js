@@ -465,7 +465,6 @@ export default class MapViewer {
     _drawHitPolys() {
         /** Draw hit detect polygons. */
         const gx = this.gx;
-        const gl = this.gx.gl;
 
         if(this._isDrawingForPicker) return;
         if(this._hitPolyBatch) {
@@ -477,79 +476,45 @@ export default class MapViewer {
         };
         const batch = new RenderBatch(gx);
         this._hitPolyBatch = batch;
+        const batches = [];
 
         //blending on, face culling off
         batch.addFunction(() => { gx.disableTextures(GX.BlendMode.BLEND, false) });
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF) || !block.polygons) continue;
-            batch.addFunction(() => { this._setMtxForBlock(block) });
-            batch.addFunction(
-                this._blockRenderer.renderCollisionMesh(block, params));
+            batches.push(this._blockRenderer.renderCollisionMesh(block, params));
         }
+
+        batch.addBatches(...batches);
         gx.executeBatch(batch);
     }
 
     _drawPolyGroups() {
         /** Draw poly group bounds. */
         const gx = this.gx;
-        const gl = this.gx.gl;
 
         if(this._isDrawingForPicker) return;
         if(this._polyGroupBatch) {
             gx.executeBatch(this._polyGroupBatch);
             return;
         }
+        const params = {
+            isPicker: this._isDrawingForPicker,
+        };
         const batch = new RenderBatch(gx);
         this._polyGroupBatch = batch;
+        const batches = [];
 
         //blending on, face culling off
         batch.addFunction(() => { gx.disableTextures(GX.BlendMode.BLEND, false) });
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF) || !block.polyGroups) continue;
-            batch.addFunction(() => { this._setMtxForBlock(block) });
-
-            let vtxs = [gl.TRIANGLES];
-            vtxs.length += block.polyGroups.length * 36;
-            let iVtx = 1;
-            for(let group of block.polyGroups) {
-                const color = [
-                    //neither of these work well. they're nearly always 0.
-                    Math.trunc((((group.id >> 5) & 0x07) / 7) * 255),
-                    Math.trunc((((group.id >> 2) & 0x07) / 7) * 255),
-                    Math.trunc((((group.id >> 0) & 0x03) / 3) * 255),
-                    //Math.trunc((((group.flags >> 11) & 0x1F) / 31) * 255),
-                    //Math.trunc((((group.flags >>  5) & 0x3F) / 63) * 255),
-                    //Math.trunc((((group.flags >>  0) & 0x1F) / 31) * 255),
-                    0x40];
-                let box = makeBox(gl,
-                    [group.x1, group.y1, group.z1],
-                    [group.x2, group.y2, group.z2],
-                    -1, 0x40);
-                //box.shift(); //remove TRIANGLES
-                //vtxs.splice(iVtx, 36, ...box);
-                //iVtx += 36;
-                //console.log("polyGroup",group, box);
-                batch.addVertices(...box);
-            }
-            //batch.addVertices(...vtxs);
+            batches.push(this._blockRenderer.renderPolyGroups(block, params));
         }
+        batch.addBatches(...batches);
         gx.executeBatch(batch);
-    }
-
-    _setMtxForBlock(block) {
-        /** Set the ModelView matrix to position at a block.
-         *  @param {MapBlock} block Block to position at.
-         */
-        let mv = mat4.clone(this.gx.context.matModelView);
-        if(block) {
-            const offsX = block.x*MAP_CELL_SIZE;
-            const offsY = block.header.yOffset;
-            const offsZ = block.z*MAP_CELL_SIZE;
-            mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
-        }
-        this.gx.setModelViewMtx(mv);
     }
 
     async _getObjAt(x, y) {

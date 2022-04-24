@@ -216,6 +216,20 @@ export default class BlockRenderer {
         return this._batches[key];
     }
 
+    setMtxForBlock(block) {
+        /** Set the ModelView matrix to position at a block.
+         *  @param {MapBlock} block Block to position at.
+         */
+        let mv = mat4.clone(this.gx.context.matModelView);
+        if(block) {
+            const offsX = block.x*MAP_CELL_SIZE;
+            const offsY = block.header.yOffset;
+            const offsZ = block.z*MAP_CELL_SIZE;
+            mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
+        }
+        this.gx.setModelViewMtx(mv);
+    }
+
     render(block, whichStream, params={}) {
         /** Render the block.
          *  @param {Block} block The block to render.
@@ -298,9 +312,7 @@ export default class BlockRenderer {
         }
 
         batch.addBatches(...batches);
-        batch.addFunction(() => {
-            gl.disable(gl.POLYGON_OFFSET_FILL);
-        })
+        batch.addFunction(() => { gl.disable(gl.POLYGON_OFFSET_FILL) });
         return batch;
     }
 
@@ -308,9 +320,10 @@ export default class BlockRenderer {
         /** Render the block's collision mesh. */
         const gx = this.gx;
         const gl = this.gx.gl;
-
         const batch = this._getBatch('collision', block, params);
         if(!batch.isEmpty) return batch; //already set up
+
+        batch.addFunction(() => { this.setMtxForBlock(block) });
 
         const vtxs = [gl.TRIANGLES];
         for(let poly of block.polygons) {
@@ -337,8 +350,36 @@ export default class BlockRenderer {
         return batch;
     }
 
+    renderPolyGroups(block, params) {
+        /** Render the block's polygon group bounding boxes. */
+        const gx = this.gx;
+        const gl = this.gx.gl;
+        const batch = this._getBatch('polygroups', block, params);
+        if(!batch.isEmpty) return batch; //already set up
+
+        batch.addFunction(() => { this.setMtxForBlock(block) });
+
+        for(let group of block.polyGroups) {
+            /*const color = [
+                //neither of these work well. they're nearly always 0.
+                Math.trunc((((group.id >> 5) & 0x07) / 7) * 255),
+                Math.trunc((((group.id >> 2) & 0x07) / 7) * 255),
+                Math.trunc((((group.id >> 0) & 0x03) / 3) * 255),
+                //Math.trunc((((group.flags >> 11) & 0x1F) / 31) * 255),
+                //Math.trunc((((group.flags >>  5) & 0x3F) / 63) * 255),
+                //Math.trunc((((group.flags >>  0) & 0x1F) / 31) * 255),
+                0x40];*/
+            let box = makeBox(gl,
+                [group.x1, group.y1, group.z1],
+                [group.x2, group.y2, group.z2],
+                -1, 0x40);
+            batch.addVertices(...box);
+        }
+        return batch;
+    }
+
     _setInitialGxParams() {
-        //set default vtx formats
+        //set default vtx formats for rendering block geometry
         this.gx.cp.setReg(CPReg.ARRAY_STRIDE_VTXS,  6); //sizeof(vec3s)
         this.gx.cp.setReg(CPReg.ARRAY_STRIDE_COLOR, 2); //sizeof(u16)
         for(let i=0; i<8; i++) {
