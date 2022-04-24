@@ -27,11 +27,14 @@ export default class InfoWidget {
             return;
         }
 
+        console.log("show", info);
         switch(info.type) {
-            case 'blockHit':      this._showBlockHit(info);   break;
-            case 'mapBlockDlist': this._showBlockDlist(info); break;
-            case 'object':        this._showObject(info);     break;
-            case 'warp':          this._showWarp(info);       break;
+            case 'blockHit':      this._showBlockHit(info);       break;
+            case 'collisionMesh': this._showBlockCollision(info); break;
+            case 'mapBlockDlist': this._showBlockDlist(info);     break;
+            case 'object':        this._showObject(info);         break;
+            case 'polyGroup':     this._showBlockPolyGroup(info); break;
+            case 'warp':          this._showWarp(info);           break;
             default:
                 this._tbl.append(E.tr(
                     E.th('error', `Unknown object type: "${info.type}"`),
@@ -39,11 +42,31 @@ export default class InfoWidget {
         }
     }
 
+    _showBlockCollision(info) {
+        /** Display info about a map block collision triangle.
+         *  @param {object} info The block info.
+         */
+        const block = info.block;
+        const poly  = info.poly;
+        const rows = [
+            E.tr(E.th(null, `Hit Tri #${info.idx}`, {colspan:2})),
+            E.tr( E.th(null, "Block"), E.td('string', block.header.name) ),
+            E.tr(
+                E.th(null, "Vtxs"),
+                E.td('string', `${poly.vtxs[0]}, ${poly.vtxs[1]}, ${poly.vtxs[2]}`),
+            ),
+            E.tr(
+                E.th(null, "ID"),
+                E.td('hex', `0x${hex(poly._06, 4)}`),
+            ),
+        ];
+        this._tbl.append(...rows);
+    }
+
     _showBlockDlist(info) {
         /** Display info about a map block display list.
          *  @param {object} info The block info.
          */
-        console.log("show block dlist", info);
         const block = info.block;
         const rows = [
             E.tr(E.th(null, `Block "${block.header.name}"`, {colspan:2})),
@@ -91,12 +114,74 @@ export default class InfoWidget {
         this._tbl.append(...rows);
     }
 
+    _showBlockHit(info) {
+        /** Display info about a HITS.bin entry.
+         *  @param {object} info The block info.
+         */
+        const hit = info.hit;
+        const sx  = Math.abs(hit.x1 - hit.x2);
+        const sy  = Math.abs(hit.y1 - hit.y2);
+        const sz  = Math.abs(hit.z1 - hit.z2);
+        const rows = [
+            E.tr(E.th(null, `Hit #${info.idx}`, {colspan:2})),
+            E.tr( E.th(null, "Block"), E.td('string', info.block.header.name) ),
+            E.tr( E.th(null, "X"), E.td('float', `${hit.x1} - ${hit.x2} (${sx})`) ),
+            E.tr( E.th(null, "Y"), E.td('float', `${hit.y1} - ${hit.y2} (${sy})`) ),
+            E.tr( E.th(null, "Z"), E.td('float', `${hit.z1} - ${hit.z2} (${sz})`) ),
+            E.tr( E.th(null, "Offset"), E.td('hex', `0x${hex(info.offset,6)}`) ),
+            E.tr( E.th(null, "Unk0C"), E.td('hex', `0x${hex(hit._0C,2)}`) ),
+            E.tr( E.th(null, "Unk0D"), E.td('hex', `0x${hex(hit._0D,2)}`) ),
+            E.tr( E.th(null, "Unk0E"), E.td('hex', `0x${hex(hit.flags0E,2)}`) ),
+            E.tr( E.th(null, "Unk0F"), E.td('hex', `0x${hex(hit.flags,2)}`) ),
+            E.tr( E.th(null, "Points"), E.td('int', `${hit.iPoint[0]}, ${hit.iPoint[1]}`) ),
+        ];
+        this._tbl.append(...rows);
+    }
+
+    _showBlockPolyGroup(info) {
+        /** Display info about a map block collision group.
+         *  @param {object} info The block info.
+         */
+        const block = info.block;
+        const group = info.group;
+        const sx    = Math.abs(group.x1 - group.x2);
+        const sy    = Math.abs(group.y1 - group.y2);
+        const sz    = Math.abs(group.z1 - group.z2);
+        const rows = [
+            E.tr(E.th(null, `Hit Group #${info.idx}`, {colspan:2})),
+            E.tr( E.th(null, "Block"), E.td('string', block.header.name) ),
+            E.tr(
+                E.th(null, "ID"),
+                E.td('hex', `0x${hex(group.id, 2)}`),
+            ),
+            E.tr(
+                E.th(null, "1stPoly"),
+                E.td('int', group.firstPolygon),
+            ),
+            E.tr( E.th(null, "X"), E.td('float', `${group.x1} - ${group.x2} (${sx})`) ),
+            E.tr( E.th(null, "Y"), E.td('float', `${group.y1} - ${group.y2} (${sy})`) ),
+            E.tr( E.th(null, "Z"), E.td('float', `${group.z1} - ${group.z2} (${sz})`) ),
+            E.tr(
+                E.th(null, "Flags"),
+                E.td('hex', `0x${hex(group.flags, 4)}`),
+            ),
+            E.tr(
+                E.th(null, "Unk0E"),
+                E.td('hex', `0x${hex(group._0E, 2)}${hex(group._0F, 2)}`),
+            ),
+            E.tr(
+                E.th(null, "Unk11"),
+                E.td('hex', `0x${hex(group._11, 2)}`),
+            ),
+        ];
+        this._tbl.append(...rows);
+    }
+
     _showObject(info) {
         /** Display info about a game object instance.
          *  @param {object} info The object info.
          *  @note `info.obj` should be a RomListEntry.
          */
-        console.log("show obj", info);
         const entry = info.obj;
         const dll   = entry.object.dll;
         const rows = [
@@ -138,7 +223,6 @@ export default class InfoWidget {
         /** Display info about a WARPTAB entry.
          *  @param {object} info The warp info.
          */
-        console.log("show warp", info);
         const warp = info.warp;
         const rows = [
             E.tr(E.th(null, `Warp #0x${hex(info.idx,2)}`, {colspan:2})),
@@ -150,31 +234,6 @@ export default class InfoWidget {
                 E.td('int',
                     `${Math.round((warp.xRot / 65536)*360)}\u00B0 (0x${hex(warp.xRot,4)})`),
             ),
-        ];
-        this._tbl.append(...rows);
-    }
-
-    _showBlockHit(info) {
-        /** Display info about a HITS.bin entry.
-         *  @param {object} info The warp info.
-         */
-        console.log("show hit", info);
-        const hit = info.hit;
-        const sx  = Math.abs(hit.x1 - hit.x2);
-        const sy  = Math.abs(hit.y1 - hit.y2);
-        const sz  = Math.abs(hit.z1 - hit.z2);
-        const rows = [
-            E.tr(E.th(null, `Hit #${info.idx}`, {colspan:2})),
-            E.tr( E.th(null, "X"), E.td('float', `${hit.x1} - ${hit.x2} (${sx})`) ),
-            E.tr( E.th(null, "Y"), E.td('float', `${hit.y1} - ${hit.y2} (${sy})`) ),
-            E.tr( E.th(null, "Z"), E.td('float', `${hit.z1} - ${hit.z2} (${sz})`) ),
-            E.tr( E.th(null, "Block"), E.td('string', info.block.header.name) ),
-            E.tr( E.th(null, "Offset"), E.td('hex', `0x${hex(info.offset,6)}`) ),
-            E.tr( E.th(null, "Unk0C"), E.td('hex', `0x${hex(hit._0C,2)}`) ),
-            E.tr( E.th(null, "Unk0D"), E.td('hex', `0x${hex(hit._0D,2)}`) ),
-            E.tr( E.th(null, "Unk0E"), E.td('hex', `0x${hex(hit.flags0E,2)}`) ),
-            E.tr( E.th(null, "Unk0F"), E.td('hex', `0x${hex(hit.flags,2)}`) ),
-            E.tr( E.th(null, "Points"), E.td('int', `${hit.iPoint[0]}, ${hit.iPoint[1]}`) ),
         ];
         this._tbl.append(...rows);
     }

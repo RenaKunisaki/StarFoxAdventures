@@ -500,8 +500,6 @@ export default class MapViewer {
     _drawPolyGroups() {
         /** Draw poly group bounds. */
         const gx = this.gx;
-
-        if(this._isDrawingForPicker) return;
         const params = {
             isPicker: this._isDrawingForPicker,
         };
