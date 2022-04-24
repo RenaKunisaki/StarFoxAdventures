@@ -255,21 +255,21 @@ export default class BlockRenderer {
                 true); //alpha test enabled
             //blend off, face culling off
             gx.disableTextures(GX.BlendMode.NONE, false);
-            let mv = mat4.clone(gx.context.matModelView);
-            mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
-            gx.setModelViewMtx(mv);
-            gl.enable(gl.POLYGON_OFFSET_FILL);
-            gl.polygonOffset(-10, 10);
+
         });
         else batch.addFunction(() => {
             //blend on, face culling off
             gx.disableTextures(GX.BlendMode.BLEND, false);
+        });
+
+        //slightly less efficient but oh well, less repetition
+        batch.addFunction(() => {
             let mv = mat4.clone(gx.context.matModelView);
             mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
             gx.setModelViewMtx(mv);
             gl.enable(gl.POLYGON_OFFSET_FILL);
-            gl.polygonOffset(-10, 10);
-        });
+            gl.polygonOffset(-20, 20);
+        })
 
         const batches = [];
         for(let i=0; i<block.hits.length; i++) {
@@ -285,10 +285,7 @@ export default class BlockRenderer {
                 });
             }
             const color = [
-                (hit._0C & 0xF) << 4,
-                (hit._0D & 0xF) << 4,
-                0xC0,
-                0xC0 ];
+                (hit._0C & 0xF) << 4, (hit._0D & 0xF) << 4, 0xC0, 0xC0 ];
             const box = Box.fromLine(this.gx,
                 [hit.x1,hit.y1,hit.z1], //p1
                 [hit.x2,hit.y2,hit.z2], //p2
@@ -301,7 +298,6 @@ export default class BlockRenderer {
         batch.addFunction(() => {
             gl.disable(gl.POLYGON_OFFSET_FILL);
         })
-
         this.gx.executeBatch(batch);
         return batch;
     }
