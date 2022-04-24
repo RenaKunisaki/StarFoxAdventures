@@ -424,7 +424,7 @@
     </struct>
 
     <struct name="LineHit">
-        <!-- XXX same as HitsBinEntry? -->
+        <!-- XXX same as HitsBinEntry? used? -->
         <field type="short" />
         <field type="short" />
         <field type="undefined" />

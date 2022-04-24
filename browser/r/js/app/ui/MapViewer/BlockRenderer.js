@@ -5,6 +5,7 @@ import RenderBatch from '../gl/gx/RenderBatch.js';
 import GX from '../gl/gx/GX.js';
 import { makeBox } from '../gl/GlUtil.js';
 import { MAP_CELL_SIZE } from '../../../game/Game.js';
+import Box from '../gl/Model/Box.js';
 
 //struct types
 let HitsBinEntry;
@@ -270,6 +271,7 @@ export default class BlockRenderer {
             gl.polygonOffset(-10, 10);
         });
 
+        const batches = [];
         for(let i=0; i<block.hits.length; i++) {
             const hit = block.hits[i];
             let id = 0;
@@ -282,39 +284,20 @@ export default class BlockRenderer {
                     hit:    hit,
                 });
             }
-
-            //holy fucking shitting cuntfuck this is stupid.
-            //all because webgl doesn't support line widths other
-            //than 1 because of ~FUCKING MICROSOFT~
-            //thank god for this https://gamedev.stackexchange.com/a/149044
-            //that FINALLY explained how to do this shit.
-            let   v1 = vec3.fromValues(hit.x1,hit.y1,hit.z1);
-            let   v2 = vec3.fromValues(hit.x2,hit.y2,hit.z2);
-            const length = vec3.distance(v1, v2);
-
-            let vX = vec3.fromValues(v2[0]-v1[0], v2[1]-v1[1], v2[2]-v1[2]);
-            vec3.normalize(vX, vX);
-            let vY = vec3.fromValues(0,0,1);
-            vec3.cross(vY, vY, vX);
-            vec3.normalize(vY, vY);
-            let vZ = vec3.create();
-            vec3.cross(vZ, vX, vY);
-            let M = mat4.fromValues(
-                vX[0], vX[1], vX[2], 0,
-                vY[0], vY[1], vY[2], 0,
-                vZ[0], vZ[1], vZ[2], 0,
-                v1[0], v1[1], v1[2], 1
-            );
-            let vA = vec3.fromValues(0, -1, -1);
-            let vB = vec3.fromValues(length,  1, 1);
-
-            batch.addVertices(...makeBox(gl, vA, vB, id, [
+            const color = [
                 (hit._0C & 0xF) << 4,
                 (hit._0D & 0xF) << 4,
                 0xC0,
-                0xC0 ], M));
+                0xC0 ];
+            const box = Box.fromLine(this.gx,
+                [hit.x1,hit.y1,hit.z1], //p1
+                [hit.x2,hit.y2,hit.z2], //p2
+                [0.5, 1, 1] //size
+                ).setColors(color).setId(id);
+            batches.push(box.batch);
         }
 
+        batch.addBatches(...batches);
         batch.addFunction(() => {
             gl.disable(gl.POLYGON_OFFSET_FILL);
         })

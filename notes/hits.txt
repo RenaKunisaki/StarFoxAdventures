@@ -1,3 +1,10 @@
+HITS.tab is u32 offsets into HITS.bin
+size is next offset - this offset
+indexed by field 0x6, 0x8 of TrkEntryMap, which appears to be just the block index
+these fields are named trkBlkTabMax, trkBlkTabEntry, so this must be from TRKBLK.tab
+entries are 0x14 bytes
+
+player terrain interaction types:
 FF: normal (no interaction, or blocked)
 0: climb ladder
 4: jump up to ledge
@@ -64,3 +71,10 @@ byte 0C [00]: any change = can no longer jump up
 
 these blocks are involved with intersectPoint
 they're not so much boxes as lines
+
+probably there isn't a direct mapping between these settings and how the player responds to the line. instead there would be flags like "can player pass this", "should player do something when passing this" etc, and what to do will depend on the situation. eg if "can pass + should interact" and it's a short wall, we climb; a high wall, we jump up; a cliff, we jump down...
+
+the map also has hit poly meshes and poly groups which probably define things like "is this a ladder", "what sound does this make when you smack it with the staff", "does this hurt to touch..."
+even the shaders could potentially define interactions?
+
+judging from some of their placements, some are also likely meant to only affect enemies, eg to stop them from chasing you into the water or straying too far from their origins, especially if it would cause them to follow you off the map

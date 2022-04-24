@@ -56,6 +56,7 @@ export function validVector(v) {
     return v;
 }
 
+//XXX replace these with Box class
 export function makeCube(gl, x, y, z, scale, id, colors=null) {
     /** Generate a cube.
      *  @param {WebGL2RenderingContext} gl WebGL instance to use.
