@@ -72,7 +72,7 @@ export function makeCube(gl, x, y, z, scale, id, colors=null) {
         id, colors);
 }
 
-export function makeBox(gl, p1, p2, id, colors=null) {
+export function makeBox(gl, p1, p2, id, colors=null, mtx=null) {
     /** Generate a box between two points.
      *  @param {WebGL2RenderingContext} gl WebGL instance to use.
      *  @param {Array} p1 Position [x,y,z] of first corner.
@@ -84,15 +84,21 @@ export function makeBox(gl, p1, p2, id, colors=null) {
     const [x1, y1, z1] = p1;
     const [x2, y2, z2] = p2;
     const vtxPositions = [ //x, y, z
-        [x2, y2, z2],
-        [x1, y2, z2],
-        [x2, y2, z1],
-        [x1, y2, z1],
-        [x2, y1, z2],
-        [x1, y1, z2],
-        [x1, y1, z1],
-        [x2, y1, z1],
+        vec3.fromValues(x2, y2, z2),
+        vec3.fromValues(x1, y2, z2),
+        vec3.fromValues(x2, y2, z1),
+        vec3.fromValues(x1, y2, z1),
+        vec3.fromValues(x2, y1, z2),
+        vec3.fromValues(x1, y1, z2),
+        vec3.fromValues(x1, y1, z1),
+        vec3.fromValues(x2, y1, z1),
     ];
+    if(mtx) {
+        for(let v of vtxPositions) {
+            vec3.transformMat4(v, v, mtx);
+        }
+    }
+
     let alpha = 0xCF;
     if(typeof(colors) == 'number') {
         alpha = colors;
