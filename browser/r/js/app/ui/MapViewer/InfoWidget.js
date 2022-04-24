@@ -59,6 +59,8 @@ export default class InfoWidget {
                 E.th(null, "ID"),
                 E.td('hex', `0x${hex(poly._06, 4)}`),
             ),
+            E.tr(E.th(null, `Group (#${poly.groupIdx})`, {colspan:2})),
+            ...this._makeBlockPolyGroupInfo(block, poly.group),
         ];
         this._tbl.append(...rows);
     }
@@ -144,11 +146,18 @@ export default class InfoWidget {
          */
         const block = info.block;
         const group = info.group;
+        const rows = [
+            E.tr(E.th(null, `Hit Group #${info.idx}`, {colspan:2})),
+            ...this._makeBlockPolyGroupInfo(block, group),
+        ];
+        this._tbl.append(...rows);
+    }
+
+    _makeBlockPolyGroupInfo(block, group) {
         const sx    = Math.abs(group.x1 - group.x2);
         const sy    = Math.abs(group.y1 - group.y2);
         const sz    = Math.abs(group.z1 - group.z2);
-        const rows = [
-            E.tr(E.th(null, `Hit Group #${info.idx}`, {colspan:2})),
+        return [
             E.tr( E.th(null, "Block"), E.td('string', block.header.name) ),
             E.tr(
                 E.th(null, "ID"),
@@ -174,7 +183,6 @@ export default class InfoWidget {
                 E.td('hex', `0x${hex(group._11, 2)}`),
             ),
         ];
-        this._tbl.append(...rows);
     }
 
     _showObject(info) {

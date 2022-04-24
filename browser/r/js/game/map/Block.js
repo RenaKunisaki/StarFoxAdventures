@@ -134,6 +134,14 @@ export default class Block {
             this.polyGroups.push(PolygonGroup.fromBytes(view,
                 offs + this.header.polygonGroups + (i * PolygonGroup.size)));
         }
+        for(let i=0; i<this.header.nPolyGroups-1; i++) {
+            const group = this.polyGroups[i];
+            for(let iPoly=group.firstPolygon;
+            iPoly<this.polyGroups[i+1].firstPolygon; iPoly++) {
+                this.polygons[iPoly].groupIdx = i;
+                this.polygons[iPoly].group = group;
+            }
+        }
     }
 
     _loadDlists(view) {
