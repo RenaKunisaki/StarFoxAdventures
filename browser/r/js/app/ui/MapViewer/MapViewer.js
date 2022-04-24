@@ -14,6 +14,7 @@ import RenderBatch from "../gl/gx/RenderBatch.js";
 import EventHandler from "./EventHandler.js";
 import ObjectRenderer from "./ObjectRenderer.js";
 import { makeCube, makeBox } from "../gl/GlUtil.js";
+import GameObject from "../../../game/GameObject.js";
 
 export default class MapViewer {
     /** Renders map geometry. */
@@ -105,11 +106,7 @@ export default class MapViewer {
 
     _reset() {
         /** Reset viewer to display another map. */
-        this._warpBatch        = null;
-        this._warpBatchPicker  = null;
-        this._hitPolyBatch     = null;
-        this._polyGroupBatch   = null;
-        this._blockBoundsBatch = null;
+        this._batches = [];
         this._isFirstDrawAfterLoadingMap = true;
 
         if(!this.context) return; //don't start if not initialized
@@ -139,6 +136,20 @@ export default class MapViewer {
         this.grid.refresh();
         this.redraw();
         this._updatedStats = false;
+    }
+
+    _getBatch(name, params) {
+        let key = [name];
+        for(const [k,v] of Object.entries(params)) {
+            key.push(`${k}:${v}`);
+        }
+        key = key.join(',');
+        let batch = this._batches[key];
+        if(!batch) {
+            batch = new RenderBatch(this.gx);
+            this._batches[key] = batch;
+        }
+        return batch;
     }
 
     async _loadMap() {
@@ -336,17 +347,29 @@ export default class MapViewer {
 
     _drawBlockHits() {
         /** Draw the hit lines for each block. */
-        const batches = [];
+        const gx = this.gx;
+        const gl = this.gx.gl;
         const params = {
             isPicker: this._isDrawingForPicker,
         };
-        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
-            const block = this.map.blocks[iBlock];
-            if(!block || (block.mod >= 0xFF)) continue;
-            batches.push(this._blockRenderer.renderHits(block, params));
+        const batch = this._getBatch('blockHits', params);
+        if(batch.isEmpty) {
+            const batches = [];
+            if(!this._isDrawingForPicker) batch.addFunction(() => {
+                //blending on, face culling off
+                gx.disableTextures(GX.BlendMode.BLEND, false);
+            });
+            else batch.addFunction(() => {
+                //blending off, face culling off
+                gx.disableTextures(GX.BlendMode.NONE, false);
+            });
+            for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+                const block = this.map.blocks[iBlock];
+                if(!block || (block.mod >= 0xFF)) continue;
+                batches.push(this._blockRenderer.renderHits(block, params));
+            }
+            batch.addBatches(...batches);
         }
-        const batch = new RenderBatch(this.gx);
-        batch.addBatches(...batches);
         this.gx.executeBatch(batch);
     }
 
@@ -356,34 +379,33 @@ export default class MapViewer {
         const gl = this.gx.gl;
         if(this._isDrawingForPicker) return;
 
-        let batch = this._blockBoundsBatch;
-        if(batch) {
-            this.gx.executeBatch(batch);
-            return batch;
-        }
-        batch = new RenderBatch(gx);
-        this._blockBoundsBatch = batch;
+        const params = {
+            isPicker: this._isDrawingForPicker,
+        };
+        const batch = this._getBatch('blockBounds', params);
+        if(batch.isEmpty) {
+            batch.addFunction(() => {
+                //blend on, face culling off
+                gx.disableTextures(GX.BlendMode.BLEND, false);
+                gx.setModelViewMtx(mat4.clone(gx.context.matModelView));
+            });
+            for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+                const block = this.map.blocks[iBlock];
+                if(!block || (block.mod >= 0xFF)) continue;
 
-        batch.addFunction(() => {
-            //blend on, face culling off
-            gx.disableTextures(GX.BlendMode.BLEND, false);
-            gx.setModelViewMtx(mat4.clone(gx.context.matModelView));
-        });
-        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
-            const block = this.map.blocks[iBlock];
-            if(!block || (block.mod >= 0xFF)) continue;
+                //top left
+                const x1 = (block.x * MAP_CELL_SIZE);
+                const y1 = (block && block.header) ? block.header.yMax :  1;
+                const z1 = block.z * MAP_CELL_SIZE;
 
-            //top left
-            const x1 = (block.x * MAP_CELL_SIZE);
-            const y1 = (block && block.header) ? block.header.yMax :  1;
-            const z1 = block.z * MAP_CELL_SIZE;
+                //bottom right
+                const x2 = (block.x+1) * MAP_CELL_SIZE;
+                const y2 = (block && block.header) ? block.header.yMin : -1;
+                const z2 = (block.z+1) * MAP_CELL_SIZE;
 
-            //bottom right
-            const x2 = (block.x+1) * MAP_CELL_SIZE;
-            const y2 = (block && block.header) ? block.header.yMin : -1;
-            const z2 = (block.z+1) * MAP_CELL_SIZE;
-
-            batch.addVertices(...makeBox(gl, [x1,y1,z1], [x2,y2,z2], -1, 0x80));
+                batch.addVertices(...makeBox(gl,
+                    [x1,y1,z1], [x2,y2,z2], -1, 0x80));
+            }
         }
         this.gx.executeBatch(batch);
         return batch;
@@ -394,59 +416,46 @@ export default class MapViewer {
         const gx = this.gx;
         const gl = this.gx.gl;
 
-        let mv = mat4.clone(this.gx.context.matModelView);
-        this.gx.setModelViewMtx(mv);
+        const params = {
+            isPicker: this._isDrawingForPicker,
+        };
+        const batch = this._getBatch('warps', params);
+        if(batch.isEmpty) {
+            let mv = mat4.clone(this.gx.context.matModelView);
+            this.gx.setModelViewMtx(mv);
 
-        if(this._isDrawingForPicker) {
-            if(this._warpBatchPicker) {
-                this.gx.executeBatch(this._warpBatchPicker);
-                return;
-            }
-        }
-        else if(this._warpBatch) {
-            if(this._warpBatch) {
-                this.gx.executeBatch(this._warpBatch);
-                return;
-            }
-        }
-
-        const batch = new RenderBatch(this.gx);
-        if(this._isDrawingForPicker) {
-            this._warpBatchPicker = batch;
-            batch.addFunction(() => {
+            if(this._isDrawingForPicker) batch.addFunction(() => {
                 gl.disable(gl.BLEND);
                 gx.setBlendMode(GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
                     GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
                 //blend off, face culling off
                 gx.disableTextures(GX.BlendMode.NONE, false);
             });
-        }
-        else {
-            this._warpBatch = batch;
-            batch.addFunction(() => {
+            else batch.addFunction(() => {
                 //blend on, face culling off
                 gx.disableTextures(GX.BlendMode.BLEND, false);
                 gx.setModelViewMtx(mat4.clone(gx.context.matModelView));
             });
+            for(let [idx, warp] of Object.entries(this.game.warpTab)) {
+                const map = this.game.getMapAt(
+                    warp.layer, warp.pos.x, warp.pos.z);
+                if(map != this.map) continue;
+                const id = this.gx.addPickerObj({
+                    type: 'warp',
+                    warp: warp,
+                    idx:  idx,
+                });
+                const x = warp.pos.x - this.map.worldOrigin[0];
+                const y = warp.pos.y;
+                const z = warp.pos.z - this.map.worldOrigin[1];
+                batch.addVertices(...makeCube(
+                    gl, x, y, z, 10, id, [[0xFF, 0x00, 0x00, 0xC0]]));
+                //console.log("add warp", hex(idx), x, y, z, "orig", warp.pos);
+            }
+            batch.addVertices(...makeCube( //map origin
+                gl, this.map.worldOrigin[0], 0, this.map.worldOrigin[1],
+                10, -1, [[0x00, 0xFF, 0x00, 0xC0]]));
         }
-        for(let [idx, warp] of Object.entries(this.game.warpTab)) {
-            const map = this.game.getMapAt(warp.layer, warp.pos.x, warp.pos.z);
-            if(map != this.map) continue;
-            const id = this.gx.addPickerObj({
-                type: 'warp',
-                warp: warp,
-                idx:  idx,
-            });
-            const x = warp.pos.x - this.map.worldOrigin[0];
-            const y = warp.pos.y;
-            const z = warp.pos.z - this.map.worldOrigin[1];
-            batch.addVertices(...makeCube(
-                gl, x, y, z, 10, id, [[0xFF, 0x00, 0x00, 0xC0]]));
-            //console.log("add warp", hex(idx), x, y, z, "orig", warp.pos);
-        }
-        batch.addVertices(...makeCube( //map origin
-            gl, this.map.worldOrigin[0], 0, this.map.worldOrigin[1],
-            10, -1, [[0x00, 0xFF, 0x00, 0xC0]]));
         this.gx.executeBatch(batch);
     }
 
@@ -466,27 +475,25 @@ export default class MapViewer {
         /** Draw hit detect polygons. */
         const gx = this.gx;
 
-        if(this._isDrawingForPicker) return;
-        if(this._hitPolyBatch) {
-            gx.executeBatch(this._hitPolyBatch);
-            return;
-        }
         const params = {
             isPicker: this._isDrawingForPicker,
         };
-        const batch = new RenderBatch(gx);
-        this._hitPolyBatch = batch;
-        const batches = [];
+        const batch = this._getBatch('blockHitPolys', params);
+        if(batch.isEmpty) {
 
-        //blending on, face culling off
-        batch.addFunction(() => { gx.disableTextures(GX.BlendMode.BLEND, false) });
-        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
-            const block = this.map.blocks[iBlock];
-            if(!block || (block.mod >= 0xFF) || !block.polygons) continue;
-            batches.push(this._blockRenderer.renderCollisionMesh(block, params));
+            batch.addFunction(() => {
+                //blending on, face culling off
+                gx.disableTextures(GX.BlendMode.BLEND, false);
+            });
+            const batches = [];
+            for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+                const block = this.map.blocks[iBlock];
+                if(!block || (block.mod >= 0xFF) || !block.polygons) continue;
+                batches.push(this._blockRenderer.renderCollisionMesh(
+                    block, params));
+            }
+            batch.addBatches(...batches);
         }
-
-        batch.addBatches(...batches);
         gx.executeBatch(batch);
     }
 
@@ -495,25 +502,28 @@ export default class MapViewer {
         const gx = this.gx;
 
         if(this._isDrawingForPicker) return;
-        if(this._polyGroupBatch) {
-            gx.executeBatch(this._polyGroupBatch);
-            return;
-        }
         const params = {
             isPicker: this._isDrawingForPicker,
         };
-        const batch = new RenderBatch(gx);
-        this._polyGroupBatch = batch;
-        const batches = [];
+        const batch = this._getBatch('blockPolyGroups', params);
+        if(batch.isEmpty) {
+            if(!this._isDrawingForPicker) batch.addFunction(() => {
+                //blending on, face culling off
+                gx.disableTextures(GX.BlendMode.BLEND, false);
+            });
+            else batch.addFunction(() => {
+                //blending off, face culling off
+                gx.disableTextures(GX.BlendMode.NONE, false);
+            });
 
-        //blending on, face culling off
-        batch.addFunction(() => { gx.disableTextures(GX.BlendMode.BLEND, false) });
-        for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
-            const block = this.map.blocks[iBlock];
-            if(!block || (block.mod >= 0xFF) || !block.polyGroups) continue;
-            batches.push(this._blockRenderer.renderPolyGroups(block, params));
+            const batches = [];
+            for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
+                const block = this.map.blocks[iBlock];
+                if(!block || (block.mod >= 0xFF) || !block.polyGroups) continue;
+                batches.push(this._blockRenderer.renderPolyGroups(block, params));
+            }
+            batch.addBatches(...batches);
         }
-        batch.addBatches(...batches);
         gx.executeBatch(batch);
     }
 

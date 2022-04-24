@@ -272,7 +272,6 @@ export default class BlockRenderer {
                 true); //alpha test enabled
             //blend off, face culling off
             gx.disableTextures(GX.BlendMode.NONE, false);
-
         });
         else batch.addFunction(() => {
             //blend on, face culling off
@@ -291,8 +290,8 @@ export default class BlockRenderer {
         const batches = [];
         for(let i=0; i<block.hits.length; i++) {
             const hit = block.hits[i];
-            let id = 0;
-            if(this._isDrawingForPicker) {
+            let id = -1;
+            if(params.isPicker) {
                 id = gx.addPickerObj({
                     type:   'blockHit',
                     idx:    i,
@@ -326,13 +325,23 @@ export default class BlockRenderer {
         batch.addFunction(() => { this.setMtxForBlock(block) });
 
         const vtxs = [gl.TRIANGLES];
-        for(let poly of block.polygons) {
+        for(let iPoly=0; iPoly < block.polygons.length; iPoly++) {
+            const poly = block.polygons[iPoly];
             const positions = new DataView(block.vtxPositions);
             const color = [
                 Math.trunc((((poly._06 >> 11) & 0x1F) / 31) * 255),
                 Math.trunc((((poly._06 >>  5) & 0x3F) / 63) * 255),
                 Math.trunc((((poly._06 >>  0) & 0x1F) / 31) * 255),
                 0xC0];
+            let id = -1;
+            if(params.isPicker) {
+                id = gx.addPickerObj({
+                    type:   'collisionMesh',
+                    idx:    iPoly,
+                    block:  block,
+                    poly:   poly,
+                });
+            }
             for(let i=0; i<3; i++) {
                 let pIdx = poly.vtxs[i] * 6;
                 //division by 8 is hardcoded, not derived from POSSHFT
@@ -342,7 +351,7 @@ export default class BlockRenderer {
                         positions.getInt16(pIdx+2) / 8,
                         positions.getInt16(pIdx+4) / 8,
                     ],
-                    COL0: color, COL1: color, id: -1,
+                    COL0: color, COL1: color, id: id,
                 });
             }
         }
@@ -359,7 +368,8 @@ export default class BlockRenderer {
 
         batch.addFunction(() => { this.setMtxForBlock(block) });
 
-        for(let group of block.polyGroups) {
+        for(let iGroup=0; iGroup < block.polyGroups.length; iGroup++) {
+            const group = block.polyGroups[iGroup];
             /*const color = [
                 //neither of these work well. they're nearly always 0.
                 Math.trunc((((group.id >> 5) & 0x07) / 7) * 255),
@@ -369,10 +379,19 @@ export default class BlockRenderer {
                 //Math.trunc((((group.flags >>  5) & 0x3F) / 63) * 255),
                 //Math.trunc((((group.flags >>  0) & 0x1F) / 31) * 255),
                 0x40];*/
+            let id = -1;
+            if(params.isPicker) {
+                id = gx.addPickerObj({
+                    type:   'polyGroup',
+                    idx:    iGroup,
+                    block:  block,
+                    group:  group,
+                });
+            }
             let box = makeBox(gl,
                 [group.x1, group.y1, group.z1],
                 [group.x2, group.y2, group.z2],
-                -1, 0x40);
+                id, 0x40);
             batch.addVertices(...box);
         }
         return batch;
