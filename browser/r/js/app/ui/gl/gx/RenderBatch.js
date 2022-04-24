@@ -61,6 +61,10 @@ export default class RenderBatch {
         NoMergeModes.add(this.gl.TRIANGLE_FAN);
     }
 
+    get isEmpty() {
+        return this.ops.length == 0;
+    }
+
     execute(programInfo, _depth=0) {
         /** Execute the batch operation.
          *  @param {object} programInfo A dict of the shader program's

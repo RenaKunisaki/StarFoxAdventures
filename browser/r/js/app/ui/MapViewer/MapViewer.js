@@ -335,14 +335,19 @@ export default class MapViewer {
     }
 
     _drawBlockHits() {
-        /** Draw the hitboxes for each block. */
+        /** Draw the hit lines for each block. */
+        const batches = [];
+        const params = {
+            isPicker: this._isDrawingForPicker,
+        };
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF)) continue;
-            this._blockRenderer.renderHits(block, {
-                isPicker: this._isDrawingForPicker,
-            });
+            batches.push(this._blockRenderer.renderHits(block, params));
         }
+        const batch = new RenderBatch(this.gx);
+        batch.addBatches(...batches);
+        this.gx.executeBatch(batch);
     }
 
     _drawBlockBounds() {
@@ -467,6 +472,9 @@ export default class MapViewer {
             gx.executeBatch(this._hitPolyBatch);
             return;
         }
+        const params = {
+            isPicker: this._isDrawingForPicker,
+        };
         const batch = new RenderBatch(gx);
         this._hitPolyBatch = batch;
 
@@ -476,29 +484,8 @@ export default class MapViewer {
             const block = this.map.blocks[iBlock];
             if(!block || (block.mod >= 0xFF) || !block.polygons) continue;
             batch.addFunction(() => { this._setMtxForBlock(block) });
-
-            const vtxs = [gl.TRIANGLES];
-            for(let poly of block.polygons) {
-                const positions = new DataView(block.vtxPositions);
-                const color = [
-                    Math.trunc((((poly._06 >> 11) & 0x1F) / 31) * 255),
-                    Math.trunc((((poly._06 >>  5) & 0x3F) / 63) * 255),
-                    Math.trunc((((poly._06 >>  0) & 0x1F) / 31) * 255),
-                    0xC0];
-                for(let i=0; i<3; i++) {
-                    let pIdx = poly.vtxs[i] * 6;
-                    //division by 8 is hardcoded, not derived from POSSHFT
-                    vtxs.push({
-                        POS: [
-                            positions.getInt16(pIdx)   / 8,
-                            positions.getInt16(pIdx+2) / 8,
-                            positions.getInt16(pIdx+4) / 8,
-                        ],
-                        COL0: color, COL1: color, id: -1,
-                    });
-                }
-            }
-            batch.addVertices(...vtxs);
+            batch.addFunction(
+                this._blockRenderer.renderCollisionMesh(block, params));
         }
         gx.executeBatch(batch);
     }

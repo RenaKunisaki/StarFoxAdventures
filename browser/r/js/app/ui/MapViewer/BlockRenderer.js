@@ -133,6 +133,16 @@ export default class BlockRenderer {
         this._batches  = {};
     }
 
+    _getBatch(name, block, params) {
+        const key = [name, block.x, block.z, params.isPicker ? 1 :0].join(',');
+        let batch = this._batches[key];
+        if(!batch) {
+            batch = new RenderBatch(this.gx);
+            this._batches[key] = batch;
+        }
+        return batch;
+    }
+
     parse(block, whichStream, params={}) {
         /** Parse the display lists.
          *  @param {Block} block The block to render.
@@ -227,18 +237,11 @@ export default class BlockRenderer {
     }
 
     renderHits(block, params) {
-        /** Render the block's hitboxes. */
+        /** Render the block's hit-lines from HITS.bin. */
         if(!block.hits) return null;
 
-        const key = ([
-            'hits', block.x, block.z, params.isPicker ? 1 : 0]).join(',');
-        let batch = this._batches[key];
-        if(batch) {
-            this.gx.executeBatch(batch);
-            return batch;
-        }
-        batch = new RenderBatch(this.gx);
-        this._batches[key] = batch;
+        const batch = this._getBatch('hits', block, params);
+        if(!batch.isEmpty) return batch; //already set up
 
         const gx = this.gx;
         const gl = this.gx.gl;
@@ -298,7 +301,39 @@ export default class BlockRenderer {
         batch.addFunction(() => {
             gl.disable(gl.POLYGON_OFFSET_FILL);
         })
-        this.gx.executeBatch(batch);
+        return batch;
+    }
+
+    renderCollisionMesh(block, params) {
+        /** Render the block's collision mesh. */
+        const gx = this.gx;
+        const gl = this.gx.gl;
+
+        const batch = this._getBatch('collision', block, params);
+        if(!batch.isEmpty) return batch; //already set up
+
+        const vtxs = [gl.TRIANGLES];
+        for(let poly of block.polygons) {
+            const positions = new DataView(block.vtxPositions);
+            const color = [
+                Math.trunc((((poly._06 >> 11) & 0x1F) / 31) * 255),
+                Math.trunc((((poly._06 >>  5) & 0x3F) / 63) * 255),
+                Math.trunc((((poly._06 >>  0) & 0x1F) / 31) * 255),
+                0xC0];
+            for(let i=0; i<3; i++) {
+                let pIdx = poly.vtxs[i] * 6;
+                //division by 8 is hardcoded, not derived from POSSHFT
+                vtxs.push({
+                    POS: [
+                        positions.getInt16(pIdx)   / 8,
+                        positions.getInt16(pIdx+2) / 8,
+                        positions.getInt16(pIdx+4) / 8,
+                    ],
+                    COL0: color, COL1: color, id: -1,
+                });
+            }
+        }
+        batch.addVertices(...vtxs);
         return batch;
     }
 
