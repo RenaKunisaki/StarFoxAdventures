@@ -3,7 +3,6 @@ import { Reg as CPReg } from '../gl/gx/CP.js';
 import DlistParser from '../gl/gx/DlistParser.js';
 import RenderBatch from '../gl/gx/RenderBatch.js';
 import GX from '../gl/gx/GX.js';
-import { makeBox } from '../gl/GlUtil.js';
 import { MAP_CELL_SIZE } from '../../../game/Game.js';
 import Box from '../gl/Model/Box.js';
 
@@ -110,7 +109,7 @@ const vatDefaults = [
 ];
 
 const SurfaceTypeColors = {
-    generic:     [0x80, 0x80, 0x80],
+    generic:     [0x20, 0x20, 0x20],
     grass:       [0x00, 0xC0, 0x00],
     sand:        [0x80, 0x80, 0x40],
     snow:        [0xF0, 0xF0, 0xF0],
@@ -353,13 +352,9 @@ export default class BlockRenderer {
             const type  = SurfaceType.valueToString(
                 poly.group ? poly.group.type : -1);
             const typeColor = SurfaceTypeColors[type];
-            let color;
-            if(typeColor) {
-                color = [typeColor[0], typeColor[1], typeColor[2], 0xA0];
-            }
-            else {
-                color = [0xFF, 0x00, 0xFF, 0xA0];
-            }
+            const color = typeColor ?
+                [typeColor[0], typeColor[1], typeColor[2], 0xA0] :
+                [0xFF, 0x00, 0xFF, 0xA0];
             let id = -1;
             if(params.isPicker) {
                 id = gx.addPickerObj({
