@@ -366,7 +366,8 @@ export default class MapViewer {
             for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
                 const block = this.map.blocks[iBlock];
                 if(!block || (block.mod >= 0xFF)) continue;
-                batches.push(this._blockRenderer.renderHits(block, params));
+                const batch = this._blockRenderer.renderHits(block, params);
+                if(batch) batches.push(batch);
             }
             batch.addBatches(...batches);
         }
