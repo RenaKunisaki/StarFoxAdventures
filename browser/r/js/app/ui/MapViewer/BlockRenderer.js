@@ -8,7 +8,7 @@ import { MAP_CELL_SIZE } from '../../../game/Game.js';
 import Box from '../gl/Model/Box.js';
 
 //struct types
-let HitsBinEntry;
+let HitsBinEntry, SurfaceType;
 
 const LogRenderOps = false;
 const ShaderFlags = {
@@ -109,6 +109,26 @@ const vatDefaults = [
     },
 ];
 
+const SurfaceTypeColors = {
+    generic:     [0x80, 0x80, 0x80],
+    grass:       [0x00, 0xC0, 0x00],
+    sand:        [0x80, 0x80, 0x40],
+    snow:        [0xF0, 0xF0, 0xF0],
+    death:       [0xF0, 0x00, 0x00],
+    icePlatform: [0x00, 0xC0, 0xC0],
+    ice:         [0x40, 0xC0, 0xC0],
+    water:       [0x40, 0x80, 0xC0],
+    gold:        [0xC0, 0xC0, 0x40],
+    roughStone:  [0x40, 0x40, 0x40],
+    magicCave:   [0xC0, 0x40, 0xC0],
+    wood:        [0xC0, 0xC0, 0x80],
+    stone:       [0x60, 0x60, 0x60],
+    lava:        [0xC0, 0x00, 0x00],
+    iceWall:     [0x00, 0xA0, 0xA0],
+    conveyor:    [0x60, 0x20, 0x60],
+    metal:       [0xC0, 0xC0, 0xC0],
+};
+
 function _setShaderParams(gl, gx, cull, blendMode, sFactor, dFactor, logicOp,
 compareEnable, compareFunc, updateEnable, alphaTest) {
     if(cull) gl.enable(gl.CULL_FACE); else gl.disable(gl.CULL_FACE);
@@ -122,6 +142,7 @@ export default class BlockRenderer {
     constructor(game, gx) {
         this.game = game;
         HitsBinEntry = game.app.types.getType('sfa.maps.HitsBinEntry');
+        SurfaceType  = game.app.types.getType('sfa.maps.SurfaceType');
         this.gx = gx;
         this.gl = gx.gl;
         this.dlistParser = new DlistParser(gx);
@@ -329,14 +350,16 @@ export default class BlockRenderer {
             const poly = block.polygons[iPoly];
             const positions = new DataView(block.vtxPositions);
             const flags = poly.group ? poly.group.flags : 0;
-            const color = [
-                //Math.trunc((((poly._06 >> 11) & 0x1F) / 31) * 255),
-                //Math.trunc((((poly._06 >>  5) & 0x3F) / 63) * 255),
-                //Math.trunc((((poly._06 >>  0) & 0x1F) / 31) * 255),
-                (flags >> 24) & 0xFF,
-                (flags >> 16) & 0xFF,
-                (flags >>  8) & 0xFF,
-                0xC0];
+            const type  = SurfaceType.valueToString(
+                poly.group ? poly.group.type : -1);
+            const typeColor = SurfaceTypeColors[type];
+            let color;
+            if(typeColor) {
+                color = [typeColor[0], typeColor[1], typeColor[2], 0xA0];
+            }
+            else {
+                color = [0xFF, 0x00, 0xFF, 0xA0];
+            }
             let id = -1;
             if(params.isPicker) {
                 id = gx.addPickerObj({
