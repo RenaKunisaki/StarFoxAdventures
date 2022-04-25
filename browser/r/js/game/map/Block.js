@@ -141,10 +141,11 @@ export default class Block {
             group.index  = i;
             this.polyGroups.push(group);
         }
-        for(let i=0; i<this.header.nPolyGroups-1; i++) {
-            const group = this.polyGroups[i];
-            for(let iPoly=group.firstPolygon;
-            iPoly<this.polyGroups[i+1].firstPolygon; iPoly++) {
+        for(let i=0; i<this.header.nPolyGroups; i++) {
+            const group    = this.polyGroups[i];
+            const lastPoly = this.polyGroups[i+1] ?
+                this.polyGroups[i+1].firstPolygon : this.header.nPolyGons;
+            for(let iPoly=group.firstPolygon; iPoly<lastPoly; iPoly++) {
                 this.polygons[iPoly].groupIdx = i;
                 this.polygons[iPoly].group = group;
             }
