@@ -328,10 +328,14 @@ export default class BlockRenderer {
         for(let iPoly=0; iPoly < block.polygons.length; iPoly++) {
             const poly = block.polygons[iPoly];
             const positions = new DataView(block.vtxPositions);
+            const flags = poly.group ? poly.group.flags : 0;
             const color = [
-                Math.trunc((((poly._06 >> 11) & 0x1F) / 31) * 255),
-                Math.trunc((((poly._06 >>  5) & 0x3F) / 63) * 255),
-                Math.trunc((((poly._06 >>  0) & 0x1F) / 31) * 255),
+                //Math.trunc((((poly._06 >> 11) & 0x1F) / 31) * 255),
+                //Math.trunc((((poly._06 >>  5) & 0x3F) / 63) * 255),
+                //Math.trunc((((poly._06 >>  0) & 0x1F) / 31) * 255),
+                (flags >> 24) & 0xFF,
+                (flags >> 16) & 0xFF,
+                (flags >>  8) & 0xFF,
                 0xC0];
             let id = -1;
             if(params.isPicker) {
@@ -367,18 +371,15 @@ export default class BlockRenderer {
         if(!batch.isEmpty) return batch; //already set up
 
         batch.addFunction(() => { this.setMtxForBlock(block) });
+        const batches = [];
 
         for(let iGroup=0; iGroup < block.polyGroups.length; iGroup++) {
             const group = block.polyGroups[iGroup];
-            /*const color = [
-                //neither of these work well. they're nearly always 0.
-                Math.trunc((((group.id >> 5) & 0x07) / 7) * 255),
-                Math.trunc((((group.id >> 2) & 0x07) / 7) * 255),
-                Math.trunc((((group.id >> 0) & 0x03) / 3) * 255),
-                //Math.trunc((((group.flags >> 11) & 0x1F) / 31) * 255),
-                //Math.trunc((((group.flags >>  5) & 0x3F) / 63) * 255),
-                //Math.trunc((((group.flags >>  0) & 0x1F) / 31) * 255),
-                0x40];*/
+            const color = [
+                (group.flags >> 28) & 0xFF,
+                (group.flags >> 20) & 0xFF,
+                (group.flags >> 12) & 0xFF,
+                0x40];
             let id = -1;
             if(params.isPicker) {
                 id = gx.addPickerObj({
@@ -388,12 +389,13 @@ export default class BlockRenderer {
                     group:  group,
                 });
             }
-            let box = makeBox(gl,
+            const box = new Box(this.gx,
                 [group.x1, group.y1, group.z1],
                 [group.x2, group.y2, group.z2],
-                id, 0x40);
-            batch.addVertices(...box);
+                ).setColors(color).setId(id);
+            batches.push(box.batch);
         }
+        batch.addBatches(...batches);
         return batch;
     }
 

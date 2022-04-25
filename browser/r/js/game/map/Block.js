@@ -8,7 +8,7 @@ import Texture from '../../app/ui/gl/Texture.js'
 
 //struct types
 let MapBlock = null;
-let GCPolygon, PolygonGroup, DisplayListPtr, Shader, HitsBinEntry;
+let GCPolygon, PolygonGroup, DisplayListPtr, Shader, HitsBinEntry, SurfaceType;
 
 export default class Block {
     /** One block of a map.
@@ -37,6 +37,7 @@ export default class Block {
             DisplayListPtr = this.app.types.getType('sfa.maps.DisplayListPtr');
             Shader = this.app.types.getType('sfa.maps.Shader');
             HitsBinEntry = this.app.types.getType('sfa.maps.HitsBinEntry');
+            SurfaceType = this.app.types.getType('sfa.maps.SurfaceType');
         }
     }
 

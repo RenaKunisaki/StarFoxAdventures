@@ -1,6 +1,9 @@
 import { clearElement, E } from "../../../lib/Element.js";
 import { hex } from "../../../Util.js";
 
+//struct types
+let SurfaceType;
+
 export default class InfoWidget {
     /** Widget displaying info about selected object. */
     constructor(mapViewer) {
@@ -25,6 +28,10 @@ export default class InfoWidget {
                 E.th(null, "Nothing selected"),
             ));
             return;
+        }
+
+        if(this.app.types) {
+            SurfaceType = this.app.types.getType('sfa.maps.SurfaceType');
         }
 
         console.log("show", info);
@@ -163,6 +170,11 @@ export default class InfoWidget {
     }
 
     _makeBlockPolyGroupInfo(block, group) {
+        if(!group) {
+            return [
+                E.tr(null, E.td('notice', "Poly isn't in a group", {colspan:2}))
+            ];
+        }
         const sx    = Math.abs(group.x1 - group.x2);
         const sy    = Math.abs(group.y1 - group.y2);
         const sz    = Math.abs(group.z1 - group.z2);
@@ -176,10 +188,6 @@ export default class InfoWidget {
                 E.td('hex', group.index),
             ),
             E.tr(
-                E.th(null, "ID"),
-                E.td('hex', `0x${hex(group.id, 2)}`),
-            ),
-            E.tr(
                 E.th(null, "1stPoly"),
                 E.td('int', group.firstPolygon),
             ),
@@ -188,15 +196,11 @@ export default class InfoWidget {
             E.tr( E.th(null, "Z"), E.td('float', `${group.z1} - ${group.z2} (${sz})`) ),
             E.tr(
                 E.th(null, "Flags"),
-                E.td('hex', `0x${hex(group.flags, 4)}`),
+                E.td('hex', `0x${hex(group._10, 2)}, 0x${hex(group.flags, 4)}`),
             ),
             E.tr(
-                E.th(null, "Unk0E"),
-                E.td('hex', `0x${hex(group._0E, 2)}${hex(group._0F, 2)}`),
-            ),
-            E.tr(
-                E.th(null, "Unk11"),
-                E.td('hex', `0x${hex(group._11, 2)}`),
+                E.th(null, "Type"),
+                E.td('hex', SurfaceType.valueToString(group.type)),
             ),
         ];
     }

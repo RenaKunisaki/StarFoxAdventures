@@ -199,6 +199,39 @@
         <item name="NO_MAP" value="-1" />
     </enum>
 
+    <enum name="SurfaceType" type="u8">
+        <item name="generic" value="0x00">
+            <description>Eg underwater ground, OoB trees</description>
+        </item>
+        <item name="grass" value="0x01" />
+        <item name="sand"  value="0x02" />
+        <item name="snow"  value="0x03" />
+        <item name="death" value="0x08">
+            <description>Used in DragRockBot for lava. Not ideal since you can revive in-place and instantly be killed again.</description>
+        </item>
+        <item name="icePlatform" value="0x09">
+            <description>Used in a few places in IM, such as under cannon</description>
+        </item>
+        <item name="ice" value="0x0D" />
+        <item name="water" value="0x0E" />
+        <item name="gold" value="0x10">
+            <description>Used in CRF mine</description>
+        </item>
+        <item name="roughStone" value="0x12" />
+        <item name="magicCave" value="0x13" />
+        <item name="wood" value="0x18" />
+        <item name="stone" value="0x19">
+            <note>Includes hot stone in DIM, and some other generic solid surfaces</note>
+        </item>
+        <item name="lava" value="0x1A" />
+        <item name="iceWall" value="0x1B" />
+        <item name="conveyor" value="0x1D" />
+        <item name="unk21" value="0x21">
+            <note>Seen in Arwing levels</note>
+        </item>
+        <item name="metal" value="0x22" />
+    </enum>
+
     <struct name="RomListEntry">
         <description>Common header of romlist entries</description>
         <field name="objDef" type="ObjDefEnum" />
@@ -397,10 +430,10 @@
         <field type="s16" name="z2" />
         <field type="undefined" />
         <field type="undefined" />
-        <field type="u8" name="id">
-            <note>Game accesses these 4 bytes as u32</note>
+        <field type="u8">
+            <note>Game accesses these last fields as u32</note>
         </field>
-        <field type="u8" />
+        <field type="SurfaceType" name="type" />
         <field type="u16" name="flags" />
     </struct>
 

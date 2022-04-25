@@ -1,0 +1,70 @@
+let's mess with a polygroup in animtest
+block 6.1 loads at 811615c0
+the tri closest to the wall is in group 3, offset 0x69C
++ 0xE (first unknown field) = 0x6AA
+
+Offset	0x00069C
+Idx	3
+ID	0x00
+1stPoly	9
+X	0 - 153 (153)
+Y	-22 - -22 (0)
+Z	0 - 640 (640)
+Flags	0x0004
+Unk0E	0x0000
+Unk11	0x00
+
+testing with no sound for now
+
+0E [0000]:
+	1111: no change
+	EEEE: no change
+	0101: no change
+10 [0000]: "id"
+	1111: no change
+	EEEE: no change
+	0101: no change
+	the second byte is actually the surface type:
+	00: bottom of rivers, OoB trees (probably "no special effect")
+	01: grass
+	02: sand
+	03: snow
+	08: instant death (DragRockBot)
+	09: ice platform? cannon guy stands on it in IM
+	0D: ice (slippery)
+	0E: water - makes a splash when hit with staff
+	10: gold (CRF mine entrance)
+	12: rough stone
+	13: magic cave floor/wall
+	18: wood
+	19: stone (including hot stone in DIM)
+	1A: lava
+	1B: ice wall
+	1D: conveyor belt
+	21: ? seen in Arwing levels
+	22: metal
+
+12 [0004]: "flags"
+	0000: no change
+	FFFF: it seems to be slightly higher. we can fall through it if we approach from certain angles.
+	0001: no change
+	00FF: similar to FFFF but we fall through easier
+	FF00: no change
+	7F04: no change
+	8004: no change
+
+let's try changing the polygon itself (offset 0x734)
+06 [1F03]: "id"
+	0000: we fall through
+	1F00: similar effect to above fall-through
+	1F0F: no change
+	1F0C: same as 1F00
+	0003: same as 1F00. we can land on it if we fall from high up, even though our Y coord is still 127.
+	FF03: no change
+	7F03: no change
+	1003: fall thru
+	0F03: no change
+	1E03: partial fall thru
+	1103: partial fall thru, but different spots
+	1703: again different spots
+interestingly this is never read! lolbreakpoints
