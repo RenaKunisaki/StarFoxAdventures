@@ -57,13 +57,30 @@ export default class Box extends Model {
         let v1 = vec3.fromValues(...p1);
         let v2 = vec3.fromValues(...p2);
         const length = vec3.distance(v1, v2);
+
+        //this method doesn't work if the line is exactly
+        //along the Z axis, so handle that differently.
+        if(Math.abs(p1[0]-p2[0]) + Math.abs(p1[1]-p2[1]) < 0.01) {
+            let M = mat4.fromValues(
+                1,     0,     0,     0,
+                0,     1,     0,     0,
+                0,     0,     1,     0,
+                v1[0], v1[1], v1[2], 1);
+            const s = (p1[2] > p2[2]) ? -1 : 1;
+            const self = new Box(gx,
+                [-size[2], -size[1], -size[0],       ],
+                [ size[2],  size[1],  size[0]+(length*s)]);
+            self.setMatrix(M);
+            return self;
+        }
+
         let vX = vec3.fromValues(v2[0]-v1[0], v2[1]-v1[1], v2[2]-v1[2]);
-        vec3.normalize(vX, vX);
+        vec3.normalize(vX, vX); //x now points at target, unit length
         let vY = vec3.fromValues(0,0,1);
         vec3.cross(vY, vY, vX);
-        vec3.normalize(vY, vY);
+        vec3.normalize(vY, vY); //y is now perpendicular to x, unit length
         let vZ = vec3.create();
-        vec3.cross(vZ, vX, vY);
+        vec3.cross(vZ, vX, vY); //z is now perpendicular to both x and y, and unit length
         let M = mat4.fromValues(
             vX[0], vX[1], vX[2], 0,
             vY[0], vY[1], vY[2], 0,
