@@ -422,15 +422,10 @@ export default class MapViewer {
         };
         const batch = this._getBatch('warps', params);
         if(batch.isEmpty) {
-            let mv = mat4.clone(this.gx.context.matModelView);
-            this.gx.setModelViewMtx(mv);
-
             if(this._isDrawingForPicker) batch.addFunction(() => {
-                gl.disable(gl.BLEND);
-                gx.setBlendMode(GX.BlendMode.NONE, GX.BlendFactor.SRCALPHA,
-                    GX.BlendFactor.INVSRCALPHA, GX.LogicOp.NOOP);
                 //blend off, face culling off
                 gx.disableTextures(GX.BlendMode.NONE, false);
+                gx.setModelViewMtx(mat4.clone(gx.context.matModelView));
             });
             else batch.addFunction(() => {
                 //blend on, face culling off
@@ -453,9 +448,9 @@ export default class MapViewer {
                     gl, x, y, z, 10, id, [[0xFF, 0x00, 0x00, 0xC0]]));
                 //console.log("add warp", hex(idx), x, y, z, "orig", warp.pos);
             }
-            batch.addVertices(...makeCube( //map origin
-                gl, this.map.worldOrigin[0], 0, this.map.worldOrigin[1],
-                10, -1, [[0x00, 0xFF, 0x00, 0xC0]]));
+            //batch.addVertices(...makeCube( //map origin
+            //    gl, this.map.worldOrigin[0], 0, this.map.worldOrigin[1],
+            //    10, -1, [[0x00, 0xFF, 0x00, 0xC0]]));
         }
         this.gx.executeBatch(batch);
     }
