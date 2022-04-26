@@ -119,6 +119,10 @@ second byte:
 	the latter makes sense being right after the coords
 	you can define a plane in 3D space as two points and a height, if you don't need it to be angled
 	though, you could also just use two points... maybe this simplifies the math
+	seems like this value / 256 is the actual height, but only for jump-up ledges.
+	for shorter, climb-up ledges it's height / 512
+	for climbable walls it's height / 1?
+	this isn't right though, this is two different bytes?
 
 third byte:
 	00: climb halfway up
@@ -152,7 +156,18 @@ types seem to be:
 	01: impassable, but not always? eg the ones lining the river have this too
 	03: climbable wall
 	04: can jump off ledge
-	05: ? found in air
+	05: same as 04?
 	06: can jump/climb up to ledge (depends on height)
 	0A: ladder
 	0E: tunnel
+
+<field type="s16" name="x1" />
+<field type="s16" name="x2" />
+<field type="s16" name="y1" />
+<field type="s16" name="y2" />
+<field type="s16" name="z1" />
+<field type="s16" name="z2" />
+<field type="s16" name="height" />
+<field type="u8" name="flags" />
+<field type="HitType" name="type" />
+<field type="s16" count="2" name="iPoint" />

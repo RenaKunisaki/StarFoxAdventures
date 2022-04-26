@@ -5,6 +5,7 @@ import RenderBatch from '../gl/gx/RenderBatch.js';
 import GX from '../gl/gx/GX.js';
 import { MAP_CELL_SIZE } from '../../../game/Game.js';
 import Box from '../gl/Model/Box.js';
+import { hsv2rgb } from '../../../Util.js';
 
 //struct types
 let HitsBinEntry, SurfaceType;
@@ -320,8 +321,9 @@ export default class BlockRenderer {
                     hit:    hit,
                 });
             }
-            const color = [
-                (hit._0C & 0xF) << 4, (hit._0D & 0xF) << 4, 0xC0, 0xC0 ];
+            //XXX verify highest valid type
+            const [r,g,b] = hsv2rgb(((hit.type & 0x7F) / 0x1F)*360, 1, 1);
+            const color = [r*255, g*255, b*255, 0xC0 ];
             const box = Box.fromLine(this.gx,
                 [hit.x1,hit.y1,hit.z1], //p1
                 [hit.x2,hit.y2,hit.z2], //p2

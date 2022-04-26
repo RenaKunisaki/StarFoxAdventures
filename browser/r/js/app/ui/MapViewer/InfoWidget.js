@@ -2,7 +2,7 @@ import { clearElement, E } from "../../../lib/Element.js";
 import { bin, hex } from "../../../Util.js";
 
 //struct types
-let SurfaceType;
+let SurfaceType, HitType;
 
 export default class InfoWidget {
     /** Widget displaying info about selected object. */
@@ -32,6 +32,7 @@ export default class InfoWidget {
 
         if(this.app.types) {
             SurfaceType = this.app.types.getType('sfa.maps.SurfaceType');
+            HitType = this.app.types.getType('sfa.maps.HitType');
         }
 
         console.log("show", info);
@@ -145,15 +146,16 @@ export default class InfoWidget {
         const sz  = Math.abs(hit.z1 - hit.z2);
         const rows = [
             E.tr(E.th(null, `Hit #${info.idx}`, {colspan:2})),
+            E.tr( E.th(null, "Offset"), E.td('hex', `0x${hex(info.offset,6)}`) ),
             E.tr( E.th(null, "Block"), E.td('string', info.block.header.name) ),
+            E.tr( E.th(null, "Type"), E.td('string',
+                `0x${hex(hit.type,2)} ${HitType.valueToString(hit.type & 0x7F)}`,
+            )),
             E.tr( E.th(null, "X"), E.td('float', `${hit.x1} - ${hit.x2} (${sx})`) ),
             E.tr( E.th(null, "Y"), E.td('float', `${hit.y1} - ${hit.y2} (${sy})`) ),
             E.tr( E.th(null, "Z"), E.td('float', `${hit.z1} - ${hit.z2} (${sz})`) ),
-            E.tr( E.th(null, "Offset"), E.td('hex', `0x${hex(info.offset,6)}`) ),
-            E.tr( E.th(null, "Unk0C"), E.td('hex', `0x${hex(hit._0C,2)}`) ),
-            E.tr( E.th(null, "Unk0D"), E.td('hex', `0x${hex(hit._0D,2)}`) ),
-            E.tr( E.th(null, "Unk0E"), E.td('hex', `0x${hex(hit.flags0E,2)}`) ),
-            E.tr( E.th(null, "Unk0F"), E.td('hex', `0x${hex(hit.flags,2)}`) ),
+            E.tr( E.th(null, "Height"), E.td('int', hit.height) ),
+            E.tr( E.th(null, "Flags"), E.td('hex', `0x${hex(hit.flags,2)}`) ),
             E.tr( E.th(null, "Points"), E.td('int', `${hit.iPoint[0]}, ${hit.iPoint[1]}`) ),
         ];
         this._tbl.append(...rows);
@@ -204,7 +206,7 @@ export default class InfoWidget {
             ),
             E.tr(
                 E.th(null, "Type"),
-                E.td('hex', SurfaceType.valueToString(group.type)),
+                E.td('string', SurfaceType.valueToString(group.type)),
             ),
         ];
     }

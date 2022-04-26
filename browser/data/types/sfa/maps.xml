@@ -232,6 +232,14 @@
         <item name="metal" value="0x22" />
     </enum>
 
+    <enum name="HitType" type="u8">
+        <item name="climbableWall" value="0x03" />
+        <item name="jumpOffLedge" value="0x04" />
+        <item name="climbUpLedge" value="0x06" />
+        <item name="ladder" value="0x0A" />
+        <item name="tunnel" value="0x0E" />
+    </enum>
+
     <struct name="RomListEntry">
         <description>Common header of romlist entries</description>
         <field name="objDef" type="ObjDefEnum" />
@@ -488,10 +496,9 @@
         <field type="s16" name="y2" />
         <field type="s16" name="z1" />
         <field type="s16" name="z2" />
-        <field type="u8" />
-        <field type="u8" /><!-- type? -->
-        <field type="u8" name="flags0E" /><!-- these two bytes control your interaction (blocks you, lets you jump off, lets you fall off... -->
+        <field type="s16" name="height" />
         <field type="u8" name="flags" />
+        <field type="HitType" name="type" />
         <field type="s16" count="2" name="iPoint" />
     </struct>
 
