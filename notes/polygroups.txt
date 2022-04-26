@@ -52,6 +52,7 @@ testing with no sound for now
 	FF00: no change
 	7F04: no change
 	8004: no change
+from the code it looks like flag 0x10 being set or flag 4 being clear disables some collision
 
 let's try changing the polygon itself (offset 0x734)
 06 [1F03]: "id"
@@ -68,3 +69,28 @@ let's try changing the polygon itself (offset 0x734)
 	1103: partial fall thru, but different spots
 	1703: again different spots
 interestingly this is never read! lolbreakpoints
+plotting it by color in the map viewer shows a clear pattern where the high byte correlates with the polygon's Z position within the block and the low byte correlates with the X position. with a few exceptions, the colors just about form an axis grid. it's not very obvious in Animtest because of the large polygons.
+in TTH and CC there's a bunch of large yellow (=both bytes high) planes toward the +Z end of the map.
+one possibility is that these are indices of some sort and just happen to be ordered this way? seems unlikely though.
+also could be encoding a range to prevent doing hit detection on polys that aren't nearby?
+if either byte of this value is 0, it skips a bunch of code.
+this is actually two bytes, each of which is a bitflag.
+for the high byte: divide the block's Z axis into 8 strips. each bit tells whether the poly overlaps that strip.
+for the low byte: same, but the X axis.
+
+at 80069120 some flags, which are derived in obscure ways from the polygon flags and other things, are set; if we change to a fixed value we can get interesting effects.
+unfortunately no way to really know what the default value is because this changes it for every polygon.
+0000: no shadows
+FFFF: shadows, you fall through it
+0001: no shadows, you can walk on water
+0002: same
+0004: same
+0008: the shadows are back
+0010: you fall through (seems to disable most/all? collision)
+0020: same as 0002
+0040: you get slightly darker?
+0080: same as 0002
+curiously none of these make you not walk on the water
+high byte could be something else
+actually the high byte isn't even used
+04 overrides 10 in some places

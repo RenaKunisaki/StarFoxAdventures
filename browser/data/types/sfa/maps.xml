@@ -415,7 +415,12 @@
         <field type="u16" count="3" name="vtxs">
             <description>Indices into block.vtxPositions</description>
         </field>
-        <field type="u16" />
+        <field type="u16" name="subBlocks">
+            <description>High byte is Z axis; low byte is X.
+                Split the block into 8 strips; each bit tells whether
+                the polygon overlaps that strip.
+            </description>
+        </field>
     </struct>
 
     <struct name="PolygonGroup">

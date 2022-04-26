@@ -90,6 +90,18 @@ export function hex(n, size=1) {
     lol[0] = n; //to handle negatives
     return lol[0].toString(16).toUpperCase().padStart(size, '0');
 }
+export function bin(n, size=8) {
+    /** Convert number `n` to binary, padded to given `size`.
+     *  @param {number} n number to convert.
+     *  @param {number} size minimum number of digits.
+     *  @returns {string} binary string.
+     */
+    if(typeof(n) == 'string') n = parseInt(n);
+    if(n == null || n == undefined) return String(n);
+    const lol = new Uint32Array(1);
+    lol[0] = n; //to handle negatives
+    return lol[0].toString(2).padStart(size, '0');
+}
 export function int(n, dflt=null) {
     /** Convert string `n` to int, returning `dflt` for null/undefined.
      *  @param {string} n string to convert.

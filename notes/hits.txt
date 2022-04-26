@@ -78,3 +78,81 @@ the map also has hit poly meshes and poly groups which probably define things li
 even the shaders could potentially define interactions?
 
 judging from some of their placements, some are also likely meant to only affect enemies, eg to stop them from chasing you into the water or straying too far from their origins, especially if it would cause them to follow you off the map
+
+entrance to shop: (climbable)
+flags 00 0004
+type roughStone
+hit below: 00 62 80 03 -1     0
+above 1:   28 28 0E 01 -1  1280
+above 2:   28 28 0E 01 -1 16384
+
+toward LV (climbable):
+flags 00 0004
+type roughStone (centre), stone (edges)
+hit below: 00 52 80 83 -1 0
+
+near queen area: (jumpable)
+flags 00 0004
+type stone
+hit below: 00 2F 8E 06 -1 0
+above:     28 28 0E 84 -1 0
+
+ladder to sewers:
+flags 00 0000
+type wood
+hit below: 00 95 8E 0A -1 0
+
+812f70f0 is hitline for climbable wall leading to shop
+unknowns: 00 62 80 03
+first byte:
+	77: I can climb seemingly infinitely into the air past the top of the wall (left/right movement is still limited). can't go down through ground.
+	01: I can climb to the top of the cliff above
+	02: into the sky again - might be a poly idx or hitbox idx?
+	I can't climb forever this time; after a while I stop, climb up onto a nonexistent ledge, and warp back down to the ground.
+
+second byte:
+	00: can't climb up, and invisible wall obstructs the entrance
+	61: no change
+	52: can't enter; will climb up to the ledge before actually reaching the top, then sink back onto the wall and resume climbing.
+	72: climb slightly beyond the top
+	so these two bytes are the climb height, or maybe a general height value for the line
+	the latter makes sense being right after the coords
+	you can define a plane in 3D space as two points and a height, if you don't need it to be angled
+	though, you could also just use two points... maybe this simplifies the math
+
+third byte:
+	00: climb halfway up
+	7F: can't climb or enter
+	40: climb halfway up
+	FF: can't climb or enter
+	81: can't climb or enter
+	C0: no change
+	82: can't climb off at top
+	83: can't climb or enter
+	84: can't climb off at bottom
+	88: can't climb off at top
+	90: no change
+	F0: no change
+
+fourth byte:
+	00: can't enter or climb
+	01: "
+	02: "
+	04: "
+	05: "
+	06: " (this is the value used for some jumpable walls)
+	0A: works as a ladder (slide option, can't move left/right)
+	so this is the type, but doesn't match up with player interact type
+	83: no change
+	F3: can't enter or climb
+	43: can't enter or climb
+	so probably only the highest bit has different meaning
+
+types seem to be:
+	01: impassable, but not always? eg the ones lining the river have this too
+	03: climbable wall
+	04: can jump off ledge
+	05: ? found in air
+	06: can jump/climb up to ledge (depends on height)
+	0A: ladder
+	0E: tunnel

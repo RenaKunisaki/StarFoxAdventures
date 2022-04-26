@@ -1,5 +1,5 @@
 import { clearElement, E } from "../../../lib/Element.js";
-import { hex } from "../../../Util.js";
+import { bin, hex } from "../../../Util.js";
 
 //struct types
 let SurfaceType;
@@ -71,8 +71,12 @@ export default class InfoWidget {
                 E.td('string', `${poly.vtxs[0]}, ${poly.vtxs[1]}, ${poly.vtxs[2]}`),
             ),
             E.tr(
-                E.th(null, "ID"),
-                E.td('hex', `0x${hex(poly._06, 4)}`),
+                E.th(null, "SubX"),
+                E.td('hex', `0x${bin(poly.subBlocks & 0xFF)}`),
+            ),
+            E.tr(
+                E.th(null, "SubZ"),
+                E.td('hex', `0x${bin(poly.subBlocks >> 8)}`),
             ),
             E.tr(E.th(null, `Hit Group #${poly.groupIdx}`, {colspan:2})),
             ...this._makeBlockPolyGroupInfo(block, poly.group),
