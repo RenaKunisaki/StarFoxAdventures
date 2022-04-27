@@ -496,7 +496,7 @@
         <field type="s16" name="y2" />
         <field type="s16" name="z1" />
         <field type="s16" name="z2" />
-        <field type="s16" name="height" />
+        <field type="u8" count="2" name="height" />
         <field type="u8" name="flags" />
         <field type="HitType" name="type" />
         <field type="s16" count="2" name="iPoint" />

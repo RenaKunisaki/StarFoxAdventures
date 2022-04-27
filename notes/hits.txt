@@ -78,6 +78,7 @@ the map also has hit poly meshes and poly groups which probably define things li
 even the shaders could potentially define interactions?
 
 judging from some of their placements, some are also likely meant to only affect enemies, eg to stop them from chasing you into the water or straying too far from their origins, especially if it would cause them to follow you off the map
+the camera also looks at them so they might be to stop it from moving into certain areas
 
 entrance to shop: (climbable)
 flags 00 0004
@@ -123,6 +124,8 @@ second byte:
 	for shorter, climb-up ledges it's height / 512
 	for climbable walls it's height / 1?
 	this isn't right though, this is two different bytes?
+	seems like some things treat it as s16 and some don't
+	type 01 often has 0x2828 here
 
 third byte:
 	00: climb halfway up
@@ -160,14 +163,39 @@ types seem to be:
 	06: can jump/climb up to ledge (depends on height)
 	0A: ladder
 	0E: tunnel
+high bits have to do with type as well
+edge of the black platform in animtest is 84
+04: you can't pass
+44: you fall off instead of jumping off
+C4: same as 44
+looks like the highest bit affects whether height is used in some calculation
+also, it decides how to interpret the two height values:
+0: two different bytes
+1: the same s16 for both
+the two values are compared to the Y position of the line and something else (maybe the line's two ends?) and the higher of the two is the max height
+if the player isn't between the line's height and (line height + max height) the line is ignored
+this doesn't seem entirely correct since some lines have the height set as two values like 0x2828 but the high bit set. the code definitely checks out though so this could be a mistake? it seems to be for cases where it doesn't actually matter, like jumping off ledges, and just makes the plane extend miles into the air/ground, allowing you to jump even if you're a mile tall, I guess?
 
-<field type="s16" name="x1" />
-<field type="s16" name="x2" />
-<field type="s16" name="y1" />
-<field type="s16" name="y2" />
-<field type="s16" name="z1" />
-<field type="s16" name="z2" />
-<field type="s16" name="height" />
-<field type="u8" name="flags" />
-<field type="HitType" name="type" />
-<field type="s16" count="2" name="iPoint" />
+bit 40 disables it entirely, no collision at all by the looks of it
+
+there's a red one further on that seems misplaced
+changing the type and params doesn't seem to do anything
+changing flags from 1B to FF makes it block the camera in one direction
+00 makes it block the player in that direction
+0B: no change
+1F: no change
+10: can't pass
+13: no change
+11: no change
+12: can't pass
+FB: blocks camera
+3B: no change
+5B: no change
+9B: blocks camera
+so the lowest bit tells if we can pass, and highest tells if camera can't pass
+1B = 0001 1011
+     C??? ???P
+	P: player can pass
+	C: block camera
+nothing makes it affect the opposite direction
+flag 10 is toggled when it's copied to the IntersectPoint
