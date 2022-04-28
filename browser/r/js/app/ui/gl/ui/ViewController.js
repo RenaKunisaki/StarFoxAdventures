@@ -48,6 +48,9 @@ export default class ViewController {
         if(params.showPickBuffer != undefined) {
             this.chkShowPickBuffer.checked = params.showPickBuffer;
         }
+        if(params.useOrtho != undefined) {
+            this.chkOrtho.checked = params.useOrtho;
+        }
         if(params.frontFaceCW != undefined) {
             this.btnFrontFaceCW .checked =  params.frontFaceCW;
             this.btnFrontFaceCCW.checked = !params.frontFaceCW;
@@ -84,6 +87,7 @@ export default class ViewController {
             useWireframe: this.chkWireframe.checked,
             enableBackfaceCulling: this.chkEnableBackface.checked,
             showPickBuffer: this.chkShowPickBuffer.checked,
+            useOrtho: this.chkOrtho.checked,
             frontFaceCW: this.btnFrontFaceCW.checked,
             useSRT: this.btnRotateCam.checked,
         };
@@ -121,6 +125,9 @@ export default class ViewController {
         if(params.showPickBuffer != undefined) {
             this.chkShowPickBuffer.checked = params.showPickBuffer;
         }
+        if(params.useOrtho != undefined) {
+            this.chkOrtho.checked = params.useOrtho;
+        }
         if(params.frontFaceCW != undefined) {
             this.btnFrontFaceCW .checked =  params.frontFaceCW;
             this.btnFrontFaceCCW.checked = !params.frontFaceCW;
@@ -149,6 +156,7 @@ export default class ViewController {
         this.chkWireframe.checked      = false;
         this.chkEnableBackface.checked = true;
         this.chkShowPickBuffer.checked = false;
+        this.chkOrtho.checked          = false;
         this.btnFrontFaceCW.checked    = true;
         this.btnFrontFaceCCW.checked   = false;
         this.btnRotateCam.checked      = true;
@@ -174,6 +182,7 @@ export default class ViewController {
         this.context.useWireframe    = this.chkWireframe.checked;
         this.context.enableBackfaceCulling = this.chkEnableBackface.checked;
         this.context.showPickBuffer = this.chkShowPickBuffer.checked;
+        this.context.useOrtho = this.chkOrtho.checked;
         this.context.frontFaceCW = this.btnFrontFaceCW.checked;
         this.context.useSRT = this.btnRotateCam.checked;
         this.context.redraw();
@@ -238,6 +247,13 @@ export default class ViewController {
         this.chkShowPickBuffer.checked = C.showPickBuffer;
         this.chkShowPickBuffer.addEventListener('change', e => this._onChange(e));
 
+        //checkbox to use orthographic projection
+        this.chkOrtho = E.input(null, {type:'checkbox', id:'chkOrtho'});
+        this.lblOrtho = E.label(null,
+            {'for':'chkOrtho', title:"Use orthographic projection"}, "Ortho");
+        this.chkOrtho.checked = C.useOrtho;
+        this.chkOrtho.addEventListener('change', e => this._onChange(e));
+
         //button to reset to default params
         this.btnReset = E.button('reset', "Reset");
         this.btnReset.addEventListener('click', e => this.reset());
@@ -285,9 +301,11 @@ export default class ViewController {
                     E.td(this.txtRotX), E.td(this.txtRotY), E.td(this.txtRotZ),
                 ),
 
-                E.tr(
-                    E.td(this.chkEnableTex, this.lblEnableTex, {colspan:2}),
-                    E.td(this.chkWireframe, this.lblWireframe, {colspan:2}),
+                E.tr(E.td(
+                    this.chkEnableTex, this.lblEnableTex,
+                    this.chkWireframe, this.lblWireframe,
+                    this.chkOrtho,     this.lblOrtho,
+                    {colspan:4}),
                 ),
             ),
 

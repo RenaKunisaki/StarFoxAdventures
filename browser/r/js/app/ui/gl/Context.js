@@ -31,6 +31,7 @@ export default class Context {
             //TSR = the rotation is around the origin point (ideal
             //for character model viewing)
         this.showPickBuffer = false; //debug: render the picker buffer
+        this.useOrtho = false; //use orthographic projection
 
         this._setupCanvas(canvas);
         this._setupExtensions();
@@ -374,10 +375,17 @@ export default class Context {
         gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
 
         //set up projection matrix
-        mat4.perspective(this.matProjection, //destination matrix
-            this.fov * RADIANS, //to radians
-            aspect, this.zNear, this.zFar);
-        //console.log("FOV=", this.fov, "Z=", this.zNear, this.zFar);
+        if(this.useOrtho) {
+            const scale = P.y / 1000;
+            const w = (gl.drawingBufferWidth  / 2) * scale;
+            const h = (gl.drawingBufferHeight / 2) * scale;
+            mat4.ortho(this.matProjection, -w, w, -h, h, this.zNear, this.zFar);
+        }
+        else {
+            mat4.perspective(this.matProjection, //destination matrix
+                this.fov * RADIANS, //to radians
+                aspect, this.zNear, this.zFar);
+        }
 
         //set up modelview matrix
         //it can help to think of this as moving the "drawing position"
