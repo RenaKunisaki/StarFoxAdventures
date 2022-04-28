@@ -175,8 +175,9 @@ also, it decides how to interpret the two height values:
 the two values are compared to the Y position of the line and something else (maybe the line's two ends?) and the higher of the two is the max height
 if the player isn't between the line's height and (line height + max height) the line is ignored
 this doesn't seem entirely correct since some lines have the height set as two values like 0x2828 but the high bit set. the code definitely checks out though so this could be a mistake? it seems to be for cases where it doesn't actually matter, like jumping off ledges, and just makes the plane extend miles into the air/ground, allowing you to jump even if you're a mile tall, I guess?
+it's the flags byte that determines this, not the type...
 
-bit 40 disables it entirely, no collision at all by the looks of it
+bit 40 of flags disables it entirely, no collision at all by the looks of it
 
 there's a red one further on that seems misplaced
 changing the type and params doesn't seem to do anything
@@ -199,3 +200,5 @@ so the lowest bit tells if we can pass, and highest tells if camera can't pass
 	C: block camera
 nothing makes it affect the opposite direction
 flag 10 is toggled when it's copied to the IntersectPoint
+the high bit is how to read height so that explains why it blocked the camera
+low bit seems to be more of a general "player does not interact"

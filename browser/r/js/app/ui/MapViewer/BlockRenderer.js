@@ -5,7 +5,6 @@ import RenderBatch from '../gl/gx/RenderBatch.js';
 import GX from '../gl/gx/GX.js';
 import { MAP_CELL_SIZE } from '../../../game/Game.js';
 import Box from '../gl/Model/Box.js';
-import { hsv2rgb } from '../../../Util.js';
 
 //struct types
 let HitsBinEntry, SurfaceType;
@@ -308,7 +307,7 @@ export default class BlockRenderer {
             gl.polygonOffset(-20, 20);
         })
 
-        const batches = [];
+        let vtxs = [gl.TRIANGLES];
         for(let i=0; i<block.hits.length; i++) {
             const hit = block.hits[i];
             let id = -1;
@@ -321,31 +320,12 @@ export default class BlockRenderer {
                     hit:    hit,
                 });
             }
-            const [r,g,b] = hsv2rgb(((hit.type & 0x3F) / 0x3F)*360,
-                (hit.type & 0x40) ? 0.25 : 1, 1);
-            const color = [r*255, g*255, b*255, 0xC0 ];
-            let H1, H2; //height
-            if(hit.type & 0x80) {
-                H1 = (hit.height[0] << 8) | hit.height[1];
-                H2 = H1;
-            }
-            else {
-                H1 = hit.height[0];
-                H2 = hit.height[1];
-            }
-            const height = Math.max(H1, H2);
-
-            //XXX draw a plane, and confirm if it's just the higher of the
-            //two heights (why?) or if there's one height per point
-            const box = Box.fromLine(this.gx,
-                [hit.x1,hit.y1 + (height/2),hit.z1], //p1
-                [hit.x2,hit.y2 + (height/2),hit.z2], //p2
-                [0.5, height, 1] //size
-                ).setColors(color).setId(id);
-            batches.push(box.batch);
+            const v = hit.toVtxs(gx, id);
+            v.shift(); //remove TRIANGLES
+            vtxs = vtxs.concat(v);
         }
 
-        batch.addBatches(...batches);
+        batch.addVertices(...vtxs);
         batch.addFunction(() => { gl.disable(gl.POLYGON_OFFSET_FILL) });
         return batch;
     }

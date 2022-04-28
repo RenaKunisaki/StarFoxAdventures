@@ -5,6 +5,7 @@ import Map from "./Map.js";
 import DisplayList from '../DisplayList.js';
 import SfaTexture from '../SfaTexture.js';
 import Texture from '../../app/ui/gl/Texture.js'
+import BlockHit from './BlockHit.js';
 
 //struct types
 let MapBlock = null;
@@ -236,8 +237,9 @@ export default class Block {
         this.hitsOffset = offset;
         this.hits       = [];
         for(let iHit=0; iHit<count; iHit++) {
-            this.hits.push(HitsBinEntry.fromBytes(dBin,
-                offset + (iHit * HitsBinEntry.size)));
+            const offs  = offset + (iHit * HitsBinEntry.size);
+            const entry = HitsBinEntry.fromBytes(dBin, offs);
+            this.hits.push(new BlockHit(this, entry, iHit, offs));
         }
     }
 }

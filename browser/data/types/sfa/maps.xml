@@ -233,11 +233,31 @@
     </enum>
 
     <enum name="HitType" type="u8">
-        <item name="climbableWall" value="0x03" />
-        <item name="jumpOffLedge" value="0x04" />
-        <item name="climbUpLedge" value="0x06" />
+        <item name="barrier" value="0x01">
+            <description>You shall not pass</description>
+        </item>
+        <item name="grabLedge" value="0x02">
+            <description>Forces player to grab onto ledge when walking off it</description>
+        </item>
+        <item name="climbableWall" value="0x03">
+            <description>Lets you climb the wall</description>
+        </item>
+        <item name="jumpOffLedge" value="0x04">
+            <description>When going off the ledge, you jump</description>
+        </item>
+        <item name="jumpOffLedge05" value="0x05">
+            <description>Same as 04?</description>
+        </item>
+        <item name="climbUpLedge" value="0x06">
+            <description>If player can reach, they'll jump/climb up the ledge</description>
+        </item>
         <item name="ladder" value="0x0A" />
-        <item name="tunnel" value="0x0E" />
+        <item name="blockPushBarrier" value="0x0D">
+            <description>Bounds that you can push a block in</description>
+        </item>
+        <item name="tunnel" value="0x0E">
+            <description>Player crawls through</description>
+        </item>
     </enum>
 
     <struct name="RomListEntry">
@@ -499,7 +519,8 @@
         <field type="u8" count="2" name="height" />
         <field type="u8" name="flags" />
         <field type="HitType" name="type" />
-        <field type="s16" count="2" name="iPoint" />
+        <field type="u16" />
+        <field type="u16" />
     </struct>
 
     <struct name="ShaderLayer">

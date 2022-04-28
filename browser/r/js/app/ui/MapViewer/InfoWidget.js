@@ -141,22 +141,28 @@ export default class InfoWidget {
          *  @param {object} info The block info.
          */
         const hit = info.hit;
-        const sx  = Math.abs(hit.x1 - hit.x2);
-        const sy  = Math.abs(hit.y1 - hit.y2);
-        const sz  = Math.abs(hit.z1 - hit.z2);
+        const [x1,y1,z1] = hit.coords[0];
+        const [x2,y2,z2] = hit.coords[1];
         const rows = [
             E.tr(E.th(null, `Hit #${info.idx}`, {colspan:2})),
             E.tr( E.th(null, "Offset"), E.td('hex', `0x${hex(info.offset,6)}`) ),
             E.tr( E.th(null, "Block"), E.td('string', info.block.header.name) ),
             E.tr( E.th(null, "Type"), E.td('string',
-                `0x${hex(hit.type,2)} ${HitType.valueToString(hit.type & 0x7F)}`,
+                `0x${hex(hit.type,2)} ${HitType.valueToString(hit.type)}`,
             )),
-            E.tr( E.th(null, "X"), E.td('float', `${hit.x1} - ${hit.x2} (${sx})`) ),
-            E.tr( E.th(null, "Y"), E.td('float', `${hit.y1} - ${hit.y2} (${sy})`) ),
-            E.tr( E.th(null, "Z"), E.td('float', `${hit.z1} - ${hit.z2} (${sz})`) ),
-            E.tr( E.th(null, "Height"), E.td('int', hit.height) ),
-            E.tr( E.th(null, "Flags"), E.td('hex', `0x${hex(hit.flags,2)}`) ),
-            E.tr( E.th(null, "Points"), E.td('int', `${hit.iPoint[0]}, ${hit.iPoint[1]}`) ),
+            E.tr( E.th(null, "X"), E.td('float', `${x1} - ${x2}`) ),
+            E.tr( E.th(null, "Y"), E.td('float', `${y1} - ${y2}`) ),
+            E.tr( E.th(null, "Z"), E.td('float', `${z1} - ${z2}`) ),
+            E.tr( E.th(null, "Height"), E.td('int', `${hit.height[0]}, ${hit.height[1]}`) ),
+            E.tr( E.th(null, "IgnorePlayer"),  E.td('bool', hit.flags.ignorePlayer ? 'Yes' : 'No')),
+            E.tr( E.th(null, "UnkFlag40"),  E.td('bool', hit.flags.unk40 ? 'Yes' : 'No')),
+            E.tr( E.th(null, "UnkFlag20"),  E.td('bool', hit.flags.unk20 ? 'Yes' : 'No')),
+            E.tr( E.th(null, "UnkFlag10"),  E.td('bool', hit.flags.unk10 ? 'Yes' : 'No')),
+            E.tr( E.th(null, "UnkFlag08"),  E.td('bool', hit.flags.unk08 ? 'Yes' : 'No')),
+            E.tr( E.th(null, "UnkFlag04"),  E.td('bool', hit.flags.unk04 ? 'Yes' : 'No')),
+            E.tr( E.th(null, "UnkFlag02"),  E.td('bool', hit.flags.unk02 ? 'Yes' : 'No')),
+            E.tr( E.th(null, "UnkTypeBits"),  E.td('int', hit.unkTypeBits)),
+            E.tr( E.th(null, "Unk10"),  E.td('hex', `0x${hex(hit.unk10,4)} 0x${hex(hit.unk12,4)}`)),
         ];
         this._tbl.append(...rows);
     }
