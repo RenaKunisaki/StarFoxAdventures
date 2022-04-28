@@ -258,6 +258,9 @@
         <item name="tunnel" value="0x0E">
             <description>Player crawls through</description>
         </item>
+        <item name="waterEdge" value="0x10">
+            <description>Lets you climb out of water</description>
+        </item>
     </enum>
 
     <struct name="RomListEntry">
