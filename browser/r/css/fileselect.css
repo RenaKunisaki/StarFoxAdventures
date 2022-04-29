@@ -51,3 +51,33 @@
 #saveSlotContainer {
     display: none;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0%;
+    }
+    to {
+        opacity: 100%;
+    }
+}
+
+#tab-file-select .box {
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+}
+
+#fileSelect_iso {
+    animation: fadeIn 0.5s;
+}
+#fileSelect_save {
+    animation: fadeIn 0.5s;
+    animation-delay: 0.25s;
+}
+#fileSelect_ram {
+    animation: fadeIn 0.5s;
+    animation-delay: 0.5s;
+}
+#fileSelect_about {
+    animation: fadeIn 0.5s;
+    animation-delay: 0.75s;
+}
