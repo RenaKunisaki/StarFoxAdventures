@@ -1,11 +1,16 @@
-.fileSelect .row {
-    padding: 0.5em;
-    margin-bottom: 2em;
+.fileSelect .header {
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-bottom: 1em;
+    border-bottom: 1px var(--border-color) solid;
 }
 
-.fileSelect .row:not(:first-child) {
-    border-top: 1px var(--border-color) solid;
-    padding-top: 1em;
+.fileSelect .main {
+    padding: 0.5em;
+    margin-bottom: 2em;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
 }
 
 .fileSelect h1 {
@@ -17,15 +22,32 @@
     margin: 1em;
 }
 
-.fileSelect .columns {
-    display: flex;
-    flex-direction: row;
+.fileSelect .box {
+    flex-basis: 33%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: inline-block;
+    margin-left: 1em;
+    margin-top: 1em;
+    padding-bottom: 1em;
+    position: relative; /* for partial border */
 }
-.fileSelect .leftPane {
-    flex-basis: 50%;
+
+.fileSelect .box::after {
+    /* partial border hack */
+    content: '';
+    height: var(--border-size);
+    background: var(--border-color);
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+  }
+
+.fileSelect .box:not(:last-child) {
     border-right: 1px var(--border-color) solid;
 }
-.fileSelect .rightPane {
-    flex-basis: 50%;
-    margin-left: 1em;
+
+#saveSlotContainer {
+    display: none;
 }

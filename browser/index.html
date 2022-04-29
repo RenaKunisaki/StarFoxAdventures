@@ -24,7 +24,7 @@
     <body>
         <div id="loading">Loading...</div>
         <div id="tab-file-select" class="tabBody fileselect" data-tab-name="Main">
-            <div class="row about">
+            <div class="header">
                 <h1>Star Fox Adventures data browser</h1>
                 <div class="explanation">
                     This app lets you explore the contents of a Star Fox Adventures
@@ -38,46 +38,37 @@
                 </div>
             </div>
 
-            <div class="row">
-                <h1>ISO File</h1>
-                <div class="columns">
-                    <div class="leftpane">
-                        <div>
-                            <input type="file" name="iso" id="fileIso" />
-                            <span class="progress" id="fileIsoProgress"></span>
-                        </div>
+            <div class="main">
+                <div class="box">
+                    <h1>ISO File</h1>
+                    <div>
+                        <input type="file" name="iso" id="fileIso" />
+                        <span class="progress" id="fileIsoProgress"></span>
+                    </div>
+                    <div id="isoFileBeforeLoadInfo">
                         <div class="explanation">
                             Select a Star Fox Adventures ISO file to examine it.
                         </div>
                         <div class="note">
-                            <h2>Supported versions:</h2>
+                            <h2>Fully supported versions:</h2>
                             <ul>
                                 <li>US version 1.0 (MD5: <code>afb0306454b581e37a62170fdfd1de09</code>)</li>
-                                <li>Other versions (less information available)</li>
                             </ul>
+                            <span>Other versions can be used but may have less information available.</span>
                             <span>If no file is selected, you can still examine a save file,
                                 but not as much information will be available.
                             </span>
                         </div>
                     </div>
-                    <div class="rightpane">
-                        <h2>Selected file:</h2>
-                        <div id="selectedIsoInfo">None</div>
-                    </div>
+                    <div id="selectedIsoInfo"></div>
                 </div>
-            </div>
 
-            <div class="row">
-                <h1>Save File</h1>
-                <div class="columns">
-                    <div class="leftpane">
-                        <div>
-                            <input type="file" name="save" id="fileSave" />
-                        </div>
-                        <div>
-                            <label for="saveSlot">Slot:</label>
-                            <select id="saveSlot"></select>
-                        </div>
+                <div class="box">
+                    <h1>Save File</h1>
+                    <div>
+                        <input type="file" name="save" id="fileSave" />
+                    </div>
+                    <div id="saveFileBeforeLoadInfo">
                         <div class="explanation">
                             Select a Star Fox Adventures save file to examine it.
                         </div>
@@ -89,16 +80,54 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="rightpane">
-                        <h2>Selected file:</h2>
-                        <div id="selectedSaveInfo">None</div>
+                    <div id="saveSlotContainer">
+                        <label for="saveSlot">Slot:</label>
+                        <select id="saveSlot"></select>
                     </div>
+                    <div id="selectedSaveInfo"></div>
                 </div>
-            </div>
 
-            <div class="note">
-                No files are uploaded to the server. You must provide your own
-                legally-obtained copy.
+                <div class="box">
+                    <h1>RAM Dump File</h1>
+                    <div>TODO</div>
+                </div>
+
+                <div class="box about">
+                    <h1>About this app</h1>
+                    <p>This app lets you examine the contents of a Star Fox Adventures
+                        ISO file, save file, or memory dump. It works entirely in the
+                        browser; no files are sent to the server. You will need to obtain
+                        the game files yourself.
+                    </p>
+                    <p>This app was created by <a href="https://twitter.com/RenaKunisaki">Rena Kunisaki</a>.
+                        Its source is available on <a href="https://github.com/RenaKunisaki/StarFoxAdventures/tree/master/browser">GitHub</a>.
+                        It's published under the <a href="https://en.wikipedia.org/wiki/MIT_License">MIT License</a>.
+                        It's primarily used to aid in reverse-engineering and modding, finding speedrun strategies, and
+                        uncovering unused and partially-deleted content.
+                    </p>
+                    <p>This app uses the following third-party modules (which may have their own licenses):
+                        <ul>
+                            <li><a href="https://glmatrix.net/docs/index.html">glMatrix</a></li>
+                            <li><a href="https://github.com/nodeca/pako">pako.js</a>, a port of <a href="https://zlib.net/">zlib</a></li>
+                            <li><a href="https://github.com/LagoLunatic/wwrando/blob/master/wwlib/texture_utils.py">texture_utils.py</a> ported from the Wind Waker Randomizer</li>
+                        </ul>
+                    </p>
+                    <p>This app demonstrates several modern web technologies, such as:
+                        <ul>
+                            <li>WebGL2 (3D rendering, including alternate framebuffers for picking)</li>
+                            <li>Dynamic image generation (texture decoding from game-specific formats)</li>
+                            <li>ArrayBuffer and typed arrays (decoding various game-specific binary formats, including not-quite-UTF-8-compliant text)</li>
+                            <li>Array preallocation (generating large arrays without excessive garbage collection that hampers performance)</li>
+                            <li>File API (accessing the user-supplied files without uploading them)</li>
+                            <li>Download API (saving modified XML files)</li>
+                            <li>async/await methods (downloading XML files containing additional information not present in the game files)</li>
+                            <li>Cross-window communication (viewing files in a new window)</li>
+                            <li>Flexbox (responsive layout that works on a variety of devices)</li>
+                            <li>CSS variables</li>
+                            <li>The capability for a JavaScript app to function without cookies, ads, or bloated libraries that poorly duplicate built-in functionality</li>
+                        </ul>
+                    </p>
+                </div>
             </div>
 
         </div><!-- tab-file-select -->

@@ -23,9 +23,14 @@ export default class FileSelect {
         const eProgress = document.getElementById('fileIsoProgress');
         this.eIso = document.getElementById('fileIso');
         this.eIso.addEventListener('change', async e => {
-            const elem = document.getElementById('selectedIsoInfo');
-            clearElement(elem);
-            elem.append(E.div('info', "Loading..."));
+            let elem = document.getElementById('isoFileBeforeLoadInfo');
+            if(elem) elem.style.display = 'none';
+            elem = document.getElementById('selectedIsoInfo');
+            if(elem) {
+                elem.style.display = 'block';
+                clearElement(elem);
+                elem.append(E.div('info', "Loading..."));
+            }
             this.app.progress.show();
             await this.app.progress.update({
                 taskText: "Reading ISO",
@@ -103,6 +108,8 @@ export default class FileSelect {
     _onSaveLoaded(save) {
         //called when app loads a new save file.
         //save: SaveGame
+        document.getElementById('saveSlotContainer').style.display = 'block';
+        document.getElementById('saveFileBeforeLoadInfo').style.display = 'none';
         this._showSaveInfo(save);
         this._makeSlotSelect(save);
     } //_onSaveLoaded
