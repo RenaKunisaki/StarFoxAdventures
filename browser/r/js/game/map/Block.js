@@ -80,11 +80,12 @@ export default class Block {
         fBlock = new GameFile(fBlock);
 
         //get the data for this block
+        let view;
         try {
             this.index      = firstBlock + this.sub;
             const offsBlock = dTab.getUint32(this.index*4) & 0xFFFFFF;
             const blockData = fBlock.decompress(offsBlock);
-            const view      = new DataView(blockData);
+            view            = new DataView(blockData);
             this.header     = MapBlock.fromBytes(view);
             //console.log("Map Block Header", this.header);
         }
