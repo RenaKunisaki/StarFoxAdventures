@@ -13,4 +13,5 @@
     <address name="mapName" type="char*" address="0x802cb940" count="0x75" />
     <!-- array of map dir ID => parent dir ID -->
     <address name="parentMapId" type="s16" address="0x802CBDFC" count="0x4B" />
+    <address name="pPlayer" type="ObjInstance*" address="0x803428f8" />
 </addresses>
