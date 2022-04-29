@@ -1,8 +1,11 @@
 import Game from "../Game.js";
 import { assertType } from "../../Util.js";
+import BinaryFile from "../../lib/BinaryFile.js";
 
 //struct types
 let ConsoleType, BootInfo;
+
+const RAM_START = 0x80000000;
 
 export default class RamDump {
     /** A raw RAM dump file. */
@@ -14,6 +17,11 @@ export default class RamDump {
         BootInfo = this.app.types.getType('dolphin.os.BootInfo');
     }
 
+    addrToOffset(addr) {
+        if(addr < RAM_START || addr >= RAM_START + this._file.size) return null;
+        return addr - RAM_START;
+    }
+
     async load(file, version='U0') {
         /** Load a save file.
          *  @param {BinaryFile} file The file to load.
@@ -23,6 +31,7 @@ export default class RamDump {
         this._version = version; //game version
         const buffer  = await this._file.arrayBuffer();
         const view    = new DataView(buffer);
+        this.data     = new BinaryFile(view);
 
         if(file.size != 24*1024*1024 //standard size
         && file.size != 48*1024*1024) { //debug size

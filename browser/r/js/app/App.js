@@ -17,6 +17,7 @@ import MapList from "./ui/MapList.js";
 import MapGrid from "./ui/MapGrid.js";
 import MapViewer from "./ui/MapViewer/MapViewer.js";
 import MiscTab from "./ui/MiscTab.js";
+import RamInfo from "./ui/RamInfo.js";
 import Warptab from "./ui/Warptab.js";
 import TextList from "./ui/TextList.js";
 import { ISO } from "../types/iso/iso.js";
@@ -66,6 +67,7 @@ export default class App {
                 mapGrid:    new MapGrid   (this.game),
                 mapView:    new MapViewer (this.game),
                 miscTab:    new MiscTab   (this.game),
+                ramInfo:    new RamInfo   (this.game),
                 warpTab:    new Warptab   (this.game),
                 textList:   new TextList  (this.game),
             };
@@ -88,6 +90,9 @@ export default class App {
                 }
                 if(elem.getAttribute('data-needs-iso')) {
                     elem.append(E.div('notice', "Select an ISO file to examine."));
+                }
+                if(elem.getAttribute('data-needs-ram')) {
+                    elem.append(E.div('notice', "Select a RAM dump file to examine."));
                 }
             }
             this.ui.tabs = new TabBar(tabs);

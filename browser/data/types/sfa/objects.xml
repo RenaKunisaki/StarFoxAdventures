@@ -1,6 +1,116 @@
 <?xml version="1.0"?>
 <?xml-model href="../types.xsd"?>
 <types namespace="objects">
+    <enum name="ObjCatId" type="s16">
+        <item value="0x00" name="DummyObject" />
+        <item value="0x01" name="Player" />
+        <item value="0x02" name="Tricky" />
+        <item value="0x04" name="setuppoint" />
+        <item value="0x05" name="checkpoint4" />
+        <item value="0x06" name="collectible" />
+        <item value="0x08" name="InfoPoint" />
+        <item value="0x09" name="EffectBox" />
+        <item value="0x10" name="AnimatedObj" />
+        <item value="0x12" name="StaticCamera" />
+        <item value="0x13" name="WalkCamera" />
+        <item value="0x14" name="TrigPnt" />
+        <item value="0x15" name="TrigPln" />
+        <item value="0x16" name="TrigCyl" />
+        <item value="0x17" name="TrigArea" />
+        <item value="0x18" name="TrigTime" />
+        <item value="0x19" name="TrigButt" />
+        <item value="0x1a" name="TriggSetp" />
+        <item value="0x1b" name="TrigBits" />
+        <item value="0x1c" name="baddie" />
+        <item value="0x1d" name="torch" />
+        <item value="0x1e" name="sideload" />
+        <item value="0x1f" name="siderepel" />
+        <item value="0x21" name="texscroll" />
+        <item value="0x24" name="fireball" />
+        <item value="0x25" name="warp" />
+        <item value="0x26" name="mammoth" />
+        <item value="0x27" name="InvHit" />
+        <item value="0x28" name="fallingRock" />
+        <item value="0x29" name="edibleMushroom" />
+        <item value="0x2a" name="enemyMushroom" />
+        <item value="0x2b" name="bombPlant" />
+        <item value="0x2c" name="curve" />
+        <item value="0x2d" name="playerWeapon" />
+        <item value="0x2e" name="bike" />
+        <item value="0x30" name="various0030" />
+        <item value="0x31" name="InfoText" />
+        <item value="0x32" name="CampFire" />
+        <item value="0x33" name="PressureSwitch" />
+        <item value="0x35" name="CCriverflow" />
+        <item value="0x36" name="DFropenode" />
+        <item value="0x37" name="ObjCreator" />
+        <item value="0x38" name="Door38" />
+        <item value="0x39" name="LevelControl" />
+        <item value="0x3a" name="Pushable" />
+        <item value="0x3b" name="TrigCrve" />
+        <item value="0x3c" name="SidekickBall" />
+        <item value="0x3d" name="CFPerch" />
+        <item value="0x3e" name="CFPrisonUncle" />
+        <item value="0x3f" name="CFPrisonCage" />
+        <item value="0x40" name="CloudRunner" />
+        <item value="0x41" name="Area" />
+        <item value="0x42" name="DigTunnel" />
+        <item value="0x43" name="LevelName" />
+        <item value="0x44" name="SH_thorntail" />
+        <item value="0x45" name="DIMLavaBall" />
+        <item value="0x46" name="DIMSnowBall" />
+        <item value="0x47" name="DIM2PathGen" />
+        <item value="0x48" name="WaveAnimator" />
+        <item value="0x49" name="AlphaAnimator" />
+        <item value="0x4a" name="GroundAnimator" />
+        <item value="0x4b" name="HitAnimator" />
+        <item value="0x4c" name="WallAnimator" />
+        <item value="0x4d" name="XYZAnimator" />
+        <item value="0x4e" name="VisAnimator" />
+        <item value="0x4f" name="ExplodeAnimator" />
+        <item value="0x50" name="IceSmash" />
+        <item value="0x51" name="ProjectileSwitch" />
+        <item value="0x52" name="PressureSwitch52" />
+        <item value="0x53" name="Door53" />
+        <item value="0x54" name="Lock" />
+        <item value="0x55" name="SeqObject" />
+        <item value="0x56" name="SeqObj2" />
+        <item value="0x57" name="IMMultiSeq" />
+        <item value="0x59" name="WM_Column" />
+        <item value="0x5c" name="sfxPlayer" />
+        <item value="0x5d" name="AppleOnTree" />
+        <item value="0x60" name="LFXEmitter" />
+        <item value="0x61" name="various0061" />
+        <item value="0x63" name="Explodable" />
+        <item value="0x65" name="MagicPlant" />
+        <item value="0x66" name="IMIcePillar" />
+        <item value="0x67" name="AreaFXEmit" />
+        <item value="0x68" name="MoonSeedPlantingSpot" />
+        <item value="0x69" name="CurveFish" />
+        <item value="0x6a" name="Tree" />
+        <item value="0x6b" name="FXEmit" />
+        <item value="0x6c" name="KT_RexFloorSwitch" />
+        <item value="0x6d" name="KT_Rex" />
+        <item value="0x6e" name="SPShop" />
+        <item value="0x6f" name="SPShopKeeper" />
+        <item value="0x70" name="ShopItem" />
+        <item value="0x71" name="Cannon" />
+        <item value="0x72" name="SkeetlaWall" />
+        <item value="0x73" name="WaterFallSpray" />
+        <item value="0x78" name="ARWGenerator" />
+        <item value="0x79" name="Light" />
+        <item value="0x7a" name="StaffActivated" />
+        <item value="0x7b" name="ProjectedLight" />
+        <item value="0x7c" name="ArwingLevelObj" />
+        <item value="0x7d" name="MagicCaveTop" />
+        <item value="0x7e" name="CmbSrc" />
+        <item value="0x7f" name="Decorative" />
+        <item value="0x80" name="DeathGas" />
+        <item value="0x81" name="FogControl" />
+        <item value="0x82" name="GuardClaw" />
+        <item value="0x83" name="Lightning" />
+    </enum>
+
     <struct name="ObjectData">
         <field name="unk00" type="float" />
         <field name="scale" type="float" />
@@ -25,7 +135,7 @@
         <field name="unk4C" type="s16" />
         <field name="hitbox_flags60" type="u16" /><!-- HitboxFlags60 -->
         <field name="dll_id" type="s16" /><!-- DLL_ID -->
-        <field name="catId" type="u16" /><!-- ObjCatId -->
+        <field name="catId" type="ObjCatId" />
         <field name="unk54" type="u8" />
         <field name="nModels" type="u8" />
         <field name="nPlayerObjs" type="u8" />
@@ -74,5 +184,143 @@
         <field name="name" type="string" count="11" />
         <!-- following is fields pointed to by the above.
         only way to determine size is by OBJECTS.TAB -->
+    </struct>
+
+    <struct name="ObjTransform">
+        <field type="vec3s" name="rotation" />
+        <field type="u16" name="flags" />
+        <field type="float" name="scale" />
+        <field type="vec3f" name="pos" />
+    </struct>
+
+    <struct name="ObjInstance">
+        <field type="ObjTransform" name="xf" />
+        <field type="vec3f" name="prevPos" />
+        <field type="vec3f" name="vel" />
+        <field type="u32" name="heldBy"><!-- ObjInstance* -->
+            <description>eg for platform you're standing on; position is relative to this</description>
+        </field>
+        <field type="u8" name="map">
+            <description>related to children and/or player objects</description>
+        </field>
+        <field type="u8" name="mtxIdx" />
+        <field type="u8" name="newOpacity" />
+        <field type="u8" name="opacity">
+            <note>is set to newOpacity each frame</note>
+        </field>
+        <field type="u32" name="next"><!-- ObjInstance* -->
+            <note>list is not necessarily in order</note>
+        </field>
+        <field type="float" name="loadDistance">
+            <note>same value as 0x40</note>
+        </field>
+        <field type="float" name="cullDistance2">
+            <note>2040=100% opacity, 128=~50% - camera distance?</note>
+        </field>
+        <field type="ObjCatId" name="catId" />
+        <field type="s16" name="defNo" /><!-- ObjDefEnum -->
+        <field type="short">
+            <note>returned from some seq funcs</note>
+        </field>
+        <field type="u8" /><!-- unknowns -->
+        <field type="u8" />
+        <field type="u32" name="objDef" /><!-- ObjDef* -->
+        <field type="u32" name="data" /><!-- ObjData* -->
+        <field type="u32" name="hitstate" /><!-- HitState* -->
+        <field type="u32" name="hitboxMtx" /><!-- HitboxMatrix* -->
+        <field type="u32" /><!-- ?* -->
+        <field type="u32" name="pEventName" />
+        <field type="u32" name="shadow" /><!-- Shadow* -->
+        <field type="u32" name="funcs"><!-- ObjectFuncPtrs* -->
+            <description>-&gt; DLL func ptrs, or NULL</description>
+        </field>
+        <field type="u32" name="pVecs" /><!-- ?* -->
+        <field type="u32" name="pTextures"><!-- astruct_53** (Texture*?) -->
+            <note>count = file-&gt;count59</note>
+        </field>
+        <field type="u32" name="focusPoints"><!-- vec3f[2] * -->
+            <note>points for camera to look at; count = file-&gt;count72</note>
+        </field>
+        <field type="u32" name="targetVal_78"><!-- ObjTargetField78* -->
+            <note>related to camera targeting; one per focus point?</note>
+        </field>
+        <field type="u32" name="models"><!-- ModelInstance** -->
+            <note>one per model</note>
+        </field>
+        <field type="vec3f" name="oldPos" />
+        <field type="vec3f" name="pos_0x8c" />
+        <field type="float" name="animTimer">
+            <note>controls idle animation</note>
+        </field>
+        <field type="float" name="animVal_9c" />
+        <field type="s16" name="animId">
+            <description>which animation is playing</description>
+        </field>
+        <field type="short" name="animId_a2" />
+        <field type="float" name="cullOffset" />
+        <field type="float" name="cullDistance">
+            <note>affects brightness and opacity; multiplied by scale; fuzz?</note>
+        </field>
+        <field type="u8" name="mapId">
+            <note>crashes if &lt; 0x80; passed to loadCharacter but not used?</note>
+        </field>
+        <field type="u8" name="curModel">
+            <description>which model index to use</description>
+        </field>
+        <field type="u8" name="priority">
+            <description>0x50 for most; determines order added to global obj list</description>
+        </field>
+        <field type="u8" name="flags_0xaf"><!-- ObjInstance_FlagsAF -->
+            <note>28=don't render something (no models?)</note>
+        </field>
+        <field type="u16" name="flags_0xb0" /><!-- ObjInstance_FlagsB0 -->
+        <field type="s16" name="objNo" />
+        <field type="short" name="curSeq" />
+        <field type="s8" /><!-- unknowns -->
+        <field type="s8" />
+        <field type="u32" name="state" /><!-- pointer, type depends on obj -->
+        <field type="u32" name="seqFn">
+            <note>-&gt; int objSeqFn(ObjInstance *this, ObjInstance *that, SeqState *seqState)</note>
+        </field>
+        <field type="u32" name="override" /><!-- ObjInstance* -->
+        <field type="u32" name="parent" /><!-- ObjInstance* -->
+        <field type="u32" name="child" /><!-- ObjInstance *[2?] -->
+        <field type="u32" /><!-- guessed -->
+        <field type="u32" /><!-- ?8* -->
+        <field type="u16" />
+        <field type="u16" /><!-- guessed -->
+        <field type="u32" name="msgQueue" /><!-- pointer -->
+        <field type="u8" /><!-- guessed -->
+        <field type="u8" /><!-- guessed -->
+        <field type="u8" /><!-- guessed -->
+        <field type="u8" name="flags_e3" />
+        <field type="u8" name="targetVal_78_count">
+            <note>count for field_0x74</note>
+        </field>
+        <field type="u8" name="flags_0xe5">
+            <note>1:frozen</note>
+        </field>
+        <field type="short" />
+        <field type="u8" name="hintTextIdx" />
+        <field type="u8" /><!-- guessed -->
+        <field type="u8">
+            <note>relates to freeing</note>
+        </field>
+        <field type="u8" name="nChildren" />
+        <field type="u32" name="colorEC" /><!-- Color4b -->
+        <field type="u8" />
+        <field type="u8" name="brightness" />
+        <field type="u8" name="colorIdx" />
+        <field type="u8" />
+        <field type="int" name="fadeTimer">
+            <description>counts down to 0 before disappearing</description>
+        </field>
+        <field type="u32" name="flags_0xf8">
+            <description>prevents picking up - also an ObjDefEnum and an ObjInstance* (target)?</description>
+        </field>
+        <field type="vec3f" name="oldVel" />
+        <field type="u32" name="cbAfterUpdateBones">
+            <note>? objField108_func(ObjInstance *obj, ModelInstance *model, Mtx44 *mtx) - maybe start of another object/subclass</note>
+        </field>
     </struct>
 </types>
