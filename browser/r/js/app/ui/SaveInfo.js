@@ -1,5 +1,5 @@
 import Game from "../../game/Game.js";
-import { E } from "../../lib/Element.js";
+import { E, clearElement } from "../../lib/Element.js";
 import { int, float, hex, Percent, Table, assertType } from "../../Util.js";
 
 //XXX verify
