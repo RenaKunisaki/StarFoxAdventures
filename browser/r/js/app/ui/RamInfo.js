@@ -3,6 +3,9 @@ import { E, clearElement } from "../../lib/Element.js";
 import { assertType, hex } from "../../Util.js";
 import Table from "./Table.js";
 
+//struct types
+let ObjInstance;
+
 export default class RamInfo {
     /** Displays info from RAM dump.
      */
@@ -14,16 +17,95 @@ export default class RamInfo {
     } //constructor
 
     refresh() {
-        const ram    = this.app.ramDump;
-        const aObjs  = ram.addrToOffset(this.game.addresses.loadedObjs.address);
-        const aNObjs = ram.addrToOffset(this.game.addresses.nLoadedObjs.address);
-
-        ram.data.seek(aNObjs);
-        const nObjs  = ram.data.readU32();
-        console.log("nObjs", nObjs);
-
-        const elem = E.div('ramInfo',
-            E.div(null, "n objs:", nObjs.toLocaleString()));
+        ObjInstance = this.app.types.getType('sfa.objects.ObjInstance');
+        const elem = E.div('ramInfo', this._makeLoadedObjWidget());
         clearElement(this.element).append(elem);
+    }
+
+    _makeLoadedObjWidget() {
+        /** Create the widget that will show the list of loaded objects. */
+        const ram = this.app.ramDump;
+
+        const aNObjs = ram.addrToOffset(this.game.addresses.nLoadedObjs.address);
+        ram.data.seek(aNObjs);
+        const nObjs = ram.data.readU32();
+
+        let loaded = false;
+        let eList = E.div('loading', "Loading...");
+        const eObjs = E.details('objlist',
+            E.summary(null, `Objects: ${nObjs.toLocaleString()}`),
+            eList,
+        );
+        eObjs.addEventListener('toggle', e => {
+            if(!eObjs.open) return;
+            if(loaded) return;
+            const lst = this._makeLoadedObjList();
+            clearElement(eList).append(lst);
+            loaded = true;
+        })
+        return eObjs;
+    }
+
+    _makeLoadedObjList() {
+        /** Create the list of loaded objects. */
+        const ram    = this.app.ramDump;
+
+        //get the object pointer list
+        const aNObjs = ram.addrToOffset(this.game.addresses.nLoadedObjs.address);
+        ram.data.seek(aNObjs);
+        const nObjs = ram.data.readU32();
+        const aObjs = ram.addrToOffset(this.game.addresses.loadedObjs.address)
+        ram.data.seek(aObjs);
+        const pObjs = ram.addrToOffset(ram.data.readU32());
+        if(!(pObjs && nObjs)) {
+            return E.div('error', "No objects loaded");
+        }
+
+        ram.data.seek(pObjs);
+        const objList = ram.data.readU32(nObjs);
+
+        //make the table
+        const tbl = this._makeObjListTable();
+
+        //populate the table
+        const view = new DataView(ram.data.buffer);
+        for(let iObj=0; iObj<nObjs; iObj++) {
+            tbl.add(this._makeObjListRow(ram, view, iObj, objList[iObj]));
+        }
+
+        return tbl.element;
+    }
+
+    _makeObjListTable() {
+        return new Table({title:"Objects", columns: [
+            {displayName:"#", name:'idx', type:'hex', length:4,
+                title:"Index in object list"},
+            {displayName:"RAM Addr", name:'addr',   type:'hex', length:8,
+                title:"ObjInstance address"},
+            {displayName:"DataAddr", name:'data',   type:'hex', length:8,
+                title:"ObjData address"},
+            {displayName:"Def Addr", name:'def',    type:'hex', length:8,
+                title:"ObjDef address"},
+            {displayName:"StateAdr", name:'state',  type:'hex', length:8,
+                title:"Obj state address"},
+            {displayName:"X", name:'x', type:'float', decimals:4, title:"X Coord"},
+            {displayName:"Y", name:'y', type:'float', decimals:4, title:"Y Coord"},
+            {displayName:"Z", name:'z', type:'float', decimals:4, title:"Z Coord"},
+        ]});
+    }
+
+    _makeObjListRow(ram, view, iObj, addr) {
+        const obj = ObjInstance.fromBytes(view, ram.addrToOffset(addr));
+        const row = {
+            idx:   iObj,
+            addr:  addr,
+            data:  obj.data,
+            def:   obj.objDef,
+            state: obj.state,
+            x:     obj.xf.pos.x,
+            y:     obj.xf.pos.y,
+            z:     obj.xf.pos.z,
+        };
+        return row;
     }
 }
