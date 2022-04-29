@@ -14,8 +14,8 @@ export default class Context {
          *  @param {function} drawFunc Function to call to render the scene.
          */
         this.fov   = 60; //degrees
-        this.zNear = 1;
-        this.zFar  = 50000;
+        this.zNear = 2.5;
+        this.zFar  = 10000;
         this.clearColor = [0.0, 0.5, 0.5, 1.0];
         this.clearDepth = 1.0; //game uses lower = nearer
         this.drawFunc   = drawFunc; //callback to draw the scene
