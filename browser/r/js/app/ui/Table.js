@@ -140,20 +140,22 @@ export default class Table {
                 }
                 case 'hex': {
                     num = parseInt(val);
-                    if(isNaN(num)) val = '';
+                    if(isNaN(num) || num == null) val = '';
                     else {
-                        val = val.toString(16);
-                        if(val.startsWith('0x')) val = val.substr(2);
-                        if(!col.lowercase) val = val.toUpperCase();
-                        if(col.length != undefined) val = val.padStart(col.length, '0');
-                        //XXX this won't work with 0x
+                        let length = col.length;
+                        if(isNaN(length) || length < 1) length = 1;
+                        const lol = new Uint32Array(1);
+                        lol[0] = val; //to handle negatives
+                        val = lol[0].toString(16).toUpperCase().padStart(length, '0');
                     }
                     break;
                 }
                 case 'float': {
                     num = parseFloat(val);
                     let decimals = col.decimals;
-                    if(decimals == undefined) val = val.toString();
+                    //null is a number because of fucking course it is
+                    if(isNaN(val) || val == null) val = '';
+                    else if(decimals == undefined) val = val.toString();
                     else val = val.toFixed(decimals);
                 }
             }

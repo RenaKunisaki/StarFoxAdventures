@@ -4,6 +4,7 @@ import BinaryFile from "../../lib/BinaryFile.js";
 
 //struct types
 let ConsoleType, BootInfo;
+let ObjInstance, ObjectData, RomListEntry;
 
 const RAM_START = 0x80000000;
 
@@ -15,6 +16,9 @@ export default class RamDump {
 
         ConsoleType = this.app.types.getType('dolphin.os.ConsoleType');
         BootInfo = this.app.types.getType('dolphin.os.BootInfo');
+        ObjInstance = this.app.types.getType('sfa.objects.ObjInstance');
+        ObjectData = this.app.types.getType('sfa.objects.ObjectData');
+        RomListEntry = this.app.types.getType('sfa.maps.RomListEntry');
     }
 
     addrToOffset(addr) {
@@ -32,6 +36,7 @@ export default class RamDump {
         const buffer  = await this._file.arrayBuffer();
         const view    = new DataView(buffer);
         this.data     = new BinaryFile(view);
+        this.view     = view;
 
         if(file.size != 24*1024*1024 //standard size
         && file.size != 48*1024*1024) { //debug size
@@ -39,5 +44,59 @@ export default class RamDump {
         }
 
         this.bootInfo = BootInfo.fromBytes(view, 0);
+        this._objDatas = {}; //objdef => data
+
+        //get the player object
+        this.data.seek(this.addrToOffset(
+            this.game.addresses.pPlayer.address));
+        this.pPlayer = this.data.readU32();
+        if(this.pPlayer) {
+            this.player = ObjInstance.fromBytes(view,
+                this.addrToOffset(this.pPlayer));
+        }
+        else this.player = null;
+    }
+
+    getLoadedObjects() {
+        /** Get list of loaded game objects. */
+        const data = this.data;
+        const view = this.view;
+
+        //get the object pointer list
+        const aNObjs = this.addrToOffset(this.game.addresses.nLoadedObjs.address);
+        data.seek(aNObjs);
+        const nObjs = data.readU32();
+
+        const aObjs = this.addrToOffset(this.game.addresses.loadedObjs.address)
+        data.seek(aObjs);
+        const pObjs = this.addrToOffset(data.readU32());
+        if(!(pObjs && nObjs)) return [];
+
+        //get the pointers
+        data.seek(pObjs);
+        const objList = data.readU32(nObjs);
+
+        //get the objects
+        const objs = [];
+        for(let pObj of objList) {
+            const obj = ObjInstance.fromBytes(view, this.addrToOffset(pObj));
+
+            let data = this._objDatas[obj.defNo];
+            if(!data) {
+                data = ObjectData.fromBytes(view, this.addrToOffset(obj.data));
+                this._objDatas[obj.defNo] = data;
+            }
+
+            const aDef = this.addrToOffset(obj.objDef);
+            const def  = aDef ? RomListEntry.fromBytes(view, aDef) : null;
+
+            objs.push({
+                addr:         pObj,
+                ObjInstance:  obj,
+                ObjectData:   data,
+                RomListEntry: def,
+            });
+        }
+        return objs;
     }
 }

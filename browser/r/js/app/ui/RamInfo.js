@@ -49,39 +49,13 @@ export default class RamInfo {
 
     _makeLoadedObjList() {
         /** Create the list of loaded objects. */
-        const ram  = this.app.ramDump;
-        const view = new DataView(ram.data.buffer);
-        this._objDatas = {}; //objdef => data
-
-        //get the object pointer list
-        const aNObjs = ram.addrToOffset(this.game.addresses.nLoadedObjs.address);
-        ram.data.seek(aNObjs);
-        const nObjs = ram.data.readU32();
-        const aObjs = ram.addrToOffset(this.game.addresses.loadedObjs.address)
-        ram.data.seek(aObjs);
-        const pObjs = ram.addrToOffset(ram.data.readU32());
-        if(!(pObjs && nObjs)) {
-            return E.div('error', "No objects loaded");
-        }
-        ram.data.seek(pObjs);
-        const objList = ram.data.readU32(nObjs);
-
-        //get the player object
-        ram.data.seek(ram.addrToOffset(
-            this.game.addresses.pPlayer.address));
-        this.pPlayer = ram.data.readU32();
-        if(this.pPlayer) {
-            this.player = ObjInstance.fromBytes(view,
-                ram.addrToOffset(this.pPlayer));
-        }
-        else this.player = null;
-
-        //make the table
+        const ram = this.app.ramDump;
         const tbl = this._makeObjListTable();
 
         //populate the table
-        for(let iObj=0; iObj<nObjs; iObj++) {
-            tbl.add(this._makeObjListRow(ram, view, iObj, objList[iObj]));
+        const objs = ram.getLoadedObjects();
+        for(let iObj=0; iObj<objs.length; iObj++) {
+            tbl.add(this._makeObjListRow(ram, iObj, objs[iObj]));
         }
 
         return tbl.element;
@@ -95,6 +69,8 @@ export default class RamInfo {
                 title:"ObjDef ID"},
             {displayName:"Name", name:'name',   type:'string',
                 title:"ObjDef Name"},
+            {displayName:"UniqueID", name:'id',   type:'hex', length:8,
+                title:"Object unique ID"},
             {displayName:"RAM Addr", name:'addr',   type:'hex', length:8,
                 title:"ObjInstance address"},
             {displayName:"DataAddr", name:'data',   type:'hex', length:8,
@@ -110,30 +86,25 @@ export default class RamInfo {
         ]});
     }
 
-    _makeObjListRow(ram, view, iObj, addr) {
-        const obj = ObjInstance.fromBytes(view, ram.addrToOffset(addr));
-        let data  = this._objDatas[obj.defNo];
-        if(!data) {
-            data = ObjectData.fromBytes(view, ram.addrToOffset(obj.data));
-            this._objDatas[obj.defNo] = data;
-        }
+    _makeObjListRow(ram, iObj, obj) {
         const row = {
             idx:   iObj,
-            addr:  addr,
-            data:  obj.data,
-            def:   obj.objDef,
-            defNo: obj.defNo,
-            name:  data.name,
-            state: obj.state,
-            x:     obj.xf.pos.x,
-            y:     obj.xf.pos.y,
-            z:     obj.xf.pos.z,
+            addr:  obj.addr,
+            data:  obj.ObjInstance.data,
+            def:   obj.ObjInstance.objDef,
+            defNo: obj.ObjInstance.defNo,
+            name:  obj.ObjectData.name,
+            id:    obj.RomListEntry ? obj.RomListEntry.id : null,
+            state: obj.ObjInstance.state,
+            x:     obj.ObjInstance.xf.pos.x,
+            y:     obj.ObjInstance.xf.pos.y,
+            z:     obj.ObjInstance.xf.pos.z,
         };
 
-        if(this.player) {
-            const dx = obj.xf.pos.x - this.player.xf.pos.x;
-            const dy = obj.xf.pos.y - this.player.xf.pos.y;
-            const dz = obj.xf.pos.z - this.player.xf.pos.z;
+        if(ram.player) {
+            const dx = obj.ObjInstance.xf.pos.x - ram.player.xf.pos.x;
+            const dy = obj.ObjInstance.xf.pos.y - ram.player.xf.pos.y;
+            const dz = obj.ObjInstance.xf.pos.z - ram.player.xf.pos.z;
             row.dist = Math.sqrt((dx*dx)+(dy*dy)+(dz*dz));
         }
         else row.dist = null;
