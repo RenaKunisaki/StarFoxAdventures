@@ -1,4 +1,5 @@
 import { SaveGame } from "../game/save/SaveGame.js";
+import RamDump from "../game/ram/RamDump.js";
 import { getXml } from "../Util.js";
 import StructParser from "../lib/Struct/StructParser.js";
 
@@ -28,6 +29,7 @@ export default class App {
         this._callbacks  = {
             onIsoLoaded: [],
             onSaveLoaded: [],
+            onRamLoaded: [],
             onSaveSlotChanged: [],
             onLanguageChanged: [],
         };
@@ -37,6 +39,7 @@ export default class App {
         this.saveGame    = null; //the loaded savegame file
         this.saveSlot    = null; //the selected slot
         this.saveSlotIdx = 0;
+        this.ramDump     = null; //RAM dump file
         this.language    = 'English';
         this.game        = new Game(this);
         //this.progress.hide();
@@ -188,6 +191,13 @@ export default class App {
         this._doCallback('onSaveSlotChanged', this.saveSlot);
     }
 
+    async loadRam(file) {
+        //load given RAM dump file
+        this.ramDump = new RamDump(this.game);
+        await this.ramDump.load(file);
+        this._doCallback('onRamLoaded', this.ramDump);
+    }
+
     showFile(file) {
         //Display contents of file. Used for child window.
         document.title = file.path;
@@ -195,9 +205,10 @@ export default class App {
         document.getElementById('loading').replaceWith(viewer.element);
     }
 
-    //callbacks
+    //callbacks (XXX auto-generate?)
     onIsoLoaded(cb) { this._callbacks.onIsoLoaded.push(cb) }
     onSaveLoaded(cb) { this._callbacks.onSaveLoaded.push(cb) }
+    onRamLoaded(cb) { this._callbacks.onRamLoaded.push(cb) }
     onSaveSlotChanged(cb) { this._callbacks.onSaveSlotChanged.push(cb) }
     onLanguageChanged(cb) { this._callbacks.onLanguageChanged.push(cb) }
 

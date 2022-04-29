@@ -54,9 +54,6 @@
                                 <li>US version 1.0 (MD5: <code>afb0306454b581e37a62170fdfd1de09</code>)</li>
                             </ul>
                             <span>Other versions can be used but may have less information available.</span>
-                            <span>If no file is selected, you can still examine a save file,
-                                but not as much information will be available.
-                            </span>
                         </div>
                     </div>
                     <div id="selectedIsoInfo"></div>
@@ -88,7 +85,16 @@
 
                 <div class="box" id="fileSelect_ram">
                     <h1>RAM Dump File</h1>
-                    <div>TODO</div>
+                    <div>
+                        <input type="file" name="ram" id="fileRam" />
+                        <span class="progress" id="fileRamProgress"></span>
+                    </div>
+                    <div id="ramFileBeforeLoadInfo">
+                        <div class="explanation">
+                            Select a raw memory dump file to examine it.
+                        </div>
+                    </div>
+                    <div id="selectedRamInfo"></div>
                 </div>
 
                 <div class="box about" id="fileSelect_about">
@@ -97,6 +103,9 @@
                         ISO file, save file, or memory dump. It works entirely in the
                         browser; no files are sent to the server. You will need to obtain
                         the game files yourself.
+                    </p>
+                    <p>You do not need to supply all three files; the more you have, the more
+                        information will be available.
                     </p>
                     <p>This app was created by <a href="https://segment6.net/">Rena Kunisaki</a>.
                         Its source is available on <a href="https://github.com/RenaKunisaki/StarFoxAdventures/tree/master/browser">GitHub</a>.

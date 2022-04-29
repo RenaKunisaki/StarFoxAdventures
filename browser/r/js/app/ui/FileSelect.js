@@ -11,11 +11,13 @@ export default class FileSelect {
 
         this._makeIsoInput();
         this._makeSaveInput();
+        this._makeRamInput();
         this._makeSlotSelect(null);
         this.element = document.getElementById('tab-file-select');
         this.app.onSaveLoaded(save => this._onSaveLoaded(save));
         //this.app.onSaveSlotChanged(slot => this._onSaveSlotChanged(slot));
         this.app.onIsoLoaded(iso => this._showIsoInfo(iso));
+        this.app.onRamLoaded(ram => this._showRamInfo(ram));
     } //constructor
 
     _makeIsoInput() {
@@ -57,6 +59,26 @@ export default class FileSelect {
             }
             this.app.progress.update(task);
         }, false);
+    }
+
+    _showIsoInfo(iso) {
+        //update the Selected File pane with the given ISO.
+        const elem = document.getElementById('selectedIsoInfo');
+        clearElement(elem);
+        elem.append(
+            E.table(
+                ...Table(
+                    ["Title",   iso.bootBin.gameName],
+                    ["Game ID", iso.bootBin.gameCode],
+                    ["Company", iso.bootBin.company],
+                    ["Disc #",  iso.bootBin.discNo],
+                    ["Version", iso.bootBin.version],
+                )
+            )
+        );
+        if(!iso.bootBin.gameCode.startsWith('GSA')) {
+            elem.append(E.div('error', "Unsupported game"));
+        }
     }
 
     _makeSaveInput() {
@@ -114,26 +136,6 @@ export default class FileSelect {
         this._makeSlotSelect(save);
     } //_onSaveLoaded
 
-    _showIsoInfo(iso) {
-        //update the Selected File pane with the given ISO.
-        const elem = document.getElementById('selectedIsoInfo');
-        clearElement(elem);
-        elem.append(
-            E.table(
-                ...Table(
-                    ["Title",   iso.bootBin.gameName],
-                    ["Game ID", iso.bootBin.gameCode],
-                    ["Company", iso.bootBin.company],
-                    ["Disc #",  iso.bootBin.discNo],
-                    ["Version", iso.bootBin.version],
-                )
-            )
-        );
-        if(!iso.bootBin.gameCode.startsWith('GSA')) {
-            elem.append(E.div('error', "Unsupported game"));
-        }
-    }
-
     _showSaveInfo(save) {
         //update the Selected File pane with the given save.
         const elem = document.getElementById('selectedSaveInfo');
@@ -168,4 +170,47 @@ export default class FileSelect {
         }
     }
 
-} //class
+    _makeRamInput() {
+        //build the RAM dump file input field.
+        this.eRam = document.getElementById('fileRam');
+        this.eRam.addEventListener('change', async e => {
+            const elem = document.getElementById('selectedRamInfo');
+            clearElement(elem);
+            elem.append(E.div('info', "Loading..."));
+            try {
+                await this.app.loadRam(this.eRam.files[0]);
+            }
+            catch(err) {
+                clearElement(elem);
+                elem.append(E.div('error', err.toString()));
+                throw err;
+            }
+        }, false);
+    }
+
+    _showRamInfo(ram) {
+        //update the Selected File pane with the given RAM dump.
+        const elem = document.getElementById('selectedRamInfo');
+        clearElement(elem);
+        const bootInfo = ram.bootInfo;
+        const ConsoleType = this.app.types.getType('dolphin.os.ConsoleType');
+        elem.append(
+            E.table(
+                ...Table(
+                    ["Game ID", bootInfo.disk.gameName],
+                    ["Company", bootInfo.disk.company],
+                    ["Disc #",  bootInfo.disk.diskNumber],
+                    ["Version", bootInfo.disk.gameVersion],
+                    ["System",  ConsoleType.valueToString(bootInfo.consoleType)],
+                )
+            )
+        );
+        if(!bootInfo.disk.gameName.startsWith('GSA')) {
+            elem.append(E.div('error', "Unsupported game"));
+        }
+        else if(bootInfo.disk.gameVersion != this.game.version
+        && this.game.iso) {
+            elem.append(E.div('notice', "Version doesn't match ISO"));
+        }
+    }
+}
