@@ -80,21 +80,35 @@ export default class Block {
         fBlock = new GameFile(fBlock);
 
         //get the data for this block
-        this.index      = firstBlock + this.sub;
-        const offsBlock = dTab.getUint32(this.index*4) & 0xFFFFFF;
-        const blockData = fBlock.decompress(offsBlock);
-        const view      = new DataView(blockData);
-        this.header     = MapBlock.fromBytes(view);
-        //console.log("Map Block Header", this.header);
+        try {
+            this.index      = firstBlock + this.sub;
+            const offsBlock = dTab.getUint32(this.index*4) & 0xFFFFFF;
+            const blockData = fBlock.decompress(offsBlock);
+            const view      = new DataView(blockData);
+            this.header     = MapBlock.fromBytes(view);
+            //console.log("Map Block Header", this.header);
+        }
+        catch(ex) {
+            console.error("Error loading block", this, ex);
+            this._triedLoad = false;
+            return false;
+        }
 
         //read the block's data
-        this._loadVtxData(view);
-        this._loadPolygons(view);
-        this._loadDlists(view);
-        this._loadRenderInstrs(view);
-        this._loadShaders(view);
-        this._loadTextures(view);
-        this._loadHits(view);
+        try {
+            this._loadVtxData(view);
+            this._loadPolygons(view);
+            this._loadDlists(view);
+            this._loadRenderInstrs(view);
+            this._loadShaders(view);
+            this._loadTextures(view);
+            this._loadHits(view);
+        }
+        catch(ex) {
+            console.error("Error loading block data", this, ex);
+            this._triedLoad = false;
+            return false;
+        }
     }
 
     _loadVtxData(view) {
