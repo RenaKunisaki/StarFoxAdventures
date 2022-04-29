@@ -70,20 +70,20 @@
 }
 #tab-file-select .box {
     animation-fill-mode: both;
-    animation-timing-function: linear;
+    animation-timing-function: cubic-bezier(1, 0, 0, 1);
 }
 #fileSelect_iso {
-    animation: fadeIn 0.5s;
+    animation: fadeIn 0.25s;
 }
 #fileSelect_save {
-    animation: fadeIn 0.5s;
-    animation-delay: 0.25s;
+    animation: fadeIn 0.25s;
+    animation-delay: 0.1s;
 }
 #fileSelect_ram {
-    animation: fadeIn 0.5s;
-    animation-delay: 0.5s;
+    animation: fadeIn 0.25s;
+    animation-delay: 0.2s;
 }
 #fileSelect_about {
-    animation: fadeIn 0.5s;
-    animation-delay: 0.75s;
+    animation: fadeIn 0.25s;
+    animation-delay: 0.3s;
 }
