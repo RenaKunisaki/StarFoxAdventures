@@ -3,6 +3,13 @@
     padding-right: 1em;
     padding-bottom: 1em;
     border-bottom: 1px var(--border-color) solid;
+    position: relative;
+}
+
+.fileSelect .support {
+    position: absolute;
+    top: 4px;
+    right: 4px;
 }
 
 .fileSelect .main {
@@ -44,12 +51,13 @@
     right: 10%;
   }
 
+/* XXX replace not-last-child with "everything at right side" somehow? */
 .fileSelect .box:not(:last-child) {
     border-right: 1px var(--border-color) solid;
 }
 
 #saveSlotContainer {
-    display: none;
+    display: none; /* hide until file is selected */
 }
 
 @keyframes fadeIn {
@@ -60,12 +68,10 @@
         opacity: 100%;
     }
 }
-
 #tab-file-select .box {
     animation-fill-mode: both;
     animation-timing-function: linear;
 }
-
 #fileSelect_iso {
     animation: fadeIn 0.5s;
 }
