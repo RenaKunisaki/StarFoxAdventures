@@ -229,7 +229,7 @@ export default class Block {
                 }
                 else {
                     console.warn(`Failed loading texture 0x${hex(texId)}`);
-                    this.textures.push(gx.missingTexture);
+                    this.textures.push(this.gx.missingTexture);
                 }
             }
             catch(ex) {
