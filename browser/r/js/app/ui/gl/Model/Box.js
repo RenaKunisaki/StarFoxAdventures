@@ -39,9 +39,6 @@ export default class Box extends Model {
          *  @param {Array} p1 Coords of first corner.
          *  @param {Array} p2 Coords of second corner.
          *  @param {Array} size Dimensions of box.
-         *  @param {Array} colors One or more vertex colors.
-         *  @param {number} opacity Opacity from 1 (opaque) to 0 (invisible).
-         *  @param {integer} id Vertex ID value for picker.
          *  @returns {Box} A box that covers the line.
          *  @note This creates a long, thin box (or thick if a different size
          *   is used) with the line at its centre. Compare to the default
