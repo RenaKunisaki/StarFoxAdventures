@@ -1867,6 +1867,15 @@
         <return type="undefined4"/>
       </function>
     </functions>
+    <objparams size="0x30">
+      <field type="u8" offset="0x18" name="action" />
+      <field type="u8" offset="0x19" name="type" />
+      <field type="ObjUniqueId" offset="0x1C" name="idPrev" />
+      <field type="ObjUniqueId" offset="0x20" name="idNext" />
+      <field type="s8" offset="0x2C" name="rotZ" />
+      <field type="s8" offset="0x2D" name="rotY" />
+      <field type="s8" offset="0x2E" name="rotX" />
+    </objparams>
   </dll>
   <dll address="0x803116E0" dolOffs="0x30E6E0" id="0x0015" interface="common" unk08="0x00000000" unk0E="0x0000">
     <description>Related to hit detection; loaded at title screen</description>

@@ -80,12 +80,19 @@ export default class RomList {
          */
         this.game    = assertType(game, Game);
         this.entries = [];
+        this.objsByUniqueId = {};
         if(view instanceof GameFile) view = new DataView(view.decompress());
         if(view instanceof ArrayBuffer) view = new DataView(view);
         for(let offs=0; offs<view.byteLength;) {
             let entry = new RomListEntry(this.game, view, offs,
                 this.entries.length);
             this.entries.push(entry);
+            if(entry.id > 0) {
+                if(this.objsByUniqueId[entry.id]) {
+                    console.warn("Duplicate object ID", entry, this.objsByUniqueId[entry.id]);
+                }
+                this.objsByUniqueId[entry.id] = entry;
+            }
             offs += entry.byteLength;
         }
     }

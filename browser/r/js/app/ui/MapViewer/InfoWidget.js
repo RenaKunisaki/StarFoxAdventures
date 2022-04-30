@@ -224,6 +224,11 @@ export default class InfoWidget {
          */
         const entry = info.obj;
         const dll   = entry.object.dll;
+        const acts  = [];
+        for(let iAct=1; iAct<16; iAct++) {
+            if(entry.acts[iAct]) acts.push(iAct);
+        }
+        if(acts.length == 0) acts.push('none');
         const rows = [
             E.tr(E.th(null, `Object ID 0x${hex(entry.id, 8)}`, {colspan:2})),
             E.tr(
@@ -246,6 +251,9 @@ export default class InfoWidget {
                 E.th(null, "DLL"),
                 E.td('dllId', `#0x${hex(entry.object.header.dll_id, 4)} `+
                     (dll ? dll.name : '-')),
+            ),E.tr(
+                E.th(null, "Acts"),
+                E.td('string', acts.join(',')),
             ),
         ];
         let params = entry.params;
