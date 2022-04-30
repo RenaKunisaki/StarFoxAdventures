@@ -167,9 +167,11 @@ export class MapParser {
         if(layers[entry.layer] == undefined) layers[entry.layer] = [];
         let layer = layers[entry.layer];
         if(layer[entry.x] == undefined) layer[entry.x] = [];
-        map.links = entry.link;
-        map.minX  =  999999; map.minZ =  999999;
-        map.maxX  = -999999; map.maxZ = -999999;
+        map.links  = entry.link;
+        map.minX   =  999999; map.minZ =  999999;
+        map.maxX   = -999999; map.maxZ = -999999;
+        map.worldX = entry.x; // + map.originX;
+        map.worldZ = entry.z; // + map.originZ;
         for(let x=0; x<map.sizeX; x++) {
             for(let z=0; z<map.sizeZ; z++) {
                 let cx = (x + entry.x) - map.originX;
@@ -179,10 +181,6 @@ export class MapParser {
 
                 let relX = x - map.originX;
                 let relZ = z - map.originZ;
-                if(!(relX || relZ)) {
-                    map.worldX = cx;
-                    map.worldZ = cz;
-                }
 
                 //maps can overlap
                 if(map.blocks[iBlock] != null || !(layer[cx][cz])) {
@@ -206,6 +204,7 @@ export class MapParser {
                 }
             }
         }
+        //console.log("parsed GlobalMap entry", map);
     }
     async parseMapsBin() {
         this.mapsBin = new GameFile(this.game.iso.getFile('/MAPS.bin'));
@@ -231,6 +230,7 @@ export class MapParser {
             map.unk1E   = info.unk1E;
             map.blocks  = this._readBlocks(map, tab.blocks);
             this._readRomList(tab.romList, map);
+            //console.log("parsed MAPS.bin entry", map);
         }
     }
     _readBlocks(map, offset) {

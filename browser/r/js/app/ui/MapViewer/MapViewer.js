@@ -446,7 +446,7 @@ export default class MapViewer {
                 const z = warp.pos.z - this.map.worldOrigin[1];
                 batch.addVertices(...makeCube(
                     gl, x, y, z, 10, id, [[0xFF, 0x00, 0x00, 0xC0]]));
-                //console.log("add warp", hex(idx), x, y, z, "orig", warp.pos);
+                console.log("add warp", hex(idx), x, y, z, "orig", warp.pos);
             }
             //batch.addVertices(...makeCube( //map origin
             //    gl, this.map.worldOrigin[0], 0, this.map.worldOrigin[1],
