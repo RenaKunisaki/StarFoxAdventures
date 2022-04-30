@@ -261,9 +261,25 @@ export default class InfoWidget {
         let params = entry.params;
         if(params == null) params = {};
         for(const [name, param] of Object.entries(params)) {
-            rows.push(E.tr(
+            let disp = param.value.display;
+            //what the fuck
+            const tp = param.value.param ? param.value.param.type : '';
+
+            if(tp == 'ObjUniqueId') {
+                const idTarget = param.value.value;
+                if(idTarget > 0) {
+                    const target = this.mapViewer.map.romList.
+                        objsByUniqueId[idTarget];
+                    if(target) {
+                        disp = E.a('objlink', disp);
+                        //XXX connect event handler to show that object
+                    }
+                    else disp += ' (not found)';
+                }
+            }
+            rows.push(E.tr({title:tp},
                 E.th('objparam', name),
-                E.td(null, param.value.display),
+                E.td(null, disp),
             ))
         }
         this._tbl.append(...rows);

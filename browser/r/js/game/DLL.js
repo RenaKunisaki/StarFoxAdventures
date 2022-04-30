@@ -204,7 +204,7 @@ export default class DLL {
             }
 
             result[field.name] = {
-                //type:    field,
+                type:    field,
                 param:   this.objParams[field.name],
                 value:   val,
                 display: disp,
