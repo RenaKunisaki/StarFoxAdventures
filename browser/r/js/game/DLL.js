@@ -192,11 +192,11 @@ export default class DLL {
             let type = field.type;
             if(type) {
                 let found = true;
-                if(type.valueToString) disp = type.valueToString(val);
-                else if(type.type.valueToString) disp = type.type.valueToString(val);
-                else if(objParamTypeFmt[type]) {
-                    disp = objParamTypeFmt[type](this.game, val);
+                if(objParamTypeFmt[type.realName]) {
+                    disp = objParamTypeFmt[type.realName](this.game, val);
                 }
+                else if(type.valueToString) disp = type.valueToString(val);
+                else if(type.type.valueToString) disp = type.type.valueToString(val);
                 else found = false;
                 if(found && disp != val && typeof(val) != 'object') {
                     disp = `${disp} (${val})`;

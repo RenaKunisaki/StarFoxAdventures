@@ -108,7 +108,8 @@ export default class ObjectRenderer {
         //HACK
         if(entry.defNo == 0x6E) {
             s = 5;
-            const idNext = entry.params.next.value.value; //ugh
+            const idNext = entry.params.idNext.value.value; //ugh
+            const idPrev = entry.params.idPrev.value.value;
             if(idNext > 0) {
                 const next = this.mapViewer.map.romList.objsByUniqueId[idNext];
                 if(!next) {
@@ -122,6 +123,19 @@ export default class ObjectRenderer {
                     console.assert(b);
                     batch.addFunction(b);
                 }
+            }
+            if(idPrev > 0) {
+                const prev = this.mapViewer.map.romList.objsByUniqueId[idPrev];
+                if(prev && prev.id != entry.id) {
+                    //some curves have a 'next' that doesn't exist.
+                    //also, technically, there's no need for them to both
+                    //point to eachother.
+                    batch.addFunction(Box.fromLine(this.gx, [x,y,z],
+                        [prev.position.x, prev.position.y, prev.position.z],
+                        [0.5, 0.5, 0.5])
+                        .setId(id).batch);
+                }
+                //else, that one will render the line
             }
         }
 

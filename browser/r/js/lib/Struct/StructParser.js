@@ -251,6 +251,7 @@ export default class StructParser {
             throw new Error(`Duplicate type name: ${name}`);
         }
         namespace[name] = type;
+        type._realName = tName;
         return null;
     }
 

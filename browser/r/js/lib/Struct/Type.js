@@ -4,8 +4,18 @@ export class Type {
 
     get size() { return this.constructor._size; } //loljs
     get typeName() { return this.constructor.name }
+    get realName() {
+        /** Return the "real name" of a typedef.
+         *  If this isn't a typedef, the real name is identical
+         *  to the name.
+         */
+        if(this._realName == null) return this.constructor.name;
+        return this._realName;
+    }
 
-    constructor() { }
+    constructor() {
+        this._realName = null;
+    }
 
     fromBytes(view, offset=0, littleEndian=false) {
         /** Read this type from a data stream.

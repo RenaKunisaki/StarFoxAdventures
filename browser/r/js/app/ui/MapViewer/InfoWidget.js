@@ -224,13 +224,15 @@ export default class InfoWidget {
          */
         const entry = info.obj;
         const dll   = entry.object.dll;
-        const acts  = [];
+        let   acts  = [];
         for(let iAct=1; iAct<16; iAct++) {
             if(entry.acts[iAct]) acts.push(iAct);
         }
         if(acts.length == 0) acts.push('none');
+        else if(acts.length == 15) acts = ['all'];
         const rows = [
-            E.tr(E.th(null, `Object ID 0x${hex(entry.id, 8)}`, {colspan:2})),
+            E.tr(E.th(null, `Object ID 0x${hex(entry.id, 8)}`,
+                {colspan:2, title:`${entry.id}`})),
             E.tr(
                 E.th(null, "Name"),
                 E.td('string objName', entry.object.header.name),
