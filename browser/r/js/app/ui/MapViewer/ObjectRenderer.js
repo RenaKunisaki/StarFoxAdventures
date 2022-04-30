@@ -1,6 +1,7 @@
 import RenderBatch from "../gl/gx/RenderBatch.js";
 import GX from "../gl/gx/GX.js";
 import { makeCube } from "../gl/GlUtil.js";
+import Box from "../gl/Model/Box.js";
 
 export default class ObjectRenderer {
     /** Handles object rendering for map viewer. */
@@ -92,7 +93,7 @@ export default class ObjectRenderer {
         const x = entry.position.x;
         const y = entry.position.y;
         const z = entry.position.z;
-        const s = Math.max(entry.object.scale, 10);
+        let   s = Math.max(entry.object.scale, 10);
         //console.log("draw obj", entry, "at", x, y, z, "scale", s)
 
         let id = this.pickerIds[entry.idx];
@@ -104,8 +105,31 @@ export default class ObjectRenderer {
             this.pickerIds[entry.idx] = id;
         }
 
+        //HACK
+        if(entry.defNo == 0x6E) {
+            s = 5;
+            const idNext = entry.params.next.value.value; //ugh
+            if(idNext > 0) {
+                const next = this.mapViewer.map.romList.objsByUniqueId[idNext];
+                if(!next) {
+                    console.warn("Curve's next point doesn't exist", entry);
+                }
+                else {
+                    const b = Box.fromLine(this.gx, [x,y,z],
+                        [next.position.x, next.position.y, next.position.z],
+                        [0.5, 0.5, 0.5])
+                        .setId(id).batch;
+                    console.assert(b);
+                    batch.addFunction(b);
+                }
+            }
+        }
+
         //just draw a cube
-        batch.addVertices(...makeCube(gl, x, y, z, s, id));
+        batch.addFunction((new Box(this.gx,
+            [x-s/2, y-s/2, z-s/2],
+            [x+s/2, y+s/2, z+s/2],
+        )).setId(id).batch);
         return batch;
     }
 

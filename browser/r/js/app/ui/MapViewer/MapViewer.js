@@ -164,7 +164,9 @@ export default class MapViewer {
         //load block data
         for(let iBlock=0; iBlock < this.map.blocks.length; iBlock++) {
             const block = this.map.blocks[iBlock];
-            await this.app.progress.update({stepsDone:iBlock});
+            if(!(iBlock & 0xF)) {
+                await this.app.progress.update({stepsDone:iBlock});
+            }
             if(block && block.mod < 0xFF) block.load(this.gx);
         }
 

@@ -36,8 +36,8 @@ export default class Box extends Model {
     static fromLine(gx, p1, p2, size=[1,1,1]) {
         /** Construct a box which is rotated to contain the given line.
          *  @param {GX} gx GX instance to use.
-         *  @param {Array} p1 Coords of first corner.
-         *  @param {Array} p2 Coords of second corner.
+         *  @param {Array} p1 Coords of first point.
+         *  @param {Array} p2 Coords of second point.
          *  @param {Array} size Dimensions of box.
          *  @returns {Box} A box that covers the line.
          *  @note This creates a long, thin box (or thick if a different size

@@ -241,7 +241,7 @@ export default class InfoWidget {
             ),
             E.tr(
                 E.th(null, "Def#"),
-                E.td('hex objDefNo', `0x${hex(entry.objDef, 4)}`),
+                E.td('hex objDefNo', `0x${hex(entry.defNo, 4)}`),
             ),
             E.tr(
                 E.th(null, "Position"),

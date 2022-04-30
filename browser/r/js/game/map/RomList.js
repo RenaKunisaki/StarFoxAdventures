@@ -25,7 +25,7 @@ class RomListEntry {
         const base      = RomListEntryStruct.fromBytes(view, offset);
         console.assert(base.length >= 6);
         this.byteLength = base.length * 4;
-        this.objDef     = base.objDef;
+        this.defNo      = base.objDef;
         this.acts       = [false]; //act 0 loads no objects
         this.loadFlags  = base.loadFlags;
         this.bound      = base.bound;
@@ -46,7 +46,7 @@ class RomListEntry {
 
         if(this.game.objects) {
             //get the object
-            let defNo = this.objDef;
+            let defNo = this.defNo;
             defNo = (defNo < 0) ? -defNo : this.game.objIndex[defNo];
             this.object = this.game.objects[defNo];
             if(!this.object) this.object = this.game.objects[0];
