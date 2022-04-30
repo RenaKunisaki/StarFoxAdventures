@@ -283,6 +283,18 @@ export default class InfoWidget {
             ))
         }
         this._tbl.append(...rows);
+
+        const data = entry.paramData;
+        if(data && data.byteLength) {
+            const words = [];
+            for(let i=0x18; i<data.byteLength; i += 4) {
+                words.push(hex(data.getUint32(i), 8));
+            }
+            this._tbl.append(E.tr('rawparams',
+                E.th('objparam', "Raw Params"),
+                E.td('hexdump', words.join(' ')),
+            ));
+        }
     }
 
     _showWarp(info) {

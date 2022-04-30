@@ -24,6 +24,7 @@
 .tabMapView .sidebar {
     left: 0.5em;
     bottom: 0;
+    max-width: 25em;
 }
 
 .tabMapView summary {
@@ -63,6 +64,10 @@
 .tabMapView .sidebar tr:first-child th {
     /* override previous rules */
     background: none;
+}
+
+.tabMapView .rawparams .hexdump {
+    white-space: break-spaces;
 }
 
 .gl-view-control input[type=number] {
