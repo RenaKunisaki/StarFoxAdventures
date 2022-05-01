@@ -277,6 +277,10 @@ export default class InfoWidget {
                     else disp += ' (not found)';
                 }
             }
+            else if(tp == 'GameBit' || tp == 'GameBit16' || tp == 'GameBit32') {
+                const bit = this.game.bits[param.value.value];
+                if(bit && bit.name) disp += ' '+bit.name;
+            }
             rows.push(E.tr({title:tp},
                 E.th('objparam', name),
                 E.td(null, disp),
