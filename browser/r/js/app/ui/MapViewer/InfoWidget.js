@@ -73,11 +73,11 @@ export default class InfoWidget {
             ),
             E.tr(
                 E.th(null, "SubX"),
-                E.td('hex', `0x${bin(poly.subBlocks & 0xFF)}`),
+                E.td('binary', bin(poly.subBlocks & 0xFF)),
             ),
             E.tr(
                 E.th(null, "SubZ"),
-                E.td('hex', `0x${bin(poly.subBlocks >> 8)}`),
+                E.td('binary', bin(poly.subBlocks >> 8)),
             ),
             E.tr(E.th(null, `Hit Group #${poly.groupIdx}`, {colspan:2})),
             ...this._makeBlockPolyGroupInfo(block, poly.group),
