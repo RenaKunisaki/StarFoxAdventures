@@ -190,6 +190,10 @@ export default class BlockRenderer {
         this.curBatch = new RenderBatch(this.gx);
         this._batches[key] = this.curBatch;
         this._isDrawingForPicker = params.isPicker;
+        this.curShaderIdx = null;
+        this.curBlock     = block;
+        this.curStream    = whichStream;
+        this.params       = params;
 
         const ops = new BitStreamReader(block.renderInstrs[whichStream]);
         this.curOps = ops;

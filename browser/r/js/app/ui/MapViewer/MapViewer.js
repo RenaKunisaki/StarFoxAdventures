@@ -14,7 +14,7 @@ import RenderBatch from "../gl/gx/RenderBatch.js";
 import EventHandler from "./EventHandler.js";
 import ObjectRenderer from "./ObjectRenderer.js";
 import { makeCube, makeBox } from "../gl/GlUtil.js";
-import GameObject from "../../../game/GameObject.js";
+import MapExporter from "./MapExporter.js";
 
 export default class MapViewer {
     /** Renders map geometry. */
@@ -39,12 +39,9 @@ export default class MapViewer {
 
     _onIsoLoaded() {
         /** Set up the map viewer. */
-        this._buildMapList();
+        this._buildControls();
         clearElement(this.element).append(
-            E.div('controls',
-                E.label(null, {For:'mapview-map-list'}, "Map:"),
-                this.eMapList,
-            ),
+            this.eControls,
             this.canvas,
             this.eSidebar,
             this.grid.element,
@@ -102,6 +99,24 @@ export default class MapViewer {
                 {value:map.id}));
         }
         this.eMapList.addEventListener('change', e => this._reset());
+    }
+
+    _buildExportButton() {
+        /** Build the Export button. */
+        const btn = E.button('export-file', 'Export');
+        btn.addEventListener('click', e => this._exportMap());
+        return btn;
+    }
+
+    _buildControls() {
+        /** Build the controls above the context. */
+        this._buildMapList();
+        this.eControls = E.div('controls',
+            E.label(null, {For:'mapview-map-list'}, "Map:"),
+            this.eMapList,
+            this._buildExportButton(),
+        );
+        return this.eControls;
     }
 
     _reset() {
@@ -535,5 +550,10 @@ export default class MapViewer {
         if(obj == undefined) obj = null;
         console.log("pick", x, y, hex(id,8), id, obj);
         return obj;
+    }
+
+    async _exportMap() {
+        /** Export the map to a DAE file. */
+        (new MapExporter(this.game, this.gx, this.map)).export();
     }
 }
