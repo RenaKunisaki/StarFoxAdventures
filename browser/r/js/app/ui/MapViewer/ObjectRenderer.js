@@ -1,7 +1,7 @@
 import RenderBatch from "../gl/gx/RenderBatch.js";
 import GX from "../gl/gx/GX.js";
-import { makeCube } from "../gl/GlUtil.js";
 import Box from "../gl/Model/Box.js";
+import createObjInstance from "./ObjInstance/ObjInstance.js";
 
 export default class ObjectRenderer {
     /** Handles object rendering for map viewer. */
@@ -27,6 +27,7 @@ export default class ObjectRenderer {
         const map = this.mapViewer.map;
         if(!map.romList) return; //nothing to render
 
+        this.objInstances = [];
         for(let i=0; i<map.romList.entries.length; i++) {
             if(!(i & 0xF)) {
                 await this.app.progress.update({
@@ -39,7 +40,9 @@ export default class ObjectRenderer {
 
             //pre-render the object
             const entry = map.romList.entries[i];
-            const batch = this.drawObject(entry);
+            const inst  = createObjInstance(this.gx, this.game, map, entry);
+            this.objInstances.push(inst);
+            const batch = this.drawObject(inst);
             this.batches[`obj${entry.idx}`] = batch;
         }
     }
@@ -84,67 +87,19 @@ export default class ObjectRenderer {
         return batch;
     }
 
-    drawObject(entry) {
+    drawObject(inst) {
         /** Draw an object.
-         *  @param {RomListEntry} entry Object to draw.
+         *  @param {ObjInstance} inst Object to draw.
          */
-        const gl = this.gx.gl;
-        const batch = new RenderBatch(this.gx);
-        const x = entry.position.x;
-        const y = entry.position.y;
-        const z = entry.position.z;
-        let   s = Math.max(entry.object.scale, 10);
-        //console.log("draw obj", entry, "at", x, y, z, "scale", s)
-
-        let id = this.pickerIds[entry.idx];
+        let id = this.pickerIds[inst.entry.idx];
         if(id == undefined) {
             id = this.gx.addPickerObj({
                 type: 'object',
-                obj:  entry,
+                obj:  inst,
             });
-            this.pickerIds[entry.idx] = id;
+            this.pickerIds[inst.entry.idx] = id;
         }
-
-        //HACK
-        if(entry.defNo == 0x6E) {
-            s = 5;
-            const idNext = entry.params.idNext.value.value; //ugh
-            const idPrev = entry.params.idPrev.value.value;
-            if(idNext > 0) {
-                const next = this.mapViewer.map.romList.objsByUniqueId[idNext];
-                if(!next) {
-                    console.warn("Curve's next point doesn't exist", entry);
-                }
-                else {
-                    const b = Box.fromLine(this.gx, [x,y,z],
-                        [next.position.x, next.position.y, next.position.z],
-                        [0.5, 0.5, 0.5])
-                        .setId(id).batch;
-                    console.assert(b);
-                    batch.addFunction(b);
-                }
-            }
-            if(idPrev > 0) {
-                const prev = this.mapViewer.map.romList.objsByUniqueId[idPrev];
-                if(prev && prev.id != entry.id) {
-                    //some curves have a 'next' that doesn't exist.
-                    //also, technically, there's no need for them to both
-                    //point to eachother.
-                    batch.addFunction(Box.fromLine(this.gx, [x,y,z],
-                        [prev.position.x, prev.position.y, prev.position.z],
-                        [0.5, 0.5, 0.5])
-                        .setId(id).batch);
-                }
-                //else, that one will render the line
-            }
-        }
-
-        //just draw a cube
-        batch.addFunction((new Box(this.gx,
-            [x-s/2, y-s/2, z-s/2],
-            [x+s/2, y+s/2, z+s/2],
-        )).setId(id).batch);
-        return batch;
+        return inst.render(id);
     }
 
     _setupRenderParams(batch) {

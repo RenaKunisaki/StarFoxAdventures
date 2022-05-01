@@ -12823,9 +12823,11 @@ seemingly only used to track magic plants' growth</description>
       <field type="u8" offset="0x18" name="action" />
       <field type="u8" offset="0x19" name="type" />
       <field type="byte" offset="0x1A" />
-      <field type="byte" offset="0x1B" />
+      <field type="byte" offset="0x1B" name="flags" />
       <field type="ObjUniqueId" offset="0x1C" name="idPrev" />
       <field type="ObjUniqueId" offset="0x20" name="idNext" />
+      <field type="ObjUniqueId" offset="0x24" />
+      <field type="ObjUniqueId" offset="0x28" />
       <field type="s8" offset="0x2C" name="rotZ" />
       <field type="s8" offset="0x2D" name="rotY" />
       <field type="s8" offset="0x2E" name="rotX" />
