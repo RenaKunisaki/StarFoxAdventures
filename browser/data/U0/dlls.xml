@@ -12900,7 +12900,7 @@ seemingly only used to track magic plants' growth</description>
       <field type="sfa.seq.ObjSeqCmd" offset="0x18" name="seq" count="8" />
       <field type="s16" offset="0x38" />
       <field type="u8" offset="0x3A" name="size" count="3" />
-      <field type="s8" offset="0x3D" name="rot" count="2" />
+      <field type="u8" offset="0x3D" name="rot" count="2" />
       <field type="u8" offset="0x43" name="target">
         <description>Index of some player-related object. 0=Player/Arwing/Mount; 1=Tricky; 2=Camera</description>
       </field>

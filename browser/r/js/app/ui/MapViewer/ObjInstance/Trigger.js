@@ -16,6 +16,7 @@ function rot2rad(n) {
     return (n/65535) * (Math.PI * 2);
 }
 
+
 export class TrigPnt extends ObjInstance {
     render(id) {
         const batch  = new RenderBatch(this.gx);
@@ -63,11 +64,11 @@ export class TrigPln extends ObjInstance {
         const entry  = this.entry;
 
         //probably still wrong...
-        //scale should be objdata.scale * s * 0.0625
+        //scale looks about right?
         const x  = this.entry.position.x;
         const y  = this.entry.position.y;
         const z  = this.entry.position.z;
-        const s  = entry.params.size.value.value[0];
+        const s  = entry.params.size.value.value[0] * 6.25 * 2 * entry.object.scale;
         const rx = rot2rad((entry.params.rot.value.value[0] & 0x3F) << 10);
         const ry = rot2rad(entry.params.rot.value.value[1] << 8);
         batch.addFunction((new Box(this.gx,
@@ -88,9 +89,9 @@ export class TrigArea extends ObjInstance {
         const x = this.entry.position.x;
         const y = this.entry.position.y;
         const z = this.entry.position.z;
-        const sx = entry.params.size.value.value[0];
-        const sy = entry.params.size.value.value[1];
-        const sz = entry.params.size.value.value[2];
+        const sx = entry.params.size.value.value[0] * 2;
+        const sy = entry.params.size.value.value[1] * 2;
+        const sz = entry.params.size.value.value[2] * 2;
         batch.addFunction((new Box(this.gx,
             [-0.5, -0.5, -0.5],
             [ 0.5,  0.5,  0.5],
