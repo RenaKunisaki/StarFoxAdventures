@@ -264,10 +264,11 @@ export default class InfoWidget {
             let disp = param.value.display;
             //what the fuck
             const tp = param.value.param ? param.value.param.type : '';
+            let val = param.value.value;
 
             //XXX this is gross and doesn't handle arrays or structs
             if(tp == 'ObjUniqueId') {
-                const idTarget = param.value.value;
+                const idTarget = val;
                 if(idTarget > 0) {
                     const target = this.mapViewer.map.romList.
                         objsByUniqueId[idTarget];
@@ -279,8 +280,11 @@ export default class InfoWidget {
                 }
             }
             else if(tp == 'GameBit' || tp == 'GameBit16' || tp == 'GameBit32') {
-                const bit = this.game.bits[param.value.value];
+                const bit = this.game.bits[val];
                 if(bit && bit.name) disp += ' '+bit.name;
+            }
+            else if(Array.isArray(val)) {
+                disp = val.join(', ');
             }
             rows.push(E.tr({title:tp},
                 E.th('objparam', name),
