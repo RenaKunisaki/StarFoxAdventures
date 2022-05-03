@@ -1,0 +1,35 @@
+init:
+xRot  = (def.xRot & 0x3F) << 10
+yRot  =  def.yRot << 8
+scale = objdata.scale * def.size1 * 0.0625
+
+create a rotation(?) matrix from xRot, yRot (and zRot but that's always 0)
+multiply vector (0,0,1) by this matrix
+set quaternion Q to the resulting vector's x, y, z
+w = -((this->prevPos).z * z + (this->prevPos).x * x + (this->prevPos).y * y);
+
+create a matrix from xRot, yRot, this.pos
+store it as state->mtx
+
+this->sizeTimes100 = this->scale * 100
+this->sizeSquared = (this->scale * 145) ** 2
+
+
+hit detect:
+A = objPos (unsure what these actually are...)
+B = tgtPos
+range1 = w + (Q.z * A.z) + (Q.x * A.x) + (Q.y * A.y)
+range2 = w + (Q.z * B.z) + (Q.x * B.x) + (Q.y * B.y)
+if (zero <= range2) {
+  if (zero <= range1) trigger = -2;
+  else trigger = -1;
+}
+else if (zero <= range1) trigger = 1;
+else trigger = 2;
+
+if(trigger == -1 || trigger == 1) activate
+
+
+so, the def vars that are actually used are: xRot, yRot, size1
+that implies that the plane is square
+maybe we don't need to understand the math...

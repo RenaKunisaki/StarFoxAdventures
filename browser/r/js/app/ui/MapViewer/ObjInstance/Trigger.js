@@ -8,6 +8,14 @@ import Cylinder from "../../gl/Model/Cylinder.js";
 //how the game actually handles them. just reading the
 //code isn't perfectly clear.
 
+function rot2rad(n) {
+    /** Convert rotation value (0-65535) to radians.
+     *  @param {integer} n Rotation value.
+     *  @returns {float} Rotation in radians.
+     */
+    return (n/65535) * (Math.PI * 2);
+}
+
 export class TrigPnt extends ObjInstance {
     render(id) {
         const batch  = new RenderBatch(this.gx);
@@ -35,17 +43,17 @@ export class TrigCyl extends ObjInstance {
         //size1 = radius (or diameter?) divided by 2
         //size2 = unused? set, but not read
         //size3 = height
-        const x  = this.entry.position.x;
-        const y  = this.entry.position.y;
-        const z  = this.entry.position.z;
+        const x = this.entry.position.x;
+        const y = this.entry.position.y;
+        const z = this.entry.position.z;
         const r = entry.params.size.value.value[0];
         //const r = entry.params.size.value.value[1];
         const h = entry.params.size.value.value[2];
         batch.addFunction((new Cylinder(this.gx, [x,y,z],
         )).setScale(r,h/2,r).setId(id).setColor(
             [0x40, 0x40, 0xFF, 0x80]).setRot(
-            entry.params.rot.value.value[0],
-            entry.params.rot.value.value[1], 0).batch);
+            rot2rad(entry.params.rot.value.value[0] << 8),
+            rot2rad(entry.params.rot.value.value[1] << 8), 0).batch);
         return batch;
     }
 }
@@ -54,15 +62,18 @@ export class TrigPln extends ObjInstance {
         const batch  = new RenderBatch(this.gx);
         const entry  = this.entry;
 
-        //XXX how exactly does this use the params?
-        const x = this.entry.position.x;
-        const y = this.entry.position.y;
-        const z = this.entry.position.z;
-        const s = entry.params.size.value.value[0];
+        //probably still wrong...
+        //scale should be objdata.scale * s * 0.0625
+        const x  = this.entry.position.x;
+        const y  = this.entry.position.y;
+        const z  = this.entry.position.z;
+        const s  = entry.params.size.value.value[0];
+        const rx = rot2rad((entry.params.rot.value.value[0] & 0x3F) << 10);
+        const ry = rot2rad(entry.params.rot.value.value[1] << 8);
         batch.addFunction((new Box(this.gx,
             [-0.5, -0.5, -0.5],
             [ 0.5,  0.5,  0.5],
-        )).setScale(s).setPos(x,y,z).setId(id).setColors(
+        )).setScale(s,s,1).setRot(0,rx,ry).setPos(x,y,z).setId(id).setColors(
             [0x40, 0xFF, 0x40, 0x80]).batch);
         return batch;
     }
@@ -85,8 +96,8 @@ export class TrigArea extends ObjInstance {
             [ 0.5,  0.5,  0.5],
         )).setScale(sx,sy,sz).setPos(x,y,z).setId(id).setColors(
             [0x40, 0x40, 0xFF, 0x80]).setRot(
-            entry.params.rot.value.value[0],
-            entry.params.rot.value.value[1], 0).batch);
+            rot2rad(entry.params.rot.value.value[0] << 8),
+            rot2rad(entry.params.rot.value.value[1] << 8), 0).batch);
         return batch;
     }
 }
