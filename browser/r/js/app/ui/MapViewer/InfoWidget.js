@@ -265,6 +265,7 @@ export default class InfoWidget {
             //what the fuck
             const tp = param.value.param ? param.value.param.type : '';
 
+            //XXX this is gross and doesn't handle arrays or structs
             if(tp == 'ObjUniqueId') {
                 const idTarget = param.value.value;
                 if(idTarget > 0) {

@@ -29,6 +29,7 @@
     TODO: come up with a way to handle circular dependencies. -->
     <include path="maps.xml" />
     <include path="text.xml" />
+    <include path="seq.xml" />
     <include path="objects.xml" />
     <include path="save.xml" />
     <include path="textures.xml" />

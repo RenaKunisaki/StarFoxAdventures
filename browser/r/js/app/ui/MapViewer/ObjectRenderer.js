@@ -1,7 +1,6 @@
 import RenderBatch from "../gl/gx/RenderBatch.js";
 import GX from "../gl/gx/GX.js";
-import Box from "../gl/Model/Box.js";
-import createObjInstance from "./ObjInstance/ObjInstance.js";
+import createObjInstance from "./ObjInstance/createObjInstance.js";
 
 export default class ObjectRenderer {
     /** Handles object rendering for map viewer. */
@@ -77,7 +76,9 @@ export default class ObjectRenderer {
             //it's not possible to actually set the act to -1
             //in the game)
             if(act == -1 || entry.acts[act]) {
-                objs.push(this.batches[`obj${entry.idx}`])
+                const batch = this.batches[`obj${entry.idx}`];
+                console.assert(batch);
+                objs.push(batch);
             }
         }
 

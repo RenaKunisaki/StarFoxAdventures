@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<?xml-model href="../types.xsd"?>
+<types namespace="seq">
+    <enum name="ObjSeqCmdEnum" type="u8">
+        <item name="PlayerCmd01" value="0x1" />
+        <item name="PlaySound" value="0x4" />
+        <item name="NOP" value="0x5" />
+        <item name="CamAct06" value="0x6" />
+        <item name="SubCmd08" value="0x8" />
+        <item name="EnvFx0A" value="0xa" />
+        <item name="SeqVar0B" value="0xb" />
+        <item name="DoObjSeq" value="0xc" />
+        <item name="GetLActions" value="0xd" />
+        <item name="SetPlayerModel" value="0x10" />
+        <item name="TrickyTalkCmd11" value="0x11" />
+        <item name="SetBit" value="0x12" />
+        <item name="SetMapBit" value="0x13" />
+        <item name="ClearMapBit" value="0x14" />
+        <item name="LoadTexture" value="0x15" />
+        <item name="UnloadTexture" value="0x16" />
+        <item name="SaveGameSetMapBits_18" value="0x18" />
+        <item name="SaveGameSetMapBit" value="0x1a" />
+        <item name="SaveGameClearMapBit" value="0x1b" />
+        <item name="GameBitCmd1C" value="0x1c" />
+        <item name="GameBitCmd1D" value="0x1d" />
+        <item name="SaveGameSetMapBits_1E" value="0x1e" />
+        <item name="SaveCharPos" value="0x1f" />
+        <item name="ChangeMapLayer" value="0x20" />
+        <item name="GameBitToggle" value="0x21" />
+        <item name="MapBitToggle" value="0x22" />
+        <item name="SaveGameCmd23" value="0x23" />
+        <item name="TrickyCmd26" value="0x26" />
+        <item name="LoadMapAssets" value="0x27" />
+        <item name="UnloadMapAssets" value="0x28" />
+        <item name="LockLevel" value="0x2a" />
+        <item name="UnlockLevel" value="0x2b" />
+        <item name="SetObj2AnimField0" value="0x2c" />
+        <item name="GameTextCmd2D" value="0x2d" />
+        <item name="RestructForMovie" value="0x2e" />
+        <item name="GameTimerCmd2F" value="0x2f" />
+    </enum>
+    <struct name="ObjSeqCmd">
+        <field type="u8" name="flags" />
+        <field type="ObjSeqCmdEnum" name="cmd" />
+        <field type="u8" name="param1" />
+        <field type="u8" name="param2" />
+    </struct>
+</types>

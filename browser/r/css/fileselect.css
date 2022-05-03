@@ -77,13 +77,13 @@
 }
 #fileSelect_save {
     animation: fadeIn 0.25s;
-    animation-delay: 0.1s;
+    animation-delay: 0.3s;
 }
 #fileSelect_ram {
     animation: fadeIn 0.25s;
-    animation-delay: 0.2s;
+    animation-delay: 0.4s;
 }
 #fileSelect_about {
     animation: fadeIn 0.25s;
-    animation-delay: 0.3s;
+    animation-delay: 0.5s;
 }

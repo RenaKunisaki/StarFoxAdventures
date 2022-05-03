@@ -51,6 +51,7 @@ export default class Box extends Model {
         //https://gamedev.stackexchange.com/a/149044
         //you would not belive how long it took to find this formula.
         //keywords: rotate arrow point target
+        //XXX this is mostly duplicated by pointTo()
         let v1 = vec3.fromValues(...p1);
         let v2 = vec3.fromValues(...p2);
         const length = vec3.distance(v1, v2);
@@ -96,6 +97,7 @@ export default class Box extends Model {
          *  @note If fewer than 8 colors are supplied, the colors
          *   are repeated for the remaining vertices. Colors beyond
          *   the first 8 are ignored.
+         *  @returns {Box} this.
          */
         if(!Array.isArray(colors[0])) colors = [colors]; //array of [r,g,b,a]
         if(colors.length < 1) throw new BugCheck("Empty color array");
@@ -114,12 +116,13 @@ export default class Box extends Model {
 
     _update() {
         /** Recalculate buffers. Called after geometry changes. */
-        //XXX this.pos, this.rot aren't used...
         const gl = this.gl;
         let v1 = vec3.create();
         let v2 = vec3.create();
         vec3.multiply(v1, this.p1, this.scale);
         vec3.multiply(v2, this.p2, this.scale);
+        //vec3.add(v1, v1, this.pos);
+        //vec3.add(v2, v2, this.pos);
         const [x1, y1, z1] = v1;
         const [x2, y2, z2] = v2;
         const vtxPositions = [ //x, y, z
@@ -133,10 +136,15 @@ export default class Box extends Model {
             vec3.fromValues(x2, y1, z1),
         ];
         //do this now since it's faster than doing it on every render.
-        if(this.mtx) {
-            for(let v of vtxPositions) {
-                vec3.transformMat4(v, v, this.mtx);
-            }
+        let mtx = this.mtx ? mat4.clone(this.mtx) : mat4.create();
+        mat4.translate(mtx, mtx, this.pos);
+        //XXX will this work?
+        mat4.rotateX(mtx, mtx, this.rot[0]);
+        mat4.rotateY(mtx, mtx, this.rot[1]);
+        mat4.rotateZ(mtx, mtx, this.rot[2]);
+        //this.pointTo(this.rot[0], this.rot[1], this.rot[2]);
+        for(let v of vtxPositions) {
+            vec3.transformMat4(v, v, mtx);
         }
 
         const vtxIdxs = [3,2,6,7,4,2,0,3,1,6,5,4,1,0];

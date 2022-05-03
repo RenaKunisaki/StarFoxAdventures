@@ -12897,21 +12897,26 @@ seemingly only used to track magic plants' growth</description>
       </function>
     </functions>
     <objparams>
-      <field type="u32" offset="0x18" name="sound0">
-        <description>Some type of struct</description>
-      </field>
-      <field type="u32" offset="0x1C" name="sound1"></field>
-      <field type="u32" offset="0x20" name="sound2"></field>
-      <field type="u32" offset="0x24" name="sound3"></field>
-      <field type="u32" offset="0x28" name="sound4"></field>
-      <field type="u32" offset="0x2C" name="sound5"></field>
-      <field type="u32" offset="0x30" name="sound6"></field>
-      <field type="u32" offset="0x34" name="sound7"></field>
-      <field type="s16" offset="0x38"></field>
-      <field type="byte" offset="0x43">
+      <field type="sfa.seq.ObjSeqCmd" offset="0x18" name="seq" count="8" />
+      <field type="s16" offset="0x38" />
+      <field type="u8" offset="0x3A" name="size" count="3" />
+      <field type="s8" offset="0x3D" name="rot" count="2" />
+      <field type="u8" offset="0x43" name="target">
         <description>Index of some player-related object. 0=Player/Arwing/Mount; 1=Tricky; 2=Camera</description>
       </field>
-      <field type="GameBit16" offset="0x44"></field>
+      <field type="GameBit16" offset="0x44" name="activate">
+        <description>Trigger activates when this bit is set</description>
+      </field>
+      <field type="u16" offset="0x46" name="delay">
+        <description>Frame count for TrigTime</description>
+      </field>
+      <field type="GameBit16" offset="0x48" name="trigBits" count="4">
+        <description>TrigBits triggers when all 4 bits are set (or are 0xFFFF)</description>
+      </field>
+      <field type="int" offset="0x4C" name="action">
+        <description>Curve action to use, for TrigCrve</description>
+        <note>Overlaps trigBits[2], trigBits[3]</note>
+      </field>
     </objparams>
   </dll>
   <dll address="0x80321E58" dolOffs="0x31EE58" id="0x0127" interface="object" unk08="0x00000000" unk0E="0x0000">

@@ -203,6 +203,7 @@ export default class RenderBatch {
 
         //get all the arrays being added to this one
         for(const batch of batches) {
+            console.assert(batch);
             for(const [field, data] of Object.entries(batch.data)) {
                 if(arrays[field] == undefined) {
                     arrays[field] = [];

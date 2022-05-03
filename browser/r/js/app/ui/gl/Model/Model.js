@@ -77,13 +77,15 @@ export default class Model {
         this._needsUpdate = true;
         return this;
     }
-    setScale(x, y, z) {
+    setScale(x, y=undefined, z=undefined) {
         /** Set the model's scale.
          *  @param {number} x Model scale on X axis.
          *  @param {number} y Model scale on Y axis.
          *  @param {number} z Model scale on Z axis.
          *  @returns {Model} this.
          */
+        if(y == undefined) y = x;
+        if(z == undefined) z = y;
         this.scale[0] = x; this.scale[1] = y; this.scale[2] = z;
         this._needsUpdate = true;
         return this;
@@ -103,6 +105,38 @@ export default class Model {
          */
         this.id = id;
         this._needsUpdate = true;
+        return this;
+    }
+    pointTo(x, y, z) {
+        let v1 = vec3.fromValues(x, y, z);
+        let v2 = vec3.fromValues(...this.pos);
+        let M;
+
+        //this method doesn't work if the line is exactly
+        //along the Z axis, so handle that differently.
+        if(Math.abs(v1[0]-v2[0]) + Math.abs(v1[1]-v2[1]) < 0.01) {
+            M = mat4.fromValues(
+                1,     0,     0,     0,
+                0,     1,     0,     0,
+                0,     0,     1,     0,
+                v1[0], v1[1], v1[2], 1);
+        }
+        else {
+            let vX = vec3.fromValues(v2[0]-v1[0], v2[1]-v1[1], v2[2]-v1[2]);
+            vec3.normalize(vX, vX); //x now points at target, unit length
+            let vY = vec3.fromValues(0,0,1);
+            vec3.cross(vY, vY, vX);
+            vec3.normalize(vY, vY); //y is now perpendicular to x, unit length
+            let vZ = vec3.create();
+            vec3.cross(vZ, vX, vY); //z is now perpendicular to both x and y, and unit length
+            M = mat4.fromValues(
+                vX[0], vX[1], vX[2], 0,
+                vY[0], vY[1], vY[2], 0,
+                vZ[0], vZ[1], vZ[2], 0,
+                v1[0], v1[1], v1[2], 1);
+        }
+        if(this.mtx) mat4.multiply(this.mtx, this.mtx, M);
+        else this.setMatrix(M);
         return this;
     }
 

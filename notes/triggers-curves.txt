@@ -1,0 +1,35 @@
+curve types:
+
+0x17: TrigCrve
+0x23: curveFish
+
+004B TrigPnt: uses size1
+0230 TrigCyl: uses size1 for radius, size2 for height
+004C TrigPln: uses bit48, field 0xC
+004D TrigArea: uses size1, size2, size3, rotX, rotY
+004E TrigTime: uses delay
+004F TrigButt: never runs?
+0050 TriggSetp: runs seq on first frame, then disappears
+0054 TrigBits: runs if all of trigBits are set (or are 0xFFFF)
+00F4 TrigCrve: runs when something is near a curve of type 0x17
+
+ObjDef for triggers:
+0x0	ObjDef	def	
+0x18	ObjSeqCmd[8]	seq	
+0x38	short		
+0x3a	db	size1	
+0x3b	db	size2	
+0x3c	db	size3	
+0x3d	db	rotX	
+0x3e	db	rotY	
+0x3f	??		
+0x40	??		
+0x41	??		
+0x42	??		
+0x43	db		
+0x44	GameBit16		
+0x46	ushort	delay	frame count for TrigTime
+0x48	GameBit16	trigBits1	
+0x4a	GameBit16	trigBits2	
+0x4c	GameBit16	trigBits3	also int action, for TrigCrve
+0x4e	GameBit16	trigBits4	
