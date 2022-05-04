@@ -26,6 +26,7 @@ WarpMenuItem warps[] = {
     { 13201,   1278,   2239/2,  0}, //"Krazoa Palace - Final Boss Warp",
     { 12188,   1379,   2461/2,  0}, //"Krazoa Palace - Top",
     {  3584,   6397,   4374/2,  0}, //"Ice Mountain - Top",
+    { 1068,     226,   3179/2,  0}, //"Ice Mountain - Bottom",
     { -4159,   -521,   4159/2,  0}, //"SnowHorn Wastes - Shrine Warp",
     { -2634,   -130,   2167/2,  0}, //"SnowHorn Wastes - Water Spout",
     { -5408,   -822,   1610/2,  0}, //"SnowHorn Wastes - Entrance",
@@ -120,6 +121,7 @@ const char *warpDict[] = {
     "Arwing: to ",             //0x8D
     "Cutscene: ",              //0x8E
     "Unused: ",                //0x8F
+    "Ice Mountain - ",         //0x90
 };
 const char *warpNames[] = {
     "\x80" "Outside",
@@ -131,7 +133,8 @@ const char *warpNames[] = {
     "\x81" "Inside",
     "\x81" "Final Boss Warp",
     "\x81" "Top",
-    "Ice Mountain - Top",
+    "\x90" "Top",
+    "\x90" "Bottom",
     "\x82" "Shrine Warp",
     "\x82" "Water Spout",
     "\x82" "Entrance",
