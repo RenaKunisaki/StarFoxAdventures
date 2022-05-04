@@ -1,6 +1,7 @@
 import Model from "./Model.js";
 import RenderBatch from "../gx/RenderBatch.js";
 import { BugCheck } from "../../../errors.js";
+const PI_OVER_180 = Math.PI / 180;
 
 const DEFAULT_COLORS = [
     [0xFF, 0xFF, 0xFF, 0xCF],
@@ -138,10 +139,20 @@ export default class Box extends Model {
         //do this now since it's faster than doing it on every render.
         let mtx = this.mtx ? mat4.clone(this.mtx) : mat4.create();
         mat4.translate(mtx, mtx, this.pos);
-        //XXX will this work?
-        mat4.rotateX(mtx, mtx, this.rot[0]);
-        mat4.rotateY(mtx, mtx, this.rot[1]);
-        mat4.rotateZ(mtx, mtx, this.rot[2]);
+        //XXX will this work? doesn't look like it.
+        //mat4.rotateX(mtx, mtx, this.rot[0]);
+        //mat4.rotateY(mtx, mtx, this.rot[1]);
+        //mat4.rotateZ(mtx, mtx, this.rot[2]);
+        let q = quat.create();
+        quat.fromEuler(q,
+            //why the shit is this in degrees!?
+            (this.rot[0] / PI_OVER_180),
+            (this.rot[1] / PI_OVER_180),
+            (this.rot[2] / PI_OVER_180),
+        );
+        let m2 = mat4.create();
+        mat4.fromQuat(m2, q);
+        mat4.multiply(mtx, mtx, m2);
         //this.pointTo(this.rot[0], this.rot[1], this.rot[2]);
         for(let v of vtxPositions) {
             vec3.transformMat4(v, v, mtx);

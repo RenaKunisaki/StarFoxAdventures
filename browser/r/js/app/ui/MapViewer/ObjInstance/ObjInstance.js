@@ -1,6 +1,7 @@
 import RenderBatch from "../../gl/gx/RenderBatch.js";
 import Box from "../../gl/Model/Box.js";
 import { E } from "../../../../lib/Element.js";
+import { hex } from "../../../../Util.js";
 
 export class ObjInstance {
     /** An instance of an object in a map. */
@@ -48,29 +49,35 @@ export class ObjInstance {
             let disp = param.value.display;
             //what the fuck
             const tp = param.value.param ? param.value.param.type : '';
-            let val = param.value.value;
+            let vals = param.value.value;
+            if(!Array.isArray(vals)) vals = [vals];
 
-            //XXX this is gross and doesn't handle arrays or structs
-            if(tp == 'ObjUniqueId') {
-                const idTarget = val;
-                if(idTarget > 0) {
-                    const target = this.map.romList.
-                        objsByUniqueId[idTarget];
-                    if(target) {
-                        disp = E.a('objlink', disp);
-                        //XXX connect event handler to show that object
+            //XXX this is gross and doesn't handle structs or properly
+            //use the original display value
+            let disps = [];
+            for(let val of vals) {
+                if(tp == 'ObjUniqueId') {
+                    if(val > 0) {
+                        const target = this.map.romList.objsByUniqueId[val];
+                        if(target) {
+                            disp = E.a('objlink', `0x${hex(val,8)} ${target.object.name}`);
+                            //XXX connect event handler to show that object
+                        }
+                        else disp = `0x${hex(val,8)} (not found)`;
                     }
-                    else disp += ' (not found)';
                 }
+                else if(tp == 'GameBit' || tp == 'GameBit16' || tp == 'GameBit32') {
+                    const bit = this.game.bits[val & 0x7FFF];
+                    disp = `0x${hex(val&0xFFFF,4)}`;
+                    if(bit && bit.name) disp += ' '+bit.name;
+                }
+                else if(Array.isArray(val)) {
+                    disp = val.join(', ');
+                }
+                else if(vals.length > 1) disp = String(val);
+                disps.push(disp);
             }
-            else if(tp == 'GameBit' || tp == 'GameBit16' || tp == 'GameBit32') {
-                const bit = this.game.bits[val];
-                if(bit && bit.name) disp += ' '+bit.name;
-            }
-            else if(Array.isArray(val)) {
-                disp = val.join(', ');
-            }
-            result[name] = E.span(null, {title:tp}, disp);
+            result[name] = E.span(null, {title:tp}, disps.join(', '));
         }
         return result;
     }
