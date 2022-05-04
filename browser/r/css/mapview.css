@@ -70,6 +70,10 @@
     white-space: break-spaces;
 }
 
+.tabMapView .seqcmd {
+    font-family: monospace;
+}
+
 .gl-view-control input[type=number] {
     width: 5em;
     background: rgba(0, 0, 0, 0.25);

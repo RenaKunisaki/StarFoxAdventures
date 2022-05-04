@@ -1,5 +1,5 @@
 curve types:
-
+0x02: baddie?
 0x17: TrigCrve
 0x23: curveFish
 

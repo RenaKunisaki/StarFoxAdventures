@@ -40,6 +40,8 @@ export default class Game {
         this.texPreTab   = null;
         this.texPreBin   = null;
 
+        this.charNames = ["Krystal", "Fox"];
+
         this.setVersion('U0');
         this.app.onLanguageChanged(lang => this._loadTexts(lang));
     }
@@ -127,6 +129,11 @@ export default class Game {
         if(res) res = res[Math.floor(z / MAP_CELL_SIZE)];
         if(res) res = res.map;
         return res;
+    }
+
+    getMapDirName(id) {
+        if(this.mapDirs[id] != undefined) return this.mapDirs[id];
+        return `0x${hex(id,2)}`;
     }
 
     getObject(defNo) {

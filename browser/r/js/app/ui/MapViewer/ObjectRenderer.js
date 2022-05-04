@@ -6,6 +6,7 @@ export default class ObjectRenderer {
     /** Handles object rendering for map viewer. */
     constructor(mapViewer) {
         this.mapViewer = mapViewer;
+        this.game = mapViewer.game;
         this.app = this.mapViewer.app;
         this.gx = this.mapViewer.gx;
         this.reset();
@@ -26,6 +27,7 @@ export default class ObjectRenderer {
         const map = this.mapViewer.map;
         if(!map.romList) return; //nothing to render
 
+        this.objInstancesById = {};
         this.objInstances = [];
         for(let i=0; i<map.romList.entries.length; i++) {
             if(!(i & 0xF)) {
@@ -41,6 +43,7 @@ export default class ObjectRenderer {
             const entry = map.romList.entries[i];
             const inst  = createObjInstance(this.gx, this.game, map, entry);
             this.objInstances.push(inst);
+            this.objInstancesById[entry.id] = inst;
             const batch = this.drawObject(inst);
             this.batches[`obj${entry.idx}`] = batch;
         }

@@ -258,38 +258,15 @@ export default class InfoWidget {
                 E.td('string', acts.join(',')),
             ),
         ];
-        let params = entry.params;
+        //XXX tidy this
+        const inst = this.mapViewer._objectRenderer.objInstancesById[entry.id];
+        let params = inst.decodeParams();
         if(params == null) params = {};
-        for(const [name, param] of Object.entries(params)) {
-            let disp = param.value.display;
-            //what the fuck
-            const tp = param.value.param ? param.value.param.type : '';
-            let val = param.value.value;
-
-            //XXX this is gross and doesn't handle arrays or structs
-            if(tp == 'ObjUniqueId') {
-                const idTarget = val;
-                if(idTarget > 0) {
-                    const target = this.mapViewer.map.romList.
-                        objsByUniqueId[idTarget];
-                    if(target) {
-                        disp = E.a('objlink', disp);
-                        //XXX connect event handler to show that object
-                    }
-                    else disp += ' (not found)';
-                }
-            }
-            else if(tp == 'GameBit' || tp == 'GameBit16' || tp == 'GameBit32') {
-                const bit = this.game.bits[val];
-                if(bit && bit.name) disp += ' '+bit.name;
-            }
-            else if(Array.isArray(val)) {
-                disp = val.join(', ');
-            }
-            rows.push(E.tr({title:tp},
+        for(const [name, val] of Object.entries(params)) {
+            rows.push(E.tr(
                 E.th('objparam', name),
-                E.td(null, disp),
-            ))
+                E.td(null, val),
+            ));
         }
         this._tbl.append(...rows);
 
