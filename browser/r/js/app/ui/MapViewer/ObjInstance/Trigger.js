@@ -30,10 +30,45 @@ export class Trigger extends ObjInstance {
         for(let iCmd=0; iCmd<8; iCmd++) {
             const cmd = this.entry.params.seq.value.value[iCmd];
             if(cmd.cmd == 0) continue;
+
+            let conditions = [];
+            const flags = cmd.flags;
+            if(flags & 0x01) { //trigger when inside
+                //04: reactivate when we leave
+                if(flags & 0x10) conditions.push("WhileIn");
+                else if(flags & 0x04) conditions.push("OnEnter");
+                else conditions.push("On1stEnter");
+            }
+            if(flags & 0x02) { //trigger when outside
+                //08: reactivate when we enter
+                if(flags & 0x10) conditions.push("WhileOut");
+                else if(flags & 0x08) conditions.push("OnLeave");
+                else conditions.push("On1stLeave");
+            }
+            //if neither enter/leave are set it triggers every frame
+            if(flags & 0x1C == 0x10) conditions.push("Always");
+            if(!conditions.length) {
+                if(flags & 0x04) conditions.push("?Enter");
+                else if(flags & 0x08) conditions.push("?Leave");
+                else conditions.push("Never");
+            }
+            if(flags & 0xE0) {
+                conditions.push(`Unk${hex(cmd.flags,2)}`);
+            }
+            conditions = conditions.join(', ');
+
             let name = ObjSeqCmdEnum.valueToString(cmd.cmd);
             if(name == undefined) name = `unk${hex(cmd.cmd,2)}`;
             let params;
             switch(cmd.cmd) {
+                case 0x01: { //player subcmd
+                    name = "Player";
+                    switch(cmd.param1) {
+                        case 0x08: params = "Respawn"; break;
+                        default: params = `Unk${hex(cmd.param1,2)}${hex(cmd.param2,2)}`;
+                    }
+                    break;
+                }
                 case 0x0B: { //subcmd
                     switch(cmd.param1) {
                         case 0: {
@@ -76,6 +111,28 @@ export class Trigger extends ObjInstance {
                 }
                 case 0x1A: case 0x1B: { //show/hide in other map
                     params = `${this.game.getMapDirName(cmd.param2)} ${cmd.param1}`;
+                    break;
+                }
+                case 0x1C: { //env cmd
+                    params = cmd.param2 ? "On" : "Off";
+                    switch(cmd.param1) {
+                        case 0: name = "EnvBit 3AB"; break;
+                        case 1: name = "EnvBit 3AC"; break;
+                        case 2: name = "EnvBit 3AF"; break;
+                        case 3: {
+                            params = '';
+                            switch(cmd.param2) {
+                                case 0: name = "Env Outdoor"; break;
+                                case 1: name = "Env Indoor"; break;
+                                case 2: name = "Env Outdoor2"; break;
+                                default: name = `Env Unk03${hex(cmd.param2,2)}`;
+                            }
+                            break;
+                        }
+                        default:
+                            name   = `Env Unk${hex(cmd.param1,2)}`;
+                            params = hex(cmd.param2,2);
+                    }
                     break;
                 }
                 case 0x1E: { //set map act for other map
@@ -139,9 +196,7 @@ export class Trigger extends ObjInstance {
                 default:
                     params = `${hex(cmd.param1,2)}${hex(cmd.param2,2)}`;
             }
-            seq.push(E.li('seqcmd',
-                `[${hex(cmd.flags,2)}] ${name} ${params}`
-            ));
+            seq.push(E.li('seqcmd', `[${conditions}] ${name} ${params}`));
         }
 
         result.seq = E.ul(...seq);

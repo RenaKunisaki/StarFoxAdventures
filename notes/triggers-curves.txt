@@ -13,23 +13,92 @@ curve types:
 0054 TrigBits: runs if all of trigBits are set (or are 0xFFFF)
 00F4 TrigCrve: runs when something is near a curve of type 0x17
 
-ObjDef for triggers:
-0x0	ObjDef	def	
-0x18	ObjSeqCmd[8]	seq	
-0x38	short		
-0x3a	db	size1	
-0x3b	db	size2	
-0x3c	db	size3	
-0x3d	db	rotX	
-0x3e	db	rotY	
-0x3f	??		
-0x40	??		
-0x41	??		
-0x42	??		
-0x43	db		
-0x44	GameBit16		
-0x46	ushort	delay	frame count for TrigTime
-0x48	GameBit16	trigBits1	
-0x4a	GameBit16	trigBits2	
-0x4c	GameBit16	trigBits3	also int action, for TrigCrve
-0x4e	GameBit16	trigBits4	
+we can just spawn one in animtest
+the ObjSeq is:
+18 ObJSeqCmd[8]
+38 trigId
+3A size[3]
+3D rot[2]
+43 target
+44 bitActivate
+46 timer
+48 trigBits[4]
+4C curveAction (overlaps trigBigs[2,3])
+a good test command is xx1280C1
+	00:clear, 40:set, 80:invert
+00: no effect
+01: activates once when entering (if it doesn't spawn on top of us)
+02: activates once when leaving
+04: no effect
+05: activates whenever we enter
+08: no effect
+0A: activates whenever we leave
+10: activates every frame
+20: no effect
+40: no effect
+80: no effect
+11: every frame while inside
+12: every frame while outside
+15: same as 11
+so the flags are:
+01: activate when inside
+02: activate when outside
+04: reactivate after exiting ("when inside" fires every time you enter)
+08: reactivate after entering ("when outside" fires every time you leave)
+10: always active ("when inside" fires every frame while inside, likewise for outside)
+
+so 01 = on enter, 02 = on leave, 04 = can enter multiple times, 08 = can leave multiple times?
+
+the "trigger" value passed to objInterpretSeq determines how the player is interacting with it:
+-2: outside its area
+-1: leaving its area
+ 0: not used?
+ 1: entering its area
+ 2: inside its area
+
+the cmd flags byte tells when to run
+
+if flag 0x10 is zero:
+	if trigger is 1:
+		if flag 0x01 is set:
+			if inside:
+				if flag 0x04 is set: execute
+			else: execute
+	else if trigger is -1 and flag 0x02 is set:
+		if outside:     ow, my brain
+			if flag 0x08 is set: execute
+else if flag 0x01 is zero:
+	if flag 0x02 is zero or trigger is (0, -1, -2): execute
+else if trigger is -2: execute
+
+so when does each trigger execute?
+-2: ( 0x10 and 0x01) or !0x01
+-1: (!0x10 and 0x02 and outside and 0x08) or !0x01
+ 0: !0x01
+ 1: !0x10 and 0x01 and ((inside and 0x04) or !inside)
+ 2: ?
+so the flag bits are something like:
+10: don't execute for 1, -1
+I have no damn idea, let's just look at some examples
+
+01 start staff tutorial
+01 set ReturnedToQueen
+03 set FoundQueen
+04 lock dbshrine 0, nwastes 1
+05 load swapholbot
+05 set respawn
+08 unlock dbshrine 0
+0A free swapholbot
+0A clear respawn
+0F void out
+
+generally 05 is used for enter, 0A for exit
+
+env cmd 1C: param1 is subcmd
+00: set bit 3AB to param2 != 0
+01: set bit 3AC to param2 != 0
+02: set bit 3AF to param2 != 0
+03: sub-subcmd on param2
+	00: set outdoor, get envfxact 0134, 0135, 0142
+	01: set indoor,  get envfxact 0134, 0135, 0142
+	02: set outdoor, get envfxact 0136, 0137, 0143

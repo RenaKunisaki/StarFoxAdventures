@@ -12899,7 +12899,7 @@ seemingly only used to track magic plants' growth</description>
     <objparams>
       <field type="sfa.seq.ObjSeqCmd" offset="0x18" name="seq" count="8" />
       <field type="s16" offset="0x38" name="trigId">
-        <description>Identifies trigger for seq cmd 0x0C; not unique</description>
+        <description>Identifies trigger for seq cmd 0x0C; not unique. If not zero, the trigger will NOT activate by any other means (exception: TrigCrve).</description>
       </field>
       <field type="u8" offset="0x3A" name="size" count="3" />
       <field type="u8" offset="0x3D" name="rot" count="2" />
