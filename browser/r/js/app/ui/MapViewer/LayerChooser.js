@@ -95,7 +95,7 @@ export default class LayerChooser {
         const eLbl = E.label(null, {'for':'mapview-layers-allgroups'}, "All");
         const eDiv = E.div('checkbox', eBox, eLbl);
         eBox.addEventListener('change', e => {
-            for(let i=0; i<NUM_OBJ_GROUPS; i++) {
+            for(let i=-1; i<NUM_OBJ_GROUPS; i++) {
                 this.setLayer(`group${i}`, eBox.checked, false);
             }
             this.mapViewer.redraw();
