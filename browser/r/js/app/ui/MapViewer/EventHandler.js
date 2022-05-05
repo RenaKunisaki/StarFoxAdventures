@@ -27,8 +27,7 @@ export default class EventHandler {
         canvas.addEventListener('keydown', e => this._onKey(e, true));
         canvas.addEventListener('keyup', e => this._onKey(e, false));
 
-        var t = this;
-        setInterval(function () { t._tick(); }, this._deltaTick);
+        setInterval(() => { this._tick(); }, this._deltaTick);
     }
 
     _tick() {
@@ -36,30 +35,29 @@ export default class EventHandler {
             return;
         }
 
-        var deltaTime = this._deltaTick / 1000.0
-        var baseSpeed = 350.0;
-        var speed = baseSpeed * this._moveSpeedModifier;
+        let deltaTime = this._deltaTick / 1000.0
+        let baseSpeed = 350.0;
+        let speed = baseSpeed * this._moveSpeedModifier;
 
-        if (this._keyPressMap[' ']) {
-            this.mapViewer.viewController.adjust({ pos: { y: speed * deltaTime } });
+        if(this._keyPressMap[' ']) {
+            this.mapViewer.viewController.adjust({pos: {y: speed * deltaTime } });
         }
 
-        var movement = { x: 0.0, y: 0.0 };
-
-        if (this._keyPressMap["ArrowLeft"] || this._keyPressMap["a"]) {
+        let movement = { x: 0.0, y: 0.0 };
+        if(this._keyPressMap["ArrowLeft"] || this._keyPressMap["a"]) {
             movement.x = speed * deltaTime;
         }
-        if (this._keyPressMap["ArrowRight"] || this._keyPressMap["d"]) {
+        if(this._keyPressMap["ArrowRight"] || this._keyPressMap["d"]) {
             movement.x = -speed * deltaTime;
         }
-        if (this._keyPressMap["ArrowUp"] || this._keyPressMap["w"]) {
+        if(this._keyPressMap["ArrowUp"] || this._keyPressMap["w"]) {
             movement.y = speed * deltaTime;
         }
-        if (this._keyPressMap["ArrowDown"] || this._keyPressMap["s"]) {
+        if(this._keyPressMap["ArrowDown"] || this._keyPressMap["s"]) {
             movement.y = -speed * deltaTime;
         }
 
-        if (movement.x != 0.0 || movement.y != 0.0) {
+        if(movement.x != 0.0 || movement.y != 0.0) {
             this._moveByVector(movement);
         }
     }
@@ -78,12 +76,14 @@ export default class EventHandler {
         const deltaY = vec.y * sinRX;
         const deltaZ = ((vec.x * sinRY) + (vec.y * cosRY));
 
-        this.mapViewer.viewController.adjust({ pos: { x: deltaX, y: deltaY, z: deltaZ } });
+        this.mapViewer.viewController.adjust({ pos: {
+            x: deltaX, y: deltaY, z: deltaZ } });
     }
 
     async _onMouseDown(event) {
         if (event.buttons == 1) {
-            const obj = await this.mapViewer._getObjAt(event.clientX, event.clientY);
+            const obj = await this.mapViewer._getObjAt(
+                event.clientX, event.clientY);
             this.mapViewer.infoWidget.show(obj);
         }
         else {
@@ -149,8 +149,9 @@ export default class EventHandler {
     _onMouseWheel(event) {
         event.preventDefault();
         const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-        var deltaSpeed = - event.deltaY / 500.0;
-        this._moveSpeedModifier = clamp(this._moveSpeedModifier + deltaSpeed, 0.25, 5.0)
+        let deltaSpeed = - event.deltaY / 500.0;
+        this._moveSpeedModifier = clamp(
+            this._moveSpeedModifier + deltaSpeed, 0.25, 5.0)
     }
 
     _onKey(event, isDown) {
