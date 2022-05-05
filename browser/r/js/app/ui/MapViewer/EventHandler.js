@@ -64,7 +64,7 @@ export default class EventHandler {
         }
     }
 
-    _moveByVector(vec2) {
+    _moveByVector(vec) {
         const view = this.mapViewer.viewController.get();
         const rx = ((view.rot.x % 360) - 180) * PI_OVER_180;
         const ry = ((view.rot.y % 360) - 180) * PI_OVER_180;
@@ -74,9 +74,9 @@ export default class EventHandler {
         const sinRY = Math.sin(ry);
         const cosRY = Math.cos(ry);
 
-        const deltaX = ((vec2.x * cosRY) - (vec2.y * sinRY));
-        const deltaY = vec2.y * sinRX;
-        const deltaZ = ((vec2.x * sinRY) + (vec2.y * cosRY));
+        const deltaX = ((vec.x * cosRY) - (vec.y * sinRY));
+        const deltaY = vec.y * sinRX;
+        const deltaZ = ((vec.x * sinRY) + (vec.y * cosRY));
 
         this.mapViewer.viewController.adjust({ pos: { x: deltaX, y: deltaY, z: deltaZ } });
     }
@@ -177,7 +177,7 @@ export default class EventHandler {
             case 'KP_8_Press':
                 //put camera at top looking down or something
                 break;
-            case 'g_Press': //case 'half_a_Press':
+            case 'g_Press':
                 C.toggleLayer('waterGeometry');
                 break;
             case 'b_Press':
