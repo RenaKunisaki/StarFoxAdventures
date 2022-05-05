@@ -25,9 +25,10 @@ export default class LayerChooser {
             false, "Polygons normally not visible");
         this._addLayer('list', 'actNo', "Objects",
             0, "Which act to show objects for");
-        //XXX doesn't currently do anything
-        this._addLayer('boolean', 'hiddenObjects', "Hidden Objects",
-            false, "Objects normally not visible");
+        this._addLayer('boolean', 'triggers', "Triggers",
+            false, "Invisible control objects");
+        this._addLayer('boolean', 'curves', "Curves",
+            false, "Invisible control objects");
         this._addLayer('boolean', 'blockBounds', "Block Bounds",
             false, "Map block boundary boxes");
         this._addLayer('boolean', 'warps', "Warps", false, "WARPTAB entries");

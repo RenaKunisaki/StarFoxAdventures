@@ -1,6 +1,8 @@
 import RenderBatch from "../gl/gx/RenderBatch.js";
 import GX from "../gl/gx/GX.js";
 import createObjInstance from "./ObjInstance/createObjInstance.js";
+import { Trigger } from "./ObjInstance/Trigger.js";
+import Curve from "./ObjInstance/Curve.js";
 
 export default class ObjectRenderer {
     /** Handles object rendering for map viewer. */
@@ -59,7 +61,9 @@ export default class ObjectRenderer {
         const gl = this.gx.gl;
         this._isDrawingForPicker = isPicker;
 
-        const cacheKey = [isPicker, act].join(':');
+        const showTrig = this.mapViewer.layerChooser.getLayer("triggers");
+        const showCurv = this.mapViewer.layerChooser.getLayer("curves");
+        const cacheKey = [isPicker, act, showTrig, showCurv].join(':');
 
         //if we already generated a batch, use it.
         if(this.batches[cacheKey]) return this.batches[cacheKey];
@@ -81,7 +85,12 @@ export default class ObjectRenderer {
             if(act == -1 || entry.acts[act]) {
                 const batch = this.batches[`obj${entry.idx}`];
                 console.assert(batch);
-                objs.push(batch);
+                const inst = this.objInstancesById[entry.id];
+                const isTrig = (inst instanceof Trigger);
+                const isCurv = (inst instanceof Curve);
+                if(isTrig && showTrig) objs.push(batch);
+                else if(isCurv && showCurv) objs.push(batch);
+                else if(!(isTrig || isCurv)) objs.push(batch);
             }
         }
 
