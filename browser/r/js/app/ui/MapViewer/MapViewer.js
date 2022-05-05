@@ -480,7 +480,7 @@ export default class MapViewer {
             (this.map.originZ * MAP_CELL_SIZE) ));
         this.gx.setModelViewMtx(mv);
         const batch = await this._objectRenderer.drawObjects(
-            this.layerChooser.getLayer('actNo'), this._isDrawingForPicker);
+            this.layerChooser.getActs(), this._isDrawingForPicker);
         if(batch) this.gx.executeBatch(batch);
     }
 

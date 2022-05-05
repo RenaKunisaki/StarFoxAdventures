@@ -44,13 +44,12 @@ export default class LayerChooser {
         this._addLayer(this.eHits, 'boolean', 'blockHits', "Block Hits", false,
             "Data from HITS.bin");
 
-        this._addLayer(this.eObjs, 'list', 'actNo', "Objects",
-            0, "Which act to show objects for");
         this._addLayer(this.eObjs, 'boolean', 'triggers', "Triggers",
             false, "Invisible control objects");
         this._addLayer(this.eObjs, 'boolean', 'curves', "Curves",
             false, "Invisible control objects");
 
+        this._makeActPicker();
 
         //debug
         this.eWhichList = E.input(null, {type:'number', value:-1});
@@ -58,6 +57,26 @@ export default class LayerChooser {
         this.eDebug.append(E.div('debug',
             E.span('label', "Dlist:"), this.eWhichList,
         ));
+    }
+
+    _makeActPicker() {
+        this.eActs = E.span('act-list', E.div('subtitle', "Acts"));
+        for(let i=1; i<16; i++) {
+            this._addLayer(this.eActs, 'boolean', `act${i}`,
+                i.toString().padStart(2), false);
+        }
+        const eBox = E.input(null, {type:'checkbox', id:'mapview-layers-allacts'});
+        const eLbl = E.label(null, {'for':'mapview-layers-allacts'}, "All");
+        const eDiv = E.div('checkbox', eBox, eLbl);
+        eBox.addEventListener('change', e => {
+            for(let i=1; i<16; i++) {
+                this.setLayer(`act${i}`, eBox.checked, false);
+            }
+            this.mapViewer.redraw();
+        });
+        this.eActs.append(eDiv);
+        this.eAllActsLabel = eLbl;
+        this.eObjs.append(this.eActs);
     }
 
     _addLayer(parent, type, name, displayName, value=undefined, tooltip='') {
@@ -79,7 +98,8 @@ export default class LayerChooser {
                 const eDiv = E.div('checkbox', eBox, eLbl);
                 if(value) eBox.checked = true;
                 eBox.addEventListener('change', e => this.toggleLayer(name));
-                layer.element = eDiv;
+                layer.eLabel   = eLbl;
+                layer.element  = eDiv;
                 layer.checkbox = eBox;
                 break;
             }
@@ -113,7 +133,7 @@ export default class LayerChooser {
         }
     }
 
-    setLayer(name, value) {
+    setLayer(name, value, redraw=true) {
         const layer = this.layers[name];
         layer.value = value;
         switch(layer.type) {
@@ -121,11 +141,19 @@ export default class LayerChooser {
                 layer.checkbox.checked = value;
                 break;
         }
-        this.mapViewer.redraw();
+        if(redraw) this.mapViewer.redraw();
     }
 
     getLayer(name) {
         return this.layers[name].value;
+    }
+
+    getActs() {
+        let result = 0;
+        for(let i=1; i<16; i++) {
+            if(this.getLayer(`act${i}`)) result |= (1 << (i-1));
+        }
+        return result;
     }
 
     _updateActList() {
@@ -139,17 +167,12 @@ export default class LayerChooser {
                 if(obj.acts[i]) objCounts[i]++;
             }
         }
-        const lAct   = this.layers['actNo'];
-        const oldAct = lAct.value;
-        clearElement(lAct.list);
-        lAct.list.append(E.option(null, "None", {value:0}));
         for(let i=1; i<16; i++) {
-            lAct.list.append(E.option(null,
-                `Act ${i} (${objCounts[i]})`, {value:i}));
+            this.layers[`act${i}`].eLabel.innerText =
+                `${i.toString().padStart(2)} (${objCounts[i].toString().padStart(4)})`;
         }
-        lAct.list.append(E.option(null,
-            `All Acts (${objs.length})`, {value:-1}));
-        lAct.list.value = oldAct;
+        //missing space on purpose here for alignment.
+        this.eAllActsLabel.innerText = `All(${objs.length.toString().padStart(4)})`;
     }
 
     refresh() {

@@ -8,8 +8,8 @@
 
 .fileSelect .support {
     position: absolute;
-    top: 4px;
-    right: 4px;
+    top: 1.5em;
+    right: 2em;
 }
 
 .fileSelect .main {

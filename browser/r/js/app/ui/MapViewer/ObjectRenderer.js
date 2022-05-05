@@ -51,9 +51,9 @@ export default class ObjectRenderer {
         }
     }
 
-    async drawObjects(act, isPicker) {
+    async drawObjects(acts, isPicker) {
         /** Draw all enabled objects.
-         *  @param {integer} act Which act number to draw.
+         *  @param {integer} act Bitflags of act numbers to draw.
          *  @param {bool} isPicker Whether we're rendering for picker buffer.
          *  @returns {RenderBatch} Batch that renders the objects.
          */
@@ -63,7 +63,7 @@ export default class ObjectRenderer {
 
         const showTrig = this.mapViewer.layerChooser.getLayer("triggers");
         const showCurv = this.mapViewer.layerChooser.getLayer("curves");
-        const cacheKey = [isPicker, act, showTrig, showCurv].join(':');
+        const cacheKey = [isPicker, acts, showTrig, showCurv].join(':');
 
         //if we already generated a batch, use it.
         if(this.batches[cacheKey]) return this.batches[cacheKey];
@@ -72,17 +72,13 @@ export default class ObjectRenderer {
         const batch = new RenderBatch(this.gx);
         this.batches[cacheKey] = batch;
 
-        //act 0 = no objects (same as in game)
-        if(act == 0) return batch;
+        if(acts == 0) return batch;
         const map = this.mapViewer.map;
         if(!map.romList) return batch; //nothing to render
 
         const objs = [];
         for(let entry of map.romList.entries) {
-            //act -1 = all objects (same as in game, even though
-            //it's not possible to actually set the act to -1
-            //in the game)
-            if(act == -1 || entry.acts[act]) {
+            if(entry.actsMask & acts) {
                 const batch = this.batches[`obj${entry.idx}`];
                 console.assert(batch);
                 const inst = this.objInstancesById[entry.id];

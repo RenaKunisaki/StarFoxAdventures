@@ -66,6 +66,18 @@
     background: none;
 }
 
+.tabMapView .sidebar .act-list .checkbox {
+    display: inline-block;
+    width: 25%;
+    font-family: monospace;
+    white-space: pre;
+}
+
+.tabMapView .sidebar .act-list .subtitle {
+    text-align: center;
+    text-decoration: underline;
+}
+
 .tabMapView .rawparams .hexdump {
     white-space: break-spaces;
 }

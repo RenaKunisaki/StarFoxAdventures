@@ -27,6 +27,7 @@ class RomListEntry {
         this.byteLength = base.length * 4;
         this.defNo      = base.objDef;
         this.acts       = [false]; //act 0 loads no objects
+        this.actsMask   = 0;
         this.loadFlags  = base.loadFlags;
         this.bound      = base.bound;
         this.cullDist   = base.cullDist;
@@ -42,6 +43,7 @@ class RomListEntry {
             if(i >= 9) disp = base.acts1 & (1 << (7-(i-9)));
             else disp = base.acts0 & (1 << (i-1));
             this.acts.push(disp == 0); //bit set = do NOT show in this act
+            if(!disp) this.actsMask |= (1 << (i-1));
         }
 
         if(this.game.objects) {
