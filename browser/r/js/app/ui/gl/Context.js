@@ -32,6 +32,7 @@ export default class Context {
             //for character model viewing)
         this.showPickBuffer = false; //debug: render the picker buffer
         this.useOrtho = false; //use orthographic projection
+        this.moveSpeed = 1.0; //movement speed multiplier
 
         this._setupCanvas(canvas);
         this._setupExtensions();

@@ -8,7 +8,6 @@ export default class EventHandler {
         this.canvas = this.mapViewer.canvas;
         this._prevMousePos = [0, 0];
         this._mouseStartPos = null;
-        this._moveSpeedModifier = 1.0;
         this._deltaTick = 1000.0 / 30.0; // 30 fps
         this._keyPressMap = {};
 
@@ -20,7 +19,7 @@ export default class EventHandler {
         //must disable context menu to be able to right-drag.
         //can still use alt+right to open it.
         canvas.addEventListener('contextmenu', e => {
-            if (!e.altKey) e.preventDefault();
+            if(!e.altKey) e.preventDefault();
         });
 
         //XXX move some of this to a generic class?
@@ -31,13 +30,13 @@ export default class EventHandler {
     }
 
     _tick() {
-        if (!this.mapViewer || !this.mapViewer.viewController) {
+        if(!this.mapViewer || !this.mapViewer.viewController) {
             return;
         }
 
         let deltaTime = this._deltaTick / 1000.0
         let baseSpeed = 350.0;
-        let speed = baseSpeed * this._moveSpeedModifier;
+        let speed = baseSpeed * this.mapViewer.context.moveSpeed;
 
         if(this._keyPressMap[' ']) {
             this.mapViewer.viewController.adjust({pos: {y: speed * deltaTime } });
@@ -148,10 +147,11 @@ export default class EventHandler {
 
     _onMouseWheel(event) {
         event.preventDefault();
-        const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-        let deltaSpeed = - event.deltaY / 500.0;
-        this._moveSpeedModifier = clamp(
-            this._moveSpeedModifier + deltaSpeed, 0.25, 5.0)
+        //let deltaSpeed = -event.deltaY / 500.0;
+        //this.mapViewer.viewController.adjust({moveSpeed: deltaSpeed});
+        if(event.shiftKey) this.mapViewer.viewController.adjust({
+            pos:{x:0, y:event.deltaY, z:0}});
+        else this._moveByVector({x:0, y:-event.deltaY});
     }
 
     _onKey(event, isDown) {

@@ -306,3 +306,7 @@ export function hexdump(data, offset=0, length=null, cols=16) {
 export function isPowerOf2(value) {
     return (value & (value - 1)) == 0;
 }
+
+export function clamp(num, min, max) {
+    return Math.min(Math.max(num, min), max);
+}

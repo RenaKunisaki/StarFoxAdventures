@@ -59,6 +59,9 @@ export default class ViewController {
             this.btnRotateCam.checked =  params.useSRT;
             this.btnRotateOrg.checked = !params.useSRT;
         }
+        if(params.moveSpeed != undefined) {
+            this.txtMoveSpeed.value = params.moveSpeed;
+        }
         this._onChange(null); //trigger an update
     }
 
@@ -90,6 +93,7 @@ export default class ViewController {
             useOrtho: this.chkOrtho.checked,
             frontFaceCW: this.btnFrontFaceCW.checked,
             useSRT: this.btnRotateCam.checked,
+            moveSpeed: F(this.txtMoveSpeed.value),
         };
     }
 
@@ -136,6 +140,9 @@ export default class ViewController {
             this.btnRotateCam.checked =  params.useSRT;
             this.btnRotateOrg.checked = !params.useSRT;
         }
+        if(params.moveSpeed != undefined) {
+            this.txtMoveSpeed.value = F(this.txtMoveSpeed.value) + params.moveSpeed;
+        }
         this._onChange(null); //trigger an update
     }
 
@@ -152,6 +159,7 @@ export default class ViewController {
         this.txtFov.value    =    60;
         this.txtZNear.value  =     1;
         this.txtZFar.value   = 50000;
+        this.txtMoveSpeed.value = 1.0;
         this.chkEnableTex.checked      = true;
         this.chkWireframe.checked      = false;
         this.chkEnableBackface.checked = true;
@@ -185,6 +193,7 @@ export default class ViewController {
         this.context.useOrtho = this.chkOrtho.checked;
         this.context.frontFaceCW = this.btnFrontFaceCW.checked;
         this.context.useSRT = this.btnRotateCam.checked;
+        this.context.moveSpeed = F(this.txtMoveSpeed.value);
         this.context.redraw();
     }
 
@@ -220,6 +229,7 @@ export default class ViewController {
         this.txtFov   =F('fov angle float',  5,    C.fov, 1, 360);
         this.txtZNear =F('znear coord float',0.01, C.zNear);
         this.txtZFar  =F('zfar coord float', 5,    C.zFar);
+        this.txtMoveSpeed=F('speed float', 0.25,   C.moveSpeed, 0.25, 5);
 
         //checkbox to enable textures
         this.chkEnableTex = E.input(null, {type:'checkbox', id:'chkEnableTex'});
@@ -301,6 +311,11 @@ export default class ViewController {
                     E.td(this.txtRotX), E.td(this.txtRotY), E.td(this.txtRotZ),
                 ),
 
+                E.tr(
+                    E.th(null, "Speed"),
+                    E.td({colspan:3}, this.txtMoveSpeed),
+                ),
+
                 E.tr(E.td(
                     this.chkEnableTex, this.lblEnableTex,
                     this.chkWireframe, this.lblWireframe,
@@ -345,12 +360,13 @@ export default class ViewController {
                             title:"Enable backface culling",
                         }),
                     ), */
-                    E.tr(
+                    //currently doesn't work
+                    /* E.tr(
                         E.td({colspan:2},
                             this.chkShowPickBuffer, this.lblShowPickBuffer, {
                             title:"Render the pick buffer for debug",
                         }),
-                    ),
+                    ), */
                 ),
             ),
         );
