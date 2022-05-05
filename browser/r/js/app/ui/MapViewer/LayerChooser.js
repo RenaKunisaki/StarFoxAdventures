@@ -8,46 +8,59 @@ export default class LayerChooser {
         this.game      = mapViewer.game;
         this.app       = mapViewer.game.app;
 
-        this.element = E.details('map-layers', {open:'open'},
+        this.eLayers = E.details('map-layers', {open:'open'},
             E.summary(null, "Layers"));
+        this.eObjs = E.details('map-objects', {open:'open'},
+            E.summary(null, "Objects"));
+        this.eHits = E.details('map-hits', {open:'open'},
+            E.summary(null, "Collision"));
+        this.eDebug = E.details('map-debug',
+            E.summary(null, "Debug"));
 
-        this.layers = {};
+        this.element = E.div('map-layer-chooser', this.eLayers, this.eObjs,
+            this.eHits, this.eDebug);
+
+        this.layers      = {};
         this.layers      = {};
         this._layerOrder = [];
-        this._addLayer('boolean', 'mainGeometry', "Main Geometry",
-            true, "Non-translucent, non-reflective polygons");
-        this._addLayer('boolean', 'waterGeometry', "Water Geometry",
-            true, "Translucent, reflective polygons");
+        this._addLayer(this.eLayers, 'boolean', 'mainGeometry',
+            "Main Geometry", true, "Non-translucent, non-reflective polygons");
+        this._addLayer(this.eLayers, 'boolean', 'waterGeometry',
+            "Water Geometry", true, "Translucent, reflective polygons");
         //XXX this should be renamed
-        this._addLayer('boolean', 'reflectiveGeometry', "Translucent Geometry",
-            true, "Translucent, non-reflective polygons");
-        this._addLayer('boolean', 'hiddenGeometry', "Hidden Geometry",
-            false, "Polygons normally not visible");
-        this._addLayer('list', 'actNo', "Objects",
-            0, "Which act to show objects for");
-        this._addLayer('boolean', 'triggers', "Triggers",
-            false, "Invisible control objects");
-        this._addLayer('boolean', 'curves', "Curves",
-            false, "Invisible control objects");
-        this._addLayer('boolean', 'blockBounds', "Block Bounds",
+        this._addLayer(this.eLayers, 'boolean', 'reflectiveGeometry',
+            "Translucent Geometry", true, "Translucent, non-reflective polygons");
+        this._addLayer(this.eLayers, 'boolean', 'hiddenGeometry',
+            "Hidden Geometry", false, "Polygons normally not visible");
+        this._addLayer(this.eLayers, 'boolean', 'blockBounds', "Block Bounds",
             false, "Map block boundary boxes");
-        this._addLayer('boolean', 'warps', "Warps", false, "WARPTAB entries");
-        this._addLayer('boolean', 'hitPolys', "Hit Polys", false,
+        this._addLayer(this.eLayers, 'boolean', 'warps', "Warps", false,
+            "WARPTAB entries");
+
+        this._addLayer(this.eHits, 'boolean', 'hitPolys', "Hit Polys", false,
             "Hit detect mesh");
-        this._addLayer('boolean', 'polyGroups', "Poly Groups", false,
-            "Polygon group boxes");
-        this._addLayer('boolean', 'blockHits', "Block Hits", false,
+        this._addLayer(this.eHits, 'boolean', 'polyGroups', "Poly Groups",
+            false, "Polygon group boxes");
+        this._addLayer(this.eHits, 'boolean', 'blockHits', "Block Hits", false,
             "Data from HITS.bin");
+
+        this._addLayer(this.eObjs, 'list', 'actNo', "Objects",
+            0, "Which act to show objects for");
+        this._addLayer(this.eObjs, 'boolean', 'triggers', "Triggers",
+            false, "Invisible control objects");
+        this._addLayer(this.eObjs, 'boolean', 'curves', "Curves",
+            false, "Invisible control objects");
+
 
         //debug
         this.eWhichList = E.input(null, {type:'number', value:-1});
         this.eWhichList.addEventListener('change', e => this.mapViewer.redraw());
-        this.element.append(E.div('debug',
+        this.eDebug.append(E.div('debug',
             E.span('label', "Dlist:"), this.eWhichList,
         ));
     }
 
-    _addLayer(type, name, displayName, value=undefined, tooltip='') {
+    _addLayer(parent, type, name, displayName, value=undefined, tooltip='') {
         const layer = {
             name:        name,
             displayName: displayName,
@@ -86,7 +99,7 @@ export default class LayerChooser {
         const elem = layer.element;
         if(elem) {
             if(tooltip != null) elem.setAttribute('title', tooltip);
-            this.element.append(elem);
+            parent.append(elem);
         }
         else console.warn("No element created for layer", layer);
     }
