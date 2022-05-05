@@ -259,8 +259,8 @@ export class TrigPln extends Trigger {
         const rx = rot2rad((entry.params.rot.value.value[0] & 0x3F) << 10);
         const ry = rot2rad(entry.params.rot.value.value[1] << 8);
         batch.addFunction((new Box(this.gx,
-            [-0.5, -0.5, -0.5],
-            [ 0.5,  0.5,  0.5],
+            [-0.5, -0.5, -0.1],
+            [ 0.5,  0.5,  0.1],
         )).setScale(s,s,1).setRot(0,rx,ry).setPos(x,y,z).setId(id).setColors(
             [0x40, 0xFF, 0x40, 0x80]).batch);
         return batch;
