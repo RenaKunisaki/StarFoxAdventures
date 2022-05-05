@@ -1,5 +1,8 @@
 import { clearElement, E } from "../../../lib/Element.js";
 
+const NUM_OBJ_GROUPS = 20;
+const NUM_MAP_ACTS   = 16;
+
 export default class LayerChooser {
     /** Widget that lets you choose what to display. */
     constructor(mapViewer) {
@@ -50,6 +53,7 @@ export default class LayerChooser {
             false, "Invisible control objects");
 
         this._makeActPicker();
+        this._makeObjGroupPicker();
 
         //debug
         this.eWhichList = E.input(null, {type:'number', value:-1});
@@ -61,7 +65,7 @@ export default class LayerChooser {
 
     _makeActPicker() {
         this.eActs = E.span('act-list', E.div('subtitle', "Acts"));
-        for(let i=1; i<16; i++) {
+        for(let i=1; i<NUM_MAP_ACTS; i++) {
             this._addLayer(this.eActs, 'boolean', `act${i}`,
                 i.toString().padStart(2), false);
         }
@@ -69,7 +73,7 @@ export default class LayerChooser {
         const eLbl = E.label(null, {'for':'mapview-layers-allacts'}, "All");
         const eDiv = E.div('checkbox', eBox, eLbl);
         eBox.addEventListener('change', e => {
-            for(let i=1; i<16; i++) {
+            for(let i=1; i<NUM_MAP_ACTS; i++) {
                 this.setLayer(`act${i}`, eBox.checked, false);
             }
             this.mapViewer.redraw();
@@ -77,6 +81,28 @@ export default class LayerChooser {
         this.eActs.append(eDiv);
         this.eAllActsLabel = eLbl;
         this.eObjs.append(this.eActs);
+    }
+    _makeObjGroupPicker() {
+        this.eObjGroups = E.span('objgroup-list', E.div('subtitle', "Obj Groups"));
+        for(let i=0; i<NUM_OBJ_GROUPS; i++) {
+            this._addLayer(this.eObjGroups, 'boolean', `group${i}`,
+                i.toString().padStart(2), true);
+        }
+        this._addLayer(this.eObjGroups, 'boolean', 'group-1',
+            "Ungrouped", true);
+        const eBox = E.input(null, {type:'checkbox',
+            id:'mapview-layers-allgroups', checked:'checked'});
+        const eLbl = E.label(null, {'for':'mapview-layers-allgroups'}, "All");
+        const eDiv = E.div('checkbox', eBox, eLbl);
+        eBox.addEventListener('change', e => {
+            for(let i=0; i<NUM_OBJ_GROUPS; i++) {
+                this.setLayer(`group${i}`, eBox.checked, false);
+            }
+            this.mapViewer.redraw();
+        });
+        this.eObjGroups.append(eDiv);
+        this.eAllGroupsLabel = eLbl;
+        this.eObjs.append(this.eObjGroups);
     }
 
     _addLayer(parent, type, name, displayName, value=undefined, tooltip='') {
@@ -156,23 +182,43 @@ export default class LayerChooser {
         return result;
     }
 
+    getGroups() {
+        let result = 0;
+        for(let i=-1; i<NUM_OBJ_GROUPS; i++) {
+            if(this.layers[`group${i}`].value) result |= (1 << (i+1));
+        }
+        return result;
+    }
+
     _updateActList() {
-        const objCounts = []; //act# => obj count
-        for(let i=0; i<16; i++) objCounts.push(0);
+        const actCounts = []; //act# => obj count
+        const groupCounts = {}; //group# => obj count (starts at -1)
+        for(let i= 0; i<NUM_MAP_ACTS; i++) actCounts.push(0);
+        for(let i=-1; i<NUM_OBJ_GROUPS; i++) groupCounts[i] = 0;
         let objs = this.mapViewer.map.romList;
         if(objs) objs = objs.entries;
         if(!objs) objs = [];
         for(let obj of objs) {
-            for(let i=1; i<16; i++) {
-                if(obj.acts[i]) objCounts[i]++;
+            for(let i=1; i<NUM_MAP_ACTS; i++) {
+                if(obj.acts[i]) actCounts[i]++;
+            }
+            for(let i = -1; i<NUM_OBJ_GROUPS; i++) {
+                if(obj.group == i) groupCounts[i]++;
             }
         }
-        for(let i=1; i<16; i++) {
+        for(let i=1; i<NUM_MAP_ACTS; i++) {
             this.layers[`act${i}`].eLabel.innerText =
-                `${i.toString().padStart(2)} (${objCounts[i].toString().padStart(4)})`;
+                `${i.toString().padStart(2)} (${actCounts[i].toString().padStart(4)})`;
         }
         //missing space on purpose here for alignment.
         this.eAllActsLabel.innerText = `All(${objs.length.toString().padStart(4)})`;
+
+        for(let i=-1; i<NUM_OBJ_GROUPS; i++) {
+            let name = (i < 0) ? "Ungrouped" : i.toString().padStart(2);
+            this.layers[`group${i}`].eLabel.innerText =
+                `${name} (${groupCounts[i].toString().padStart(4)})`;
+        }
+        this.eAllGroupsLabel.innerText = `All (${objs.length.toString().padStart(4)})`;
     }
 
     refresh() {

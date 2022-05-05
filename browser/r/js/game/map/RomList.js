@@ -3,7 +3,7 @@ import { assertType } from "../../Util.js";
 import Game from "../Game.js";
 
 //struct types
-let Vec3f, RomListEntryStruct;
+let Vec3f, RomListEntryStruct, RomlistObjLoadFlags;
 
 class RomListEntry {
     constructor(game, data, offset, idx) {
@@ -20,6 +20,7 @@ class RomListEntry {
 
         Vec3f = this.app.types.getType('vec3f');
         RomListEntryStruct = this.app.types.getType('sfa.maps.RomListEntry');
+        RomlistObjLoadFlags = this.app.types.getType('sfa.maps.RomlistObjLoadFlags');
 
         const view      = new DataView(data.buffer);
         const base      = RomListEntryStruct.fromBytes(view, offset);
@@ -38,6 +39,7 @@ class RomListEntry {
             this.byteLength);
         this.params     = null;
 
+        //set act mask/flags
         for(let i=1; i<16; i++) {
             let disp = 0;
             if(i >= 9) disp = base.acts1 & (1 << (7-(i-9)));
@@ -45,6 +47,19 @@ class RomListEntry {
             this.acts.push(disp == 0); //bit set = do NOT show in this act
             if(!disp) this.actsMask |= (1 << (i-1));
         }
+
+        //set objgroup
+        if(this.loadFlags & (RomlistObjLoadFlags.isManualLoad |
+            RomlistObjLoadFlags.isLevelObject |
+            RomlistObjLoadFlags.isBlockObject)) {
+                this.group = -1;
+                this.groupMask = 1;
+        }
+        else {
+            this.group = this.bound;
+            if(this.group < 0 || this.group >= 20) this.group = -1;
+        }
+        this.groupMask = 1 << (this.group+1);
 
         if(this.game.objects) {
             //get the object

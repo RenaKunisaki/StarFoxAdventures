@@ -63,7 +63,8 @@ export default class ObjectRenderer {
 
         const showTrig = this.mapViewer.layerChooser.getLayer("triggers");
         const showCurv = this.mapViewer.layerChooser.getLayer("curves");
-        const cacheKey = [isPicker, acts, showTrig, showCurv].join(':');
+        const groups   = this.mapViewer.layerChooser.getGroups();
+        const cacheKey = [isPicker, acts, groups, showTrig, showCurv].join(':');
 
         //if we already generated a batch, use it.
         if(this.batches[cacheKey]) return this.batches[cacheKey];
@@ -78,7 +79,7 @@ export default class ObjectRenderer {
 
         const objs = [];
         for(let entry of map.romList.entries) {
-            if(entry.actsMask & acts) {
+            if((entry.actsMask & acts) && (entry.groupMask & groups)) {
                 const batch = this.batches[`obj${entry.idx}`];
                 console.assert(batch);
                 const inst = this.objInstancesById[entry.id];
