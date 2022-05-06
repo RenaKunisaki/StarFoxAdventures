@@ -82,15 +82,16 @@ export default class GameBitsXmlBuilder {
                 let params = entry.params;
                 if(params == null) params = [];
                 for(let [name, param] of Object.entries(params)) {
-                    const type = param.param.type;
+                    //what the FUCK
+                    const type = param.param.param ? param.param.param.type : null;
+                    const val  = param.value.value & 0x7FFF;
                     if((type == 'GameBit' || type == 'GameBit16'
-                    || type == 'GameBit32') && (param.value.value != 0xFFFF)
-                    && (param.value.value != 0)) {
+                    || type == 'GameBit32') && (val != 0x7FFF) && (val != 0)) {
                         const objName = entry.object.name.trim();
                         const objId   = `0x${hex(entry.id,8)}`;
                         const field   = [mapName,objName,objId,name].join('.'); //for debug
                         //high bit indicates inverted value
-                        let eBit = this.bitElems[param.value.value & 0x7FFF];
+                        let eBit = this.bitElems[val];
                         if(eBit) {
                             eBit.append(E.objref({
                                 map:   mapName,
