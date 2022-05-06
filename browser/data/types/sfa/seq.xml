@@ -6,8 +6,8 @@
         <item name="PlaySound" value="0x4" />
         <item name="NOP" value="0x5" />
         <item name="CamAct06" value="0x6" />
-        <item name="SubCmd08" value="0x8" />
-        <item name="EnvFx0A" value="0xa" />
+        <item name="SetEnvParams" value="0x8" />
+        <item name="LoadEnvFx" value="0xa" />
         <item name="SeqVar0B" value="0xb" />
         <item name="ActivateTrigger" value="0xc" />
         <item name="GetLActions" value="0xd" />
@@ -22,7 +22,7 @@
         <item name="ShowObjGroupIn" value="0x1a" />
         <item name="HideObjGroupIn" value="0x1b" />
         <item name="EnvCmd1C" value="0x1c" />
-        <item name="GameBitCmd1D" value="0x1d" />
+        <item name="HornLanternAndFood" value="0x1d" />
         <item name="SetMapActOf" value="0x1e" />
         <item name="CharPos" value="0x1f" />
         <item name="ChangeMapLayer" value="0x20" />
@@ -35,7 +35,7 @@
         <item name="LockLevel" value="0x2a" />
         <item name="UnlockLevel" value="0x2b" />
         <item name="SetObj2AnimField0" value="0x2c" />
-        <item name="GameTextCmd2D" value="0x2d" />
+        <item name="ShowDialogue" value="0x2d" />
         <item name="RestructForMovie" value="0x2e" />
         <item name="GameTimerCmd2F" value="0x2f" />
     </enum>

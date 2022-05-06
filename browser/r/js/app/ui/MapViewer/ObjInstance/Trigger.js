@@ -69,10 +69,41 @@ export class Trigger extends ObjInstance {
                     }
                     break;
                 }
-                case 0x0B: { //subcmd
+                case 0x08: { //set env params
+                    params = cmd.param2 ? 'On' : 'Off';
+                    switch(cmd.param1) {
+                        case 0x00: name = "CloudsAndLights"; break;
+                        case 0x01: name = "NoAntiAlias"; break;
+                        case 0x02: name = "Lights"; break;
+                        case 0x03: name = "Nothing"; break; //deleted cloudaction func
+                        case 0x04: name = "Unk04"; break; //DLL_0D.func05
+                        case 0x05: {
+                            if(cmd.param2) name = "NOP";
+                            else name = "ClearFootprints";
+                            params = '';
+                            break;
+                        }
+                        case 0x06: name = "HideMoon"; break;
+                        case 0x07: name = "Unk07"; break;
+                        case 0x08: name = "HeatFx"; break;
+                        case 0x09: case 0x0A: case 0x0B: {
+                            name = 'SkyUnk_';
+                            switch(cmd.param1) {
+                                case 0x09: name += 'Toggle'; break;
+                                case 0x0A: name += 'Off'; break;
+                                case 0x0B: name += 'On'; break;
+                            }
+                            params = `0x${hex(param2,2)}`;
+                            break;
+                        }
+                        default: name = `Unk${hex(cmd.param1,2)}`;
+                    }
+                    break;
+                }
+                case 0x0B: { //subcmd, relates tp seq
                     switch(cmd.param1) {
                         case 0: {
-                            name = "DoObjSeq";
+                            name = "ActivateTrigger";
                             params = `0x${hex(cmd.param2,2)}`;
                             break;
                         }
@@ -89,6 +120,7 @@ export class Trigger extends ObjInstance {
                     if(cmd.param1 < this.game.charNames.length) {
                         params = this.game.charNames[cmd.param1];
                     }
+                    else params = `0x${hex(cmd.param1,2)}`;
                     break;
                 }
                 case 0x12: { //change gamebit
@@ -133,6 +165,10 @@ export class Trigger extends ObjInstance {
                             name   = `Env Unk${hex(cmd.param1,2)}`;
                             params = hex(cmd.param2,2);
                     }
+                    break;
+                }
+                case 0x1D: { //enable/disable the dinosaur horn, fireflies, feeding Tricky
+                    params = cmd.param1 ? 'Enabled' : 'Disabled';
                     break;
                 }
                 case 0x1E: { //set map act for other map
@@ -191,6 +227,16 @@ export class Trigger extends ObjInstance {
                 }
                 case 0x2A: case 0x2B: { //lock/unlock bucket
                     params = `${this.game.getMapDirName(cmd.param1)} ${hex(cmd.param2,2)}`;
+                    break;
+                }
+                case 0x2D: { //show dialogue
+                    const id = (cmd.param1 << 8) | cmd.param2;
+                    const text = this.game.texts[id];
+                    params = `[${hex(id,4)}] `;
+                    if(text) {
+                        params += text.phrases.join('\n').substr(0,64);
+                    }
+                    else params += '[unknown]';
                     break;
                 }
                 default:

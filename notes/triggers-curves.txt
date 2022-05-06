@@ -102,3 +102,24 @@ env cmd 1C: param1 is subcmd
 	00: set outdoor, get envfxact 0134, 0135, 0142
 	01: set indoor,  get envfxact 0134, 0135, 0142
 	02: set outdoor, get envfxact 0136, 0137, 0143
+
+player cmd 01:
+only 08 (respawn) is doing anything
+09 and some others SHOULD do something...
+
+subcmd 08: param1
+00: setDrawCloudsAndLights(param2)
+01: setDisableAntiAlias(param2)
+02: setDrawLights(param2)  also affects moon
+03: do nothing (deleted cloudaction func)
+04: DLL_0D.func05(param2)
+05: clearFootprints(param2)
+	if param2 != 0 it does nothing
+06: set whether to hide moon (param2 is bool)
+07: set some rendering flag (param2 is bool)
+08: toggle heat effect (param2 is bool) - doesn't set intensity?
+09: something with sky (toggle)
+0A: something with sky (off)
+0B: something with sky (on)
+	these three affect whether the moon is drawn
+	param2 does something
