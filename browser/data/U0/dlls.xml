@@ -676,7 +676,7 @@
       <field type="s8" offset="0x29" name="rotation"></field>
     </objparams>
   </dll>
-  <dll address="0x80311378" dolOffs="0x30E378" id="0x0004" interface="common" name="Dummy04" unk08="0x00000000" unk0E="0x0000">
+  <dll address="0x80311378" dolOffs="0x30E378" id="0x0004" interface="common" name="MusicAction" unk08="0x00000000" unk0E="0x0000">
     <description>All functions stubbed; loaded at title screen</description>
     <functions>
       <function address="0x800D801C" idx="0x0" name="initialise" stub="1">

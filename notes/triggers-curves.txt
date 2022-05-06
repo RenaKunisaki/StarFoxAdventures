@@ -94,6 +94,14 @@ I have no damn idea, let's just look at some examples
 
 generally 05 is used for enter, 0A for exit
 
+some commands from default.dol that may no longer exist:
+03: music action
+0E: "Storyboard disabled, please remove trigger"
+0F: "Setup Point, Level {param1}, SetupPoint {param2}"
+19: "Script {param1}, Subscript {param2}"
+	"WARNING: DLL not loaded"
+	state->field_0x64[iCmd] + param2 * 4 + 4 is a func ptr
+
 env cmd 1C: param1 is subcmd
 00: set bit 3AB to param2 != 0
 01: set bit 3AC to param2 != 0
