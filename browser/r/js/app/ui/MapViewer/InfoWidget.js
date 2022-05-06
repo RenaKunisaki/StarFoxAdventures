@@ -2,7 +2,7 @@ import { clearElement, E } from "../../../lib/Element.js";
 import { bin, hex } from "../../../Util.js";
 
 //struct types
-let SurfaceType, HitType;
+let SurfaceType, HitType, ObjCatId;
 
 export default class InfoWidget {
     /** Widget displaying info about selected object. */
@@ -33,6 +33,7 @@ export default class InfoWidget {
         if(this.app.types) {
             SurfaceType = this.app.types.getType('sfa.maps.SurfaceType');
             HitType = this.app.types.getType('sfa.maps.HitType');
+            ObjCatId = this.app.types.getType('sfa.objects.ObjCatId');
         }
 
         console.log("show", info);
@@ -230,6 +231,9 @@ export default class InfoWidget {
         }
         if(acts.length == 0) acts.push('none');
         else if(acts.length == 15) acts = ['all'];
+
+        let cat = ObjCatId.valueToString(entry.object.header.catId);
+
         const rows = [
             E.tr(E.th(null, `Object ID 0x${hex(entry.id, 8)}`,
                 {colspan:2, title:`${entry.id}`})),
@@ -259,6 +263,9 @@ export default class InfoWidget {
             ),E.tr(
                 E.th(null, "Group"),
                 E.td('int', entry.group),
+            ),E.tr(
+                E.th(null, "Category"),
+                E.td('string', cat),
             ),
         ];
         //XXX tidy this
