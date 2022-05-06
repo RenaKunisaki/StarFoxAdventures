@@ -65,6 +65,8 @@ export class Trigger extends ObjInstance {
                     name = "Player";
                     switch(cmd.param1) {
                         case 0x08: params = "Respawn"; break;
+                        case 0x09: params = "DangerousWater"; break;
+                        case 0x0A: params = "SafeWater"; break;
                         default: params = `Unk${hex(cmd.param1,2)}${hex(cmd.param2,2)}`;
                     }
                     break;
@@ -72,19 +74,18 @@ export class Trigger extends ObjInstance {
                 case 0x08: { //set env params
                     params = cmd.param2 ? 'On' : 'Off';
                     switch(cmd.param1) {
-                        case 0x00: name = "CloudsAndLights"; break;
-                        case 0x01: name = "NoAntiAlias"; break;
-                        case 0x02: name = "Lights"; break;
-                        case 0x03: name = "Nothing"; break; //deleted cloudaction func
-                        case 0x04: name = "Unk04"; break; //DLL_0D.func05
-                        case 0x05: {
-                            if(cmd.param2) name = "NOP";
-                            else name = "ClearFootprints";
-                            params = '';
+                        case 0x00: name = "Sky"; break;
+                        case 0x01: name = "AntiAlias"; break;
+                        case 0x02: name = "SkyObjs"; break;
+                        case 0x03: name = "Dome"; break; //deleted cloudaction func
+                        case 0x04: { //DLL_0D.func05
+                            name = "Sheen";
+                            params = cmd.param2.toString();
                             break;
                         }
-                        case 0x06: name = "HideMoon"; break;
-                        case 0x07: name = "Unk07"; break;
+                        case 0x05: name = "Footprints"; break;
+                        case 0x06: name = "newlightInside"; break;
+                        case 0x07: name = "SunGlare"; break;
                         case 0x08: name = "HeatFx"; break;
                         case 0x09: case 0x0A: case 0x0B: {
                             name = 'SkyUnk_';
@@ -93,7 +94,7 @@ export class Trigger extends ObjInstance {
                                 case 0x0A: name += 'Off'; break;
                                 case 0x0B: name += 'On'; break;
                             }
-                            params = `0x${hex(param2,2)}`;
+                            params = `0x${hex(cmd.param2,2)}`;
                             break;
                         }
                         default: name = `Unk${hex(cmd.param1,2)}`;
@@ -103,12 +104,12 @@ export class Trigger extends ObjInstance {
                 case 0x0B: { //subcmd, relates tp seq
                     switch(cmd.param1) {
                         case 0: {
-                            name = "ActivateTrigger";
+                            name = "StartSeq";
                             params = `0x${hex(cmd.param2,2)}`;
                             break;
                         }
                         case 1: case 2: {
-                            name = "ObjSeqBool_";
+                            name = "SeqFlag_";
                             if(cmd.param1 == 1) name += 'Set';
                             else name += 'Clear;'
                             break;
@@ -202,7 +203,7 @@ export class Trigger extends ObjInstance {
                         case 0: name = "RespawnPos_Set"; break;
                         case 1: name = "RespawnPos_Clear"; break;
                         case 2: name = "RespawnPos_Goto"; break;
-                        case 3: name = "RespawnPos_SetForCRF"; break;
+                        case 3: name = "RespawnPos_SetDazed"; break;
                     }
                     params = '';
                     break;
@@ -210,7 +211,9 @@ export class Trigger extends ObjInstance {
                 case 0x26: { //subcmd
                     params = '';
                     switch(cmd.param1) {
+                        case 0x00: name = "Tricky_Heel"; break;
                         case 0x01: name = "Tricky_Delete"; break;
+                        case 0x02: name = "Tricky_Find"; break;
                         case 0x03: name = "Tricky_DisableBall"; break;
                         case 0x04: name = "Tricky_EnableBall"; break;
                         default:

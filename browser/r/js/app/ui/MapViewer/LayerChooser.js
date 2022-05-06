@@ -1,6 +1,6 @@
 import { clearElement, E } from "../../../lib/Element.js";
 
-const NUM_OBJ_GROUPS = 20;
+const NUM_OBJ_GROUPS = 32; //only supposed to be 20, but lots of triggers reference 31
 const NUM_MAP_ACTS   = 16;
 
 export default class LayerChooser {

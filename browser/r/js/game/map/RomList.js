@@ -59,7 +59,7 @@ class RomListEntry {
             this.group = this.bound;
             //bound is probably meant to be interpreted as s8 in
             //this case, since some have it set to 255.
-            if(this.group < 0 || this.group >= 20) this.group = -1;
+            if(this.group < 0 || this.group >= 32) this.group = -1;
         }
         this.groupMask = 1 << (this.group+1);
 

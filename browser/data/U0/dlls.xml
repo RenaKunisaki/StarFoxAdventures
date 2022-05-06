@@ -11661,6 +11661,9 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams size="0x0C">
+      <field offset="0x18" type="GameBit16" name="open" />
+    </objparams>
   </dll>
   <dll address="0x80321130" dolOffs="0x31E130" id="0x0111" interface="object" name="Lock" unk08="0x00000000" unk0E="0x0000">
     <description>Any object that consumes an item to "open" it - padlocks, bridge cogs, LightFoot Village stone block spots, etc</description>
@@ -20938,6 +20941,9 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams>
+      <field type="s16" offset="0x1A" name="cost" />
+    </objparams>
   </dll>
   <dll address="0x80323B08" dolOffs="0x320B08" id="0x01BE" interface="object" name="LavaBall1BE" unk08="0x00000000" unk0E="0x0000">
     <description/>
@@ -24929,6 +24935,9 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams size="0x08">
+      <field offset="0x1C" type="GameBit16" name="pressed" />
+    </objparams>
   </dll>
   <dll address="0x80328828" dolOffs="0x325828" id="0x01FF" interface="object" unk08="0x00000000" unk0E="0x0000">
     <description/>
