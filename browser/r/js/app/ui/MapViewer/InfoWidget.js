@@ -256,6 +256,9 @@ export default class InfoWidget {
             ),E.tr(
                 E.th(null, "Acts"),
                 E.td('string', acts.join(',')),
+            ),E.tr(
+                E.th(null, "Group"),
+                E.td('int', entry.group),
             ),
         ];
         //XXX tidy this
