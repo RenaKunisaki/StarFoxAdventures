@@ -1,7 +1,7 @@
 import RenderBatch from "../../gl/gx/RenderBatch.js";
 import Box from "../../gl/Model/Box.js";
 import { E } from "../../../../lib/Element.js";
-import { hex } from "../../../../Util.js";
+import { hex, hsv2rgb } from "../../../../Util.js";
 
 export class ObjInstance {
     /** An instance of an object in a map. */
@@ -30,12 +30,14 @@ export class ObjInstance {
         const y = this.entry.position.y;
         const z = this.entry.position.z;
         const s = Math.max(this.entry.object.scale, 10);
+        const [r,g,b] = hsv2rgb((this.entry.object.header.catId / 0x83)*360, 1, 1);
 
         const batch = new RenderBatch(this.gx);
         batch.addFunction((new Box(this.gx,
             [-0.5, -0.5, -0.5],
             [ 0.5,  0.5,  0.5],
-        )).setScale(s).setPos(x,y,z).setId(id).batch);
+        )).setScale(s).setPos(x,y,z).setColors(
+            [r*255, g*255, b*255, 0xC0]).setId(id).batch);
         return batch;
     }
 
