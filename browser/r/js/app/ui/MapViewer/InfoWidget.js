@@ -232,8 +232,6 @@ export default class InfoWidget {
         if(acts.length == 0) acts.push('none');
         else if(acts.length == 15) acts = ['all'];
 
-        let cat = ObjCatId.valueToString(entry.object.header.catId);
-
         const rows = [
             E.tr(E.th(null, `Object ID 0x${hex(entry.id, 8)}`,
                 {colspan:2, title:`${entry.id}`})),
@@ -265,7 +263,7 @@ export default class InfoWidget {
                 E.td('int', entry.group),
             ),E.tr(
                 E.th(null, "Category"),
-                E.td('string', cat),
+                E.td('string', ObjCatId.valueToString(entry.object.header.catId)),
             ),
         ];
         //XXX tidy this

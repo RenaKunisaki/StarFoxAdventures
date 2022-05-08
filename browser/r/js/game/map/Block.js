@@ -136,6 +136,8 @@ export default class Block {
         //it can be done.)
         //(maybe we can make a new buffer containing all values in the new
         //format whenever the format changes?)
+        //actually I don't think the buffer formats can ever change, only the
+        //format of the indices in the display lists.
     }
 
     _loadPolygons(view) {
