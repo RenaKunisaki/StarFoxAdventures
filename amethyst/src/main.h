@@ -206,7 +206,9 @@ void raceTimerUpdate();
 
 //random.c
 extern u32 rngCalls;
+extern u32 rngReseeds;
 u32 rngHook();
+void rngSeedHook(u32 seed);
 void drawRNG();
 void printRNG();
 

@@ -221,6 +221,7 @@ GLOBALFN bool shouldForceMotionBlur(void);
 GLOBALFN float sinf(float);
 GLOBALFN int sprintf(char * restrict, const char * restrict, ...);
 GLOBALFN float sqrtf(float distance);
+GLOBALFN void srand(u32 seed);
 GLOBALFN void streamPlay(int id, void (*callback)(void));
 GLOBALFN void streamPlay_defaultCallback();
 GLOBALFN void streamStop(void);

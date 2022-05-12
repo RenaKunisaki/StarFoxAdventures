@@ -510,6 +510,7 @@ void mainLoopDebugPrint() {
     } */
 
     rngCalls = 0; //reset logging
+    rngReseeds = 0;
     debugPrintf("\n"); //for game's own messages
     printHits();
 }

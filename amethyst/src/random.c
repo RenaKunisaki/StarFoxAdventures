@@ -1,6 +1,7 @@
 #include "main.h"
 
 u32 rngCalls = 0; //reset each frame
+u32 rngReseeds = 0;
 
 u32 rngHook() { //installed in perf.c
     rngCalls++;
@@ -9,6 +10,13 @@ u32 rngHook() { //installed in perf.c
     randomNumber = randomNumber * 0x19660d + 0x3c6ef35f;
     return randomNumber;
     //return 0;
+}
+
+void rngSeedHook(u32 seed) {
+    //80292de4
+    rngReseeds++;
+    //duplicate the code
+    randomNumber = seed;
 }
 
 void drawRNG() {
@@ -38,7 +46,9 @@ void drawRNG() {
 void printRNG() {
     //print RNG call rate and next few values
     u32 start = randomNumber;
-    debugPrintf("RNG" DPRINT_FIXED "%6d %08X %08X %08X %08X\n" DPRINT_NOFIXED, rngCalls,
-        randomGetNext(), randomGetNext(), randomGetNext(), randomGetNext());
+    debugPrintf("RNG" DPRINT_FIXED "%6d %08X %08X %08X %08X Reseeds: %d\n"
+        DPRINT_NOFIXED, rngCalls,
+        randomGetNext(), randomGetNext(), randomGetNext(), randomGetNext(),
+        rngReseeds);
     randomNumber = start; //reset seed
 }

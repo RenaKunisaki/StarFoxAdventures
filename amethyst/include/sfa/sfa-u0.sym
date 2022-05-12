@@ -461,6 +461,7 @@ songTable = 0x802c5700;
 soundMode = 0x803db1e8;
 sprintf = 0x8028f688;
 sqrtf = 0x802931a0;
+srand = 0x80292de4;
 streamPlay = 0x8000d200;
 streamPlay_defaultCallback = 0x8000d138;
 streamPos = 0x803dc858;

@@ -107,4 +107,5 @@ void perfMonInit() {
     hookBranch(0x80020c74, renderStartHook, 1);
     hookBranch(0x80020d60, renderEndHook, 1);
     hookBranch(0x80292dc0, rngHook, 0);
+    hookBranch((u32)srand, rngSeedHook, 0);
 }
