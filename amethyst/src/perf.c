@@ -9,18 +9,21 @@ u64 tAudioEnd;    //end   time of audio section
 u64 tAudioIrq;    //time spent between sndBegin/sndEnd
 u64 tRenderStart; //start time of render section
 u64 tRenderEnd;   //end   time of render section
-u64 tLoop, tLogic, tAudio, tRender; //durations
+u64 tLoadStart;   //start time of loading section
+u64 tLoadEnd;     //end   time of loading section
+u64 tLoop, tLogic, tAudio, tRender, tLoad; //durations
 //u32 audioIrqCnt;
-float pctLogic, pctRender, pctAudio, pctTotal;
+float pctLogic, pctRender, pctAudio, pctLoad, pctTotal;
 
 //if we can find an unused 8-byte field in ObjInstance (or just alloc a buffer)
 //we could track logic/render times per object
 
 void renderPerfMeters() {
     //draw meters
+    static const Color4b colLoad   = {255,   0,   0, 128};
     static const Color4b colLogic  = {  0, 255,   0, 128};
     static const Color4b colAudio  = {  0,   0, 255, 128};
-    static const Color4b colRender = {255,   0,   0, 128};
+    static const Color4b colRender = {255, 255,   0, 128};
     static const Color4b colIdle   = {  0,   0,   0, 128};
     int x = 40;
     int y = SCREEN_HEIGHT - 50;
@@ -28,7 +31,9 @@ void renderPerfMeters() {
     int h = 4;
 
     begin2D(NULL);
-    draw2Dbox(x, y, w*pctLogic, h, &colLogic);
+    draw2Dbox(x, y, w*pctLoad, h, &colLoad);
+    x += (w * pctLoad);
+    if(x < w) draw2Dbox(x, y, w*pctLogic, h, &colLogic);
     x += (w * pctLogic);
     if(x < w) draw2Dbox(x, y, w*pctRender, h, &colRender);
     x += (w * pctRender);
@@ -57,8 +62,10 @@ void loopStartHook() {
 }
 
 void loopEndHook() {
+    tLoadStart = __OSGetSystemTime();
     doQueuedLoads(); //replaced
-    tLoopEnd = __OSGetSystemTime();
+    tLoadEnd = __OSGetSystemTime();
+    tLoopEnd = tLoadEnd; //__OSGetSystemTime();
 
     //if(tLoopEnd < tLoopStart || tLogicEnd < tLogicStart || tRenderEnd < tRenderStart) {
     //    OSReport("ERROR: TIME TRAVEL DETECTED");
@@ -69,6 +76,7 @@ void loopEndHook() {
     tAudio  = tAudioEnd  - tLogicEnd; //tLogicEnd is also tAudioStart
     tAudio += tAudioIrq;
     tAudioIrq = 0;
+    tLoad   = tLoadEnd   - tLoadStart;
 
     //this will give percent of main thread time, not percent of frame time
     //double dTotal    = u64toDouble(tLoop);
@@ -83,10 +91,12 @@ void loopEndHook() {
     double sLogic  = ticksToSecs(tLogic);
     double sRender = ticksToSecs(tRender);
     double sAudio  = ticksToSecs(tAudio);
+    double sLoad   = ticksToSecs(tLoad);
     pctLogic  = sLogic   / frame;
     pctRender = sRender  / frame;
     pctAudio  = sAudio   / frame;
-    pctTotal  = (sLogic + sRender + sAudio) / frame;
+    pctLoad   = sLoad    / frame;
+    pctTotal  = (sLogic + sRender + sAudio + sLoad) / frame;
 }
 
 void gameLogicStartHook() {

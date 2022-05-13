@@ -192,9 +192,11 @@ extern u64 tLogicEnd;    //end   time of game logic section, start of audio
 extern u64 tAudioEnd;    //end   time of audio section
 extern u64 tRenderStart; //start time of render section
 extern u64 tRenderEnd;   //end   time of render section
-extern u64 tLoop, tLogic, tAudio, tRender; //durations
+extern u64 tLoadStart;   //start time of loading section
+extern u64 tLoadEnd;     //end   time of loading section
+extern u64 tLoop, tLogic, tAudio, tRender, tLoad; //durations
 //extern u32 audioIrqCnt;
-extern float pctLogic, pctRender, pctAudio, pctTotal;
+extern float pctLogic, pctRender, pctAudio, pctLoad, pctTotal;
 void renderPerfMeters();
 void perfMonInit();
 
