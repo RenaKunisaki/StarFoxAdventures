@@ -89,6 +89,10 @@ void initBugFixes();
 //dll.c
 void dllHooksInit();
 
+//draw.c
+void begin2D(Color4b *col);
+void write2Dvtx(int x, int y);
+
 //drawarrow.c
 void drawArrow(vec3f pos, vec3s rot, float scale, Color4b color);
 

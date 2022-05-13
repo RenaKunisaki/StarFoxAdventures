@@ -90,6 +90,7 @@ void rngHooksInit() {
 }
 
 void drawRngRate() {
+    //expects that begin2D() was already called
     if(!callCounts) {
         callCounts = allocTagged(600 * sizeof(u16),
             ALLOC_TAG_TEST_COL,  "rng:callCounts");
@@ -97,27 +98,16 @@ void drawRngRate() {
         memset(callCounts, 0, 600 * sizeof(u16));
     }
 
-    static volatile float *fifoFloat = (volatile float*)GX_FIFO_BASE;
-    static volatile u8 *fifoU8 = (volatile u8*)GX_FIFO_BASE;
-    static volatile s16 *fifoS16 = (volatile s16*)GX_FIFO_BASE;
-    gxResetVtxDescr();
-    gxSetVtxDescr(GX_VA_PNMTXIDX,GX_DIRECT);
-    gxSetVtxDescr(GX_VA_POS,GX_DIRECT);
-    gxSetBackfaceCulling(0);
-    gxSetProjection(&hudMatrix,TRUE);
-    gxSetBlendMode(GX_BM_BLEND,GX_BL_SRCALPHA,GX_BL_INVSRCALPHA,GX_LO_NOOP);
     Color4b col = {0xFF, 0x00, 0xFF, 0xFF};
     gxSetTexEnvColor(0,&col);
+
     GXBegin(GX_LINESTRIP, 1, 599);
     for(int i=0; i<599; i++) {
         int idx = (frameCount-600)+i+1;
         if(idx < 0) idx += 600;
         float iY = SCREEN_HEIGHT - ((callCounts[idx%600]/3.0) + 100);
         if(iY < 20) iY = 20;
-        *fifoU8  = 0x3C; //PNMTXIDX
-        *fifoS16 = (i+20) * hudScale;
-        *fifoS16 = iY     * hudScale;
-        *fifoS16 = -8;
+        write2Dvtx(i+20, iY);
     }
     callCounts[frameCount % 600] = 0;
 }
@@ -126,25 +116,20 @@ void drawRNG() {
     //graph the next several RNG values on-screen
     static const int w = 1, h = 100;
     int x = 20, y = SCREEN_HEIGHT - (h + 20) + (h/2);
+
+    Color4b col = {0xFF, 0xFF, 0xFF, 0xFF};
+    begin2D(&col);
+    GXBegin(GX_LINESTRIP, 1, graphW/w);
+
     u32 start = randomNumber;
     u32 startCalls = rngCalls;
     for(int i=0; i<graphW / w; i++) {
         u32 rnd = randomGetRange(0, h);
-        if(rnd) {
-            int half = h/2;
-            int y2, c;
-            if(rnd >= half) {
-                y2 = y + (rnd-half);
-                c  = (int)(((float)(y2 - y) / (float)half) * 255.0);
-            }
-            else {
-                y2 = y - rnd;
-                c  = (int)(((float)(y - y2) / (float)half) * 255.0);
-            }
-            Color4b col = {c, c, c, 0xFF};
-            //hudDrawRect(x, y+h, x+w, (y+h)-rnd, &col);
-            hudDrawRect(x, y, x+w, y2, &col);
-        }
+        int half = h/2;
+        int y2;
+        if(rnd >= half) y2 = y + (rnd-half);
+        else y2 = y - rnd;
+        write2Dvtx(x, y2);
         x += w;
     }
     randomNumber = start; //reset seed
