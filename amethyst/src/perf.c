@@ -22,7 +22,7 @@ void renderPerfMeters() {
     //draw meters
     static const Color4b colLoad   = {255,   0,   0, 128};
     static const Color4b colLogic  = {  0, 255,   0, 128};
-    static const Color4b colAudio  = {  0,   0, 255, 128};
+    static const Color4b colAudio  = {  0, 128, 255, 128};
     static const Color4b colRender = {255, 255,   0, 128};
     static const Color4b colIdle   = {  0,   0,   0, 128};
     int x = 40;

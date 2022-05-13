@@ -36,16 +36,25 @@ u32 debugRenderFlags =
 
 void debugPrintSetPos(s16 x, s16 y) {
     if(!enableDebugText) return; //or else game hangs
-    *(debugLogEnd++) = 0x82;
+    *(debugLogEnd++) = DPRINT_POS[0];
     *(debugLogEnd++) = x & 0xFF;
     *(debugLogEnd++) = x >> 8;
     *(debugLogEnd++) = y & 0xFF;
     *(debugLogEnd++) = y >> 8;
     *debugLogEnd = 0;
 }
+void debugPrintSetColor(u8 r, u8 g, u8 b, u8 a) {
+    if(!enableDebugText) return; //or else game hangs
+    *(debugLogEnd++) = DPRINT_COLOR[0];
+    *(debugLogEnd++) = r;
+    *(debugLogEnd++) = g;
+    *(debugLogEnd++) = b;
+    *(debugLogEnd++) = a;
+    *debugLogEnd = 0;
+}
 void debugPrintSetBgColor(u8 r, u8 g, u8 b, u8 a) {
     if(!enableDebugText) return; //or else game hangs
-    *(debugLogEnd++) = 0x85;
+    *(debugLogEnd++) = DPRINT_BGCOLOR[0];
     *(debugLogEnd++) = r;
     *(debugLogEnd++) = g;
     *(debugLogEnd++) = b;
@@ -342,35 +351,41 @@ static void printPlayerState() {
 }
 
 static void printPerformance() {
+    //wtf is this coordinate system
     static const int x=400, startY=16, h=10;
     int y = startY;
-    char msg[256];
+    char msg[256]; //debugPrintf doesn't support "%4.1f"
 
-    debugPrintSetPos(x, y); //wtf is this coordinate system
+    debugPrintSetPos(x, y);
+    debugPrintSetColor(0, 255, 0, 255);
     sprintf(msg, "Logic %3d%% %4.1fms",
         (int)(pctLogic  * 100.0), (float)ticksToSecs(tLogic)  * 1000.0);
     debugPrintf(DPRINT_FIXED "%s", msg);
     y += h;
 
     debugPrintSetPos(x, y);
+    debugPrintSetColor(255, 255, 0, 255);
     sprintf(msg, "Rendr %3d%% %4.1fms",
         (int)(pctRender * 100.0), (float)ticksToSecs(tRender) * 1000.0);
     debugPrintf("%s", msg);
     y += h;
 
     debugPrintSetPos(x, y);
+    debugPrintSetColor(0, 128, 255, 255);
     sprintf(msg, "Audio %3d%% %4.1fms",
         (int)(pctAudio  * 100.0), (float)ticksToSecs(tAudio)  * 1000.0);
     debugPrintf("%s", msg);
     y += h;
 
     debugPrintSetPos(x, y);
+    debugPrintSetColor(255, 0, 0, 255);
     sprintf(msg, "Load  %3d%% %4.1fms",
         (int)(pctLoad  * 100.0), (float)ticksToSecs(tLoad)  * 1000.0);
     debugPrintf("%s", msg);
     y += h;
 
     debugPrintSetPos(x, y);
+    debugPrintSetColor(255, 255, 255, 255);
     sprintf(msg, "Idle  %3d%% %4.1fms",
         (int)((1.0-pctTotal) * 100.0),
         ((1000.0/60.0) - ((float)ticksToSecs(tLogic+tRender+tAudio+tLoad) * 1000.0)));

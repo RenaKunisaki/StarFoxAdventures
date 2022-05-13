@@ -66,6 +66,7 @@ extern u32 debugTextFlags;
 extern u32 debugRenderFlags;
 //debugPrintSetColor is already in the game
 void debugPrintSetPos(s16 x, s16 y);
+void debugPrintSetColor(u8 r, u8 g, u8 b, u8 a);
 void debugPrintSetBgColor(u8 r, u8 g, u8 b, u8 a);
 void mainLoopDebugPrint();
 
