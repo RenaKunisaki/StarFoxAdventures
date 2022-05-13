@@ -73,6 +73,7 @@ const char *strings_Japanese[] = {
     "FOV", //field of view
     "フォックス", //Fox player character
     "FPSメーター", //Frames Per Second
+    "フレーム", //one frame
     "自由に動く", //let camera move anywhere
     "フリームーブ", //move the player anywhere
     "敵フリーズ", //enemies can't move (effect of Ice Blast spell)
@@ -86,6 +87,7 @@ const char *strings_Japanese[] = {
     "最後にセーブした場所に移動", //move to the last saved location
     "移動", //move to this object
     "リスタートポイントに移動", //move to the "restart point"
+    "半分", //half
     "ヘッドホン", //sound mode: headphones
     "ヒープの状態", //show details about memory allocation
     "熱表現", //enable a heat wave effect on screen

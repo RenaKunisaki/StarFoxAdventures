@@ -3,16 +3,19 @@
 u32 rngCalls = 0; //reset each frame
 u32 rngReseeds = 0;
 s8 rngMode = RNG_MODE_NORMAL;
+u32(*randIntHookOld)(u32 min, u32 max);
 
 u32 rngHook() { //installed in perf.c
     rngCalls++;
     switch(rngMode) {
         case RNG_MODE_ZERO: return 0;
         case RNG_MODE_ONE:  return 1;
+        case RNG_MODE_HALF: return 0x7FFFFFFF;
         case RNG_MODE_MAX:  return 0xFFFFFFFF;
         case RNG_MODE_INC:
             randomNumber++;
             return randomNumber;
+        case RNG_MODE_FRAME: return frameCount;
         case RNG_MODE_ANALOG:
             return controllerStates[3].triggerRight << 24;
         default:
@@ -26,8 +29,41 @@ u32 rngHook() { //installed in perf.c
     }
 }
 
+u32 randIntHook(u32 min, u32 max) {
+    rngCalls++;
+    switch(rngMode) {
+        case RNG_MODE_ZERO: return min;
+        case RNG_MODE_ONE:  return min+1;
+        case RNG_MODE_HALF: return min + (((max+1)-min)/2);
+        case RNG_MODE_MAX:  return max;
+        case RNG_MODE_INC:
+            randomNumber++;
+            return (randomNumber % ((max+1) - min)) + min;
+        case RNG_MODE_FRAME:
+            return (frameCount % ((max+1) - min)) + min;
+        case RNG_MODE_ANALOG: {
+            if(max <= min) return min;
+            u32 val = controllerStates[3].triggerRight;
+            if(val > max) val = max;
+            if(val < min) val = min;
+            return val;
+        }
+        default: {
+            if(max <= min) return min;
+            randomNumber = randomNumber * 0x19660d + 0x3c6ef35f;
+            //much simpler algorithm which gives a perfect uniform distribution
+            //at least, for randomGetRange(0,255)
+            u32 val = (randomNumber % ((max+1) - min)) + min;
+            //game's algorithm which isn't quite perfectly uniform
+            //and suffers from rounding errors
+            //u32 val = ((float)randomNumber / 4294967296.0) * ((1.0 + (float)max) - (float)min) + min;
+            //OSReport("rand(%6d, %6d) = %6d", min, max, val);
+            return val;
+        }
+    }
+}
+
 void rngSeedHook(u32 seed) {
-    //80292de4
     rngReseeds++;
     //duplicate the code
     randomNumber = seed;

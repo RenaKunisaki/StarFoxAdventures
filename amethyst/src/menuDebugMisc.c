@@ -16,8 +16,8 @@ void menuDebugMiscHexEdit_select(const MenuItem *self, int amount) {
 
 void menuDebugMiscRNG_draw(const MenuItem *self, int x, int y, bool selected) {
     char str[256];
-    static const char *modes[] = {"Normal", "Zero", "One", "Max",
-        "Increment", "P4 R-Trigger"};
+    static const char *modes[] = {"Normal", "Zero", "One", "Half", "Max",
+        "Increment", "Frame", "P4 R-Trigger"};
     sprintf(str, self->fmt, T(self->name), T(modes[rngMode]));
     menuDrawText(str, x, y, selected);
 }
@@ -34,7 +34,7 @@ void menuDebugMiscRNGTest_select(const MenuItem *self, int amount) {
     u32 count[256], inval=0;
     memset(count, 0, sizeof(count));
     for(int i=0; i<100000000; i++) {
-        u32 r = randomGetRange(1, 4);
+        u32 r = randomGetRange(0, 254);
         if(r > 255) inval++;
         else count[r]++;
     }

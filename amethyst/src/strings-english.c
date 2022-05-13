@@ -85,6 +85,7 @@ const char *strings_English[] = {
     "FOV", //field of view
     "Fox", //Fox player character
     "FPS Meter", //Frames Per Second
+    "Frame", //one frame
     "Free", //let camera move anywhere
     "Free Move", //move the player anywhere
     "Frozen Baddies", //enemies can't move (effect of Ice Blast spell)
@@ -98,6 +99,7 @@ const char *strings_English[] = {
     "Goto Last Save", //move to the last saved location
     "Go To", //move to this object
     "Goto Restart Point", //move to the "restart point"
+    "Half", //half
     "Headphones", //sound mode: headphones
     "Heap Details", //show details about memory allocation
     "Heat Effect", //enable a heat wave effect on screen

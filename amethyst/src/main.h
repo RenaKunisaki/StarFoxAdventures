@@ -210,6 +210,7 @@ extern u32 rngReseeds;
 extern s8 rngMode;
 u32 rngHook();
 void rngSeedHook(u32 seed);
+u32 randIntHook(u32 min, u32 max);
 void drawRNG();
 void printRNG();
 

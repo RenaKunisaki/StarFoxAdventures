@@ -45,10 +45,12 @@ typedef enum {
 
 enum RngMode {
     RNG_MODE_NORMAL = 0, //normal RNG
-    RNG_MODE_ZERO, //always return 0
-    RNG_MODE_ONE, //always return 1
-    RNG_MODE_MAX, //always return RAND_MAX
-    RNG_MODE_INC, //return incrementing values
+    RNG_MODE_ZERO, //always return min
+    RNG_MODE_ONE, //always return min+1
+    RNG_MODE_HALF, //always return halfway between min and max
+    RNG_MODE_MAX, //always return max
+    RNG_MODE_INC, //return incrementing values (inc once per call)
+    RNG_MODE_FRAME, //return incrementing values (inc once per frame)
     RNG_MODE_ANALOG, //return controller 4 R trigger
     NUM_RNG_MODES
 };
