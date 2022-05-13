@@ -49,6 +49,7 @@ void draw2Dbox(float x, float y, float w, float h, const Color4b *color) {
      *  @param color If not NULL, color to use. Otherwise, keep previous color.
      */
     if(color) GXSetTevKColor_(0,(Color4b*)color);
+    if(w<0.1 || h<0.1) return;
     GXBegin(GX_QUADS, 1, 4);
     write2Dvtx(x,   y);
     write2Dvtx(x+w, y);

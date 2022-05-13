@@ -188,13 +188,13 @@ void pdaHookInit();
 extern u64 tLoopStart;   //start time of main loop
 extern u64 tLoopEnd;     //end   time of main loop
 extern u64 tLogicStart;  //start time of game logic section
-extern u64 tLogicEnd;    //end   time of game logic section
+extern u64 tLogicEnd;    //end   time of game logic section, start of audio
+extern u64 tAudioEnd;    //end   time of audio section
 extern u64 tRenderStart; //start time of render section
 extern u64 tRenderEnd;   //end   time of render section
-extern u64 tLoop, tLogic, tRender; //durations
-extern float pctLogic;
-extern float pctRender;
-extern float pctTotal;
+extern u64 tLoop, tLogic, tAudio, tRender; //durations
+//extern u32 audioIrqCnt;
+extern float pctLogic, pctRender, pctAudio, pctTotal;
 void renderPerfMeters();
 void perfMonInit();
 

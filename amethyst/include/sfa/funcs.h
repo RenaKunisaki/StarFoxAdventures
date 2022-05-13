@@ -142,6 +142,7 @@ GLOBALFN void loadMapForCurrentSaveGame(void);
 GLOBALFN void loadSaveSettings(void);
 GLOBALFN DLL* loadUiDll(int idx); //idx is not a DLL ID
 GLOBALFN u32 mainGetBit(GameBit bit);
+GLOBALFN void mainLoopAudioUpdate(void);
 GLOBALFN void mainLoopDoQueuedSounds(void);
 GLOBALFN void mainSetBits(GameBit bit, u32 val);
 GLOBALFN int mapCoordsToId(int x, int z, int layer); //MapId32
@@ -189,7 +190,8 @@ GLOBALFN BOOL OSDisableInterrupts(void);
 GLOBALFN BOOL OSEnableInterrupts(void);
 GLOBALFN u16 OSGetFontEncode(void);
 GLOBALFN OSInterruptMask OSGetInterruptMask(void);
-GLOBALFN u64 __OSGetSystemTime();
+GLOBALFN u64 __OSGetSystemTime(void);
+GLOBALFN OSTime OSGetTime(void);
 GLOBALFN void OSReport(const char *fmt, ...);
 GLOBALFN BOOL OSRestoreInterrupts(BOOL level); //wtf Nintendo why a bool param?
 GLOBALFN OSInterruptMask OSSetInterruptMask(OSInterruptMask mask);
@@ -232,6 +234,8 @@ GLOBALFN void setSubtitlesEnabled(bool);
 GLOBALFN int setWidescreen(bool); //always returns 0
 GLOBALFN bool shouldForceMotionBlur(void);
 GLOBALFN float sinf(float);
+GLOBALFN void sndBegin(void);
+GLOBALFN void sndEnd(void);
 GLOBALFN int sprintf(char * restrict, const char * restrict, ...);
 GLOBALFN float sqrtf(float distance);
 GLOBALFN void srand(u32 seed);

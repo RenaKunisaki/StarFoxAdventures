@@ -342,10 +342,29 @@ static void printPlayerState() {
 }
 
 static void printPerformance() {
-    debugPrintf(DPRINT_FIXED "L%3d%% %3dms R%3d%% %3dms T%3d%% %3dms \n" DPRINT_NOFIXED,
-        (int)(pctLogic  * 100.0), (int)(ticksToSecs(tLogic) * 1000.0),
-        (int)(pctRender * 100.0), (int)(ticksToSecs(tRender) * 1000.0),
-        (int)(pctTotal  * 100.0), (int)(ticksToSecs(tLogic+tRender) * 1000.0));
+    static const int x=400, y=16, h=10;
+    char msg[256];
+
+    debugPrintSetPos(x, y); //wtf is this coordinate system
+    sprintf(msg, "Logic %3d%% %4.1fms",
+        (int)(pctLogic  * 100.0), (float)ticksToSecs(tLogic)  * 1000.0);
+    debugPrintf(DPRINT_FIXED "%s", msg);
+
+    debugPrintSetPos(x, y+h);
+    sprintf(msg, "Rendr %3d%% %4.1fms",
+        (int)(pctRender * 100.0), (float)ticksToSecs(tRender) * 1000.0);
+    debugPrintf("%s", msg);
+
+    debugPrintSetPos(x, y+(h*2));
+    sprintf(msg, "Audio %3d%% %4.1fms",
+        (int)(pctAudio  * 100.0), (float)ticksToSecs(tAudio)  * 1000.0);
+    debugPrintf("%s", msg);
+
+    debugPrintSetPos(x, y+(h*3));
+    sprintf(msg, "Idle  %3d%% %4.1fms",
+        (int)((1.0-pctTotal) * 100.0),
+        ((1000.0/60.0) - ((float)ticksToSecs(tLogic+tRender+tAudio) * 1000.0)));
+    debugPrintf("%s" DPRINT_NOFIXED, msg);
 }
 
 static void printFPS() {

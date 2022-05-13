@@ -1,6 +1,7 @@
 #define MAX_LOADED_OBJECTS 600
 
 extern u16 aButtonIcon;
+extern u32 audioPrevIrqFlags;
 extern bool bBiggerBlurFilter; //bigger blur filter
 extern bool bBlurFilterUseArea; //constrain effect by blurFilterArea
 extern bool bEnableBlurFilter; //blur filter
@@ -60,6 +61,7 @@ extern float hudHealthBlinkTimer; //default: -30
 extern bool hudHidden;
 extern Texture *hudTextures[102];
 extern int initFrameCount;
+extern s16 irqDisableDepth;
 extern bool isJapanese;
 extern MapDirIdx32 levelLockBuckets[2];
 extern s16 loadedFileMapIds[NUM_FILES];
@@ -132,6 +134,7 @@ extern u8 seqGlobal3;
 extern bool shouldCloseCMenu;
 extern u8 shouldOpenCMenu;
 extern u8 soundMode; //Stereo, Surround, Mono, Headphones
+extern u64 systemBootTime;
 extern u8 tempGameBits[128];
 extern float timeDelta;
 extern bool timeStop;
