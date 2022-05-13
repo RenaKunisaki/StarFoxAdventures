@@ -214,7 +214,7 @@ GLOBALFN BOOL playerSetHeldObject(ObjInstance *player, ObjInstance *obj);
 GLOBALFN void PSMTXConcat(Mtx * Ma, Mtx * Mb, Mtx * out);
 GLOBALFN void PSMTXIdentiy(Mtx *M);
 GLOBALFN u32 randomGetNext(void);
-GLOBALFN u32 randomGetRange(u32 min, u32 max);
+GLOBALFN int randomGetRange(int min, int max);
 GLOBALFN void randomSetSeed(u32);
 GLOBALFN void renderObjects(bool *visible);
 GLOBALFN void reset(int, int, int);
