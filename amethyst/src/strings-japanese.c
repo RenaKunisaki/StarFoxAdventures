@@ -96,6 +96,7 @@ const char *strings_Japanese[] = {
     "接触領域", //hitboxes
     "HUD", //heads-up display
     "ID", //ID number
+    "増加", //increase by 1
     "HP無限", //infinite health
     "ライフ無限", //infinite extra lives
     "お金無限", //infinite money (scarabs)
@@ -124,6 +125,7 @@ const char *strings_Japanese[] = {
     "マップの状態", //state of each map
     "マップのズーム", //zoom level of PDA map
     "マスター", //master debug text enable
+    "最大", //maximum value
     "最大ご飯", //maximum food/energy
     "最大HP", //maximum health
     "最大ライフ", //maximum extra lives
@@ -153,9 +155,11 @@ const char *strings_Japanese[] = {
     "Obj Seq", //show object sequences
     "Off", //off
     "On", //on
+    "1", //always one
     "軌道", //camera mode: orbit around player
     "元の位置", //original position
     "メモリ不足", //out of memory
+    "P4のRトリガー", //player 4 R trigger
     "ページ", //move to another page
     "パラメータ", //parameter
     "パラメータ", //parameters
@@ -177,11 +181,13 @@ const char *strings_Japanese[] = {
     "曲再生", //play a song
     "ストリーム音源再生", //play audio stream
     "位置", //position
+    "位置", //coordinate
     "マップリロード", //reload the map
     "レンダリング", //debug settings for rendering
     "復活ポイント", //show the "restart point" coordinates
     "乗る", //start riding this object
     "RNG", //random number generator
+    "RNGテスト", //random number generator test
     "振動ぼかし", //blur the screen when rumble is active
     "振動", //controller vibrate function
     "シーケンス%d実行", //run sequence
@@ -225,6 +231,6 @@ const char *strings_Japanese[] = {
     "テクスチャ表示", //show all textures
     "ワープ", //warp to another map
     "ワイドスクリーン", //enable widescreen display
-    "位置", //coordinate
+    "零", //always zero
     NULL
 };

@@ -2,14 +2,28 @@
 
 u32 rngCalls = 0; //reset each frame
 u32 rngReseeds = 0;
+s8 rngMode = RNG_MODE_NORMAL;
 
 u32 rngHook() { //installed in perf.c
     rngCalls++;
-    //this is simple enough that it's easier to just duplicate here
-    //rather than calling the original code
-    randomNumber = randomNumber * 0x19660d + 0x3c6ef35f;
-    return randomNumber;
-    //return 0;
+    switch(rngMode) {
+        case RNG_MODE_ZERO: return 0;
+        case RNG_MODE_ONE:  return 1;
+        case RNG_MODE_MAX:  return 0xFFFFFFFF;
+        case RNG_MODE_INC:
+            randomNumber++;
+            return randomNumber;
+        case RNG_MODE_ANALOG:
+            return controllerStates[3].triggerRight << 24;
+        default:
+        //this is simple enough that it's easier to just duplicate here
+        //rather than calling the original code
+        randomNumber = randomNumber * 0x19660d + 0x3c6ef35f;
+        //fixes a very rare (~1 in 100 million) chance where randomGetRange()
+        //can actually return an out-of-bounds value
+        if(randomNumber >= 0xFFFFFE80) randomNumber = 0xFFFFFE7F;
+        return randomNumber;
+    }
 }
 
 void rngSeedHook(u32 seed) {

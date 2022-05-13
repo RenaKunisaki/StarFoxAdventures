@@ -108,6 +108,7 @@ const char *strings_English[] = {
     "HITS", //hitboxes
     "HUD", //heads-up display
     "ID", //ID number
+    "Increment", //increase by 1
     "Infinite HP", //infinite health
     "Infinite Lives", //infinite extra lives
     "Infinite Money", //infinite money (scarabs)
@@ -126,7 +127,7 @@ const char *strings_English[] = {
     "Load  Flags", //flags to use when loading (extra space for alignment)
     "Load Map", //load a map's assets
     "Low HP Flash", //flash the HP meter when HP is low
-    "Low HP Sound", //play a sound when HP is low=
+    "Low HP Sound", //play a sound when HP is low
     "Map Acts", //"act numbers" of each map
     "Map Grid", //show the map grid on-screen
     "Map ID", //ID number of map
@@ -136,6 +137,7 @@ const char *strings_English[] = {
     "Map States", //state of each map
     "Map Zoom", //zoom level of PDA map
     "Master", //master debug text enable
+    "Max", //maximum value
     "Max Food", //maximum food/energy
     "Max HP", //maximum health
     "Max Lives", //maximum extra lives
@@ -165,9 +167,11 @@ const char *strings_English[] = {
     "Obj Seq", //show object sequences
     "Off", //off
     "On", //on
+    "One", //always one
     "Orbit", //camera mode: orbit around player
     "ORIG", //original position
     "OUT OF MEMORY", //out of memory
+    "P4 R-Trigger", //player 4 R trigger
     "Page", //move to another page
     "Param", //parameter
     "Params", //parameters
@@ -189,11 +193,13 @@ const char *strings_English[] = {
     "Play Song", //play a song
     "Play Stream", //play audio stream
     "POS", //position
+    "Position", //coordinate
     "Reload Map", //reload the map
     "Render", //debug settings for rendering
     "Restart Point", //show the "restart point" coordinates
     "Ride", //start riding this object
     "RNG", //random number generator
+    "RNG Test", //random number generator test
     "Rumble Blur", //blur the screen when rumble is active
     "Rumble", //controller vibrate function
     "Run Seq", //run sequence
@@ -237,6 +243,6 @@ const char *strings_English[] = {
     "View Textures", //show all textures
     "Warp", //warp to another map
     "Widescreen", //enable widescreen display
-    "Position", //coordinate
+    "Zero", //always zero
     NULL
 };

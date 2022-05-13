@@ -43,6 +43,16 @@ typedef enum {
     NUM_HEAP_DRAW_MODES
 } HeapDrawMode;
 
+enum RngMode {
+    RNG_MODE_NORMAL = 0, //normal RNG
+    RNG_MODE_ZERO, //always return 0
+    RNG_MODE_ONE, //always return 1
+    RNG_MODE_MAX, //always return RAND_MAX
+    RNG_MODE_INC, //return incrementing values
+    RNG_MODE_ANALOG, //return controller 4 R trigger
+    NUM_RNG_MODES
+};
+
 //debuglog.s
 void debugPrintfHook(const char *fmt, ...);
 
