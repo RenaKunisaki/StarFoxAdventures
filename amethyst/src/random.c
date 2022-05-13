@@ -22,9 +22,12 @@ u32 rngHook() { //installed in perf.c
         //this is simple enough that it's easier to just duplicate here
         //rather than calling the original code
         randomNumber = randomNumber * 0x19660d + 0x3c6ef35f;
-        //fixes a very rare (~1 in 100 million) chance where randomGetRange()
+        //fixes a very rare (~1 in 112 million) chance where randomGetRange()
         //can actually return an out-of-bounds value
-        if(randomNumber >= 0xFFFFFE80) randomNumber = 0xFFFFFE7F;
+        if(randomNumber >= 0xFFFFFE80) {
+            OSReport("Correcting bad RNG value 0x%08X", randomNumber);
+            randomNumber = 0xFFFFFE7F;
+        }
         return randomNumber;
     }
 }
@@ -37,8 +40,7 @@ u32 randIntHook(u32 min, u32 max) {
         case RNG_MODE_HALF: return min + (((max+1)-min)/2);
         case RNG_MODE_MAX:  return max;
         case RNG_MODE_INC:
-            randomNumber++;
-            return (randomNumber % ((max+1) - min)) + min;
+            return ((++randomNumber) % ((max+1) - min)) + min;
         case RNG_MODE_FRAME:
             return (frameCount % ((max+1) - min)) + min;
         case RNG_MODE_ANALOG: {
@@ -71,21 +73,26 @@ void rngSeedHook(u32 seed) {
 
 void drawRNG() {
     //graph the next several RNG values on-screen
-    static const int w = 1, h = 50;
-    int x = 20, y = SCREEN_HEIGHT - (h + 20);
+    static const int w = 1, h = 100;
+    int x = 20, y = SCREEN_HEIGHT - (h + 20) + (h/2);
     u32 start = randomNumber;
     u32 startCalls = rngCalls;
     for(int i=0; i<(SCREEN_WIDTH - 40) / w; i++) {
-        //u32 rnd = randomGetNext();
-        //XXX this scale discards a lot of detail. any better way?
-        //u32 sz = ((double)rnd / 4294967295.0) * (double)h;
         u32 rnd = randomGetRange(0, h);
-        u32 sz = rnd;
-        if(sz) {
-            //Color4b col = {(rnd >> 24) & 0xFF, (rnd >> 16) & 0xFF, (rnd >> 8) & 0xFF, 0xFF};
-            u8 c = (u8)(((double)rnd / (double)h) * 255.0);
+        if(rnd) {
+            int half = h/2;
+            int y2, c;
+            if(rnd >= half) {
+                y2 = y + (rnd-half);
+                c  = (int)(((float)(y2 - y) / (float)half) * 255.0);
+            }
+            else {
+                y2 = y - rnd;
+                c  = (int)(((float)(y - y2) / (float)half) * 255.0);
+            }
             Color4b col = {c, c, c, 0xFF};
-            hudDrawRect(x, y+h, x+w, (y+h)-sz, &col);
+            //hudDrawRect(x, y+h, x+w, (y+h)-rnd, &col);
+            hudDrawRect(x, y, x+w, y2, &col);
         }
         x += w;
     }
