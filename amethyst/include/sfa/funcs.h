@@ -110,9 +110,11 @@ GLOBALFN void gxSetTexColorEnv0(int, int, int, int, int);
 GLOBALFN void _gxSetTexColorEnv0(int, int, int, int, int, int);
 GLOBALFN void gxSetTexColorEnv1(int, int, int);
 GLOBALFN void _gxSetTexColorEnv1(int, int, int, int, int, int);
-GLOBALFN void gxSetTexEnvColor(int idx, Color4b *color);
 GLOBALFN void gxSetTextureParams(int textureIdx, int type, int format, uint mtxIdx, uint normal, int texIdx);
-GLOBALFN void GXSetTevKColor( GXTevKColorID id, GXColor color );
+//note these take pointers to colors, whereas the ones defined in SDK
+//take the color directly... we probably have wrong SDK version.
+//also Color4b == GXColor but has added 'value' union member.
+GLOBALFN void GXSetTevKColor_( GXTevKColorID id, Color4b *color );
 GLOBALFN void GXSetTevKColorSel( GXTevStageID stage, GXTevKColorSel sel );
 GLOBALFN void GXSetTevKAlphaSel( GXTevStageID stage, GXTevKAlphaSel sel );
 GLOBALFN void gxSetTevKsel(int, int);

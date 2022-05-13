@@ -16,19 +16,20 @@ float pctTotal;
 
 void renderPerfMeters() {
     //draw meters
-    //colors can't be const because hudDrawRect is insane and changes them
-    Color4b colLogic  = {  0, 255,   0, 128};
-    Color4b colRender = {255,   0,   0, 128};
-    Color4b colIdle   = {  0,   0,   0, 128};
+    static const Color4b colLogic  = {  0, 255,   0, 128};
+    static const Color4b colRender = {255,   0,   0, 128};
+    static const Color4b colIdle   = {  0,   0,   0, 128};
     int x = 40;
     int y = SCREEN_HEIGHT - 50;
     int w = SCREEN_WIDTH - (x * 2);
     int h = 4;
-    hudDrawRect(x, y, x+(w*pctLogic), y+h, &colLogic);
+
+    begin2D(NULL);
+    draw2Dbox(x, y, w*pctLogic, h, &colLogic);
     x += (w * pctLogic);
-    if(x < w) hudDrawRect(x, y, x+(w*pctRender), y+h, &colRender);
+    if(x < w) draw2Dbox(x, y, w*pctRender, h, &colRender);
     x += (w * pctRender);
-    if(x < w) hudDrawRect(x, y, w, y+h, &colIdle);
+    if(x < w) draw2Dbox(x, y, w, h, &colIdle);
 
     //draw scale
     Color4b colScale[] = {
@@ -39,10 +40,10 @@ void renderPerfMeters() {
     };
     x = 40;
     y += h;
-    hudDrawRect(x,          y, (x + (w*0.25)) - 1, y+h, &colScale[0]);
-    hudDrawRect(x+(w*0.25), y, (x + (w*0.50)) - 1, y+h, &colScale[1]);
-    hudDrawRect(x+(w*0.50), y, (x + (w*0.75)) - 1, y+h, &colScale[2]);
-    hudDrawRect(x+(w*0.75), y,  x +  w,            y+h, &colScale[3]);
+    draw2Dbox(x,          y, (w*0.25) - 1, h, &colScale[0]);
+    draw2Dbox(x+(w*0.25), y, (w*0.25) - 1, h, &colScale[1]);
+    draw2Dbox(x+(w*0.50), y, (w*0.25) - 1, h, &colScale[2]);
+    draw2Dbox(x+(w*0.75), y, (w*0.25) - 1, h, &colScale[3]);
 }
 
 void loopStartHook() {

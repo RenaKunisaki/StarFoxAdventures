@@ -1,8 +1,9 @@
 #include "main.h"
 #include "revolution/gx/GXEnum.h"
 
-void begin2D(Color4b *col) {
+void begin2D(Color4b *color) {
     /** Set up to render 2D graphics.
+     *  @param color If not NULL, color to use. Otherwise, keep previous color.
      */
     gxResetVtxDescr();
     gxSetVtxDescr(GX_VA_PNMTXIDX,GX_DIRECT);
@@ -10,7 +11,7 @@ void begin2D(Color4b *col) {
     gxSetBackfaceCulling(0);
     gxSetProjection((Mtx*)&hudMatrix,TRUE);
     gxSetBlendMode(GX_BM_BLEND,GX_BL_SRCALPHA,GX_BL_INVSRCALPHA,GX_LO_NOOP);
-    gxSetTexEnvColor(0,col);
+    if(color) GXSetTevKColor_(0,color);
 
     //copied from game code. not sure what most of this does.
     GXSetTevKAlphaSel(0,0x1c);
@@ -30,11 +31,27 @@ void begin2D(Color4b *col) {
     GXSetNumTevStages(1);
 }
 
-void write2Dvtx(int x, int y) {
+void write2Dvtx(float x, float y) {
     static volatile u8  *fifoU8  = (volatile u8*) GX_FIFO_BASE;
     static volatile s16 *fifoS16 = (volatile s16*)GX_FIFO_BASE;
     *fifoU8  = 0x3C; //PNMTXIDX
     *fifoS16 = x * hudScale;
     *fifoS16 = y * hudScale;
     *fifoS16 = -8;
+}
+
+void draw2Dbox(float x, float y, float w, float h, const Color4b *color) {
+    /** Draw a filled 2D box.
+     *  @param x X coordinate on screen.
+     *  @param y Y coordinate on screen.
+     *  @param w Width in pixels.
+     *  @param h Height in pixels.
+     *  @param color If not NULL, color to use. Otherwise, keep previous color.
+     */
+    if(color) GXSetTevKColor_(0,(Color4b*)color);
+    GXBegin(GX_QUADS, 1, 4);
+    write2Dvtx(x,   y);
+    write2Dvtx(x+w, y);
+    write2Dvtx(x+w, y+h);
+    write2Dvtx(x,   y+h);
 }

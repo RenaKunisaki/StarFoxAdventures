@@ -152,7 +152,7 @@ void _drawVel(vec3f base, vec3f tip, Color4b color) {
     //draw a thin pyramid with its (not drawn) base centred around "base"
     //and its tip at "tip".
     //similar to drawArrow() but different params, no base
-    gxSetTexEnvColor(0, &color);
+    GXSetTevKColor_(0, &color);
 
     vec3f TL  = {-1.0f + base.x, -1.0f + base.y, 0.0f + base.z};
     vec3f TR  = { 1.0f + base.x, -1.0f + base.y, 0.0f + base.z};

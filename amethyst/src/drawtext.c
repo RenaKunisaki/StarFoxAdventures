@@ -100,7 +100,7 @@ Color4b color, float scale) {
     gxSetVtxDescr(GX_VA_PNMTXIDX, GX_DIRECT);
     gxSetVtxDescr(GX_VA_POS,      GX_DIRECT);
     gxSetVtxDescr(GX_VA_TEX0,     GX_DIRECT);
-    gxSetTexEnvColor(0, &color);
+    GXSetTevKColor_(0, &color);
     gxSetTevKsel(0, 0xc);
     gxSetKSel(0, 0x1c);
 

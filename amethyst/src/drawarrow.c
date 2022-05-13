@@ -8,7 +8,7 @@
  *  @param color Color to draw.
  */
 void drawArrow(vec3f pos, vec3s rot, float scale, Color4b color) {
-    gxSetTexEnvColor(0, &color);
+    GXSetTevKColor_(0, &color);
 
     //just draw a pyramid.
     vec3f a = {( 0.0f * scale),  ( 0.0f * scale),  ( 0.0f * scale)};

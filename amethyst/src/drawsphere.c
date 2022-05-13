@@ -72,7 +72,7 @@ void drawSphere(vec3f pos, float radius, Color4b color) {
     vec3f *vtxs = _generateSphere();
     if(!vtxs) return;
 
-    gxSetTexEnvColor(0, &color);
+    GXSetTevKColor_(0, &color);
 
     //draw strips around the perimeter.
     for(int iStack = 0; iStack < STACKS - 1; ++iStack) {

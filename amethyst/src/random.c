@@ -99,7 +99,7 @@ void drawRngRate() {
     }
 
     Color4b col = {0xFF, 0x00, 0xFF, 0xFF};
-    gxSetTexEnvColor(0,&col);
+    GXSetTevKColor_(0, &col);
 
     GXBegin(GX_LINESTRIP, 1, 599);
     for(int i=0; i<599; i++) {

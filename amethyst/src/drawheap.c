@@ -186,7 +186,8 @@ static void drawHeapBlocks(int iHeap) {
     u32 avail = heap->avail;
     int w = (avail > 300) ? 1 : 2;
     Color4b color = {0, 0, 0, 128};
-    hudDrawRect(x, y, x+(avail*w), y+GRAPH_HEIGHT, &color);
+    begin2D(NULL);
+    draw2Dbox(x, y, (avail*w), GRAPH_HEIGHT, &color);
 
     //XXX an option to hide the unused slots entirely?
     //just means using i<used instead of i<avail
@@ -197,7 +198,7 @@ static void drawHeapBlocks(int iHeap) {
             if(col < NUM_ALLOC_TAGS) col = allocTagColorTbl[col];
             color.value = col;
             if(iBlock >= used) color.a /= 8;
-            hudDrawRect(x, y, x+w, y+GRAPH_HEIGHT, &color);
+            draw2Dbox(x, y, w, GRAPH_HEIGHT, &color);
         }
         x += w;
         if(x > SCREEN_WIDTH) break;
@@ -213,10 +214,11 @@ static void drawHeapBytes(int iHeap) {
 
     u32 used  = heap->size;
     u32 avail = heap->dataSize;
-    float scale = (float)(SCREEN_WIDTH-(x*2)) / (float)(avail / BYTE_SCALE);
+    float scale = (float)(SCREEN_WIDTH-(x*2)) / ((float)avail / BYTE_SCALE);
     int w;
     Color4b color = {0, 0, 0, 128};
-    hudDrawRect(x, y, x+(SCREEN_WIDTH-(x*2)), y+GRAPH_HEIGHT, &color);
+    begin2D(NULL);
+    draw2Dbox(x, y, (SCREEN_WIDTH-(x*2)), GRAPH_HEIGHT, &color);
 
     u32 total = 0, totalBlocks = 0;
     for(int iBlock=0; iBlock >= 0; iBlock = heap->data[iBlock].next) {
@@ -232,8 +234,8 @@ static void drawHeapBytes(int iHeap) {
                 totalBlocks++;
             }
             else color.a /= 8;
-            w = (entry->size / BYTE_SCALE) / scale;
-            hudDrawRect(x, y, x+w, y+GRAPH_HEIGHT, &color);
+            w = ((float)entry->size / BYTE_SCALE) / scale;
+            draw2Dbox(x, y, w, GRAPH_HEIGHT, &color);
         }
         x += w;
         if(x > SCREEN_WIDTH) break;
