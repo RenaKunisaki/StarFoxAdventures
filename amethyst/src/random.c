@@ -1,12 +1,22 @@
 #include "main.h"
+#include "revolution/gx/GXEnum.h"
 
 u32 rngCalls = 0; //reset each frame
 u32 rngReseeds = 0;
-s8 rngMode = RNG_MODE_NORMAL;
+u32 badVals = 0;
 u32(*randIntHookOld)(u32 min, u32 max);
+u16 *callCounts = NULL;
+s8 rngMode = RNG_MODE_NORMAL;
+static const int graphW = (SCREEN_WIDTH-40);
 
-u32 rngHook() { //installed in perf.c
+static void _logCall() {
     rngCalls++;
+    if(!callCounts) return;
+    callCounts[frameCount % 600]++;
+}
+
+u32 rngHook() {
+     _logCall();
     switch(rngMode) {
         case RNG_MODE_ZERO: return 0;
         case RNG_MODE_ONE:  return 1;
@@ -25,7 +35,7 @@ u32 rngHook() { //installed in perf.c
         //fixes a very rare (~1 in 112 million) chance where randomGetRange()
         //can actually return an out-of-bounds value
         if(randomNumber >= 0xFFFFFE80) {
-            OSReport("Correcting bad RNG value 0x%08X", randomNumber);
+            badVals++;
             randomNumber = 0xFFFFFE7F;
         }
         return randomNumber;
@@ -33,7 +43,7 @@ u32 rngHook() { //installed in perf.c
 }
 
 u32 randIntHook(u32 min, u32 max) {
-    rngCalls++;
+    _logCall();
     switch(rngMode) {
         case RNG_MODE_ZERO: return min;
         case RNG_MODE_ONE:  return min+1;
@@ -53,6 +63,7 @@ u32 randIntHook(u32 min, u32 max) {
         default: {
             if(max <= min) return min;
             randomNumber = randomNumber * 0x19660d + 0x3c6ef35f;
+            if(randomNumber >= 0xFFFFFE80) badVals++;
             //much simpler algorithm which gives a perfect uniform distribution
             //at least, for randomGetRange(0,255)
             u32 val = (randomNumber % ((max+1) - min)) + min;
@@ -71,13 +82,53 @@ void rngSeedHook(u32 seed) {
     randomNumber = seed;
 }
 
+void rngHooksInit() {
+    hookBranch((u32)randomGetNext, rngHook, 0);
+    hookBranch((u32)srand, rngSeedHook, 0);
+    hookBranch((u32)randomGetRange, randIntHook, 0);
+    registerFreeablePtr((void**)&callCounts, "rng:callCounts");
+}
+
+void drawRngRate() {
+    if(!callCounts) {
+        callCounts = allocTagged(600 * sizeof(u16),
+            ALLOC_TAG_TEST_COL,  "rng:callCounts");
+        if(!callCounts) return;
+        memset(callCounts, 0, 600 * sizeof(u16));
+    }
+
+    static volatile float *fifoFloat = (volatile float*)GX_FIFO_BASE;
+    static volatile u8 *fifoU8 = (volatile u8*)GX_FIFO_BASE;
+    static volatile s16 *fifoS16 = (volatile s16*)GX_FIFO_BASE;
+    gxResetVtxDescr();
+    gxSetVtxDescr(GX_VA_PNMTXIDX,GX_DIRECT);
+    gxSetVtxDescr(GX_VA_POS,GX_DIRECT);
+    gxSetBackfaceCulling(0);
+    gxSetProjection(&hudMatrix,TRUE);
+    gxSetBlendMode(GX_BM_BLEND,GX_BL_SRCALPHA,GX_BL_INVSRCALPHA,GX_LO_NOOP);
+    Color4b col = {0xFF, 0x00, 0xFF, 0xFF};
+    gxSetTexEnvColor(0,&col);
+    GXBegin(GX_LINESTRIP, 1, 599);
+    for(int i=0; i<599; i++) {
+        int idx = (frameCount-600)+i+1;
+        if(idx < 0) idx += 600;
+        float iY = SCREEN_HEIGHT - ((callCounts[idx%600]/3.0) + 100);
+        if(iY < 20) iY = 20;
+        *fifoU8  = 0x3C; //PNMTXIDX
+        *fifoS16 = (i+20) * hudScale;
+        *fifoS16 = iY     * hudScale;
+        *fifoS16 = -8;
+    }
+    callCounts[frameCount % 600] = 0;
+}
+
 void drawRNG() {
     //graph the next several RNG values on-screen
     static const int w = 1, h = 100;
     int x = 20, y = SCREEN_HEIGHT - (h + 20) + (h/2);
     u32 start = randomNumber;
     u32 startCalls = rngCalls;
-    for(int i=0; i<(SCREEN_WIDTH - 40) / w; i++) {
+    for(int i=0; i<graphW / w; i++) {
         u32 rnd = randomGetRange(0, h);
         if(rnd) {
             int half = h/2;
@@ -98,6 +149,7 @@ void drawRNG() {
     }
     randomNumber = start; //reset seed
     rngCalls = startCalls; //don't count these
+    drawRngRate();
 }
 
 void printRNG() {

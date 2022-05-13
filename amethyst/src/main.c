@@ -361,6 +361,7 @@ void _start(void) {
     hookBranch(0x800d9e2c, hudDrawHook, 1);
     allocInit();
     perfMonInit();
+    rngHooksInit();
     hookBranch(0x80105df8, firstPersonHook, 1);
     hookBranch(0x80133A54, _pdaHook, 0);
     hookBranch(0x8020d31c, worldMapHook, 1);
