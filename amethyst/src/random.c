@@ -42,7 +42,7 @@ u32 rngHook() {
     }
 }
 
-u32 randIntHook(u32 min, u32 max) {
+int randIntHook(int min, int max) {
     _logCall();
     switch(rngMode) {
         case RNG_MODE_ZERO: return min;
@@ -61,15 +61,15 @@ u32 randIntHook(u32 min, u32 max) {
             return val;
         }
         default: {
-            if(max <= min) return min;
             randomNumber = randomNumber * 0x19660d + 0x3c6ef35f;
             if(randomNumber >= 0xFFFFFE80) badVals++;
+            if(max <= min) return min;
             //much simpler algorithm which gives a perfect uniform distribution
             //at least, for randomGetRange(0,255)
-            u32 val = (randomNumber % ((max+1) - min)) + min;
+            int val = (randomNumber % ((max+1) - min)) + min;
             //game's algorithm which isn't quite perfectly uniform
             //and suffers from rounding errors
-            //u32 val = ((float)randomNumber / 4294967296.0) * ((1.0 + (float)max) - (float)min) + min;
+            //int val = ((float)randomNumber / 4294967296.0) * ((1.0 + (float)max) - (float)min) + min;
             //OSReport("rand(%6d, %6d) = %6d", min, max, val);
             return val;
         }
@@ -124,12 +124,9 @@ void drawRNG() {
     u32 start = randomNumber;
     u32 startCalls = rngCalls;
     for(int i=0; i<graphW / w; i++) {
-        u32 rnd = randomGetRange(0, h);
         int half = h/2;
-        int y2;
-        if(rnd >= half) y2 = y + (rnd-half);
-        else y2 = y - rnd;
-        write2Dvtx(x, y2);
+        int rnd = randomGetRange(-half, half);
+        write2Dvtx(x, y+rnd);
         x += w;
     }
     randomNumber = start; //reset seed
