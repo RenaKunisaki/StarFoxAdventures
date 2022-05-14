@@ -40,8 +40,8 @@ export default class LayerChooser {
         this._addLayer(this.eLayers, 'boolean', 'warps', "Warps", false,
             "WARPTAB entries");
 
-        this._addLayer(this.eHits, 'boolean', 'hitPolys', "Hit Polys", false,
-            "Hit detect mesh");
+        this._addLayer(this.eHits, 'boolean', 'hitPolys', "Collision Mesh",
+            false, "Hit detect mesh");
         this._addLayer(this.eHits, 'boolean', 'polyGroups', "Poly Groups",
             false, "Polygon group boxes");
         this._addLayer(this.eHits, 'boolean', 'blockHits', "Block Hits", false,
@@ -214,9 +214,14 @@ export default class LayerChooser {
         this.eAllActsLabel.innerText = `All(${objs.length.toString().padStart(4)})`;
 
         for(let i=-1; i<NUM_OBJ_GROUPS; i++) {
+            const layer = this.layers[`group${i}`];
             let name = (i < 0) ? "Ungrouped" : i.toString().padStart(2);
-            this.layers[`group${i}`].eLabel.innerText =
+            layer.eLabel.innerText =
                 `${name} (${groupCounts[i].toString().padStart(4)})`;
+            if(groupCounts[i]) {
+                layer.element.classList.remove('empty');
+            }
+            else layer.element.classList.add('empty');
         }
         this.eAllGroupsLabel.innerText = `All (${objs.length.toString().padStart(4)})`;
     }

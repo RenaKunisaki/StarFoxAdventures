@@ -66,6 +66,10 @@
     background: none;
 }
 
+.tabMapView .sidebar .checkbox:hover {
+    color: #0FF;
+}
+
 .tabMapView .sidebar .act-list .checkbox {
     display: inline-block;
     width: 25%;
@@ -81,6 +85,11 @@
 #mapview-layers-allgroups {
     /* don't overlap Ungrouped */
     margin-left: 50%;
+}
+.tabMapView .sidebar .objgroup-list .empty {
+    /* display: none; */
+    opacity: 0.5;
+    color: #888;
 }
 
 .tabMapView .sidebar .subtitle {
