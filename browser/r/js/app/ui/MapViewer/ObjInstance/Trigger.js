@@ -198,6 +198,10 @@ export class Trigger extends ObjInstance {
                     params += ` bit${idx}`;
                     break;
                 }
+                case 0x22: { //ToggleObjGroup
+                    params = `${cmd.param2}`;
+                    break;
+                }
                 case 0x23: { //subcmd
                     switch(cmd.param1) {
                         case 0: name = "RespawnPos_Set"; break;
