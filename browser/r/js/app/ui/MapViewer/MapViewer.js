@@ -10,6 +10,7 @@ import Grid from "./Grid.js";
 import Stats from "./Stats.js";
 import LayerChooser from "./LayerChooser.js";
 import InfoWidget from "./InfoWidget.js";
+import ObjectList from "./ObjectList.js";
 import RenderBatch from "../gl/gx/RenderBatch.js";
 import EventHandler from "./EventHandler.js";
 import ObjectRenderer from "./ObjectRenderer.js";
@@ -31,10 +32,21 @@ export default class MapViewer {
         this.stats         = new Stats(this);
         this.layerChooser  = new LayerChooser(this);
         this.infoWidget    = new InfoWidget(this);
+        this.objectList    = new ObjectList(this);
         this.eSidebar      = E.div('sidebar');
         this._eventHandler = new EventHandler(this);
         this._reset();
         this.app.onIsoLoaded(iso => this._onIsoLoaded());
+    }
+
+    showObject(entry) {
+        /** Move the camera to show the given object.
+         *  @param {RomListEntry} entry Object to show.
+         */
+        //XXX enable the appropriate acts and groups
+        //then calculate the angle difference between camera's
+        //current angle and the angle to the target
+        //then move toward it
     }
 
     _onIsoLoaded() {
@@ -63,6 +75,7 @@ export default class MapViewer {
         this.viewController = new ViewController(this.context);
         this.eSidebar.append(this.viewController.element,
             this.layerChooser.element,
+            this.objectList.element,
             this.infoWidget.element,
             this.stats.element,
         );
@@ -148,6 +161,7 @@ export default class MapViewer {
         this._blockRenderer.reset();
         this.curBlock = this._findABlock();
         this.layerChooser.refresh();
+        this.objectList.refresh();
         this.grid.refresh();
         this.redraw();
         this._updatedStats = false;

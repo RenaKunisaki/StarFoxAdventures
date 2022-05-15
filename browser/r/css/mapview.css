@@ -69,6 +69,13 @@
 .tabMapView .sidebar .checkbox:hover {
     color: #0FF;
 }
+.tabMapView .sidebar .geometry {
+    border-bottom: 1px #CCC solid;
+}
+.tabMapView .sidebar .map-layers div {
+    display: inline-block;
+    margin-left: 0.5em;
+}
 
 .tabMapView .sidebar .act-list .checkbox {
     display: inline-block;
@@ -111,4 +118,10 @@
     color: #FFF;
     font-family: monospace;
     font-size: 1em;
+}
+
+#mapview-layers-triggers-element,
+#mapview-layers-curves-element {
+    display: inline-block;
+    width: 6em;
 }

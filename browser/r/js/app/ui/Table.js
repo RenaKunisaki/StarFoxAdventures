@@ -28,6 +28,12 @@ export default class Table {
         this._eTable.append(this._buildRow(row));
     }
 
+    clear() {
+        this._rows = [];
+        clearElement(this._eTable);
+        this._rebuildContent();
+    }
+
     sort(col, reverse=false) {
         if(col.sortFunc) this._rows.sort(col.sortFunc);
         else if(col.compareFunc) {
