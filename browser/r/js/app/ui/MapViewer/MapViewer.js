@@ -28,6 +28,7 @@ export default class MapViewer {
         this.eMapList      = null;
         this.map           = null; //current map
         this.curBlock      = null;
+        this._targetObj    = null;
         this.grid          = new Grid(this);
         this.stats         = new Stats(this);
         this.layerChooser  = new LayerChooser(this);
@@ -43,10 +44,24 @@ export default class MapViewer {
         /** Move the camera to show the given object.
          *  @param {RomListEntry} entry Object to show.
          */
-        //XXX enable the appropriate acts and groups
-        //then calculate the angle difference between camera's
-        //current angle and the angle to the target
-        //then move toward it
+        //ensure at least one act containing this object is visible.
+        let visible = false, actNo = null;
+        for(let [i,act] of Object.entries(entry.acts)) {
+            if(act) {
+                if(this.layerChooser.getLayer(`act${i}`)) {
+                    visible = true;
+                    break;
+                }
+                else if(actNo == null) actNo = i;
+            }
+        }
+        if(actNo != null) this.layerChooser.setLayer(`act${actNo}`, true, false);
+
+        //ensure the object group is visible.
+        //this will redraw the map (last param is true)
+        this.layerChooser.setLayer(`group${entry.group}`, true, true);
+
+        this._eventHandler.moveToObject(entry);
     }
 
     _onIsoLoaded() {
@@ -80,7 +95,7 @@ export default class MapViewer {
             this.stats.element,
         );
 
-        this._blockRenderer  = new BlockRenderer(this.game, this.gx);
+        this._blockRenderer  = new BlockRenderer(this, this.gx);
         this._objectRenderer = new ObjectRenderer(this);
         this.context.canvas.focus();
         this._reset();
@@ -416,6 +431,8 @@ export default class MapViewer {
         };
         const batch = this._getBatch('blockBounds', params);
         if(batch.isEmpty) {
+            const ox = this.map.originX;
+            const oz = this.map.originZ;
             batch.addFunction(() => {
                 //blend on, face culling off
                 gx.disableTextures(GX.BlendMode.BLEND, false);
@@ -426,14 +443,14 @@ export default class MapViewer {
                 if(!block || (block.mod >= 0xFF)) continue;
 
                 //top left
-                const x1 = (block.x * MAP_CELL_SIZE);
+                const x1 = ((block.x-ox) * MAP_CELL_SIZE);
                 const y1 = (block && block.header) ? block.header.yMax :  1;
-                const z1 = block.z * MAP_CELL_SIZE;
+                const z1 = (block.z-oz) * MAP_CELL_SIZE;
 
                 //bottom right
-                const x2 = (block.x+1) * MAP_CELL_SIZE;
+                const x2 = ((block.x-ox)+1) * MAP_CELL_SIZE;
                 const y2 = (block && block.header) ? block.header.yMin : -1;
-                const z2 = (block.z+1) * MAP_CELL_SIZE;
+                const z2 = ((block.z-oz)+1) * MAP_CELL_SIZE;
 
                 batch.addVertices(...makeBox(gl,
                     [x1,y1,z1], [x2,y2,z2], -1, 0x80));
@@ -489,9 +506,9 @@ export default class MapViewer {
     async _drawObjects() {
         /** Draw object positions. */
         let mv = mat4.clone(this.gx.context.matModelView);
-        mat4.translate(mv, mv, vec3.fromValues(
+        /*mat4.translate(mv, mv, vec3.fromValues(
             (this.map.originX * MAP_CELL_SIZE), 0,
-            (this.map.originZ * MAP_CELL_SIZE) ));
+            (this.map.originZ * MAP_CELL_SIZE) ));*/
         this.gx.setModelViewMtx(mv);
         const batch = await this._objectRenderer.drawObjects(
             this.layerChooser.getActs(), this._isDrawingForPicker);

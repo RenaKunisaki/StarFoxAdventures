@@ -138,10 +138,11 @@ compareEnable, compareFunc, updateEnable, alphaTest) {
 
 export default class BlockRenderer {
     /** Renders map blocks. */
-    constructor(game, gx) {
-        this.game = game;
-        HitsBinEntry = game.app.types.getType('sfa.maps.HitsBinEntry');
-        SurfaceType  = game.app.types.getType('sfa.maps.SurfaceType');
+    constructor(mapViewer, gx) {
+        this.mapViewer = mapViewer;
+        this.game = mapViewer.game;
+        HitsBinEntry = this.game.app.types.getType('sfa.maps.HitsBinEntry');
+        SurfaceType  = this.game.app.types.getType('sfa.maps.SurfaceType');
         this.gx = gx;
         this.gl = gx.gl;
         this.dlistParser = new DlistParser(gx);
@@ -200,6 +201,7 @@ export default class BlockRenderer {
 
         let done = false;
         this._setInitialGxParams();
+        this.curBatch.addFunction(() => { this.setMtxForBlock(block) });
         while(!done && !ops.isEof) {
             //this is similar but not identical to the render instructions
             //used for character models.
@@ -240,17 +242,18 @@ export default class BlockRenderer {
         return this._batches[key];
     }
 
-    setMtxForBlock(block) {
+    setMtxForBlock(block, yOffset=true) {
         /** Set the ModelView matrix to position at a block.
          *  @param {MapBlock} block Block to position at.
+         *  @param {boolean} yOffset Whether to include the block's Y offset.
          */
+        if(!block) return;
         let mv = mat4.clone(this.gx.context.matModelView);
-        if(block) {
-            const offsX = block.x*MAP_CELL_SIZE;
-            const offsY = block.header.yOffset;
-            const offsZ = block.z*MAP_CELL_SIZE;
-            mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
-        }
+        const map = this.mapViewer.map;
+        const offsX = (block.x-map.originX)*MAP_CELL_SIZE;
+        const offsY = yOffset ? block.header.yOffset : 0;
+        const offsZ = (block.z-map.originZ)*MAP_CELL_SIZE;
+        mat4.translate(mv, mv, vec3.fromValues(offsX, offsY, offsZ));
         this.gx.setModelViewMtx(mv);
     }
 
@@ -283,9 +286,10 @@ export default class BlockRenderer {
 
         const gx = this.gx;
         const gl = this.gx.gl;
-        const offsX = block.x*MAP_CELL_SIZE;
+        const map = this.mapViewer.map;
+        const offsX = (block.x-map.originX)*MAP_CELL_SIZE;
         const offsY = 0; //block.header.yOffset;
-        const offsZ = block.z*MAP_CELL_SIZE;
+        const offsZ = (block.z-map.originZ)*MAP_CELL_SIZE;
 
         if(params.isPicker) batch.addFunction(() => {
             _setShaderParams(

@@ -58,7 +58,67 @@ export default class EventHandler {
 
         if(movement.x != 0.0 || movement.y != 0.0) {
             this._moveByVector(movement);
+            this.mapViewer._targetObj = null;
         }
+    }
+
+    moveToObject(obj) {
+        const view = this.mapViewer.viewController.get();
+
+        //calculate angle we need to be at to point to object
+        let angleXZ = vec2.angle(
+            vec2.fromValues(obj.position.x, obj.position.z),
+            vec2.fromValues(view.pos.x, view.pos.z),
+        ); //- (view.rot.y * PI_OVER_180);
+        let angleXY = vec2.angle(
+            vec2.fromValues(obj.position.x, obj.position.y),
+            vec2.fromValues(view.pos.x, view.pos.y),
+        ); //- (view.rot.x * PI_OVER_180);
+        /*if(angleXZ < -Math.PI) angleXZ += (2 * Math.PI);
+        if(angleXZ >  Math.PI) angleXZ -= (2 * Math.PI);
+        if(angleXY < -Math.PI) angleXY += (2 * Math.PI);
+        if(angleXY >  Math.PI) angleXY -= (2 * Math.PI);*/
+        let dstAngle = vec3.fromValues(angleXY, angleXZ, 0);
+        let curAngle = vec3.fromValues(view.rot.x, view.rot.y, view.rot.z);
+
+        let curPos = vec3.fromValues(view.pos.x, view.pos.y, view.pos.z);
+        let dstPos = vec3.fromValues(
+            obj.position.x, obj.position.y, obj.position.z);
+
+        console.log("curAngle", curAngle);
+        console.log("dstAngle", dstAngle);
+        console.log("curPos", curPos);
+        console.log("objPos", dstPos);
+
+        //adjust dstPos so that it's within distBuff of the object,
+        //not directly inside the object.
+        /*const distBuff = Math.max(obj.object.scale, 10) * 5;
+        const dist = Math.max(0, vec3.distance(curPos, dstPos) - distBuff);
+        let vMove = vec3.fromValues(0, 0, dist);
+        vec3.rotateY(vMove, vMove, vec3.fromValues(0,0,0),
+            vec3.angle(dstAngle, curAngle));
+        console.log("dist", dist, "move", vMove);
+        vec3.add(dstPos, curPos, vMove);
+        console.log("dstPos", dstPos);*/
+
+        const tStart = performance.now();
+        const tick = () => {
+            const tNow = performance.now();
+            const tDiff = Math.min(1, (tNow - tStart) / 1000); //msec -> sec
+            //let dist = vec3.distance(objPos, camPos) - distBuff;
+            //if(dist < 0) dist = 0;
+
+            let rot = vec3.create(), pos = vec3.create();
+            vec3.lerp(rot, curAngle, dstAngle, tDiff);
+            vec3.lerp(pos, curPos,   dstPos,   tDiff);
+            this.mapViewer.viewController.set({
+                pos: {x:pos[0], y:pos[1], z:pos[2]},
+                rot: {x:rot[0], y:rot[1], z:rot[2]},
+            });
+
+            if(tDiff < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
     }
 
     _moveByVector(vec) {
