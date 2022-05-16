@@ -2,6 +2,9 @@ import { clearElement, E } from "../../../lib/Element.js";
 import Table from "../Table.js";
 import { NUM_MAP_ACTS } from "./LayerChooser.js";
 
+//struct types
+let ObjCatId;
+
 export default class ObjectList {
     /** Widget listing all objects in the map. */
     constructor(mapViewer) {
@@ -30,6 +33,7 @@ export default class ObjectList {
                     return td;
                 },
             },
+            {displayName:"Cat", name:'category', type:'string'},
             {displayName:"Grp", name:'group', type:'int'},
             {displayName: "A", name:'act1',  type:'string'},
             {displayName: "c", name:'act2',  type:'string'},
@@ -62,6 +66,7 @@ export default class ObjectList {
             y:     entry.position.y,
             z:     entry.position.z,
             group: entry.group,
+            category: ObjCatId.valueToString(entry.object.header.catId),
         };
         for(let i=1; i<NUM_MAP_ACTS; i++) {
             row[`act${i}`] = entry.acts[i] ? '✔' : '';
@@ -70,6 +75,9 @@ export default class ObjectList {
     }
 
     refresh() {
+        if(this.app.types) {
+            ObjCatId = this.app.types.getType('sfa.objects.ObjCatId');
+        }
         if(!this.mapViewer.map) return;
         let entries = this.mapViewer.map.romList;
         if(entries) entries = entries.entries;
