@@ -34,7 +34,8 @@ export default class MapViewer {
         this.layerChooser  = new LayerChooser(this);
         this.infoWidget    = new InfoWidget(this);
         this.objectList    = new ObjectList(this);
-        this.eSidebar      = E.div('sidebar');
+        this.eLeftSidebar  = E.div('sidebar sidebar-left');
+        this.eRightSidebar = E.div('sidebar sidebar-right');
         this._eventHandler = new EventHandler(this);
         this._reset();
         this.app.onIsoLoaded(iso => this._onIsoLoaded());
@@ -72,8 +73,8 @@ export default class MapViewer {
         clearElement(this.element).append(
             this.eControls,
             this.canvas,
-            this.eSidebar,
-            this.grid.element,
+            this.eLeftSidebar,
+            this.eRightSidebar,
         )
         if(!this.context) this._initContext();
     }
@@ -90,12 +91,16 @@ export default class MapViewer {
         await this.gx.loadPrograms();
 
         this.viewController = new ViewController(this.context);
-        this.eSidebar.append(this.viewController.element,
+        this.eLeftSidebar.append(
+            this.viewController.element,
             this.layerChooser.element,
-            this.objectList.element,
             this.infoWidget.element,
             this.stats.element,
         );
+        this.eRightSidebar.append(
+            this.grid.element,
+            this.objectList.element,
+        )
 
         this._blockRenderer  = new BlockRenderer(this, this.gx);
         this._objectRenderer = new ObjectRenderer(this);

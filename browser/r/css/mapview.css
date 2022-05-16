@@ -12,19 +12,23 @@
     text-align: right;
 }
 
-.tabMapView .sidebar, .tabMapView .map-grid {
-    position: fixed;
-    top: 3.5em;
+.tabMapView .sidebar {
     background: rgba(0, 0, 0, 0.5);
     color: #FFF;
     border: 1px #CCC solid;
     overflow-y: auto;
+    position: fixed;
+    /* bottom: 0; */
+    top: 3.5em;
 }
 
-.tabMapView .sidebar {
+.tabMapView .sidebar-left {
     left: 0.5em;
-    bottom: 0;
     max-width: 25em;
+}
+
+.tabMapView .sidebar-right {
+    right: 0.5em;
 }
 
 .tabMapView summary {
@@ -32,12 +36,21 @@
     background: linear-gradient(#009DF3, #0000F0);
 }
 
+.tabMapView .sidebar details details summary,
+.tabMapView .map-debug summary {
+    /* indent nested expandables */
+    padding-left: 1em;
+}
+
 .tabMapView .sidebar td, .tabMapView .sidebar tr {
     background: none;
 }
 
-.tabMapView .map-grid {
+.tabMapView .map-grid, .tabMapView .map-object-list {
     right: 0.5em;
+}
+.tabMapView .map-object-list {
+    top: 0.5em;
 }
 .tabMapView .map-grid td, .tabMapView .map-grid tr {
     background: none;
