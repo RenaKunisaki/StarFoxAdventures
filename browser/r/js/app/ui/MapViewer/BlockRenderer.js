@@ -396,11 +396,16 @@ export default class BlockRenderer {
 
         for(let iGroup=0; iGroup < block.polyGroups.length; iGroup++) {
             const group = block.polyGroups[iGroup];
-            const color = [
+            /*const color = [
                 (group.flags >> 28) & 0xFF,
                 (group.flags >> 20) & 0xFF,
                 (group.flags >> 12) & 0xFF,
-                0x40];
+                0x40];*/
+            const type      = SurfaceType.valueToString(group.type);
+            const typeColor = SurfaceTypeColors[type];
+            const color     = typeColor ?
+                [typeColor[0], typeColor[1], typeColor[2], 0x80] :
+                [0xFF, 0x00, 0xFF, 0x80];
             let id = -1;
             if(params.isPicker) {
                 id = gx.addPickerObj({
