@@ -1,6 +1,14 @@
 const PI_OVER_180 = Math.PI / 180.0; //rad = deg * PI_OVER_180
 //const PI_UNDER_180 = 180.0 / Math.PI; //deg = rad * PI_UNDER_180
 
+const CLAMP_RADIANS = (x) => {
+    x %= Math.PI * 2;
+    if(x < 0) x += Math.PI * 2;
+    return x;
+};
+const DEG2RAD = (x) => (x*PI_OVER_180);
+const RAD2DEG = (x) => (x/PI_OVER_180);
+
 export default class EventHandler {
     /** Handles events for the MapViewer canvas. */
     constructor(mapViewer) {
@@ -65,55 +73,52 @@ export default class EventHandler {
     moveToObject(obj) {
         const view = this.mapViewer.viewController.get();
 
-        //calculate angle we need to be at to point to object
-        let angleXZ = vec2.angle(
-            vec2.fromValues(obj.position.x, obj.position.z),
-            vec2.fromValues(view.pos.x, view.pos.z),
-        ); //- (view.rot.y * PI_OVER_180);
-        let angleXY = vec2.angle(
-            vec2.fromValues(obj.position.x, obj.position.y),
-            vec2.fromValues(view.pos.x, view.pos.y),
-        ); //- (view.rot.x * PI_OVER_180);
-        /*if(angleXZ < -Math.PI) angleXZ += (2 * Math.PI);
-        if(angleXZ >  Math.PI) angleXZ -= (2 * Math.PI);
-        if(angleXY < -Math.PI) angleXY += (2 * Math.PI);
-        if(angleXY >  Math.PI) angleXY -= (2 * Math.PI);*/
-        let dstAngle = vec3.fromValues(angleXY, angleXZ, 0);
-        let curAngle = vec3.fromValues(view.rot.x, view.rot.y, view.rot.z);
-
+        //get starting and ending positions
         let curPos = vec3.fromValues(view.pos.x, view.pos.y, view.pos.z);
-        let dstPos = vec3.fromValues(
+        let objPos = vec3.fromValues(
             obj.position.x, obj.position.y, obj.position.z);
 
-        console.log("curAngle", curAngle);
-        console.log("dstAngle", dstAngle);
-        console.log("curPos", curPos);
-        console.log("objPos", dstPos);
-
-        //adjust dstPos so that it's within distBuff of the object,
+        //adjust destination so that it's within some distance of the object,
         //not directly inside the object.
-        /*const distBuff = Math.max(obj.object.scale, 10) * 5;
-        const dist = Math.max(0, vec3.distance(curPos, dstPos) - distBuff);
-        let vMove = vec3.fromValues(0, 0, dist);
-        vec3.rotateY(vMove, vMove, vec3.fromValues(0,0,0),
-            vec3.angle(dstAngle, curAngle));
-        console.log("dist", dist, "move", vMove);
-        vec3.add(dstPos, curPos, vMove);
-        console.log("dstPos", dstPos);*/
+        //here we're imagining the object is a sphere, and calculating
+        //the nearest point on its surface.
+        const radius = Math.max(obj.object.scale, 10) * 10;
+        const dist = vec3.distance(curPos, objPos);
+        let dstPos = vec3.fromValues(
+            objPos[0] + ((radius * (curPos[0]-objPos[0])) / dist),
+            objPos[1], //+ ((radius * (curPos[1]-objPos[1])) / dist),
+            objPos[2] + ((radius * (curPos[2]-objPos[2])) / dist),
+        );
+
+        //calculate angle we need to be at to point to object
+        let angleXZ  = Math.atan2(dstPos[2] - objPos[2], dstPos[0] - objPos[0]);
+        angleXZ = CLAMP_RADIANS(angleXZ - (Math.PI / 2)); //no idea
+        const startXZ = CLAMP_RADIANS(DEG2RAD(view.rot.y));
+        let   diffXZ  = CLAMP_RADIANS(angleXZ - startXZ);
+
+        let startYZ = DEG2RAD(view.rot.x);
+        let diffYZ  = -startYZ;
+
+        //don't do a full rotation if we don't have to.
+        if(diffXZ  >= Math.PI) diffXZ = -((Math.PI * 2) - diffXZ);
+        if(startYZ >= Math.PI) diffYZ =   (Math.PI * 2) + diffYZ;
+
+        //maybe sometime when I'm not up too late already, I'll try to
+        //have it do the minimal Y movement too instead of forcing to
+        //the same height as the object...
 
         const tStart = performance.now();
         const tick = () => {
             const tNow = performance.now();
             const tDiff = Math.min(1, (tNow - tStart) / 1000); //msec -> sec
-            //let dist = vec3.distance(objPos, camPos) - distBuff;
-            //if(dist < 0) dist = 0;
 
-            let rot = vec3.create(), pos = vec3.create();
-            vec3.lerp(rot, curAngle, dstAngle, tDiff);
-            vec3.lerp(pos, curPos,   dstPos,   tDiff);
+            let pos = vec3.create();
+            vec3.lerp(pos, curPos, dstPos, tDiff);
+            let rx = startYZ + (diffYZ * tDiff);
+            let ry = startXZ + (diffXZ * tDiff);
             this.mapViewer.viewController.set({
                 pos: {x:pos[0], y:pos[1], z:pos[2]},
-                rot: {x:rot[0], y:rot[1], z:rot[2]},
+                rot: {x:RAD2DEG(rx), y:RAD2DEG(ry), z:0},
             });
 
             if(tDiff < 1) requestAnimationFrame(tick);

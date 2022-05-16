@@ -61,6 +61,8 @@ export default class MapViewer {
         //this will redraw the map (last param is true)
         this.layerChooser.setLayer(`group${entry.group}`, true, true);
 
+        //XXX if the object is a trigger/curve, enable those.
+
         this._eventHandler.moveToObject(entry);
     }
 
