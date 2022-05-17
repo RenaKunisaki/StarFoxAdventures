@@ -16,6 +16,7 @@ import EventHandler from "./EventHandler.js";
 import ObjectRenderer from "./ObjectRenderer.js";
 import { makeCube, makeBox } from "../gl/GlUtil.js";
 import Arrow from "../gl/Model/Arrow.js";
+import Axes from "../gl/Model/Axes.js";
 import MapExporter from "./MapExporter.js";
 
 export default class MapViewer {
@@ -292,6 +293,7 @@ export default class MapViewer {
 
         const blockStats = {totals:{}};
         this._beginRender();
+        this._drawOrigin();
         this._drawBlocks(blockStats, blockStreams);
         if(LC.getLayer('blockHits')) this._drawBlockHits();
         await this._drawObjects();
@@ -345,6 +347,22 @@ export default class MapViewer {
         }
         //console.log("Render msec:", tEnd-tStart, "stats:", blockStats);
         this.stats.updateDrawCounts(blockStats);
+    }
+
+    _drawOrigin() {
+        /** Draw the map's origin. */
+        const params = {
+            isPicker: this._isDrawingForPicker,
+        };
+        const batch = this._getBatch('origin', params);
+        if(batch.isEmpty) {
+            batch.addFunction(
+                (new Axes(this.gx,[
+                    this.map.originX*MAP_CELL_SIZE, 0,
+                    this.map.originZ*MAP_CELL_SIZE
+                ], [0,0,0], [80,80,80])).batch);
+        }
+        this.gx.executeBatch(batch);
     }
 
     _drawBlocks(blockStats, blockStreams) {
@@ -510,9 +528,6 @@ export default class MapViewer {
                     .batch);
                 console.log("add warp", hex(idx), x, y, z, "orig", warp.pos);
             }
-            //batch.addVertices(...makeCube( //map origin
-            //    gl, this.map.worldOrigin[0], 0, this.map.worldOrigin[1],
-            //    10, -1, [[0x00, 0xFF, 0x00, 0xC0]]));
         }
         this.gx.executeBatch(batch);
     }

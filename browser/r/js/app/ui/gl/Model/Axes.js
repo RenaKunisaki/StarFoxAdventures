@@ -4,62 +4,68 @@ import { BugCheck } from "../../../errors.js";
 const PI_OVER_180 = Math.PI / 180;
 
 const VTX_POSITIONS = [
-    [ 0.3,  0.3,  0.0],
-    [ 0.3, -0.3,  0.0],
-    [ 0.3,  0.3,  1.0],
-    [ 0.3, -0.3,  1.0],
-    [-0.3,  0.3,  0.0],
-    [-0.3, -0.3,  0.0],
-    [-0.3,  0.3,  1.0],
-    [-0.3, -0.3,  1.0],
-    [ 0.0,  0.0, -1.0],
-    [ 0.6,  0.6,  0.0],
-    [ 0.6, -0.6,  0.0],
-    [-0.6,  0.6,  0.0],
-    [-0.6, -0.6,  0.0],
+    [0.0,  1.0,  0.0],
+    [0.1,  0.1,  0.0],
+    [1.0,  0.0,  0.0],
+    [0.1,  0.1,  0.1],
+    [0.1,  0.0,  0.0],
+    [0.0,  0.0,  1.0],
+    [0.0,  0.1,  0.1],
+    [0.1,  0.0,  0.1],
+    [0.0,  0.0,  0.0],
+    [0.0,  0.1,  0.0],
+    [0.0,  0.0,  0.1],
 ];
-
+const VTX_COLORS = [
+    [0, 1, 0],
+    [1, 1, 1],
+    [1, 0, 0],
+    [1, 1, 1],
+    [1, 1, 1],
+    [0, 0, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+    [1, 1, 1],
+];
 const VTX_IDXS = [
-     4,  2,  0,
-     2,  7,  3,
-     6,  5,  7,
-     1,  7,  5,
-     0,  3,  1,
-     4,  1,  5,
-     8, 11,  9,
-    12, 11,  8,
-     8, 10, 12,
-     8,  9, 10,
-    12,  9, 11,
-     4,  6,  2,
-     2,  6,  7,
-     6,  4,  5,
-     1,  3,  7,
-     0,  2,  3,
-     4,  0,  1,
-    12, 10,  9,
+     9,  0,  6,
+     6,  0,  3,
+     3,  0,  1,
+     1,  0,  9,
+     6,  1,  9,
+     1,  2,  3,
+     3,  2,  7,
+     7,  2,  4,
+     4,  2,  1,
+     7,  1,  3,
+     3,  5,  6,
+     6,  5, 10,
+    10,  5,  7,
+     7,  5,  3,
+    10,  3,  6,
+     8,  6, 10,
+     1,  8,  4,
+     7,  8, 10,
+     6,  3,  1,
+     7,  4,  1,
+    10,  7,  3,
+     8,  9,  6,
+     1,  9,  8,
+     7,  4,  8,
 ];
 
-export default class Arrow extends Model {
-    /** An arrow. */
+export default class Axes extends Model {
+    /** A set of red, green, and blue axis arrows. */
     constructor(gx, pos=[0,0,0], rot=[0,0,0], scale=[1,1,1]) {
-        /** Construct arrow centered at given point.
+        /** Construct axes centered at given point.
          *  @param {GX} gx GX instance to use.
          *  @param {Array} pos Model position in 3D environment.
          *  @param {Array} rot Model rotation on X, Y, Z axes, in radians.
          *  @param {Array} scale Model scale on X, Y, Z axes.
          */
         super(gx, pos, rot, scale);
-        this.setColor(0xFF, 0xFF, 0xFF, 0xFF);
-    }
-
-    setColor(r, g, b, a=255) {
-        /** Set the vertex colors.
-         *  @returns {Arrow} this.
-         */
-        this.color = [r,g,b,a];
-        this._needsUpdate = true;
-        return this;
     }
 
     _update() {
@@ -88,10 +94,12 @@ export default class Arrow extends Model {
 
         const vtxs = [gl.TRIANGLES];
         for(const idx of VTX_IDXS) {
+            const [r,g,b] = VTX_COLORS[idx];
+            const color = [r*255, g*255, b*255, 0xA0];
             vtxs.push({
                 POS:  vtxPositions[idx],
-                COL0: this.color,
-                COL1: this.color,
+                COL0: color,
+                COL1: color,
                 id:   this.id,
             });
         }
