@@ -71,27 +71,48 @@ export default class EventHandler {
     }
 
     moveToObject(obj) {
+        /** Move the camera to an object.
+         *  @param {RomListEntry} obj Object to move to.
+         */
+        this.moveToPoint(obj.position.x, obj.position.y, obj.position.z,
+            Math.max(obj.object.scale, 10) * 10);
+    }
+
+    moveToPoint(x, y, z, radius=1, time=1.0) {
+        /** Move the camera to a point.
+         *  @param {float} x X coordinate to move to.
+         *  @param {float} y Y coordinate to move to.
+         *  @param {float} z Z coordinate to move to.
+         *  @param {float} radius How close to the point the camera should get.
+         *  @param {float} time How many seconds the camera should take to
+         *      reach the target point. (Can be zero)
+         *  @description Moves the camera toward the target point, and rotates
+         *      it to look at that point. The movement is animated over the
+         *      given amount of time, and the camera is placed within the
+         *      given radius of the target point, pointed toward the target.
+         */
         const view = this.mapViewer.viewController.get();
 
         //get starting and ending positions
         let curPos = vec3.fromValues(view.pos.x, view.pos.y, view.pos.z);
-        let objPos = vec3.fromValues(
-            obj.position.x, obj.position.y, obj.position.z);
+        let tgtPos = vec3.fromValues(x, y, z);
 
-        //adjust destination so that it's within some distance of the object,
-        //not directly inside the object.
-        //here we're imagining the object is a sphere, and calculating
+        //adjust destination so that it's within some distance of the point.
+        //here we're imagining the point is a sphere, and calculating
         //the nearest point on its surface.
-        const radius = Math.max(obj.object.scale, 10) * 10;
-        const dist = vec3.distance(curPos, objPos);
-        let dstPos = vec3.fromValues(
-            objPos[0] + ((radius * (curPos[0]-objPos[0])) / dist),
-            objPos[1], //+ ((radius * (curPos[1]-objPos[1])) / dist),
-            objPos[2] + ((radius * (curPos[2]-objPos[2])) / dist),
-        );
+        //this means we zoom *to* an object, not *into* it.
+        let dstPos = tgtPos;
+        if(radius > 0) {
+            const dist = vec3.distance(curPos, tgtPos);
+            dstPos = vec3.fromValues(
+                tgtPos[0] + ((radius * (curPos[0]-tgtPos[0])) / dist),
+                tgtPos[1], //+ ((radius * (curPos[1]-objPos[1])) / dist),
+                tgtPos[2] + ((radius * (curPos[2]-tgtPos[2])) / dist),
+            );
+        }
 
-        //calculate angle we need to be at to point to object
-        let angleXZ  = Math.atan2(dstPos[2] - objPos[2], dstPos[0] - objPos[0]);
+        //calculate angle we need to be at to point to target
+        let angleXZ  = Math.atan2(dstPos[2] - tgtPos[2], dstPos[0] - tgtPos[0]);
         angleXZ = CLAMP_RADIANS(angleXZ - (Math.PI / 2)); //no idea
         const startXZ = CLAMP_RADIANS(DEG2RAD(view.rot.y));
         let   diffXZ  = CLAMP_RADIANS(angleXZ - startXZ);
@@ -113,17 +134,26 @@ export default class EventHandler {
             const tDiff = Math.min(1, (tNow - tStart) / 1000); //msec -> sec
 
             let pos = vec3.create();
-            vec3.lerp(pos, curPos, dstPos, tDiff);
-            let rx = startYZ + (diffYZ * tDiff);
-            let ry = startXZ + (diffXZ * tDiff);
+            let rx, ry;
+            if(time <= 0) { //no lerping
+                pos = dstPos;
+                rx = startYZ + diffYZ;
+                ry = startXZ + diffXZ;
+            }
+            else {
+                const s = tDiff / time;
+                vec3.lerp(pos, curPos, dstPos, s);
+                rx = startYZ + (diffYZ * s);
+                ry = startXZ + (diffXZ * s);
+            }
             this.mapViewer.viewController.set({
                 pos: {x:pos[0], y:pos[1], z:pos[2]},
                 rot: {x:RAD2DEG(rx), y:RAD2DEG(ry), z:0},
             });
 
-            if(tDiff < 1) requestAnimationFrame(tick);
+            if(tDiff < time) requestAnimationFrame(tick);
         };
-        requestAnimationFrame(tick);
+        tick();
     }
 
     _moveByVector(vec) {

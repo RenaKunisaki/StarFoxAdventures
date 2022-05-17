@@ -271,10 +271,38 @@ export default class MapViewer {
                 this.stats.refresh();
             }
             if(this._isFirstDrawAfterLoadingMap) {
-                this.app.progress.hide();
                 this._isFirstDrawAfterLoadingMap = false;
+                this.app.progress.hide();
+                this.resetCamera();
             }
         });
+    }
+
+    resetCamera() {
+        /** Move the camera to an appropriate starting position. */
+        let x = this.map.originX * MAP_CELL_SIZE;
+        let y = 0;
+        let z = this.map.originZ * MAP_CELL_SIZE;
+        if(this.curBlock && this.curBlock.header) { //XXX use origin block if any
+            y = this.curBlock.header.yOffset;
+        }
+
+        //if we have a setup point, use that. just take the first one.
+        if(this.map.romList) {
+            for(let entry of this.map.romList.entries) {
+                if(entry.defNo == 0xD) { //setuppoint
+                    x = entry.position.x;
+                    y = entry.position.y;
+                    z = entry.position.z;
+                    break;
+                }
+            }
+        }
+
+        if(isNaN(x) || x == null) x = 0;
+        if(isNaN(y) || y == null) y = 0;
+        if(isNaN(z) || z == null) z = 0;
+        this._eventHandler.moveToPoint(x, y, z, 1, 0);
     }
 
     async _draw(isPicker) {
