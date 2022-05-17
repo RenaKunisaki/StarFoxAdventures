@@ -293,7 +293,7 @@ export default class MapViewer {
 
         const blockStats = {totals:{}};
         this._beginRender();
-        this._drawOrigin();
+        if(LC.getLayer('origin')) this._drawOrigin();
         this._drawBlocks(blockStats, blockStreams);
         if(LC.getLayer('blockHits')) this._drawBlockHits();
         await this._drawObjects();

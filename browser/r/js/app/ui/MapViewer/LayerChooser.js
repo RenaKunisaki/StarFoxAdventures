@@ -35,10 +35,12 @@ export default class LayerChooser {
         this._addLayer(this.eGeom, 'boolean', 'hiddenGeometry',
             "Hidden", false, "Polygons normally not visible");
 
-        this._addLayer(this.eLayers, 'boolean', 'blockBounds', "Block Bounds",
-            false, "Map block boundary boxes");
+        this._addLayer(this.eLayers, 'boolean', 'origin', "Origin", false,
+            "Map's origin point");
         this._addLayer(this.eLayers, 'boolean', 'warps', "Warps", false,
             "WARPTAB entries");
+        this._addLayer(this.eLayers, 'boolean', 'blockBounds', "Block Bounds",
+            false, "Map block boundary boxes");
 
         this._addLayer(this.eLayers, 'boolean', 'hitPolys', "Collision Mesh",
             false, "Hit detect mesh");
