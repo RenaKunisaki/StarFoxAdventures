@@ -15,6 +15,7 @@ import RenderBatch from "../gl/gx/RenderBatch.js";
 import EventHandler from "./EventHandler.js";
 import ObjectRenderer from "./ObjectRenderer.js";
 import { makeCube, makeBox } from "../gl/GlUtil.js";
+import Arrow from "../gl/Model/Arrow.js";
 import MapExporter from "./MapExporter.js";
 
 export default class MapViewer {
@@ -496,11 +497,17 @@ export default class MapViewer {
                     warp: warp,
                     idx:  idx,
                 });
-                const x = warp.pos.x - this.map.worldOrigin[0];
+                const x = warp.pos.x - (this.map.worldX*MAP_CELL_SIZE);
                 const y = warp.pos.y;
-                const z = warp.pos.z - this.map.worldOrigin[1];
-                batch.addVertices(...makeCube(
-                    gl, x, y, z, 10, id, [[0xFF, 0x00, 0x00, 0xC0]]));
+                const z = warp.pos.z - (this.map.worldZ*MAP_CELL_SIZE);
+                const r = (warp.xRot / 32768) * Math.PI;
+                const pos = [x,y,z];
+                const rot = [0,r,0];
+                const scale = [10,10,10];
+                batch.addFunction(
+                    (new Arrow(gx,pos,rot,scale))
+                    .setColor(0x00,0x80,0xFF,0xC0)
+                    .batch);
                 console.log("add warp", hex(idx), x, y, z, "orig", warp.pos);
             }
             //batch.addVertices(...makeCube( //map origin
