@@ -3,6 +3,7 @@ import RenderBatch from "../../gl/gx/RenderBatch.js";
 import Box from "../../gl/Model/Box.js";
 import Sphere from "../../gl/Model/Sphere.js";
 import Cylinder from "../../gl/Model/Cylinder.js";
+import Arrow from "../../gl/Model/Arrow.js";
 import { E } from "../../../../lib/Element.js";
 import { hex } from "../../../../Util.js";
 
@@ -304,7 +305,7 @@ export class TrigPln extends Trigger {
         const entry  = this.entry;
 
         //probably still wrong...
-        //scale looks about right?
+        //scale looks about right? but some are rotated wrong.
         const x  = this.entry.position.x;
         const y  = this.entry.position.y;
         const z  = this.entry.position.z;
@@ -316,6 +317,10 @@ export class TrigPln extends Trigger {
             [ 0.5,  0.5,  0.1],
         )).setScale(s,s,1).setRot(0,rx,ry).setPos(x,y,z).setId(id).setColors(
             [0x40, 0xFF, 0x40, 0x80]).batch);
+        batch.addFunction(
+            (new Arrow(this.gx, [x,y,z], [0,rx,ry], [s/10,s/10,s/10]))
+            .setColor(0x40, 0xC0, 0x40, 0x80)
+            .batch);
         return batch;
     }
 }
