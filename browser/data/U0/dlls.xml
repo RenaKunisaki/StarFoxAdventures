@@ -29930,6 +29930,18 @@ seemingly only used to track magic plants' growth</description>
         <return type="int"/>
       </function>
     </functions>
+    <objparams size="0x24">
+      <field offset="0x18" type="u8" name="id">
+        <description>Used to select a particular camera</description>
+      </field>
+      <field offset="0x1a" type="u8" name="fov" />
+      <field offset="0x1b" type="u8" name="flags">
+        <description>1, 2, 4 = use rotX, rotY, rotZ</description>
+      </field>
+      <field offset="0x1c" type="short" name="rotX" />
+      <field offset="0x1e" type="short" name="rotY" />
+      <field offset="0x20" type="short" name="rotZ" />
+    </objparams>
   </dll>
   <dll address="0x803232F8" dolOffs="0x3202F8" id="0x025B" interface="object" name="MoonSeedPlantingSpot" unk08="0x00000000" unk0E="0x0000">
     <description/>
