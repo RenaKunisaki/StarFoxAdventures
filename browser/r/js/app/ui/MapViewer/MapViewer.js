@@ -283,6 +283,7 @@ export default class MapViewer {
         let x = this.map.originX * MAP_CELL_SIZE;
         let y = 0;
         let z = this.map.originZ * MAP_CELL_SIZE;
+        let radius = 1;
         if(this.curBlock && this.curBlock.header) { //XXX use origin block if any
             y = this.curBlock.header.yOffset;
         }
@@ -294,6 +295,7 @@ export default class MapViewer {
                     x = entry.position.x;
                     y = entry.position.y;
                     z = entry.position.z;
+                    radius = 20;
                     break;
                 }
             }
@@ -302,7 +304,7 @@ export default class MapViewer {
         if(isNaN(x) || x == null) x = 0;
         if(isNaN(y) || y == null) y = 0;
         if(isNaN(z) || z == null) z = 0;
-        this._eventHandler.moveToPoint(x, y, z, 1, 0);
+        this._eventHandler.moveToPoint(x, y, z, radius, 0);
     }
 
     async _draw(isPicker) {
