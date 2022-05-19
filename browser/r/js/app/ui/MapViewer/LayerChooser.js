@@ -210,8 +210,13 @@ export default class LayerChooser {
             }
         }
         for(let i=1; i<NUM_MAP_ACTS; i++) {
-            this.layers[`act${i}`].eLabel.innerText =
+            const layer = this.layers[`act${i}`];
+            layer.eLabel.innerText =
                 `${i.toString().padStart(2)} (${actCounts[i].toString().padStart(4)})`;
+            if(actCounts[i]) {
+                layer.element.classList.remove('empty');
+            }
+            else layer.element.classList.add('empty');
         }
         //missing space on purpose here for alignment.
         this.eAllActsLabel.innerText = `All(${objs.length.toString().padStart(4)})`;

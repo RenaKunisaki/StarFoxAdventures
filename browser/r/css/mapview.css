@@ -106,7 +106,7 @@
     /* don't overlap Ungrouped */
     margin-left: 50%;
 }
-.tabMapView .sidebar .objgroup-list .empty {
+.tabMapView .sidebar .empty {
     /* display: none; */
     opacity: 0.5;
     color: #888;
