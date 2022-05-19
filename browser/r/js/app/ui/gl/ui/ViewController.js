@@ -169,7 +169,8 @@ export default class ViewController {
         this.btnFrontFaceCCW.checked   = false;
         this.btnRotateCam.checked      = true;
         this.btnRotateOrg.checked      = false;
-        this._onChange(null);
+        if(this.context._onResetCamera) this.context._onResetCamera();
+        else this._onChange(null);
     }
 
     _onChange(event) {

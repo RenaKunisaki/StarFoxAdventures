@@ -19,6 +19,7 @@ export default class Context {
         this.clearColor = [0.0, 0.5, 0.5, 1.0];
         this.clearDepth = 1.0; //game uses lower = nearer
         this.drawFunc   = drawFunc; //callback to draw the scene
+        this.camResetFunc = null; //callback when camera is reset
         //XXX add getters/setters for these
         this._gl_extensions = {};
         this.enableTextures = true;
@@ -269,6 +270,14 @@ export default class Context {
             }
         };
         window.requestAnimationFrame(lol);
+    }
+
+    _onResetCamera() {
+        //called by ViewController after camera is reset
+        if(this.camResetFunc) {
+            if(this.camResetFunc()) this.redraw();
+        }
+        else this.redraw();
     }
 
     _onResize(event) {

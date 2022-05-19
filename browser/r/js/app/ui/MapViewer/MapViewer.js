@@ -107,6 +107,10 @@ export default class MapViewer {
         this._blockRenderer  = new BlockRenderer(this, this.gx);
         this._objectRenderer = new ObjectRenderer(this);
         this.context.canvas.focus();
+        this.context.camResetFunc = () => {
+            this.resetCamera();
+            return true; //redraw
+        };
         this._reset();
     }
 
