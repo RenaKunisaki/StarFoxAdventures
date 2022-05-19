@@ -43,15 +43,6 @@ void _camGetStickInput(s8 *outX, s8 *outY) {
 }
 
 void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
-    if(cameraMtxVar57) {
-        debugPrintf("cam %f %f %f %f\n", cameraMtxVar57->unk90,
-            cameraMtxVar57->unk94, cameraMtxVar57->unk98, cameraMtxVar57->unk9C);
-        debugPrintf("cam %f %f %f %f\n", cameraMtxVar57->unkA0,
-            cameraMtxVar57->unkA4, cameraMtxVar57->unkA8, cameraMtxVar57->unkAC);
-        debugPrintf("cam %f %f %f %f\n", cameraMtxVar57->unkB0,
-            cameraMtxVar57->unkB4, cameraMtxVar57->unkB8, cameraMtxVar57->yPosBC);
-        //cameraMtxVar57->targetHeight = stickY;
-    }
     if(ABS(stickX) < 1 && ABS(stickY) < 1) return;
     //get the distance from camera to target
     float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
@@ -64,7 +55,7 @@ void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
     s16 ry = pCamera->pos.rotation.y;
     rx += stickX * 16 * framesThisStep;
     ry += stickY * 16 * framesThisStep;
-    dy += (float)stickY / 32.0f * framesThisStep;
+    dy += (float)stickY / 32 * framesThisStep;
 
     float cosx, cosy, sinx, siny;
     sinx = sinf(pi * (rx - 0x4000) / 32768.0);
