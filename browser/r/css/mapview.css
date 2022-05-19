@@ -138,3 +138,7 @@
     display: inline-block;
     width: 6em;
 }
+
+.tabMapView .help div {
+    padding: 0.5em;
+}

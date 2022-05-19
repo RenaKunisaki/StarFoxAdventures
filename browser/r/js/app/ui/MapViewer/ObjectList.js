@@ -15,7 +15,7 @@ export default class ObjectList {
         this.table = this._makeTable();
         this.element = E.div('map-object-list',
             E.details(
-                E.summary(null, "Object List"),
+                E.summary(null, "Objects"),
                 this.table.element,
             ),
         );

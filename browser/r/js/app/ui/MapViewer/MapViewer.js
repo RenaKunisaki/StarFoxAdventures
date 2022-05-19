@@ -11,6 +11,7 @@ import Stats from "./Stats.js";
 import LayerChooser from "./LayerChooser.js";
 import InfoWidget from "./InfoWidget.js";
 import ObjectList from "./ObjectList.js";
+import HelpBox from "./HelpBox.js";
 import RenderBatch from "../gl/gx/RenderBatch.js";
 import EventHandler from "./EventHandler.js";
 import ObjectRenderer from "./ObjectRenderer.js";
@@ -36,6 +37,7 @@ export default class MapViewer {
         this.layerChooser  = new LayerChooser(this);
         this.infoWidget    = new InfoWidget(this);
         this.objectList    = new ObjectList(this);
+        this.helpBox       = new HelpBox(this);
         this.eLeftSidebar  = E.div('sidebar sidebar-left');
         this.eRightSidebar = E.div('sidebar sidebar-right');
         this._eventHandler = new EventHandler(this);
@@ -102,6 +104,7 @@ export default class MapViewer {
         this.eRightSidebar.append(
             this.grid.element,
             this.objectList.element,
+            this.helpBox.element,
         )
 
         this._blockRenderer  = new BlockRenderer(this, this.gx);
