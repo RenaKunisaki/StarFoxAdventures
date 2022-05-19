@@ -105,7 +105,7 @@ export default class MapViewer {
             this.grid.element,
             this.objectList.element,
             this.helpBox.element,
-        )
+        );
 
         this._blockRenderer  = new BlockRenderer(this, this.gx);
         this._objectRenderer = new ObjectRenderer(this);
