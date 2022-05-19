@@ -22,6 +22,7 @@ GLOBALFN void cameraCheckEnterFirstPerson(void *param1, void *param2); //XXX sig
 GLOBALFN void cameraGetFocusObjDistance(float offsY, Camera *this,
     float *outX, float *outY, float *outZ, float *outXZ, //outXZ can be null
     BOOL bUseCurPos);
+GLOBALFN void CameraModeNormal_FollowPlayerVertically(Camera *this, ObjInstance *that);
 GLOBALFN void camera_overridePos(float x, float y, float z);
 GLOBALFN void cameraUpdate(int frames);
 GLOBALFN void cameraUpdateViewMtx(Camera *camera);

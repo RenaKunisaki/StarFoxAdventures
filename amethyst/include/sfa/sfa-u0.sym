@@ -137,6 +137,7 @@ cMenuState = 0x803dd7d4;
 cameraGetFocusObjDistance = 0x80102914;
 cameraMtxVar57 = 0x803dd530;
 cameraMode = 0x803dd510;
+CameraModeNormal_FollowPlayerVertically = 0x801049b0;
 cMenuEnabled = 0x803dd793;
 cMenuFadeCounter = 0x803dd798;
 colorFilterColor = 0x803db630;

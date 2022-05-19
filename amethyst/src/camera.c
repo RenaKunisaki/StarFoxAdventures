@@ -43,6 +43,16 @@ void _camGetStickInput(s8 *outX, s8 *outY) {
 }
 
 void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
+    if(cameraMtxVar57) {
+        debugPrintf("cam %f %f %f %f\n", cameraMtxVar57->unk90,
+            cameraMtxVar57->unk94, cameraMtxVar57->unk98, cameraMtxVar57->unk9C);
+        debugPrintf("cam %f %f %f %f\n", cameraMtxVar57->unkA0,
+            cameraMtxVar57->unkA4, cameraMtxVar57->unkA8, cameraMtxVar57->unkAC);
+        debugPrintf("cam %f %f %f %f\n", cameraMtxVar57->unkB0,
+            cameraMtxVar57->unkB4, cameraMtxVar57->unkB8, cameraMtxVar57->yPosBC);
+        //cameraMtxVar57->targetHeight = stickY;
+    }
+    if(ABS(stickX) < 1 && ABS(stickY) < 1) return;
     //get the distance from camera to target
     float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
     float dx, dy, dz, dxz;
@@ -50,27 +60,21 @@ void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
     //we don't need dx and dz here but we can't pass NULL for them.
 
     //calculate the angle
-    //XXX this doesn't fully work for height.
-    //- it vibrates when moving vertically
-    //- it zooms into the player's head instead of maintaining distance
-    //- it keeps the camera at a set height causing it to dip underground
-    //there's probably a "height above ground" variable we need to find.
-    //if we leave the Y position unchanged it will zoom right into the head...
-    dy = dy - (height - pCamera->pos.pos.y);
     s16 rx = pCamera->pos.rotation.x;
     s16 ry = pCamera->pos.rotation.y;
     rx += stickX * 16 * framesThisStep;
     ry += stickY * 16 * framesThisStep;
+    dy += (float)stickY / 32.0f * framesThisStep;
 
-    float mx, my, mz;
-    mz = sinf(pi * (rx - 0x4000) / 32768.0);
-    mx = cosf(pi * (rx - 0x4000) / 32768.0);
-    my = sinf(pi *  ry / 32768.0);
-    dy = cosf(pi *  ry / 32768.0) * dxz;
+    float cosx, cosy, sinx, siny;
+    sinx = sinf(pi * (rx - 0x4000) / 32768.0);
+    cosx = cosf(pi * (rx - 0x4000) / 32768.0);
+    siny = sinf(pi *  ry / 32768.0);
+    cosy = cosf(pi *  ry / 32768.0) * dxz;
 
-    pCamera->pos.pos.x = pCamera->focus->pos.pos.x + dy * mx;
-    pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + dy * my;
-    pCamera->pos.pos.z = pCamera->focus->pos.pos.z + dy * mz;
+    pCamera->pos.pos.x = pCamera->focus->pos.pos.x + cosy * cosx;
+    pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + dy;
+    pCamera->pos.pos.z = pCamera->focus->pos.pos.z + cosy * sinx;
     _lookAtTarget();
 }
 
