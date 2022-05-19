@@ -330,7 +330,7 @@ static void adjustHex32(u32 *val, int adj) {
 static void doAdjust(Menu *self, int amount) {
     switch(self->selected) {
         case SPAWN_MENU_ITEM_OBJECT:
-            adjustHex16(&spawnObjDef.def.objType, amount);
+            adjustHex16((u16*)&spawnObjDef.def.objType, amount);
             break;
 
         case SPAWN_MENU_ITEM_NUM_PARAMS:
@@ -352,11 +352,11 @@ static void doAdjust(Menu *self, int amount) {
             break;
 
         case SPAWN_MENU_ITEM_BOUNDS:
-            adjustHex8(&spawnObjDef.def.bound, amount);
+            adjustHex8((u8*)&spawnObjDef.def.bound, amount);
             break;
 
         case SPAWN_MENU_ITEM_UNK7:
-            adjustHex8(&spawnObjDef.def.unk7, amount);
+            adjustHex8((u8*)&spawnObjDef.def.unk7, amount);
             break;
 
         case SPAWN_MENU_ITEM_OBJID:
@@ -364,23 +364,23 @@ static void doAdjust(Menu *self, int amount) {
             break;
 
         case SPAWN_MENU_ITEM_MAPID:
-            adjustHex8(&spawnMapId, amount);
+            adjustHex8((u8*)&spawnMapId, amount);
             break;
 
         case SPAWN_MENU_ITEM_OBJNO:
-            adjustHex16(&spawnObjNo, amount);
+            adjustHex16((u16*)&spawnObjNo, amount);
             break;
 
         case SPAWN_MENU_ITEM_XPOS:
-            adjustHex32(&spawnCoords[0], amount);
+            adjustHex32((u32*)&spawnCoords[0], amount);
             break;
 
         case SPAWN_MENU_ITEM_YPOS:
-            adjustHex32(&spawnCoords[1], amount);
+            adjustHex32((u32*)&spawnCoords[1], amount);
             break;
 
         case SPAWN_MENU_ITEM_ZPOS:
-            adjustHex32(&spawnCoords[2], amount);
+            adjustHex32((u32*)&spawnCoords[2], amount);
             break;
 
         default: //params
