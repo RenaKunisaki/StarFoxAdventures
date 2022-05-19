@@ -427,6 +427,7 @@ void spawnMenu_run(Menu *self) {
             spawnCoords[0] = (int)pPlayer->pos.pos.x;
             spawnCoords[1] = (int)pPlayer->pos.pos.y;
             spawnCoords[2] = (int)pPlayer->pos.pos.z;
+            spawnMapId = curMapId;
         }
         else audioPlaySound(NULL, MENU_FAIL_SOUND);
     }
