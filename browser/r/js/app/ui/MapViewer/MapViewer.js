@@ -293,7 +293,7 @@ export default class MapViewer {
             for(let entry of this.map.romList.entries) {
                 if(entry.defNo == 0xD) { //setuppoint
                     x = entry.position.x;
-                    y = entry.position.y;
+                    y = entry.position.y + 100;
                     z = entry.position.z;
                     radius = 20;
                     break;
