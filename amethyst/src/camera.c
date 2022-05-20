@@ -59,7 +59,6 @@ void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
         void *pState = pPlayer->state;
         float aimX = (*(float*)(pState + 0x7B8));
         float aimY = (*(float*)(pState + 0x7BC));
-        debugPrintf("aim %f %f\n", aimX, aimY);
         aimX += stickX / 256.0;
         aimY += stickY / 256.0;
         if(aimX < -pi) aimX += (2 * pi);
@@ -373,10 +372,9 @@ int padGetStickXHook(int pad) {
     if(joypadDisable || isDvdDriveBusy) return 0;
     int result = controllerStates[pad + (whichControllerFrame * 4)].stickX;
     u16 buttons = controllerStates[pad + (whichControllerFrame * 4)].button;
-    //XXX mode 0x52 is both holding L button and aiming with staff,
-    //and pushing blocks.
-    //find a better way to distinguish the two than checking for L button.
 
+    //mode 0x52 is both holding L button and aiming with staff,
+    //and pushing blocks.
     void *pState = pPlayer ? pPlayer->state : NULL;
     u16 stateNo = pState ? *(u16*)(pState + 0x274) : 0;
     //don't invert controls when pushing a block

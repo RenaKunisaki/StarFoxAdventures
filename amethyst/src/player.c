@@ -48,9 +48,11 @@ void playerMainLoopHook() {
     if(playerState) {
         u16 stateNo = *(u16*)(playerState + 0x274);
         if(stateNo == 0x2C) { //staff aiming
-            float aimY = *(float*)(playerState + 0x7BC);
-            if(aimY < -2.1) aimY = -2.1;
-            if(aimY >  2.1) aimY =  2.1;
+            float aimX = (*(float*)(playerState + 0x7B8));
+            float aimY = (*(float*)(playerState + 0x7BC));
+            //debugPrintf("aim %f %f\n", aimX, aimY);
+            if(aimY < -1.85) aimY = -1.85;
+            if(aimY >  1.85) aimY =  1.85;
             *(float*)(playerState + 0x7BC) = aimY;
         }
     }
