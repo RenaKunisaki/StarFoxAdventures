@@ -104,11 +104,11 @@ void raceTimerUpdate() {
         vec3f vel;
         if(pPlayer) vel = pPlayer->vel;
         vec3f zero = {0, 0, 0};
-        float vxz = (vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 8) + 70;
+        float vxz = (vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 12) + 70;
         //average to avoid big jumps when hitting walls
         float vOld = READFLOAT(0x803e1784);
         WRITEFLOAT(0x803e1784, MIN(130.0, (vxz + vOld) / 2.0));
-        debugPrintf("fov = %f", vxz);
+        //debugPrintf("fov = %f", vxz);
     }
     else if(disappearTimer > 0) {
         disappearTimer -= timeDelta;
