@@ -272,7 +272,8 @@ static inline void _initPauseMenuHacks() {
 }
 
 static inline void _initCameraHacks() {
-    hookBranch(0x8010328c,        cameraUpdateHook,         1);
+    //hookBranch(0x8010328c,        cameraUpdateHook,         1);
+    hookBranch(0x801032b8,        cameraUpdateHook,         1);
     hookBranch((u32)padGetCX,     padGetCxHook,             0);
     hookBranch((u32)padGetCY,     padGetCyHook,             0);
     hookBranch((u32)padGetStickX, padGetStickXHook,         0);
@@ -405,10 +406,10 @@ void _start(void) {
     WRITE32(0x8022fc50, 0x38800004);
 
     //let it rain in Cape Claw sometimes
-    //XXX add some triggers to disable it when entering areas
-    //that have a roof.
-    //also, ensure the rain isn't disabled when we enter. (or don't?
+    //XXX ensure the rain isn't disabled when we enter. (or don't?
     //that just means it'll be foggy but not rainy sometimes.)
+    //also this is iffy because the rain will appear/disappear as we
+    //walk between CC and the link map.
     WRITE16(0x803235F0, 0x01A8);
     WRITE16(0x80323600, 0x008A);
     WRITE16(0x80323580, 0x01B8);

@@ -43,30 +43,65 @@ void _camGetStickInput(s8 *outX, s8 *outY) {
 }
 
 void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
+    //XXX this doesn't work for some modes...
+    /*debugPrintf("Cam zoom %f focus %f %f %f rot %d %d\n",
+        pCamera->zoomTimer,
+        pCamera->focus->pos.pos.x,
+        pCamera->focus->pos.pos.y,
+        pCamera->focus->pos.pos.z,
+        pCamera->pos.rotation.x, pCamera->pos.rotation.y);*/
+
     if(ABS(stickX) < 1 && ABS(stickY) < 1) return;
-    //get the distance from camera to target
-    float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
-    float dx, dy, dz, dxz;
-    cameraGetFocusObjDistance(height, pCamera, &dx, &dy, &dz, &dxz, true);
-    //we don't need dx and dz here but we can't pass NULL for them.
 
-    //calculate the angle
-    s16 rx = pCamera->pos.rotation.x;
-    s16 ry = pCamera->pos.rotation.y;
-    rx += stickX * 16 * framesThisStep;
-    ry += stickY * 16 * framesThisStep;
-    dy += (float)stickY / 32 * framesThisStep;
+    if(cameraMode == 0x52) {
+        //in "force behind" mode, update aim vector so camera isn't
+        //forced behind at all times.
+        void *pState = pPlayer->state;
+        float aimX = (*(float*)(pState + 0x7B8));
+        float aimY = (*(float*)(pState + 0x7BC));
+        debugPrintf("aim %f %f\n", aimX, aimY);
+        aimX += stickX / 256.0;
+        aimY += stickY / 256.0;
+        if(aimX < -pi) aimX += (2 * pi);
+        if(aimX >  pi) aimX -= (2 * pi);
+        if(aimY < -pi) aimY += (2 * pi);
+        if(aimY >  pi) aimY -= (2 * pi);
+        (*(float*)(pState + 0x7B8)) = aimX;
+        (*(float*)(pState + 0x7BC)) = aimY;
+        //let the camera circle 360 degrees, not 180
+        WRITE_NOP(0x8010fda4);
+        WRITE_NOP(0x8010fdb8);
+    }
+    else {
+        //get the distance from camera to target
+        float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
+        float dx, dy, dz, dxz;
+        cameraGetFocusObjDistance(height, pCamera, &dx, &dy, &dz, &dxz, true);
+        //we don't need dx and dz here but we can't pass NULL for them.
 
-    float cosx, cosy, sinx, siny;
-    sinx = sinf(pi * (rx - 0x4000) / 32768.0);
-    cosx = cosf(pi * (rx - 0x4000) / 32768.0);
-    siny = sinf(pi *  ry / 32768.0);
-    cosy = cosf(pi *  ry / 32768.0) * dxz;
+        //calculate the angle
+        s16 rx = pCamera->pos.rotation.x;
+        s16 ry = pCamera->pos.rotation.y;
+        rx += stickX * 16.0 * framesThisStep;
+        ry += stickY * 16.0 * framesThisStep;
+        dy += (float)stickY * (1.0 / 32.0) * framesThisStep;
 
-    pCamera->pos.pos.x = pCamera->focus->pos.pos.x + cosy * cosx;
-    pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + dy;
-    pCamera->pos.pos.z = pCamera->focus->pos.pos.z + cosy * sinx;
-    _lookAtTarget();
+        float cosx, cosy, sinx, siny;
+        sinx = sinf(pi * (rx - 0x4000) / 32768.0);
+        cosx = cosf(pi * (rx - 0x4000) / 32768.0);
+        siny = sinf(pi *  ry / 32768.0);
+        cosy = cosf(pi *  ry / 32768.0) * dxz;
+
+        pCamera->pos.pos.x = pCamera->focus->pos.pos.x + cosy * cosx;
+        pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + dy;
+        pCamera->pos.pos.z = pCamera->focus->pos.pos.z + cosy * sinx;
+        _lookAtTarget();
+
+        //undo 360 patch
+        WRITE32(0x8010fda4, 0x7C000E70); //srawi r0,r0,0x1
+        WRITE32(0x8010fdb8, 0x7C000E70); //srawi r0,r0,0x1
+    }
+    iCacheFlush((void*)0x8010fda4, 0x8010fdbc-0x8010fda4);
 }
 
 void _camDoCStick() {
@@ -78,7 +113,18 @@ void _camDoCStick() {
         || debugCameraMode == CAM_MODE_FIRST_PERSON) {
             scale = 8;
         }
-        if(cameraFlags & CAM_FLAG_PLAYER_AXIS) {
+        if((cameraFlags & CAM_FLAG_PLAYER_AXIS) && (
+        (cameraMode == 0x42) || //normal
+        (cameraMode == 0x45) || //bike
+        (cameraMode == 0x49) || //combat
+        (cameraMode == 0x4B) || //climb
+        (cameraMode == 0x4C) || //cutscene
+        (cameraMode == 0x4D) || //speaking
+        (cameraMode == 0x50) || //crawling
+        (cameraMode == 0x52) || //aiming, holding L
+        (cameraMode == 0x53) || //riding CloudRunner in DR
+        (cameraMode == 0x56) || //Arwing
+        (cameraMode == 0x57))) { //title screen
             _camDoRotateAroundPlayer(stickX, stickY);
         }
         else {
@@ -246,9 +292,7 @@ void _doOrbit(u32 bHeld, u32 bPressed) {
 //replaces a call to the update method of the current camera DLL.
 void cameraUpdateHook() {
     //r12 is the address it was about to jump to, which depends on the mode.
-    GET_REGISTER(12, origFunc);
-
-    //debugPrintf("Cam mode 0x%02X\n", cameraMode);
+    //GET_REGISTER(12, origFunc);
 
     //do this in all modes so that we don't carry over stale button states
     //when changing modes
@@ -258,8 +302,9 @@ void cameraUpdateHook() {
     prevBtn4 = bHeld;
 
     if(debugCameraMode == CAM_MODE_NORMAL) {
-        origFunc(pCamera);
+        //origFunc(pCamera);
         _camDoCStick();
+        cameraUpdateViewMtx(pCamera);
         return;
     }
 

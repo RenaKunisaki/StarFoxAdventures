@@ -70,7 +70,7 @@ typedef struct PACKED Camera {
 	byte                unk140;               //0x140
 	byte                flags_0x141;          //0x141
 	byte                unk142;               //0x142
-	byte                unk143;               //0x143
+	byte                interpolation;        //0x143
 } Camera;
 CASSERT(sizeof(Camera) == 0x144, sizeof_Camera);
 
