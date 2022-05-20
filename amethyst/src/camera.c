@@ -122,8 +122,7 @@ void _camDoCStick() {
         (cameraMode == 0x50) || //crawling
         (cameraMode == 0x52) || //aiming, holding L
         (cameraMode == 0x53) || //riding CloudRunner in DR
-        (cameraMode == 0x56) || //Arwing
-        (cameraMode == 0x57))) { //title screen
+        (cameraMode == 0x56))) { //Arwing
             _camDoRotateAroundPlayer(stickX, stickY);
         }
         else {
