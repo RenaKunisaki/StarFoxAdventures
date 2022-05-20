@@ -53,54 +53,64 @@ void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
 
     if(ABS(stickX) < 1 && ABS(stickY) < 1) return;
 
-    if(cameraMode == 0x52) {
-        //in "force behind" mode, update aim vector so camera isn't
-        //forced behind at all times.
-        void *pState = pPlayer->state;
-        float aimX = (*(float*)(pState + 0x7B8));
-        float aimY = (*(float*)(pState + 0x7BC));
-        aimX += stickX / 256.0;
-        aimY += stickY / 256.0;
-        if(aimX < -pi) aimX += (2 * pi);
-        if(aimX >  pi) aimX -= (2 * pi);
-        if(aimY < -pi) aimY += (2 * pi);
-        if(aimY >  pi) aimY -= (2 * pi);
-        (*(float*)(pState + 0x7B8)) = aimX;
-        (*(float*)(pState + 0x7BC)) = aimY;
-        //let the camera circle 360 degrees, not 180
-        WRITE_NOP(0x8010fda4);
-        WRITE_NOP(0x8010fdb8);
+    void *pState = pPlayer->state;
+    switch(cameraMode) {
+        case 0x45: { //bike
+            void *params = *(void**)0x803dd540;
+            if(params) *(float*)(params+0x20) += stickX * 64;
+            WRITEFLOAT(0x803e1798, 3072 + (stickY * 256));
+            break;
+        }
+        case 0x52: { //force behind
+            //update aim vector so camera isn't
+            //forced behind at all times.
+            float aimX = (*(float*)(pState + 0x7B8));
+            float aimY = (*(float*)(pState + 0x7BC));
+            aimX += stickX / 256.0;
+            aimY += stickY / 256.0;
+            if(aimX < -pi) aimX += (2 * pi);
+            if(aimX >  pi) aimX -= (2 * pi);
+            if(aimY < -pi) aimY += (2 * pi);
+            if(aimY >  pi) aimY -= (2 * pi);
+            (*(float*)(pState + 0x7B8)) = aimX;
+            (*(float*)(pState + 0x7BC)) = aimY;
+            //let the camera circle 360 degrees, not 180
+            WRITE_NOP(0x8010fda4);
+            WRITE_NOP(0x8010fdb8);
+            iCacheFlush((void*)0x8010fda4, 0x8010fdbc-0x8010fda4);
+            break;
+        }
+        default: {
+            //get the distance from camera to target
+            float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
+            float dx, dy, dz, dxz;
+            cameraGetFocusObjDistance(height, pCamera, &dx, &dy, &dz, &dxz, true);
+            //we don't need dx and dz here but we can't pass NULL for them.
+
+            //calculate the angle
+            s16 rx = pCamera->pos.rotation.x;
+            s16 ry = pCamera->pos.rotation.y;
+            rx += stickX * 16.0 * framesThisStep;
+            ry += stickY * 16.0 * framesThisStep;
+            dy += (float)stickY * (1.0 / 32.0) * framesThisStep;
+
+            float cosx, cosy, sinx, siny;
+            sinx = sinf(pi * (rx - 0x4000) / 32768.0);
+            cosx = cosf(pi * (rx - 0x4000) / 32768.0);
+            siny = sinf(pi *  ry / 32768.0);
+            cosy = cosf(pi *  ry / 32768.0) * dxz;
+
+            pCamera->pos.pos.x = pCamera->focus->pos.pos.x + cosy * cosx;
+            pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + dy;
+            pCamera->pos.pos.z = pCamera->focus->pos.pos.z + cosy * sinx;
+            _lookAtTarget();
+
+            //undo 360 patch
+            WRITE32(0x8010fda4, 0x7C000E70); //srawi r0,r0,0x1
+            WRITE32(0x8010fdb8, 0x7C000E70); //srawi r0,r0,0x1
+            iCacheFlush((void*)0x8010fda4, 0x8010fdbc-0x8010fda4);
+        }
     }
-    else {
-        //get the distance from camera to target
-        float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
-        float dx, dy, dz, dxz;
-        cameraGetFocusObjDistance(height, pCamera, &dx, &dy, &dz, &dxz, true);
-        //we don't need dx and dz here but we can't pass NULL for them.
-
-        //calculate the angle
-        s16 rx = pCamera->pos.rotation.x;
-        s16 ry = pCamera->pos.rotation.y;
-        rx += stickX * 16.0 * framesThisStep;
-        ry += stickY * 16.0 * framesThisStep;
-        dy += (float)stickY * (1.0 / 32.0) * framesThisStep;
-
-        float cosx, cosy, sinx, siny;
-        sinx = sinf(pi * (rx - 0x4000) / 32768.0);
-        cosx = cosf(pi * (rx - 0x4000) / 32768.0);
-        siny = sinf(pi *  ry / 32768.0);
-        cosy = cosf(pi *  ry / 32768.0) * dxz;
-
-        pCamera->pos.pos.x = pCamera->focus->pos.pos.x + cosy * cosx;
-        pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + dy;
-        pCamera->pos.pos.z = pCamera->focus->pos.pos.z + cosy * sinx;
-        _lookAtTarget();
-
-        //undo 360 patch
-        WRITE32(0x8010fda4, 0x7C000E70); //srawi r0,r0,0x1
-        WRITE32(0x8010fdb8, 0x7C000E70); //srawi r0,r0,0x1
-    }
-    iCacheFlush((void*)0x8010fda4, 0x8010fdbc-0x8010fda4);
 }
 
 void _camDoCStick() {
