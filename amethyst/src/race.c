@@ -8,6 +8,7 @@
 #define TEXTBOX_ID 4
 #define TEXT_XPOS (SCREEN_WIDTH - 150)
 #define TEXT_YPOS (SCREEN_HEIGHT - 83)
+#define SPEED_SCALE 21.5 //this scale gives a top speed of 64km/h which is nice.
 static float disappearTimer = 0;
 static bool active = false;
 
@@ -40,8 +41,7 @@ static void drawTimer() {
     vec3f vel;
     if(pPlayer) vel = pPlayer->vel;
     vec3f zero = {0, 0, 0};
-    //this scale gives a top speed of 64km/h which is nice.
-    double vxz = vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 21.5;
+    float vxz = vec3f_xzDistance(&vel, &zero) * bikeMoveScale * SPEED_SCALE;
 
     sprintf(str, "\eF%02d:%02d:%02d\n%3d km/h",
         ((int)secs) / 60, // minutes
@@ -99,6 +99,16 @@ void raceTimerUpdate() {
         if(!timeStop) gameTimerValue += timeDelta;
         disappearTimer = 300.0; //frames, ie 5 seconds
         drawTimer();
+
+        //adjust FOV by speed; default is 85
+        vec3f vel;
+        if(pPlayer) vel = pPlayer->vel;
+        vec3f zero = {0, 0, 0};
+        float vxz = (vec3f_xzDistance(&vel, &zero) * bikeMoveScale * 8) + 70;
+        //average to avoid big jumps when hitting walls
+        float vOld = READFLOAT(0x803e1784);
+        WRITEFLOAT(0x803e1784, MIN(130.0, (vxz + vOld) / 2.0));
+        debugPrintf("fov = %f", vxz);
     }
     else if(disappearTimer > 0) {
         disappearTimer -= timeDelta;
