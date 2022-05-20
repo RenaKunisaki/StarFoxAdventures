@@ -1,7 +1,7 @@
 #include <sfa/sfa.h>
 
 #define MOD_VERSION_MAJOR 2
-#define MOD_VERSION_MINOR 3
+#define MOD_VERSION_MINOR 4
 #define MOD_VERSION_PATCH 0
 #define __STR(x) #x
 #define _STR(x) __STR(x)
