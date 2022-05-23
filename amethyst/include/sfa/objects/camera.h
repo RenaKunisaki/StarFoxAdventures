@@ -1,17 +1,27 @@
+typedef struct PACKED CameraPosition {
+    /*0x00*/ ObjPos xf;
+    /*0x18*/ vec3f prevPos;
+    /*0x24*/ vec3f vel;
+    /*0x30*/ ObjInstance *pMatrix;
+    /*0x34*/ s8 unk34;
+    /*0x35*/ s8 unk35;
+    /*0x36*/ s8 unk36;
+    /*0x37*/ s8 unk37;
+    /*0x38*/ float unk38;
+    /*0x3c*/ u32 unk3C;
+    /*0x40*/ float unk40;
+    /*0x44*/ vec3f prevPos44;
+    /*0x50*/ vec3s prevRot;
+    /*0x56*/ u16 unk56;
+    /*0x58*/ u32 unk58;
+    /*0x5c*/ u32 unk5C;
+} CameraPosition;
+CASSERT(sizeof(CameraPosition) == 0x60, sizeof_CameraPosition);
+extern CameraPosition cameraPositions[4];
+extern s8 camera_playerNo;
+
 typedef struct PACKED Camera {
-	ObjPos              pos;                  //0x00
-	vec3f               prevPos;              //0x18
-	vec3f               vel;                  //0x24
-	ObjInstance        *pMatrix;              //0x30
-    int                 unk34;                //0x34
-	float               unk38;                //0x38
-    int                 unk3C;                //0x3C
-	short              *unk40;                //0x40
-	vec3f               prevPos44;            //0x44
-	vec3s               prevRot;              //0x50
-    u16                 unk56;                //0x56
-    u32                 unk58;                //0x58
-    u32                 unk5C;                //0x5C
+	CameraPosition      pos;
     u32                 unk60;                //0x60
     u32                 unk64;                //0x64
     u32                 unk68;                //0x68

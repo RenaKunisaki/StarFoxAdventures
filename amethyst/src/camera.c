@@ -3,7 +3,7 @@
 u8 cameraFlags = 0; //CameraFlags
 s8 debugCameraMode = CAM_MODE_NORMAL; //CameraMode
 
-static void (*origFunc)(Camera *self);
+//static void (*origFunc)(Camera *self);
 
 //position to override camera for free/stay modes
 static float camOverrideX, camOverrideY, camOverrideZ, camOverrideDist = 300;
@@ -23,11 +23,11 @@ void _lookAtTarget() {
         cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0,
         pCamera, &targetPos.x, &targetPos.y,
         &targetPos.z, &targetXZ, false);
-    pCamera->pos.rotation.x = -0x8000 - atan2fi(targetPos.x, targetPos.z);
+    pCamera->pos.xf.rotation.x = -0x8000 - atan2fi(targetPos.x, targetPos.z);
 
     //tilt to point to player
     //(Y rotation value, even though it's local X-axis rotation...)
-    pCamera->pos.rotation.y = atan2fi(targetPos.y, targetXZ);
+    pCamera->pos.xf.rotation.y = atan2fi(targetPos.y, targetXZ);
 }
 
 void _camGetStickInput(s8 *outX, s8 *outY) {
@@ -40,6 +40,58 @@ void _camGetStickInput(s8 *outX, s8 *outY) {
 
     if(outX) *outX = stickX;
     if(outY) *outY = stickY;
+}
+
+void _camDoRotateAroundPlayerDefault(float stickX, float stickY) {
+    //get the distance from camera to target
+    float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
+    float dx, dy, dz, dxz;
+    ObjInstance *target = NULL;
+    if(!pCamera) return;
+    if(pCamera->overrideTarget) target = pCamera->overrideTarget;
+    else if(pCamera->target) target = pCamera->target;
+    else target = pCamera->focus;
+
+    //cameraGetFocusObjDistance(height, pCamera, &dx, &dy, &dz, &dxz, true);
+    //we don't need dx and dz here but we can't pass NULL for them.
+
+    dy = pCamera->pos.xf.pos.y - (target->pos.pos.y + height);
+    float *paramsCombat = *(float**)0x803dd568;
+    if(paramsCombat) {
+        dxz = paramsCombat[0];
+    }
+    else {
+        dx  = pCamera->pos.xf.pos.x -  target->pos.pos.x;
+        dz  = pCamera->pos.xf.pos.z -  target->pos.pos.z;
+        dxz = sqrtf((dx*dx)+(dz*dz));
+    }
+    debugPrintf("dy=%f dxz=%f\n", dy, dxz);
+
+    //calculate the angle
+    s16 rx = pCamera->pos.xf.rotation.x;
+    s16 ry = pCamera->pos.xf.rotation.y;
+    rx += stickX * 16.0 * framesThisStep;
+    ry += stickY * 16.0 * framesThisStep;
+    dy += (float)stickY * (1.0 / 32.0) * framesThisStep;
+
+    float cosx, cosy, sinx, siny;
+    sinx = sinf(pi * (rx - 0x4000) / 32768.0);
+    cosx = cosf(pi * (rx - 0x4000) / 32768.0);
+    siny = sinf(pi *  ry / 32768.0);
+    cosy = cosf(pi *  ry / 32768.0) * dxz;
+
+    pCamera->pos.xf.pos.x = target->pos.pos.x + cosy * cosx;
+    pCamera->pos.xf.pos.y = target->pos.pos.y + height + dy;
+    pCamera->pos.xf.pos.z = target->pos.pos.z + cosy * sinx;
+
+    /*pCamera->prevPos = pCamera->pos.pos;
+    pCamera->prevPos44 = pCamera->pos.pos;
+    pCamera->pos_0xa8 = pCamera->pos.pos;
+    pCamera->prevPos2 = pCamera->pos.pos;
+    pCamera->focusOverridePos = pCamera->pos.pos;
+    pCamera->firstPersonPos = pCamera->pos.pos;
+    pCamera->prevRot = pCamera->pos.rotation;
+    pCamera->firstPersonRot = pCamera->pos.rotation;*/
 }
 
 void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
@@ -61,6 +113,23 @@ void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
             WRITEFLOAT(0x803e1798, 3072 + (stickY * 256));
             break;
         }
+        case 0x49: { //combat
+            //this sort of works but the camera will just keep going up and up
+            //WRITEFLOAT(0x803e18e8, 20+(stickY*20));
+            float *params = *(float**)0x803dd568;
+            if(params) {
+                debugPrintf("params %08X %f %f %f %f\n", params,
+                    params[0], params[1], params[2], params[6]);
+                if((params[1] > -64 && stickY < 0)
+                || (params[1] <  64 && stickY > 0)) {
+                    params[1] = stickY * 10;
+                }
+                //params[6] = stickX;
+            }
+            //pCamera->rotFlags_0x13f = 0xFF;
+            _camDoRotateAroundPlayerDefault(stickX, 0);
+            break;
+        }
         case 0x52: { //force behind
             //update aim vector so camera isn't
             //forced behind at all times.
@@ -80,36 +149,13 @@ void _camDoRotateAroundPlayer(s8 stickX, s8 stickY) {
             iCacheFlush((void*)0x8010fda4, 0x8010fdbc-0x8010fda4);
             break;
         }
-        default: {
-            //get the distance from camera to target
-            float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
-            float dx, dy, dz, dxz;
-            cameraGetFocusObjDistance(height, pCamera, &dx, &dy, &dz, &dxz, true);
-            //we don't need dx and dz here but we can't pass NULL for them.
-
-            //calculate the angle
-            s16 rx = pCamera->pos.rotation.x;
-            s16 ry = pCamera->pos.rotation.y;
-            rx += stickX * 16.0 * framesThisStep;
-            ry += stickY * 16.0 * framesThisStep;
-            dy += (float)stickY * (1.0 / 32.0) * framesThisStep;
-
-            float cosx, cosy, sinx, siny;
-            sinx = sinf(pi * (rx - 0x4000) / 32768.0);
-            cosx = cosf(pi * (rx - 0x4000) / 32768.0);
-            siny = sinf(pi *  ry / 32768.0);
-            cosy = cosf(pi *  ry / 32768.0) * dxz;
-
-            pCamera->pos.pos.x = pCamera->focus->pos.pos.x + cosy * cosx;
-            pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + dy;
-            pCamera->pos.pos.z = pCamera->focus->pos.pos.z + cosy * sinx;
+        default:
+            _camDoRotateAroundPlayerDefault(stickX, stickY);
             _lookAtTarget();
-
             //undo 360 patch
             WRITE32(0x8010fda4, 0x7C000E70); //srawi r0,r0,0x1
             WRITE32(0x8010fdb8, 0x7C000E70); //srawi r0,r0,0x1
             iCacheFlush((void*)0x8010fda4, 0x8010fdbc-0x8010fda4);
-        }
     }
 }
 
@@ -136,17 +182,18 @@ void _camDoCStick() {
             _camDoRotateAroundPlayer(stickX, stickY);
         }
         else {
-            pCamera->pos.rotation.x += stickX * 128 * scale * timeDelta;
-            pCamera->pos.rotation.y += stickY *  16 * scale * timeDelta;
+            pCamera->pos.xf.rotation.x += stickX * 128 * scale * timeDelta;
+            pCamera->pos.xf.rotation.y += stickY *  16 * scale * timeDelta;
         }
     }
     camOverrideValid = 0;
 }
 
 void _drawDebugInfo() {
-    float px=pCamera->pos.pos.x, py=pCamera->pos.pos.y, pz=pCamera->pos.pos.z;
-    s16 rx=pCamera->pos.rotation.x, ry=pCamera->pos.rotation.y,
-        rz=pCamera->pos.rotation.z;
+    float px=pCamera->pos.xf.pos.x, py=pCamera->pos.xf.pos.y,
+        pz=pCamera->pos.xf.pos.z;
+    s16 rx=pCamera->pos.xf.rotation.x, ry=pCamera->pos.xf.rotation.y,
+        rz=pCamera->pos.xf.rotation.z;
     debugPrintfxy(24, 400, "X\t%6d\t%3d", (int)px, (int)(rx / (65535.0 / 360.0)));
     debugPrintfxy(24, 411, "Y\t%6d\t%3d", (int)py, (int)(ry / (65535.0 / 360.0)));
     debugPrintfxy(24, 422, "Z\t%6d\t%3d", (int)pz, (int)(rz / (65535.0 / 360.0)));
@@ -154,24 +201,24 @@ void _drawDebugInfo() {
 
 void _applyOverride() {
     if(camOverrideValid) {
-        pCamera->pos.pos.x = camOverrideX;
-        pCamera->pos.pos.y = camOverrideY;
-        pCamera->pos.pos.z = camOverrideZ;
+        pCamera->pos.xf.pos.x = camOverrideX;
+        pCamera->pos.xf.pos.y = camOverrideY;
+        pCamera->pos.xf.pos.z = camOverrideZ;
         if(debugCameraMode == CAM_MODE_FREE) {
-            pCamera->pos.rotation.x = camOverrideRX;
-            pCamera->pos.rotation.y = camOverrideRY;
-            pCamera->pos.rotation.z = camOverrideRZ;
+            pCamera->pos.xf.rotation.x = camOverrideRX;
+            pCamera->pos.xf.rotation.y = camOverrideRY;
+            pCamera->pos.xf.rotation.z = camOverrideRZ;
         }
     }
 }
 
 void _updateOverride() {
-    camOverrideX  = pCamera->pos.pos.x;
-    camOverrideY  = pCamera->pos.pos.y;
-    camOverrideZ  = pCamera->pos.pos.z;
-    camOverrideRX = pCamera->pos.rotation.x;
-    camOverrideRY = pCamera->pos.rotation.y;
-    camOverrideRZ = pCamera->pos.rotation.z;
+    camOverrideX  = pCamera->pos.xf.pos.x;
+    camOverrideY  = pCamera->pos.xf.pos.y;
+    camOverrideZ  = pCamera->pos.xf.pos.z;
+    camOverrideRX = pCamera->pos.xf.rotation.x;
+    camOverrideRY = pCamera->pos.xf.rotation.y;
+    camOverrideRZ = pCamera->pos.xf.rotation.z;
     camOverrideValid = 1;
 }
 
@@ -200,21 +247,21 @@ void _doStayOrFree(u32 bHeld, u32 bPressed) {
     if(tr < CAMERA_TRIGGER_DEADZONE) tr = 0;
 
     //apply rotation
-    pCamera->pos.rotation.x += srx * cx;
-    pCamera->pos.rotation.y += sry * cy;
+    pCamera->pos.xf.rotation.x += srx * cx;
+    pCamera->pos.xf.rotation.y += sry * cy;
 
     //apply Y translation (movement)
-    pCamera->pos.pos.y += spy * (tr - tl);
+    pCamera->pos.xf.pos.y += spy * (tr - tl);
 
     //calculate XZ movement vector
     float tx = spx * sx;
     float tz = spz * sy; //not sz, since it's analog stick input
     //X here is actually the rotation around the Y axis...
-    float sinR = sinf((float)pCamera->pos.rotation.x * S16_TO_RADIANS);
-    float cosR = cosf((float)pCamera->pos.rotation.x * S16_TO_RADIANS);
+    float sinR = sinf((float)pCamera->pos.xf.rotation.x * S16_TO_RADIANS);
+    float cosR = cosf((float)pCamera->pos.xf.rotation.x * S16_TO_RADIANS);
 
-    pCamera->pos.pos.x += (tx * cosR) - (tz * sinR);
-    pCamera->pos.pos.z += (tx * sinR) + (tz * cosR);
+    pCamera->pos.xf.pos.x += (tx * cosR) - (tz * sinR);
+    pCamera->pos.xf.pos.z += (tx * sinR) + (tz * cosR);
 }
 
 //update camera in Bird's Eye mode
@@ -224,18 +271,18 @@ void _doBird(u32 bHeld, u32 bPressed) {
 
     //follow the target
     if(pCamera->focus) {
-        pCamera->pos.pos.x = pCamera->focus->pos.pos.x;
-        pCamera->pos.pos.y = pCamera->focus->pos.pos.y + camOverrideDist;
-        pCamera->pos.pos.z = pCamera->focus->pos.pos.z;
+        pCamera->pos.xf.pos.x = pCamera->focus->pos.pos.x;
+        pCamera->pos.xf.pos.y = pCamera->focus->pos.pos.y + camOverrideDist;
+        pCamera->pos.xf.pos.z = pCamera->focus->pos.pos.z;
         if(getArwing()) {
-            pCamera->pos.rotation.x = -pCamera->focus->pos.rotation.x;
-            pCamera->pos.rotation.y = 0x4000;
+            pCamera->pos.xf.rotation.x = -pCamera->focus->pos.rotation.x;
+            pCamera->pos.xf.rotation.y = 0x4000;
         }
         else {
-            pCamera->pos.rotation.x = -0x8000 - pCamera->focus->pos.rotation.x;
-            pCamera->pos.rotation.y = 0x4000;
+            pCamera->pos.xf.rotation.x = -0x8000 - pCamera->focus->pos.rotation.x;
+            pCamera->pos.xf.rotation.y = 0x4000;
         }
-        if(camOverrideDist < 0) pCamera->pos.rotation.y = -pCamera->pos.rotation.y;
+        if(camOverrideDist < 0) pCamera->pos.xf.rotation.y = -pCamera->pos.xf.rotation.y;
     }
     _camDoCStick();
 
@@ -253,19 +300,19 @@ void _doBird(u32 bHeld, u32 bPressed) {
 void _doFirstPerson(u32 bHeld, u32 bPressed) {
     if(pCamera->focus) {
         float height = cameraMtxVar57 ? cameraMtxVar57->targetHeight : 0;
-        pCamera->pos.pos.x = pCamera->focus->pos.pos.x;
+        pCamera->pos.xf.pos.x = pCamera->focus->pos.pos.x;
         //fudge factor to be above character's head instead of inside it
-        pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + 8;
-        pCamera->pos.pos.z = pCamera->focus->pos.pos.z;
+        pCamera->pos.xf.pos.y = pCamera->focus->pos.pos.y + height + 8;
+        pCamera->pos.xf.pos.z = pCamera->focus->pos.pos.z;
         if(getArwing()) {
-            pCamera->pos.rotation.x = -pCamera->focus->pos.rotation.x;
-            pCamera->pos.rotation.y = pCamera->focus->pos.rotation.y;
-            pCamera->pos.rotation.z = pCamera->focus->pos.rotation.z;
+            pCamera->pos.xf.rotation.x = -pCamera->focus->pos.rotation.x;
+            pCamera->pos.xf.rotation.y = pCamera->focus->pos.rotation.y;
+            pCamera->pos.xf.rotation.z = pCamera->focus->pos.rotation.z;
         }
         else {
-            pCamera->pos.rotation.x = -0x8000 - pCamera->focus->pos.rotation.x;
-            pCamera->pos.rotation.y = -pCamera->focus->pos.rotation.y;
-            pCamera->pos.rotation.z = -pCamera->focus->pos.rotation.z;
+            pCamera->pos.xf.rotation.x = -0x8000 - pCamera->focus->pos.rotation.x;
+            pCamera->pos.xf.rotation.y = -pCamera->focus->pos.rotation.y;
+            pCamera->pos.xf.rotation.z = -pCamera->focus->pos.rotation.z;
         }
         //this works but doesn't undo when you exit
         //XXX how does it work when you do the actual first person view?
@@ -291,9 +338,9 @@ void _doOrbit(u32 bHeld, u32 bPressed) {
     float my = sinf(pi * -camOrbitAngY / 32768.0);
     float dy = cosf(pi * -camOrbitAngY / 32768.0) * camOrbitDist;
 
-    pCamera->pos.pos.x = pCamera->focus->pos.pos.x + dy * mx;
-    pCamera->pos.pos.y = pCamera->focus->pos.pos.y + height + camOrbitDist * my;
-    pCamera->pos.pos.z = pCamera->focus->pos.pos.z + dy * mz;
+    pCamera->pos.xf.pos.x = pCamera->focus->pos.pos.x + dy * mx;
+    pCamera->pos.xf.pos.y = pCamera->focus->pos.pos.y + height + camOrbitDist * my;
+    pCamera->pos.xf.pos.z = pCamera->focus->pos.pos.z + dy * mz;
     _lookAtTarget();
 }
 
@@ -309,10 +356,32 @@ void cameraUpdateHook() {
     u32 bPressed = bHeld & ~prevBtn4;
     prevBtn4 = bHeld;
 
-    if(debugCameraMode == CAM_MODE_NORMAL) {
+    CameraPosition *pos = &cameraPositions[camera_playerNo];
+    debugPrintf("Cam%d @ " DPRINT_FIXED "%f %f %f\n" DPRINT_NOFIXED,
+        camera_playerNo, pos->xf.pos.x, pos->xf.pos.y, pos->xf.pos.z);
+    char name[16];
+    getObjName(name, pos->pMatrix);
+    debugPrintf("30: %08X %s\n", pos->pMatrix, name);
+    debugPrintf("34: %08X 38:%f %f %f 56:%04X %08X %08X\n",
+        *(u32*)(&pos->unk34), pos->unk38, *(float*)(&pos->unk3C), pos->unk40,
+        *(u16*)(&pos->unk56), *(u32*)(&pos->unk58), *(u32*)(&pos->unk5C));
+
+    /*static const u16 offsets[] = {0x30, 0xA4, 0x11C, 0x124, 0x128, 0};
+    static const char *names[] = {
+        "unk30", "focus", "overd", "targt", "tPrev"};
+    for(int i=0; offsets[i]; i++) {
+        char name[16];
+        ObjInstance *obj = *(ObjInstance**)(((void*)pCamera) + offsets[i]);
+        getObjName(name, obj);
+        debugPrintf(DPRINT_FIXED "%s %08X %s\n" DPRINT_NOFIXED,
+            names[i], obj, name);
+    }*/
+
+    if(debugCameraMode == CAM_MODE_NORMAL || bHeld & PAD_BUTTON_A) {
         //origFunc(pCamera);
         _camDoCStick();
         cameraUpdateViewMtx(pCamera);
+        //updateViewMatrix();
         return;
     }
 
@@ -320,11 +389,6 @@ void cameraUpdateHook() {
 
     if(debugCameraMode == CAM_MODE_STAY || bHeld & PAD_BUTTON_Y) {
         _lookAtTarget();
-    }
-
-    if(bHeld & PAD_BUTTON_A) { //reset
-        origFunc(pCamera);
-        _camDoCStick();
     }
 
     switch(debugCameraMode) {
@@ -345,6 +409,7 @@ void cameraUpdateHook() {
 
     //update camera
     cameraUpdateViewMtx(pCamera);
+    //updateViewMatrix();
     _drawDebugInfo();
     _updateOverride();
 }

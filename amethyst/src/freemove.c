@@ -139,7 +139,7 @@ void doFreeMove() {
     vCam.y = obj->pos.pos.y;
     angleToVec2(obj->pos.rotation.x, &vCam.x, &vCam.z);
     vec3f_scale(FREE_MOVE_CAMERA_DISTANCE, &vCam, &vCam);
-    pCamera->pos.pos = vCam;
+    pCamera->pos.xf.pos = vCam;
 
     //force player state even if target object isn't player,
     //so that the player isn't running around while we're

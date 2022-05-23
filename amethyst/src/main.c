@@ -274,6 +274,7 @@ static inline void _initPauseMenuHacks() {
 static inline void _initCameraHacks() {
     //hookBranch(0x8010328c,        cameraUpdateHook,         1);
     hookBranch(0x801032b8,        cameraUpdateHook,         1);
+    //hookBranch(0x80101e98,        cameraUpdateHook,         1);
     hookBranch((u32)padGetCX,     padGetCxHook,             0);
     hookBranch((u32)padGetCY,     padGetCyHook,             0);
     hookBranch((u32)padGetStickX, padGetStickXHook,         0);

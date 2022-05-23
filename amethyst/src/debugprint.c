@@ -196,8 +196,8 @@ static void printCamera() {
     //Display camera coords
     if(pCamera) {
         debugPrintf("C:" DPRINT_FIXED "%6d %6d %6d M%02X",
-            (int)pCamera->pos.pos.x, (int)pCamera->pos.pos.y,
-            (int)pCamera->pos.pos.z, cameraMode);
+            (int)pCamera->pos.xf.pos.x, (int)pCamera->pos.xf.pos.y,
+            (int)pCamera->pos.xf.pos.z, cameraMode);
         int seq = READ32(0x803dd064);
         if(seq) {
             debugPrintf(DPRINT_NOFIXED " S:" DPRINT_FIXED "%02X", seq);
