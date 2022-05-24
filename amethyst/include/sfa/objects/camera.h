@@ -104,7 +104,7 @@ typedef struct PACKED CameraStruct57 {
     float yPosBC;       //0xbc
     s8    unkC0;        //0xc0
     s8    unkC1;        //0xc1
-    s8    unkC2;        //0xc2
+    s8    rotSpeed;     //0xc2
     s8    unkC3;        //0xc3
     s8    unkC4;        //0xc4
     s8    unkC5;        //0xc5
