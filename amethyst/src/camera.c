@@ -316,7 +316,7 @@ void _doBird(u32 bHeld, u32 bPressed) {
     if(tr < CAMERA_TRIGGER_DEADZONE) tr = 0;
     float scale = timeDelta * 0.01;
     camOverrideDist += (tr - tl) * ((bHeld & PAD_TRIGGER_Z) ? 2 : 1) * scale;
-    if(tl != tr) debugPrintf("Dist %f\n", camOverrideDist);
+    //if(tl != tr) debugPrintf("Dist %f\n", camOverrideDist);
 }
 
 //handle camera in First Person mode
@@ -379,7 +379,7 @@ void cameraUpdateHook() {
     u32 bPressed = bHeld & ~prevBtn4;
     prevBtn4 = bHeld;
 
-    CameraPosition *pos = &cameraPositions[camera_playerNo];
+    /*CameraPosition *pos = &cameraPositions[camera_playerNo];
     debugPrintf("Cam%d @ " DPRINT_FIXED "%f %f %f\n" DPRINT_NOFIXED,
         camera_playerNo, pos->xf.pos.x, pos->xf.pos.y, pos->xf.pos.z);
     char name[16];
@@ -387,7 +387,7 @@ void cameraUpdateHook() {
     debugPrintf("30: %08X %s\n", pos->pMatrix, name);
     debugPrintf("34: %08X 38:%f %f %f 56:%04X %08X %08X\n",
         *(u32*)(&pos->unk34), pos->unk38, *(float*)(&pos->unk3C), pos->unk40,
-        *(u16*)(&pos->unk56), *(u32*)(&pos->unk58), *(u32*)(&pos->unk5C));
+        *(u16*)(&pos->unk56), *(u32*)(&pos->unk58), *(u32*)(&pos->unk5C));*/
 
     /*static const u16 offsets[] = {0x30, 0xA4, 0x11C, 0x124, 0x128, 0};
     static const char *names[] = {
