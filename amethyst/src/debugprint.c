@@ -81,6 +81,28 @@ static void printObjName(const char *fmt, ObjInstance *obj) {
     debugPrintf(fmt, name);
 }
 
+static void printBaddieInfo(ObjInstance *target) {
+    char name[16];
+    void *state = (void*)target->state;
+    debugPrintf("  baddie state@" DPRINT_FIXED "%08X" DPRINT_NOFIXED "; ", state);
+
+    ObjInstance *theirTarget = *(ObjInstance**)(state+0x29C);
+    getObjName(name, theirTarget);
+    debugPrintf("Target: " DPRINT_FIXED "%08X" DPRINT_NOFIXED " %s\n"
+    "  state %02X %02X %02X %02X",
+        theirTarget, name,
+        *(u8*)(state+0x33A), *(u8*)(state+0x33B),
+        *(u8*)(state+0x33C), *(u8*)(state+0x33D));
+    debugPrintf("anim %04X\n  timer %f hit %f\n",
+        *(u16*)(state+0x338),
+        *(float*)(state+0x324),
+        *(float*)(state+0x2D8));
+    debugPrintf("  flags " DPRINT_FIXED "%08X %08X %08X" DPRINT_NOFIXED "\n",
+        *(u32*)(state+0x2DC),
+        *(u32*)(state+0x2E4),
+        *(u32*)(state+0x2F0));
+}
+
 static void printCoords() {
     //Display player coords
     //debugPrintf doesn't support eg '%+7.2f' so we'll just convert
@@ -269,6 +291,11 @@ static void printTarget() {
             pCamera->target->objDef->id,
             pCamera->target->defNo);
         printObjName("%s\n", pCamera->target);
+
+        switch(pCamera->target->catId) {
+            case ObjCatId_baddie: printBaddieInfo(pCamera->target); break;
+            default: break;
+        }
     }
 }
 
@@ -350,45 +377,49 @@ static void printPlayerState() {
     printPlayerObj("Enemy",       *(ObjInstance**)(pState + 0x2D0));
 }
 
+static u32 ticksToUsec(u64 ticks) {
+    return (u32)((float)ticksToSecs(ticks)  * 1000000.0);
+}
+
 static void printPerformance() {
     //wtf is this coordinate system
-    static const int x=400, startY=16, h=10;
+    static const int x=390, startY=16, h=10;
     int y = startY;
     char msg[256]; //debugPrintf doesn't support "%4.1f"
 
     debugPrintSetPos(x, y);
     debugPrintSetColor(0, 255, 0, 255);
-    sprintf(msg, "Logic %3d%% %4.1fms",
-        (int)(pctLogic  * 100.0), (float)ticksToSecs(tLogic)  * 1000.0);
+    sprintf(msg, "Logic %3d%%%6dus",
+        (int)(pctLogic  * 100.0), ticksToUsec(tLogic));
     debugPrintf(DPRINT_FIXED "%s", msg);
     y += h;
 
     debugPrintSetPos(x, y);
     debugPrintSetColor(255, 255, 0, 255);
-    sprintf(msg, "Rendr %3d%% %4.1fms",
-        (int)(pctRender * 100.0), (float)ticksToSecs(tRender) * 1000.0);
+    sprintf(msg, "Rendr %3d%%%6dus",
+        (int)(pctRender * 100.0), ticksToUsec(tRender));
     debugPrintf("%s", msg);
     y += h;
 
     debugPrintSetPos(x, y);
     debugPrintSetColor(0, 128, 255, 255);
-    sprintf(msg, "Audio %3d%% %4.1fms",
-        (int)(pctAudio  * 100.0), (float)ticksToSecs(tAudio)  * 1000.0);
+    sprintf(msg, "Audio %3d%%%6dus",
+        (int)(pctAudio  * 100.0), ticksToUsec(tAudio));
     debugPrintf("%s", msg);
     y += h;
 
     debugPrintSetPos(x, y);
     debugPrintSetColor(255, 0, 0, 255);
-    sprintf(msg, "Load  %3d%% %4.1fms",
-        (int)(pctLoad  * 100.0), (float)ticksToSecs(tLoad)  * 1000.0);
+    sprintf(msg, "Load  %3d%%%6dus",
+        (int)(pctLoad  * 100.0), ticksToUsec(tLoad));
     debugPrintf("%s", msg);
     y += h;
 
     debugPrintSetPos(x, y);
     debugPrintSetColor(255, 255, 255, 255);
-    sprintf(msg, "Idle  %3d%% %4.1fms",
+    sprintf(msg, "Idle  %3d%%%6dus\n",
         (int)((1.0-pctTotal) * 100.0),
-        ((1000.0/60.0) - ((float)ticksToSecs(tLogic+tRender+tAudio+tLoad) * 1000.0)));
+        (int)((1000000.0/60.0) - ticksToUsec(tLogic+tRender+tAudio+tLoad)));
     debugPrintf("%s" DPRINT_NOFIXED, msg);
 }
 
@@ -526,14 +557,14 @@ void mainLoopDebugPrint() {
 
     //do this first because it changes text position
     //and trying to restore it is a pain
-    if(debugTextFlags & DEBUGTEXT_FPS) printFPS();
+    if(debugTextFlags & DEBUGTEXT_PERFORMANCE)       printPerformance();
+    if(debugTextFlags & DEBUGTEXT_FPS)               printFPS();
 
     if(debugTextFlags & DEBUGTEXT_PLAYER_COORDS)     printCoords();
     if(debugTextFlags & DEBUGTEXT_CAMERA_COORDS)     printCamera();
     if(debugTextFlags & DEBUGTEXT_RESTART_POINT)     printRestartPoint();
     if(debugTextFlags & DEBUGTEXT_MEMORY_INFO)     { printObjCount(); printMemory(); }
     if(debugTextFlags & DEBUGTEXT_HEAP_STATE)        printHeapInfo();
-    if(debugTextFlags & DEBUGTEXT_PERFORMANCE)       printPerformance();
     if(debugTextFlags & DEBUGTEXT_INTERACT_OBJ_INFO) printTarget();
     if(debugTextFlags & DEBUGTEXT_RNG)               printRNG();
     if(debugTextFlags & DEBUGTEXT_PLAYER_STATE)      printPlayerState();
