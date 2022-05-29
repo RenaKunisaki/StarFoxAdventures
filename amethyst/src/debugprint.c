@@ -105,11 +105,12 @@ static void printBaddieInfo(ObjInstance *target) {
 
 static void printCoords() {
     //Display player coords
-    //debugPrintf doesn't support eg '%+7.2f' so we'll just convert
-    //to int to get rid of excess digits
+    //debugPrintf doesn't support eg '%+7.2f'
+    char buf[256];
     if(pPlayer) {
-        debugPrintf("P:" DPRINT_FIXED "%6d %6d %6d" DPRINT_NOFIXED,
-            (int)pPlayer->pos.pos.x, (int)pPlayer->pos.pos.y, (int)pPlayer->pos.pos.z);
+        sprintf(buf, "%+7.2f %+7.2f %+7.2f",
+            pPlayer->pos.pos.x, pPlayer->pos.pos.y, pPlayer->pos.pos.z);
+        debugPrintf("P:" DPRINT_FIXED "%s" DPRINT_NOFIXED, buf);
     }
 
     //Display map coords
@@ -152,8 +153,6 @@ static void printCoords() {
         if(ry < 0.0) ry += 360.0;
         if(rz < 0.0) rz += 360.0;
 
-        //debugPrintf doesn't support these precision modifiers but sprintf does
-        char buf[256];
         sprintf(buf, "V:" DPRINT_FIXED "%+7.3f %+7.3f R:%5.1f %5.1f %5.1f\n" DPRINT_NOFIXED,
             vel.z, vel.y, rx, ry, rz);
         debugPrintf("%s", buf);
@@ -216,10 +215,11 @@ static void printRestartPoint() {
 
 static void printCamera() {
     //Display camera coords
+    char buf[256];
     if(pCamera) {
-        debugPrintf("C:" DPRINT_FIXED "%6d %6d %6d M%02X",
-            (int)pCamera->pos.xf.pos.x, (int)pCamera->pos.xf.pos.y,
-            (int)pCamera->pos.xf.pos.z, cameraMode);
+        sprintf(buf, "%+7.2f %+7.2f %+7.2f",
+            pCamera->pos.xf.pos.x, pCamera->pos.xf.pos.y, pCamera->pos.xf.pos.z);
+        debugPrintf("C:" DPRINT_FIXED "%s M%02X", buf, cameraMode);
         int seq = READ32(0x803dd064);
         if(seq) {
             debugPrintf(DPRINT_NOFIXED " S:" DPRINT_FIXED "%02X", seq);
@@ -292,9 +292,10 @@ static void printTarget() {
             pCamera->target->defNo);
         char name[16];
         getObjName(name, pCamera->target);
-        debugPrintf("%s; d=%f (%f)\n", pCamera->target,
+        debugPrintf("%s; d=%f (%f, %f)\n", name,
             vec3f_distance(&pCamera->target->pos.pos, &pCamera->focus->pos.pos),
-            vec3f_xzDistance(&pCamera->target->pos.pos, &pCamera->focus->pos.pos));
+            vec3f_xzDistance(&pCamera->target->pos.pos, &pCamera->focus->pos.pos),
+            ABS(pCamera->target->pos.pos.y - pCamera->focus->pos.pos.y));
 
         switch(pCamera->target->catId) {
             case ObjCatId_baddie: printBaddieInfo(pCamera->target); break;
@@ -307,11 +308,10 @@ static void printPlayerObj(const char *name, ObjInstance *obj) {
     if(!(PTR_VALID(obj) && PTR_VALID(obj->file))) return;
     debugPrintf("%s " DPRINT_FIXED "%08X ", name, obj);
     printObjName("%s", obj);
-    debugPrintf(" %08X %d, %d, %d" DPRINT_NOFIXED "\n",
-        obj->objDef->id,
-        (int)obj->pos.pos.x,
-        (int)obj->pos.pos.y,
-        (int)obj->pos.pos.z);
+    char buf[256];
+    sprintf(buf, "%08X %+7.2f %+7.2f %+7.2f", obj->objDef->id,
+        obj->pos.pos.x, obj->pos.pos.y, obj->pos.pos.z);
+    debugPrintf(" %s" DPRINT_NOFIXED "\n", buf);
 }
 
 static void printPlayerState() {
