@@ -290,7 +290,11 @@ static void printTarget() {
             pCamera->target,
             pCamera->target->objDef->id,
             pCamera->target->defNo);
-        printObjName("%s\n", pCamera->target);
+        char name[16];
+        getObjName(name, pCamera->target);
+        debugPrintf("%s; d=%f (%f)\n", pCamera->target,
+            vec3f_distance(&pCamera->target->pos.pos, &pCamera->focus->pos.pos),
+            vec3f_xzDistance(&pCamera->target->pos.pos, &pCamera->focus->pos.pos));
 
         switch(pCamera->target->catId) {
             case ObjCatId_baddie: printBaddieInfo(pCamera->target); break;
