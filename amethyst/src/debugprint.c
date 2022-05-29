@@ -304,6 +304,27 @@ static void printTarget() {
     }
 }
 
+static void printHeldObj() {
+    //Display object that player is carrying
+    if(pCamera && pCamera->target) {
+        debugPrintf("Target: " DPRINT_FIXED "%08X %08X %04X " DPRINT_NOFIXED,
+            pCamera->target,
+            pCamera->target->objDef->id,
+            pCamera->target->defNo);
+        char name[16];
+        getObjName(name, pCamera->target);
+        debugPrintf("%s; d=%f (%f, %f)\n", name,
+            vec3f_distance(&pCamera->target->pos.pos, &pCamera->focus->pos.pos),
+            vec3f_xzDistance(&pCamera->target->pos.pos, &pCamera->focus->pos.pos),
+            ABS(pCamera->target->pos.pos.y - pCamera->focus->pos.pos.y));
+
+        switch(pCamera->target->catId) {
+            case ObjCatId_baddie: printBaddieInfo(pCamera->target); break;
+            default: break;
+        }
+    }
+}
+
 static void printPlayerObj(const char *name, ObjInstance *obj) {
     if(!(PTR_VALID(obj) && PTR_VALID(obj->file))) return;
     debugPrintf("%s " DPRINT_FIXED "%08X ", name, obj);
@@ -368,17 +389,30 @@ static void printPlayerState() {
             waterCurrentRelX, waterCurrentRelZ, curRelLen);
     }
 
-    printPlayerObj("Death obj",   *(ObjInstance**)(pState + 0x46C));
-    //printPlayerObj("Staff obj",   *(ObjInstance**)(pState + 0x4B8)); //just target?
-    printPlayerObj("Obj4C4",      *(ObjInstance**)(pState + 0x4C4));
-    printPlayerObj("Collect obj", *(ObjInstance**)(pState + 0x684));
-    printPlayerObj("Obj7B0",      *(ObjInstance**)(pState + 0x7B0));
-    printPlayerObj("Ride obj",    *(ObjInstance**)(pState + 0x7F0));
-    //XXX confirm 7F4 is an object
-    printPlayerObj("Obj7F4",      *(ObjInstance**)(pState + 0x7F4));
-    printPlayerObj("Hold obj",    *(ObjInstance**)(pState + 0x7F8));
-    printPlayerObj("Push obj",    *(ObjInstance**)(pState + 0x248));
-    printPlayerObj("Enemy",       *(ObjInstance**)(pState + 0x2D0));
+    static const struct {
+        const char *name;
+        u16 offset;
+    } objPtrs[] = {
+        {"Enemy obj",   0x2D0},
+        {"Death obj",   0x46C},
+        //{"Staff obj",   0x4B8}, //just target?
+        {"Obj4BC",      0x4BC},
+        {"Obj4C0",      0x4C0},
+        {"Obj4C4",      0x4C4},
+        {"Collect obj", 0x684},
+        {"Obj67C",      0x67C},
+        {"Obj700",      0x700},
+        {"Obj7B0",      0x7B0},
+        {"Ride obj",    0x7F0},
+        {"Obj7F4",      0x7F4},
+        {"Hold obj",    0x7F8},
+        {"Push obj",    0x7FC},
+        {NULL,          0}
+    };
+    for(int i=0; objPtrs[i].name; i++) {
+        printPlayerObj(objPtrs[i].name,
+            *(ObjInstance**)(pState + objPtrs[i].offset));
+    }
 }
 
 static u32 ticksToUsec(u64 ticks) {
