@@ -51,6 +51,7 @@
 }
 .tabMapView .map-object-list {
     top: 0.5em;
+    max-height: 90vh;
 }
 .tabMapView .map-grid td, .tabMapView .map-grid tr {
     background: none;

@@ -102,9 +102,9 @@ export default class MapViewer {
             this.stats.element,
         );
         this.eRightSidebar.append(
+            this.helpBox.element,
             this.grid.element,
             this.objectList.element,
-            this.helpBox.element,
         );
 
         this._blockRenderer  = new BlockRenderer(this, this.gx);
