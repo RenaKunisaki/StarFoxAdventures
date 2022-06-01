@@ -7210,19 +7210,6 @@ seemingly only used to track magic plants' growth</description>
     <objparams size="0x36">
       <field type="GameBit16" offset="0x18" name="bit_incOnDeath"></field>
       <field type="GameBit16" offset="0x1A" name="bit_clearOnDeath"></field>
-      <field type="byte" offset="0x27" name="weapon"></field>
-      <field type="u8" offset="0x28" name="hitbox">
-        <description>Sets the WhichParentHitbox flags of the object</description>
-      </field>
-      <field type="byte" offset="0x29"></field>
-      <field type="s8" offset="0x2A" name="rotation"></field>
-      <field type="undefined2" offset="0x2C" name="saveTime">
-        <description>time passed to gplayAddTime if not 0 and ID not -1</description>
-      </field>
-      <field type="byte" offset="0x2E"></field>
-      <field type="byte" offset="0x2F"></field>
-      <field type="byte" offset="0x32"></field>
-      <field type="undefined2" offset="0x34"></field>
       <field type="GameBit16" offset="0x1C" name="bit_cleared">
         <description>for BribeClaw, set when you pay</description>
       </field>
@@ -7236,10 +7223,25 @@ seemingly only used to track magic plants' growth</description>
       <field type="undefined" offset="0x24"></field>
       <field type="undefined" offset="0x25"></field>
       <field type="undefined" offset="0x26"></field>
+      <field type="byte" offset="0x27" name="weapon"></field>
+      <field type="u8" offset="0x28" name="hitbox">
+        <description>Sets the WhichParentHitbox flags of the object</description>
+      </field>
+      <field type="byte" offset="0x29"></field>
+      <field type="s8" offset="0x2A" name="rotation"></field>
       <field type="undefined" offset="0x2B"></field>
+      <field type="undefined2" offset="0x2C" name="saveTime">
+        <description>time passed to gplayAddTime if not 0 and ID not -1</description>
+      </field>
+      <field type="byte" offset="0x2E"></field>
+      <field type="byte" offset="0x2F"></field>
       <field type="undefined" offset="0x30"></field>
       <field type="undefined" offset="0x31"></field>
+      <field type="u8" offset="0x32" name="health">
+        <note>Some enemy types ignore this field</note>
+      </field>
       <field type="undefined" offset="0x33"></field>
+      <field type="undefined2" offset="0x34"></field>
     </objparams>
   </dll>
   <dll address="0x8031FE68" dolOffs="0x31CE68" id="0x00CA" interface="object" unk08="0x00000000" unk0E="0x0000">

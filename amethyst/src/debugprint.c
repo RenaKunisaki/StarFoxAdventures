@@ -84,16 +84,18 @@ static void printObjName(const char *fmt, ObjInstance *obj) {
 static void printBaddieInfo(ObjInstance *target) {
     char name[16];
     void *state = (void*)target->state;
-    debugPrintf("  baddie state@" DPRINT_FIXED "%08X" DPRINT_NOFIXED "; ", state);
+    debugPrintf("  baddie state@" DPRINT_FIXED "%08X" DPRINT_NOFIXED
+        "; HP: " DPRINT_FIXED "%3d" DPRINT_NOFIXED "; ", state,
+        *(s16*)(state+0x2B0));
 
     ObjInstance *theirTarget = *(ObjInstance**)(state+0x29C);
     getObjName(name, theirTarget);
     debugPrintf("Target: " DPRINT_FIXED "%08X" DPRINT_NOFIXED " %s\n"
-    "  state %02X %02X %02X %02X",
+    "  state " DPRINT_FIXED "%02X %02X %02X %02X" DPRINT_NOFIXED,
         theirTarget, name,
         *(u8*)(state+0x33A), *(u8*)(state+0x33B),
         *(u8*)(state+0x33C), *(u8*)(state+0x33D));
-    debugPrintf("anim %04X\n  timer %f hit %f\n",
+    debugPrintf(" anim %04X\n  timer %f hit %f\n",
         *(u16*)(state+0x338),
         *(float*)(state+0x324),
         *(float*)(state+0x2D8));
@@ -286,10 +288,11 @@ static void printHeapInfo() {
 static void printTarget() {
     //Display target that player is focused on
     if(pCamera && pCamera->target) {
-        debugPrintf("Target: " DPRINT_FIXED "%08X %08X %04X " DPRINT_NOFIXED,
+        debugPrintf("Target: " DPRINT_FIXED "%08X %08X %04X %04X " DPRINT_NOFIXED,
             pCamera->target,
             pCamera->target->objDef->id,
-            pCamera->target->defNo);
+            pCamera->target->defNo,
+            pCamera->target->animId);
         char name[16];
         getObjName(name, pCamera->target);
         debugPrintf("%s; d=%f (%f, %f)\n", name,
@@ -307,7 +310,7 @@ static void printTarget() {
 static void printHeldObj() {
     //Display object that player is carrying
     if(pCamera && pCamera->target) {
-        debugPrintf("Target: " DPRINT_FIXED "%08X %08X %04X " DPRINT_NOFIXED,
+        debugPrintf("Held: " DPRINT_FIXED "%08X %08X %04X " DPRINT_NOFIXED,
             pCamera->target,
             pCamera->target->objDef->id,
             pCamera->target->defNo);
@@ -395,7 +398,7 @@ static void printPlayerState() {
     } objPtrs[] = {
         {"Enemy obj",   0x2D0},
         {"Death obj",   0x46C},
-        //{"Staff obj",   0x4B8}, //just target?
+        //{"Staff obj",   0x4B8}, //just same as target?
         {"Obj4BC",      0x4BC},
         {"Obj4C0",      0x4C0},
         {"Obj4C4",      0x4C4},
