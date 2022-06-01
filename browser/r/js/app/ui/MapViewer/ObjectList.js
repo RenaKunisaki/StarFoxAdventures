@@ -30,6 +30,7 @@ export default class ObjectList {
                     //XXX make the entire row clickable?
                     td.addEventListener('click',
                         e => this.mapViewer.showObject(row.entry));
+                    td.classList.add('link');
                     return td;
                 },
             },
