@@ -26,7 +26,8 @@ void _start(void) {
     WRITE32(0x8007b7ec, 0x8081FFE0); //clear memory on alloc
     WRITE32(0x8007b7f0, 0x4BF87A60); //clear memory on alloc
     WRITE_BLR(0x800a72ec); //do not update environment
-    WRITE32(0x800a7758, 0x38000001); //disable sky
+    //WRITE32(0x800a7758, 0x38000001); //disable sky
+    WRITE_BLR(0x800d4434); //disable sky objects
 
     WRITE32(0x80084a44, 0x38600000); //objGetControlNo return 0
     WRITE_BLR(0x80084a48); //objGetControlNo return 0
@@ -46,6 +47,18 @@ void _start(void) {
 
     WRITE_BLR(0x8007cc94); //disable makeModelAnimation
     WRITE_BLR(0x8007cfa4); //disable modelSetupAnims
+
+    //disable command menu stuff
+    WRITE32(0x8016d128, 0x38600000);
+    WRITE_BLR(0x8016d12c);
+
+    //disable some object animation stuff
+    WRITE_NOP(0x80087e28);
+    WRITE_NOP(0x80087e40);
+    WRITE_NOP(0x80087e5c);
+
+    //disable object interact icon rendering
+    WRITE_NOP(0x80155360);
 
     initBsodHooks();
     initCompressionHooks();

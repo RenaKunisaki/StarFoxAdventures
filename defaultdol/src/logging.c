@@ -41,7 +41,7 @@ void _assetLoadHook(AssetDef *def) {
             else id = objindex_bin[id];
             ObjData *data = objLoadData(id);
             if(data) strncpy(objName, data->name, OBJECT_NAME_LEN);
-            OSReport("  -> \"%s\"\n", objName);
+            OSReport("  -> %08X \"%s\"\n", data, objName);
 
             //XXX if ID is invalid, change it.
             break;
