@@ -1,30 +1,7 @@
 {
-	"folders": [
-		{
-			"path": "amethyst"
-		},
-		{
-			"path": "data"
-		},
-		{
-			"path": "wiki/StarFoxAdventures.wiki"
-		},
-		{
-			"path": "browser"
-		},
-		{
-			"path": "speedrun"
-		}
-	],
-	"settings": {
-		"python.pythonPath": "/usr/bin/python3",
-		"spellright.language": [
-			"en_CA"
-		],
-		"spellright.documentTypes": [
-			"markdown",
-			"latex",
-			"plaintext"
-		]
-	}
+    "folders": [
+        {
+            "path": "."
+        }
+    ]
 }

@@ -27,7 +27,6 @@ export default class ObjectList {
             {displayName:"ID",   name:'id',   type:'hex', length:8},
             {displayName:"Name", name:'name', type:'string',
                 makeElem: (val, td, row) => {
-                    //XXX make the entire row clickable?
                     td.addEventListener('click',
                         e => this.mapViewer.showObject(row.entry));
                     td.classList.add('link');
