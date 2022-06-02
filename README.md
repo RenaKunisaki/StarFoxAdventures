@@ -3,6 +3,9 @@ Reverse engineering notes for SFA.
 
 Most of the information is in the wiki pages. This repository mainly contains code for patches, scripts, and extracted data.
 
+# Amethyst Edition mod
+Moved to: https://github.com/RenaKunisaki/SFA-Amethyst
+
 ## Directory Listing
 ### data
 Contains a lot of information extracted from the game and/or written by hand, as well as a script that presents it in a web browser.
@@ -31,9 +34,6 @@ Old, crude model viewer.
 
 ### notes
 Unsorted notes, largely out of date.
-
-### patches
-Source for Amethyst Edition mod.
 
 ### GSAE01.map
 Symbol map automatically exported from Ghidra. Symbol names made up by me for the most part.
