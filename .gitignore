@@ -25,8 +25,8 @@ __pycache__
 dp/**
 root/**
 demo/**
-data/U0/disc
-data/U0/video
+data/U0/disc/**
+data/U0/video/**
 SFAModelTesting/**
 SFAModelsBin/**
 saves/**
