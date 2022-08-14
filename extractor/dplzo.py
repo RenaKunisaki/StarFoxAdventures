@@ -1,4 +1,5 @@
-import lzo
+try: import lzo
+except ModuleNotFoundError: lzo = None
 import struct
 from binaryfile import BinaryFile
 
@@ -8,6 +9,7 @@ class DPLZO:
         self.file = file
 
     def decompress(self):
+        assert lzo is not None, "Python lzo module not installed"
         sig = self.file.readStruct('4s')
         if sig == b"LZO\0":
             version = self.file.readu32()
@@ -22,6 +24,7 @@ class DPLZO:
         return result
 
     def compress(self, rawData=None):
+        assert lzo is not None, "Python lzo module not installed"
         if rawData is None:
             rawData = self.file.readBytes()
         data = lzo.compress(rawData, 1)
