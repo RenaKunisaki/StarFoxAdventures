@@ -23,19 +23,32 @@ class App:
     def __init__(self):
         pass
 
-
-    def help(self):
-        """Display help text."""
-        methods = [
+    def _getMethods(self):
+        return [
             (func, getattr(self, func))
             for func in dir(self)
             if callable(getattr(self, func))
             and not func.startswith('_')
         ]
+
+
+    def help(self):
+        """Display detailed help text."""
+        methods = self._getMethods()
         for name, method in sorted(methods, key = lambda it: it[0]):
             doc = getattr(method, '__doc__', "(no documentation)")
             doc = [line for line in doc.split('\n') if line.strip() != '']
             printf("%s: %s\n\n", name, '\n'.join(doc))
+
+
+    def usage(self):
+        """Display summary help text."""
+        methods = self._getMethods()
+        names = []
+        for name, method in sorted(methods, key = lambda it: it[0]):
+            names.append(name)
+        print("Usage: %s method" % sys.argv[0])
+        print("  method:", ', '.join(names))
 
 
     def compress(self, inPath, outPath, inOffset=0):
@@ -855,12 +868,11 @@ class App:
             outTab.writeu32(0)
 
 
-
 def main(*args):
     app = App()
 
     if len(args) < 1:
-        app.help()
+        app.usage()
         return 0
 
     while len(args) > 0:
