@@ -140,7 +140,7 @@ class App:
             count = (entry >> 24) & 0x3F
             offs  = (entry & 0xFFFFFF) * 2
             if flags == 0: continue # XXX meaning of these?
-            printf("%04X %06X %X %02X\n", idx, offs, flags, count)
+            #printf("%04X %06X %X %02X\n", idx, offs, flags, count)
 
             try:
                 file.seek(offs)
@@ -208,6 +208,7 @@ class App:
         """Pack images in `path` to TEXn.bin, TEXn.tab files, where n=which."""
         textures = {} # ID => tex
         # get list of files to pack
+        # XXX change to read CSV file.
         for name in os.listdir(path):
             if re.match(r'^[0-9a-fA-F]+\.[0-9a-fA-F]+\.', name):
                 fields = name.split('.')
@@ -411,14 +412,20 @@ class App:
                 self._analyzeMapDump(fullPath, base, _files, _depth+1)
             elif os.path.isfile(fullPath):
                 #print("Checking", fullPath)
-                hash = hashlib.md5()
-                with open(fullPath, 'rb') as file:
-                    hash.update(file.read())
-                hash = hash.hexdigest()
-                fName = fullPath[len(base):]
-                fName = os.path.join(*(fName.split(os.path.sep)[1:]))
-                if fName not in _files: _files[fName] = {}
-                _files[fName][hash] = fullPath
+                if name.endswith('.csv'):
+                    pass # XXX
+                    # need to examine texture CSVs and check if
+                    # any were stored with a different format
+                    # or have a different number or frames.
+                else:
+                    hash = hashlib.md5()
+                    with open(fullPath, 'rb') as file:
+                        hash.update(file.read())
+                    hash = hash.hexdigest()
+                    fName = fullPath[len(base):]
+                    fName = os.path.join(*(fName.split(os.path.sep)[1:]))
+                    if fName not in _files: _files[fName] = {}
+                    _files[fName][hash] = fullPath
             else:
                 print("Skipping non-file, non-directory object:", fullPath)
         return _files
@@ -434,10 +441,12 @@ class App:
         for name in names:
             hashes = files[name]
             if len(hashes) > 1:
+                # XXX identify which one isn't the same as most.
+                # also, this won't catch if a file isn't present
+                # in some maps.
                 print(name)
                 for hash, path in hashes.items():
-                    print('', path)
-
+                    print('', hash, path)
 
 
     def listAnimations(self, discRoot, modelId):
