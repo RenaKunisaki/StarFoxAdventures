@@ -128,6 +128,9 @@ class App:
         tbl  = BinaryFile(path+'.tab', 'rb') # don't use TabFile
             # because it's not quite the same format here
         idx   = -1
+        csvLines = [
+            ['idx', 'frame', 'fmt', 'flags']
+        ]
         while True:
             idx += 1
             entry = tbl.readu32()
@@ -150,19 +153,27 @@ class App:
                 for i, offset in enumerate(offsets):
                     file.seek(offs + offset)
                     data = Zlb(file).decompress()
+                    tex  = SfaTexture.fromData(data)
+
                     if raw:
                         name = "%s/%04X.%02X.tex" % (outPath, idx, i)
                         with open(name, 'wb') as outFile:
                             outFile.write(data)
                     else:
-                        tex  = SfaTexture.fromData(data)
                         #printf("%04X.%02X: %3dx%3d %2dfrm %s\n", idx, i,
                         #    tex.width, tex.height, tex.nFrames, tex.format.name)
-                        name = "%s/%04X.%02X.%s.png" % (outPath, idx, i,
-                            tex.format.name)
+                        name = "%s/%04X.%02X.png" % (outPath, idx, i)
                         tex.image.save(name)
+
+                    csvLines.append([
+                        '%04X' % idx, i, tex.format.name, flags])
             except Exception as ex:
                 printf("%04X ERROR: %s\n", idx, ex)
+        # while
+        name = path.split('/')[-1]
+        with open(f'{outPath}/{name}.csv', 'wt') as file:
+            for line in csvLines:
+                file.write(';'.join(map(str, line)) + '\n')
 
 
     def packTexture(self, path, outPath, format, nFrames):

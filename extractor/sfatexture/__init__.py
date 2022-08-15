@@ -7,6 +7,7 @@ import math
 import struct
 import numpy as np
 from .texture import ImageFormat, BITS_PER_PIXEL, decode_image, encode_image
+from .Header import Header
 from PIL import Image
 
 class SfaTexture:
@@ -39,11 +40,10 @@ class SfaTexture:
         """Instantiate texture from file."""
         self = SfaTexture()
 
-        header = file.read(0x60)
-        self.width, self.height = struct.unpack_from('>HH', header, 0x0A)
-        self.nFrames = struct.unpack_from('>B', header, 0x19)[0] # grumble
-        fmtId = struct.unpack_from('>B', header, 0x16)[0] # grumble
-        self.format = ImageFormat(fmtId)
+        header = Header.from_buffer_copy(file.read(0x60))
+        self.width, self.height = header.width, header.height
+        self.nFrames = header.nFrames
+        self.format  = ImageFormat(header.format)
 
         bpp = BITS_PER_PIXEL[self.format]
         dataLen = self.width * self.height * bpp // 8
@@ -55,10 +55,10 @@ class SfaTexture:
         """Instantiate texture from raw data."""
         self = SfaTexture()
 
-        self.width, self.height = struct.unpack_from('>HH', data, 0x0A)
-        self.nFrames = struct.unpack_from('>B', data, 0x19)[0] # grumble
-        fmtId = struct.unpack_from('>B', data, 0x16)[0] # grumble
-        self.format = ImageFormat(fmtId)
+        header = Header.from_buffer_copy(data[0:0x60])
+        self.width, self.height = header.width, header.height
+        self.nFrames = header.nFrames
+        self.format  = ImageFormat(header.format)
 
         return self._fromData(data[0:0x60], data[0x60:])
 
@@ -71,9 +71,9 @@ class SfaTexture:
         assert nFrames > 0, "nFrames must be greater than zero"
         self = SfaTexture()
         self.width, self.height = img.size
-        self.format = ImageFormat(fmt)
+        self.format  = ImageFormat(fmt)
         self.nFrames = nFrames
-        self.image = img
+        self.image   = img
         return self
 
 
@@ -85,26 +85,23 @@ class SfaTexture:
         """
         self = SfaTexture()
         self.width, self.height = img[0].size
-        self.format = ImageFormat(fmt)
-        self.nFrames = len(img)
-        self.image = img[0]
+        self.format      = ImageFormat(fmt)
+        self.nFrames     = len(img)
+        self.image       = img[0]
         self.frameImages = img[1:]
         return self
 
 
     def _makeHeader(self) -> bytearray:
         """Build the SFA texture file header for this texture."""
-        header = bytearray(0x60)
-        struct.pack_into('>HH', header, 0x0A, self.width, self.height)
-        header[0x0F] = 1 # unknown
-        header[0x10] = 1 # unknown
-        header[0x16] = int(self.format)
-        header[0x17] = 1 # unknown
-        header[0x18] = 1 # unknown
-        header[0x19] = self.nFrames
-        header[0x1A] = 1 # unknown
-        header[0x1D] = 6 # unknown
-        return header
+        header = Header()
+        header.width  = self.width
+        header.height = self.height
+        header.format = int(self.format)
+        header.usage  = 1 # XXX check these fields
+        header.magFilter = 1
+        header.mipmapVar1D = 6
+        return bytearray(header)
 
 
     def writeToFile(self, file:io.RawIOBase) -> None:
