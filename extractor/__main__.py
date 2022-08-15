@@ -96,6 +96,26 @@ class App:
                 'Y' if entry['compressed'] else '-',
                 entry['flags'], entry['offset'])
 
+
+    def _writeEndOfTabFile(self, tabFile) -> None:
+        """Write the end-of-table marker, checksum, and
+        padding to a table file.
+        """
+        # checksum (not used by final game but good to have)
+        # default.dol did check this
+        length = tabFile.tell()
+        cksum  = 0
+        tabFile.seek(0)
+        for i in range(length):
+            cksum += tabFile.readu8()
+
+        tabFile.writeu32(0xFFFFFFFF) # end-of-table marker
+        tabFile.writeu32(cksum & 0xFFFFFFFF)
+
+        # game requires file length to be a multiple of 32 bytes
+        tabFile.padToMultiple(32)
+
+
     def dumpTexture(self, path:str, outPath:str, raw:bool=False,
     offset:int=0) -> None:
         """Dump texture from file.
@@ -205,9 +225,9 @@ class App:
         Last path is output file. Others are frames in order.
         """
         assert len(paths) > 1, "Usage: packMultiTexture format inPath [inPath...] outPath"
-        format = ImageFormat[format]
-        images = []
-        paths  = list(paths) # make mutable
+        format  = ImageFormat[format]
+        images  = []
+        paths   = list(paths) # make mutable
         outPath = paths.pop()
         for path in paths:
             images.append(Image.open(path))
@@ -216,11 +236,11 @@ class App:
             tex.writeToFile(file)
 
 
-    def packTextures(self, path:str, outPath:str, which:int) -> None:
-        """Pack images in `path` to TEXn.bin, TEXn.tab files, where n=which."""
+    def _readTextureCsv(self, path:str, which:int) \
+    -> dict[int,dict]:
+        """Read the texture CSV file."""
+        # XXX use a proper CSV module, and actual CSV
         textures = {} # ID => tex
-        # get list of files to pack from CSV.
-        # XXX use a proper CSV module
         with open(os.path.join(path, f'TEX{which}.csv')) as fCsv:
             for line in fCsv:
                 idx, frame, fmt, flags = line.split(';')
@@ -234,7 +254,31 @@ class App:
                     'fmt':   fmt,
                     'flags': int(flags, 16),
                 }
+        return textures
 
+
+    def _readTextureFile(self, fPath, fmt) -> bytes:
+        """Read texture from file, which can be either PNG
+        or raw binary.
+        """
+        try:
+            img = Image.open(fPath+'.png')
+            fmt = ImageFormat[fmt]
+            tex = SfaTexture.fromImage(img, fmt=fmt)
+            return tex.toData()
+        except FileNotFoundError:
+            # try raw binary
+            try:
+                with open(fPath+'.tex', 'rb') as fTex:
+                    return fTex.read()
+            except FileNotFoundError:
+                with open(fPath+'.bin', 'rb') as fTex:
+                    return fTex.read()
+
+
+    def packTextures(self, path:str, outPath:str, which:int) -> None:
+        """Pack images in `path` to TEXn.bin, TEXn.tab files, where n=which."""
+        textures = self._readTextureCsv(path, which)
         printf("Packing %d textures to %s.bin/tab\n", len(textures), outPath)
 
         # write out bin and tab files
@@ -254,29 +298,11 @@ class App:
 
                 frameData = []
                 for iFrame in range(nFrames):
-                    # open the file
+                    # read the file
                     name = '%04X.%02X' % (tid, iFrame)
                     fPath = os.path.join(path, name)
-                    isRaw = False
-                    try:
-                        file = open(fPath+'.png')
-                    except FileNotFoundError:
-                        isRaw = True
-                        try: file = open(fPath+'.tex')
-                        except FileNotFoundError:
-                            try: file = open(fPath+'.bin')
-                            except FileNotFoundError:
-                                print("File not found")
-                                raise
-
-                    # read the file
-                    if isRaw: data = file.read()
-                    else: # image file
-                        fmt  = ImageFormat[frames[iFrame]['fmt']]
-                        img  = Image.open(file.name)
-                        tex  = SfaTexture.fromImage(img, fmt=fmt, nFrames=nFrames)
-                        data = tex.toData()
-                    file.close()
+                    data = self._readTextureFile(fPath,
+                        frames[iFrame]['fmt'])
 
                     # compress the data
                     data = Zlb(None).compress(data)
@@ -310,20 +336,7 @@ class App:
                 tabFile.writeu32(0x01000000)
         # write size of last item and terminator
         tabFile.writeu32(binFile.tell() >> 1)
-
-        # checksum (not used by final game but good to have)
-        # default.dol did check this
-        length = tabFile.tell()
-        cksum  = 0
-        tabFile.seek(0)
-        for i in range(length):
-            cksum += tabFile.readu8()
-
-        tabFile.writeu32(0xFFFFFFFF) # end-of-table marker
-        tabFile.writeu32(cksum & 0xFFFFFFFF)
-
-        # game requires file length to be a multiple of 32 bytes
-        tabFile.padToMultiple(32)
+        self._writeEndOfTabFile(tabFile)
         binFile.close()
         tabFile.close()
 
