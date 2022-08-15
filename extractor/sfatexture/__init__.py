@@ -13,12 +13,12 @@ class SfaTexture:
     """Texture file in SFA."""
 
     def __init__(self):
-        self.width        = None
-        self.height       = None
-        self.format       = None
-        self.numMipMaps   = None
-        self.image        = None
-        self.mipMapImages = None
+        self.width       = None
+        self.height      = None
+        self.format      = None
+        self.nFrames     = None
+        self.image       = None
+        self.frameImages = None
 
 
     def _fromData(self, header:bytes, data:bytes):
@@ -41,7 +41,7 @@ class SfaTexture:
 
         header = file.read(0x60)
         self.width, self.height = struct.unpack_from('>HH', header, 0x0A)
-        self.numMipMaps = struct.unpack_from('>B', header, 0x19)[0] # grumble
+        self.nFrames = struct.unpack_from('>B', header, 0x19)[0] # grumble
         fmtId = struct.unpack_from('>B', header, 0x16)[0] # grumble
         self.format = ImageFormat(fmtId)
 
@@ -56,7 +56,7 @@ class SfaTexture:
         self = SfaTexture()
 
         self.width, self.height = struct.unpack_from('>HH', data, 0x0A)
-        self.numMipMaps = struct.unpack_from('>B', data, 0x19)[0] # grumble
+        self.nFrames = struct.unpack_from('>B', data, 0x19)[0] # grumble
         fmtId = struct.unpack_from('>B', data, 0x16)[0] # grumble
         self.format = ImageFormat(fmtId)
 
@@ -65,32 +65,30 @@ class SfaTexture:
 
     @staticmethod
     def fromImage(img:Image,
-    fmt:ImageFormat=ImageFormat.RGBA32,
-    numMipMaps:int=1) -> SfaTexture:
+    fmt:ImageFormat=ImageFormat.RGBA8,
+    nFrames:int=1) -> SfaTexture:
         """Instantiate texture from image."""
-        assert numMipMaps > 0, "numMipMaps must be greater than zero"
+        assert nFrames > 0, "nFrames must be greater than zero"
         self = SfaTexture()
         self.width, self.height = img.size
         self.format = ImageFormat(fmt)
-        self.numMipMaps = numMipMaps
+        self.nFrames = nFrames
         self.image = img
         return self
 
 
     @staticmethod
     def fromImageSet(img:list,
-    fmt:ImageFormat=ImageFormat.RGBA32) -> SfaTexture:
+    fmt:ImageFormat=ImageFormat.RGBA8) -> SfaTexture:
         """Instantiate texture from multiple images.
-
-        Each image is one mipmap. This is used for textures that use mipmaps
-        as variations instead of actual smaller versions, such as eyes.
+        Each image is one frame.
         """
         self = SfaTexture()
         self.width, self.height = img[0].size
         self.format = ImageFormat(fmt)
-        self.numMipMaps = len(img)
+        self.nFrames = len(img)
         self.image = img[0]
-        self.mipMapImages = img[1:]
+        self.frameImages = img[1:]
         return self
 
 
@@ -103,7 +101,7 @@ class SfaTexture:
         header[0x16] = int(self.format)
         header[0x17] = 1 # unknown
         header[0x18] = 1 # unknown
-        header[0x19] = self.numMipMaps
+        header[0x19] = self.nFrames
         header[0x1A] = 1 # unknown
         header[0x1D] = 6 # unknown
         return header
@@ -114,7 +112,7 @@ class SfaTexture:
         header = self._makeHeader()
         imageData, paletteData, colors = encode_image(
             self.image, self.format, None,
-            mipmap_count=self.numMipMaps-1)
+            mipmap_count=self.nFrames-1)
         file.write(header)
         file.write(imageData.getbuffer())
 
@@ -124,6 +122,6 @@ class SfaTexture:
         header = self._makeHeader()
         imageData, paletteData, colors = encode_image(
             self.image, self.format, None,
-            mipmap_count=self.numMipMaps-1,
-            mipmap_images=self.mipMapImages)
+            mipmap_count=self.nFrames-1,
+            mipmap_images=self.frameImages)
         return header + imageData.getbuffer()

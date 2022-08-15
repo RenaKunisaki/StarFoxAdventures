@@ -60,17 +60,41 @@ class TooManyColorsError(Exception):
   pass
 
 class ImageFormat(IntEnum):
-  I4     =   0
-  I8     =   1
-  IA4    =   2
-  IA8    =   3
-  RGB565 =   4
-  RGB5A3 =   5
-  RGBA32 =   6
-  C4     =   8
-  C8     =   9
-  C14X2  = 0xA
-  CMPR   = 0xE
+  I4     = 0x00
+  I8     = 0x01
+  IA4    = 0x02
+  IA8    = 0x03
+  RGB565 = 0x04
+  RGB5A3 = 0x05
+  RGBA8  = 0x06 # aka RGBA32
+  C4     = 0x08
+  C8     = 0x09
+  C14X2  = 0x0A
+  CMPR   = 0x0E # aka BC1
+
+  # following are defined by GX but not used for image files
+  ZTF    = 0x10 # Z-texture-format
+  CTF    = 0x20 # copy-texture-format only
+
+  R4     = 0x00 | CTF # For copying 4 bits from red.
+  RA4    = 0x02 | CTF # For copying 4 bits from red, 4 bits from alpha.
+  RA8    = 0x03 | CTF # For copying 8 bits from red, 8 bits from alpha.
+  YUVA8  = 0x06 | CTF
+  A8     = 0x07 | CTF # For copying 8 bits from alpha.
+  R8     = 0x08 | CTF # For copying 8 bits from red.
+  G8     = 0x09 | CTF # For copying 8 bits from green.
+  B8     = 0x0A | CTF # For copying 8 bits from blue.
+  RG8    = 0x0B | CTF # For copying 8 bits from red, 8 bits from green.
+  GB8    = 0x0C | CTF # For copying 8 bits from green, 8 bits from blue.
+
+  Z8     = 0x01 | ZTF # For texture copy, specifies upper 8 bits of Z.
+  Z16    = 0x03 | ZTF # For texture copy, specifies upper 16 bits of Z.
+  Z24X8  = 0x06 | ZTF # For texture copy, copies 24 Z bits and 0xff.
+
+  Z4     = 0x00 | ZTF | CTF # For copying 4 upper bits from Z.
+  Z8M    = 0x09 | ZTF | CTF # For copying the middle 8 bits of Z.
+  Z8L    = 0x0A | ZTF | CTF # For copying the lower 8 bits of Z.
+  Z16L   = 0x0C | ZTF | CTF # For copying the lower 16 bits of Z.
 
 class PaletteFormat(Enum):
   IA8    = 0
@@ -84,7 +108,7 @@ BLOCK_WIDTHS = {
   ImageFormat.IA8   : 4,
   ImageFormat.RGB565: 4,
   ImageFormat.RGB5A3: 4,
-  ImageFormat.RGBA32: 4,
+  ImageFormat.RGBA8 : 4,
   ImageFormat.C4    : 8,
   ImageFormat.C8    : 8,
   ImageFormat.C14X2 : 4,
@@ -97,7 +121,7 @@ BLOCK_HEIGHTS = {
   ImageFormat.IA8   : 4,
   ImageFormat.RGB565: 4,
   ImageFormat.RGB5A3: 4,
-  ImageFormat.RGBA32: 4,
+  ImageFormat.RGBA8 : 4,
   ImageFormat.C4    : 8,
   ImageFormat.C8    : 4,
   ImageFormat.C14X2 : 4,
@@ -110,7 +134,7 @@ BLOCK_DATA_SIZES = {
   ImageFormat.IA8   : 32,
   ImageFormat.RGB565: 32,
   ImageFormat.RGB5A3: 32,
-  ImageFormat.RGBA32: 64,
+  ImageFormat.RGBA8 : 64,
   ImageFormat.C4    : 32,
   ImageFormat.C8    : 32,
   ImageFormat.C14X2 : 32,
@@ -146,7 +170,7 @@ BITS_PER_PIXEL = {
     ImageFormat.IA8:    16,
     ImageFormat.RGB565: 16,
     ImageFormat.RGB5A3: 16,
-    ImageFormat.RGBA32: 32,
+    ImageFormat.RGBA8 : 32,
     ImageFormat.C4:      4,
     ImageFormat.C8:      8,
     ImageFormat.C14X2:  16,
@@ -660,8 +684,8 @@ def decode_block(image_format, image_data, offset, block_data_size, colors):
     return decode_rgb565_block(image_format, image_data, offset, block_data_size, colors)
   elif image_format == ImageFormat.RGB5A3:
     return decode_rgb5a3_block(image_format, image_data, offset, block_data_size, colors)
-  elif image_format == ImageFormat.RGBA32:
-    return decode_rgba32_block(image_format, image_data, offset, block_data_size, colors)
+  elif image_format == ImageFormat.RGBA8:
+    return decode_rgba8_block(image_format, image_data, offset, block_data_size, colors)
   elif image_format == ImageFormat.C4:
     return decode_c4_block(image_format, image_data, offset, block_data_size, colors)
   elif image_format == ImageFormat.C8:
@@ -741,7 +765,7 @@ def decode_rgb5a3_block(image_format, image_data, offset, block_data_size, color
 
   return pixel_color_data
 
-def decode_rgba32_block(image_format, image_data, offset, block_data_size, colors):
+def decode_rgba8_block(image_format, image_data, offset, block_data_size, colors):
   pixel_color_data = []
 
   for i in range(16):
@@ -915,8 +939,8 @@ def encode_image_to_block(image_format, pixels, colors_to_color_indexes, block_x
     return encode_image_to_rgb563_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height)
   elif image_format == ImageFormat.RGB5A3:
     return encode_image_to_rgb5a3_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height)
-  elif image_format == ImageFormat.RGBA32:
-    return encode_image_to_rgba32_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height)
+  elif image_format == ImageFormat.RGBA8:
+    return encode_image_to_rgba8_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height)
   elif image_format == ImageFormat.C4:
     return encode_image_to_c4_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height)
   elif image_format == ImageFormat.C8:
@@ -1054,7 +1078,7 @@ def encode_image_to_rgb5a3_block(pixels, colors_to_color_indexes, block_x, block
   new_data.seek(0)
   return new_data.read()
 
-def encode_image_to_rgba32_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height):
+def encode_image_to_rgba8_block(pixels, colors_to_color_indexes, block_x, block_y, block_width, block_height, image_width, image_height):
   new_data = BytesIO()
   for i in range(16):
     x = block_x + (i % block_width)

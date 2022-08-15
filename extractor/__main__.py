@@ -17,6 +17,7 @@ def printf(fmt, *args, **kw):
     print(fmt % args, end='', flush=True, **kw)
 
 class App:
+    # XXX don't hardcode these
     MAX_TEX0_ID = 0x35E
     MAX_TEX1_ID = 0x900
 
@@ -111,9 +112,9 @@ class App:
                 outFile.write(data)
         else:
             tex = SfaTexture.fromData(data)
-            printf("Texture size: %dx%d, fmt %s, %d mipmaps\n",
+            printf("Texture size: %dx%d, fmt %s, %d frames\n",
                 tex.width, tex.height, tex.format.name,
-                tex.numMipMaps)
+                tex.nFrames)
             tex.image.save(outPath)
 
 
@@ -155,8 +156,8 @@ class App:
                             outFile.write(data)
                     else:
                         tex  = SfaTexture.fromData(data)
-                        #printf("%04X.%02X: %3dx%3d %2dmip %s\n", idx, i,
-                        #    tex.width, tex.height, tex.numMipMaps, tex.format.name)
+                        #printf("%04X.%02X: %3dx%3d %2dfrm %s\n", idx, i,
+                        #    tex.width, tex.height, tex.nFrames, tex.format.name)
                         name = "%s/%04X.%02X.%s.png" % (outPath, idx, i,
                             tex.format.name)
                         tex.image.save(name)
@@ -164,13 +165,13 @@ class App:
                 printf("%04X ERROR: %s\n", idx, ex)
 
 
-    def packTexture(self, path, outPath, format, numMipMaps):
+    def packTexture(self, path, outPath, format, nFrames):
         """Pack image at `path` to texture file."""
-        numMipMaps = int(numMipMaps)
-        assert numMipMaps > 0, "numMipMaps must be at least 1"
+        nFrames = int(nFrames)
+        assert nFrames > 0, "nFrames must be at least 1"
         format = ImageFormat[format]
         img = Image.open(path)
-        tex = SfaTexture.fromImage(img, fmt=format, numMipMaps=numMipMaps)
+        tex = SfaTexture.fromImage(img, fmt=format, nFrames=nFrames)
         with open(outPath, 'wb') as file:
             tex.writeToFile(file)
 
@@ -178,7 +179,7 @@ class App:
     def packMultiTexture(self, format, *paths):
         """Pack images at `paths` to texture file.
 
-        Last path is output file. Others are mipmaps in order.
+        Last path is output file. Others are frames in order.
         """
         assert len(paths) > 1, "Usage: packMultiTexture format inPath [inPath...] outPath"
         format = ImageFormat[format]
@@ -200,7 +201,7 @@ class App:
             if re.match(r'^[0-9a-fA-F]+\.[0-9a-fA-F]+\.', name):
                 fields = name.split('.')
                 tid = int(fields[0], 16) # texture ID
-                mid = int(fields[1], 16) # mipmap ID
+                mid = int(fields[1], 16) # frame ID
                 if tid not in textures: textures[tid] = {}
                 textures[tid][mid] = name
 
@@ -213,16 +214,16 @@ class App:
         for tid in range(maxId):
             if tid in textures:
                 printf("%04X... ", tid)
-                mips = textures[tid]
-                offs = binFile.tell()
-                nMips = len(mips)
-                printf("%2d mips, %08X  ", nMips, offs)
+                frames = textures[tid]
+                offs   = binFile.tell()
+                nFrames = len(frames)
+                printf("%2d frames, %08X  ", nFrames, offs)
                 tabFile.writeu32(
-                    0x80000000 | (offs>>1) | (nMips << 24))
+                    0x80000000 | (offs>>1) | (nFrames << 24))
 
-                mipData = []
-                for mip in range(nMips):
-                    name = mips[mip]
+                frameData = []
+                for iFrame in range(nFrames):
+                    name = frames[iFrame]
                     fPath = os.path.join(path, name)
                     if name.endswith('.tex') or name.endswith('.bin'):
                         with open(fPath, 'rb') as file:
@@ -231,23 +232,23 @@ class App:
                         fields = name.split('.')
                         fmt = ImageFormat[fields[2]]
                         img = Image.open(fPath)
-                        tex = SfaTexture.fromImage(img, fmt=format, numMipMaps=numMipMaps)
+                        tex = SfaTexture.fromImage(img, fmt=format, nFrames=nFrames)
                         data = tex.toData()
                     data = Zlb(None).compress(data)
                     pad = len(data) & 0x3
                     if pad: data += b'\0' * (4 - pad)
-                    mipData.append(data)
+                    frameData.append(data)
 
-                # write the mipmap offsets
-                if nMips > 1:
-                    mipOffs = 4 * (nMips+1)
-                    for data in mipData:
-                        binFile.writeu32(mipOffs)
-                        mipOffs += len(data)
-                    binFile.writeu32(mipOffs)
+                # write the frame offsets
+                if nFrames > 1:
+                    frameOffs = 4 * (nFrames+1)
+                    for data in frameData:
+                        binFile.writeu32(frameOffs)
+                        frameOffs += len(data)
+                    binFile.writeu32(frameOffs)
 
                 # write the data
-                for data in mipData:
+                for data in frameData:
                     binFile.write(data)
 
                 # align to 32 bytes - required by game
