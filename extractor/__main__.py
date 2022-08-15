@@ -190,14 +190,11 @@ class App:
         # that are actually present?
 
 
-    def packTexture(self, path:str, outPath:str, format:str,
-    nFrames:int=1) -> None:
+    def packTexture(self, path:str, outPath:str, format:str) -> None:
         """Pack image at `path` to texture file."""
-        nFrames = int(nFrames)
-        assert nFrames > 0, "nFrames must be at least 1"
         format = ImageFormat[format]
         img = Image.open(path)
-        tex = SfaTexture.fromImage(img, fmt=format, nFrames=nFrames)
+        tex = SfaTexture.fromImage(img, fmt=format)
         with open(outPath, 'wb') as file:
             tex.writeToFile(file)
 

@@ -65,14 +65,12 @@ class SfaTexture:
 
     @staticmethod
     def fromImage(img:Image,
-    fmt:ImageFormat=ImageFormat.RGBA8,
-    nFrames:int=1) -> SfaTexture:
+    fmt:ImageFormat=ImageFormat.RGBA8) -> SfaTexture:
         """Instantiate texture from image."""
-        assert nFrames > 0, "nFrames must be greater than zero"
         self = SfaTexture()
         self.width, self.height = img.size
         self.format  = ImageFormat(fmt)
-        self.nFrames = nFrames
+        self.nFrames = 1
         self.image   = img
         return self
 
@@ -89,6 +87,7 @@ class SfaTexture:
         self.nFrames     = len(img)
         self.image       = img[0]
         self.frameImages = img[1:]
+        assert self.nFrames > 0, "fromImageSet: no images"
         return self
 
 
