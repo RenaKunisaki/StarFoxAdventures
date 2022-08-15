@@ -166,7 +166,8 @@ class App:
                         tex.image.save(name)
 
                     csvLines.append([
-                        '%04X' % idx, i, tex.format.name, flags])
+                        '%04X' % idx, i, tex.format.name,
+                        '%02X' % flags])
             except Exception as ex:
                 printf("%04X ERROR: %s\n", idx, ex)
         # while
@@ -174,6 +175,10 @@ class App:
         with open(f'{outPath}/{name}.csv', 'wt') as file:
             for line in csvLines:
                 file.write(';'.join(map(str, line)) + '\n')
+        # XXX writing flags per frame is redundant since they
+        # have to be the same for every frame...
+        # for that matter, are they not always 2 for textures
+        # that are actually present?
 
 
     def packTexture(self, path, outPath, format, nFrames):
@@ -207,15 +212,22 @@ class App:
     def packTextures(self, path, outPath, which):
         """Pack images in `path` to TEXn.bin, TEXn.tab files, where n=which."""
         textures = {} # ID => tex
-        # get list of files to pack
-        # XXX change to read CSV file.
-        for name in os.listdir(path):
-            if re.match(r'^[0-9a-fA-F]+\.[0-9a-fA-F]+\.', name):
-                fields = name.split('.')
-                tid = int(fields[0], 16) # texture ID
-                mid = int(fields[1], 16) # frame ID
-                if tid not in textures: textures[tid] = {}
-                textures[tid][mid] = name
+        # get list of files to pack from CSV.
+        # XXX use a proper CSV module
+        whichFile = os.path.split(outPath)[1]
+        with open(os.path.join(path, whichFile+'.csv')) as fCsv:
+            for line in fCsv:
+                idx, frame, fmt, flags = line.split(';')
+                try: idx = int(idx, 16)
+                except ValueError: pass # header line
+                frame = int(frame, 10)
+                if idx not in textures: textures[idx] = {}
+                textures[idx][frame] = {
+                    #'idx':   idx,
+                    #'frame': frame,
+                    'fmt':   fmt,
+                    'flags': int(flags, 16),
+                }
 
         printf("Packing %d textures to %s.bin/tab\n", len(textures), outPath)
 
@@ -229,29 +241,45 @@ class App:
                 frames = textures[tid]
                 offs   = binFile.tell()
                 nFrames = len(frames)
-                printf("%2d frames, %08X  ", nFrames, offs)
+                printf("%2d frames, offs=%08X  ", nFrames, offs)
                 tabFile.writeu32(
-                    0x80000000 | (offs>>1) | (nFrames << 24))
+                    (frames[0]['flags'] << 30) | (offs>>1) |
+                    (nFrames << 24))
 
                 frameData = []
                 for iFrame in range(nFrames):
-                    name = frames[iFrame]
+                    # open the file
+                    name = '%04X.%d' % (tid, iFrame)
                     fPath = os.path.join(path, name)
-                    if name.endswith('.tex') or name.endswith('.bin'):
-                        with open(fPath, 'rb') as file:
-                            data = file.read()
+                    isRaw = False
+                    try:
+                        file = open(fPath+'.png')
+                    except FileNotFoundError:
+                        isRaw = True
+                        try: file = open(fPath+'.tex')
+                        except FileNotFoundError:
+                            try: file = open(fPath+'.bin')
+                            except FileNotFoundError:
+                                print("File not found")
+                                raise
+
+                    # read the file
+                    if isRaw: data = file.read()
                     else: # image file
-                        fields = name.split('.')
-                        fmt = ImageFormat[fields[2]]
-                        img = Image.open(fPath)
-                        tex = SfaTexture.fromImage(img, fmt=format, nFrames=nFrames)
+                        fmt  = ImageFormat[frames[iFrame]['fmt']]
+                        img  = Image.open(fPath)
+                        tex  = SfaTexture.fromImage(img, fmt=fmt, nFrames=nFrames)
                         data = tex.toData()
+                    file.close()
+
+                    # compress the data
                     data = Zlb(None).compress(data)
                     pad = len(data) & 0x3
                     if pad: data += b'\0' * (4 - pad)
                     frameData.append(data)
 
-                # write the frame offsets
+                # write the frame offsets if more than one frame.
+                # offsets aren't present when only one frame.
                 if nFrames > 1:
                     frameOffs = 4 * (nFrames+1)
                     for data in frameData:
@@ -269,11 +297,16 @@ class App:
 
                 printf("OK\n")
             else:
+                # non-present textures have frame count of 1
+                # and offset of 0, which points them to the
+                # placeholder texture at the beginning of the
+                # file. they also have no flags set.
                 tabFile.writeu32(0x01000000)
         # write size of last item and terminator
         tabFile.writeu32(binFile.tell() >> 1)
         tabFile.writeu32(0xFFFFFFFF)
-        tabFile.writeu32(0xCFA2) # XXX what is this? never read?
+        tabFile.writeu32(0xCFA2) # XXX checksum
+        # padding to make multiple of 32 byte length
         tabFile.writeu32(0, 0, 0, 0, 0, 0, 0)
         binFile.close()
         tabFile.close()
@@ -444,6 +477,8 @@ class App:
                 # XXX identify which one isn't the same as most.
                 # also, this won't catch if a file isn't present
                 # in some maps.
+                # should somehow check the highest valid ID of
+                # each asset and test for their presence.
                 print(name)
                 for hash, path in hashes.items():
                     print('', hash, path)
