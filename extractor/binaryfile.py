@@ -158,6 +158,14 @@ class BinaryFile:
         if cur >= offset: return
         return self.writePadding(offset - cur, padding=padding)
 
+    def padToMultiple(self, length, padding=b'\0'):
+        idx = 0
+        cnt = 0
+        while self.tell() % length != 0:
+            self.writeu8(padding[idx])
+            idx = (idx+1) % len(padding)
+        return cnt
+
     def __enter__(self):
         return self
 

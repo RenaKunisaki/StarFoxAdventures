@@ -109,7 +109,7 @@ class SfaTexture:
         header = self._makeHeader()
         imageData, paletteData, colors = encode_image(
             self.image, self.format, None,
-            mipmap_count=self.nFrames-1)
+            mipmap_count=0)
         file.write(header)
         file.write(imageData.getbuffer())
 
@@ -119,6 +119,5 @@ class SfaTexture:
         header = self._makeHeader()
         imageData, paletteData, colors = encode_image(
             self.image, self.format, None,
-            mipmap_count=self.nFrames-1,
-            mipmap_images=self.frameImages)
+            mipmap_count=0)
         return header + imageData.getbuffer()

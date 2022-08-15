@@ -166,7 +166,9 @@ class App:
                         tex.image.save(name)
 
                     csvLines.append([
-                        '%04X' % idx, i, tex.format.name,
+                        '%04X' % idx,
+                        '%02X' % i,
+                        tex.format.name,
                         '%02X' % flags])
             except Exception as ex:
                 printf("%04X ERROR: %s\n", idx, ex)
@@ -214,13 +216,12 @@ class App:
         textures = {} # ID => tex
         # get list of files to pack from CSV.
         # XXX use a proper CSV module
-        whichFile = os.path.split(outPath)[1]
-        with open(os.path.join(path, whichFile+'.csv')) as fCsv:
+        with open(os.path.join(path, f'TEX{which}.csv')) as fCsv:
             for line in fCsv:
                 idx, frame, fmt, flags = line.split(';')
                 try: idx = int(idx, 16)
-                except ValueError: pass # header line
-                frame = int(frame, 10)
+                except ValueError: continue # header line
+                frame = int(frame, 16)
                 if idx not in textures: textures[idx] = {}
                 textures[idx][frame] = {
                     #'idx':   idx,
@@ -232,8 +233,8 @@ class App:
         printf("Packing %d textures to %s.bin/tab\n", len(textures), outPath)
 
         # write out bin and tab files
-        binFile = BinaryFile(outPath+'.bin', 'wb')
-        tabFile = BinaryFile(outPath+'.tab', 'wb')
+        binFile = BinaryFile(outPath+'.bin', 'wb+')
+        tabFile = BinaryFile(outPath+'.tab', 'wb+')
         maxId = self.MAX_TEX0_ID if str(which) == '0' else self.MAX_TEX1_ID
         for tid in range(maxId):
             if tid in textures:
@@ -249,7 +250,7 @@ class App:
                 frameData = []
                 for iFrame in range(nFrames):
                     # open the file
-                    name = '%04X.%d' % (tid, iFrame)
+                    name = '%04X.%02X' % (tid, iFrame)
                     fPath = os.path.join(path, name)
                     isRaw = False
                     try:
@@ -267,7 +268,7 @@ class App:
                     if isRaw: data = file.read()
                     else: # image file
                         fmt  = ImageFormat[frames[iFrame]['fmt']]
-                        img  = Image.open(fPath)
+                        img  = Image.open(file.name)
                         tex  = SfaTexture.fromImage(img, fmt=fmt, nFrames=nFrames)
                         data = tex.toData()
                     file.close()
@@ -304,10 +305,20 @@ class App:
                 tabFile.writeu32(0x01000000)
         # write size of last item and terminator
         tabFile.writeu32(binFile.tell() >> 1)
-        tabFile.writeu32(0xFFFFFFFF)
-        tabFile.writeu32(0xCFA2) # XXX checksum
-        # padding to make multiple of 32 byte length
-        tabFile.writeu32(0, 0, 0, 0, 0, 0, 0)
+
+        # checksum (not used by final game but good to have)
+        # default.dol did check this
+        length = tabFile.tell()
+        cksum  = 0
+        tabFile.seek(0)
+        for i in range(length):
+            cksum += tabFile.readu8()
+
+        tabFile.writeu32(0xFFFFFFFF) # end-of-table marker
+        tabFile.writeu32(cksum & 0xFFFFFFFF)
+
+        # game requires file length to be a multiple of 32 bytes
+        tabFile.padToMultiple(32)
         binFile.close()
         tabFile.close()
 

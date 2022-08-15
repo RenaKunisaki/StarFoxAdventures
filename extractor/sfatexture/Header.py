@@ -15,7 +15,7 @@ class GXTexObj(BigEndianStructure):
         ('image0',   u32), # 08
         ('image3',   u32), # 0C
         ('userData', u32), # 10 void*
-        ('format',   u32), # 14 GXTexFmt
+        ('format',   u32), # 14 ImageFormat
         ('tlutName', u32), # 18
         ('loadCnt',  u16), # 1C
         ('loadFmt',  u8),  # 1E (0=CMPR 1=4bpp 2=8bpp 3=32bpp)
