@@ -6,6 +6,7 @@ import inspect
 import struct
 import re
 import hashlib
+import typing
 from PIL import Image
 from binaryfile import BinaryFile
 from tabfile import TabFile
@@ -24,7 +25,8 @@ class App:
     def __init__(self):
         pass
 
-    def _getMethods(self):
+    def _getMethods(self) -> list[typing.Callable]:
+        """Get all methods that can be invoked from the command line."""
         return [
             (func, getattr(self, func))
             for func in dir(self)
@@ -33,7 +35,7 @@ class App:
         ]
 
 
-    def help(self):
+    def help(self) -> None:
         """Display detailed help text."""
         methods = self._getMethods()
         for name, method in sorted(methods, key = lambda it: it[0]):
@@ -42,7 +44,7 @@ class App:
             printf("%s: %s\n\n", name, '\n'.join(doc))
 
 
-    def usage(self):
+    def usage(self) -> None:
         """Display summary help text."""
         methods = self._getMethods()
         names = []
@@ -52,7 +54,7 @@ class App:
         print("  method:", ', '.join(names))
 
 
-    def compress(self, inPath, outPath, inOffset=0):
+    def compress(self, inPath:str, outPath:str, inOffset:int=0) -> None:
         """Compress a ZLB file."""
         if type(inOffset) is str: inOffset = int(inOffset, 0)
         file = BinaryFile(inPath, 'rb', offset=inOffset)
@@ -60,7 +62,7 @@ class App:
             outFile.write(Zlb(file).compress())
 
 
-    def decompress(self, inPath, outPath, inOffset=0):
+    def decompress(self, inPath:str, outPath:str, inOffset:int=0) -> None:
         """Decompress a ZLB file."""
         if type(inOffset) is str: inOffset = int(inOffset, 0)
         file = BinaryFile(inPath, 'rb', offset=inOffset)
@@ -68,7 +70,7 @@ class App:
             outFile.write(Zlb(file).decompress())
 
 
-    def compressLZO(self, inPath, outPath, inOffset=0):
+    def compressLZO(self, inPath:str, outPath:str, inOffset:int=0) -> None:
         """Compress a LZO file."""
         if type(inOffset) is str: inOffset = int(inOffset, 0)
         file = BinaryFile(inPath, 'rb', offset=inOffset)
@@ -76,7 +78,7 @@ class App:
             outFile.write(DPLZO(file).compress())
 
 
-    def decompressLZO(self, inPath, outPath, inOffset=0):
+    def decompressLZO(self, inPath:str, outPath:str, inOffset:int=0) -> None:
         """Decompress a LZO file."""
         if type(inOffset) is str: inOffset = int(inOffset, 0)
         file = BinaryFile(inPath, 'rb', offset=inOffset)
@@ -84,7 +86,7 @@ class App:
             outFile.write(DPLZO(file).decompress())
 
 
-    def listTable(self, inPath):
+    def listTable(self, inPath:str) -> None:
         """List entries in a TAB file."""
         file = BinaryFile(inPath, 'rb')
         tbl  = TabFile(file)
@@ -94,8 +96,12 @@ class App:
                 'Y' if entry['compressed'] else '-',
                 entry['flags'], entry['offset'])
 
-    def dumpTexture(self, path, outPath, raw=False, offset=0):
-        """Dump texture from file."""
+    def dumpTexture(self, path:str, outPath:str, raw:bool=False,
+    offset:int=0) -> None:
+        """Dump texture from file.
+
+        raw: If true, dump game format as-is; else, dump PNG image.
+        """
         if type(raw) is str: raw = (raw == '1')
         if type(offset) is str: offset = int(offset, 0)
         file = BinaryFile(path, 'rb', offset=offset)
@@ -118,10 +124,11 @@ class App:
             tex.image.save(outPath)
 
 
-    def dumpTextures(self, path, outPath, raw=False):
+    def dumpTextures(self, path:str, outPath:str, raw:bool=False) -> None:
         """Dump textures from files at `path` to dir `outPath`.
 
         path: eg "warlock/TEX0" (no extension)
+        raw: If true, dump game format as-is; else, dump PNG image.
         """
         if type(raw) is str: raw = (raw == '1')
         file = BinaryFile(path+'.bin', 'rb')
@@ -183,7 +190,8 @@ class App:
         # that are actually present?
 
 
-    def packTexture(self, path, outPath, format, nFrames):
+    def packTexture(self, path:str, outPath:str, format:str,
+    nFrames:int=1) -> None:
         """Pack image at `path` to texture file."""
         nFrames = int(nFrames)
         assert nFrames > 0, "nFrames must be at least 1"
@@ -194,7 +202,7 @@ class App:
             tex.writeToFile(file)
 
 
-    def packMultiTexture(self, format, *paths):
+    def packMultiTexture(self, format:str, *paths:str) -> None:
         """Pack images at `paths` to texture file.
 
         Last path is output file. Others are frames in order.
@@ -211,7 +219,7 @@ class App:
             tex.writeToFile(file)
 
 
-    def packTextures(self, path, outPath, which):
+    def packTextures(self, path:str, outPath:str, which:int) -> None:
         """Pack images in `path` to TEXn.bin, TEXn.tab files, where n=which."""
         textures = {} # ID => tex
         # get list of files to pack from CSV.
@@ -323,8 +331,9 @@ class App:
         tabFile.close()
 
 
-    def _dumpRaw(self, binPath, tabPath, outPath, ignoreFlags=False,
-    offsMask=0x0FFFFFFF, offsShift=0, nameFunc=None):
+    def _dumpRaw(self, binPath:str, tabPath:str, outPath:str,
+    ignoreFlags:bool=False, offsMask:int=0x0FFFFFFF,
+    offsShift:int=0, nameFunc:typing.Callable=None) -> None:
         """Dump raw data listed in table, where the next entry is used
         to calculate the size.
         """
@@ -367,7 +376,7 @@ class App:
             entry = eNext
 
 
-    def dumpModels(self, path, outPath):
+    def dumpModels(self, path:str, outPath:str) -> None:
         """Dump models from files at `path` to dir `outPath`.
 
         path: eg "warlock/MODELS" (no extension)
@@ -375,28 +384,28 @@ class App:
         # XXX eventually decode them too
         self._dumpRaw(path, path, outPath)
 
-    def dumpAnimations(self, path, outPath):
+    def dumpAnimations(self, path:str, outPath:str) -> None:
         """Dump animations from files at `path` to dir `outPath`.
 
         path: eg "warlock/ANIM" (no extension)
         """
         self._dumpRaw(path, path, outPath)
 
-    def dumpAnimCurv(self, path, outPath):
+    def dumpAnimCurv(self, path:str, outPath:str) -> None:
         """Dump animation curves from files at `path` to dir `outPath`.
 
         path: eg "warlock/ANIMCURV" (no extension)
         """
         self._dumpRaw(path, path, outPath)
 
-    def dumpVoxMap(self, path, outPath):
+    def dumpVoxMap(self, path:str, outPath:str) -> None:
         """Dump Voxmap data from files at `path` to dir `outPath`.
 
         path: eg "warlock/VOXMAP" (no extension)
         """
         self._dumpRaw(path, path, outPath)
 
-    def dumpMod(self, path, outPath):
+    def dumpMod(self, path:str, outPath:str) -> None:
         """Dump modXX data from files at `path` to dir `outPath`.
 
         path: eg "warlock/mod16" (no extension)
@@ -405,7 +414,7 @@ class App:
             nameFunc=lambda idx, data: struct.unpack_from('12s', data, 0xA4)[0].strip(b'\0').decode('utf-8')+'.bin')
 
 
-    def dumpMap(self, path, outPath):
+    def dumpMap(self, path:str, outPath:str) -> None:
         """Dump all of a map's files at `path` to dir `outPath`.
 
         path: eg "warlock"
@@ -426,7 +435,7 @@ class App:
                 self.dumpMod(J(path, name.split('.')[0]), J(outPath, 'mod'))
 
 
-    def dumpAllMaps(self, path, outPath):
+    def dumpAllMaps(self, path:str, outPath:str) -> None:
         """Dump all files of every map from `path` to `outpath`.
 
         path: disc root.
@@ -448,7 +457,9 @@ class App:
             print("Failed extracting:", name, ex)
 
 
-    def _analyzeMapDump(self, path, base, _files={}, _depth=0):
+    def _analyzeMapDump(self, path:str, base:str,
+    _files:dict[str,dict[str,str]]={}, _depth:int=0) \
+    -> dict[str,dict[str,str]]:
         assert _depth < 5, "Maximum depth exceeded"
         for name in os.listdir(path):
             fullPath = os.path.join(path, name)
@@ -475,7 +486,7 @@ class App:
         return _files
 
 
-    def analyzeMapDump(self, path):
+    def analyzeMapDump(self, path:str) -> None:
         """Examine all files dumped from maps in `path`.
 
         Tests whether any maps have different versions.
@@ -495,9 +506,9 @@ class App:
                     print('', hash, path)
 
 
-    def listAnimations(self, discRoot, modelId):
+    def listAnimations(self, discRoot:str, modelId:int) -> None:
         """List the animation IDs used by given model."""
-        modelId = int(modelId, 0)
+        modelId = int(modelId, 0) # accept '10' or '0xA'
         modAnimTab = BinaryFile(discRoot+'/MODANIM.TAB', 'rb')
         modAnimOffs = modAnimTab.readu16(modelId << 1)
         nextOffs = modAnimTab.readu16((modelId+1) << 1)
@@ -513,7 +524,7 @@ class App:
             ' '.join(map(lambda v: '%04X' % (v&0xFFFF), animIds[i:i+8])))
 
 
-    def readRomList(self, path, discRoot):
+    def readRomList(self, path:str, discRoot:str) -> None:
         """Read romlist.zlb file."""
         file = BinaryFile(path, 'rb', offset=0)
         data = Zlb(file).decompress()
@@ -576,7 +587,8 @@ class App:
             offs += length * 4
             idx  += 1
 
-    def toLZO(self, path, tabPath, outBinPath, outTabPath):
+    def toLZO(self, path:str, tabPath:str, outBinPath:str,
+    outTabPath:str) -> None:
         """Convert a file's contents to LZO.
 
         path: input file to convert.
@@ -604,7 +616,8 @@ class App:
         outTab.writeu32(0xFFFFFFFF)
         # XXX should move the tab code to a common method...
 
-    def toDIR(self, path, tabPath, outBinPath, outTabPath):
+    def toDIR(self, path:str, tabPath:str, outBinPath:str,
+    outTabPath:str) -> None:
         """Convert a file's contents to uncompressed DIR format.
 
         path: input file to convert.
@@ -636,7 +649,8 @@ class App:
         outTab.writeu32(outBin.tell()) # XXX verify
         outTab.writeu32(0xFFFFFFFF)
 
-    def toFakeLZO(self, path, tabPath, outBinPath, outTabPath):
+    def toFakeLZO(self, path:str, tabPath:str, outBinPath:str,
+    outTabPath:str) -> None:
         """Convert a file's contents to "fake LZO" format.
 
         path: input file to convert.
@@ -668,7 +682,8 @@ class App:
         outTab.writeu32(outBin.tell()) # XXX verify
         outTab.writeu32(0xFFFFFFFF)
 
-    def textoLZO(self, path, tabPath, outBinPath, outTabPath):
+    def textoLZO(self, path:str, tabPath:str, outBinPath:str,
+    outTabPath:str) -> None:
         """Convert a texture file's contents to LZO.
 
         path: input file to convert.
@@ -715,7 +730,8 @@ class App:
         for i in range(7):
             outTab.writeu32(0)
 
-    def textoDIR(self, path, tabPath, outBinPath, outTabPath):
+    def textoDIR(self, path:str, tabPath:str, outBinPath:str,
+    outTabPath:str) -> None:
         """Convert a texture file's contents to uncompressed DIR format.
 
         path: input file to convert.
@@ -766,7 +782,8 @@ class App:
         for i in range(7):
             outTab.writeu32(0)
 
-    def modelstoDIR(self, path, tabPath, outBinPath, outTabPath):
+    def modelstoDIR(self, path:str, tabPath:str, outBinPath:str,
+    outTabPath:str) -> None:
         """Convert a model file's contents to uncompressed DIR format.
 
         path: input file to convert.
@@ -825,7 +842,8 @@ class App:
             outTab.writeu32(0)
 
 
-    def modelstoFakeLZO(self, path, tabPath, outBinPath, outTabPath):
+    def modelstoFakeLZO(self, path:str, tabPath:str, outBinPath:str,
+    outTabPath:str) -> None:
         """Convert a model file's contents to "fake LZO" format.
 
         path: input file to convert.
@@ -883,7 +901,8 @@ class App:
         for i in range(7):
             outTab.writeu32(0)
 
-    def mapstoFakeLZO(self, path, tabPath, outBinPath, outTabPath):
+    def mapstoFakeLZO(self, path:str, tabPath:str, outBinPath:str,
+    outTabPath:str) -> None:
         """Convert MAPS.BIN file's contents to "fake LZO" format.
 
         path: input file to convert.
