@@ -106,7 +106,7 @@ class App:
         length = tabFile.tell()
         cksum  = 0
         tabFile.seek(0)
-        for i in range(length):
+        for _ in range(length):
             cksum += tabFile.readu8()
 
         tabFile.writeu32(0xFFFFFFFF) # end-of-table marker
@@ -154,10 +154,8 @@ class App:
         file = BinaryFile(path+'.bin', 'rb')
         tbl  = BinaryFile(path+'.tab', 'rb') # don't use TabFile
             # because it's not quite the same format here
-        idx   = -1
-        csvLines = [
-            ['idx', 'frame', 'fmt', 'flags']
-        ]
+        idx = -1
+        csvLines = [ ['idx', 'frame', 'fmt', 'flags'] ]
         while True:
             idx += 1
             entry = tbl.readu32()

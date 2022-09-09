@@ -1,0 +1,39 @@
+possibly unchecked allocs:
+getLActions (reads 0x28 bytes from LACTIONS.BIN and ignores it)
+ARQPostRequest (audio)
+voxAllocFn_80012888 (maps)
+initCamera (probably only called at boot)
+ShopKeeper::init (allocates something to do with models)
+DBstealerworm::update (allocates something to do with models)
+KT_Rex::init (allocates something to do with models)
+modelLoadColorFn_80024ec8, modelLoadAnimations, loadAnimation (reads ANIM.BIN to buf)
+model_load (reads MODELS.bin to buf)
+loadModLines (reads MODLINES.tab, MODLINES.bin)
+mapLoadDataFile (probably all map assets)
+loadAndDecompressDataFile (TEX1.bin, ?)
+piRomLoadSection (romlist)
+tex1GetMipmap (TEX1.BIN)
+loadDataFileWithLength
+loadDataFile
+probably not much point checking others since those two already cover 99% of files
+
+useless unchecked allocs:
+sparseArray_create (writes to the result immediately, so would crash)
+textFn_80018bc4 (memcpy to buf)
+gameTextLoadSystemFonts (loads system font data)
+	not controllable data but does use DMA, so would stomp over RAM
+	only called at boot
+gameTextGenTexture (writes to buf)
+stackCreate (writes to buf)
+allocModelStruct2 (writes to buf)
+initModels (only at boot)
+objAlloc (writes to buf)
+loadCharacter (writes to buf)
+Object::initObjects (only at boot)
+Object::allocHitLists (only at boot)
+objAllocMsgQueue (writes to buf)
+
+other alloc functions that can return null:
+textureAlloc, lightCreate
+loadFileByPath, loadFileByPathAsync
+reading from memcard might also be exploitable since it would use DMA too

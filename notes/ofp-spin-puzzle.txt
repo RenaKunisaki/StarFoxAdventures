@@ -1,0 +1,42 @@
+1. Is the timer from when you hit the fireblaster switch to when the first wind particles appear always the same, or can it vary by what it starts at/how much it counts down by each frame?
+2. Do the same number of wind particles appear each time (is it hard-coded), and do they always have the same starting position?
+3. Is there any randomness affecting where the wind particles end up/their velocity, or is this also static?
+
+bits for statue switches: 672, 673, 674, 675
+lever that activates puzzle: EDF=1, 671=0
+	EDF: if != 0, statues can be activated
+during scene: 66E=1, 66F=1, 66E=0, 66F=0, 670=1, 670=0, 9F5=1, 9F5=0
+671 is checked in DFP_RotatePuzzle::init
+EDF=0 on completion and on start, 1 while init
+9F7=1 on completion if map act is 1
+msg 1 is sent to DFP_RotatePuzzle to initialize it (create objects)
+66E, 66F, 670, 9F5 correspond with
+672, 671, 674, 675 somehow
+the former are "is active" and the latter is "activate"
+there's also references to activate+5, so 677, 678, 679, 67A
+
+objects:     DLL  desc
+DFP_FireHit  012A invisible hitbox following the torch
+DFP_LevelCo  0229 generic level control object
+DFP_ObjCrea  022A the water creator
+DFP_RotateP  0232 the platform with the torches on it
+DFP_Statue1  0233 the statue itself
+DFP_WaterHi  012A the water falling from the statues
+DFP_TargetB  0235 part of block pushing puzzle (not relevant here)
+DFP_blockwa  012A part of block pushing puzzle
+
+so the relevant DLLs are:
+012A (CFCrate - many things - renamed to InteractObj12A)
+0229 (DFP_LevelCo)
+022A (DFP_ObjCrea)
+0232 (DFP_RotateP) - handles rotating, timer, checking if fire is hit
+0233 (DFP_Statue1)
+
+when the WaterHi(tbox?) collides with the correct-colored FireHit, the flame goes out
+the water can hurt you too and the fire can block your shots
+on act 1 the rotation speed is fixed (30 units per tick); on act 2 it increases by 1 for each torch you hit (30, 60, 90 units per tick)
+the torch goes out whenever it's hit by the water
+the fadeTimer field of the water object is repurposed as the color for act 2; it's ignored for act 1
+hitting the switch activates the statue for 150 ticks which should be 2.5 seconds
+this seems to be not directly done by the switch though, the object receives a message from somewhere
+should hack the objmsg functions to log who sends what where

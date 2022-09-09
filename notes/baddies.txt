@@ -1,0 +1,26 @@
+- baddies have several modes including attacking Tricky and attacking Fox
+- the mode is determined by other objects
+- they target you when you come within 1000 units
+
+mapActs2 & 0x18 is flag relating to weapons
+looks like acts only go up to 11
+
+shielding 239F2440 40343EFB 02 00 01 00
+shielding 239F2440 40343EFB 02 00 05 00
+hit       239F6400 40343EFB 03 00 00 00
+
+248 pushingObj
+2D0 enemy
+46C curDeathObj
+4B8 target
+4BC possibly an object?
+4C0 ?
+4C4 ?
+67C ?
+684 ?
+700 ?
+7B0 ?
+7F0 ridingObject
+7F4 object?
+7F8 heldObject
+

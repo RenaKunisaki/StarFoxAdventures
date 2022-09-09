@@ -1,0 +1,15 @@
+60 FPS,  60 VI/s: 0c 00 01e0 0030 0030 0006 0006 18 18 18 18 040e 040e 040e 040e 041A 01AD 40 4769 A2 0175 7A00 019C
+30 FPS,  60 VI/s: 0c 00 01e0 0018 0018 0003 0003 18 18 18 18 040e 040e 040e 040e 043f
+60 FPS, 120 VI/s: 0c 00 01e0 0030 0030 0006 0006 18 18 18 18 040e 040e 040e 040e 021A
+	but Dolphin still says 60 VI/s
+	probably this isn't 120 VI/s but just 120 interrupts/sec
+	and some of them aren't Vertical Blank Interrupt
+wiiiide:          0c 00 01e0 0030 0030 0006 0006 18 18 18 18 040e 040e 040e 040e 041A 00AD 40 4769 A2 0175 7A00 019C
+squished:         0c 00 01e0 0030 0030 0006 0006 18 18 18 18 040e 040e 040e 040e 041A 01AD 40 4769 02 0175 7A00 019C
+
+changing VTR affects height
+changing VTO/VTE/DIO affect refresh rate
+BSx, BEx affect nothing?
+HTRx affects horizontal stretch
+
+by messing with these we can get the game to say 120 FPS but Dolphin disagrees

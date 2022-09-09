@@ -1,0 +1,16 @@
+#                     0        1        2        3        4        5
+texture18             0        2        3        4        0        0
+_1C                  -1       -1       -1       -1        1       -1
+_20            83886080 50331648 50331648 83886080 67114240 83886080
+layer0.texture        0        2        3        4        0        0
+layer0.tevMode      128      128      128      129      128      128
+layer0.enableT        0        0        0        5        0        0
+layer1.texture        0        0        0        5        0        0
+layer1.tevMode        0        0        0      128        0        0
+layer1.enableT        0        0        0        1        0        0
+furTexture            1     null     null     null     null     null
+flags               520        8        8        8        8        8
+nLayers               1        1        1        2        1        1
+
+texture18, layer0.texture present in 1, 2, 3
+unk1C set in 4
