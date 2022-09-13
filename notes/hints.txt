@@ -1,0 +1,182 @@
+[KP, Krystal section]
+Defeated General Scales' Galleon
+Encountered General Scales
+Learned of Krazoa Tests
+Entered Krazoa Shrine
+Completed Test of Observation  [K1 get]
+Released Krazoa Spirit         [K1 release]
+
+[TTH]
+Piloted to Dinosaur Planet
+Discovered Krystal's Staff
+Collected Fire Blaster
+Found the Queen EarthWalker
+Planted a Bomb Spore
+Gave Gift to WarpStone
+
+[IM Race]
+Rescued Tricky from SharpClaw
+Raced SharpClaw on Ice Mountain
+
+[SHW]
+Tricky's Stay/Find Activated
+Tricky's Heel Command Activated
+Escaped from Snow Clearing
+Got Past BribeClaw
+
+[TTH]
+Returned to ThornTail Hollow
+Returned to Queen EarthWalker
+Went Inside Ancient Well
+Gained Rocket Boost Upgrade
+Bought FireFly Lantern
+Collected 6 GrubTub
+Saved Queen EarthWalker
+
+[SHW]
+Returned to SnowHorn Wastes
+(blank)
+Rescued SnowHorn GateKeeper
+Vortex Open
+
+[DIM]
+Piloted Arwing to DarkIce Mines
+Released SnowHorn
+Found Injured SnowHorn
+Rode SnowHorn Through Gates
+Captured Cannon
+Located Missing Cogs
+Collected the Dinosaur Horn
+Crossed Blizzard
+
+[DIM Underground]
+Found Belina Te and Tricky
+Reached Bottom of Mine
+Reached DarkIce Boss  [Galdon]
+Collected First SpellStone [S1 get]
+
+[TTH, Chapter 2]
+Collected Moon Pass Key  [Fire Weeds]
+
+[MMP]
+Opened SharpClaw Lookout
+Opened Path to Volcano
+
+[VFP]
+Entered Volcano Force Point
+Collected Ice Blast
+Opened Volcano Door
+Found the SpellStone Warp Pad
+Placed First SpellStone   [S1 release]
+Fox Saw the Krazoa
+Collected Ground Quake
+Used MoonSeed
+Moved Meteor
+Entered Krazoa Shrine
+Collected Test of Combat Krazoa Spirit  [K2 get]
+
+[TTH]
+Returned to WarpStone
+
+[KP]
+Found Krystal
+Released Second Krazoa Spirit  [K2 release]
+
+[CC]
+Located Cape Claw
+Found HighTop Gold
+Rescued Queen CloudRunner
+CloudRunner Vortex Opened
+
+[CRF]
+Piloted Arwing to CloudRunner Fortress
+Captured by General Scales
+Escaped Dungeon  [SharpClaw Disguise]
+Fortress Power Restored
+Rescued Queen Again!
+Rescued Baby CloudRunners
+
+[CRF Race]
+Discovered Gold Mine
+Collected Second SpellStone  [S2 get]
+
+[CC, Chapter 3]
+Opened Route to Ocean Temple
+
+[OFP]
+Entered Ocean Force Point
+Located Warp Pad to Lower Chamber
+Found the SpellStone Warp Pad
+Placed Second SpellStone    [S2 release]
+
+[LV]
+Captured By LightFoot
+Escaped From LightFoot Pole
+Chief LightFoot Started Test
+Completed LightFoot Tests
+Located Krazoa Shrine
+Collected Test of Fear Krazoa Spirit  [K3 get]
+Released Third Krazoa Spirit    [K3 release]
+
+[TTH]
+Rescued the ThornTail's Eggs  [Portal Device get]
+Walled City Vortex Opened
+
+[WC]
+Piloted Arwing to Walled City
+Lit Walled City Beacons
+Spoke to King EarthWalker
+Collected Super Ground Quake
+Opened Doorway to RedEye Boss  [T-Rex, teeth]
+Collected Third SpellStone   [S3 get]
+
+[VFP, Chapter 4]
+Returned to Volcano with SpellStone
+Opened Second Path Through Temple
+Found SpellStone Warp Pad
+Placed Third SpellStone  [S3 release]
+
+[TTH]
+Gained Big Scarab Bag  [Bloop event]
+Bought SnowHorn Artifact
+
+[SHW]
+Gave Artifact to Blue SnowHorn
+Located Krazoa Shrine
+Collected Test of Strength Krazoa Spirit  [K4 get]
+Released Fourth Krazoa Spirit  [K4 release]
+
+[TTH]
+Dragon Rock Vortex Opened  [ThornTail gatekeeper]
+Piloted Arwing to Dragon Rock
+Rescued EarthWalker
+Deactivated Robot Generators
+Destroyed Robots
+Rescued the HighTop
+Rescued CloudRunner
+Dropped into Tower  [Drakor]
+Collected Final SpellStone  [S4 get]
+
+[CC, Chapter 5]
+Re-opened Route to Ocean Force Point
+Opened Route Into Ocean
+Placed Final SpellStone  [S4 release]
+
+[TTH]
+Headed Back to Hollow
+Bought Zoom Goggles  [Hi-Def Display Device]
+
+[WC]
+Opened Sun & Moon Main Areas
+Placed Sun and Moon Stones
+Entered Krazoa Shrine
+Completed Test of Knowledge  [K5 get]
+Said Good-bye to Tricky
+
+[KP]
+Piloted Arwing to Krazoa Palace
+Released Fifth Krazoa Spirit  [K5 release]
+Entered Final Krazoa Shrine
+General Scales Released Final Spirit  [K6 get]
+Andross Revealed  [K6 release]
+Saved Dinosaur Planet

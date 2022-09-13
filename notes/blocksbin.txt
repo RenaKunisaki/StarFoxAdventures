@@ -1,0 +1,190 @@
+changing mod6.0 flags in header
+was 0008
+0000: no change
+FFFF: no change
+changing the texture list offset crashes so we ARE changing things
+
+shaders start at 0x208, let's change them
+first 4 bytes are unknown: 00 00 00 FF
+99 99 99 FF: no effect
+00 00 00 00: "
+FF FF FF FF: "
+
+next 4 bytes are "r, g, b, ?" FF FF FF FF
+00 00 00 00: no effect
+01 01 01 01: no effect
+might come back to these since I think some of them are flags that enable others
+
+at 0x210 auxTex0: 00 00 00 00
+FF FF FF FF: no effect
+12 34 56 78: no effect
+
+0x214 "alpha, ?, ?, ?": FF 00 00 00
+00 00 00 00: no effect
+12 34 56 78: "
+
+0x218 unknown: FF FF FF FF
+00 00 00 00: no effect
+12 34 56 78: "
+
+0x21C auxTex1: 00 00 00 00
+12 34 56 78: no effect
+
+0x220 texture18: 00 00 00 00
+12 34 56 78: no effect
+
+0x224 unk1C: FF FF FF FF
+12 34 56 78: no effect
+
+0x228 colorIdx, ?, alpha22, ?: 00 00 00 00
+12 34 56 78: no effect
+
+0x22C: 00 00 00 01
+00 00 00 02: changes one of the wall textures
+this is layer[0].texture
+next bytes are tevMode, polyGroupId, scrollingTexMtx, ?
+
+0x230 tevMode: 80
+00: no effect
+FF: the wall is bright
+
+0x231 polyGroupId: 00
+01: no effect
+FF: no effect
+there might only be one group here...
+
+0x232 scrollingTexMtx: 00
+there are no scrolling textures here so skip
+
+0x233 padding?: 00
+AA: no effect
+
+next is another layer, all zeros, probably not being used (nLayers=1)
+
+0x23C auxTex2: FF FF FF FF
+00 00 00 00: no effect
+
+0x240 furTexture: FF FF FF FF
+00 00 00 00: no effect
+
+0x244 flags: 00 00 00 0C
+00 00 00 00: wall isn't affected by fog
+current flags are fog+cull so let's enable others
+00 00 00 0D: no effect
+00 00 00 01: no effect (same as 0)
+00 00 00 02: invisible
+00 00 00 10: no effect
+00 00 00 20: wall is darker (no sky to reflect...)
+00 00 00 40: wall has a wavy water-reflection texture overlaid on it
+00 00 00 80: wall cycles between glowing red and not
+00 00 01 00: wall has reflection image overlaid on it
+00 00 02 00: no effect
+00 00 04 00: no effect (no alpha?)
+00 00 08 00: wall is black; slightly green when lit
+00 00 10 00: "
+00 00 20 00: only visible at certain angles
+00 00 40 00: faint shimmering effect, mostly when lit (ShortFur)
+00 00 80 00: stronger shimmering (MediumFur)
+00 01 00 00: thicker shimmering (LongFur)
+00 02 00 00: invisible most of the time
+00 04 00 00: no effect
+00 08 00 00: not affected by light
+00 10 00 00: no effect (GlowingPink)
+00 20 00 00: no effect
+00 40 00 00: "
+00 80 00 00: "
+01 00 00 00: "
+02 00 00 00: "
+04 00 00 00: "
+08 00 00 00: "
+10 00 00 00: "
+20 00 00 00: no depth testing (further objects show in front of it)
+40 00 00 00: "
+80 00 00 00: invisible, but reflects lightning as a solid column
+
+0x248 AttrFlags: 06
+00: no effect
+FF: "
+would have expected a crash...
+
+0x249 nLayers: 01
+00: "Mismatched configuration between XF and BP stages - 1/2 texgens, 2/1 colors."
+	cool effect but not playable, would crash real hardware
+02: the wall polygon connects to the wrong vertex
+
+0x24A padding?: 00 00
+AA AA: no effect
+shader ends here
+
+let's try some combinations of shader stuff:
+furTexture -> 2 (the wood texture)
+flags -> 00 01 00 0C (add LongFur)
+same as without changing furTexture
+let's change auxTex2 to 2 as well
+it looks more fuzzy? but I don't see the wood texture
+let's do auxTex0 too... no change
+auxTex1, no change
+texture18, no change
+now let's change flags back to 0C (remove LongFur)
+looks normal again
+now set layer[0].texture to -1... the wall is a pink gradient
+now mess with r,g,b: 12 34 56 78 - no change
+
+none of these changes appear to flip textures
+let's restore the original shader settings and continue messing with other things
+actually not much else to mess with here...
+
+the tree in animtest is mat6 sub2, at 0x1780.
+compare to mat0, sub0 (the wall mentioned above)
+00 -> .. for visibility
+wall        | tree        | note
+.. .. .. FF | .. .. .. FF | unk0
+FF FF FF FF | FF FF FF FF | r, g, b, ?
+.. .. .. .. | .. .. .. .. | auxTex0
+FF .. .. .. | FF .. .. .. | alpha, ?
+FF FF FF FF | FF FF FF FF | ?
+.. .. .. .. | .. .. .. .. | auxTex1
+.. .. .. .. | .. .. .. .. | tex18
+FF FF FF FF | FF FF FF FF | ?
+.. .. .. .. | .. .. .. .. | colorIdx, ?, alpha22, ?
+.. .. .. 01 | .. .. .. 02 | layer0 texIdx
+80 .. .. .. | 80 .. .. .. | layer0 tevMode, polyGroupId, scrollMtx
+.. .. .. .. | .. .. .. .. | layer1 texIdx
+.. .. .. .. | .. .. .. .. | layer1  tevMode, polyGroupId, scrollMtx
+FF FF FF FF | FF FF FF FF | auxTex2
+FF FF FF FF | FF FF FF FF | furTexture
+.. .. .. 0C | .. .. 04 04 | flags
+06 01 .. .. | 06 01 .. .. | attrFlags, nLayers
+only difference is flags (and texture idx)
+the tree has fog on, alpha blend on,  backface culling off
+the wall has fog on, alpha blend off, backface culling on
+nothing here should be related to flipping textures
+
+the flip could be just mirrored repeat? doesn't look like it...
+seems like all textures in animtest are upside down
+crfort too
+they're fine in the JS viewer so something's going wrong here.
+in fact the maps are mirrored in Blender too, including warlock which doesn't have flipped textures
+the game uses CW winding order which is opposite of standard (and presumably Blender)
+correcting that and inverting Y does fix the mirroring but not the textures
+looking at the bird textures in CRF confirms the textures are upside down, not rotated 180 degrees.
+the trick seems to be in the texcoords
+they're all way out of the actual image if I do -y
+with 1-y the tree coords aren't out of the image and it still looks right
+but the ones that are wrong also aren't out of it
+in-game the tree is set to clamp so I don't think that's it
+1-y is probably right, or something like it.
+the fact that animtest, CRF and warlock all work fine in JS is bizarre.
+I can't even find anything that would cause that. no texture matrices, etc
+I doubt it's the vertices themselves either because why only some?
+
+if we import a map, select everything, and look in the UV editor... the Uvs are basically the entire map flattened, instead of constrained to the image.
+I doubt that's correct because the game sets things to clamp.
+could check by hex editing or adding a basic UV viewer to JS...
+quick peek in the hex view suggests they really are like that.
+but whatever's going on there can't be too strange because our viewer works.
+it would make sense if it's because we invert the Y axis of the vertices themselves, but undoing that doesn't change it.
+GreatFox is another one, the foxy poster is upside down but other pictures are OK. and that one's texture is right side up...
+then if we don't invert Y, it's the other way around.
+
+turns out the texture files themselves were flipped because the old exporter we used there flipped some of them. :|
